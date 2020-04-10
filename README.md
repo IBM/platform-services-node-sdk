@@ -49,6 +49,7 @@ IBM Cloud services:
 Service Name | Import Path
 --- | --- 
 [Global Catalog](https://cloud.ibm.com/apidocs/resource-catalog/global-catalog) | ibm-platform-services/global-catalog/v1
+[Enterprise Management](https://cloud.ibm.com/apidocs/enterprise-apis/enterprise) | ibm-platform-services/enterprise-management/v1
 [Global Search](https://cloud.ibm.com/apidocs/search) | ibm-platform-services/global-search/v2
 [Global Tagging](https://cloud.ibm.com/apidocs/tagging) | ibm-platform-services/global-tagging/v1
 [IAM Access Groups](https://cloud.ibm.com/apidocs/iam-access-groups) | ibm-platform-services/iam-acess-groups/v2
