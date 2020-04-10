@@ -19,7 +19,6 @@
 const fs = require('fs');
 const dotenv = require('dotenv');
 
-
 // this variable will either hold the normal `describe` method from `jest`
 // or will be an alias for `describe.skip` from `jest` (skipping all tests)
 let describeToUse;
@@ -30,11 +29,11 @@ let configFilename;
 let configFileExists;
 
 // `filename` is the location of the credentials file
-// returns the appropriate "describe" to be used for the tests. 
+// returns the appropriate "describe" to be used for the tests.
 module.exports.prepareTests = filename => {
   // Save off the name of the config file.
   configFilename = filename;
-  
+
   // set the filepath as an environment variable so that the
   // service factory can find it.
   process.env.IBM_CREDENTIALS_FILE = filename;
@@ -47,7 +46,7 @@ module.exports.prepareTests = filename => {
     describeToUse = describe.skip.bind(describe);
     describeToUse.skip = describeToUse;
   }
-  
+
   return describeToUse;
 };
 
@@ -59,7 +58,7 @@ module.exports.getDescribe = () => {
 // set the properties as environment variables.
 module.exports.loadEnv = () => {
   if (configFileExists) {
-    dotenv.config({path: configFilename});
+    dotenv.config({ path: configFilename });
   }
 };
 

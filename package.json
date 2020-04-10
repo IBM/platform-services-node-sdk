@@ -24,10 +24,10 @@
     "jest": "jest test/",
     "test": "npm run build && npm run lint && jest test/",
     "test-unit": "npm run build && jest test/unit/",
-    "test-integration": "npm run build && jest --expand test/integration/ --reporters jest-skipped-reporter",
+    "test-integration": "npm run build && jest --expand test/integration/",
+    "test-travis": "jest --runInBand --testNamePattern='^((?!@slow).)*$' test/",
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
-    "test-travis": "jest --runInBand --testNamePattern='^((?!@slow).)*$' test/",
     "report-coverage": "codecov",
     "check-packages": "installed-check -e -d -v"
   },
@@ -38,15 +38,14 @@
   "dependencies": {
     "@types/node": "^12.0.8",
     "extend": "^3.0.2",
-    "ibm-cloud-sdk-core": "^2.3.0",
-    "jest-skipped-reporter": "0.0.5",
-    "dotenv": "^8.2.0"
+    "ibm-cloud-sdk-core": "^2.3.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.12",
     "axios": "^0.19.0",
     "codecov": "^3.5.0",
+    "dotenv": "^8.2.0",
     "eslint": "^5.16.0",
     "eslint-config-google": "^0.12.0",
     "eslint-config-prettier": "^4.2.0",
