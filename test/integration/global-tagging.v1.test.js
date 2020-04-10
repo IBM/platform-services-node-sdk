@@ -18,7 +18,7 @@
 'use strict';
 
 const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
-const {IamAuthenticator} = require('ibm-cloud-sdk-core');
+const { IamAuthenticator } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
 const timeout = 10000; // ten seconds
@@ -37,7 +37,7 @@ const config = authHelper.loadConfig();
 describe('GlobalTaggingV1_integration', () => {
   jest.setTimeout(timeout);
 
-  const tagName = 'node-sdk-' + Math.floor((Math.random() * 100000) + 1).toString();
+  const tagName = 'node-sdk-' + Math.floor(Math.random() * 100000 + 1).toString();
   const providers = ['ghost'];
   const fullData = true;
   const offset = 0;
@@ -58,7 +58,6 @@ describe('GlobalTaggingV1_integration', () => {
     attachedOnly: attachedOnly,
   };
 
-
   // Initialize the service client.
   const options = {
     authenticator: new IamAuthenticator({
@@ -68,7 +67,7 @@ describe('GlobalTaggingV1_integration', () => {
   };
   const globalTagging = new GlobalTaggingV1(options);
 
-  test('should getAll tags', done => {
+  it('should getAll tags', done => {
     const params = {
       providers: providers,
       fullData: fullData,
@@ -86,8 +85,7 @@ describe('GlobalTaggingV1_integration', () => {
     });
   });
 
-  test('should Attach tag', done => {
-
+  it('should Attach tag', done => {
     const resourceModel = {
       resource_id: config.GST_RESOURCE_CRN,
       resource_type: 'cf-application',
@@ -97,7 +95,7 @@ describe('GlobalTaggingV1_integration', () => {
     const tagNameArray = [tagName];
     const params = {
       resources: resources,
-      tagNames: tagNameArray
+      tagNames: tagNameArray,
     };
 
     globalTagging.attachTag(params).then(response => {
@@ -113,12 +111,10 @@ describe('GlobalTaggingV1_integration', () => {
         expect(Array.isArray(response.result.items)).toBe(true);
         done();
       });
-
     });
   });
 
-  test('should Detach tag', done => {
-
+  it('should Detach tag', done => {
     const resourceModel = {
       resource_id: config.GST_RESOURCE_CRN,
       resource_type: 'cf-application',
@@ -128,7 +124,7 @@ describe('GlobalTaggingV1_integration', () => {
     const tagNameArray = [tagName];
     const params = {
       resources: resources,
-      tagNames: tagNameArray
+      tagNames: tagNameArray,
     };
 
     globalTagging.detachTag(params).then(response => {
@@ -142,13 +138,10 @@ describe('GlobalTaggingV1_integration', () => {
         expect(Array.isArray(response.result.items)).toBe(true);
         done();
       });
-
     });
   });
 
-
-  test('should Delete tag', done => {
-
+  it('should Delete tag', done => {
     const providers = ['ghost'];
     const params = {
       tagName: tagName,
@@ -160,16 +153,12 @@ describe('GlobalTaggingV1_integration', () => {
       expect(response.status).toBe(200);
       expect(response.result.results[0].isError).toBe('false');
 
-
       return globalTagging.listTags(paramsAttachedTo).then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(200);
         expect(Array.isArray(response.result.items)).toBe(true);
         done();
       });
-
     });
   });
-
 });
-

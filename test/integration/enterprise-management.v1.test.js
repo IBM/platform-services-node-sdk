@@ -34,13 +34,11 @@ describe('IamAccessGroupsV2_integration', () => {
   jest.setTimeout(timeout);
 
   let service;
-  
+
   test('should successfully complete initialization', done => {
     // Initialize the service client.
     service = EnterpriseManagementV1.newInstance();
     expect(service).not.toBeNull();
     done();
   });
-  
 });
-
