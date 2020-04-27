@@ -18,29 +18,34 @@
 'use strict';
 
 const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
-// const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
+const am_coe_v2_account_apis_helper = require('../integration/am_coe_v2_account_apis.js');
+const async = require('async');
 
-// testcase timeout value (10s).
-const timeout = 10000;
+// testcase timeout value (200s).
+const timeout = 200000;
 
 // Location of our config file.
 const configFile = 'enterprise-management.env';
 
-// Use authHelper to skip tests if our configFile is not available.
 const describe = authHelper.prepareTests(configFile);
+const config = authHelper.loadConfig();
 
-const parent = 'crn:v1:bluemix:public:enterprise::a/74bcc349d963484f82e8279ba310c6df::enterprise:cbbb066a123a40ebadb806a293655aec';
-const name = 'IBM-1586402147632';
-const primaryContactIamId = 'IBMid-550006CNQ6';
+let parent = 'crn:v1:bluemix:public:enterprise::a/f0c4bd1370d547c1a7d7418380c3fe1d::enterprise:26afe35c608e42f398fb200606f87f21';
+const primaryContactIamId = 'IBMid-550006M6HE';
 const limit = 100;
-const enterpriseId = '1b1d66e78e5941708e5775728ab22c51';
-const parentAccountGroupId = '7e96629680604e0b9de15712c84719eb';
-const accountId = 'b8a7c19fa050430b997c20c636bead83';
+const enterpriseId = '26afe35c608e42f398fb200606f87f21';
+let parentAccountGroupId;
+let am_service_iam_token;
+let owner_iam_id;
+const retry_params = { times: 12, interval: 10000 };
+let activation_token;
+let account_id;
+let subscription_id;
 
 describe('EnterpriseManagementV1_integration', () => {
   jest.setTimeout(timeout);
-
+  const account_info = am_coe_v2_account_apis_helper.get_default_account_info();
   let service;
 
   it('should successfully complete initialization', done => {
@@ -52,7 +57,7 @@ describe('EnterpriseManagementV1_integration', () => {
   it('should create an account group', done => {
     const params = {
       parent: parent,
-      name: name,
+      name: `IBM-${new Date().getTime()}`,
       primaryContactIamId: primaryContactIamId,
     };
     return service
@@ -60,10 +65,11 @@ describe('EnterpriseManagementV1_integration', () => {
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(201);
+
+        parentAccountGroupId = response.result.account_group_id;
         done();
       })
       .catch(err => {
-        console.log('createAccountGroup error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
@@ -83,7 +89,6 @@ describe('EnterpriseManagementV1_integration', () => {
         done();
       })
       .catch(err => {
-        console.log('listAccountGroups error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
@@ -95,20 +100,19 @@ describe('EnterpriseManagementV1_integration', () => {
     return service
       .getAccountGroupById(params)
       .then(response => {
+        parent = response.result.crn;
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(200);
         done();
       })
       .catch(err => {
-        console.log('getAccountGroupById error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
 
   it('should update an account group', done => {
     const params = {
-      name: name,
-      primaryContactIamId: primaryContactIamId,
+      name: `IBM-${new Date().getTime()}`,
       accountGroupId: parentAccountGroupId,
     };
     return service
@@ -119,7 +123,6 @@ describe('EnterpriseManagementV1_integration', () => {
         done();
       })
       .catch(err => {
-        console.log('updateAccountGroup error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
@@ -137,17 +140,66 @@ describe('EnterpriseManagementV1_integration', () => {
         done();
       })
       .catch(err => {
-        console.log('getAccountGroupPermissibleActions error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
 
-  it('should import an account into an enterprise', done => {
+  it('Create a Standard Account - should generate IAM service token', done => {
+    am_coe_v2_account_apis_helper.generate_iam_service_token(config.IAM_HOST, config.IAM_BASIC_AUTH, config.IAM_API_KEY, (e, token) => {
+      am_service_iam_token = `bearer ${token}`;
+      done();
+    });
+  });
+
+  account_info.email = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
+
+  it('Create a Standard Account - calls POST /coe/v2/accounts with BSS token', done => {
+    const payload = am_coe_v2_account_apis_helper.get_account_payload(account_info.email, 'STANDARD', 'ACTIVE');
+    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.AM_HOST, payload, am_service_iam_token, (e, r, b) => {
+      account_info.account_id = r.id;
+      done();
+    });
+  });
+
+  it('Create a Standard Account - waits until activation token is generated', done => {
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
+    async.retry(retry_params, db_activation_token, (e, token) => {
+      activation_token = token;
+      done();
+    });
+  });
+
+  it('Create a Standard Account - waits until create process is done', done => {
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
+    async.retry(retry_params, db_activation_token, (e, end_record) => {
+      done();
+    });
+  });
+
+  it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Standard Account - calls GET /coe/v2/accounts/verify?email=******&token=****** to activate the account', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.AM_HOST, account_info.email, activation_token, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+      owner_iam_id = b.entity.owner_iam_id;
+      subscription_id = b.entity.subscription_id;
+      done();
+    });
+  });
+
+  it('should import this Standard account into an enterprise', done => {
     const params = {
-      parent: parent,
-      billingUnitId: 'testString',
       enterpriseId: enterpriseId,
-      accountId: accountId,
+      accountId: account_info.account_id,
     };
     return service
       .importAccountToEnterprise(params)
@@ -157,7 +209,102 @@ describe('EnterpriseManagementV1_integration', () => {
         done();
       })
       .catch(err => {
-        console.log('importAccountToEnterprise error: ', JSON.stringify(err, null, 4));
+        done(err);
+      });
+  });
+
+  it('should get account by id', done => {
+    const params = {
+      accountId: account_info.account_id,
+    };
+    return service
+      .getAccountById(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  account_info.email = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
+
+  it('Create a Subscription Account - calls POST /coe/v2/accounts with BSS token', done => {
+    const payload = am_coe_v2_account_apis_helper.get_account_payload(account_info.email, 'STANDARD', 'ACTIVE');
+    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.AM_HOST, payload, am_service_iam_token, (e, r, b) => {
+      account_info.account_id = r.id;
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - waits until activation token is generated', done => {
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
+    async.retry(retry_params, db_activation_token, (e, token) => {
+      activation_token = token;
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - waits until create process is done', done => {
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
+    async.retry(retry_params, db_activation_token, (e, end_record) => {
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - calls GET /coe/v2/accounts/verify?email=******&token=****** to activate the account', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.AM_HOST, account_info.email, activation_token, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+      owner_iam_id = b.entity.owner_iam_id;
+      subscription_id = b.entity.subscription_id;
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - convert account to subscription', done => {
+    const payload_to_convert = am_coe_v2_account_apis_helper.get_activate_subscription_payload('2020-03-01T07:00:00.000Z', '2020-11-30T08:00:00.000', 10);
+    delete payload_to_convert['softlayer_account_id'];
+    am_coe_v2_account_apis_helper.patch_am_coe_v2_account_subscription(config.AM_HOST, account_info.account_id, subscription_id, payload_to_convert, am_service_iam_token, null, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+      owner_iam_id = b.entity.owner_iam_id;
+      subscription_id = b.entity.subscription_id;
+      done();
+    });
+  });
+
+  it('should create an enterprise using this Subscription Account', done => {
+    const params = {
+      name: `IBM-${new Date().getTime()}`,
+      domain: `IBM-${new Date().getTime()}.com`,
+      primaryContactIamId: owner_iam_id,
+      sourceAccountId: account_info.account_id,
+    };
+    return service
+      .createEnterprise(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(202);
+        done();
+      })
+      .catch(err => {
         done(err);
       });
   });
@@ -165,19 +312,34 @@ describe('EnterpriseManagementV1_integration', () => {
   it('should create a new account in an enterprise', done => {
     const params = {
       parent: parent,
-      name: name,
-      ownerIamId: primaryContactIamId,
+      name: `IBM-${new Date().getTime()}`,
+      ownerIamId: 'IBMid-550006JKXX',
     };
     return service
       .createAccount(params)
       .then(response => {
-	console.log("createAccount response: ", JSON.stringify(response, null, 4));
         expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(201);
+        account_id = response.result.account_id;
+        expect(response.status).toBe(202);
         done();
       })
       .catch(err => {
-        console.log('createAccount error: ', JSON.stringify(err, null, 4));
+        done(err);
+      });
+  });
+
+  it('should get account by id', done => {
+    const params = {
+      accountId: account_id,
+    };
+    return service
+      .getAccountById(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
+        done();
+      })
+      .catch(err => {
         done(err);
       });
   });
@@ -197,42 +359,23 @@ describe('EnterpriseManagementV1_integration', () => {
         done();
       })
       .catch(err => {
-        console.log('listAccounts (by query param) error: ', JSON.stringify(err, null, 4));
-        done(err);
-      });
-  });
-
-  it('should get account by id', done => {
-    const params = {
-      accountId: accountId,
-    };
-    return service
-      .getAccountById(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        console.log('getAccountById error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
 
   it('should move an account with the enterprise', done => {
     const params = {
-      parent: parent,
-      accountId: accountId,
+      parent: 'crn:v1:bluemix:public:enterprise::a/f0c4bd1370d547c1a7d7418380c3fe1d::account-group:cb8d8788f902402aacb81065fd53fde8',
+      accountId: account_id,
     };
     return service
       .updateAccount(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(204);
+        expect(response.status).toBe(202);
         done();
       })
       .catch(err => {
-        console.log('updateAccount error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
@@ -240,7 +383,7 @@ describe('EnterpriseManagementV1_integration', () => {
   it('should get permissible actions for an account', done => {
     const params = {
       actions: ['testString'],
-      accountId: accountId,
+      accountId: account_info.account_id,
     };
     return service
       .getAccountPermissibleActions(params)
@@ -250,7 +393,6 @@ describe('EnterpriseManagementV1_integration', () => {
         done();
       })
       .catch(err => {
-        console.log('getAccountPermissibleActions error: ', JSON.stringify(err, null, 4));
         done(err);
       });
   });
