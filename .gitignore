@@ -12,6 +12,7 @@ global-tagging/*.js
 resource-controller/*.js
 usage-metering/*.js
 usage-reports/*.js
+resource-manager/*.js
 
 # file holding service credentials
 test/resources/auth.js
