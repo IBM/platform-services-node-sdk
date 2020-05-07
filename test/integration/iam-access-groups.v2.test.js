@@ -40,7 +40,7 @@ describe('IamAccessGroupsV2_integration', () => {
   const testGroupDescription = "This group is used for integration test purposes. It can be deleted at any time.";
   let testGroupETag;
   let testGroupId;
-  const testUserId = "IBMid-1234";
+  const testUserId = "IBMid-" + Math.floor(Math.random() * 100000);
   const userType = "user";
   let testClaimRuleId;
   let testClaimRuleETag;
@@ -603,24 +603,32 @@ describe('IamAccessGroupsV2_integration', () => {
     let group;
     for (group of result.groups) {
 
-      // Force delete each test group
+      // Force delete the test group (or any test groups older than 5 minutes)
       if (group.name === testGroupName) {
+
+        const createdAt = Date.parse(group.created_at);
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        const fiveMinutesAgo = Date.now() - FIVE_MINUTES;
         
-        const params = {
-          accessGroupId: group.id,
-          force: true,
+        if (group.id === testGroupId || createdAt < fiveMinutesAgo) {
+          const params = {
+            accessGroupId: group.id,
+            force: true,
+          }
+
+          let response;
+          try {
+            response = await service.deleteAccessGroup(params);
+          } catch (err) {
+            done(err);
+          }
+
+          expect(response).toBeDefined();
+          expect(response.status).toEqual(204);
         }
 
-        let response;
-        try {
-          response = await service.deleteAccessGroup(params);
-        } catch (err) {
-          done(err);
-        }
-
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(204);
       }
+
     }
 
     done();
