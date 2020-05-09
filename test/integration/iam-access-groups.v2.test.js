@@ -1,18 +1,18 @@
 /* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 'use strict';
@@ -36,8 +36,8 @@ describe('IamAccessGroupsV2_integration', () => {
   let service;
   let config;
   let testAccountId;
-  const testGroupName = "SDK Test Group - Node";
-  const testGroupDescription = "This group is used for integration test purposes. It can be deleted at any time.";
+  const testGroupName = 'SDK Test Group - Node';
+  const testGroupDescription = 'This group is used for integration test purposes. It can be deleted at any time.';
   let testGroupETag;
   let testGroupId;
   const testUserId = "IBMid-" + Math.floor(Math.random() * 100000);
@@ -45,7 +45,7 @@ describe('IamAccessGroupsV2_integration', () => {
   let testClaimRuleId;
   let testClaimRuleETag;
   let testAccountSettings;
-  
+
   test('should successfully complete initialization', done => {
     // Initialize the service client.
     service = IamAccessGroupsV2.newInstance();
@@ -59,13 +59,12 @@ describe('IamAccessGroupsV2_integration', () => {
 
     // Retrieve the test account id to be used with the tests.
     testAccountId = config.testAccountId;
-    
+
     expect(testAccountId).not.toBeNull();
     done();
   });
 
   test('Create an access group', async done => {
-    
     const params = {
       accountId: testAccountId,
       name: testGroupName,
@@ -111,10 +110,10 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.account_id).toEqual(testAccountId);
     expect(result.id).toEqual(testGroupId);
     expect(result.name).toEqual(testGroupName);
-    expect(result.description).toEqual("");
+    expect(result.description).toEqual('');
 
     testGroupETag = response.headers.etag;
-    
+
     done();
   });
 
@@ -190,7 +189,7 @@ describe('IamAccessGroupsV2_integration', () => {
         {
           iam_id: testUserId,
           type: userType,
-        }
+        },
       ],
     };
 
@@ -349,7 +348,6 @@ describe('IamAccessGroupsV2_integration', () => {
       expect(err.message).toContain(testUserId);
       done();
     }
-
   });
 
   test('Delete multiple members from an access group', async done => {
@@ -367,24 +365,23 @@ describe('IamAccessGroupsV2_integration', () => {
       expect(err.message).toContain(testGroupId);
       done();
     }
-
   });
 
   test('Create an access group rule', async done => {
     expect(testGroupId).toBeDefined();
 
-    let testExpiration = 24;
+    const testExpiration = 24;
 
     const params = {
       accessGroupId: testGroupId,
       expiration: testExpiration,
-      realmName: "test realm name",
+      realmName: 'test realm name',
       conditions: [
         {
-          claim: "test claim",
-          operator: "EQUALS",
-          value: "1",
-        }
+          claim: 'test claim',
+          operator: 'EQUALS',
+          value: '1',
+        },
       ],
     };
 
@@ -474,20 +471,20 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(testGroupId).toBeDefined();
     expect(testClaimRuleId).toBeDefined();
 
-    let testExpiration = 24;
+    const testExpiration = 24;
 
     const params = {
       accessGroupId: testGroupId,
       ruleId: testClaimRuleId,
       ifMatch: testClaimRuleETag,
       expiration: testExpiration,
-      realmName: "updated test realm name",
+      realmName: 'updated test realm name',
       conditions: [
         {
-          claim: "test claim",
-          operator: "EQUALS",
-          value: "1",
-        }
+          claim: 'test claim',
+          operator: 'EQUALS',
+          value: '1',
+        },
       ],
     };
 
@@ -532,7 +529,6 @@ describe('IamAccessGroupsV2_integration', () => {
   });
 
   test('Get account settings', async done => {
-
     const params = {
       accountId: testAccountId,
     };
@@ -556,7 +552,6 @@ describe('IamAccessGroupsV2_integration', () => {
   });
 
   test('Update account settings', async done => {
-
     const params = {
       accountId: testAccountId,
       publicAccessEnabled: testAccountSettings.public_access_enabled,
@@ -580,12 +575,11 @@ describe('IamAccessGroupsV2_integration', () => {
   });
 
   test('Clean up all test groups', async done => {
-   
     // List all groups in the account (minus the public access group)
     const params = {
       accountId: testAccountId,
       hidePublicAccess: true,
-    }
+    };
 
     let response;
     try {
@@ -626,13 +620,9 @@ describe('IamAccessGroupsV2_integration', () => {
           expect(response).toBeDefined();
           expect(response.status).toEqual(204);
         }
-
       }
-
     }
 
     done();
   });
-  
 });
-
