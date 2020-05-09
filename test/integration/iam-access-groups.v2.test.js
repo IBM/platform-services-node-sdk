@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -40,8 +40,8 @@ describe('IamAccessGroupsV2_integration', () => {
   const testGroupDescription = 'This group is used for integration test purposes. It can be deleted at any time.';
   let testGroupETag;
   let testGroupId;
-  const testUserId = "IBMid-" + Math.floor(Math.random() * 100000);
-  const userType = "user";
+  const testUserId = 'IBMid-' + Math.floor(Math.random() * 100000);
+  const userType = 'user';
   let testClaimRuleId;
   let testClaimRuleETag;
   let testAccountSettings;
@@ -596,19 +596,17 @@ describe('IamAccessGroupsV2_integration', () => {
     // Iterate across the groups
     let group;
     for (group of result.groups) {
-
       // Force delete the test group (or any test groups older than 5 minutes)
       if (group.name === testGroupName) {
-
         const createdAt = Date.parse(group.created_at);
         const FIVE_MINUTES = 5 * 60 * 1000;
         const fiveMinutesAgo = Date.now() - FIVE_MINUTES;
-        
+
         if (group.id === testGroupId || createdAt < fiveMinutesAgo) {
           const params = {
             accessGroupId: group.id,
             force: true,
-          }
+          };
 
           let response;
           try {
