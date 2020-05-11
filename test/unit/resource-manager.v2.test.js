@@ -31,7 +31,7 @@ const {
 
 const service = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://resource-controller.cloud.ibm.com',
+  url: 'https://resource-controller.cloud.ibm.com/v2',
 };
 
 const resourceManager = new ResourceManagerV2(service);
@@ -99,125 +99,15 @@ describe('ResourceManagerV2', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(ResourceManagerV2.DEFAULT_SERVICE_URL);
     });
   });
-  describe('listQuotaDefinitions', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation listQuotaDefinitions
-        const params = {};
-
-        const listQuotaDefinitionsResult = resourceManager.listQuotaDefinitions(params);
-
-        // all methods should return a Promise
-        expectToBePromise(listQuotaDefinitionsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/quota_definitions', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        resourceManager.listQuotaDefinitions(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        resourceManager.listQuotaDefinitions({});
-        checkForSuccessfulExecution(createRequestMock);
-      });
-    });
-  });
-  describe('getQuotaDefinition', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getQuotaDefinition
-        const id = 'testString';
-        const params = {
-          id: id,
-        };
-
-        const getQuotaDefinitionResult = resourceManager.getQuotaDefinition(params);
-
-        // all methods should return a Promise
-        expectToBePromise(getQuotaDefinitionResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/quota_definitions/{id}', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const id = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          id,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        resourceManager.getQuotaDefinition(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await resourceManager.getQuotaDefinition({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const getQuotaDefinitionPromise = resourceManager.getQuotaDefinition();
-        expectToBePromise(getQuotaDefinitionPromise);
-
-        getQuotaDefinitionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
-      });
-    });
-  });
   describe('listResourceGroups', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listResourceGroups
         const accountId = 'testString';
+        const date = 'testString';
         const params = {
           accountId: accountId,
+          date: date,
         };
 
         const listResourceGroupsResult = resourceManager.listResourceGroups(params);
@@ -235,6 +125,7 @@ describe('ResourceManagerV2', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.qs['account_id']).toEqual(accountId);
+        expect(options.qs['date']).toEqual(date);
       });
 
       test('should prioritize user-given headers', () => {
@@ -514,6 +405,118 @@ describe('ResourceManagerV2', () => {
         expectToBePromise(deleteResourceGroupPromise);
 
         deleteResourceGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listQuotaDefinitions', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listQuotaDefinitions
+        const params = {};
+
+        const listQuotaDefinitionsResult = resourceManager.listQuotaDefinitions(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listQuotaDefinitionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/quota_definitions', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        resourceManager.listQuotaDefinitions(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        resourceManager.listQuotaDefinitions({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('getQuotaDefinition', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getQuotaDefinition
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getQuotaDefinitionResult = resourceManager.getQuotaDefinition(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getQuotaDefinitionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/quota_definitions/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        resourceManager.getQuotaDefinition(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await resourceManager.getQuotaDefinition({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getQuotaDefinitionPromise = resourceManager.getQuotaDefinition();
+        expectToBePromise(getQuotaDefinitionPromise);
+
+        getQuotaDefinitionPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });

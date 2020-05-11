@@ -25,7 +25,7 @@ import { getSdkHeaders } from '../lib/common';
 
 class ResourceManagerV2 extends BaseService {
 
-  static DEFAULT_SERVICE_URL: string = 'https://resource-controller.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://resource-controller.cloud.ibm.com/v2';
   static DEFAULT_SERVICE_NAME: string = 'resource_manager';
 
   /*************************
@@ -64,7 +64,7 @@ class ResourceManagerV2 extends BaseService {
    * Construct a ResourceManagerV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net/v2'). The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -82,84 +82,6 @@ class ResourceManagerV2 extends BaseService {
   }
 
   /*************************
-   * quotaDefinition
-   ************************/
-
-  /**
-   * Get a list of all quota definitions.
-   *
-   * Get a list of all quota definitions.
-   *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>>}
-   */
-  public listQuotaDefinitions(params?: ResourceManagerV2.ListQuotaDefinitionsParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>> {
-    const _params = extend({}, params);
-
-    return new Promise((resolve, reject) => {
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'listQuotaDefinitions');
-
-      const parameters = {
-        options: {
-          url: '/quota_definitions',
-          method: 'GET',
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
-
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
-  /**
-   * Get a quota definition.
-   *
-   * Get a quota definition.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The id of the quota.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>>}
-   */
-  public getQuotaDefinition(params: ResourceManagerV2.GetQuotaDefinitionParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>> {
-    const _params = extend({}, params);
-    const requiredParams = ['id'];
-
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
-
-      const path = {
-        'id': _params.id
-      };
-
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'getQuotaDefinition');
-
-      const parameters = {
-        options: {
-          url: '/quota_definitions/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
-
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
-  /*************************
    * resourceGroup
    ************************/
 
@@ -170,6 +92,8 @@ class ResourceManagerV2 extends BaseService {
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - The ID of the account that contains the resource groups that you want to get.
+   * @param {string} [params.date] - The date would be in a format of YYYY-MM which returns resource groups exclude the
+   * deleted ones before this month.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroupList>>}
    */
@@ -178,7 +102,8 @@ class ResourceManagerV2 extends BaseService {
 
     return new Promise((resolve, reject) => {
       const query = {
-        'account_id': _params.accountId
+        'account_id': _params.accountId,
+        'date': _params.date
       };
 
       const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'listResourceGroups');
@@ -377,6 +302,84 @@ class ResourceManagerV2 extends BaseService {
     });
   };
 
+  /*************************
+   * quotaDefinition
+   ************************/
+
+  /**
+   * List quota definitions.
+   *
+   * Get a list of all quota definitions.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>>}
+   */
+  public listQuotaDefinitions(params?: ResourceManagerV2.ListQuotaDefinitionsParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>> {
+    const _params = extend({}, params);
+
+    return new Promise((resolve, reject) => {
+      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'listQuotaDefinitions');
+
+      const parameters = {
+        options: {
+          url: '/quota_definitions',
+          method: 'GET',
+        },
+        defaultOptions: extend(true, {}, this.baseOptions, {
+          headers: extend(true, sdkHeaders, {
+            'Accept': 'application/json',
+          }, _params.headers),
+        }),
+      };
+
+      return resolve(this.createRequest(parameters));
+    });
+  };
+
+  /**
+   * Get a quota definition.
+   *
+   * Get a a quota definition.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The id of the quota.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>>}
+   */
+  public getQuotaDefinition(params: ResourceManagerV2.GetQuotaDefinitionParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>> {
+    const _params = extend({}, params);
+    const requiredParams = ['id'];
+
+    return new Promise((resolve, reject) => {
+      const missingParams = getMissingParams(_params, requiredParams);
+      if (missingParams) {
+        return reject(missingParams);
+      }
+
+      const path = {
+        'id': _params.id
+      };
+
+      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'getQuotaDefinition');
+
+      const parameters = {
+        options: {
+          url: '/quota_definitions/{id}',
+          method: 'GET',
+          path,
+        },
+        defaultOptions: extend(true, {}, this.baseOptions, {
+          headers: extend(true, sdkHeaders, {
+            'Accept': 'application/json',
+          }, _params.headers),
+        }),
+      };
+
+      return resolve(this.createRequest(parameters));
+    });
+  };
+
 }
 
 /*************************
@@ -408,22 +411,14 @@ namespace ResourceManagerV2 {
    * request interfaces
    ************************/
 
-  /** Parameters for the `listQuotaDefinitions` operation. */
-  export interface ListQuotaDefinitionsParams {
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `getQuotaDefinition` operation. */
-  export interface GetQuotaDefinitionParams {
-    /** The id of the quota. */
-    id: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
   /** Parameters for the `listResourceGroups` operation. */
   export interface ListResourceGroupsParams {
     /** The ID of the account that contains the resource groups that you want to get. */
     accountId?: string;
+    /** The date would be in a format of YYYY-MM which returns resource groups exclude the deleted ones before this
+     *  month.
+     */
+    date?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -461,6 +456,18 @@ namespace ResourceManagerV2 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listQuotaDefinitions` operation. */
+  export interface ListQuotaDefinitionsParams {
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getQuotaDefinition` operation. */
+  export interface GetQuotaDefinitionParams {
+    /** The id of the quota. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
@@ -487,8 +494,8 @@ namespace ResourceManagerV2 {
     total_app_memory?: string;
     /** The VSI limit. */
     vsi_limit?: number;
-    /** A resource quota. */
-    resource_quotas?: ResourceQuota;
+    /** The resource quotas associated with a quota definition. */
+    resource_quotas?: ResourceQuota[];
     /** The date when the quota was initially created. */
     created_at?: string;
     /** The date when the quota was last updated. */
@@ -526,7 +533,7 @@ namespace ResourceManagerV2 {
     /** The state of the resource group. */
     state?: string;
     /** Identify if this resource group is default of the account or not. */
-    _default?: boolean;
+    default?: boolean;
     /** An alpha-numeric value identifying the quota ID associated with the resource group. */
     quota_id?: string;
     /** The URL to access the quota details that associated with the resource group. */
@@ -552,7 +559,7 @@ namespace ResourceManagerV2 {
   /** A resource quota. */
   export interface ResourceQuota {
     /** An alpha-numeric value identifying the quota. */
-    id?: string;
+    _id?: string;
     /** The human-readable name of the quota. */
     resource_id?: string;
     /** The full CRN (cloud resource name) associated with the quota. For more on this format, see
