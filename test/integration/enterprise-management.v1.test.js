@@ -23,7 +23,7 @@ const am_coe_v2_account_apis_helper = require('../integration/am_coe_v2_account_
 const async = require('async');
 
 // testcase timeout value (200s).
-const timeout = 200000;
+const timeout = 250000;
 
 // Location of our config file.
 const configFile = 'enterprise-management.env';
@@ -31,10 +31,10 @@ const configFile = 'enterprise-management.env';
 const describe = authHelper.prepareTests(configFile);
 const config = authHelper.loadConfig();
 
-let parent = 'crn:v1:bluemix:public:enterprise::a/f0c4bd1370d547c1a7d7418380c3fe1d::enterprise:26afe35c608e42f398fb200606f87f21';
-const primaryContactIamId = 'IBMid-550006M6HE';
+let parent;
 const limit = 100;
-const enterpriseId = '26afe35c608e42f398fb200606f87f21';
+let enterpriseId;
+let enterpriseAccountId;
 let parentAccountGroupId;
 let am_service_iam_token;
 let owner_iam_id;
@@ -42,6 +42,9 @@ const retry_params = { times: 12, interval: 10000 };
 let activation_token;
 let account_id;
 let subscription_id;
+let crn;
+let iEmail;
+let iAccountId;
 
 describe('EnterpriseManagementV1_integration', () => {
   jest.setTimeout(timeout);
@@ -54,179 +57,11 @@ describe('EnterpriseManagementV1_integration', () => {
     done();
   });
 
-  it('should create an account group', done => {
-    const params = {
-      parent: parent,
-      name: `IBM-${new Date().getTime()}`,
-      primaryContactIamId: primaryContactIamId,
-    };
-    return service
-      .createAccountGroup(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(201);
-
-        parentAccountGroupId = response.result.account_group_id;
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('should get account groups by query parameter', done => {
-    const params = {
-      enterpriseId: enterpriseId,
-      parentAccountGroupId: parentAccountGroupId,
-      parent: parent,
-      limit: limit,
-    };
-    service
-      .listAccountGroups(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('should get account group by id', done => {
-    const params = {
-      accountGroupId: parentAccountGroupId,
-    };
-    return service
-      .getAccountGroupById(params)
-      .then(response => {
-        parent = response.result.crn;
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('should update an account group', done => {
-    const params = {
-      name: `IBM-${new Date().getTime()}`,
-      accountGroupId: parentAccountGroupId,
-    };
-    return service
-      .updateAccountGroup(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(204);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('should get permissible actions for an account group.', done => {
-    const params = {
-      actions: ['testString'],
-      accountGroupId: parentAccountGroupId,
-    };
-    return service
-      .getAccountGroupPermissibleActions(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('Create a Standard Account - should generate IAM service token', done => {
+  it('Create a Subscription Account - should generate IAM service token', done => {
     am_coe_v2_account_apis_helper.generate_iam_service_token(config.IAM_HOST, config.IAM_BASIC_AUTH, config.IAM_API_KEY, (e, token) => {
       am_service_iam_token = `bearer ${token}`;
       done();
     });
-  });
-
-  account_info.email = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
-
-  it('Create a Standard Account - calls POST /coe/v2/accounts with BSS token', done => {
-    const payload = am_coe_v2_account_apis_helper.get_account_payload(account_info.email, 'STANDARD', 'ACTIVE');
-    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.AM_HOST, payload, am_service_iam_token, (e, r, b) => {
-      account_info.account_id = r.id;
-      done();
-    });
-  });
-
-  it('Create a Standard Account - waits until activation token is generated', done => {
-    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
-    async.retry(retry_params, db_activation_token, (e, token) => {
-      activation_token = token;
-      done();
-    });
-  });
-
-  it('Create a Standard Account - waits until create process is done', done => {
-    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
-    async.retry(retry_params, db_activation_token, (e, end_record) => {
-      done();
-    });
-  });
-
-  it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
-      done();
-    });
-  });
-
-  it('Create a Standard Account - calls GET /coe/v2/accounts/verify?email=******&token=****** to activate the account', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.AM_HOST, account_info.email, activation_token, (e, r, b) => {
-      done();
-    });
-  });
-
-  it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
-      owner_iam_id = b.entity.owner_iam_id;
-      subscription_id = b.entity.subscription_id;
-      done();
-    });
-  });
-
-  it('should import this Standard account into an enterprise', done => {
-    const params = {
-      enterpriseId: enterpriseId,
-      accountId: account_info.account_id,
-    };
-    return service
-      .importAccountToEnterprise(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(202);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('should get account by id', done => {
-    const params = {
-      accountId: account_info.account_id,
-    };
-    return service
-      .getAccountById(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
   });
 
   account_info.email = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
@@ -286,6 +121,7 @@ describe('EnterpriseManagementV1_integration', () => {
     am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
       owner_iam_id = b.entity.owner_iam_id;
       subscription_id = b.entity.subscription_id;
+
       done();
     });
   });
@@ -302,6 +138,183 @@ describe('EnterpriseManagementV1_integration', () => {
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(202);
+        enterpriseId = response.result.enterprise_id;
+        enterpriseAccountId = response.result.enterprise_account_id;
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+      parent = b.entity.parent;
+      done();
+    });
+  });
+
+  it('should create an account group', done => {
+    const params = {
+      parent: parent,
+      name: `IBM-${new Date().getTime()}`,
+      primaryContactIamId: owner_iam_id,
+    };
+    return service
+      .createAccountGroup(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(201);
+
+        parentAccountGroupId = response.result.account_group_id;
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should get account groups by query parameter', done => {
+    const params = {
+      enterpriseId: enterpriseId,
+      parentAccountGroupId: parentAccountGroupId,
+      parent: parent,
+      limit: limit,
+    };
+    service
+      .listAccountGroups(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should get account group by id', done => {
+    const params = {
+      accountGroupId: parentAccountGroupId,
+    };
+    return service
+      .getAccountGroupById(params)
+      .then(response => {
+        crn = response.result.crn;
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should update an account group', done => {
+    const params = {
+      name: `IBM-${new Date().getTime()}`,
+      accountGroupId: parentAccountGroupId,
+    };
+    return service
+      .updateAccountGroup(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(204);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should get permissible actions for an account group.', done => {
+    const params = {
+      actions: ['testString'],
+      accountGroupId: parentAccountGroupId,
+    };
+    return service
+      .getAccountGroupPermissibleActions(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+
+  iEmail = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
+
+  it('Create a Standard Account - calls POST /coe/v2/accounts with BSS token', done => {
+    const payload = am_coe_v2_account_apis_helper.get_account_payload(iEmail, 'STANDARD', 'ACTIVE');
+    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.AM_HOST, payload, am_service_iam_token, (e, r, b) => {
+      iAccountId = r.id;
+      done();
+    });
+  });
+
+  it('Create a Standard Account - waits until activation token is generated', done => {
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, iEmail);
+    async.retry(retry_params, db_activation_token, (e, token) => {
+      activation_token = token;
+      done();
+    });
+  });
+
+  it('Create a Standard Account - waits until create process is done', done => {
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, iEmail);
+    async.retry(retry_params, db_activation_token, (e, end_record) => {
+      done();
+    });
+  });
+
+  it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, iAccountId, am_service_iam_token, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Standard Account - calls GET /coe/v2/accounts/verify?email=******&token=****** to activate the account', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.AM_HOST, iEmail, activation_token, (e, r, b) => {
+      done();
+    });
+  });
+
+  it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, iAccountId, am_service_iam_token, (e, r, b) => {
+      done();
+    });
+  });
+
+
+  it('should import this Standard account into an enterprise', done => {
+    const params = {
+      enterpriseId: enterpriseId,
+      accountId: iAccountId,
+    };
+    return service
+      .importAccountToEnterprise(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(202);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should get account by id', done => {
+    const params = {
+      accountId: enterpriseAccountId,
+    };
+    return service
+      .getAccountById(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
         done();
       })
       .catch(err => {
@@ -363,9 +376,47 @@ describe('EnterpriseManagementV1_integration', () => {
       });
   });
 
+  it('should create an account group', done => {
+    const params = {
+      parent: parent,
+      name: `IBM-${new Date().getTime()}`,
+      primaryContactIamId: owner_iam_id,
+    };
+    return service
+      .createAccountGroup(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(201);
+        parentAccountGroupId = response.result.account_group_id;
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should get account groups by query parameter', done => {
+    const params = {
+      enterpriseId: enterpriseId,
+      parentAccountGroupId: parentAccountGroupId,
+      parent: parent,
+      limit: limit,
+    };
+    service
+      .listAccountGroups(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
   it('should move an account with the enterprise', done => {
     const params = {
-      parent: 'crn:v1:bluemix:public:enterprise::a/f0c4bd1370d547c1a7d7418380c3fe1d::account-group:cb8d8788f902402aacb81065fd53fde8',
+      parent: crn,
       accountId: account_id,
     };
     return service
