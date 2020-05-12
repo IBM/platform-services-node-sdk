@@ -24,7 +24,7 @@ const IamAuthenticator = require('ibm-cloud-sdk-core').IamAuthenticator;
 const timeout = 200000;
 
 // Location of our config file.
-const configFile = 'resource-manager.env';
+const configFile = 'resource_manager.env';
 
 const describe = authHelper.prepareTests(configFile);
 const config = authHelper.loadConfig();
