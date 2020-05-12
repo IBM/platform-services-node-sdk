@@ -32,20 +32,28 @@ const config = authHelper.loadConfig();
 describe('ResourceManagerV2_integration', () => {
   jest.setTimeout(timeout);
 
-  let service;
   let service1;
+  let service2;
   let new_resource_group_id;
   const test_quota_id = '7ce89f4a-4381-4600-b814-3cd9a4f4bdf4';
   const test_user_account_id = '60ce10d1d94749bf8dceff12065db1b0';
 
   it('should successfully complete initialization', done => {
-    service = ResourceManagerV2.newInstance({});
-    expect(service).not.toBeNull();
+    service1 = ResourceManagerV2.newInstance({ 
+      serviceName: "RMGR1",
+    });
+    expect(service1).not.toBeNull();
+
+    service2 = ResourceManagerV2.newInstance({ 
+      serviceName: "RMGR2",
+    });
+    expect(service2).not.toBeNull();
+
     done();
   });
 
-  it('should get a list of all qupta definitions', done => {
-    service
+  it('should get a list of all quota definitions', done => {
+    service1
       .listQuotaDefinitions()
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -61,7 +69,7 @@ describe('ResourceManagerV2_integration', () => {
     const params = {
       id: test_quota_id,
     };
-    service
+    service1
       .getQuotaDefinition(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -77,7 +85,7 @@ describe('ResourceManagerV2_integration', () => {
     const params = {
       accountId: test_user_account_id,
     };
-    service
+    service1
       .listResourceGroups(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -94,7 +102,7 @@ describe('ResourceManagerV2_integration', () => {
       accountId: test_user_account_id,
       name: 'TestGroup',
     };
-    service
+    service1
       .createResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -111,7 +119,7 @@ describe('ResourceManagerV2_integration', () => {
     const params = {
       id: new_resource_group_id,
     };
-    service
+    service1
       .getResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -129,7 +137,7 @@ describe('ResourceManagerV2_integration', () => {
       name: 'TestGroup2',
       state: 'ACTIVE',
     };
-    service
+    service1
       .updateResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -141,22 +149,11 @@ describe('ResourceManagerV2_integration', () => {
       });
   });
 
-  it('should instantiate service with custom authenticator', done => {
-    const options = {};
-    options.authenticator = new IamAuthenticator({
-      apikey: config.TEST_USER_API_KEY,
-      url: config.RESOURCE_MANAGER_AUTH_URL,
-    });
-    service1 = ResourceManagerV2.newInstance(options);
-    expect(service1).not.toBeNull();
-    done();
-  });
-
   it('should delete a resource group by id', done => {
     const params = {
       id: new_resource_group_id,
     };
-    service1
+    service2
       .deleteResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
