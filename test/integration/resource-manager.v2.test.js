@@ -18,7 +18,6 @@
 'use strict';
 const ResourceManagerV2 = require('../../dist/resource-manager/v2');
 const authHelper = require('../resources/auth-helper.js');
-const IamAuthenticator = require('ibm-cloud-sdk-core').IamAuthenticator;
 
 // testcase timeout value (200s).
 const timeout = 200000;
@@ -27,7 +26,6 @@ const timeout = 200000;
 const configFile = 'resource_manager.env';
 
 const describe = authHelper.prepareTests(configFile);
-const config = authHelper.loadConfig();
 
 describe('ResourceManagerV2_integration', () => {
   jest.setTimeout(timeout);
@@ -39,14 +37,10 @@ describe('ResourceManagerV2_integration', () => {
   const test_user_account_id = '60ce10d1d94749bf8dceff12065db1b0';
 
   it('should successfully complete initialization', done => {
-    service1 = ResourceManagerV2.newInstance({ 
-      serviceName: "RMGR1",
-    });
+    service1 = ResourceManagerV2.newInstance({ serviceName: 'RMGR1' });
     expect(service1).not.toBeNull();
 
-    service2 = ResourceManagerV2.newInstance({ 
-      serviceName: "RMGR2",
-    });
+    service2 = ResourceManagerV2.newInstance({ serviceName: 'RMGR2' });
     expect(service2).not.toBeNull();
 
     done();
