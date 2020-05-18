@@ -141,18 +141,18 @@ class CaseManagementV1 extends BaseService {
    * Create a case in the account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.type -
+   * @param {string} params.type - Case type.
    * @param {string} params.subject - Subject of the case.
    * @param {string} params.description - Detailed description of the issue.
-   * @param {number} [params.severity] -
+   * @param {number} [params.severity] - Severity of the case. Smaller values mean higher severity.
    * @param {CasePayloadEu} [params.eu] - Specify if the case should be treated as EU regulated. Only one of the
    * following properties is required. Call EU support utility endpoint to determine which property must be specified
    * for your account.
-   * @param {OfferingPayload} [params.offering] -
+   * @param {Offering} [params.offering] - Offering details.
    * @param {ResourcePayload[]} [params.resources] - List of resources to attach to case. If attaching Classic IaaS
    * devices use type and id fields if Cloud Resource Name (CRN) is unavialable. Otherwise pass the resource CRN. The
    * resource list must be consistent with the value selected for the resource offering.
-   * @param {UserIdAndRealm[]} [params.watchlist] - Array of user IDs to add to the watchlist.
+   * @param {User[]} [params.watchlist] - Array of user IDs to add to the watchlist.
    * @param {string} [params.invoiceNumber] - Invoice number of "Billing and Invoice" case type.
    * @param {boolean} [params.slaCreditRequest] - Flag to indicate if case is for an Service Level Agreement (SLA)
    * credit request.
@@ -305,7 +305,7 @@ class CaseManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
-   * @param {string} params.comment -
+   * @param {string} params.comment - Comment to add to the case.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.Comment>>}
    */
@@ -357,7 +357,7 @@ class CaseManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
-   * @param {UserIdAndRealm[]} [params.watchlist] - Array of user ID objects.
+   * @param {User[]} [params.watchlist] - Array of user ID objects.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.WatchlistAddResponse>>}
    */
@@ -407,11 +407,11 @@ class CaseManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
-   * @param {UserIdAndRealm[]} [params.watchlist] - Array of user ID objects.
+   * @param {User[]} [params.watchlist] - Array of user ID objects.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.User[]>>}
+   * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.Watchlist>>}
    */
-  public removeWatchlist(params: CaseManagementV1.RemoveWatchlistParams): Promise<CaseManagementV1.Response<CaseManagementV1.User[]>> {
+  public removeWatchlist(params: CaseManagementV1.RemoveWatchlistParams): Promise<CaseManagementV1.Response<CaseManagementV1.Watchlist>> {
     const _params = extend({}, params);
     const requiredParams = ['caseNumber'];
 
@@ -740,24 +740,27 @@ namespace CaseManagementV1 {
 
   /** Parameters for the `createCase` operation. */
   export interface CreateCaseParams {
+    /** Case type. */
     type: CreateCaseConstants.Type | string;
     /** Subject of the case. */
     subject: string;
     /** Detailed description of the issue. */
     description: string;
+    /** Severity of the case. Smaller values mean higher severity. */
     severity?: number;
     /** Specify if the case should be treated as EU regulated. Only one of the following properties is required.
      *  Call EU support utility endpoint to determine which property must be specified for your account.
      */
     eu?: CasePayloadEu;
-    offering?: OfferingPayload;
+    /** Offering details. */
+    offering?: Offering;
     /** List of resources to attach to case. If attaching Classic IaaS devices use type and id fields if Cloud
      *  Resource Name (CRN) is unavialable. Otherwise pass the resource CRN. The resource list must be consistent with
      *  the value selected for the resource offering.
      */
     resources?: ResourcePayload[];
     /** Array of user IDs to add to the watchlist. */
-    watchlist?: UserIdAndRealm[];
+    watchlist?: User[];
     /** Invoice number of "Billing and Invoice" case type. */
     invoiceNumber?: string;
     /** Flag to indicate if case is for an Service Level Agreement (SLA) credit request. */
@@ -767,7 +770,7 @@ namespace CaseManagementV1 {
 
   /** Constants for the `createCase` operation. */
   export namespace CreateCaseConstants {
-    /** Type */
+    /** Case type. */
     export enum Type {
       TECHNICAL = 'technical',
       ACCOUNT_AND_ACCESS = 'account_and_access',
@@ -826,6 +829,7 @@ namespace CaseManagementV1 {
   export interface AddCommentParams {
     /** Unique identifier of a case. */
     caseNumber: string;
+    /** Comment to add to the case. */
     comment: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -835,7 +839,7 @@ namespace CaseManagementV1 {
     /** Unique identifier of a case. */
     caseNumber: string;
     /** Array of user ID objects. */
-    watchlist?: UserIdAndRealm[];
+    watchlist?: User[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -844,7 +848,7 @@ namespace CaseManagementV1 {
     /** Unique identifier of a case. */
     caseNumber: string;
     /** Array of user ID objects. */
-    watchlist?: UserIdAndRealm[];
+    watchlist?: User[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -910,13 +914,13 @@ namespace CaseManagementV1 {
     url?: string;
   }
 
-  /** AttachmentList. */
+  /** List of attachments in the case. */
   export interface AttachmentList {
     /** New attachments array. */
     attachments?: Attachment[];
   }
 
-  /** Case. */
+  /** The support case. */
   export interface Case {
     /** Number/ID of the case. */
     number?: string;
@@ -926,12 +930,15 @@ namespace CaseManagementV1 {
     description?: string;
     /** Date time of case creation in UTC. */
     created_at?: string;
+    /** User info in a case. */
     created_by?: User;
     /** Date time of the last update on the case in UTC. */
     updated_at?: string;
+    /** User info in a case. */
     updated_by?: User;
     /** Name of the console to interact with the contact. */
     contact_type?: string;
+    /** User info in a case. */
     contact?: User;
     /** Status of the case. */
     status?: string;
@@ -943,11 +950,13 @@ namespace CaseManagementV1 {
     resolution?: string;
     /** Notes of case closing. */
     close_notes?: string;
+    /** EU support. */
     eu?: CaseEu;
-    /** User IDs in the watchlist. */
+    /** List of users in the case watchlist. */
     watchlist?: User[];
     /** List of attachments/files of the case. */
     attachments?: Attachment[];
+    /** Offering details. */
     offering?: Offering;
     /** List of attached resources. */
     resources?: Resource[];
@@ -955,7 +964,7 @@ namespace CaseManagementV1 {
     comments?: Comment[];
   }
 
-  /** CaseEu. */
+  /** EU support. */
   export interface CaseEu {
     /** Identifying whether the case has EU Support. */
     support?: boolean;
@@ -963,19 +972,25 @@ namespace CaseManagementV1 {
     data_center?: string;
   }
 
-  /** CaseList. */
+  /** Response of a GET /cases request. */
   export interface CaseList {
     /** Total number of cases satisfying the query. */
     total_count?: number;
+    /** Container for URL pointer to related pages of cases. */
     first?: PaginationLink;
+    /** Container for URL pointer to related pages of cases. */
     next?: PaginationLink;
+    /** Container for URL pointer to related pages of cases. */
     previous?: PaginationLink;
+    /** Container for URL pointer to related pages of cases. */
     last?: PaginationLink;
+    /** List of cases. */
     cases?: Case[];
   }
 
   /** Specify if the case should be treated as EU regulated. Only one of the following properties is required. Call EU support utility endpoint to determine which property must be specified for your account. */
   export interface CasePayloadEu {
+    /** indicating whether the case is EU supported. */
     supported?: boolean;
     /** If EU supported utility endpoint specifies datacenter then pass the datacenter id to mark a case as EU
      *  supported.
@@ -983,58 +998,45 @@ namespace CaseManagementV1 {
     data_center?: number;
   }
 
-  /** Comment. */
+  /** A comment in a case. */
   export interface Comment {
     /** The comment. */
     value?: string;
     /** Timestamp of when comment is added. */
     added_at?: string;
+    /** User info in a case. */
     added_by?: User;
   }
 
-  /** Offering. */
+  /** Offering details. */
   export interface Offering {
     /** Name of the offering. */
     name: string;
+    /** Offering type. */
     type: OfferingType;
   }
 
-  /** OfferingPayload. */
-  export interface OfferingPayload {
-    /** Offering name. */
-    name: string;
-    /** Offering type. */
-    type: OfferingPayloadType;
-  }
-
   /** Offering type. */
-  export interface OfferingPayloadType {
+  export interface OfferingType {
+    /** Offering type group. "crn_service_name" is strongly prefered over "category" as the latter is legacy and
+     *  will be deprecated in the future.
+     */
     group: string;
-    /** crn service name of the offering. */
+    /** CRN service name of the offering. */
     key: string;
+    /** Optional. Platform kind of the offering. */
     kind?: string;
     /** Offering id in the catalog. This alone is enough to identify the offering. */
     id?: string;
   }
 
-  /** OfferingType. */
-  export interface OfferingType {
-    /** indicating whether this is an offering or a broad category. */
-    group: string;
-    /** crn service name of the offering or the value of the category. */
-    key: string;
-    /** catalog id of the offering. */
-    id?: string;
-    /** kind of the offering. */
-    kind?: string;
-  }
-
-  /** PaginationLink. */
+  /** Container for URL pointer to related pages of cases. */
   export interface PaginationLink {
+    /** URL to related pages of cases. */
     href?: string;
   }
 
-  /** Resource. */
+  /** A resource record of a case. */
   export interface Resource {
     /** ID of the resource. */
     crn?: string;
@@ -1048,7 +1050,7 @@ namespace CaseManagementV1 {
     note?: string;
   }
 
-  /** ResourcePayload. */
+  /** Payload to add a resource to a case. */
   export interface ResourcePayload {
     /** Cloud Resource Name of the resource. */
     crn?: string;
@@ -1062,46 +1064,44 @@ namespace CaseManagementV1 {
     note?: string;
   }
 
-  /** StatusPayload. */
+  /** Payload to update status of the case. */
   export interface StatusPayload {
     /** action to perform on the case. */
     action: string;
   }
 
-  /** User. */
+  /** User info in a case. */
   export interface User {
     /** Full name of the user. */
     name?: string;
-    /** the ID realm. */
-    realm?: string;
-    /** unique user ID in the realm specified by the type. */
-    user_id?: string;
-  }
-
-  /** UserIdAndRealm. */
-  export interface UserIdAndRealm {
     /** the ID realm. */
     realm: string;
     /** unique user ID in the realm specified by the type. */
     user_id: string;
   }
 
-  /** WatchlistAddResponse. */
+  /** Payload to add/remove users to/from the case watchlist. */
+  export interface Watchlist {
+    /** Array of user ID objects. */
+    watchlist?: User[];
+  }
+
+  /** Response of a request adding to watchlist. */
   export interface WatchlistAddResponse {
-    /** User IDs in the watchlist. */
+    /** List of added user. */
     added?: User[];
-    /** User IDs in the watchlist. */
+    /** List of failed to add user. */
     failed?: User[];
   }
 
-  /** StatusPayloadAcceptPayload. */
-  export interface StatusPayloadAcceptPayload extends StatusPayload {
-    /** comment about accepting the proposed resolution. */
+  /** Payload to accept the proposed resolution of the case. */
+  export interface AcceptPayload extends StatusPayload {
+    /** Comment about accepting the proposed resolution. */
     comment?: string;
   }
 
-  /** StatusPayloadResolvePayload. */
-  export interface StatusPayloadResolvePayload extends StatusPayload {
+  /** Payload to resolve the case. */
+  export interface ResolvePayload extends StatusPayload {
     /** comment of resolution. */
     comment?: string;
     /** * 1: Client error
@@ -1116,9 +1116,9 @@ namespace CaseManagementV1 {
     resolution_code: number;
   }
 
-  /** StatusPayloadUnresolvePayload. */
-  export interface StatusPayloadUnresolvePayload extends StatusPayload {
-    /** comment why the case should be unresolved. */
+  /** Payload to unresolve the case. */
+  export interface UnresolvePayload extends StatusPayload {
+    /** Comment why the case should be unresolved. */
     comment: string;
   }
 

@@ -172,18 +172,18 @@ describe('CaseManagementV1', () => {
         data_center: 38,
       };
 
-      // OfferingPayloadType
-      const offeringPayloadTypeModel = {
+      // OfferingType
+      const offeringTypeModel = {
         group: 'crn_service_name',
         key: 'testString',
         kind: 'testString',
         id: 'testString',
       };
 
-      // OfferingPayload
-      const offeringPayloadModel = {
+      // Offering
+      const offeringModel = {
         name: 'testString',
-        type: offeringPayloadTypeModel,
+        type: offeringTypeModel,
       };
 
       // ResourcePayload
@@ -194,10 +194,10 @@ describe('CaseManagementV1', () => {
         note: 'testString',
       };
 
-      // UserIdAndRealm
-      const userIdAndRealmModel = {
+      // User
+      const userModel = {
         realm: 'IBMid',
-        user_id: 'testString',
+        user_id: 'abc@ibm.com',
       };
 
       test('should pass the right params to createRequest', () => {
@@ -207,9 +207,9 @@ describe('CaseManagementV1', () => {
         const description = 'testString';
         const severity = 1;
         const eu = casePayloadEuModel;
-        const offering = offeringPayloadModel;
+        const offering = offeringModel;
         const resources = [resourcePayloadModel];
-        const watchlist = [userIdAndRealmModel];
+        const watchlist = [userModel];
         const invoiceNumber = 'testString';
         const slaCreditRequest = true;
         const params = {
@@ -372,7 +372,7 @@ describe('CaseManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // StatusPayloadResolvePayload
+      // ResolvePayload
       const statusPayloadModel = {
         action: 'resolve',
         comment: 'testString',
@@ -527,16 +527,16 @@ describe('CaseManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // UserIdAndRealm
-      const userIdAndRealmModel = {
+      // User
+      const userModel = {
         realm: 'IBMid',
-        user_id: 'testString',
+        user_id: 'abc@ibm.com',
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation addWatchlist
         const caseNumber = 'testString';
-        const watchlist = [userIdAndRealmModel];
+        const watchlist = [userModel];
         const params = {
           caseNumber: caseNumber,
           watchlist: watchlist,
@@ -606,16 +606,16 @@ describe('CaseManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // UserIdAndRealm
-      const userIdAndRealmModel = {
+      // User
+      const userModel = {
         realm: 'IBMid',
-        user_id: 'testString',
+        user_id: 'abc@ibm.com',
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation removeWatchlist
         const caseNumber = 'testString';
-        const watchlist = [userIdAndRealmModel];
+        const watchlist = [userModel];
         const params = {
           caseNumber: caseNumber,
           watchlist: watchlist,
