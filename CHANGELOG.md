@@ -1,3 +1,17 @@
+## [0.4.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.4.0...v0.4.1) (2020-05-15)
+
+
+### Bug Fixes
+
+* disable integration tests in tagged-release builds ([077db88](https://github.com/IBM/platform-services-node-sdk/commit/077db883ed9adf9683443d6a559b5dbaeb798014))
+
+# [0.4.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.3.0...v0.4.0) (2020-05-12)
+
+
+### Features
+
+* **Resource Manager:** add service and unit test code to project ([#9](https://github.com/IBM/platform-services-node-sdk/issues/9)) ([1bec1be](https://github.com/IBM/platform-services-node-sdk/commit/1bec1beed375fa21ea3e22a03c9ef7004dbf3606))
+
 # [0.3.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.2.0...v0.3.0) (2020-05-07)
 
 
