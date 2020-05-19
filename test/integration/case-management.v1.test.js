@@ -19,7 +19,7 @@
 const CaseManagementV1 = require('../../dist/case-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
-// testcase timeout value (60s).
+// testcase timeout value (120s).
 const timeout = 120000;
 
 // Location of our config file.
@@ -36,12 +36,16 @@ const config = authHelper.loadConfig();
 describe('CaseManagementV1_integration', () => {
   jest.setTimeout(timeout);
 
-  let service;
+  // config constants
   const testAccountId = config.CASE_MANAGEMENT_ACCOUNT_ID;
   const testAccountApiKey = config.CASE_MANAGEMENT_APIKEY;
 
-  // Test payload
+  // global values used in various test cases
+  let service;
   let caseNumber;
+  let attachmentId;
+
+  // Test payload
   const commentValue = 'Test comment';
   const offeringPayload = {
     name: 'Cloud Object Storage',
@@ -69,8 +73,6 @@ describe('CaseManagementV1_integration', () => {
     data: Buffer.from('This is a mock file.', 'utf8'),
     contentType: 'image/png',
   };
-
-  let attachmentId;
 
   test('should successfully complete initialization', done => {
     // Initialize the service client.
