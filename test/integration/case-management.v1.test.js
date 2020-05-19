@@ -17,7 +17,6 @@
 'use strict';
 
 const CaseManagementV1 = require('../../dist/case-management/v1');
-const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (120s).
