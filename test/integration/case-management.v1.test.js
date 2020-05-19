@@ -17,6 +17,7 @@
 'use strict';
 
 const CaseManagementV1 = require('../../dist/case-management/v1');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (120s).
@@ -28,17 +29,8 @@ const configFile = 'case_management.env';
 // Use authHelper to skip tests if our configFile is not available.
 const describe = authHelper.prepareTests(configFile);
 
-// Retrieve the config file as an object.
-// We do this because we're going to directly use the
-// config properties, rather than let the SDK do it for us.
-const config = authHelper.loadConfig();
-
 describe('CaseManagementV1_integration', () => {
   jest.setTimeout(timeout);
-
-  // config constants
-  const testAccountId = config.CASE_MANAGEMENT_ACCOUNT_ID;
-  const testAccountApiKey = config.CASE_MANAGEMENT_APIKEY;
 
   // global values used in various test cases
   let service;
@@ -78,9 +70,6 @@ describe('CaseManagementV1_integration', () => {
     // Initialize the service client.
     service = CaseManagementV1.newInstance();
     expect(service).not.toBeNull();
-    expect(config).not.toBeNull();
-    expect(testAccountId).not.toBeNull();
-    expect(testAccountApiKey).not.toBeNull();
     done();
   });
 
@@ -112,7 +101,7 @@ describe('CaseManagementV1_integration', () => {
         expect(result.description).toEqual(params.description);
 
         caseNumber = result.number;
-        console.log('Case number: ', caseNumber);
+        console.log('\nCase number: ', caseNumber);
 
         done();
       } catch (err) {
