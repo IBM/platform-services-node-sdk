@@ -198,7 +198,7 @@ describe('EnterpriseManagementV1_integration', () => {
       accountGroupId: parentAccountGroupId,
     };
     return service
-      .getAccountGroupById(params)
+      .getAccountGroup(params)
       .then(response => {
         crn = response.result.crn;
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -311,7 +311,7 @@ describe('EnterpriseManagementV1_integration', () => {
       accountId: enterpriseAccountId,
     };
     return service
-      .getAccountById(params)
+      .getAccount(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(200);
@@ -346,7 +346,7 @@ describe('EnterpriseManagementV1_integration', () => {
       accountId: account_id,
     };
     return service
-      .getAccountById(params)
+      .getAccount(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(200);

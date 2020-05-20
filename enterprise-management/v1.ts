@@ -26,7 +26,7 @@ import { getSdkHeaders } from '../lib/common';
 
 class EnterpriseManagementV1 extends BaseService {
 
-  static DEFAULT_SERVICE_URL: string = 'https://enterprise.test.cloud.ibm.com/v1';
+  static DEFAULT_SERVICE_URL: string = 'https://enterprise.cloud.ibm.com/v1';
   static DEFAULT_SERVICE_NAME: string = 'enterprise_management';
 
   /*************************
@@ -139,7 +139,7 @@ class EnterpriseManagementV1 extends BaseService {
   };
 
   /**
-   * Get account groups by query parameter.
+   * List account groups.
    *
    * Retrieve all account groups based on the values that are passed in the query parameters. If no query parameter is
    * passed, all of the account groups in the enterprise for which the calling identity has access are returned.
@@ -202,9 +202,9 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountGroupId - The ID of the account group to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroupResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>>}
    */
-  public getAccountGroupById(params: EnterpriseManagementV1.GetAccountGroupByIdParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroupResponse>> {
+  public getAccountGroup(params: EnterpriseManagementV1.GetAccountGroupParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>> {
     const _params = extend({}, params);
     const requiredParams = ['accountGroupId'];
 
@@ -218,7 +218,7 @@ class EnterpriseManagementV1 extends BaseService {
         'account_group_id': _params.accountGroupId
       };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountGroupById');
+      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountGroup');
 
       const parameters = {
         options: {
@@ -276,57 +276,6 @@ class EnterpriseManagementV1 extends BaseService {
         options: {
           url: '/account-groups/{account_group_id}',
           method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
-
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
-  /**
-   * Get permissible actions for an account group.
-   *
-   * Return all the actions that are allowed on a particular account group. This method takes an array of IAM actions in
-   * the body of the request and returns those actions that can be performed by the caller. An authentication check is
-   * performed for each action that is passed in the payload.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountGroupId - The ID of the account group to check for permissible actions.
-   * @param {string[]} [params.actions] - A list of names of permissible actions.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
-   */
-  public getAccountGroupPermissibleActions(params: EnterpriseManagementV1.GetAccountGroupPermissibleActionsParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = extend({}, params);
-    const requiredParams = ['accountGroupId'];
-
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
-
-      const body = {
-        'actions': _params.actions
-      };
-
-      const path = {
-        'account_group_id': _params.accountGroupId
-      };
-
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountGroupPermissibleActions');
-
-      const parameters = {
-        options: {
-          url: '/account-groups/{account_group_id}/permissible-actions',
-          method: 'POST',
           body,
           path,
         },
@@ -460,7 +409,7 @@ class EnterpriseManagementV1 extends BaseService {
   };
 
   /**
-   * Get accounts by query parameter.
+   * List accounts.
    *
    * Retrieve all accounts based on the values that are passed in the query parameters. If no query parameter is passed,
    * all of the accounts in the enterprise for which the calling identity has access are returned. <br/><br/>You can use
@@ -522,9 +471,9 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The ID of the account to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>>}
    */
-  public getAccountById(params: EnterpriseManagementV1.GetAccountByIdParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountResponse>> {
+  public getAccount(params: EnterpriseManagementV1.GetAccountParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>> {
     const _params = extend({}, params);
     const requiredParams = ['accountId'];
 
@@ -538,7 +487,7 @@ class EnterpriseManagementV1 extends BaseService {
         'account_id': _params.accountId
       };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountById');
+      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccount');
 
       const parameters = {
         options: {
@@ -558,7 +507,7 @@ class EnterpriseManagementV1 extends BaseService {
   };
 
   /**
-   * Move an account with the enterprise.
+   * Move an account within the enterprise.
    *
    * Move an account to a different parent within the same enterprise.
    *
@@ -592,57 +541,6 @@ class EnterpriseManagementV1 extends BaseService {
         options: {
           url: '/accounts/{account_id}',
           method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
-
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
-  /**
-   * Get permissible actions for an account.
-   *
-   * Return all the actions that are allowed on a particular account. This method takes an array of IAM actions in the
-   * body of the request and returns those actions which can be performed by the caller. An authentication check is
-   * performed for each action that is passed in the payload.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The ID of the account to check for permissible actions.
-   * @param {string[]} [params.actions] - A list of names of permissible actions.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
-   */
-  public getAccountPermissibleActions(params: EnterpriseManagementV1.GetAccountPermissibleActionsParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = extend({}, params);
-    const requiredParams = ['accountId'];
-
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
-
-      const body = {
-        'actions': _params.actions
-      };
-
-      const path = {
-        'account_id': _params.accountId
-      };
-
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountPermissibleActions');
-
-      const parameters = {
-        options: {
-          url: '/accounts/{account_id}/permissible-actions',
-          method: 'POST',
           body,
           path,
         },
@@ -719,7 +617,7 @@ class EnterpriseManagementV1 extends BaseService {
   };
 
   /**
-   * Get enterprise by query parameter.
+   * List enterprises.
    *
    * Retrieve all enterprises for a given ID by passing the IDs on query parameters. If no ID is passed, the enterprises
    * for which the calling identity is the primary contact are returned. You can use pagination parameters to filter the
@@ -778,9 +676,9 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.enterpriseId - The ID of the enterprise to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EnterpriseResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>>}
    */
-  public getEnterprise(params: EnterpriseManagementV1.GetEnterpriseParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EnterpriseResponse>> {
+  public getEnterprise(params: EnterpriseManagementV1.GetEnterpriseParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>> {
     const _params = extend({}, params);
     const requiredParams = ['enterpriseId'];
 
@@ -868,57 +766,6 @@ class EnterpriseManagementV1 extends BaseService {
     });
   };
 
-  /**
-   * Get permissible actions for an enterprise.
-   *
-   * Return all the actions that are allowed on a particular enterprise. This method takes an array of IAM actions in
-   * the body of the request and returns those actions which can be performed by the caller. An authentication check is
-   * performed for each action that is passed in the payload.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.enterpriseId - The ID of the enterprise to check for permissible actions.
-   * @param {string[]} [params.actions] - A list of names of permissible actions.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
-   */
-  public getEnterprisePermissibleActions(params: EnterpriseManagementV1.GetEnterprisePermissibleActionsParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = extend({}, params);
-    const requiredParams = ['enterpriseId'];
-
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
-
-      const body = {
-        'actions': _params.actions
-      };
-
-      const path = {
-        'enterprise_id': _params.enterpriseId
-      };
-
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getEnterprisePermissibleActions');
-
-      const parameters = {
-        options: {
-          url: '/enterprises/{enterprise_id}/permissible-actions',
-          method: 'POST',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
-
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
 }
 
 /*************************
@@ -982,8 +829,8 @@ namespace EnterpriseManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getAccountGroupById` operation. */
-  export interface GetAccountGroupByIdParams {
+  /** Parameters for the `getAccountGroup` operation. */
+  export interface GetAccountGroupParams {
     /** The ID of the account group to retrieve. */
     accountGroupId: string;
     headers?: OutgoingHttpHeaders;
@@ -997,15 +844,6 @@ namespace EnterpriseManagementV1 {
     name?: string;
     /** The IAM ID of the user to be the new primary contact for the account group. */
     primaryContactIamId?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `getAccountGroupPermissibleActions` operation. */
-  export interface GetAccountGroupPermissibleActionsParams {
-    /** The ID of the account group to check for permissible actions. */
-    accountGroupId: string;
-    /** A list of names of permissible actions. */
-    actions?: string[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1052,8 +890,8 @@ namespace EnterpriseManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getAccountById` operation. */
-  export interface GetAccountByIdParams {
+  /** Parameters for the `getAccount` operation. */
+  export interface GetAccountParams {
     /** The ID of the account to retrieve. */
     accountId: string;
     headers?: OutgoingHttpHeaders;
@@ -1065,15 +903,6 @@ namespace EnterpriseManagementV1 {
     accountId: string;
     /** The CRN of the new parent within the enterprise. */
     parent: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `getAccountPermissibleActions` operation. */
-  export interface GetAccountPermissibleActionsParams {
-    /** The ID of the account to check for permissible actions. */
-    accountId: string;
-    /** A list of names of permissible actions. */
-    actions?: string[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1123,55 +952,12 @@ namespace EnterpriseManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getEnterprisePermissibleActions` operation. */
-  export interface GetEnterprisePermissibleActionsParams {
-    /** The ID of the enterprise to check for permissible actions. */
-    enterpriseId: string;
-    /** A list of names of permissible actions. */
-    actions?: string[];
-    headers?: OutgoingHttpHeaders;
-  }
-
   /*************************
    * model interfaces
    ************************/
 
-  /** An object that represents account group. */
-  export interface AccountGroupResponse {
-    /** The URL of the account group. */
-    url?: string;
-    /** The account group ID. */
-    id?: string;
-    /** The CRN of the account group. */
-    crn?: string;
-    /** The CRN of the parent of the account group. */
-    parent?: string;
-    /** The enterprise account ID. */
-    enterprise_account_id?: string;
-    /** The enterprise ID that the account group is a part of. */
-    enterprise_id?: string;
-    /** The path from the enterprise to this particular account group. */
-    enterprise_path?: string;
-    /** The name of the account group. */
-    name?: string;
-    /** The state of the account group. */
-    state?: string;
-    /** The IAM ID of the primary contact of the account group. */
-    primary_contact_iam_id?: string;
-    /** The email address of the primary contact of the account group. */
-    primary_contact_email?: string;
-    /** The time stamp at which the account group was created. */
-    created_at?: string;
-    /** The IAM ID of the user or service that created the account group. */
-    created_by?: string;
-    /** The time stamp at which the account group was last updated. */
-    updated_at?: string;
-    /** The IAM ID of the user or service that updated the account group. */
-    updated_by?: string;
-  }
-
-  /** The response from successfully calling get account. */
-  export interface AccountResponse {
+  /** An account resource. */
+  export interface Account {
     /** The URL of the account. */
     url?: string;
     /** The account ID. */
@@ -1208,60 +994,8 @@ namespace EnterpriseManagementV1 {
     updated_by?: string;
   }
 
-  /** Create account group request completed successfully. */
-  export interface CreateAccountGroupResponse {
-    /** The ID of the account group entity that was created. */
-    account_group_id?: string;
-  }
-
-  /** The create account request completed successfully. */
-  export interface CreateAccountResponse {
-    /** The ID of the account group entity that was created. */
-    account_group_id?: string;
-  }
-
-  /** The response from calling create enterprise. */
-  export interface CreateEnterpriseResponse {
-    /** The ID of the enterprise entity that was created. This entity is the root of the hierarchy. */
-    enterprise_id?: string;
-    /** The ID of the enterprise account that was created. The enterprise account is used to manage billing and
-     *  access to the enterprise management.
-     */
-    enterprise_account_id?: string;
-  }
-
-  /** The response from calling get enterprise. */
-  export interface EnterpriseResponse {
-    /** The URL of the enterprise. */
-    url?: string;
-    /** The enterprise ID. */
-    id?: string;
-    /** The enterprise account ID. */
-    enterprise_account_id?: string;
-    /** The Cloud Resource Name (CRN) of the enterprise. */
-    crn?: string;
-    /** The name of the enterprise. */
-    name?: string;
-    /** The domain of the enterprise. */
-    domain?: string;
-    /** The state of the enterprise. */
-    state?: string;
-    /** The IAM ID of the primary contact of the enterprise, such as `IBMid-0123ABC`. */
-    primary_contact_iam_id?: string;
-    /** The email of the primary contact of the enterprise. */
-    primary_contact_email?: string;
-    /** The time stamp at which the enterprise was created. */
-    created_at?: string;
-    /** The IAM ID of the user or service that created the enterprise. */
-    created_by?: string;
-    /** The time stamp at which the enterprise was last updated. */
-    updated_at?: string;
-    /** The IAM ID of the user or service that updated the enterprise. */
-    updated_by?: string;
-  }
-
-  /** An object that represents account groups resource. */
-  export interface ListAccountGroupsResources {
+  /** An account group resource. */
+  export interface AccountGroup {
     /** The URL of the account group. */
     url?: string;
     /** The account group ID. */
@@ -1294,66 +1028,30 @@ namespace EnterpriseManagementV1 {
     updated_by?: string;
   }
 
-  /** The response from successfully calling list account groups. */
-  export interface ListAccountGroupsResponse {
-    /** The number of enterprises returned from calling list account groups. */
-    rows_count?: number;
-    /** A string that represents the link to the next page of results. */
-    next_url?: string;
-    /** A list of account groups. */
-    resources?: ListAccountGroupsResources[];
+  /** A newly-created account group. */
+  export interface CreateAccountGroupResponse {
+    /** The ID of the account group entity that was created. */
+    account_group_id?: string;
   }
 
-  /** An object that represents account resource. */
-  export interface ListAccountResources {
-    /** The URL of the account. */
-    url?: string;
-    /** The account ID. */
-    id?: string;
-    /** The Cloud Resource Name (CRN) of the account. */
-    crn?: string;
-    /** The CRN of the parent of the account. */
-    parent?: string;
-    /** The enterprise account ID. */
-    enterprise_account_id?: string;
-    /** The enterprise ID that the account is a part of. */
+  /** A newly-created account. */
+  export interface CreateAccountResponse {
+    /** The ID of the account entity that was created. */
+    account_id?: string;
+  }
+
+  /** The response from calling create enterprise. */
+  export interface CreateEnterpriseResponse {
+    /** The ID of the enterprise entity that was created. This entity is the root of the hierarchy. */
     enterprise_id?: string;
-    /** The path from the enterprise to this particular account. */
-    enterprise_path?: string;
-    /** The name of the account. */
-    name?: string;
-    /** The state of the account. */
-    state?: string;
-    /** The IAM ID of the owner of the account. */
-    owner_iam_id?: string;
-    /** The type of account - whether it is free or paid. */
-    paid?: boolean;
-    /** The email address of the owner of the account. */
-    owner_email?: string;
-    /** The flag to indicate whether the account is an enterprise account or not. */
-    is_enterprise_account?: boolean;
-    /** The time stamp at which the account was created. */
-    created_at?: string;
-    /** The IAM ID of the user or service that created the account. */
-    created_by?: string;
-    /** The time stamp at which the account was last updated. */
-    updated_at?: string;
-    /** The IAM ID of the user or service that updated the account. */
-    updated_by?: string;
+    /** The ID of the enterprise account that was created. The enterprise account is used to manage billing and
+     *  access to the enterprise management.
+     */
+    enterprise_account_id?: string;
   }
 
-  /** The response from successfully calling list accounts. */
-  export interface ListAccountsResponse {
-    /** The number of enterprises returned from calling list accounts. */
-    rows_count?: number;
-    /** A string that represents the link to the next page of results. */
-    next_url?: string;
-    /** A list of accounts. */
-    resources?: ListAccountResources[];
-  }
-
-  /** An object that represents an enterprise. */
-  export interface ListEnterpriseResources {
+  /** An enterprise resource. */
+  export interface Enterprise {
     /** The URL of the enterprise. */
     url?: string;
     /** The enterprise ID. */
@@ -1382,6 +1080,26 @@ namespace EnterpriseManagementV1 {
     updated_by?: string;
   }
 
+  /** The list_account_groups operation response. */
+  export interface ListAccountGroupsResponse {
+    /** The number of enterprises returned from calling list account groups. */
+    rows_count?: number;
+    /** A string that represents the link to the next page of results. */
+    next_url?: string;
+    /** A list of account groups. */
+    resources?: AccountGroup[];
+  }
+
+  /** The list_accounts operation response. */
+  export interface ListAccountsResponse {
+    /** The number of enterprises returned from calling list accounts. */
+    rows_count?: number;
+    /** A string that represents the link to the next page of results. */
+    next_url?: string;
+    /** A list of accounts. */
+    resources?: Account[];
+  }
+
   /** The response from calling list enterprises. */
   export interface ListEnterprisesResponse {
     /** The number of enterprises returned from calling list enterprise. */
@@ -1389,7 +1107,7 @@ namespace EnterpriseManagementV1 {
     /** A string that represents the link to the next page of results. */
     next_url?: string;
     /** A list of enterprise objects. */
-    resources?: ListEnterpriseResources[];
+    resources?: Enterprise[];
   }
 
 }

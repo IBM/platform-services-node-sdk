@@ -31,7 +31,7 @@ const {
 
 const service = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://enterprise.test.cloud.ibm.com/v1',
+  url: 'https://enterprise.cloud.ibm.com/v1',
 };
 
 const enterpriseManagement = new EnterpriseManagementV1(service);
@@ -234,19 +234,19 @@ describe('EnterpriseManagementV1', () => {
       });
     });
   });
-  describe('getAccountGroupById', () => {
+  describe('getAccountGroup', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAccountGroupById
+        // Construct the params object for operation getAccountGroup
         const accountGroupId = 'testString';
         const params = {
           accountGroupId: accountGroupId,
         };
 
-        const getAccountGroupByIdResult = enterpriseManagement.getAccountGroupById(params);
+        const getAccountGroupResult = enterpriseManagement.getAccountGroup(params);
 
         // all methods should return a Promise
-        expectToBePromise(getAccountGroupByIdResult);
+        expectToBePromise(getAccountGroupResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -273,7 +273,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagement.getAccountGroupById(params);
+        enterpriseManagement.getAccountGroup(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -282,7 +282,7 @@ describe('EnterpriseManagementV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await enterpriseManagement.getAccountGroupById({});
+          await enterpriseManagement.getAccountGroup({});
         } catch (e) {
           err = e;
         }
@@ -292,10 +292,10 @@ describe('EnterpriseManagementV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const getAccountGroupByIdPromise = enterpriseManagement.getAccountGroupById();
-        expectToBePromise(getAccountGroupByIdPromise);
+        const getAccountGroupPromise = enterpriseManagement.getAccountGroup();
+        expectToBePromise(getAccountGroupPromise);
 
-        getAccountGroupByIdPromise.catch(err => {
+        getAccountGroupPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -370,77 +370,6 @@ describe('EnterpriseManagementV1', () => {
         expectToBePromise(updateAccountGroupPromise);
 
         updateAccountGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
-      });
-    });
-  });
-  describe('getAccountGroupPermissibleActions', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAccountGroupPermissibleActions
-        const accountGroupId = 'testString';
-        const actions = ['testString'];
-        const params = {
-          accountGroupId: accountGroupId,
-          actions: actions,
-        };
-
-        const getAccountGroupPermissibleActionsResult = enterpriseManagement.getAccountGroupPermissibleActions(params);
-
-        // all methods should return a Promise
-        expectToBePromise(getAccountGroupPermissibleActionsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/account-groups/{account_group_id}/permissible-actions', 'POST');
-        const expectedAccept = undefined;
-        const expectedContentType = 'application/json';
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['actions']).toEqual(actions);
-        expect(options.path['account_group_id']).toEqual(accountGroupId);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const accountGroupId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          accountGroupId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        enterpriseManagement.getAccountGroupPermissibleActions(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await enterpriseManagement.getAccountGroupPermissibleActions({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const getAccountGroupPermissibleActionsPromise = enterpriseManagement.getAccountGroupPermissibleActions();
-        expectToBePromise(getAccountGroupPermissibleActionsPromise);
-
-        getAccountGroupPermissibleActionsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -661,19 +590,19 @@ describe('EnterpriseManagementV1', () => {
       });
     });
   });
-  describe('getAccountById', () => {
+  describe('getAccount', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAccountById
+        // Construct the params object for operation getAccount
         const accountId = 'testString';
         const params = {
           accountId: accountId,
         };
 
-        const getAccountByIdResult = enterpriseManagement.getAccountById(params);
+        const getAccountResult = enterpriseManagement.getAccount(params);
 
         // all methods should return a Promise
-        expectToBePromise(getAccountByIdResult);
+        expectToBePromise(getAccountResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -700,7 +629,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagement.getAccountById(params);
+        enterpriseManagement.getAccount(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -709,7 +638,7 @@ describe('EnterpriseManagementV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await enterpriseManagement.getAccountById({});
+          await enterpriseManagement.getAccount({});
         } catch (e) {
           err = e;
         }
@@ -719,10 +648,10 @@ describe('EnterpriseManagementV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const getAccountByIdPromise = enterpriseManagement.getAccountById();
-        expectToBePromise(getAccountByIdPromise);
+        const getAccountPromise = enterpriseManagement.getAccount();
+        expectToBePromise(getAccountPromise);
 
-        getAccountByIdPromise.catch(err => {
+        getAccountPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -796,77 +725,6 @@ describe('EnterpriseManagementV1', () => {
         expectToBePromise(updateAccountPromise);
 
         updateAccountPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
-      });
-    });
-  });
-  describe('getAccountPermissibleActions', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAccountPermissibleActions
-        const accountId = 'testString';
-        const actions = ['testString'];
-        const params = {
-          accountId: accountId,
-          actions: actions,
-        };
-
-        const getAccountPermissibleActionsResult = enterpriseManagement.getAccountPermissibleActions(params);
-
-        // all methods should return a Promise
-        expectToBePromise(getAccountPermissibleActionsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/accounts/{account_id}/permissible-actions', 'POST');
-        const expectedAccept = undefined;
-        const expectedContentType = 'application/json';
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['actions']).toEqual(actions);
-        expect(options.path['account_id']).toEqual(accountId);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const accountId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          accountId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        enterpriseManagement.getAccountPermissibleActions(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await enterpriseManagement.getAccountPermissibleActions({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const getAccountPermissibleActionsPromise = enterpriseManagement.getAccountPermissibleActions();
-        expectToBePromise(getAccountPermissibleActionsPromise);
-
-        getAccountPermissibleActionsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1150,77 +1008,6 @@ describe('EnterpriseManagementV1', () => {
         expectToBePromise(updateEnterprisePromise);
 
         updateEnterprisePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
-      });
-    });
-  });
-  describe('getEnterprisePermissibleActions', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getEnterprisePermissibleActions
-        const enterpriseId = 'testString';
-        const actions = ['testString'];
-        const params = {
-          enterpriseId: enterpriseId,
-          actions: actions,
-        };
-
-        const getEnterprisePermissibleActionsResult = enterpriseManagement.getEnterprisePermissibleActions(params);
-
-        // all methods should return a Promise
-        expectToBePromise(getEnterprisePermissibleActionsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/enterprises/{enterprise_id}/permissible-actions', 'POST');
-        const expectedAccept = undefined;
-        const expectedContentType = 'application/json';
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['actions']).toEqual(actions);
-        expect(options.path['enterprise_id']).toEqual(enterpriseId);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const enterpriseId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          enterpriseId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        enterpriseManagement.getEnterprisePermissibleActions(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await enterpriseManagement.getEnterprisePermissibleActions({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const getEnterprisePermissibleActionsPromise = enterpriseManagement.getEnterprisePermissibleActions();
-        expectToBePromise(getEnterprisePermissibleActionsPromise);
-
-        getEnterprisePermissibleActionsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
