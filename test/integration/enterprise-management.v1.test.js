@@ -244,7 +244,6 @@ describe('EnterpriseManagementV1_integration', () => {
       });
   });
 
-
   iEmail = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
 
   it('Create a Standard Account - calls POST /coe/v2/accounts with BSS token', done => {
@@ -287,7 +286,6 @@ describe('EnterpriseManagementV1_integration', () => {
       done();
     });
   });
-
 
   it('should import this Standard account into an enterprise', done => {
     const params = {
