@@ -18,6 +18,7 @@
 'use strict';
 
 const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 const am_coe_v2_account_apis_helper = require('../integration/am_coe_v2_account_apis.js');
 const async = require('async');
@@ -29,7 +30,6 @@ const timeout = 250000;
 const configFile = 'enterprise-management.env';
 
 const describe = authHelper.prepareTests(configFile);
-const config = authHelper.loadConfig();
 
 let parent;
 const limit = 100;
@@ -50,16 +50,29 @@ describe('EnterpriseManagementV1_integration', () => {
   jest.setTimeout(timeout);
   const account_info = am_coe_v2_account_apis_helper.get_default_account_info();
   let service;
+  let config;
 
   it('should successfully complete initialization', done => {
     service = EnterpriseManagementV1.newInstance({});
     expect(service).not.toBeNull();
+
+    // Grab our test-specific config properties.
+    config = readExternalSources('EMTEST_CONFIG');
+    expect(config).not.toBeNull();
+    expect(config).toHaveProperty('amHost');
+    expect(config).toHaveProperty('dbUrl');
+    expect(config).toHaveProperty('dbUser');
+    expect(config).toHaveProperty('dbPass');
+    expect(config).toHaveProperty('activationDbName');
+    expect(config).toHaveProperty('iamHost');
+    expect(config).toHaveProperty('iamBasicAuth');
+    expect(config).toHaveProperty('iamApiKey');
     done();
   });
 
   it('Create a Subscription Account - should generate IAM service token', done => {
-    am_coe_v2_account_apis_helper.generate_iam_service_token(config.IAM_HOST, config.IAM_BASIC_AUTH, config.IAM_API_KEY, (e, token) => {
-      am_service_iam_token = `bearer ${token}`;
+    am_coe_v2_account_apis_helper.generate_iam_service_token(config.iamHost, config.iamBasicAuth, config.iamApiKey, (e, token) => {
+      am_service_iam_token = `Bearer ${token}`;
       done();
     });
   });
@@ -68,14 +81,14 @@ describe('EnterpriseManagementV1_integration', () => {
 
   it('Create a Subscription Account - calls POST /coe/v2/accounts with BSS token', done => {
     const payload = am_coe_v2_account_apis_helper.get_account_payload(account_info.email, 'STANDARD', 'ACTIVE');
-    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.AM_HOST, payload, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.amHost, payload, am_service_iam_token, (e, r, b) => {
       account_info.account_id = r.id;
       done();
     });
   });
 
   it('Create a Subscription Account - waits until activation token is generated', done => {
-    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.dbUrl, config.activationDbName, config.dbUser, config.dbPass, account_info.email);
     async.retry(retry_params, db_activation_token, (e, token) => {
       activation_token = token;
       done();
@@ -83,26 +96,26 @@ describe('EnterpriseManagementV1_integration', () => {
   });
 
   it('Create a Subscription Account - waits until create process is done', done => {
-    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, account_info.email);
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.dbUrl, config.activationDbName, config.dbUser, config.dbPass, account_info.email);
     async.retry(retry_params, db_activation_token, (e, end_record) => {
       done();
     });
   });
 
   it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.amHost, account_info.account_id, am_service_iam_token, (e, r, b) => {
       done();
     });
   });
 
   it('Create a Subscription Account - calls GET /coe/v2/accounts/verify?email=******&token=****** to activate the account', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.AM_HOST, account_info.email, activation_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.amHost, account_info.email, activation_token, (e, r, b) => {
       done();
     });
   });
 
   it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.amHost, account_info.account_id, am_service_iam_token, (e, r, b) => {
       owner_iam_id = b.entity.owner_iam_id;
       subscription_id = b.entity.subscription_id;
       done();
@@ -112,13 +125,13 @@ describe('EnterpriseManagementV1_integration', () => {
   it('Create a Subscription Account - convert account to subscription', done => {
     const payload_to_convert = am_coe_v2_account_apis_helper.get_activate_subscription_payload('2020-03-01T07:00:00.000Z', '2020-11-30T08:00:00.000', 10);
     delete payload_to_convert['softlayer_account_id'];
-    am_coe_v2_account_apis_helper.patch_am_coe_v2_account_subscription(config.AM_HOST, account_info.account_id, subscription_id, payload_to_convert, am_service_iam_token, null, (e, r, b) => {
+    am_coe_v2_account_apis_helper.patch_am_coe_v2_account_subscription(config.amHost, account_info.account_id, subscription_id, payload_to_convert, am_service_iam_token, null, (e, r, b) => {
       done();
     });
   });
 
   it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.amHost, account_info.account_id, am_service_iam_token, (e, r, b) => {
       owner_iam_id = b.entity.owner_iam_id;
       subscription_id = b.entity.subscription_id;
 
@@ -148,7 +161,7 @@ describe('EnterpriseManagementV1_integration', () => {
   });
 
   it('Create a Subscription Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, account_info.account_id, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.amHost, account_info.account_id, am_service_iam_token, (e, r, b) => {
       parent = b.entity.parent;
       done();
     });
@@ -227,35 +240,18 @@ describe('EnterpriseManagementV1_integration', () => {
       });
   });
 
-  it('should get permissible actions for an account group.', done => {
-    const params = {
-      actions: ['testString'],
-      accountGroupId: parentAccountGroupId,
-    };
-    return service
-      .getAccountGroupPermissibleActions(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
   iEmail = `aminttest+${new Date().getTime()}_${Math.floor(Math.random() * 10000)}@mail.test.ibm.com`;
 
   it('Create a Standard Account - calls POST /coe/v2/accounts with BSS token', done => {
     const payload = am_coe_v2_account_apis_helper.get_account_payload(iEmail, 'STANDARD', 'ACTIVE');
-    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.AM_HOST, payload, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.post_am_coe_v2_accounts(config.amHost, payload, am_service_iam_token, (e, r, b) => {
       iAccountId = r.id;
       done();
     });
   });
 
   it('Create a Standard Account - waits until activation token is generated', done => {
-    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, iEmail);
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.dbUrl, config.activationDbName, config.dbUser, config.dbPass, iEmail);
     async.retry(retry_params, db_activation_token, (e, token) => {
       activation_token = token;
       done();
@@ -263,26 +259,26 @@ describe('EnterpriseManagementV1_integration', () => {
   });
 
   it('Create a Standard Account - waits until create process is done', done => {
-    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.DB_URL, config.ACTIVATION_DB_NAME, config.DB_USER, config.DB_PASS, iEmail);
+    const db_activation_token = am_coe_v2_account_apis_helper.fetch_db_activation_token(config.dbUrl, config.activationDbName, config.dbUser, config.dbPass, iEmail);
     async.retry(retry_params, db_activation_token, (e, end_record) => {
       done();
     });
   });
 
   it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, iAccountId, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.amHost, iAccountId, am_service_iam_token, (e, r, b) => {
       done();
     });
   });
 
   it('Create a Standard Account - calls GET /coe/v2/accounts/verify?email=******&token=****** to activate the account', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.AM_HOST, iEmail, activation_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_accounts_verify(config.amHost, iEmail, activation_token, (e, r, b) => {
       done();
     });
   });
 
   it('Create a Standard Account - calls GET /coe/v2/accounts/:account_id with BSS token', done => {
-    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.AM_HOST, iAccountId, am_service_iam_token, (e, r, b) => {
+    am_coe_v2_account_apis_helper.get_am_coe_v2_account_by_id(config.amHost, iAccountId, am_service_iam_token, (e, r, b) => {
       done();
     });
   });
@@ -422,23 +418,6 @@ describe('EnterpriseManagementV1_integration', () => {
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(202);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
-  it('should get permissible actions for an account', done => {
-    const params = {
-      actions: ['testString'],
-      accountId: account_info.account_id,
-    };
-    return service
-      .getAccountPermissibleActions(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
         done();
       })
       .catch(err => {
