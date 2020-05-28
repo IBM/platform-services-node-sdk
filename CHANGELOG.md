@@ -1,3 +1,24 @@
+# [0.6.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.5.0...v0.6.0) (2020-05-21)
+
+
+### Features
+
+* **Enterprise Management:** add service to project ([811f059](https://github.com/IBM/platform-services-node-sdk/commit/811f059ef4d34b8aa0a19e03daa15a6d557a3e1a))
+
+# [0.5.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.4.1...v0.5.0) (2020-05-20)
+
+
+### Features
+
+* **Case Management:** add service to project ([#18](https://github.com/IBM/platform-services-node-sdk/issues/18)) ([610718c](https://github.com/IBM/platform-services-node-sdk/commit/610718cac39d76fa0c24fdf1915ad9a7cc7a4cdb))
+
+## [0.4.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.4.0...v0.4.1) (2020-05-15)
+
+
+### Bug Fixes
+
+* disable integration tests in tagged-release builds ([077db88](https://github.com/IBM/platform-services-node-sdk/commit/077db883ed9adf9683443d6a559b5dbaeb798014))
+
 # [0.4.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.3.0...v0.4.0) (2020-05-12)
 
 
