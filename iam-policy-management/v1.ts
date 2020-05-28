@@ -168,11 +168,9 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
-   * @param {PolicyRequestSubjectsItem[]} params.subjects - The subject attribute values that must match in order for
-   * this policy to apply in a permission decision.
-   * @param {PolicyRequestRolesItem[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
-   * @param {PolicyRequestResourcesItem[]} params.resources - The attributes of the resource. Note that only one
-   * resource is allowed in a policy.
+   * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
+   * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
+   * @param {PolicyResource[]} params.resources - The resources associated with a policy.
    * @param {string} [params.acceptLanguage] - Translation language code.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
@@ -242,11 +240,9 @@ class IamPolicyManagementV1 extends BaseService {
    * existing policy. The Etag can be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag
    * response header.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
-   * @param {PolicyRequestSubjectsItem[]} params.subjects - The subject attribute values that must match in order for
-   * this policy to apply in a permission decision.
-   * @param {PolicyRequestRolesItem[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
-   * @param {PolicyRequestResourcesItem[]} params.resources - The attributes of the resource. Note that only one
-   * resource is allowed in a policy.
+   * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
+   * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
+   * @param {PolicyResource[]} params.resources - The resources associated with a policy.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
@@ -436,12 +432,12 @@ class IamPolicyManagementV1 extends BaseService {
    * the new role.
    *
    * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.displayName - The display name of the role that is shown in the console.
+   * @param {string[]} params.actions - The actions of the role.
    * @param {string} params.name - The name of the role that is used in the CRN. Can only be alphanumeric and has to be
    * capitalized.
    * @param {string} params.accountId - The account GUID.
    * @param {string} params.serviceName - The service name.
-   * @param {string} params.displayName - The display name of the role that is shown in the console.
-   * @param {string[]} params.actions - The actions of the role.
    * @param {string} [params.description] - The description of the role.
    * @param {string} [params.acceptLanguage] - Translation language code.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -449,7 +445,7 @@ class IamPolicyManagementV1 extends BaseService {
    */
   public createRole(params: IamPolicyManagementV1.CreateRoleParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = extend({}, params);
-    const requiredParams = ['name', 'accountId', 'serviceName', 'displayName', 'actions'];
+    const requiredParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName'];
 
     return new Promise((resolve, reject) => {
       const missingParams = getMissingParams(_params, requiredParams);
@@ -458,11 +454,11 @@ class IamPolicyManagementV1 extends BaseService {
       }
 
       const body = {
+        'display_name': _params.displayName,
+        'actions': _params.actions,
         'name': _params.name,
         'account_id': _params.accountId,
         'service_name': _params.serviceName,
-        'display_name': _params.displayName,
-        'actions': _params.actions,
         'description': _params.description
       };
 
@@ -683,12 +679,12 @@ namespace IamPolicyManagementV1 {
   export interface CreatePolicyParams {
     /** The policy type; either 'access' or 'authorization'. */
     type: string;
-    /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
-    subjects: PolicyRequestSubjectsItem[];
+    /** The subjects associated with a policy. */
+    subjects: PolicySubject[];
     /** A set of role cloud resource names (CRNs) granted by the policy. */
-    roles: PolicyRequestRolesItem[];
-    /** The attributes of the resource. Note that only one resource is allowed in a policy. */
-    resources: PolicyRequestResourcesItem[];
+    roles: PolicyRole[];
+    /** The resources associated with a policy. */
+    resources: PolicyResource[];
     /** Translation language code. */
     acceptLanguage?: string;
     headers?: OutgoingHttpHeaders;
@@ -704,12 +700,12 @@ namespace IamPolicyManagementV1 {
     ifMatch: string;
     /** The policy type; either 'access' or 'authorization'. */
     type: string;
-    /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
-    subjects: PolicyRequestSubjectsItem[];
+    /** The subjects associated with a policy. */
+    subjects: PolicySubject[];
     /** A set of role cloud resource names (CRNs) granted by the policy. */
-    roles: PolicyRequestRolesItem[];
-    /** The attributes of the resource. Note that only one resource is allowed in a policy. */
-    resources: PolicyRequestResourcesItem[];
+    roles: PolicyRole[];
+    /** The resources associated with a policy. */
+    resources: PolicyResource[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -740,16 +736,16 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `createRole` operation. */
   export interface CreateRoleParams {
+    /** The display name of the role that is shown in the console. */
+    displayName: string;
+    /** The actions of the role. */
+    actions: string[];
     /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
     name: string;
     /** The account GUID. */
     accountId: string;
     /** The service name. */
     serviceName: string;
-    /** The display name of the role that is shown in the console. */
-    displayName: string;
-    /** The actions of the role. */
-    actions: string[];
     /** The description of the role. */
     description?: string;
     /** Translation language code. */
@@ -792,154 +788,24 @@ namespace IamPolicyManagementV1 {
    * model interfaces
    ************************/
 
-  /** PolicyBaseResourcesItem. */
-  export interface PolicyBaseResourcesItem {
-    /** List of resource attributes. */
-    attributes?: PolicyBaseResourcesItemAttributesItem[];
-  }
-
-  /** PolicyBaseResourcesItemAttributesItem. */
-  export interface PolicyBaseResourcesItemAttributesItem {
-    /** The name of an attribute. */
-    name?: string;
-    /** The value of an attribute. */
-    value?: string;
-    /** The operator of an attribute. */
-    operator?: string;
-  }
-
-  /** PolicyBaseSubjectsItem. */
-  export interface PolicyBaseSubjectsItem {
-    /** List of subject attributes. */
-    attributes?: PolicyBaseSubjectsItemAttributesItem[];
-  }
-
-  /** PolicyBaseSubjectsItemAttributesItem. */
-  export interface PolicyBaseSubjectsItemAttributesItem {
-    /** The name of an attribute. */
-    name?: string;
-    /** The value of an attribute. */
-    value?: string;
-  }
-
-  /** PolicyRequestResourcesItem. */
-  export interface PolicyRequestResourcesItem {
-    /** List of resource attributes. */
-    attributes: PolicyRequestResourcesItemAttributesItem[];
-  }
-
-  /** PolicyRequestResourcesItemAttributesItem. */
-  export interface PolicyRequestResourcesItemAttributesItem {
-    /** The name of an attribute. */
-    name: string;
-    /** The value of an attribute. */
-    value: string;
-    /** The operator of an attribute. */
-    operator?: string;
-  }
-
-  /** PolicyRequestRolesItem. */
-  export interface PolicyRequestRolesItem {
-    /** A role cloud resource name (CRN). */
-    role_id: string;
-  }
-
-  /** PolicyRequestSubjectsItem. */
-  export interface PolicyRequestSubjectsItem {
-    /** List of subject attributes. */
-    attributes: PolicyRequestSubjectsItemAttributesItem[];
-  }
-
-  /** PolicyRequestSubjectsItemAttributesItem. */
-  export interface PolicyRequestSubjectsItemAttributesItem {
-    /** The name of an attribute. */
-    name: string;
-    /** The value of an attribute. */
-    value: string;
-  }
-
-  /** PolicyRolesItem. */
-  export interface PolicyRolesItem {
-    /** The role cloud resource name granted by the policy. */
-    role_id?: string;
-    /** The display name of the role. */
-    display_name?: string;
-    /** The description of the role. */
-    description?: string;
-  }
-
-  /** RoleListCustomRolesItem. */
-  export interface RoleListCustomRolesItem {
-    /** The role ID. */
-    id?: string;
-    /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
-    name?: string;
-    /** The account GUID. */
-    account_id?: string;
-    /** The service name. */
-    service_name?: string;
-    /** The display name of the role that is shown in the console. */
-    display_name?: string;
-    /** The description of the role. */
-    description?: string;
-    /** The role CRN. */
-    crn?: string;
-    /** The actions of the role. */
-    actions?: string[];
-    /** The UTC timestamp when the role was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the role. */
-    created_by_id?: string;
-    /** The UTC timestamp when the role was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
-    last_modified_by_id?: string;
-    /** The href link back to the role. */
-    href?: string;
-  }
-
-  /** RoleListServiceRolesItem. */
-  export interface RoleListServiceRolesItem {
-    /** The display name of the role that is shown in the console. */
-    display_name?: string;
-    /** The description of the role. */
-    description?: string;
-    /** The role CRN. */
-    crn?: string;
-    /** The actions of the role. */
-    actions?: string[];
-  }
-
-  /** RoleListSystemRolesItem. */
-  export interface RoleListSystemRolesItem {
-    /** The display name of the role that is shown in the console. */
-    display_name?: string;
-    /** The description of the role. */
-    description?: string;
-    /** The role CRN. */
-    crn?: string;
-    /** The actions of the role. */
-    actions?: string[];
-  }
-
-  /** CustomRole. */
+  /** An additional set of properties associated with a role. */
   export interface CustomRole {
     /** The role ID. */
     id?: string;
+    /** The display name of the role that is shown in the console. */
+    display_name?: string;
+    /** The description of the role. */
+    description?: string;
+    /** The actions of the role. */
+    actions?: string[];
+    /** The role CRN. */
+    crn?: string;
     /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
     name?: string;
     /** The account GUID. */
     account_id?: string;
     /** The service name. */
     service_name?: string;
-    /** The display name of the role that is shown in the console. */
-    display_name?: string;
-    /** The description of the role. */
-    description?: string;
-    /** The role CRN. */
-    crn?: string;
-    /** The actions of the role. */
-    actions?: string[];
     /** The UTC timestamp when the role was created. */
     created_at?: string;
     /** The iam ID of the entity that created the role. */
@@ -952,18 +818,18 @@ namespace IamPolicyManagementV1 {
     href?: string;
   }
 
-  /** Policy. */
+  /** The core set of properties associated with a policy. */
   export interface Policy {
     /** The policy ID. */
     id?: string;
     /** The policy type; either 'access' or 'authorization'. */
     type?: string;
-    /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
-    subjects?: PolicyBaseSubjectsItem[];
+    /** The subjects associated with a policy. */
+    subjects?: PolicySubject[];
     /** A set of role cloud resource names (CRNs) granted by the policy. */
-    roles?: PolicyRolesItem[];
-    /** The attributes of the resource. Note that only one resource is allowed in a policy. */
-    resources?: PolicyBaseResourcesItem[];
+    roles?: PolicyRole[];
+    /** The resources associated with a policy. */
+    resources?: PolicyResource[];
     /** The href link back to the policy. */
     href?: string;
     /** The UTC timestamp when the policy was created. */
@@ -976,20 +842,72 @@ namespace IamPolicyManagementV1 {
     last_modified_by_id?: string;
   }
 
-  /** PolicyList. */
+  /** A collection of policies. */
   export interface PolicyList {
     /** List of policies. */
     policies?: Policy[];
   }
 
-  /** RoleList. */
+  /** The attributes of the resource. Note that only one resource is allowed in a policy. */
+  export interface PolicyResource {
+    /** List of resource attributes. */
+    attributes?: ResourceAttribute[];
+  }
+
+  /** A role associated with a policy. */
+  export interface PolicyRole {
+    /** The role cloud resource name granted by the policy. */
+    role_id: string;
+    /** The display name of the role. */
+    display_name?: string;
+    /** The description of the role. */
+    description?: string;
+  }
+
+  /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
+  export interface PolicySubject {
+    /** List of subject attributes. */
+    attributes?: SubjectAttribute[];
+  }
+
+  /** An attribute associated with a resource. */
+  export interface ResourceAttribute {
+    /** The name of an attribute. */
+    name: string;
+    /** The value of an attribute. */
+    value: string;
+    /** The operator of an attribute. */
+    operator?: string;
+  }
+
+  /** A role resource. */
+  export interface Role {
+    /** The display name of the role that is shown in the console. */
+    display_name?: string;
+    /** The description of the role. */
+    description?: string;
+    /** The actions of the role. */
+    actions?: string[];
+    /** The role CRN. */
+    crn?: string;
+  }
+
+  /** A collection of roles returned by the 'list roles' operation. */
   export interface RoleList {
     /** List of custom roles. */
-    custom_roles?: RoleListCustomRolesItem[];
+    custom_roles?: CustomRole[];
     /** List of service roles. */
-    service_roles?: RoleListServiceRolesItem[];
+    service_roles?: Role[];
     /** List of system roles. */
-    system_roles?: RoleListSystemRolesItem[];
+    system_roles?: Role[];
+  }
+
+  /** An attribute associated with a subject. */
+  export interface SubjectAttribute {
+    /** The name of an attribute. */
+    name: string;
+    /** The value of an attribute. */
+    value: string;
   }
 
 }

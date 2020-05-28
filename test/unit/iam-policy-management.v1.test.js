@@ -187,40 +187,40 @@ describe('IamPolicyManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // PolicyRequestSubjectsItemAttributesItem
-      const policyRequestSubjectsItemAttributesItemModel = {
+      // SubjectAttribute
+      const subjectAttributeModel = {
         name: 'testString',
         value: 'testString',
       };
 
-      // PolicyRequestSubjectsItem
-      const policyRequestSubjectsItemModel = {
-        attributes: [policyRequestSubjectsItemAttributesItemModel],
+      // PolicySubject
+      const policySubjectModel = {
+        attributes: [subjectAttributeModel],
       };
 
-      // PolicyRequestRolesItem
-      const policyRequestRolesItemModel = {
+      // PolicyRole
+      const policyRoleModel = {
         role_id: 'testString',
       };
 
-      // PolicyRequestResourcesItemAttributesItem
-      const policyRequestResourcesItemAttributesItemModel = {
+      // ResourceAttribute
+      const resourceAttributeModel = {
         name: 'testString',
         value: 'testString',
         operator: 'testString',
       };
 
-      // PolicyRequestResourcesItem
-      const policyRequestResourcesItemModel = {
-        attributes: [policyRequestResourcesItemAttributesItemModel],
+      // PolicyResource
+      const policyResourceModel = {
+        attributes: [resourceAttributeModel],
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createPolicy
         const type = 'testString';
-        const subjects = [policyRequestSubjectsItemModel];
-        const roles = [policyRequestRolesItemModel];
-        const resources = [policyRequestResourcesItemModel];
+        const subjects = [policySubjectModel];
+        const roles = [policyRoleModel];
+        const resources = [policyResourceModel];
         const acceptLanguage = 'testString';
         const params = {
           type: type,
@@ -254,9 +254,9 @@ describe('IamPolicyManagementV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const type = 'testString';
-        const subjects = [policyRequestSubjectsItemModel];
-        const roles = [policyRequestRolesItemModel];
-        const resources = [policyRequestResourcesItemModel];
+        const subjects = [policySubjectModel];
+        const roles = [policyRoleModel];
+        const resources = [policyResourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -303,32 +303,32 @@ describe('IamPolicyManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // PolicyRequestSubjectsItemAttributesItem
-      const policyRequestSubjectsItemAttributesItemModel = {
+      // SubjectAttribute
+      const subjectAttributeModel = {
         name: 'testString',
         value: 'testString',
       };
 
-      // PolicyRequestSubjectsItem
-      const policyRequestSubjectsItemModel = {
-        attributes: [policyRequestSubjectsItemAttributesItemModel],
+      // PolicySubject
+      const policySubjectModel = {
+        attributes: [subjectAttributeModel],
       };
 
-      // PolicyRequestRolesItem
-      const policyRequestRolesItemModel = {
+      // PolicyRole
+      const policyRoleModel = {
         role_id: 'testString',
       };
 
-      // PolicyRequestResourcesItemAttributesItem
-      const policyRequestResourcesItemAttributesItemModel = {
+      // ResourceAttribute
+      const resourceAttributeModel = {
         name: 'testString',
         value: 'testString',
         operator: 'testString',
       };
 
-      // PolicyRequestResourcesItem
-      const policyRequestResourcesItemModel = {
-        attributes: [policyRequestResourcesItemAttributesItemModel],
+      // PolicyResource
+      const policyResourceModel = {
+        attributes: [resourceAttributeModel],
       };
 
       test('should pass the right params to createRequest', () => {
@@ -336,9 +336,9 @@ describe('IamPolicyManagementV1', () => {
         const policyId = 'testString';
         const ifMatch = 'testString';
         const type = 'testString';
-        const subjects = [policyRequestSubjectsItemModel];
-        const roles = [policyRequestRolesItemModel];
-        const resources = [policyRequestResourcesItemModel];
+        const subjects = [policySubjectModel];
+        const roles = [policyRoleModel];
+        const resources = [policyResourceModel];
         const params = {
           policyId: policyId,
           ifMatch: ifMatch,
@@ -375,9 +375,9 @@ describe('IamPolicyManagementV1', () => {
         const policyId = 'testString';
         const ifMatch = 'testString';
         const type = 'testString';
-        const subjects = [policyRequestSubjectsItemModel];
-        const roles = [policyRequestRolesItemModel];
-        const resources = [policyRequestResourcesItemModel];
+        const subjects = [policySubjectModel];
+        const roles = [policyRoleModel];
+        const resources = [policyResourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -616,19 +616,19 @@ describe('IamPolicyManagementV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createRole
+        const displayName = 'testString';
+        const actions = ['testString'];
         const name = 'testString';
         const accountId = 'testString';
         const serviceName = 'testString';
-        const displayName = 'testString';
-        const actions = ['testString'];
         const description = 'testString';
         const acceptLanguage = 'testString';
         const params = {
+          displayName: displayName,
+          actions: actions,
           name: name,
           accountId: accountId,
           serviceName: serviceName,
-          displayName: displayName,
-          actions: actions,
           description: description,
           acceptLanguage: acceptLanguage,
         };
@@ -648,29 +648,29 @@ describe('IamPolicyManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(options.body['display_name']).toEqual(displayName);
+        expect(options.body['actions']).toEqual(actions);
         expect(options.body['name']).toEqual(name);
         expect(options.body['account_id']).toEqual(accountId);
         expect(options.body['service_name']).toEqual(serviceName);
-        expect(options.body['display_name']).toEqual(displayName);
-        expect(options.body['actions']).toEqual(actions);
         expect(options.body['description']).toEqual(description);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
+        const displayName = 'testString';
+        const actions = ['testString'];
         const name = 'testString';
         const accountId = 'testString';
         const serviceName = 'testString';
-        const displayName = 'testString';
-        const actions = ['testString'];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
+          displayName,
+          actions,
           name,
           accountId,
           serviceName,
-          displayName,
-          actions,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
