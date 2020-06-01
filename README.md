@@ -55,7 +55,7 @@ Service Name | Import Path
 [Global Tagging](https://cloud.ibm.com/apidocs/tagging) | ibm-platform-services/global-tagging/v1
 [IAM Access Groups](https://cloud.ibm.com/apidocs/iam-access-groups) | ibm-platform-services/iam-access-groups/v2
 [IAM Policy Management](https://cloud.ibm.com/apidocs/iam-policy-management) | ibm-platform-services/iam-policy-management/v1
-[Resource Manager](https://cloud.ibm.com/apidocs/iam-access-groups) | ibm-platform-services/resource-manager/v2
+[Resource Manager](https://cloud.ibm.com/apidocs/resource-controller/resource-manager) | ibm-platform-services/resource-manager/v2
 
 ## Prerequisites
 * You need an [IBM Cloud][ibm-cloud-onboarding] account.
