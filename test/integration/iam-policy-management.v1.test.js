@@ -44,31 +44,36 @@ describe('IamPolicyManagementV1_integration', () => {
   const testEditorRoleCrn = 'crn:v1:bluemix:public:iam::::role:Editor';
   const testServiceName = 'iam-groups';
   const policyType = 'access';
-  const policySubjects = [{
-    attributes: [{
-      name: 'iam_id',
-      value: testUserId,
-    }]
-  }];
-  const policyRoles = [{
-    role_id: testViewerRoleCrn
-  }];
+  const policySubjects = [
+    {
+      attributes: [
+        {
+          name: 'iam_id',
+          value: testUserId,
+        },
+      ],
+    },
+  ];
+  const policyRoles = [
+    {
+      role_id: testViewerRoleCrn,
+    },
+  ];
   const policyResourceAccountAttribute = {
     name: 'accountId',
     value: testAccountId,
-    operator: 'stringEquals'
+    operator: 'stringEquals',
   };
   const policyResourceServiceAttribute = {
     name: 'serviceName',
     value: testServiceName,
-    operator: 'stringEquals'
+    operator: 'stringEquals',
   };
-  const policyResources = [{
-    attributes: [
-      policyResourceAccountAttribute,
-      policyResourceServiceAttribute
-    ]
-  }];
+  const policyResources = [
+    {
+      attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+    },
+  ];
 
   let testCustomRoleId;
   let testCustomRoleEtag;
@@ -103,7 +108,7 @@ describe('IamPolicyManagementV1_integration', () => {
         subjects: policySubjects,
         roles: policyRoles,
         resources: policyResources,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -132,7 +137,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       const params = {
         policyId: testPolicyId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -161,9 +166,11 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(testPolicyId).toBeDefined();
       expect(testPolicyETag).toBeDefined();
 
-      const updPolicyRoles = [{
-        role_id: testEditorRoleCrn
-      }];
+      const updPolicyRoles = [
+        {
+          role_id: testEditorRoleCrn,
+        },
+      ];
 
       const params = {
         policyId: testPolicyId,
@@ -172,7 +179,7 @@ describe('IamPolicyManagementV1_integration', () => {
         subjects: policySubjects,
         roles: updPolicyRoles,
         resources: policyResources,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -201,7 +208,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const params = {
         accountId: testAccountId,
         iamId: testUserId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -235,7 +242,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const params = {
         accountId: testAccountId,
         iamId: testUserId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -261,7 +268,7 @@ describe('IamPolicyManagementV1_integration', () => {
         if (policy.id === testPolicyId || createdAt < fiveMinutesAgo) {
           const params = {
             policyId: policy.id,
-            headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+            headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
           };
 
           let response;
@@ -289,7 +296,7 @@ describe('IamPolicyManagementV1_integration', () => {
         accountId: testAccountId,
         serviceName: testServiceName,
         actions: testCustomRoleActions,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -320,7 +327,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       const params = {
         roleId: testCustomRoleId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -357,7 +364,7 @@ describe('IamPolicyManagementV1_integration', () => {
         roleId: testCustomRoleId,
         ifMatch: testCustomRoleEtag,
         description: updCustomRoleDescription,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -388,7 +395,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const params = {
         accountId: testAccountId,
         serviceName: testServiceName,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -422,7 +429,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const params = {
         accountId: testAccountId,
         serviceName: testServiceName,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -448,7 +455,7 @@ describe('IamPolicyManagementV1_integration', () => {
         if (role.id === testCustomRoleId || createdAt < fiveMinutesAgo) {
           const params = {
             roleId: role.id,
-            headers: { 'transaction-Id': 'SDKNode-' + testUniqueId }
+            headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
           };
 
           let response;
