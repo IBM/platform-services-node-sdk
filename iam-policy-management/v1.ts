@@ -25,7 +25,7 @@ import { getSdkHeaders } from '../lib/common';
 
 class IamPolicyManagementV1 extends BaseService {
 
-  static DEFAULT_SERVICE_URL: string = 'https://iam.test.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://iam.cloud.ibm.com';
   static DEFAULT_SERVICE_NAME: string = 'iam_policy_management';
 
   /*************************
