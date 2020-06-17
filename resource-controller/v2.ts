@@ -1675,7 +1675,7 @@ namespace ResourceControllerV2 {
      */
     entity_crn?: string;
     /** The short ID of the resource instance. */
-    resource_instance_id?: any;
+    resource_instance_id?: string;
     /** The short ID of the resource group. */
     resource_group_id?: string;
     /** An alpha-numeric value identifying the account ID. */

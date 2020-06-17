@@ -1064,7 +1064,7 @@ describe('ResourceControllerV2', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createResourceBinding
         const source = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
-        const target = 'crn:v1:bluemix:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c';
+        const target = 'crn:v1:cf:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c';
         const name = 'my-binding';
         const parameters = resourceBindingPostParametersModel;
         const role = 'Writer';
@@ -1100,7 +1100,7 @@ describe('ResourceControllerV2', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const source = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
-        const target = 'crn:v1:bluemix:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c';
+        const target = 'crn:v1:cf:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -1428,7 +1428,7 @@ describe('ResourceControllerV2', () => {
         // Construct the params object for operation createResourceAlias
         const name = 'my-alias';
         const source = 'a8dff6d3-d287-4668-a81d-c87c55c2656d';
-        const target = 'crn:v1:staging:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5';
+        const target = 'crn:v1:cf:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5';
         const params = {
           name: name,
           source: source,
@@ -1458,7 +1458,7 @@ describe('ResourceControllerV2', () => {
         // parameters
         const name = 'my-alias';
         const source = 'a8dff6d3-d287-4668-a81d-c87c55c2656d';
-        const target = 'crn:v1:staging:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5';
+        const target = 'crn:v1:cf:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
