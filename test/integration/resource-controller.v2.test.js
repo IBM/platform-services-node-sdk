@@ -1532,7 +1532,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(response).toBeDefined();
     expect(response.status).toEqual(204);
 
-    done();
+    setTimeout(done, 20000);
   });
 
   test('46 - Verify The Resource Instance Is Pending Reclamation', async done => {
@@ -1564,7 +1564,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.last_operation.async).toBeFalsy();
     expect(result.last_operation.state).toEqual('succeeded');
 
-    setTimeout(done, 20000);
+    done();
   });
 
   test('47 - List Reclamations For Account Id', async done => {
@@ -1642,7 +1642,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.resource_group_id).toEqual(testResourceGroupGuid);
     expect(result.state).toEqual('RESTORING');
 
-    setTimeout(done, 10000);
+    setTimeout(done, 20000);
   });
 
   test('49 - Verify The Resource Instance Is Restored', async done => {
@@ -1762,7 +1762,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.resource_group_id).toEqual(testResourceGroupGuid);
     expect(result.state).toEqual('RECLAIMING');
 
-    setTimeout(done, 15000);
+    setTimeout(done, 20000);
   });
 
   test('53 - Verify The Resource Instance Is Reclaimed', async done => {
@@ -2039,7 +2039,7 @@ async function cleanupReclamationInstance(done) {
         done(err);
       }
 
-      await new Promise(resolve => setTimeout(resolve, 15000));
+      await new Promise(resolve => setTimeout(resolve, 20000));
       await cleanupInstancePendingReclamation(done);
       done();
     }
