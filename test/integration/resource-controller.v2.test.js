@@ -39,6 +39,7 @@ const testRegionId1 = 'global';
 const testPlanId1 = 'a10e4820-3685-11e9-b210-d663bd873d93';
 const testRegionId2 = 'us-south';
 const testPlanId2 = '2580b607-db64-4883-9793-445b694ed57b';
+const transactionId = uuidv4();
 
 let service;
 let testInstanceCrn;
@@ -65,12 +66,14 @@ describe('ResourceControllerV2_integration', () => {
     // Initialize the service client.
     service = ResourceControllerV2.newInstance();
     expect(service).not.toBeNull();
+
+    console.log("Transaction-Id for Test Run:", transactionId);
     done();
   });
 
   test('00 - Create A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test00-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test00-' + transactionId,
     };
 
     const params = {
@@ -115,7 +118,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('01 - Get A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test01-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test01-' + transactionId,
     };
 
     const params = {
@@ -153,7 +156,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('02 - Update A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test02-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test02-' + transactionId,
     };
 
     const instanceParams = {
@@ -192,7 +195,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('03 - List Resource Instances With No Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test03-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test03-' + transactionId,
     };
 
     const params = {
@@ -219,7 +222,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('04 - List Resource Instances With Guid Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test04-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test04-' + transactionId,
     };
 
     const params = {
@@ -254,7 +257,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('05 - List Resource Instances With Name Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test05-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test05-' + transactionId,
     };
 
     const params = {
@@ -282,7 +285,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('06 - Create A Resource Alias', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test06-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test06-' + transactionId,
     };
 
     const targetCrn = 'crn:v1:bluemix:public:bluemix:us-south:o/' + testOrgGuid + '::cf-space:' + testSpaceGuid;
@@ -325,7 +328,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('07 - Get A Resource Alias', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test07-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test07-' + transactionId,
     };
 
     const params = {
@@ -360,7 +363,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('08 - Update A Resource Alias', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test08-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test08-' + transactionId,
     };
 
     const params = {
@@ -390,7 +393,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('09 - List Resource Aliases With No Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test09-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test09-' + transactionId,
     };
 
     const params = {
@@ -417,7 +420,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('10 - List Resource Aliases With Guid Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test10-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test10-' + transactionId,
     };
 
     const params = {
@@ -453,7 +456,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('11 - List Resource Aliases With Name Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test11-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test11-' + transactionId,
     };
 
     const params = {
@@ -481,7 +484,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('12 - Create A Resource Binding', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test12-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test12-' + transactionId,
     };
 
     const targetCrn = 'crn:v1:staging:public:bluemix:us-south:s/' + testSpaceGuid + '::cf-application:' + testAppGuid;
@@ -524,7 +527,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('13 - Get A Resource Binding', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test13-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test13-' + transactionId,
     };
 
     const params = {
@@ -559,7 +562,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('14 - Update A Resource Binding', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test14-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test14-' + transactionId,
     };
 
     const params = {
@@ -589,7 +592,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('15 - List Resource Bindings With No Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test15-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test15-' + transactionId,
     };
 
     const params = {
@@ -616,7 +619,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('16 - List Resource Bindings With Guid Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test16-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test16-' + transactionId,
     };
 
     const params = {
@@ -651,7 +654,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('17 - List Resource Bindings With Name Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test17-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test17-' + transactionId,
     };
 
     const params = {
@@ -679,7 +682,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('18 - Create A Resource Key For Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test18-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test18-' + transactionId,
     };
 
     const params = {
@@ -718,7 +721,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('19 - Get A Resource Key', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test19-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test19-' + transactionId,
     };
 
     const params = {
@@ -752,7 +755,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('20 - Update A Resource Key', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test20-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test20-' + transactionId,
     };
 
     const params = {
@@ -782,7 +785,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('21 - List Resource Keys With No Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test21-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test21-' + transactionId,
     };
 
     const params = {
@@ -809,7 +812,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('22 - List Resource Keys With Guid Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test22-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test22-' + transactionId,
     };
 
     const params = {
@@ -843,7 +846,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('23 - List Resource Keys With Name Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test23-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test23-' + transactionId,
     };
 
     const params = {
@@ -871,7 +874,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('24 - Create A Resource Key For Alias', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test24-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test24-' + transactionId,
     };
 
     const params = {
@@ -910,7 +913,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('25 - Get A Resource Key', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test25-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test25-' + transactionId,
     };
 
     const params = {
@@ -944,7 +947,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('26 - Update A Resource Key', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test26-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test26-' + transactionId,
     };
 
     const params = {
@@ -974,7 +977,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('27 - List Resource Keys With No Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test27-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test27-' + transactionId,
     };
 
     const params = {
@@ -1001,7 +1004,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('28 - List Resource Keys With Guid Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test28-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test28-' + transactionId,
     };
 
     const params = {
@@ -1035,7 +1038,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('29 - List Resource Keys With Name Filter', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test29-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test29-' + transactionId,
     };
 
     const params = {
@@ -1063,7 +1066,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('30 - Delete A Resource Alias With Dependencies - Fail', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test30-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test30-' + transactionId,
     };
 
     const params = {
@@ -1087,7 +1090,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('31 - Delete A Resource Instance With Dependencies - Fail', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test31-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test31-' + transactionId,
     };
 
     const params = {
@@ -1110,7 +1113,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('32 - Delete A Resource Binding', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test32-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test32-' + transactionId,
     };
 
     const params = {
@@ -1133,7 +1136,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('33 - Verify Resource Binding Was Deleted', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test33-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test33-' + transactionId,
     };
 
     const params = {
@@ -1161,7 +1164,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('34 - Delete Resource Keys', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test34-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test34-' + transactionId,
     };
 
     const params = {
@@ -1180,7 +1183,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(response.status).toEqual(204);
 
     const customHeader2 = {
-      'Transaction-Id': 'rc-sdk-node-test34-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test34-' + transactionId,
     };
 
     const params2 = {
@@ -1203,7 +1206,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('35 - Verify Resource Keys Were Deleted', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test35-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test35-' + transactionId,
     };
 
     const params = {
@@ -1227,7 +1230,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.state).toEqual('removed');
 
     const customHeader2 = {
-      'Transaction-Id': 'rc-sdk-node-test35-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test35-' + transactionId,
     };
 
     const params2 = {
@@ -1255,7 +1258,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('36 - Delete A Resource Alias', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test36-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test36-' + transactionId,
     };
 
     const params = {
@@ -1278,7 +1281,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('37 - Verify Resource Alias Was Deleted', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test37-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test37-' + transactionId,
     };
 
     const params = {
@@ -1306,7 +1309,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('38 - Lock A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test38-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test38-' + transactionId,
     };
 
     const params = {
@@ -1337,7 +1340,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('39 - Update A Locked Resource Instance - Fail', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test39-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test39-' + transactionId,
     };
 
     const params = {
@@ -1361,7 +1364,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('40 - Delete A Locked Resource Instance - Fail', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test40-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test40-' + transactionId,
     };
 
     const params = {
@@ -1384,7 +1387,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('41 - Unlock A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test41-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test41-' + transactionId,
     };
 
     const params = {
@@ -1415,7 +1418,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('42 - Delete A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test42-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test42-' + transactionId,
     };
 
     const params = {
@@ -1438,7 +1441,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('43 - Verify Resource Instance Was Deleted', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test43-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test43-' + transactionId,
     };
 
     const params = {
@@ -1469,7 +1472,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('44 - Create Resource Instance For Reclamation Enabled Plan', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test44-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test44-' + transactionId,
     };
 
     const params = {
@@ -1514,7 +1517,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('45 - Schedule A Resource Instance For Reclamation', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test45-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test45-' + transactionId,
     };
 
     const params = {
@@ -1537,7 +1540,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('46 - Verify The Resource Instance Is Pending Reclamation', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test46-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test46-' + transactionId,
     };
 
     const params = {
@@ -1569,7 +1572,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('47 - List Reclamations For Account Id', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test47-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test47-' + transactionId,
     };
 
     const params = {
@@ -1615,7 +1618,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('48 - Restore A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test48-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test48-' + transactionId,
     };
 
     const params = {
@@ -1647,7 +1650,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('49 - Verify The Resource Instance Is Restored', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test49-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test49-' + transactionId,
     };
 
     const params = {
@@ -1679,7 +1682,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('50 - Schedule A Resource Instance For Reclamation 2', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test50-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test50-' + transactionId,
     };
 
     const params = {
@@ -1702,7 +1705,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('51 - List Reclamations For Account Id And Resource Instance Id', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test51-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test51-' + transactionId,
     };
 
     const params = {
@@ -1735,7 +1738,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('52 - Reclaim A Resource Instance', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test52-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test52-' + transactionId,
     };
 
     const params = {
@@ -1767,7 +1770,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('53 - Verify The Resource Instance Is Reclaimed', async done => {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-node-test53-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-node-test53-' + transactionId,
     };
 
     const params = {
@@ -1803,7 +1806,7 @@ describe('ResourceControllerV2_integration', () => {
     if (testAliasKeyGuid) {
       try {
         const customHeader = {
-          'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+          'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
         };
 
         const params = {
@@ -1826,7 +1829,7 @@ describe('ResourceControllerV2_integration', () => {
     if (testInstanceKeyGuid) {
       try {
         const customHeader = {
-          'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+          'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
         };
 
         const params = {
@@ -1850,7 +1853,7 @@ describe('ResourceControllerV2_integration', () => {
     if (testBindingGuid) {
       try {
         const customHeader = {
-          'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+          'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
         };
 
         const params = {
@@ -1875,7 +1878,7 @@ describe('ResourceControllerV2_integration', () => {
     if (testAliasGuid) {
       try {
         const customHeader = {
-          'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+          'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
         };
 
         const params = {
@@ -1910,7 +1913,7 @@ describe('ResourceControllerV2_integration', () => {
       if (response && response.result && response.result.state === 'active' && response.result.locked) {
         try {
           const customHeader = {
-            'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+            'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
           };
 
           const params = {
@@ -1945,7 +1948,7 @@ describe('ResourceControllerV2_integration', () => {
 
 function getResourceInstanceForCleanup(instanceId) {
   const customHeader = {
-    'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+    'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
   };
 
   const params = {
@@ -1958,7 +1961,7 @@ function getResourceInstanceForCleanup(instanceId) {
 
 function deleteResourceInstanceForCleanup(instanceId) {
   const customHeader = {
-    'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+    'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
   };
 
   const params = {
@@ -1974,7 +1977,7 @@ async function cleanupInstancePendingReclamation(done) {
   let reclamationId;
   try {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
     };
 
     const params = {
@@ -1996,7 +1999,7 @@ async function cleanupInstancePendingReclamation(done) {
 
   try {
     const customHeader = {
-      'Transaction-Id': 'rc-sdk-cleanup-' + uuidv4(),
+      'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
     };
 
     const params = {
