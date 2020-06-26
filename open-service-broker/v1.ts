@@ -164,7 +164,7 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2448145Root>>}
    */
-  public replaceState(params: OpenServiceBrokerV1.ReplaceStateParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2448145Root>> {
+  public replaceServiceInstanceState(params: OpenServiceBrokerV1.ReplaceServiceInstanceStateParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2448145Root>> {
     const _params = extend({}, params);
     const requiredParams = ['instanceId'];
 
@@ -184,7 +184,7 @@ class OpenServiceBrokerV1 extends BaseService {
         'instance_id': _params.instanceId
       };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceState');
+      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceServiceInstanceState');
 
       const parameters = {
         options: {
@@ -238,9 +238,12 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {string} [params.spaceGuid] - Deprecated in favor of `context`. The IBM Cloud platform GUID for the
    * organization under which the service instance is to be provisioned. Although most brokers will not use this field,
    * it might be helpful for executing operations on a user's behalf. It MUST be a non-empty string.
-   * @param {Context[]} [params.context] - Platform specific contextual information under which the service instance is
-   * to be provisioned.
-   * @param {Parameters[]} [params.parameters] - A list of plans for this service that must contain at least one plan.
+   * @param {Context} [params.context] - Platform specific contextual information under which the service instance is to
+   * be provisioned.
+   * @param {JsonObject} [params.parameters] - Configuration options for the service instance. An opaque object,
+   * controller treats this as a blob. Brokers should ensure that the client has provided valid configuration parameters
+   * and values for the operation. If this field is not present in the request message, then the broker MUST NOT change
+   * the parameters of the instance as a result of this request.
    * @param {boolean} [params.acceptsIncomplete] - A value of true indicates that both the IBM Cloud platform and the
    * requesting client support asynchronous deprovisioning. If this parameter is not included in the request, and the
    * broker can only deprovision a service instance of the requested plan asynchronously, the broker MUST reject the
@@ -311,8 +314,9 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {string} params.instanceId - The ID of a previously provisioned service instance.
    * @param {string} [params.serviceId] - The ID of the service stored in the catalog.json of your broker. This value
    * should be a GUID. It MUST be a non-empty string.
-   * @param {Context[]} [params.context] - Contextual data under which the service instance is created.
-   * @param {Parameters} [params.parameters] - Configuration options for the service instance. An opaque object,
+   * @param {Context} [params.context] - Platform specific contextual information under which the service instance is to
+   * be provisioned.
+   * @param {JsonObject} [params.parameters] - Configuration options for the service instance. An opaque object,
    * controller treats this as a blob. Brokers should ensure that the client has provided valid configuration parameters
    * and values for the operation. If this field is not present in the request message, then the broker MUST NOT change
    * the parameters of the instance as a result of this request.
@@ -320,15 +324,15 @@ class OpenServiceBrokerV1 extends BaseService {
    * stored in the catalog.json of your broker. This value should be a GUID. MUST be unique to a service. If present,
    * MUST be a non-empty string. If this field is not present in the request message, then the broker MUST NOT change
    * the plan of the instance as a result of this request.
-   * @param {string[]} [params.previousValues] - Information about the service instance prior to the update.
-   * @param {string} [params.acceptsIncomplete] - A value of true indicates that both the IBM Cloud platform and the
+   * @param {JsonObject} [params.previousValues] - Information about the service instance prior to the update.
+   * @param {boolean} [params.acceptsIncomplete] - A value of true indicates that both the IBM Cloud platform and the
    * requesting client support asynchronous deprovisioning. If this parameter is not included in the request, and the
    * broker can only deprovision a service instance of the requested plan asynchronously, the broker MUST reject the
    * request with a `422` Unprocessable Entity.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<OpenServiceBrokerV1.Response<string>>}
+   * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>>}
    */
-  public updateServiceInstance(params: OpenServiceBrokerV1.UpdateServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<string>> {
+  public updateServiceInstance(params: OpenServiceBrokerV1.UpdateServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>> {
     const _params = extend({}, params);
     const requiredParams = ['instanceId'];
 
@@ -394,9 +398,9 @@ class OpenServiceBrokerV1 extends BaseService {
    * broker can only deprovision a service instance of the requested plan asynchronously, the broker MUST reject the
    * request with a `422` Unprocessable Entity.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<OpenServiceBrokerV1.Response<string>>}
+   * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>>}
    */
-  public deleteServiceInstance(params: OpenServiceBrokerV1.DeleteServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<string>> {
+  public deleteServiceInstance(params: OpenServiceBrokerV1.DeleteServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>> {
     const _params = extend({}, params);
     const requiredParams = ['serviceId', 'planId', 'instanceId'];
 
@@ -454,9 +458,9 @@ class OpenServiceBrokerV1 extends BaseService {
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Services[]>>}
+   * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874650Root>>}
    */
-  public listCatalog(params?: OpenServiceBrokerV1.ListCatalogParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Services[]>> {
+  public listCatalog(params?: OpenServiceBrokerV1.ListCatalogParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874650Root>> {
     const _params = extend({}, params);
 
     return new Promise((resolve, reject) => {
@@ -508,7 +512,7 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079894Root>>}
    */
-  public listLastOperation(params: OpenServiceBrokerV1.ListLastOperationParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079894Root>> {
+  public getLastOperation(params: OpenServiceBrokerV1.GetLastOperationParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079894Root>> {
     const _params = extend({}, params);
     const requiredParams = ['instanceId'];
 
@@ -528,7 +532,7 @@ class OpenServiceBrokerV1 extends BaseService {
         'instance_id': _params.instanceId
       };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'listLastOperation');
+      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'getLastOperation');
 
       const parameters = {
         options: {
@@ -570,17 +574,20 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {string} params.bindingId - The `binding_id` is provided by the IBM Cloud platform. This ID will be used for
    * future unbind requests, so the broker can use it to correlate the resource it creates.
    * @param {string} params.instanceId - The :`instance_id` is the ID of a previously provisioned service instance.
-   * @param {BindResource[]} [params.bindResource] - A JSON object that contains data for platform resources associated
-   * with the binding to be created.
-   * @param {JsonObject} [params.parameters] - Configuration options for the service binding.
    * @param {string} [params.planId] - The ID of the plan from the catalog.json in your broker. If present, it MUST be a
    * non-empty string.
    * @param {string} [params.serviceId] - The ID of the service from the catalog.json in your broker. If present, it
    * MUST be a non-empty string.
+   * @param {BindResource} [params.bindResource] - A JSON object that contains data for platform resources associated
+   * with the binding to be created.
+   * @param {JsonObject} [params.parameters] - Configuration options for the service instance. An opaque object,
+   * controller treats this as a blob. Brokers should ensure that the client has provided valid configuration parameters
+   * and values for the operation. If this field is not present in the request message, then the broker MUST NOT change
+   * the parameters of the instance as a result of this request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<OpenServiceBrokerV1.Response<string>>}
+   * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079876Root>>}
    */
-  public replaceServiceBinding(params: OpenServiceBrokerV1.ReplaceServiceBindingParams): Promise<OpenServiceBrokerV1.Response<string>> {
+  public replaceServiceBinding(params: OpenServiceBrokerV1.ReplaceServiceBindingParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079876Root>> {
     const _params = extend({}, params);
     const requiredParams = ['bindingId', 'instanceId'];
 
@@ -591,10 +598,10 @@ class OpenServiceBrokerV1 extends BaseService {
       }
 
       const body = {
-        'bind_resource': _params.bindResource,
-        'parameters': _params.parameters,
         'plan_id': _params.planId,
-        'service_id': _params.serviceId
+        'service_id': _params.serviceId,
+        'bind_resource': _params.bindResource,
+        'parameters': _params.parameters
       };
 
       const path = {
@@ -643,9 +650,9 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {string} params.serviceId - The ID of the service from the catalog.json in the broker. It MUST be a
    * non-empty string and should be a GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<OpenServiceBrokerV1.Response<string>>}
+   * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Empty>>}
    */
-  public deleteServiceBinding(params: OpenServiceBrokerV1.DeleteServiceBindingParams): Promise<OpenServiceBrokerV1.Response<string>> {
+  public deleteServiceBinding(params: OpenServiceBrokerV1.DeleteServiceBindingParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Empty>> {
     const _params = extend({}, params);
     const requiredParams = ['bindingId', 'instanceId', 'planId', 'serviceId'];
 
@@ -725,8 +732,8 @@ namespace OpenServiceBrokerV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `replaceState` operation. */
-  export interface ReplaceStateParams {
+  /** Parameters for the `replaceServiceInstanceState` operation. */
+  export interface ReplaceServiceInstanceStateParams {
     /** The `instance_id` of a service instance is provided by the IBM Cloud platform. This ID will be used for
      *  future requests to bind and deprovision, so the broker can use it to correlate the resource it creates.
      */
@@ -770,9 +777,13 @@ namespace OpenServiceBrokerV1 {
      */
     spaceGuid?: string;
     /** Platform specific contextual information under which the service instance is to be provisioned. */
-    context?: Context[];
-    /** A list of plans for this service that must contain at least one plan. */
-    parameters?: Parameters[];
+    context?: Context;
+    /** Configuration options for the service instance. An opaque object, controller treats this as a blob. Brokers
+     *  should ensure that the client has provided valid configuration parameters and values for the operation. If this
+     *  field is not present in the request message, then the broker MUST NOT change the parameters of the instance as a
+     *  result of this request.
+     */
+    parameters?: JsonObject;
     /** A value of true indicates that both the IBM Cloud platform and the requesting client support asynchronous
      *  deprovisioning. If this parameter is not included in the request, and the broker can only deprovision a service
      *  instance of the requested plan asynchronously, the broker MUST reject the request with a `422` Unprocessable
@@ -790,14 +801,14 @@ namespace OpenServiceBrokerV1 {
      *  non-empty string.
      */
     serviceId?: string;
-    /** Contextual data under which the service instance is created. */
-    context?: Context[];
+    /** Platform specific contextual information under which the service instance is to be provisioned. */
+    context?: Context;
     /** Configuration options for the service instance. An opaque object, controller treats this as a blob. Brokers
      *  should ensure that the client has provided valid configuration parameters and values for the operation. If this
      *  field is not present in the request message, then the broker MUST NOT change the parameters of the instance as a
      *  result of this request.
      */
-    parameters?: Parameters;
+    parameters?: JsonObject;
     /** The ID of the plan for which the service instance has been requested, which is stored in the catalog.json of
      *  your broker. This value should be a GUID. MUST be unique to a service. If present, MUST be a non-empty string.
      *  If this field is not present in the request message, then the broker MUST NOT change the plan of the instance as
@@ -805,13 +816,13 @@ namespace OpenServiceBrokerV1 {
      */
     planId?: string;
     /** Information about the service instance prior to the update. */
-    previousValues?: string[];
+    previousValues?: JsonObject;
     /** A value of true indicates that both the IBM Cloud platform and the requesting client support asynchronous
      *  deprovisioning. If this parameter is not included in the request, and the broker can only deprovision a service
      *  instance of the requested plan asynchronously, the broker MUST reject the request with a `422` Unprocessable
      *  Entity.
      */
-    acceptsIncomplete?: string;
+    acceptsIncomplete?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -841,8 +852,8 @@ namespace OpenServiceBrokerV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listLastOperation` operation. */
-  export interface ListLastOperationParams {
+  /** Parameters for the `getLastOperation` operation. */
+  export interface GetLastOperationParams {
     /** The unique instance ID generated during provisioning by the IBM Cloud platform. */
     instanceId: string;
     /** A broker-provided identifier for the operation. When a value for operation is included with asynchronous
@@ -865,14 +876,18 @@ namespace OpenServiceBrokerV1 {
     bindingId: string;
     /** The :`instance_id` is the ID of a previously provisioned service instance. */
     instanceId: string;
-    /** A JSON object that contains data for platform resources associated with the binding to be created. */
-    bindResource?: BindResource[];
-    /** Configuration options for the service binding. */
-    parameters?: JsonObject;
     /** The ID of the plan from the catalog.json in your broker. If present, it MUST be a non-empty string. */
     planId?: string;
     /** The ID of the service from the catalog.json in your broker. If present, it MUST be a non-empty string. */
     serviceId?: string;
+    /** A JSON object that contains data for platform resources associated with the binding to be created. */
+    bindResource?: BindResource;
+    /** Configuration options for the service instance. An opaque object, controller treats this as a blob. Brokers
+     *  should ensure that the client has provided valid configuration parameters and values for the operation. If this
+     *  field is not present in the request message, then the broker MUST NOT change the parameters of the instance as a
+     *  result of this request.
+     */
+    parameters?: JsonObject;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -910,6 +925,12 @@ namespace OpenServiceBrokerV1 {
     last_active?: number;
   }
 
+  /** Resp1874650Root. */
+  export interface Resp1874650Root {
+    /** List of services. */
+    services?: Services[];
+  }
+
   /** OK - MUST be returned if the service instance already exists, is fully provisioned, and the requested parameters are identical to the existing service instance. */
   export interface Resp2079872Root {
     /** The URL of a web-based management user interface for the service instance; we refer to this as a service
@@ -924,6 +945,35 @@ namespace OpenServiceBrokerV1 {
      *  query parameter. If present, MUST be a non-empty string.
      */
     operation?: string;
+  }
+
+  /** Accepted - MUST be returned if the service instance provisioning is in progress. This triggers the IBM Cloud platform to poll the Service Instance `last_operation` Endpoint for operation status. Note that a re-sent `PUT` request MUST return a `202 Accepted`, not a `200 OK`, if the service instance is not yet fully provisioned. */
+  export interface Resp2079874Root {
+    /** For asynchronous responses, service brokers MAY return an identifier representing the operation. The value
+     *  of this field MUST be provided by the platform with requests to the Last Operation endpoint in a URL encoded
+     *  query parameter. If present, MUST be a non-empty string.
+     */
+    operation?: string;
+  }
+
+  /** Resp2079876Root. */
+  export interface Resp2079876Root {
+    /** A free-form hash of credentials that can be used by applications or users to access the service. */
+    credentials?: JsonObject;
+    /** A URL to which logs MUST be streamed. 'requires':['syslog_drain'] MUST be declared in the Catalog endpoint
+     *  or the platform MUST consider the response invalid.
+     */
+    syslog_drain_url?: string;
+    /** A URL to which the platform MUST proxy requests for the address sent with bind_resource.route in the request
+     *  body. 'requires':['route_forwarding'] MUST be declared in the Catalog endpoint or the platform can consider the
+     *  response invalid.
+     */
+    route_service_url?: string;
+    /** An array of configuration for remote storage devices to be mounted into an application container filesystem.
+     *  'requires':['volume_mount'] MUST be declared in the Catalog endpoint or the platform can consider the response
+     *  invalid.
+     */
+    volume_mounts?: VolumeMount[];
   }
 
   /** OK - MUST be returned upon successful processing of this request. */
@@ -954,7 +1004,7 @@ namespace OpenServiceBrokerV1 {
     last_active?: number;
   }
 
-  /** Bind a resource. */
+  /** A JSON object that contains data for platform resources associated with the binding to be created. */
   export interface BindResource {
     /** Account owner of resource to bind. */
     account_id?: string;
@@ -962,9 +1012,13 @@ namespace OpenServiceBrokerV1 {
     serviceid_crn?: string;
     /** Target ID of resource to bind. */
     target_crn?: string;
+    /** GUID of an application associated with the binding. For credentials bindings. */
+    app_guid?: string;
+    /** URL of the application to be intermediated. For route services bindings. */
+    route?: string;
   }
 
-  /** Contextual data under which the service instance is created. */
+  /** Platform specific contextual information under which the service instance is to be provisioned. */
   export interface Context {
     /** Returns the ID of the account in IBM Cloud that is provisioning the service instance. */
     account_id?: string;
@@ -978,14 +1032,6 @@ namespace OpenServiceBrokerV1 {
     crn?: string;
     /** Identifies the platform as "ibmcloud". */
     platform?: string;
-  }
-
-  /** Configuration options for the service instance. An opaque object, controller treats this as a blob. Brokers should ensure that the client has provided valid configuration parameters and values for the operation. If this field is not present in the request message, then the broker MUST NOT change the parameters of the instance as a result of this request. */
-  export interface Parameters {
-    /** a custom integer or string within the parameters JSON object. */
-    parameter1?: number;
-    /** a custom integer or string within the parameters JSON object. */
-    parameter2?: string;
   }
 
   /** Where is this in the source?. */
@@ -1047,6 +1093,22 @@ namespace OpenServiceBrokerV1 {
     plan_updateable?: boolean;
     /** A list of plans for this service that must contain at least one plan. */
     plans: Plans[];
+  }
+
+  /** VolumeMount. */
+  export interface VolumeMount {
+    /** A free-form hash of credentials that can be used by applications or users to access the service. */
+    driver: string;
+    /** The path in the application container onto which the volume will be mounted. This specification does not
+     *  mandate what action the platform is to take if the path specified already exists in the container.
+     */
+    container_dir: string;
+    /** 'r' to mount the volume read-only or 'rw' to mount it read-write. */
+    mode: string;
+    /** A string specifying the type of device to mount. Currently the only supported value is 'shared'. */
+    device_type: string;
+    /** Device object containing device_type specific details. Currently only shared devices are supported. */
+    device: string;
   }
 
 }

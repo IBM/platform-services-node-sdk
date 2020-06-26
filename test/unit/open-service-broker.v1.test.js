@@ -167,10 +167,10 @@ describe('OpenServiceBrokerV1', () => {
       });
     });
   });
-  describe('replaceState', () => {
+  describe('replaceServiceInstanceState', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation replaceState
+        // Construct the params object for operation replaceServiceInstanceState
         const instanceId = 'testString';
         const enabled = false;
         const initiatorId = 'null';
@@ -182,10 +182,10 @@ describe('OpenServiceBrokerV1', () => {
           reasonCode: reasonCode,
         };
 
-        const replaceStateResult = openServiceBroker.replaceState(params);
+        const replaceServiceInstanceStateResult = openServiceBroker.replaceServiceInstanceState(params);
 
         // all methods should return a Promise
-        expectToBePromise(replaceStateResult);
+        expectToBePromise(replaceServiceInstanceStateResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -215,7 +215,7 @@ describe('OpenServiceBrokerV1', () => {
           },
         };
 
-        openServiceBroker.replaceState(params);
+        openServiceBroker.replaceServiceInstanceState(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -224,7 +224,7 @@ describe('OpenServiceBrokerV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await openServiceBroker.replaceState({});
+          await openServiceBroker.replaceServiceInstanceState({});
         } catch (e) {
           err = e;
         }
@@ -234,10 +234,10 @@ describe('OpenServiceBrokerV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const replaceStatePromise = openServiceBroker.replaceState();
-        expectToBePromise(replaceStatePromise);
+        const replaceServiceInstanceStatePromise = openServiceBroker.replaceServiceInstanceState();
+        expectToBePromise(replaceServiceInstanceStatePromise);
 
-        replaceStatePromise.catch(err => {
+        replaceServiceInstanceStatePromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -255,12 +255,6 @@ describe('OpenServiceBrokerV1', () => {
         platform: 'null',
       };
 
-      // Parameters
-      const parametersModel = {
-        parameter1: 38,
-        parameter2: 'null',
-      };
-
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation replaceServiceInstance
         const instanceId = 'testString';
@@ -268,8 +262,8 @@ describe('OpenServiceBrokerV1', () => {
         const planId = 'null';
         const serviceId = 'null';
         const spaceGuid = 'null';
-        const context = [contextModel];
-        const parameters = [parametersModel];
+        const context = contextModel;
+        const parameters = { 'key1' : 'null' };
         const acceptsIncomplete = true;
         const params = {
           instanceId: instanceId,
@@ -359,21 +353,15 @@ describe('OpenServiceBrokerV1', () => {
         platform: 'null',
       };
 
-      // Parameters
-      const parametersModel = {
-        parameter1: 38,
-        parameter2: 'null',
-      };
-
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateServiceInstance
         const instanceId = 'testString';
         const serviceId = 'null';
-        const context = [contextModel];
-        const parameters = parametersModel;
+        const context = contextModel;
+        const parameters = { 'key1' : 'null' };
         const planId = 'null';
-        const previousValues = ['testString'];
-        const acceptsIncomplete = 'testString';
+        const previousValues = { 'key1' : 'null' };
+        const acceptsIncomplete = true;
         const params = {
           instanceId: instanceId,
           serviceId: serviceId,
@@ -574,10 +562,10 @@ describe('OpenServiceBrokerV1', () => {
       });
     });
   });
-  describe('listLastOperation', () => {
+  describe('getLastOperation', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation listLastOperation
+        // Construct the params object for operation getLastOperation
         const instanceId = 'testString';
         const operation = 'testString';
         const planId = 'testString';
@@ -589,10 +577,10 @@ describe('OpenServiceBrokerV1', () => {
           serviceId: serviceId,
         };
 
-        const listLastOperationResult = openServiceBroker.listLastOperation(params);
+        const getLastOperationResult = openServiceBroker.getLastOperation(params);
 
         // all methods should return a Promise
-        expectToBePromise(listLastOperationResult);
+        expectToBePromise(getLastOperationResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -622,7 +610,7 @@ describe('OpenServiceBrokerV1', () => {
           },
         };
 
-        openServiceBroker.listLastOperation(params);
+        openServiceBroker.getLastOperation(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -631,7 +619,7 @@ describe('OpenServiceBrokerV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await openServiceBroker.listLastOperation({});
+          await openServiceBroker.getLastOperation({});
         } catch (e) {
           err = e;
         }
@@ -641,10 +629,10 @@ describe('OpenServiceBrokerV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const listLastOperationPromise = openServiceBroker.listLastOperation();
-        expectToBePromise(listLastOperationPromise);
+        const getLastOperationPromise = openServiceBroker.getLastOperation();
+        expectToBePromise(getLastOperationPromise);
 
-        listLastOperationPromise.catch(err => {
+        getLastOperationPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -660,23 +648,25 @@ describe('OpenServiceBrokerV1', () => {
         account_id: 'null',
         serviceid_crn: 'null',
         target_crn: 'null',
+        app_guid: 'null',
+        route: 'null',
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation replaceServiceBinding
         const bindingId = 'testString';
         const instanceId = 'testString';
-        const bindResource = [bindResourceModel];
-        const parameters = { foo: 'bar' };
         const planId = 'null';
         const serviceId = 'null';
+        const bindResource = bindResourceModel;
+        const parameters = { 'key1' : 'null' };
         const params = {
           bindingId: bindingId,
           instanceId: instanceId,
-          bindResource: bindResource,
-          parameters: parameters,
           planId: planId,
           serviceId: serviceId,
+          bindResource: bindResource,
+          parameters: parameters,
         };
 
         const replaceServiceBindingResult = openServiceBroker.replaceServiceBinding(params);
@@ -693,10 +683,10 @@ describe('OpenServiceBrokerV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['bind_resource']).toEqual(bindResource);
-        expect(options.body['parameters']).toEqual(parameters);
         expect(options.body['plan_id']).toEqual(planId);
         expect(options.body['service_id']).toEqual(serviceId);
+        expect(options.body['bind_resource']).toEqual(bindResource);
+        expect(options.body['parameters']).toEqual(parameters);
         expect(options.path['binding_id']).toEqual(bindingId);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
