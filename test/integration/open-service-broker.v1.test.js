@@ -171,7 +171,7 @@ describe('OpenServiceBrokerV1_integration', () => {
 
     let response;
     try {
-      response = await service.updateServiceInstance(params);
+      response = await service.replaceServiceInstanceState(params);
     } catch (err) {
       done(err);
     }
@@ -181,8 +181,8 @@ describe('OpenServiceBrokerV1_integration', () => {
     expect(response.result).toBeDefined();
 
     const result = response.result;
-    // expect(result.active).toBeTruthy(); //comes back undefined? postman is 400?
-    // expect(result.enabled).toBeTruthy(); //comes back undefined? postman is 400?
+    expect(result.active).toBeTruthy(); 
+    expect(result.enabled).toBeTruthy(); 
 
     done();
   });
@@ -202,7 +202,7 @@ describe('OpenServiceBrokerV1_integration', () => {
 
     let response;
     try {
-      response = await service.updateServiceInstance(params);
+      response = await service.replaceServiceInstanceState(params);
     } catch (err) {
       done(err);
     }
@@ -212,8 +212,8 @@ describe('OpenServiceBrokerV1_integration', () => {
     expect(response.result).toBeDefined();
 
     const result = response.result;
-    // expect(result.active).toBeTruthy(); //comes back undefined? postman is 400?
-    // expect(result.enabled).toBeTruthy(); //comes back undefined? postman is 400?
+    expect(result.active).toBeTruthy(); 
+    expect(result.enabled).toBeTruthy();
 
     done();
   });
@@ -276,6 +276,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     expect(response.result).toBeDefined();
 
     const result = response.result;
+    console.log(`Result-defined!: ${JSON.stringify(result)}`);
     expect(result.active).toBeDefined();
     expect(result.enabled).toBeDefined();
     done();
@@ -312,15 +313,13 @@ describe('OpenServiceBrokerV1_integration', () => {
     let foundPlan3 = false;
     let plans = result.services[0].plans;
 
-    for (let plan in plans){
-        if (plan.id == testPlanId1) foundPlan1 = true;
-        if (plan.id == testPlanId2) foundPlan2 = true;
-        if (plan.id == testPlanId3) foundPlan3 = true;
+    for (let i = 0; i < plans.length; i++){
+        if (plans[i].id == testPlanId1) foundPlan1 = true;
+        if (plans[i].id == testPlanId2) foundPlan2 = true;
+        if (plans[i].id == testPlanId3) foundPlan3 = true;
     }
 
-    // expect(foundPlan1).toBeTruthy(); //comes back false?
-    // expect(foundPlan2).toBeTruthy(); //comes back false?
-    // expect(foundPlan3).toBeTruthy(); //comes back false?
+    expect(foundPlan1 && foundPlan2 && foundPlan3).toBeTruthy();
 
     done();
   });
@@ -376,4 +375,3 @@ describe('OpenServiceBrokerV1_integration', () => {
   });
 
 });
-
