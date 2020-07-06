@@ -1,6 +1,6 @@
 {
   "name": "ibm-platform-services",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Node.js client library for IBM Cloud Platform Services",
   "repository": {
     "type": "git",
@@ -65,7 +65,7 @@
     "pouchdb": "^7.2.1",
     "async": "^3.2.0",
     "request": "^2.88.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.2.0"
   },
   "jest": {
     "collectCoverage": true,
