@@ -1578,7 +1578,8 @@ describe('ResourceControllerV2_integration', () => {
     };
 
     const params = {
-      accountId: testAccountId,
+      // accountId: testAccountId,
+      resourceInstanceId: testReclaimInstanceGuid, //checking reclamations with instance guid for more test reliability 
       headers: customHeader,
     };
 
