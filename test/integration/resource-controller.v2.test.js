@@ -37,7 +37,7 @@ const testSpaceGuid = '336ba5f3-f185-488e-ac8d-02195eebb2f3';
 const testAppGuid = 'bf692181-1f0e-46be-9faf-eb0857f4d1d5';
 const testRegionId1 = 'global';
 const testPlanId1 = 'a10e4820-3685-11e9-b210-d663bd873d93';
-const testRegionId2 = 'global'; 
+const testRegionId2 = 'global';
 const testPlanId2 = 'a10e4960-3685-11e9-b210-d663bd873d93';
 const transactionId = uuidv4();
 
@@ -54,7 +54,7 @@ let testAliasKeyCrn;
 let testAliasKeyGuid;
 let aliasTargetCrn;
 let bindTargetCrn;
-let testReclaimInstanceCrn;
+// let testReclaimInstanceCrn; //commented to fix linting error of declared but not used
 let testReclaimInstanceGuid;
 let testReclamationId1;
 let testReclamationId2;
@@ -67,7 +67,7 @@ describe('ResourceControllerV2_integration', () => {
     service = ResourceControllerV2.newInstance();
     expect(service).not.toBeNull();
 
-    console.log("Transaction-Id for Test Run:", transactionId);
+    console.log('Transaction-Id for Test Run:', transactionId);
     done();
   });
 
@@ -1329,7 +1329,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(response.result).toBeDefined();
 
     const result = response.result;
-    expect(result.id).toEqual(testInstanceCrn)
+    expect(result.id).toEqual(testInstanceCrn);
     expect(result.locked).toBeTruthy();
     expect(result.last_operation.type).toEqual('lock');
     expect(result.last_operation.async).toBeFalsy();
@@ -1407,7 +1407,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(response.result).toBeDefined();
 
     const result = response.result;
-    expect(result.id).toEqual(testInstanceCrn)
+    expect(result.id).toEqual(testInstanceCrn);
     expect(result.locked).toBeFalsy();
     expect(result.last_operation.type).toEqual('unlock');
     expect(result.last_operation.async).toBeFalsy();
@@ -1509,7 +1509,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.last_operation.async).toBeFalsy();
     expect(result.last_operation.state).toEqual('succeeded');
 
-    testReclaimInstanceCrn = result.id;
+    // testReclaimInstanceCrn = result.id; //commented to fix linting error of declared but not used
     testReclaimInstanceGuid = result.guid;
 
     done();
@@ -1579,7 +1579,7 @@ describe('ResourceControllerV2_integration', () => {
 
     const params = {
       // accountId: testAccountId,
-      resourceInstanceId: testReclaimInstanceGuid, //checking reclamations with instance guid for more test reliability 
+      resourceInstanceId: testReclaimInstanceGuid, // checking reclamations with instance guid for more test reliability
       headers: customHeader,
     };
 
