@@ -38,7 +38,8 @@ describe('UserManagementV1_integration', () => {
       iamId: 'testString',
     };
 
-    userManagementService.getUserSettings(params)
+    userManagementService
+      .getUserSettings(params)
       .then(res => {
         done();
       })
@@ -57,7 +58,8 @@ describe('UserManagementV1_integration', () => {
       selfManage: true,
     };
 
-    userManagementService.updateUserSettings(params)
+    userManagementService
+      .updateUserSettings(params)
       .then(res => {
         done();
       })
@@ -72,7 +74,8 @@ describe('UserManagementV1_integration', () => {
       state: 'testString',
     };
 
-    userManagementService.listUsers(params)
+    userManagementService
+      .listUsers(params)
       .then(res => {
         done();
       })
@@ -119,7 +122,8 @@ describe('UserManagementV1_integration', () => {
       accessGroups: ['testString'],
     };
 
-    userManagementService.inviteUsers(params)
+    userManagementService
+      .inviteUsers(params)
       .then(res => {
         done();
       })
@@ -134,7 +138,8 @@ describe('UserManagementV1_integration', () => {
       iamId: 'testString',
     };
 
-    userManagementService.getUserProfile(params)
+    userManagementService
+      .getUserProfile(params)
       .then(res => {
         done();
       })
@@ -156,7 +161,8 @@ describe('UserManagementV1_integration', () => {
       photo: 'testString',
     };
 
-    userManagementService.updateUserProfiles(params)
+    userManagementService
+      .updateUserProfiles(params)
       .then(res => {
         done();
       })
@@ -171,7 +177,8 @@ describe('UserManagementV1_integration', () => {
       iamId: 'testString',
     };
 
-    userManagementService.removeUsers(params)
+    userManagementService
+      .removeUsers(params)
       .then(res => {
         done();
       })
