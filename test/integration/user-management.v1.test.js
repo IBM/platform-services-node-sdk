@@ -27,15 +27,18 @@ const configFile = 'user_management.env';
 
 const describe = authHelper.prepareTests(configFile);
 
+let userId;
+
 describe('UserManagementV1_integration', () => {
-  const userManagementService = UserManagementV1.newInstance({});
+  const userManagementService = UserManagementV1.newInstance({serviceName: 'USERMGMT1'});
+  const alternateUserManagementService = UserManagementV1.newInstance({serviceName: 'USERMGMT2'});
 
   jest.setTimeout(timeout);
 
   test('getUserSettings()', done => {
     const params = {
-      accountId: 'testString',
-      iamId: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
+      iamId: 'IBMid-550008BJPR',
     };
 
     userManagementService
@@ -50,8 +53,8 @@ describe('UserManagementV1_integration', () => {
   });
   test('updateUserSettings()', done => {
     const params = {
-      accountId: 'testString',
-      iamId: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
+      iamId: 'IBMid-550008BJPR',
       language: 'testString',
       notificationLanguage: 'testString',
       allowedIpAddresses: '32.96.110.50,172.16.254.1',
@@ -70,8 +73,8 @@ describe('UserManagementV1_integration', () => {
   });
   test('listUsers()', done => {
     const params = {
-      accountId: 'testString',
-      state: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
+      state: 'ACTIVE',
     };
 
     userManagementService
@@ -89,42 +92,50 @@ describe('UserManagementV1_integration', () => {
 
     // InviteUser
     const inviteUserModel = {
-      email: 'testString',
-      account_role: 'testString',
+      email: 'aminttest+linked_account_owner_11@mail.test.ibm.com',
+      account_role: 'Member',
     };
 
     // Role
     const roleModel = {
-      role_id: 'testString',
+      role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
     };
 
     // Attribute
     const attributeModel = {
-      name: 'testString',
-      value: 'testString',
+      name: 'accountId',
+      value: '1aa434630b594b8a88b961a44c9eb2a9',
+    };
+
+    // Attribute
+    const attributeModel2 = {
+      name: 'resourceGroupId',
+      value: '*',
     };
 
     // Resource
     const resourceModel = {
-      attributes: [attributeModel],
+      attributes: [attributeModel, attributeModel2],
     };
 
     // InviteUserIamPolicy
     const inviteUserIamPolicyModel = {
+      type: 'access',
       roles: [roleModel],
       resources: [resourceModel],
     };
 
     const params = {
-      accountId: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
       users: [inviteUserModel],
       iamPolicy: [inviteUserIamPolicyModel],
-      accessGroups: ['testString'],
+      accessGroups: ['AccessGroupId-51675919-2bd7-4ce3-86e4-5faff8065574'],
     };
 
-    userManagementService
+    alternateUserManagementService
       .inviteUsers(params)
       .then(res => {
+        userId = res.result.resources[0].id;
         done();
       })
       .catch(err => {
@@ -134,8 +145,8 @@ describe('UserManagementV1_integration', () => {
   });
   test('getUserProfile()', done => {
     const params = {
-      accountId: 'testString',
-      iamId: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
+      iamId: 'IBMid-550008BJPR',
     };
 
     userManagementService
@@ -150,12 +161,12 @@ describe('UserManagementV1_integration', () => {
   });
   test('updateUserProfiles()', done => {
     const params = {
-      accountId: 'testString',
-      iamId: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
+      iamId: 'IBMid-550008BJPR',
       firstname: 'testString',
       lastname: 'testString',
-      state: 'testString',
-      email: 'testString',
+      state: 'ACTIVE',
+      email: 'do_not_delete_user_without_iam_policy_stage@mail.test.ibm.com',
       phonenumber: 'testString',
       altphonenumber: 'testString',
       photo: 'testString',
@@ -173,8 +184,8 @@ describe('UserManagementV1_integration', () => {
   });
   test('removeUsers()', done => {
     const params = {
-      accountId: 'testString',
-      iamId: 'testString',
+      accountId: '1aa434630b594b8a88b961a44c9eb2a9',
+      iamId: userId,
     };
 
     userManagementService

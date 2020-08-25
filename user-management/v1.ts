@@ -30,7 +30,7 @@ import { getSdkHeaders } from '../lib/common';
 
 class UserManagementV1 extends BaseService {
 
-  static DEFAULT_SERVICE_URL: string = 'https://user-management.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://user-management.test.cloud.ibm.com';
   static DEFAULT_SERVICE_NAME: string = 'user_management';
 
   /*************************
