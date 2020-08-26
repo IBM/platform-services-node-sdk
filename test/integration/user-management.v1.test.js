@@ -30,8 +30,8 @@ const describe = authHelper.prepareTests(configFile);
 let userId;
 
 describe('UserManagementV1_integration', () => {
-  const userManagementService = UserManagementV1.newInstance({serviceName: 'USERMGMT1'});
-  const alternateUserManagementService = UserManagementV1.newInstance({serviceName: 'USERMGMT2'});
+  const userManagementService = UserManagementV1.newInstance({ serviceName: 'USERMGMT1' });
+  const alternateUserManagementService = UserManagementV1.newInstance({ serviceName: 'USERMGMT2' });
 
   jest.setTimeout(timeout);
 
