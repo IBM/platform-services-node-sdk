@@ -82,7 +82,17 @@ describe('ConfigurationGovernanceV1', () => {
 
     configurationGovernanceService.createRules(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        const { result, status } = res;
+        if (status === 201) {
+          console.log(JSON.stringify(result, null, 2));
+        } else {
+          // some rules may have failed
+          for (rule of result.rules) {
+            if (rule.errors !== undefined && rule.errors.length > 0) {
+              throw new Error(rule.errors[0].message)
+            }
+          }
+        }
       })
       .catch(err => {
         console.warn(err)
