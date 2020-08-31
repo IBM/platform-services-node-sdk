@@ -129,9 +129,9 @@ describe('ConfigurationGovernanceV1', () => {
         attachmentEtag = res.headers['etag'];
         done();
       })
-      .catch(err => {
-        console.warn(err)
-      });
+        .catch(err => {
+          console.warn(err)
+        });
     });
     consoleWarnMock.mockImplementation(output => {
       done(output);
@@ -164,9 +164,9 @@ describe('ConfigurationGovernanceV1', () => {
         ruleEtag = res.headers['etag'];
         done();
       })
-      .catch(err => {
-        console.warn(err)
-      });
+        .catch(err => {
+          console.warn(err)
+        });
     });
     consoleWarnMock.mockImplementation(output => {
       done(output);

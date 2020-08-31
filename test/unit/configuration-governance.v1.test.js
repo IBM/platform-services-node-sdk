@@ -103,35 +103,23 @@ describe('ConfigurationGovernanceV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // UISupport
-      const uiSupportModel = {
-        display_name: 'testString',
-        description: 'testString',
-      };
-
-      // RuleImport
-      const ruleImportModel = {
-        name: 'testString',
-        ui_support: uiSupportModel,
-      };
-
       // RuleTargetAttribute
       const ruleTargetAttributeModel = {
-        name: 'resource_id',
+        name: 'testString',
         operator: 'string_equals',
-        value: 'f0f8f7994e754ff38f9d370201966561',
+        value: 'testString',
       };
 
       // TargetResource
       const targetResourceModel = {
         service_name: 'iam-groups',
-        resource_kind: 'zone',
-        additional_target_attributes: [{ name: 'resource_id', operator: 'string_equals', value: 'f0f8f7994e754ff38f9d370201966561' }],
+        resource_kind: 'service',
+        additional_target_attributes: [ruleTargetAttributeModel],
       };
 
       // RuleRequiredConfigSingleProperty
       const ruleRequiredConfigModel = {
-        description: 'testString',
+        description: 'Public access check',
         property: 'public_access_enabled',
         operator: 'is_true',
         value: 'testString',
@@ -139,21 +127,19 @@ describe('ConfigurationGovernanceV1', () => {
 
       // EnforcementAction
       const enforcementActionModel = {
-        action: 'disallow',
+        action: 'audit_log',
       };
 
       // RuleRequest
       const ruleRequestModel = {
-        account_id: 'testString',
-        name: 'testString',
-        description: 'testString',
-        version: '1.0.0',
+        account_id: '531fc3e28bfc43c5a2cea07786d93f5c',
+        name: 'Disable public access',
+        description: 'Ensure that public access to account resources is disabled.',
         rule_type: 'user_defined',
-        imports: [ruleImportModel],
         target: targetResourceModel,
         required_config: ruleRequiredConfigModel,
-        enforcement_actions: [{ action: 'disallow' }, { action: 'audit_log' }],
-        labels: ['SOC2', 'ITCS300'],
+        enforcement_actions: [enforcementActionModel],
+        labels: ['testString'],
       };
 
       // CreateRuleRequest
@@ -235,7 +221,7 @@ describe('ConfigurationGovernanceV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listRules
-        const accountId = 'testString';
+        const accountId = '531fc3e28bfc43c5a2cea07786d93f5c';
         const transactionId = 'testString';
         const attached = true;
         const labels = 'SOC2,ITCS300';
@@ -277,7 +263,7 @@ describe('ConfigurationGovernanceV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
+        const accountId = '531fc3e28bfc43c5a2cea07786d93f5c';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -394,23 +380,23 @@ describe('ConfigurationGovernanceV1', () => {
 
       // RuleTargetAttribute
       const ruleTargetAttributeModel = {
-        name: 'resource_id',
+        name: 'testString',
         operator: 'string_equals',
-        value: 'f0f8f7994e754ff38f9d370201966561',
+        value: 'testString',
       };
 
       // TargetResource
       const targetResourceModel = {
         service_name: 'iam-groups',
-        resource_kind: 'zone',
-        additional_target_attributes: [{ name: 'resource_id', operator: 'string_equals', value: 'f0f8f7994e754ff38f9d370201966561' }],
+        resource_kind: 'service',
+        additional_target_attributes: [ruleTargetAttributeModel],
       };
 
       // RuleRequiredConfigSingleProperty
       const ruleRequiredConfigModel = {
         description: 'testString',
         property: 'public_access_enabled',
-        operator: 'is_true',
+        operator: 'is_false',
         value: 'testString',
       };
 
@@ -419,32 +405,18 @@ describe('ConfigurationGovernanceV1', () => {
         action: 'audit_log',
       };
 
-      // UISupport
-      const uiSupportModel = {
-        display_name: 'testString',
-        description: 'testString',
-      };
-
-      // RuleImport
-      const ruleImportModel = {
-        name: 'testString',
-        ui_support: uiSupportModel,
-      };
-
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateRule
         const ruleId = 'testString';
         const ifMatch = 'testString';
         const name = 'Disable public access';
         const description = 'Ensure that public access to account resources is disabled.';
-        const target = {"service_name":"iam-groups","resource_kind":"service","additional_target_attributes":[]};
-        const requiredConfig = { property: 'public_access_enabled', operator: 'is_false' };
-        const enforcementActions = [{ action: 'audit_log' }, { action: 'disallow' }];
+        const target = targetResourceModel;
+        const requiredConfig = ruleRequiredConfigModel;
+        const enforcementActions = [enforcementActionModel];
         const accountId = '531fc3e28bfc43c5a2cea07786d93f5c';
-        const version = '1.0.0';
         const ruleType = 'user_defined';
-        const imports = [ruleImportModel];
-        const labels = ['SOC2', 'ITCS300'];
+        const labels = ['testString'];
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
@@ -455,9 +427,7 @@ describe('ConfigurationGovernanceV1', () => {
           requiredConfig: requiredConfig,
           enforcementActions: enforcementActions,
           accountId: accountId,
-          version: version,
           ruleType: ruleType,
-          imports: imports,
           labels: labels,
           transactionId: transactionId,
         };
@@ -484,9 +454,7 @@ describe('ConfigurationGovernanceV1', () => {
         expect(options.body['required_config']).toEqual(requiredConfig);
         expect(options.body['enforcement_actions']).toEqual(enforcementActions);
         expect(options.body['account_id']).toEqual(accountId);
-        expect(options.body['version']).toEqual(version);
         expect(options.body['rule_type']).toEqual(ruleType);
-        expect(options.body['imports']).toEqual(imports);
         expect(options.body['labels']).toEqual(labels);
         expect(options.path['rule_id']).toEqual(ruleId);
       });
@@ -497,9 +465,9 @@ describe('ConfigurationGovernanceV1', () => {
         const ifMatch = 'testString';
         const name = 'Disable public access';
         const description = 'Ensure that public access to account resources is disabled.';
-        const target = {"service_name":"iam-groups","resource_kind":"service","additional_target_attributes":[]};
-        const requiredConfig = { property: 'public_access_enabled', operator: 'is_false' };
-        const enforcementActions = [{ action: 'audit_log' }, { action: 'disallow' }];
+        const target = targetResourceModel;
+        const requiredConfig = ruleRequiredConfigModel;
+        const enforcementActions = [enforcementActionModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -622,22 +590,22 @@ describe('ConfigurationGovernanceV1', () => {
 
       // RuleScope
       const ruleScopeModel = {
-        note: 'testString',
-        scope_id: 'testString',
+        note: 'My enterprise',
+        scope_id: '282cf433ac91493ba860480d92519990',
         scope_type: 'enterprise',
       };
 
       // AttachmentRequest
       const attachmentRequestModel = {
-        account_id: 'testString',
+        account_id: '531fc3e28bfc43c5a2cea07786d93f5c',
         included_scope: ruleScopeModel,
-        excluded_scopes: [{ note: 'test account group', scope_id: '82f60bdb-250a-49a5-9af0-d925f0a88e32', scope_type: 'enterprise.account_group' }, { note: 'test account', scope_id: '3a34e60a-46b8-47c9-9192-9d4fe3665217', scope_type: 'enterprise.account' }],
+        excluded_scopes: [ruleScopeModel],
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createAttachments
         const ruleId = 'testString';
-        const attachments = [{ attachment_id: 'attachment-4301178a-8028-4220-9cb6-dfb86f09da99', account_id: '531fc3e28bfc43c5a2cea07786d93f5c', rule_id: 'rule-702d1db7-ca4a-414b-8464-2b517a065c14', included_scope: { note: 'My enterprise', scope_id: '282cf433ac91493ba860480d92519990', scope_type: 'enterprise' }, excluded_scopes: [{ note: 'Development account group', scope_id: '0142f84c2d7e4987b63fe8f98543d59f', scope_type: 'enterprise.account_group' }] }];
+        const attachments = [attachmentRequestModel];
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
@@ -667,7 +635,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const ruleId = 'testString';
-        const attachments = [{ attachment_id: 'attachment-4301178a-8028-4220-9cb6-dfb86f09da99', account_id: '531fc3e28bfc43c5a2cea07786d93f5c', rule_id: 'rule-702d1db7-ca4a-414b-8464-2b517a065c14', included_scope: { note: 'My enterprise', scope_id: '282cf433ac91493ba860480d92519990', scope_type: 'enterprise' }, excluded_scopes: [{ note: 'Development account group', scope_id: '0142f84c2d7e4987b63fe8f98543d59f', scope_type: 'enterprise.account_group' }] }];
+        const attachments = [attachmentRequestModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -867,8 +835,8 @@ describe('ConfigurationGovernanceV1', () => {
 
       // RuleScope
       const ruleScopeModel = {
-        note: 'testString',
-        scope_id: 'testString',
+        note: 'My enterprise',
+        scope_id: '282cf433ac91493ba860480d92519990',
         scope_type: 'enterprise',
       };
 
@@ -877,9 +845,9 @@ describe('ConfigurationGovernanceV1', () => {
         const ruleId = 'testString';
         const attachmentId = 'testString';
         const ifMatch = 'testString';
-        const accountId = 'testString';
+        const accountId = '531fc3e28bfc43c5a2cea07786d93f5c';
         const includedScope = ruleScopeModel;
-        const excludedScopes = [{ note: 'test account group', scope_id: '82f60bdb-250a-49a5-9af0-d925f0a88e32', scope_type: 'enterprise.account_group' }, { note: 'test account', scope_id: '3a34e60a-46b8-47c9-9192-9d4fe3665217', scope_type: 'enterprise.account' }];
+        const excludedScopes = [ruleScopeModel];
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
@@ -919,7 +887,7 @@ describe('ConfigurationGovernanceV1', () => {
         const ruleId = 'testString';
         const attachmentId = 'testString';
         const ifMatch = 'testString';
-        const accountId = 'testString';
+        const accountId = '531fc3e28bfc43c5a2cea07786d93f5c';
         const includedScope = ruleScopeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';

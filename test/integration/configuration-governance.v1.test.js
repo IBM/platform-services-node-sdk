@@ -354,7 +354,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
     expect(ruleEtag1).not.toBeUndefined();
 
     // Starting with "rule1" (result of a get), modify the description, then call the update operation.
-    // Note: we also update the version, but that is currently NOT being stored by the server :(
     const params = {
       ruleId: ruleId1,
       ifMatch: ruleEtag1,
@@ -364,9 +363,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       requiredConfig: rule1.required_config,
       enforcementActions: rule1.enforcement_actions,
       accountId: rule1.account_id,
-      version: `${rule1.version} - Updated!`,
       ruleType: rule1.rule_type,
-      imports: rule1.imports,
       labels: rule1.labels,
       transactionId: transactionId,
     };
@@ -398,7 +395,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     expect(ruleEtag1).not.toBeNull();
     expect(ruleEtag1).not.toBeUndefined();
 
-    // Starting with "rule1" (result of a get), modify the version, then call the update operation.
+    // Starting with "rule1" (result of a get), modify the description, then call the update operation.
     const params = {
       ruleId: ruleId1,
       ifMatch: `${ruleEtag1} just-foolin`,
@@ -408,9 +405,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       requiredConfig: rule1.required_config,
       enforcementActions: rule1.enforcement_actions,
       accountId: rule1.account_id,
-      version: `${rule1.version} - Updated!`,
       ruleType: rule1.rule_type,
-      imports: rule1.imports,
       labels: rule1.labels,
       transactionId: transactionId,
     };
@@ -920,16 +915,6 @@ async function cleanRules(label, done) {
 }
 
 function initSampleData() {
-  const uiSupportModel = {
-    display_name: 'Bogus Rule',
-    description: 'Sample rule used for testing',
-  };
-
-  const ruleImportModel = {
-    name: 'sampleImport',
-    ui_support: uiSupportModel,
-  };
-
   const ruleTargetAttributeModel = {
     name: 'resource_id',
     operator: 'is_not_empty',
@@ -976,9 +961,7 @@ function initSampleData() {
     account_id: ACCOUNT_ID,
     name: 'Node Test Rule #1',
     description: 'This is the description for Node Test Rule #1.',
-    version: '0.0.1',
     rule_type: 'user_defined',
-    imports: [ruleImportModel],
     target: targetResourceModel,
     required_config: ruleRequiredConfigModel1,
     enforcement_actions: [enforcementActionModel],
@@ -989,7 +972,6 @@ function initSampleData() {
     account_id: ACCOUNT_ID,
     name: 'Node Test Rule #2',
     description: 'This is the description for Node Test Rule #2.',
-    version: '0.1.3',
     rule_type: 'user_defined',
     target: targetResourceModel,
     required_config: ruleRequiredConfigModel2,
@@ -1001,7 +983,6 @@ function initSampleData() {
     account_id: ACCOUNT_ID,
     name: 'Node Test Rule #2',
     description: 'This is the description for Node Test Rule #2.',
-    version: '0.1.3',
     rule_type: 'service_defined',
     target: targetResourceModel,
     required_config: ruleRequiredConfigModel2,

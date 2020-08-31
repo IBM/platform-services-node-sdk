@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-106e48e3-20200827-100723
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-68ee7c8f-20200829-062726
  */
  
 
@@ -284,11 +284,7 @@ class ConfigurationGovernanceV1 extends BaseService {
    * @param {EnforcementAction[]} params.enforcementActions - The actions that the service must run on your behalf when
    * a request to create or modify the target resource does not comply with your conditions.
    * @param {string} [params.accountId] - Your IBM Cloud account ID.
-   * @param {string} [params.version] - A field that you can use to store and manage a custom version for this rule.
-   * @param {string} [params.ruleType] - The type of rule. Rules that you create are `user_defined`. Rules that are
-   * created by IBM are `service_defined`.
-   * @param {RuleImport[]} [params.imports] - Parameters that are imported by IBM as metadata to create
-   * `service_defined` rules.
+   * @param {string} [params.ruleType] - The type of rule. Rules that you create are `user_defined`.
    * @param {string[]} [params.labels] - Labels that you can use to group and search for similar rules, such as those
    * that help you to meet a specific organization guideline.
    * @param {string} [params.transactionId] - The unique identifier that is used to trace an entire request. If you omit
@@ -317,9 +313,7 @@ class ConfigurationGovernanceV1 extends BaseService {
         'required_config': _params.requiredConfig,
         'enforcement_actions': _params.enforcementActions,
         'account_id': _params.accountId,
-        'version': _params.version,
         'rule_type': _params.ruleType,
-        'imports': _params.imports,
         'labels': _params.labels
       };
 
@@ -594,7 +588,8 @@ class ConfigurationGovernanceV1 extends BaseService {
    * headers.
    * @param {string} params.accountId - Your IBM Cloud account ID.
    * @param {RuleScope} params.includedScope - The extent at which the rule can be attached across your accounts.
-   * @param {RuleScope[]} [params.excludedScopes] -
+   * @param {RuleScope[]} [params.excludedScopes] - The extent at which the rule can be excluded from the included
+   * scope.
    * @param {string} [params.transactionId] - The unique identifier that is used to trace an entire request. If you omit
    * this field, the service generates and sends a transaction ID in the
    * `trace` field of the response body.
@@ -819,14 +814,8 @@ namespace ConfigurationGovernanceV1 {
     enforcementActions: EnforcementAction[];
     /** Your IBM Cloud account ID. */
     accountId?: string;
-    /** A field that you can use to store and manage a custom version for this rule. */
-    version?: string;
-    /** The type of rule. Rules that you create are `user_defined`. Rules that are created by IBM are
-     *  `service_defined`.
-     */
+    /** The type of rule. Rules that you create are `user_defined`. */
     ruleType?: UpdateRuleConstants.RuleType | string;
-    /** Parameters that are imported by IBM as metadata to create `service_defined` rules. */
-    imports?: RuleImport[];
     /** Labels that you can use to group and search for similar rules, such as those that help you to meet a
      *  specific organization guideline.
      */
@@ -844,10 +833,9 @@ namespace ConfigurationGovernanceV1 {
 
   /** Constants for the `updateRule` operation. */
   export namespace UpdateRuleConstants {
-    /** The type of rule. Rules that you create are `user_defined`. Rules that are created by IBM are `service_defined`. */
+    /** The type of rule. Rules that you create are `user_defined`. */
     export enum RuleType {
       USER_DEFINED = 'user_defined',
-      SERVICE_DEFINED = 'service_defined',
     }
   }
 
@@ -945,6 +933,7 @@ namespace ConfigurationGovernanceV1 {
     accountId: string;
     /** The extent at which the rule can be attached across your accounts. */
     includedScope: RuleScope;
+    /** The extent at which the rule can be excluded from the included scope. */
     excludedScopes?: RuleScope[];
     /** The unique identifier that is used to trace an entire request. If you omit this field, the service generates
      *  and sends a transaction ID in the
@@ -988,6 +977,7 @@ namespace ConfigurationGovernanceV1 {
     account_id: string;
     /** The extent at which the rule can be attached across your accounts. */
     included_scope: RuleScope;
+    /** The extent at which the rule can be excluded from the included scope. */
     excluded_scopes?: RuleScope[];
   }
 
@@ -1012,6 +1002,7 @@ namespace ConfigurationGovernanceV1 {
     account_id: string;
     /** The extent at which the rule can be attached across your accounts. */
     included_scope: RuleScope;
+    /** The extent at which the rule can be excluded from the included scope. */
     excluded_scopes?: RuleScope[];
   }
 
@@ -1090,14 +1081,8 @@ namespace ConfigurationGovernanceV1 {
     name: string;
     /** An extended description of your rule. */
     description: string;
-    /** A field that you can use to store and manage a custom version for this rule. */
-    version?: string;
-    /** The type of rule. Rules that you create are `user_defined`. Rules that are created by IBM are
-     *  `service_defined`.
-     */
+    /** The type of rule. Rules that you create are `user_defined`. */
     rule_type?: string;
-    /** Parameters that are imported by IBM as metadata to create `service_defined` rules. */
-    imports?: RuleImport[];
     /** The properties that describe the resource that you want to target  with the rule. */
     target: TargetResource;
     required_config: RuleRequiredConfig;
@@ -1127,14 +1112,6 @@ namespace ConfigurationGovernanceV1 {
   export interface RuleCondition {
   }
 
-  /** RuleImport. */
-  export interface RuleImport {
-    /** The imported name for a rule. */
-    name: string;
-    /** Imported metadata that displays in the dashboard. */
-    ui_support?: UISupport;
-  }
-
   /** A list of rules. */
   export interface RuleList {
     /** The requested offset for the returned items. */
@@ -1159,14 +1136,8 @@ namespace ConfigurationGovernanceV1 {
     name: string;
     /** An extended description of your rule. */
     description: string;
-    /** A field that you can use to store and manage a custom version for this rule. */
-    version?: string;
-    /** The type of rule. Rules that you create are `user_defined`. Rules that are created by IBM are
-     *  `service_defined`.
-     */
+    /** The type of rule. Rules that you create are `user_defined`. */
     rule_type?: string;
-    /** Parameters that are imported by IBM as metadata to create `service_defined` rules. */
-    imports?: RuleImport[];
     /** The properties that describe the resource that you want to target  with the rule. */
     target: TargetResource;
     required_config: RuleRequiredConfig;
@@ -1252,14 +1223,6 @@ namespace ConfigurationGovernanceV1 {
      *  match the             definition are included in the rule.
      */
     additional_target_attributes?: RuleTargetAttribute[];
-  }
-
-  /** Imported metadata that displays in the dashboard. */
-  export interface UISupport {
-    /** The display name for a rule. */
-    display_name: string;
-    /** An extended description of a rule. */
-    description: string;
   }
 
   /** A condition with the `and` logical operator. */
