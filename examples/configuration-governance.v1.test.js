@@ -50,7 +50,7 @@ describe('ConfigurationGovernanceV1', () => {
   let ruleId
 
   const config = readExternalSources(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME);
-  
+
   // Additional configuration settings
   let testLabel = 'NodeSDKExamples';
   let accountId = config.accountId;
@@ -233,7 +233,6 @@ describe('ConfigurationGovernanceV1', () => {
       requiredConfig: { property: 'public_access_enabled', operator: 'is_false' },
       enforcementActions: [{ action: 'audit_log' }, { action: 'disallow' }],
       accountId: accountId,
-      version: '1.0.0',
       ruleType: 'user_defined',
       labels: ['SOC2', 'ITCS300'],
     };
@@ -357,7 +356,7 @@ describe('ConfigurationGovernanceV1', () => {
 
   async function cleanRules(label, done) {
     console.log('Cleaning rules...');
-  
+
     try {
       // List any existing rules for this account with the specified label.
       const params = {
@@ -366,24 +365,24 @@ describe('ConfigurationGovernanceV1', () => {
         limit: 1000,
         offset: 0,
       };
-  
+
       const res = await configurationGovernanceService.listRules(params);
       expect(res).not.toBeNull();
       expect(res.status).toEqual(200);
       const ruleListResult = res.result;
       expect(ruleListResult).not.toBeNull();
-  
+
       console.log(`Found ${ruleListResult.total_count} rule(s) to be cleaned`);
-  
+
       // Now walk through the returned rules and delete each one.
       if (ruleListResult.total_count > 0) {
         for (const rule of ruleListResult.rules) {
           const deleteRuleParams = {
             ruleId: rule.rule_id,
           };
-  
+
           console.log(`Deleting rule: name=${rule.name} id=${rule.rule_id}`);
-  
+
           const deleteRuleRes = await configurationGovernanceService.deleteRule(deleteRuleParams);
           expect(deleteRuleRes).not.toBeNull();
           expect(deleteRuleRes.status).toEqual(204);
@@ -396,5 +395,5 @@ describe('ConfigurationGovernanceV1', () => {
       done(err);
     }
   }
-  
+
 });
