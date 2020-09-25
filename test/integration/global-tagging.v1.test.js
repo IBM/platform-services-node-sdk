@@ -200,25 +200,33 @@ async function getTagNamesForResource(service, resourceId) {
   const resourceModel = {
     resource_id: resourceId,
   };
-  const params = {
-    offset: 0,
-    limit: 1000,
-    resources: [resourceModel],
-  };
   const tagNames = null;
   try {
-    const response = service.listTags(params);
-    expect(response).toBeDefined();
-    const result = response.result;
-    console.log('Received tags attached to resource: ', result);
-    if (result.items) {
-      result.items.forEach(tag => {
-        tagNames.push(tag.name);
-      });
+
+    pagesize = 500
+    offset = 0
+
+    condition = true
+    while (condition) {
+      const params = {
+        offset: offset,
+        limit: pagesize,
+        resources: [resourceModel],
+      };
+      const response = service.listTags(params);
+      expect(response).toBeDefined();
+      const result = response.result;
+      if (result.items) {
+        result.items.forEach(tag => {
+          tagNames.push(tag.name);
+        });
+      }
+
+      offset += pagesize
+      condition = offset < result.total_count;
     }
   } catch (err) {
     // absorb the exception
   }
-  console.log('Returning tagNames: ', tagNames);
   return tagNames;
 }
