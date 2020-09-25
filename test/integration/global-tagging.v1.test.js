@@ -102,11 +102,10 @@ describe('GlobalTaggingV1_integration', () => {
         });
 
         // Make sure the tag was in fact attached to the resource.
-        getTagNamesForResource(globalTaggingService, resourceCrn)
-          .then(tagNames => {
-            expect(tagNames.includes(tagName)).toBe(true);
-            done();
-          })
+        getTagNamesForResource(globalTaggingService, resourceCrn).then(tagNames => {
+          expect(tagNames.includes(tagName)).toBe(true);
+          done();
+        });
       })
       .catch(err => {
         console.warn(err);
@@ -137,11 +136,10 @@ describe('GlobalTaggingV1_integration', () => {
         });
 
         // Make sure the tag was in fact attached to the resource.
-        getTagNamesForResource(globalTaggingService, resourceCrn)
-          .then(tagNames => {
-            expect(tagNames.includes(tagName)).toBe(false);
-            done();
-          })
+        getTagNamesForResource(globalTaggingService, resourceCrn).then(tagNames => {
+          expect(tagNames.includes(tagName)).toBe(false);
+          done();
+        });
       })
       .catch(err => {
         console.warn(err);
