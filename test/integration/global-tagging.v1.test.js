@@ -75,7 +75,7 @@ describe('GlobalTaggingV1_integration', () => {
         done(err);
       });
   });
-  test('attachTag()', done => {
+  test('attachTag()', async done => {
     // Request models needed by this operation.
     const resourceModel = {
       resource_id: resourceCrn,
@@ -102,12 +102,11 @@ describe('GlobalTaggingV1_integration', () => {
         });
 
         // Make sure the tag was in fact attached to the resource.
-        async () => {
-          const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn);
-          expect(tagNames).toBeDefined();
-          expect(tagNames.includes(tagName)).toBe(true);
-        };
-        done();
+        getTagNamesForResource(globalTaggingService, resourceCrn)
+          .then(tagNames => {
+            expect(tagNames.includes(tagName)).toBe(true);
+            done();
+          })
       })
       .catch(err => {
         console.warn(err);
@@ -138,12 +137,11 @@ describe('GlobalTaggingV1_integration', () => {
         });
 
         // Make sure the tag was in fact attached to the resource.
-        async () => {
-          const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn);
-          expect(tagNames).toBeDefined();
-          expect(tagNames.includes(tagName)).toBe(true);
-        };
-        done();
+        getTagNamesForResource(globalTaggingService, resourceCrn)
+          .then(tagNames => {
+            expect(tagNames.includes(tagName)).toBe(false);
+            done();
+          })
       })
       .catch(err => {
         console.warn(err);
@@ -197,36 +195,21 @@ describe('GlobalTaggingV1_integration', () => {
 });
 
 async function getTagNamesForResource(service, resourceId) {
-  const resourceModel = {
-    resource_id: resourceId,
+  const tagNames = [];
+
+  const params = {
+    offset: 0,
+    limit: 1000,
+    attachedTo: resourceId,
   };
-  const tagNames = null;
-  try {
-
-    pagesize = 500
-    offset = 0
-
-    condition = true
-    while (condition) {
-      const params = {
-        offset: offset,
-        limit: pagesize,
-        resources: [resourceModel],
-      };
-      const response = service.listTags(params);
-      expect(response).toBeDefined();
-      const result = response.result;
-      if (result.items) {
-        result.items.forEach(tag => {
-          tagNames.push(tag.name);
-        });
-      }
-
-      offset += pagesize
-      condition = offset < result.total_count;
-    }
-  } catch (err) {
-    // absorb the exception
+  const response = await service.listTags(params);
+  expect(response).toBeDefined();
+  const result = response.result;
+  if (result.items) {
+    result.items.forEach(tag => {
+      tagNames.push(tag.name);
+    });
   }
+
   return tagNames;
 }
