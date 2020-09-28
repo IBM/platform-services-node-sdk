@@ -21,9 +21,10 @@
 const IamIdentityV1 = require('../dist/iam-identity/v1');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
+const { expectToBePromise } = require('ibm-cloud-sdk-core/lib/sdk-test-helpers');
 
 // Location of our config file.
-const configFile = 'iam_identity_v1.env';
+const configFile = 'iam_identity.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -36,6 +37,7 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('IamIdentityV1', () => {
+  jest.setTimeout(30000);
 
   // begin-common
 
@@ -44,74 +46,83 @@ describe('IamIdentityV1', () => {
   // end-common
 
   const config = readExternalSources(IamIdentityV1.DEFAULT_SERVICE_NAME);
-  const apikeyName = 'Node-SDK-IT-ApiKey';
-  const serviceIDName = 'Node-SDK-IT-ServiceId';
-  const newDescription = 'This is an updated description';
+  const apikeyName = 'Node-SDK-Example-ApiKey"';
+  const serviceIdName = 'Node-SDK-Example-ServiceId';
 
-  let accountID = config.ACCOUNT_ID;
-  let iamID = config.IAM_ID;
-  let iamApikey = config.APIKEY;
+  let accountId = config.accountId;
+  let iamId = config.iamId;
+  let iamApikey = config.apikey;
 
-  let apikeyID;
-  let apikeyEtag;
+  let apikeyId = null;
+  let apikeyEtag = null;
 
-  let serviceID;
-  let serviceIDEtag;
+  let serviceId = null;
+  let serviceIdEtag = null;
 
   test('createApiKey request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
 
     // begin-create_api_key
 
     const params = {
       name: apikeyName,
-      iamId: iamID,
-      description: 'NodeSDK test apikey',
-      accountId: accountID,
+      iamId: iamId,
+      description: 'Node.js Example ApiKey',
     };
 
     iamIdentityService.createApiKey(params)
       .then(res => {
+        apikeyId = res.result.id
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(201);
-
-        const apikey = res.result;
-        apikeyID = apikey.id;
-        apikeyEtag = apikey.entity_tag;
-        expect(apikeyID).not.toBeNull();
-        expect(apikeyEtag).not.toBeNull();
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-create_api_key
   });
   test('getApiKey request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(apikeyId).not.toBeNull();
+
     // begin-get_api_key
 
     const params = {
-      id: apikeyID,
+      id: apikeyId,
     };
 
     iamIdentityService.getApiKey(params)
       .then(res => {
+        apikeyEtag = res.headers['etag'];
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-get_api_key
   });
   test('getApiKeysDetails request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
 
     // begin-get_api_keys_details
 
@@ -123,268 +134,311 @@ describe('IamIdentityV1', () => {
     iamIdentityService.getApiKeysDetails(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-get_api_keys_details
   });
   test('listApiKeys request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
     // begin-list_api_keys
-    
+
     const params = {
-      accountId: accountID,
-      iamId: iamID,
-      pagesize: 1,
+      accountId: accountId,
+      iamId: iamId,
       includeHistory: true,
     };
 
-    iamIdentityService.listApiKeys({})
+    iamIdentityService.listApiKeys(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-list_api_keys
   });
   test('updateApiKey request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(apikeyId).not.toBeNull();
+    expect(apikeyEtag).not.toBeNull();
+
     // begin-update_api_key
 
     const params = {
-      id: apikeyID,
+      id: apikeyId,
       ifMatch: apikeyEtag,
-      description: newDescription,
+      description: 'This is an updated description',
     };
 
     iamIdentityService.updateApiKey(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-update_api_key
   });
   test('lockApiKey request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(apikeyId).not.toBeNull();
+
     // begin-lock_api_key
 
     const params = {
-      id: apikeyID,
+      id: apikeyId,
     };
 
     iamIdentityService.lockApiKey(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-lock_api_key
   });
   test('unlockApiKey request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(apikeyId).not.toBeNull();
+
     // begin-unlock_api_key
 
     const params = {
-      id: apikeyID,
+      id: apikeyId,
     };
 
     iamIdentityService.unlockApiKey(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-unlock_api_key
   });
   test('deleteApiKey request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(apikeyId).not.toBeNull();
+
     // begin-delete_api_key
 
     const params = {
-      id: apikeyID,
+      id: apikeyId,
     };
 
     iamIdentityService.deleteApiKey(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(204);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-delete_api_key
   });
   test('createServiceId request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
     // begin-create_service_id
 
     const params = {
-      accountId: accountID,
-      name: serviceIDName,
-      description: 'NodeSDK ServiceID desc',
+      accountId: accountId,
+      name: serviceIdName,
+      description: 'Node.js Example ServiceId',
     };
 
     iamIdentityService.createServiceId(params)
       .then(res => {
+        serviceId = res.result.id;
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(201);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-create_service_id
   });
   test('getServiceId request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(serviceId).not.toBeNull();
+
     // begin-get_service_id
 
     const params = {
-      id: serviceID,
+      id: serviceId,
     };
 
     iamIdentityService.getServiceId(params)
       .then(res => {
+        serviceIdEtag = res.headers['etag'];
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-
-        const result = res.result;
-        expect(result).not.toBeNull();
-
-        serviceIDEtag = result.entity_tag;
-        expect(serviceIDEtag).not.toBeNull();
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-get_service_id
   });
   test('listServiceIds request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
     // begin-list_service_ids
 
     const params = {
-      accountId: accountID,
-      name: serviceIDName,
+      accountId: accountId,
+      name: serviceIdName,
       pagesize: 100,
     };
 
     iamIdentityService.listServiceIds(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-list_service_ids
   });
   test('updateServiceId request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(serviceId).not.toBeNull();
+    expect(serviceIdEtag).not.toBeNull();
+
     // begin-update_service_id
 
     const params = {
-      id: serviceID,
-      ifMatch: serviceIDEtag,
-      description: newDescription,
+      id: serviceId,
+      ifMatch: serviceIdEtag,
+      description: 'This is an updated description',
     };
 
     iamIdentityService.updateServiceId(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-update_service_id
   });
   test('lockServiceId request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(serviceId).not.toBeNull();
+
     // begin-lock_service_id
 
     const params = {
-      id: serviceID,
+      id: serviceId,
     };
 
     iamIdentityService.lockServiceId(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-lock_service_id
   });
   test('unlockServiceId request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(serviceId).not.toBeNull();
+
     // begin-unlock_service_id
 
     const params = {
-      id: serviceID,
+      id: serviceId,
     };
 
     iamIdentityService.unlockServiceId(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
@@ -395,22 +449,27 @@ describe('IamIdentityV1', () => {
   });
   test('deleteServiceId request example', done => {
 
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    expect(serviceId).not.toBeNull();
+
     // begin-delete_service_id
 
     const params = {
-      id: serviceID,
+      id: serviceId,
     };
 
     iamIdentityService.deleteServiceId(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        done();
       })
       .catch(err => {
         console.warn(err);
-        done(err);
       });
 
     // end-delete_service_id

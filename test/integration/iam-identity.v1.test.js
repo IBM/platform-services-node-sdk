@@ -81,7 +81,6 @@ describe('IamIdentityV1_integration', () => {
       name: apikeyName,
       iamId: iamId,
       description: 'NodeSDK test apikey #1',
-      accountId: accountId,
     };
 
     iamIdentityService
@@ -108,7 +107,6 @@ describe('IamIdentityV1_integration', () => {
       name: apikeyName,
       iamId: iamId,
       description: 'NodeSDK test apikey #2',
-      accountId: accountId,
     };
 
     iamIdentityService
