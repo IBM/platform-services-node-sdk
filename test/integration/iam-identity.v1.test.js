@@ -196,13 +196,11 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('listApiKeys()', async done => {
-
     const pageSize = 1;
     let pageToken = null;
-    let apikeys = [];
+    const apikeys = [];
 
     try {
-
       // Retrieve 1 apikey at a time to test the pagination.
       do {
         const params = {
@@ -634,9 +632,9 @@ async function cleanupResources() {
           const params = {
             id: elem.id,
           };
-          res = await iamIdentityService.deleteApiKey(params);
-          expect(res).not.toBeNull();
-          expect(res.status).toEqual(204);
+          const response = await iamIdentityService.deleteApiKey(params);
+          expect(response).not.toBeNull();
+          expect(response.status).toEqual(204);
         }
       }
     }
@@ -656,9 +654,9 @@ async function cleanupResources() {
         const params = {
           id: elem.id,
         };
-        res = await iamIdentityService.deleteServiceId(params);
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(204);
+        const response = await iamIdentityService.deleteServiceId(params);
+        expect(response).not.toBeNull();
+        expect(response.status).toEqual(204);
       }
     }
     console.log('Finished cleaning resources!');
