@@ -23,7 +23,23 @@ const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
 const { expectToBePromise } = require('ibm-cloud-sdk-core/lib/sdk-test-helpers');
 
-// Location of our config file.
+//
+// This file provides an example of how to use the IAM-IDENTITY service.
+//
+// The following configuration properties are assumed to be defined:
+//
+// IAM_IDENTITY_URL=<service url>
+// IAM_IDENTITY_AUTHTYPE=iam
+// IAM_IDENTITY_AUTH_URL=<IAM Token Service url>
+// IAM_IDENTITY_APIKEY=<IAM APIKEY for the User>
+// IAM_IDENTITY_ACCOUNT_ID=<AccountID which is unique to the User>
+// IAM_IDENTITY_IAM_ID=<IAM ID which is unique to the User account>
+//
+// These configuration properties can be exported as environment variables, or stored
+// in a "credentials" file and then:
+// export IBM_CREDENTIALS_FILE=<name of credentials file>
+//
+
 const configFile = 'iam_identity.env';
 
 const describe = authHelper.prepareTests(configFile);
@@ -46,8 +62,8 @@ describe('IamIdentityV1', () => {
   // end-common
 
   const config = readExternalSources(IamIdentityV1.DEFAULT_SERVICE_NAME);
-  const apikeyName = 'Node-SDK-Example-ApiKey';
-  const serviceIdName = 'Node-SDK-Example-ServiceId';
+  const apikeyName = 'Example-ApiKey';
+  const serviceIdName = 'Example-ServiceId';
 
   let accountId = config.accountId;
   let iamId = config.iamId;
@@ -56,8 +72,8 @@ describe('IamIdentityV1', () => {
   let apikeyId = null;
   let apikeyEtag = null;
 
-  let serviceId = null;
-  let serviceIdEtag = null;
+  let svcId = null;
+  let svcIdEtag = null;
 
   test('createApiKey request example', done => {
 
@@ -73,7 +89,7 @@ describe('IamIdentityV1', () => {
     const params = {
       name: apikeyName,
       iamId: iamId,
-      description: 'Node.js Example ApiKey',
+      description: 'Example ApiKey',
     };
 
     iamIdentityService.createApiKey(params)
@@ -86,6 +102,59 @@ describe('IamIdentityV1', () => {
       });
 
     // end-create_api_key
+  });
+  test('listApiKeys request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-list_api_keys
+
+    const params = {
+      accountId: accountId,
+      iamId: iamId,
+      includeHistory: true,
+    };
+
+    iamIdentityService.listApiKeys(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+
+    // end-list_api_keys
+  });
+  test('getApiKeysDetails request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-get_api_keys_details
+
+    const params = {
+      iamApiKey: iamApikey,
+      includeHistory: false,
+    };
+
+    iamIdentityService.getApiKeysDetails(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+
+    // end-get_api_keys_details
   });
   test('getApiKey request example', done => {
 
@@ -114,59 +183,6 @@ describe('IamIdentityV1', () => {
       });
 
     // end-get_api_key
-  });
-  test('getApiKeysDetails request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-get_api_keys_details
-
-    const params = {
-      iamApiKey: iamApikey,
-      includeHistory: true,
-    };
-
-    iamIdentityService.getApiKeysDetails(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err);
-      });
-
-    // end-get_api_keys_details
-  });
-  test('listApiKeys request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-list_api_keys
-
-    const params = {
-      accountId: accountId,
-      iamId: iamId,
-      includeHistory: true,
-    };
-
-    iamIdentityService.listApiKeys(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err);
-      });
-
-    // end-list_api_keys
   });
   test('updateApiKey request example', done => {
 
@@ -293,12 +309,12 @@ describe('IamIdentityV1', () => {
     const params = {
       accountId: accountId,
       name: serviceIdName,
-      description: 'Node.js Example ServiceId',
+      description: 'Example ServiceId',
     };
 
     iamIdentityService.createServiceId(params)
       .then(res => {
-        serviceId = res.result.id;
+        svcId = res.result.id;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -316,17 +332,17 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
-    expect(serviceId).not.toBeNull();
+    expect(svcId).not.toBeNull();
 
     // begin-get_service_id
 
     const params = {
-      id: serviceId,
+      id: svcId,
     };
 
     iamIdentityService.getServiceId(params)
       .then(res => {
-        serviceIdEtag = res.headers['etag'];
+        svcIdEtag = res.headers['etag'];
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -349,7 +365,6 @@ describe('IamIdentityV1', () => {
     const params = {
       accountId: accountId,
       name: serviceIdName,
-      pagesize: 100,
     };
 
     iamIdentityService.listServiceIds(params)
@@ -371,14 +386,14 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
-    expect(serviceId).not.toBeNull();
-    expect(serviceIdEtag).not.toBeNull();
+    expect(svcId).not.toBeNull();
+    expect(svcIdEtag).not.toBeNull();
 
     // begin-update_service_id
 
     const params = {
-      id: serviceId,
-      ifMatch: serviceIdEtag,
+      id: svcId,
+      ifMatch: svcIdEtag,
       description: 'This is an updated description',
     };
 
@@ -401,12 +416,12 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
-    expect(serviceId).not.toBeNull();
+    expect(svcId).not.toBeNull();
 
     // begin-lock_service_id
 
     const params = {
-      id: serviceId,
+      id: svcId,
     };
 
     iamIdentityService.lockServiceId(params)
@@ -428,12 +443,12 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
-    expect(serviceId).not.toBeNull();
+    expect(svcId).not.toBeNull();
 
     // begin-unlock_service_id
 
     const params = {
-      id: serviceId,
+      id: svcId,
     };
 
     iamIdentityService.unlockServiceId(params)
@@ -456,12 +471,12 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
-    expect(serviceId).not.toBeNull();
+    expect(svcId).not.toBeNull();
 
     // begin-delete_service_id
 
     const params = {
-      id: serviceId,
+      id: svcId,
     };
 
     iamIdentityService.deleteServiceId(params)
