@@ -46,7 +46,7 @@ describe('IamIdentityV1', () => {
   // end-common
 
   const config = readExternalSources(IamIdentityV1.DEFAULT_SERVICE_NAME);
-  const apikeyName = 'Node-SDK-Example-ApiKey"';
+  const apikeyName = 'Node-SDK-Example-ApiKey';
   const serviceIdName = 'Node-SDK-Example-ServiceId';
 
   let accountId = config.accountId;
