@@ -67,7 +67,11 @@ describe('GlobalTaggingV1', () => {
 
     // begin-list_tags
 
-    globalTaggingService.listTags({})
+    const params = {
+      attachedOnly: true,
+    };
+
+    globalTaggingService.listTags(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
