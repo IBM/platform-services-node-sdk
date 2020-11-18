@@ -7,6 +7,7 @@
     ./catalog-management/v1.ts \
     ./configuration-governance/v1.ts \
     ./enterprise-management/v1.ts \
+    ./enterprise-usage-reports/v1.ts \
     ./global-catalog/v1.ts \
     ./global-search/v2.ts \
     ./global-tagging/v1.ts \
@@ -16,5 +17,6 @@
     ./open-service-broker/v1.ts \
     ./resource-controller/v2 \
     ./resource-manager/v2 \
+    ./usage-reports/v4 \
     ./user-management/v1 \
     --target "ES5"

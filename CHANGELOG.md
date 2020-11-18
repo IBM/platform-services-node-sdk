@@ -1,3 +1,31 @@
+## [0.15.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.15.1...v0.15.2) (2020-11-18)
+
+
+### Bug Fixes
+
+* **IAM Access Groups:** update service and add examples ([773363c](https://github.com/IBM/platform-services-node-sdk/commit/773363c4bb91a2f47a8e327a155e475f9f09b2d3))
+
+## [0.15.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.15.0...v0.15.1) (2020-11-11)
+
+
+### Bug Fixes
+
+* **Configuration Governance:** update service after API changes ([09ff19a](https://github.com/IBM/platform-services-node-sdk/commit/09ff19a2b9acaeb90271be70709a130b666d1ac6))
+
+# [0.15.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.14.0...v0.15.0) (2020-11-04)
+
+
+### Features
+
+* **Enterprise Usage Reports:** add service to project ([5e93384](https://github.com/IBM/platform-services-node-sdk/commit/5e933847a2c8956df2bc5df92b5cd02401f6ef0c))
+
+# [0.14.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.13.2...v0.14.0) (2020-10-31)
+
+
+### Features
+
+* **Usage Reports:** add service to project ([6bc47ac](https://github.com/IBM/platform-services-node-sdk/commit/6bc47acae0226fabaca155170e3f2e9201ae28e0))
+
 ## [0.13.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.13.1...v0.13.2) (2020-10-30)
 
 
