@@ -25,6 +25,19 @@ const authHelper = require('../test/resources/auth-helper.js');
 // Location of our config file.
 const configFile = 'resource_controller.env';
 
+///////////////////////////////////////////////////////
+///////////// Example config file fields //////////////
+// RESOURCE_CONTROLLER_URL=https://resource-controller.cloud.ibm.com
+// RESOURCE_CONTROLLER_AUTH_TYPE=iam
+// RESOURCE_CONTROLLER_AUTH_URL=https://iam.cloud.ibm.com/identity/token
+// RESOURCE_CONTROLLER_APIKEY=<User's IAM API Key>
+// RESOURCE_CONTROLLER_RESOURCE_GROUP=5g9f447903254bb58972a2f3f5a4c711
+// RESOURCE_CONTROLLER_RECLAMATION_PLAN_ID=0be5ad401ae913d8ff665d92680664ed
+// RESOURCE_CONTROLLER_ACCOUNT_ID=b80a8b513ae24e178438b7a18bd8d609
+// RESOURCE_CONTROLLER_ALIAS_TARGET_CRN=crn:v1:cf:public:cf:eu-gb:o/e242c7f0-9eb7-4541-ad3e-b5f5a45a1498::cf-space:f5038ca8-9d28-42a1-9e57-9b9fdd66bf8e
+// RESOURCE_CONTROLLER_BINDING_TARGET_CRN=crn:v1:cf:public:cf:eu-gb:s/f5038ca8-9d28-42a1-9e57-9b9fdd66bf8e::cf-application:b04ddee1-2838-449a-96d3-02a03179e991
+///////////////////////////////////////////////////////
+
 const describe = authHelper.prepareTests(configFile);
 
 // Save original console.log and console.warn
@@ -36,6 +49,7 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('ResourceControllerV2', () => {
+  jest.setTimeout(30000);
 
   // begin-common
 
@@ -45,32 +59,27 @@ describe('ResourceControllerV2', () => {
 
   const config = readExternalSources(ResourceControllerV2.DEFAULT_SERVICE_NAME);
 
-  test('listResourceInstances request example', done => {
+  let instanceGuid = null;
+  let aliasGuid = null;
+  let bindingGuid = null;
+  let instanceKeyGuid = null;
+  let reclamationId = null;
+  let resourceGroupGuid = config.resourceGroup; 
+  let resourcePlanId = config.reclamationPlanId; 
+  let accountId = config.accountId;
+  let aliasTargetCRN = config.aliasTargetCrn;
+  let bindingTargetCRN = config.bindingTargetCrn;
+  let resourceInstanceName = 'RcSdkInstance1Node';
+  let resourceInstanceUpdateName = 'RcSdkInstanceUpdate1Node';
+  let aliasName = 'RcSdkAlias1Node';
+  let aliasUpdateName = 'RcSdkAliasUpdate1Node';
+  let bindingName = 'RcSdkBinding1Node';
+  let bindingUpdateName = 'RcSdkBindingUpdate1Node';
+  let keyName = 'RcSdkKey1Node';
+  let keyUpdateName = 'RcSdkKeyUpdate1Node';
+  let targetRegion = 'global';
+  let reclaimAction = 'reclaim';
 
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-list_resource_instances
-
-    const params = {
-      updatedFrom: '2019-01-08T00:00:00.000Z',
-      updatedTo: '2019-01-08T00:00:00.000Z',
-    };
-
-    resourceControllerService.listResourceInstances(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-list_resource_instances
-  });
   test('createResourceInstance request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -83,15 +92,16 @@ describe('ResourceControllerV2', () => {
     // begin-create_resource_instance
 
     const params = {
-      name: 'my-instance',
-      target: 'bluemix-us-south',
-      resourceGroup: '5c49eabc-f5e8-5881-a37e-2d100a33b3df',
-      resourcePlanId: 'cloudant-standard',
+      name: resourceInstanceName,
+      target: targetRegion,
+      resourceGroup: resourceGroupGuid,
+      resourcePlanId: resourcePlanId,
     };
 
     resourceControllerService.createResourceInstance(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
+        instanceGuid = res.result.guid;
       })
       .catch(err => {
         console.warn(err)
@@ -111,7 +121,7 @@ describe('ResourceControllerV2', () => {
     // begin-get_resource_instance
 
     const params = {
-      id: 'testString',
+      id: instanceGuid,
     };
 
     resourceControllerService.getResourceInstance(params)
@@ -135,8 +145,14 @@ describe('ResourceControllerV2', () => {
 
     // begin-update_resource_instance
 
+    const instancePars = {
+      'example': 'property',
+    };
+
     const params = {
-      id: 'testString',
+      id: instanceGuid,
+      name: resourceInstanceUpdateName,
+      parameters: instancePars,
     };
 
     resourceControllerService.updateResourceInstance(params)
@@ -149,7 +165,7 @@ describe('ResourceControllerV2', () => {
 
     // end-update_resource_instance
   });
-  test('lockResourceInstance request example', done => {
+  test('listResourceInstances request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       done();
@@ -158,13 +174,13 @@ describe('ResourceControllerV2', () => {
       done(output);
     });
 
-    // begin-lock_resource_instance
+    // begin-list_resource_instances
 
     const params = {
-      id: 'testString',
+      name: resourceInstanceName,
     };
 
-    resourceControllerService.lockResourceInstance(params)
+    resourceControllerService.listResourceInstances(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
@@ -172,239 +188,7 @@ describe('ResourceControllerV2', () => {
         console.warn(err)
       });
 
-    // end-lock_resource_instance
-  });
-  test('listResourceKeys request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-list_resource_keys
-
-    const params = {
-      updatedFrom: '2019-01-08T00:00:00.000Z',
-      updatedTo: '2019-01-08T00:00:00.000Z',
-    };
-
-    resourceControllerService.listResourceKeys(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-list_resource_keys
-  });
-  test('createResourceKey request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-create_resource_key
-
-    const params = {
-      name: 'my-key',
-      source: '25eba2a9-beef-450b-82cf-f5ad5e36c6dd',
-    };
-
-    resourceControllerService.createResourceKey(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-create_resource_key
-  });
-  test('getResourceKey request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-get_resource_key
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.getResourceKey(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-get_resource_key
-  });
-  test('updateResourceKey request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-update_resource_key
-
-    const params = {
-      id: 'testString',
-      name: 'my-new-key-name',
-    };
-
-    resourceControllerService.updateResourceKey(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-update_resource_key
-  });
-  test('listResourceBindings request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-list_resource_bindings
-
-    const params = {
-      updatedFrom: '2019-01-08T00:00:00.000Z',
-      updatedTo: '2019-01-08T00:00:00.000Z',
-    };
-
-    resourceControllerService.listResourceBindings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-list_resource_bindings
-  });
-  test('createResourceBinding request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-create_resource_binding
-
-    const params = {
-      source: '25eba2a9-beef-450b-82cf-f5ad5e36c6dd',
-      target: 'crn:v1:cf:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c',
-    };
-
-    resourceControllerService.createResourceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-create_resource_binding
-  });
-  test('getResourceBinding request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-get_resource_binding
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.getResourceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-get_resource_binding
-  });
-  test('updateResourceBinding request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-update_resource_binding
-
-    const params = {
-      id: 'testString',
-      name: 'my-new-binding-name',
-    };
-
-    resourceControllerService.updateResourceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-update_resource_binding
-  });
-  test('listResourceAliases request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-list_resource_aliases
-
-    const params = {
-      updatedFrom: '2019-01-08T00:00:00.000Z',
-      updatedTo: '2019-01-08T00:00:00.000Z',
-    };
-
-    resourceControllerService.listResourceAliases(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-list_resource_aliases
+    // end-list_resource_instances
   });
   test('createResourceAlias request example', done => {
 
@@ -418,14 +202,15 @@ describe('ResourceControllerV2', () => {
     // begin-create_resource_alias
 
     const params = {
-      name: 'my-alias',
-      source: 'a8dff6d3-d287-4668-a81d-c87c55c2656d',
-      target: 'crn:v1:cf:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5',
+      name: aliasName,
+      source: instanceGuid,
+      target: aliasTargetCRN,
     };
 
     resourceControllerService.createResourceAlias(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
+        aliasGuid = res.result.guid;
       })
       .catch(err => {
         console.warn(err)
@@ -445,7 +230,7 @@ describe('ResourceControllerV2', () => {
     // begin-get_resource_alias
 
     const params = {
-      id: 'testString',
+      id: aliasGuid,
     };
 
     resourceControllerService.getResourceAlias(params)
@@ -470,8 +255,8 @@ describe('ResourceControllerV2', () => {
     // begin-update_resource_alias
 
     const params = {
-      id: 'testString',
-      name: 'my-new-alias-name',
+      id: aliasGuid,
+      name: aliasUpdateName,
     };
 
     resourceControllerService.updateResourceAlias(params)
@@ -484,6 +269,388 @@ describe('ResourceControllerV2', () => {
 
     // end-update_resource_alias
   });
+  test('listResourceAliases request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-list_resource_aliases
+
+    const params = {
+      name: aliasName,
+    };
+
+    resourceControllerService.listResourceAliases(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-list_resource_aliases
+  });
+  test('createResourceBinding request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-create_resource_binding
+
+    const params = {
+      name: bindingName,
+      source: aliasGuid,
+      target: bindingTargetCRN,
+    };
+
+    resourceControllerService.createResourceBinding(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+        bindingGuid = res.result.guid;
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-create_resource_binding
+  });
+  test('getResourceBinding request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-get_resource_binding
+
+    const params = {
+      id: bindingGuid,
+    };
+
+    resourceControllerService.getResourceBinding(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-get_resource_binding
+  });
+  test('updateResourceBinding request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-update_resource_binding
+
+    const params = {
+      id: bindingGuid,
+      name: bindingUpdateName,
+    };
+
+    resourceControllerService.updateResourceBinding(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-update_resource_binding
+  });
+  test('listResourceBindings request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-list_resource_bindings
+
+    const params = {
+      name: bindingName,
+    };
+
+    resourceControllerService.listResourceBindings(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-list_resource_bindings
+  });
+  test('createResourceKey request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-create_resource_key
+
+    const params = {
+      name: keyName,
+      source: instanceGuid,
+    };
+
+    resourceControllerService.createResourceKey(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+        instanceKeyGuid = res.result.guid;
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-create_resource_key
+  });
+  test('getResourceKey request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-get_resource_key
+
+    const params = {
+      id: instanceKeyGuid,
+    };
+
+    resourceControllerService.getResourceKey(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-get_resource_key
+  });
+  test('updateResourceKey request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-update_resource_key
+
+    const params = {
+      id: instanceKeyGuid,
+      name: keyUpdateName,
+    };
+
+    resourceControllerService.updateResourceKey(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-update_resource_key
+  });
+  test('listResourceKeys request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-list_resource_keys
+
+    const params = {
+      name: keyName,
+    };
+
+    resourceControllerService.listResourceKeys(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-list_resource_keys
+  });
+  test('deleteResourceBinding request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-delete_resource_binding
+
+    const params = {
+      id: bindingGuid,
+    };
+
+    resourceControllerService.deleteResourceBinding(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-delete_resource_binding
+  });
+  test('deleteResourceKey request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-delete_resource_key
+
+    const params = {
+      id: instanceKeyGuid,
+    };
+
+    resourceControllerService.deleteResourceKey(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-delete_resource_key
+  });
+  test('deleteResourceAlias request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-delete_resource_alias
+
+    const params = {
+      id: aliasGuid,
+    };
+
+    resourceControllerService.deleteResourceAlias(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-delete_resource_alias
+  });
+  test('lockResourceInstance request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-lock_resource_instance
+
+    const params = {
+      id: instanceGuid,
+    };
+
+    resourceControllerService.lockResourceInstance(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-lock_resource_instance
+  });
+  test('unlockResourceInstance request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-unlock_resource_instance
+
+    const params = {
+      id: instanceGuid,
+    };
+
+    resourceControllerService.unlockResourceInstance(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-unlock_resource_instance
+  });
+  test('deleteResourceInstance request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-delete_resource_instance
+
+    const params = {
+      id: instanceGuid,
+    };
+
+    resourceControllerService.deleteResourceInstance(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-delete_resource_instance
+  });
   test('listReclamations request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -495,9 +662,19 @@ describe('ResourceControllerV2', () => {
 
     // begin-list_reclamations
 
-    resourceControllerService.listReclamations({})
+    const params = {
+      accountId: accountId,
+    };
+
+    resourceControllerService.listReclamations(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
+        var resources = res.result.resources;
+        resources.forEach( reclaim => {
+          if (reclaim.resource_instance_id.toString() === instanceGuid){
+            reclamationId = reclaim.id;
+          }
+        });
       })
       .catch(err => {
         console.warn(err)
@@ -517,8 +694,8 @@ describe('ResourceControllerV2', () => {
     // begin-run_reclamation_action
 
     const params = {
-      id: 'testString',
-      actionName: 'testString',
+      id: reclamationId,
+      actionName: reclaimAction,
     };
 
     resourceControllerService.runReclamationAction(params)
@@ -530,130 +707,5 @@ describe('ResourceControllerV2', () => {
       });
 
     // end-run_reclamation_action
-  });
-  test('unlockResourceInstance request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-unlock_resource_instance
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.unlockResourceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-unlock_resource_instance
-  });
-  test('deleteResourceKey request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-delete_resource_key
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.deleteResourceKey(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-delete_resource_key
-  });
-  test('deleteResourceInstance request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-delete_resource_instance
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.deleteResourceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-delete_resource_instance
-  });
-  test('deleteResourceBinding request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-delete_resource_binding
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.deleteResourceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-delete_resource_binding
-  });
-  test('deleteResourceAlias request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-delete_resource_alias
-
-    const params = {
-      id: 'testString',
-    };
-
-    resourceControllerService.deleteResourceAlias(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-delete_resource_alias
   });
 });
