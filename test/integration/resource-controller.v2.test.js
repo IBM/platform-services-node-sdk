@@ -43,6 +43,7 @@ const testRegionId2 = 'global';
 const transactionId = uuidv4();
 
 let service;
+let testAccountId;
 let testInstanceCrn;
 let testInstanceGuid;
 let testAliasCrn;
@@ -65,7 +66,7 @@ describe('ResourceControllerV2_integration', () => {
 
   const config = readExternalSources(ResourceControllerV2.DEFAULT_SERVICE_NAME);
 
-  const testAccountId = config.accountId;
+  testAccountId = config.accountId;
   const testResourceGroupGuid = config.resourceGroup;
   const testOrgGuid = config.organizationGuid;
   const testSpaceGuid = config.spaceGuid;
@@ -1982,8 +1983,8 @@ describe('ResourceControllerV2_integration', () => {
         console.log('Error retrieving key with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
       if (listKeyResponse.result.resources.length > 0) {
-        let resources = listKeyResponse.result.resources;
-        let resLength = resources.length;
+        const resources = listKeyResponse.result.resources;
+        const resLength = resources.length;
         let resCounter = 0;
         while (resCounter < resLength) {
           const keyGuid = resources[resCounter].guid;
@@ -2025,9 +2026,9 @@ describe('ResourceControllerV2_integration', () => {
         console.log('Error retrieving instance with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
       if (listInstanceResponse.result.resources.length > 0) {
-        resources = listInstanceResponse.result.resources;
-        resLength = resources.length;
-        resCounter = 0;
+        const resources = listInstanceResponse.result.resources;
+        const resLength = resources.length;
+        let resCounter = 0;
         while (resCounter < resLength) {
           const instanceGuid = resources[resCounter].guid;
 
@@ -2082,9 +2083,9 @@ describe('ResourceControllerV2_integration', () => {
         console.log('Error retrieving binding with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
       if (listBindingResponse.result.resources.length > 0) {
-        resources = listBindingResponse.result.resources;
-        resLength = resources.length;
-        resCounter = 0;
+        const resources = listBindingResponse.result.resources;
+        const resLength = resources.length;
+        let resCounter = 0;
         while (resCounter < resLength) {
           const bindingGuid = resources[resCounter].guid;
           const deleteBindingParams = {
@@ -2125,9 +2126,9 @@ describe('ResourceControllerV2_integration', () => {
         console.log('Error retrieving alias with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
       if (listAliasResponse.result.resources.length > 0) {
-        resources = listAliasResponse.result.resources;
-        resLength = resources.length;
-        resCounter = 0;
+        const resources = listAliasResponse.result.resources;
+        const resLength = resources.length;
+        let resCounter = 0;
         while (resCounter < resLength) {
           const aliasGuid = resources[resCounter].guid;
           const deleteAliasParams = {
