@@ -33,10 +33,10 @@ const describe = authHelper.prepareTests(configFile);
 
 const reclaimInstanceName = 'RcSdkReclaimInstance1';
 const lockedInstanceNameUpdate = 'RcSdkLockedInstanceUpdate1';
-const instanceNames = {'name':'RcSdkInstance1Node', 'update':'RcSdkInstanceUpdate1Node'};
-const keyNames = {'name':'RcSdkKey1Node', 'update':'RcSdkKeyUpdate1Node', 'name2':'RcSdkKey2Node', 'update2':'RcSdkKeyUpdate2Node'};
-const bindingNames = {'name':'RcSdkBinding1Node', 'update':'RcSdkBindingUpdate1Node'};
-const aliasNames = {'name':'RcSdkAlias1Node', 'update':'RcSdkAliasUpdate1Node'};
+const instanceNames = { 'name': 'RcSdkInstance1Node', 'update': 'RcSdkInstanceUpdate1Node' };
+const keyNames = { 'name': 'RcSdkKey1Node', 'update': 'RcSdkKeyUpdate1Node', 'name2': 'RcSdkKey2Node', 'update2': 'RcSdkKeyUpdate2Node' };
+const bindingNames = { 'name': 'RcSdkBinding1Node', 'update': 'RcSdkBindingUpdate1Node' };
+const aliasNames = { 'name': 'RcSdkAlias1Node', 'update': 'RcSdkAliasUpdate1Node' };
 
 const testRegionId1 = 'global';
 const testRegionId2 = 'global';
@@ -1818,7 +1818,7 @@ describe('ResourceControllerV2_integration', () => {
   //   done();
   // });
 
-  afterAll( done => {
+  afterAll(done => {
     cleanUp(done);
   }, 120000);
 
@@ -1965,12 +1965,12 @@ describe('ResourceControllerV2_integration', () => {
     const customHeader = {
       'Transaction-Id': 'rc-sdk-cleanup-' + transactionId,
     };
-    
-    //Clean up keys by name
-    var names = Object.values(keyNames);
-    var namesLength = names.length;
-    var nameCounter = 0;
-    while (nameCounter < namesLength){
+
+    // Clean up keys by name
+    let names = Object.values(keyNames);
+    let namesLength = names.length;
+    let nameCounter = 0;
+    while (nameCounter < namesLength) {
       const listKeyParams = {
         name: names[nameCounter],
         headers: customHeader,
@@ -1981,12 +1981,12 @@ describe('ResourceControllerV2_integration', () => {
       } catch (err) {
         console.log('Error retrieving key with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
-      if (listKeyResponse.result.resources.length > 0){
-        var resources = listKeyResponse.result.resources;
-        var resLength = resources.length;
-        var resCounter = 0;
-        while (resCounter < resLength){
-          var keyGuid = resources[resCounter].guid;
+      if (listKeyResponse.result.resources.length > 0) {
+        let resources = listKeyResponse.result.resources;
+        let resLength = resources.length;
+        let resCounter = 0;
+        while (resCounter < resLength) {
+          const keyGuid = resources[resCounter].guid;
           const deleteKeyParams = {
             id: keyGuid,
             headers: customHeader,
@@ -2009,11 +2009,11 @@ describe('ResourceControllerV2_integration', () => {
       nameCounter++;
     }
 
-    //Clean up instances by name
+    // Clean up instances by name
     names = Object.values(instanceNames);
     namesLength = names.length;
     nameCounter = 0;
-    while (nameCounter < namesLength){
+    while (nameCounter < namesLength) {
       const listInstanceParams = {
         name: names[nameCounter],
         headers: customHeader,
@@ -2024,12 +2024,12 @@ describe('ResourceControllerV2_integration', () => {
       } catch (err) {
         console.log('Error retrieving instance with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
-      if (listInstanceResponse.result.resources.length > 0){
+      if (listInstanceResponse.result.resources.length > 0) {
         resources = listInstanceResponse.result.resources;
         resLength = resources.length;
         resCounter = 0;
-        while (resCounter < resLength){
-          var instanceGuid = resources[resCounter].guid;
+        while (resCounter < resLength) {
+          const instanceGuid = resources[resCounter].guid;
 
           // if active and locked, unlock instance to cleanup
           if (resources[resCounter].state === 'active' && resources[resCounter].locked) {
@@ -2066,11 +2066,11 @@ describe('ResourceControllerV2_integration', () => {
       nameCounter++;
     }
 
-    //Clean up bindings by name
+    // Clean up bindings by name
     names = Object.values(bindingNames);
     namesLength = names.length;
     nameCounter = 0;
-    while (nameCounter < namesLength){
+    while (nameCounter < namesLength) {
       const listBindingParams = {
         name: names[nameCounter],
         headers: customHeader,
@@ -2081,12 +2081,12 @@ describe('ResourceControllerV2_integration', () => {
       } catch (err) {
         console.log('Error retrieving binding with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
-      if (listBindingResponse.result.resources.length > 0){
+      if (listBindingResponse.result.resources.length > 0) {
         resources = listBindingResponse.result.resources;
         resLength = resources.length;
         resCounter = 0;
-        while (resCounter < resLength){
-          var bindingGuid = resources[resCounter].guid;
+        while (resCounter < resLength) {
+          const bindingGuid = resources[resCounter].guid;
           const deleteBindingParams = {
             id: bindingGuid,
             headers: customHeader,
@@ -2109,11 +2109,11 @@ describe('ResourceControllerV2_integration', () => {
       nameCounter++;
     }
 
-    //Clean up aliases by name
+    // Clean up aliases by name
     names = Object.values(aliasNames);
     namesLength = names.length;
     nameCounter = 0;
-    while (nameCounter < namesLength){
+    while (nameCounter < namesLength) {
       const listAliasParams = {
         name: names[nameCounter],
         headers: customHeader,
@@ -2124,12 +2124,12 @@ describe('ResourceControllerV2_integration', () => {
       } catch (err) {
         console.log('Error retrieving alias with name ' + names[nameCounter] + ' for cleanup: ', JSON.stringify(err));
       }
-      if (listAliasResponse.result.resources.length > 0){
+      if (listAliasResponse.result.resources.length > 0) {
         resources = listAliasResponse.result.resources;
         resLength = resources.length;
         resCounter = 0;
-        while (resCounter < resLength){
-          var aliasGuid = resources[resCounter].guid;
+        while (resCounter < resLength) {
+          const aliasGuid = resources[resCounter].guid;
           const deleteAliasParams = {
             id: aliasGuid,
             headers: customHeader,
