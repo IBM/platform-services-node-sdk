@@ -634,7 +634,7 @@ describe('ResourceControllerV2', () => {
 
     // end-unlock_resource_instance
   });
-  test('deleteResourceInstance request example', done => {
+  test('deleteResourceInstance request example', async done => {
 
     consoleLogMock.mockImplementation(output => {
       done();
@@ -658,8 +658,9 @@ describe('ResourceControllerV2', () => {
       });
 
     // end-delete_resource_instance
+    await new Promise(resolve => setTimeout(resolve, 20000));
   });
-  test('listReclamations request example', done => {
+  test('listReclamations request example', async done => {
 
     consoleLogMock.mockImplementation(output => {
       done();
@@ -667,6 +668,7 @@ describe('ResourceControllerV2', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
+    await new Promise(resolve => setTimeout(resolve, 20000));
 
     // begin-list_reclamations
 
