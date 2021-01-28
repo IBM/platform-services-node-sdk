@@ -58,7 +58,8 @@ describe('IamPolicyManagementV1', () => {
     // begin-list_policies
 
     const params = {
-      accountId: 'testString',
+      accountId: 'testAccountId',
+      format: 'include_last_permit',
     };
 
     iamPolicyManagementService.listPolicies(params)
@@ -83,11 +84,46 @@ describe('IamPolicyManagementV1', () => {
 
     // begin-create_policy
 
+    const policySubjects = [
+      {
+        attributes: [
+          {
+            name: 'iam_id',
+            value: 'IBMid-12345',
+          },
+        ],
+      },
+    ];
+    const policyRoles = [
+      {
+        role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+      },
+    ];
+    const policyResourceAccountAttribute = {
+      name: 'accountId',
+      value: 'testAccountId',
+      operator: 'stringEquals',
+    };
+    const policyResourceServiceAttribute = {
+      name: 'serviceName',
+      value: 'testServiceName',
+      operator: 'stringEquals',
+    };
+    const policyResourceTag = {
+      name: 'project',
+      value: 'moonshoot',
+    };
+    const samplePolicyResources = [
+      {
+        attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+        tags: [policyResourceTag],
+      },
+    ];
     const params = {
-      type: 'testString',
-      subjects: [{}],
-      roles: [policyRoleModel],
-      resources: [{}],
+      type: 'access',
+      subjects: policySubjects,
+      roles: policyRoles,
+      resources: samplePolicyResources,
     };
 
     iamPolicyManagementService.createPolicy(params)
@@ -112,13 +148,43 @@ describe('IamPolicyManagementV1', () => {
 
     // begin-update_policy
 
+    const policySubjects = [
+      {
+        attributes: [
+          {
+            name: 'iam_id',
+            value: 'IBMid-12345',
+          },
+        ],
+      },
+    ];
+    const policyResourceAccountAttribute = {
+      name: 'accountId',
+      value: 'testAccountId',
+      operator: 'stringEquals',
+    };
+    const policyResourceServiceAttribute = {
+      name: 'serviceName',
+      value: 'testServiceName',
+      operator: 'stringEquals',
+    };
+    const samplePolicyResources = [
+      {
+        attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+      },
+    ];
+    const updatedPolicyRoles = [
+      {
+        role_id: 'crn:v1:bluemix:public:iam::::role:Editor',
+      },
+    ];
     const params = {
-      policyId: 'testString',
-      ifMatch: 'testString',
-      type: 'testString',
-      subjects: [{}],
-      roles: [policyRoleModel],
-      resources: [{}],
+      policyId: 'testPolicyId',
+      ifMatch: 'testETagExistingPolicy',
+      type: 'access',
+      subjects: policySubjects,
+      roles: updatedPolicyRoles,
+      resources: samplePolicyResources,
     };
 
     iamPolicyManagementService.updatePolicy(params)
@@ -144,7 +210,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-get_policy
 
     const params = {
-      policyId: 'testString',
+      policyId: 'testPolicyId',
     };
 
     iamPolicyManagementService.getPolicy(params)
@@ -192,11 +258,11 @@ describe('IamPolicyManagementV1', () => {
     // begin-create_role
 
     const params = {
-      displayName: 'testString',
-      actions: ['testString'],
-      name: 'testString',
-      accountId: 'testString',
-      serviceName: 'testString',
+      displayName: 'IAM Groups read access',
+      actions: ['iam-groups.groups.read'],
+      name: 'ExampleRoleIAMGroups',
+      accountId: 'testAccountId',
+      serviceName: 'iam-groups',
     };
 
     iamPolicyManagementService.createRole(params)
@@ -221,9 +287,11 @@ describe('IamPolicyManagementV1', () => {
 
     // begin-update_role
 
+    const updatedRoleId = ['iam-groups.groups.read', 'iam-groups.groups.list'];
     const params = {
-      roleId: 'testString',
-      ifMatch: 'testString',
+      roleId: 'testRoleId',
+      ifMatch: 'testETagExistingRole',
+      actions: updatedRoleId,
     };
 
     iamPolicyManagementService.updateRole(params)
@@ -249,7 +317,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-get_role
 
     const params = {
-      roleId: 'testString',
+      roleId: 'testRoleId',
     };
 
     iamPolicyManagementService.getRole(params)
@@ -275,7 +343,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-delete_role
 
     const params = {
-      roleId: 'testString',
+      roleId: 'testRoleId',
     };
 
     iamPolicyManagementService.deleteRole(params)
@@ -301,7 +369,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-delete_policy
 
     const params = {
-      policyId: 'testString',
+      policyId: 'testPolicyId',
     };
 
     iamPolicyManagementService.deletePolicy(params)
