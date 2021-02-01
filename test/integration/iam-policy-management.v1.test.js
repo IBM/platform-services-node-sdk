@@ -69,9 +69,15 @@ describe('IamPolicyManagementV1_integration', () => {
     value: testServiceName,
     operator: 'stringEquals',
   };
+  const policyResourceTag = {
+    name: 'project',
+    operator: 'stringEquals',
+    value: 'moonshoot',
+  };
   const policyResources = [
     {
       attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+      tags: [policyResourceTag],
     },
   ];
 
