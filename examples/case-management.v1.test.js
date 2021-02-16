@@ -23,7 +23,7 @@ const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
 
 // Location of our config file.
-const configFile = 'case_management_v1.env';
+const configFile = 'case_management.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -45,28 +45,6 @@ describe('CaseManagementV1', () => {
 
   const config = readExternalSources(CaseManagementV1.DEFAULT_SERVICE_NAME);
 
-  test('getCases request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-getCases
-
-    caseManagementService.getCases({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-getCases
-  });
   test('createCase request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -121,7 +99,7 @@ describe('CaseManagementV1', () => {
 
     // end-getCase
   });
-  test('updateCaseStatus request example', done => {
+  test('getCases request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -131,14 +109,9 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
-    // begin-updateCaseStatus
+    // begin-getCases
 
-    const params = {
-      caseNumber: 'testString',
-      statusPayload: statusPayloadModel,
-    };
-
-    caseManagementService.updateCaseStatus(params)
+    caseManagementService.getCases({})
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
@@ -146,7 +119,7 @@ describe('CaseManagementV1', () => {
         console.warn(err)
       });
 
-    // end-updateCaseStatus
+    // end-getCases
   });
   test('addComment request example', done => {
 
@@ -200,6 +173,32 @@ describe('CaseManagementV1', () => {
       });
 
     // end-addWatchlist
+  });
+  test('removeWatchlist request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-removeWatchlist
+
+    const params = {
+      caseNumber: 'testString',
+    };
+
+    caseManagementService.removeWatchlist(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-removeWatchlist
   });
   test('addResource request example', done => {
 
@@ -281,32 +280,6 @@ describe('CaseManagementV1', () => {
 
     // end-downloadFile
   });
-  test('removeWatchlist request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-removeWatchlist
-
-    const params = {
-      caseNumber: 'testString',
-    };
-
-    caseManagementService.removeWatchlist(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-removeWatchlist
-  });
   test('deleteFile request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -333,5 +306,32 @@ describe('CaseManagementV1', () => {
       });
 
     // end-deleteFile
+  });
+  test('updateCaseStatus request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-updateCaseStatus
+
+    const params = {
+      caseNumber: 'testString',
+      statusPayload: statusPayloadModel,
+    };
+
+    caseManagementService.updateCaseStatus(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-updateCaseStatus
   });
 });
