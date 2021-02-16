@@ -98,12 +98,12 @@ describe('IamPolicyManagementV1', () => {
         role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
       },
     ];
-    const policyResourceAccountAttribute = {
+    const accountIdResourceAttribute = {
       name: 'accountId',
       value: exampleAccountId,
       operator: 'stringEquals',
     };
-    const policyResourceServiceAttribute = {
+    const serviceNameResourceAttribute = {
       name: 'serviceName',
       value: exampleServiceName,
       operator: 'stringEquals',
@@ -113,9 +113,9 @@ describe('IamPolicyManagementV1', () => {
       operator: 'stringEquals',
       value: 'prototype',
     };
-    const samplePolicyResources = [
+    const policyResources = [
       {
-        attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+        attributes: [accountIdResourceAttribute, serviceNameResourceAttribute],
         tags: [policyResourceTag],
       },
     ];
@@ -123,7 +123,7 @@ describe('IamPolicyManagementV1', () => {
       type: 'access',
       subjects: policySubjects,
       roles: policyRoles,
-      resources: samplePolicyResources,
+      resources: policyResources,
     };
 
     iamPolicyManagementService.createPolicy(params)
@@ -190,19 +190,19 @@ describe('IamPolicyManagementV1', () => {
         ],
       },
     ];
-    const policyResourceAccountAttribute = {
+    const accountIdResourceAttribute = {
       name: 'accountId',
       value: exampleAccountId,
       operator: 'stringEquals',
     };
-    const policyResourceServiceAttribute = {
+    const serviceNameResourceAttribute = {
       name: 'serviceName',
       value: exampleServiceName,
       operator: 'stringEquals',
     };
-    const samplePolicyResources = [
+    const policyResources = [
       {
-        attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+        attributes: [accountIdResourceAttribute, serviceNameResourceAttribute],
       },
     ];
     const updatedPolicyRoles = [
@@ -216,7 +216,7 @@ describe('IamPolicyManagementV1', () => {
       ifMatch: examplePolicyETag,
       subjects: policySubjects,
       roles: updatedPolicyRoles,
-      resources: samplePolicyResources,
+      resources: policyResources,
     };
 
     iamPolicyManagementService.updatePolicy(params)
