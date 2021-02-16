@@ -49,14 +49,13 @@ const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('IamPolicyManagementV1', () => {
 
-  let testAccountId;
-  let testPolicyId;
-  let testPolicyETag;
-  let testCustomRoleId;
-  let testCustomRoleEtag;
-  const testUniqueId = Math.floor(Math.random() * 100000);
-  const testIamId = 'IBMid-SDKNode' + testUniqueId;
-  const testServiceName = 'iam-groups';
+  let exampleAccountId;
+  let examplePolicyId;
+  let examplePolicyETag;
+  let exampleCustomRoleId;
+  let exampleCustomRoleEtag;
+  const exampleUserId = 'IBMid-user1';
+  const exampleServiceName = 'iam-groups';
 
   // begin-common
 
@@ -69,10 +68,10 @@ describe('IamPolicyManagementV1', () => {
   expect(iamPolicyManagementService).not.toBeNull();
   expect(config).not.toBeNull();
   expect(config).toHaveProperty('testAccountId');
-  testAccountId = config.testAccountId;
+  exampleAccountId = config.testAccountId;
 
   test('createPolicy request example', done => {
-    expect(testAccountId).not.toBeNull();
+    expect(exampleAccountId).not.toBeNull();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -89,7 +88,7 @@ describe('IamPolicyManagementV1', () => {
         attributes: [
           {
             name: 'iam_id',
-            value: testIamId,
+            value: exampleUserId,
           },
         ],
       },
@@ -101,18 +100,18 @@ describe('IamPolicyManagementV1', () => {
     ];
     const policyResourceAccountAttribute = {
       name: 'accountId',
-      value: testAccountId,
+      value: exampleAccountId,
       operator: 'stringEquals',
     };
     const policyResourceServiceAttribute = {
       name: 'serviceName',
-      value: testServiceName,
+      value: exampleServiceName,
       operator: 'stringEquals',
     };
     const policyResourceTag = {
       name: 'project',
       operator: 'stringEquals',
-      value: 'moonshoot',
+      value: 'prototype',
     };
     const samplePolicyResources = [
       {
@@ -129,7 +128,7 @@ describe('IamPolicyManagementV1', () => {
 
     iamPolicyManagementService.createPolicy(params)
       .then(res => {
-        testPolicyId = res.result.id;
+        examplePolicyId = res.result.id;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -139,7 +138,7 @@ describe('IamPolicyManagementV1', () => {
     // end-create_policy
   });
   test('getPolicy request example', done => {
-    expect(testPolicyId).toBeDefined();
+    expect(examplePolicyId).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -152,12 +151,12 @@ describe('IamPolicyManagementV1', () => {
     // begin-get_policy
 
     const params = {
-      policyId: testPolicyId,
+      policyId: examplePolicyId,
     };
 
     iamPolicyManagementService.getPolicy(params)
       .then(res => {
-        testPolicyETag = res.headers.etag;
+        examplePolicyETag = res.headers.etag;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -167,9 +166,9 @@ describe('IamPolicyManagementV1', () => {
     // end-get_policy
   });
   test('updatePolicy request example', done => {
-    expect(testAccountId).not.toBeNull();
-    expect(testPolicyId).toBeDefined();
-    expect(testPolicyETag).toBeDefined();
+    expect(exampleAccountId).not.toBeNull();
+    expect(examplePolicyId).toBeDefined();
+    expect(examplePolicyETag).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -186,19 +185,19 @@ describe('IamPolicyManagementV1', () => {
         attributes: [
           {
             name: 'iam_id',
-            value: testIamId,
+            value: exampleUserId,
           },
         ],
       },
     ];
     const policyResourceAccountAttribute = {
       name: 'accountId',
-      value: testAccountId,
+      value: exampleAccountId,
       operator: 'stringEquals',
     };
     const policyResourceServiceAttribute = {
       name: 'serviceName',
-      value: testServiceName,
+      value: exampleServiceName,
       operator: 'stringEquals',
     };
     const samplePolicyResources = [
@@ -212,9 +211,9 @@ describe('IamPolicyManagementV1', () => {
       },
     ];
     const params = {
-      policyId: testPolicyId,
-      ifMatch: testPolicyETag,
       type: 'access',
+      policyId: examplePolicyId,
+      ifMatch: examplePolicyETag,
       subjects: policySubjects,
       roles: updatedPolicyRoles,
       resources: samplePolicyResources,
@@ -231,7 +230,7 @@ describe('IamPolicyManagementV1', () => {
     // end-update_policy
   });
   test('listPolicies request example', done => {
-    expect(testAccountId).not.toBeNull();
+    expect(exampleAccountId).not.toBeNull();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -244,8 +243,8 @@ describe('IamPolicyManagementV1', () => {
     // begin-list_policies
 
     const params = {
-      accountId: testAccountId,
-      iamId: testIamId,
+      accountId: exampleAccountId,
+      iamId: exampleUserId,
       format: 'include_last_permit',
     };
 
@@ -272,12 +271,12 @@ describe('IamPolicyManagementV1', () => {
     // begin-delete_policy
 
     const params = {
-      policyId: testPolicyId,
+      policyId: examplePolicyId,
     };
 
     iamPolicyManagementService.deletePolicy(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        console.log(JSON.stringify(res, null, 2));
       })
       .catch(err => {
         console.warn(err)
@@ -286,7 +285,7 @@ describe('IamPolicyManagementV1', () => {
     // end-delete_policy
   })
   test('createRole request example', done => {
-    expect(testAccountId).not.toBeNull();
+    expect(exampleAccountId).not.toBeNull();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -302,13 +301,13 @@ describe('IamPolicyManagementV1', () => {
       displayName: 'IAM Groups read access',
       actions: ['iam-groups.groups.read'],
       name: 'ExampleRoleIAMGroups',
-      accountId: testAccountId,
-      serviceName: testServiceName,
+      accountId: exampleAccountId,
+      serviceName: exampleServiceName,
     };
 
     iamPolicyManagementService.createRole(params)
       .then(res => {
-        testCustomRoleId = res.result.id;
+        exampleCustomRoleId = res.result.id;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -318,7 +317,7 @@ describe('IamPolicyManagementV1', () => {
     // end-create_role
   });
   test('getRole request example', done => {
-    expect(testCustomRoleId).toBeDefined();
+    expect(exampleCustomRoleId).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -331,12 +330,12 @@ describe('IamPolicyManagementV1', () => {
     // begin-get_role
 
     const params = {
-      roleId: testCustomRoleId,
+      roleId: exampleCustomRoleId,
     };
 
     iamPolicyManagementService.getRole(params)
       .then(res => {
-        testCustomRoleEtag = res.headers.etag;
+        exampleCustomRoleEtag = res.headers.etag;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -346,8 +345,8 @@ describe('IamPolicyManagementV1', () => {
     // end-get_role
   });
   test('updateRole request example', done => {
-    expect(testCustomRoleId).toBeDefined();
-    expect(testCustomRoleEtag).toBeDefined();
+    expect(exampleCustomRoleId).toBeDefined();
+    expect(exampleCustomRoleEtag).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -359,11 +358,11 @@ describe('IamPolicyManagementV1', () => {
 
     // begin-update_role
 
-    const updatedRoleId = ['iam-groups.groups.read', 'iam-groups.groups.list'];
+    const updatedRoleActions = ['iam-groups.groups.read', 'iam-groups.groups.list'];
     const params = {
-      roleId: testCustomRoleId,
-      ifMatch: testCustomRoleEtag,
-      actions: updatedRoleId,
+      roleId: exampleCustomRoleId,
+      ifMatch: exampleCustomRoleEtag,
+      actions: updatedRoleActions,
     };
 
     iamPolicyManagementService.updateRole(params)
@@ -389,8 +388,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-list_roles
 
     const params = {
-      accountId: testAccountId,
-      serviceName: testServiceName,
+      accountId: exampleAccountId,
     };
 
     iamPolicyManagementService.listRoles(params)
@@ -404,7 +402,7 @@ describe('IamPolicyManagementV1', () => {
     // end-list_roles
   });
   test('deleteRole request example', done => {
-    expect(testCustomRoleId).toBeDefined();
+    expect(exampleCustomRoleId).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -417,12 +415,12 @@ describe('IamPolicyManagementV1', () => {
     // begin-delete_role
 
     const params = {
-      roleId: testCustomRoleId,
+      roleId: exampleCustomRoleId,
     };
 
     iamPolicyManagementService.deleteRole(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        console.log(JSON.stringify(res, null, 2));
       })
       .catch(err => {
         console.warn(err)
