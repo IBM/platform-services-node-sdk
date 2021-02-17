@@ -36,6 +36,7 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('CaseManagementV1', () => {
+  jest.setTimeout(30000);
 
   // begin-common
 
@@ -45,10 +46,14 @@ describe('CaseManagementV1', () => {
 
   const config = readExternalSources(CaseManagementV1.DEFAULT_SERVICE_NAME);
 
+  let resourceCrn = config.resourceCrn;
+
+  let caseNumber = null;
+  let attachmentId = null;
+
   test('createCase request example', done => {
 
     consoleLogMock.mockImplementation(output => {
-      originalLog(output);
       done();
     });
     consoleWarnMock.mockImplementation(output => {
@@ -57,14 +62,27 @@ describe('CaseManagementV1', () => {
 
     // begin-createCase
 
+    const offeringType = {
+      group: 'crn_service_name',
+      key: 'cloud-object-storage',
+    };
+
+    const offeringPayload = {
+      name: 'Cloud Object Storage',
+      type: offeringType,
+    };
+
     const params = {
       type: 'technical',
-      subject: 'testString',
-      description: 'testString',
+      subject: 'Example technical case',
+      description: 'This is an example case description. This is where the problem would be described.',
+      offering: offeringPayload,
+      severity: 4,
     };
 
     caseManagementService.createCase(params)
       .then(res => {
+        caseNumber = res.result.number
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -83,10 +101,20 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+
     // begin-getCase
 
+    const fieldsToReturn = [
+      CaseManagementV1.GetCaseConstants.Fields.DESCRIPTION,
+      CaseManagementV1.GetCaseConstants.Fields.STATUS,
+      CaseManagementV1.GetCaseConstants.Fields.SEVERITY,
+      CaseManagementV1.GetCaseConstants.Fields.CREATED_BY,
+    ];
+
     const params = {
-      caseNumber: 'testString',
+      caseNumber: caseNumber,
+      fields: fieldsToReturn,
     };
 
     caseManagementService.getCase(params)
@@ -111,6 +139,13 @@ describe('CaseManagementV1', () => {
 
     // begin-getCases
 
+    const params = {
+      offset: 0,
+      limit: 100,
+      search: 'blocker',
+      sort: CaseManagementV1.GetCasesConstants.Fields.UPDATED_AT,
+    };
+
     caseManagementService.getCases({})
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -123,6 +158,7 @@ describe('CaseManagementV1', () => {
   });
   test('addComment request example', done => {
 
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -131,11 +167,13 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+
     // begin-addComment
 
     const params = {
-      caseNumber: 'testString',
-      comment: 'This is a test comment',
+      caseNumber: caseNumber,
+      comment: 'This is an example comment,',
     };
 
     caseManagementService.addComment(params)
@@ -158,10 +196,17 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+
     // begin-addWatchlist
 
+    const watchlistUsers = [
+      {realm: 'IBMid', user_id: 'abc@ibm.com'}
+    ]
+
     const params = {
-      caseNumber: 'testString',
+      caseNumber: caseNumber,
+      watchlist: watchlistUsers,
     };
 
     caseManagementService.addWatchlist(params)
@@ -184,10 +229,17 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+
     // begin-removeWatchlist
 
+    const watchlistUsers = [
+      {realm: 'IBMid', user_id: 'abc@ibm.com'}
+    ]
+
     const params = {
-      caseNumber: 'testString',
+      caseNumber: caseNumber,
+      watchlist: watchlistUsers,
     };
 
     caseManagementService.removeWatchlist(params)
@@ -210,10 +262,15 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+    expect(resourceCrn).not.toBeNull();
+
     // begin-addResource
 
     const params = {
-      caseNumber: 'testString',
+      caseNumber: caseNumber,
+      crn: resourceCrn,
+      note: 'This resource is the service that is having the problem.',
     };
 
     caseManagementService.addResource(params)
@@ -236,15 +293,28 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+
     // begin-uploadFile
 
+    const exampleFileContent = 'This is the content of the file to upload.';
+
+    const fileWithMetadata = {
+      data: Buffer.from(exampleFileContent),
+      filename: 'example.log',
+      content_type: 'application/octet-stream',
+    };
+
+    const filesToUpload = [fileWithMetadata]
+
     const params = {
-      caseNumber: 'testString',
-      file: [Buffer.from('This is a mock file.')],
+      caseNumber: caseNumber,
+      file: filesToUpload,
     };
 
     caseManagementService.uploadFile(params)
       .then(res => {
+        attachmentId = res.result.id;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -263,16 +333,20 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+    expect(attachmentId).not.toBeNull();
+
     // begin-downloadFile
 
     const params = {
-      caseNumber: 'testString',
-      fileId: 'testString',
+      caseNumber: caseNumber,
+      fileId: attachmentId,
     };
 
     caseManagementService.downloadFile(params)
       .then(res => {
-        fs.writeFileSync('result.out', res.result);
+
+        console.log(`Attachment content-type: ${res.headers['content-type']}\nAttachment contents: ${res.result.read()}`);
       })
       .catch(err => {
         console.warn(err)
@@ -290,11 +364,14 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+    expect(attachmentId).not.toBeNull();
+
     // begin-deleteFile
 
     const params = {
-      caseNumber: 'testString',
-      fileId: 'testString',
+      caseNumber: caseNumber,
+      fileId: attachmentId,
     };
 
     caseManagementService.deleteFile(params)
@@ -317,10 +394,18 @@ describe('CaseManagementV1', () => {
       done(output);
     });
 
+    expect(caseNumber).not.toBeNull();
+
     // begin-updateCaseStatus
 
+    const statusPayloadModel = {
+      action: 'resolve',
+      comment: 'The problem has been resolved.',
+      resolution_code: 1,
+    };
+
     const params = {
-      caseNumber: 'testString',
+      caseNumber: caseNumber,
       statusPayload: statusPayloadModel,
     };
 
