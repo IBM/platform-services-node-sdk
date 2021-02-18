@@ -19,12 +19,21 @@
 'use strict';
 
 const CaseManagementV1 = require('../dist/case-management/v1');
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources, streamToPromise } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
+
+//
+// This file provides an example of how to use the Case Management service.
+//
+// CASE_MANAGEMENT_URL=<service url>
+// CASE_MANAGEMENT_AUTHTYPE=iam
+// CASE_MANAGEMENT_APIKEY=<IAM apikey>
+// CASE_MANAGEMENT_AUTH_URL=<IAM token service URL - omit this if using the production environment>
+// CASE_MANAGEMENT_RESOURCE_CRN=<cloud resource name>
+//
 
 // Location of our config file.
 const configFile = 'case_management.env';
-
 const describe = authHelper.prepareTests(configFile);
 
 // Save original console.log and console.warn
@@ -336,6 +345,8 @@ describe('CaseManagementV1', () => {
     expect(caseNumber).not.toBeNull();
     expect(attachmentId).not.toBeNull();
 
+    let responseContentType = null;
+
     // begin-downloadFile
 
     const params = {
@@ -345,8 +356,11 @@ describe('CaseManagementV1', () => {
 
     caseManagementService.downloadFile(params)
       .then(res => {
-
-        console.log(`Attachment content-type: ${res.headers['content-type']}\nAttachment contents: ${res.result.read()}`);
+        responseContentType = res.headers['content-type'];
+        return streamToPromise(res.result);
+      })
+      .then(contents => {
+        console.log(`Attachment content-type: ${responseContentType}\nAttachment contents: ${contents}`);
       })
       .catch(err => {
         console.warn(err)
