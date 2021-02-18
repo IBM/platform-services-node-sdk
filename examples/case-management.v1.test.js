@@ -210,7 +210,7 @@ describe('CaseManagementV1', () => {
     // begin-addWatchlist
 
     const watchlistUsers = [
-      {realm: 'IBMid', user_id: 'abc@ibm.com'}
+      { realm: 'IBMid', user_id: 'abc@ibm.com' }
     ]
 
     const params = {
@@ -243,7 +243,7 @@ describe('CaseManagementV1', () => {
     // begin-removeWatchlist
 
     const watchlistUsers = [
-      {realm: 'IBMid', user_id: 'abc@ibm.com'}
+      { realm: 'IBMid', user_id: 'abc@ibm.com' }
     ]
 
     const params = {
