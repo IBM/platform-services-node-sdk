@@ -107,8 +107,8 @@ describe('IamPolicyManagementV1', () => {
       operator: 'stringEquals',
     };
     const serviceNameResourceAttribute = {
-      name: 'serviceName',
-      value: exampleServiceName,
+      name: 'serviceType',
+      value: 'service',
       operator: 'stringEquals',
     };
     const policyResourceTag = {
@@ -199,13 +199,19 @@ describe('IamPolicyManagementV1', () => {
       operator: 'stringEquals',
     };
     const serviceNameResourceAttribute = {
-      name: 'serviceName',
-      value: exampleServiceName,
+      name: 'serviceType',
+      value: 'service',
       operator: 'stringEquals',
+    };
+    const policyResourceTag = {
+      name: 'project',
+      operator: 'stringEquals',
+      value: 'prototype',
     };
     const policyResources = [
       {
         attributes: [accountIdResourceAttribute, serviceNameResourceAttribute],
+        tags: [policyResourceTag],
       },
     ];
     const updatedPolicyRoles = [

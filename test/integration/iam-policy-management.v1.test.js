@@ -65,8 +65,8 @@ describe('IamPolicyManagementV1_integration', () => {
     operator: 'stringEquals',
   };
   const policyResourceServiceAttribute = {
-    name: 'serviceName',
-    value: testServiceName,
+    name: 'serviceType',
+    value: 'service',
     operator: 'stringEquals',
   };
   const policyResourceTag = {
