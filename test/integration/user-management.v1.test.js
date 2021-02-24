@@ -17,7 +17,7 @@
 
 'use strict';
 const UserManagementV1 = require('../../dist/user-management/v1');
-const { readExternalSources } = require('ibm-cloud-sdk-core')
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
@@ -41,7 +41,7 @@ describe('UserManagementV1_integration', () => {
   let accountId;
   let iamUserId;
   let invitedUserEmail;
-  let viewerRoleId ;
+  let viewerRoleId;
   let accessGroupId;
 
   beforeAll(async done => {
@@ -69,8 +69,7 @@ describe('UserManagementV1_integration', () => {
     log('Finished setup.');
 
     done();
-  })
-
+  });
 
   test('getUserSettings()', done => {
     const params = {
