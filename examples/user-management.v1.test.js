@@ -45,6 +45,32 @@ describe('UserManagementV1', () => {
 
   const config = readExternalSources(UserManagementV1.DEFAULT_SERVICE_NAME);
 
+  test('inviteUsers request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-invite_users
+
+    const params = {
+      accountId: 'testString',
+    };
+
+    userManagementService.inviteUsers(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-invite_users
+  });
   test('listUsers request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -71,7 +97,7 @@ describe('UserManagementV1', () => {
 
     // end-list_users
   });
-  test('inviteUsers request example', done => {
+  test('removeUser request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -81,13 +107,14 @@ describe('UserManagementV1', () => {
       done(output);
     });
 
-    // begin-invite_users
+    // begin-remove_user
 
     const params = {
       accountId: 'testString',
+      iamId: 'testString',
     };
 
-    userManagementService.inviteUsers(params)
+    userManagementService.removeUser(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
@@ -95,7 +122,7 @@ describe('UserManagementV1', () => {
         console.warn(err)
       });
 
-    // end-invite_users
+    // end-remove_user
   });
   test('getUserProfile request example', done => {
 
@@ -204,32 +231,5 @@ describe('UserManagementV1', () => {
       });
 
     // end-update_user_settings
-  });
-  test('removeUser request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-remove_user
-
-    const params = {
-      accountId: 'testString',
-      iamId: 'testString',
-    };
-
-    userManagementService.removeUser(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-remove_user
   });
 });
