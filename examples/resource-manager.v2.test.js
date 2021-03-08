@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -48,39 +48,19 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('ResourceManagerV2', () => {
-
+  
   // begin-common
-
+  
   const resourceManagerService = ResourceManagerV2.newInstance({});
-
+  
   // end-common
-
+  
   const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
-
-  test('listResourceGroups request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-list_resource_groups
-
-    resourceManagerService.listResourceGroups({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-list_resource_groups
-  });
+  const testUserAccountId = config.TEST_USER_ACCOUNT_ID;
+  let resourceGroupId;
+  
   test('createResourceGroup request example', done => {
-
+    
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -88,21 +68,26 @@ describe('ResourceManagerV2', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
+    
     // begin-create_resource_group
-
-    resourceManagerService.createResourceGroup({})
+    const params = {
+      accountId: testUserAccountId,
+      name: "ExampleGroup"
+    };
+    
+    resourceManagerService.createResourceGroup(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
+        resourceGroupId = res.result.id;
       })
       .catch(err => {
         console.warn(err)
       });
-
+    
     // end-create_resource_group
   });
   test('getResourceGroup request example', done => {
-
+    
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -110,13 +95,13 @@ describe('ResourceManagerV2', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
+    
     // begin-get_resource_group
-
+    
     const params = {
-      id: 'testString',
+      id: resourceGroupId,
     };
-
+    
     resourceManagerService.getResourceGroup(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -124,11 +109,11 @@ describe('ResourceManagerV2', () => {
       .catch(err => {
         console.warn(err)
       });
-
+    
     // end-get_resource_group
   });
   test('updateResourceGroup request example', done => {
-
+    
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -136,13 +121,15 @@ describe('ResourceManagerV2', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
+    
     // begin-update_resource_group
-
+    
     const params = {
-      id: 'testString',
+      id: resourceGroupId,
+      state: 'ACTIVE',
+      name: 'RenamedResourceGroup'
     };
-
+    
     resourceManagerService.updateResourceGroup(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -150,11 +137,12 @@ describe('ResourceManagerV2', () => {
       .catch(err => {
         console.warn(err)
       });
-
+    
     // end-update_resource_group
   });
-  test('listQuotaDefinitions request example', done => {
-
+  
+  test('listResourceGroups request example', done => {
+    
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -162,47 +150,24 @@ describe('ResourceManagerV2', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
-    // begin-list_quota_definitions
-
-    resourceManagerService.listQuotaDefinitions({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-list_quota_definitions
-  });
-  test('getQuotaDefinition request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-get_quota_definition
-
+    
+    // begin-list_resource_groups
     const params = {
-      id: 'testString',
-    };
-
-    resourceManagerService.getQuotaDefinition(params)
+      accountId: testUserAccountId
+    }
+    
+    resourceManagerService.listResourceGroups(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
         console.warn(err)
       });
-
-    // end-get_quota_definition
+    
+    // end-list_resource_groups
   });
   test('deleteResourceGroup request example', done => {
-
+    
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -210,13 +175,13 @@ describe('ResourceManagerV2', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
+    
     // begin-delete_resource_group
-
+    
     const params = {
-      id: 'testString',
+      id: resourceGroupId,
     };
-
+    
     resourceManagerService.deleteResourceGroup(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -224,7 +189,57 @@ describe('ResourceManagerV2', () => {
       .catch(err => {
         console.warn(err)
       });
-
+    
     // end-delete_resource_group
   });
+  
+  test('listQuotaDefinitions request example', done => {
+    
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+    
+    // begin-list_quota_definitions
+    
+    resourceManagerService.listQuotaDefinitions({})
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+    
+    // end-list_quota_definitions
+  });
+  test('getQuotaDefinition request example', done => {
+    
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+    
+    // begin-get_quota_definition
+    
+    const params = {
+      id: resourceGroupId,
+    };
+    
+    resourceManagerService.getQuotaDefinition(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+    
+    // end-get_quota_definition
+  });
+  
 });
