@@ -2,7 +2,7 @@
 * @jest-environment node
 */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -487,5 +487,58 @@ describe('IamIdentityV1', () => {
       });
 
     // end-delete_service_id
+  });
+  test('getAccountSettings request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-getAccountSettings
+
+    const params = {
+      accountId: 'testString',
+    };
+
+    iamIdentityService.getAccountSettings(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-getAccountSettings
+  });
+  test('updateAccountSettings request example', done => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+
+    // begin-updateAccountSettings
+
+    const params = {
+      ifMatch: 'testString',
+      accountId: 'testString',
+    };
+
+    iamIdentityService.updateAccountSettings(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+
+    // end-updateAccountSettings
   });
 });

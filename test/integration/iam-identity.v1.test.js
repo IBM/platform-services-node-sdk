@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -551,6 +551,32 @@ describe('IamIdentityV1_integration', () => {
         console.warn(err);
         done(err);
       });
+  });
+  test('getAccountSettings()', async () => {
+    const params = {
+      accountId: 'testString',
+      includeHistory: true,
+    };
+
+    const res = await iamIdentityService.getAccountSettings(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateAccountSettings()', async () => {
+    const params = {
+      ifMatch: 'testString',
+      accountId: 'testString',
+      restrictCreateServiceId: 'RESTRICTED',
+      restrictCreatePlatformApikey: 'RESTRICTED',
+      allowedIpAddresses: 'testString',
+      mfa: 'NONE',
+      sessionExpirationInSeconds: 'testString',
+      sessionInvalidationInSeconds: 'testString',
+    };
+
+    const res = await iamIdentityService.updateAccountSettings(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
   });
 });
 
