@@ -74,6 +74,8 @@ describe('IamIdentityV1', () => {
   let svcId = null;
   let svcIdEtag = null;
 
+  let accountSettingsEtag = null;
+
   test('createApiKey request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -498,14 +500,17 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
+    expect(accountSettingsEtag).toBeNull();
+
     // begin-getAccountSettings
 
     const params = {
-      accountId: 'testString',
+      accountId: accountId,
     };
 
     iamIdentityService.getAccountSettings(params)
       .then(res => {
+        accountSettingsEtag = res.headers['etag'];
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -524,11 +529,18 @@ describe('IamIdentityV1', () => {
       done(output);
     });
 
+    expect(accountSettingsEtag).not.toBeNull();
+
     // begin-updateAccountSettings
 
     const params = {
-      ifMatch: 'testString',
-      accountId: 'testString',
+      ifMatch: accountSettingsEtag,
+      accountId: accountId,
+      restrict_create_service_id: "NOT_RESTRICTED",
+      restrict_create_platform_apikey: "NOT_RESTRICTED",
+      mfa: "NONE",
+      session_expiration_in_seconds: "86400",
+      session_invalidation_in_seconds: "7200",
     };
 
     iamIdentityService.updateAccountSettings(params)

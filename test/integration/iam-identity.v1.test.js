@@ -44,6 +44,8 @@ let apikeyId2;
 let serviceId1;
 let serviceIdEtag1;
 
+let accountSettingsEtag;
+
 describe('IamIdentityV1_integration', () => {
   jest.setTimeout(timeout);
 
@@ -552,33 +554,80 @@ describe('IamIdentityV1_integration', () => {
         done(err);
       });
   });
-  test('getAccountSettings()', async () => {
+  test('getAccountSettings()', done => {
+    expect(accountSettingsEtag).toBeUndefined();
     const params = {
-      accountId: 'testString',
-      includeHistory: true,
+      accountId: accountId,
+      includeHistory: false,
     };
 
-    const res = await iamIdentityService.getAccountSettings(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
+    iamIdentityService
+      .getAccountSettings(params)
+      .then(res => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+        expect(res).toBeDefined();
+
+        const result = res.result;
+        expect(result).toBeDefined();
+
+        // console.log('getAccountSettings() result: ', result);
+        expect(result.account_id).toEqual(accountId);
+        expect(result.restrict_create_service_id).toBeDefined();
+        expect(result.restrict_create_platform_apikey).toBeDefined();
+        expect(result.entity_tag).toBeDefined();
+        expect(result.mfa).toBeDefined();
+        expect(result.history).toBeDefined();
+        expect(result.session_expiration_in_seconds).toBeDefined();
+        expect(result.session_invalidation_in_seconds).toBeDefined();
+
+        accountSettingsEtag = result.entity_tag;
+        expect(accountSettingsEtag).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
   });
-  test('updateAccountSettings()', async () => {
+  test('updateAccountSettings()', done => {
+    expect(accountSettingsEtag).toBeDefined();
     const params = {
-      ifMatch: 'testString',
-      accountId: 'testString',
-      restrictCreateServiceId: 'RESTRICTED',
-      restrictCreatePlatformApikey: 'RESTRICTED',
-      allowedIpAddresses: 'testString',
+      ifMatch: accountSettingsEtag,
+      accountId: accountId,
+      restrict_create_service_id: 'NOT_RESTRICTED',
+      restrict_create_platform_apikey: 'NOT_RESTRICTED',
+      // allowedIpAddresses: 'testString',
       mfa: 'NONE',
-      sessionExpirationInSeconds: 'testString',
-      sessionInvalidationInSeconds: 'testString',
+      session_expiration_in_seconds: '86400',
+      session_invalidation_in_seconds: '7200',
     };
 
-    const res = await iamIdentityService.updateAccountSettings(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
+    iamIdentityService
+      .updateAccountSettings(params)
+      .then(res => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const result = res.result;
+        expect(res).toBeDefined();
+        expect(res.result).toBeDefined();
+
+        // console.log('updateAccountSettings() result: ', result);
+        expect(result.account_id).toEqual(accountId);
+        expect(result.entity_tag).toEqual(res.headers['etag']);
+        expect(result.restrict_create_service_id).toEqual(params.restrict_create_service_id);
+        expect(result.restrict_create_platform_apikey).toEqual(params.restrict_create_platform_apikey);
+        expect(result.mfa).toEqual(params.mfa);
+        expect(result.session_expiration_in_seconds).toEqual(params.session_expiration_in_seconds);
+        expect(result.session_invalidation_in_seconds).toEqual(params.session_invalidation_in_seconds);
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
   });
-});
 
 function getPageTokenFromURL(urlstring) {
   let pageToken = null;
@@ -677,4 +726,4 @@ async function cleanupResources() {
     console.log(err);
     throw err;
   }
-}
+}})
