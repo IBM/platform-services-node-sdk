@@ -629,101 +629,102 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-function getPageTokenFromURL(urlstring) {
-  let pageToken = null;
-  if (urlstring) {
-    // We use a bogus "baseurl" in case "urlstring" is a relative url.
-    // This is fine since we're only trying to retrieve the "offset" query parameter.
-    const url = new URL(urlstring, 'https://fakehost.com');
-    pageToken = url.searchParams.get('pagetoken');
-  }
-  return pageToken;
-}
-
-async function getApiKeyById(apikeyId) {
-  let result = null;
-  try {
-    const params = {
-      id: apikeyId,
-    };
-
-    const res = await iamIdentityService.getApiKey(params);
-    if (res != null) {
-      result = res.result;
+  function getPageTokenFromURL(urlstring) {
+    let pageToken = null;
+    if (urlstring) {
+      // We use a bogus "baseurl" in case "urlstring" is a relative url.
+      // This is fine since we're only trying to retrieve the "offset" query parameter.
+      const url = new URL(urlstring, 'https://fakehost.com');
+      pageToken = url.searchParams.get('pagetoken');
     }
-    return result;
-  } catch (err) {
-    return result;
+    return pageToken;
   }
-}
 
-async function getServiceId(serviceId) {
-  let result = null;
-  try {
-    const params = {
-      id: serviceId,
-    };
+  async function getApiKeyById(apikeyId) {
+    let result = null;
+    try {
+      const params = {
+        id: apikeyId,
+      };
 
-    const res = await iamIdentityService.getServiceId(params);
-    if (res != null) {
-      result = res.result;
+      const res = await iamIdentityService.getApiKey(params);
+      if (res != null) {
+        result = res.result;
+      }
+      return result;
+    } catch (err) {
+      return result;
     }
-    return result;
-  } catch (err) {
-    return result;
   }
-}
 
-async function cleanupResources() {
-  console.log('Cleaning resources...');
+  async function getServiceId(serviceId) {
+    let result = null;
+    try {
+      const params = {
+        id: serviceId,
+      };
 
-  try {
-    // list apikeys
-    const apikeyParams = {
-      accountId: accountId,
-      iamId: iamId,
-      pagesize: 100,
-    };
+      const res = await iamIdentityService.getServiceId(params);
+      if (res != null) {
+        result = res.result;
+      }
+      return result;
+    } catch (err) {
+      return result;
+    }
+  }
 
-    const apikeyResponse = await iamIdentityService.listApiKeys(apikeyParams);
-    const apikeyResult = apikeyResponse.result;
-    if (apikeyResult.apikeys) {
-      for (const elem of apikeyResult.apikeys) {
-        if (elem.name == apikeyName) {
-          console.log('>>> Cleaning apikey: ', elem.id);
+  async function cleanupResources() {
+    console.log('Cleaning resources...');
+
+    try {
+      // list apikeys
+      const apikeyParams = {
+        accountId: accountId,
+        iamId: iamId,
+        pagesize: 100,
+      };
+
+      const apikeyResponse = await iamIdentityService.listApiKeys(apikeyParams);
+      const apikeyResult = apikeyResponse.result;
+      if (apikeyResult.apikeys) {
+        for (const elem of apikeyResult.apikeys) {
+          if (elem.name == apikeyName) {
+            console.log('>>> Cleaning apikey: ', elem.id);
+            const params = {
+              id: elem.id,
+            };
+            const response = await iamIdentityService.deleteApiKey(params);
+            expect(response).not.toBeNull();
+            expect(response.status).toEqual(204);
+          }
+        }
+      }
+
+      // list serviceIds
+      const serviceidParams = {
+        accountId: accountId,
+        name: serviceIdName,
+        pagesize: 100,
+      };
+
+      const serviceidResponse = await iamIdentityService.listServiceIds(serviceidParams);
+      const serviceidResult = serviceidResponse.result;
+      if (serviceidResult.serviceids) {
+        for (const elem of serviceidResult.serviceids) {
+          console.log('Cleaning serviceId: ', elem.id);
           const params = {
             id: elem.id,
           };
-          const response = await iamIdentityService.deleteApiKey(params);
+          const response = await iamIdentityService.deleteServiceId(params);
           expect(response).not.toBeNull();
           expect(response.status).toEqual(204);
         }
       }
+      console.log('Finished cleaning resources!');
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
-
-    // list serviceIds
-    const serviceidParams = {
-      accountId: accountId,
-      name: serviceIdName,
-      pagesize: 100,
-    };
-
-    const serviceidResponse = await iamIdentityService.listServiceIds(serviceidParams);
-    const serviceidResult = serviceidResponse.result;
-    if (serviceidResult.serviceids) {
-      for (const elem of serviceidResult.serviceids) {
-        console.log('Cleaning serviceId: ', elem.id);
-        const params = {
-          id: elem.id,
-        };
-        const response = await iamIdentityService.deleteServiceId(params);
-        expect(response).not.toBeNull();
-        expect(response.status).toEqual(204);
-      }
-    }
-    console.log('Finished cleaning resources!');
-  } catch (err) {
-    console.log(err);
-    throw err;
   }
-}})
+});
