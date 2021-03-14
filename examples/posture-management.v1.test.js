@@ -30,12 +30,14 @@ const authHelper = require('../test/resources/auth-helper.js');
 // POSTURE_MANAGEMENT_AUTH_TYPE=iam
 // POSTURE_MANAGEMENT_APIKEY=<IAM apikey>
 // POSTURE_MANAGEMENT_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// POSTURE_MANAGEMENT_PROFILE_NAME=<Profile Name>
+// POSTURE_MANAGEMENT_SCOPES_NAME=<Scope Name>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'posture_management_v1.env';
+const configFile = 'posture_management.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -56,33 +58,17 @@ describe('PostureManagementV1', () => {
   // end-common
 
   const config = readExternalSources(PostureManagementV1.DEFAULT_SERVICE_NAME);
-
-  test('createValidationScan request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    // begin-create_validation_scan
-
-    const params = {
-      accountId: 'testString',
-    };
-
-    postureManagementService.createValidationScan(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-create_validation_scan
-  });
+  const accountId = config.accountId;
+  const profileName = config.profileName;
+  const scopesName = config.scopesName;
+  
+  expect(accountId).toBeDefined();
+  expect(profileName).toBeDefined();
+  expect(scopesName).toBeDefined();
+  
+  let profileId;
+  let scopeId;
+  
   test('listProfile request example', done => {
 
     consoleLogMock.mockImplementation(output => {
@@ -96,11 +82,13 @@ describe('PostureManagementV1', () => {
     // begin-list_profile
 
     const params = {
-      accountId: 'testString',
+      accountId: accountId,
+      name: profileName,
     };
 
     postureManagementService.listProfile(params)
       .then(res => {
+        profileId = res.result.profiles[0].profile_id;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -122,11 +110,13 @@ describe('PostureManagementV1', () => {
     // begin-list_scopes
 
     const params = {
-      accountId: 'testString',
+      accountId: accountId,
+      name: scopesName,
     };
 
     postureManagementService.listScopes(params)
       .then(res => {
+        scopeId = res.result.scopes[0].scope_id;
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
@@ -134,5 +124,33 @@ describe('PostureManagementV1', () => {
       });
 
     // end-list_scopes
+  });
+  test('createValidationScan request example', done => {
+    
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation(output => {
+      done(output);
+    });
+    
+    // begin-create_validation_scan
+    
+    const params = {
+      accountId: accountId,
+      scopeId: scopeId,
+      profileId: profileId,
+    };
+    
+    postureManagementService.createValidationScan(params)
+      .then(res => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch(err => {
+        console.warn(err)
+      });
+    
+    // end-create_validation_scan
   });
 });
