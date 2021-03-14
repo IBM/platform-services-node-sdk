@@ -24,7 +24,7 @@ const authHelper = require('../resources/auth-helper.js');
 const timeout = 200000;
 
 // Location of our config file.
-const configFile = 'posture_management_v1.env';
+const configFile = 'posture_management.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -35,38 +35,53 @@ describe('PostureManagementV1_integration', () => {
 
   const config = readExternalSources(PostureManagementV1.DEFAULT_SERVICE_NAME);
   expect(config).not.toBeNull();
+  const apiKey = config.apikey;
+  expect(apiKey).toBeDefined();
+  const accountId = config.accountId;
+  expect(accountId).toBeDefined();
+  const profileName = config.profileName;
+  expect(profileName).toBeDefined();
+  const scopesName = config.scopesName;
+  expect(scopesName).toBeDefined();
+
+  let scopesId;
+  let profileId;
 
   jest.setTimeout(timeout);
 
-  test('createValidationScan()', async () => {
-    const params = {
-      accountId: 'testString',
-      scopeId: 1,
-      profileId: 6,
-      groupProfileId: 13,
-    };
-
-    const res = await postureManagementService.createValidationScan(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-  });
   test('listProfile()', async () => {
     const params = {
-      accountId: 'testString',
-      name: 'testString',
+      accountId: accountId,
+      name: profileName,
     };
 
     const res = await postureManagementService.listProfile(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    expect(res.result.profiles[0]).toBeDefined();
+    expect(res.result.profiles[0].profile_id).toBeDefined();
+    profileId = res.result.profiles[0].profile_id;
   });
   test('listScopes()', async () => {
     const params = {
-      accountId: 'testString',
-      name: 'testString',
+      accountId: accountId,
+      name: scopesName,
     };
 
     const res = await postureManagementService.listScopes(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+    expect(res.result.scopes[0]).toBeDefined();
+    expect(res.result.scopes[0].scope_id).toBeDefined();
+    scopesId = res.result.scopes[0].scope_id;
+  });
+  test('createValidationScan()', async () => {
+    const params = {
+      accountId: accountId,
+      scopeId: scopesId,
+      profileId: profileId,
+    };
+    const res = await postureManagementService.createValidationScan(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
