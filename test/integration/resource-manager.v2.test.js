@@ -32,59 +32,43 @@ describe('ResourceManagerV2_integration', () => {
   jest.setTimeout(timeout);
 
   let resourceManagerService = null;
-  let resourceManagerUsersService = null;
+  let deleteResourceManagerService = null;
   let newResourceGroupId = null;
   let url = null;
   let authType = null;
   let apiKey = null;
   let authUrl = null;
-  let testQuotaId = null;
-  let testUserAccountId = null;
+  let quotaId = null;
+  let userAccountId = null;
 
-  beforeAll('should successfully complete initialization', done => {
-    resourceManagerService = ResourceManagerV2.newInstance({ serviceName: 'RMGR1' });
+  beforeAll(done => {
+    resourceManagerService = ResourceManagerV2.newInstance({ serviceName: ResourceManagerV2.DEFAULT_SERVICE_NAME });
     expect(resourceManagerService).not.toBeNull();
-    resourceManagerUsersService = ResourceManagerV2.newInstance({ serviceName: 'RMGR2' });
-    expect(resourceManagerUsersService).not.toBeNull();
+    deleteResourceManagerService = ResourceManagerV2.newInstance({ serviceName: 'ALT_RESOURCE_MANAGER' });
+    expect(deleteResourceManagerService).not.toBeNull();
 
     const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
     url = config.url;
     authType = config.authType;
     apiKey = config.apiKey;
-    authUrl = config.AuthUrl;
-    testQuotaId = config.testQuotaId;
-    testUserAccountId = config.testUserAccountId;
+    authUrl = config.authUrl;
+    quotaId = config.quotaId;
+    userAccountId = config.userAccountId;
 
     expect(url).not.toBeNull();
     expect(authType).not.toBeNull();
     expect(apiKey).not.toBeNull();
     expect(authUrl).not.toBeNull();
-    expect(testQuotaId).not.toBeNull();
-    expect(testUserAccountId).not.toBeNull();
+    expect(quotaId).not.toBeNull();
+    expect(userAccountId).not.toBeNull();
 
     done();
   });
 
-  it('should get a list of all resource groups in an account', done => {
-    const params = {
-      accountId: testUserAccountId,
-    };
-    resourceManagerService
-      .listResourceGroups(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
   it('should create a new resource group in an account', done => {
     const params = {
-      accountId: testUserAccountId,
+      accountId: userAccountId,
       name: 'TestGroup',
     };
     resourceManagerService
@@ -93,6 +77,22 @@ describe('ResourceManagerV2_integration', () => {
         expect(response.hasOwnProperty('status')).toBe(true);
         expect(response.status).toBe(201);
         newResourceGroupId = response.result.id;
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
+  it('should get a list of all resource groups in an account', done => {
+    const params = {
+      accountId: userAccountId,
+    };
+    resourceManagerService
+      .listResourceGroups(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(200);
         done();
       })
       .catch(err => {
@@ -138,7 +138,7 @@ describe('ResourceManagerV2_integration', () => {
     const params = {
       id: newResourceGroupId,
     };
-    resourceManagerUsersService
+    deleteResourceManagerService
       .deleteResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -165,7 +165,7 @@ describe('ResourceManagerV2_integration', () => {
 
   it('should get a quota definition by quota id', done => {
     const params = {
-      id: testQuotaId,
+      id: quotaId,
     };
     resourceManagerService
       .getQuotaDefinition(params)
