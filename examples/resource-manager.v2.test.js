@@ -30,6 +30,7 @@ const authHelper = require('../test/resources/auth-helper.js');
 // RESOURCE_MANAGER_AUTH_TYPE=iam
 // RESOURCE_MANAGER_APIKEY=<IAM apikey>
 // RESOURCE_MANAGER_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// RESOURCE_MANAGER_TEST_USER_ACCOUNT_ID
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -56,7 +57,8 @@ describe('ResourceManagerV2', () => {
   // end-common
   
   const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
-  const testUserAccountId = config.TEST_USER_ACCOUNT_ID;
+  const testUserAccountId = config.testUserAccountId;
+  const testQuotaId = config.testQuotaId;
   let resourceGroupId;
   
   test('createResourceGroup request example', done => {
@@ -228,7 +230,7 @@ describe('ResourceManagerV2', () => {
     // begin-get_quota_definition
     
     const params = {
-      id: resourceGroupId,
+      id: testQuotaId,
     };
     
     resourceManagerService.getQuotaDefinition(params)
