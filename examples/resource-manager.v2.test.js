@@ -26,18 +26,24 @@ const authHelper = require('../test/resources/auth-helper.js');
 // This file provides an example of how to use the Resource Manager service.
 //
 // The following configuration properties are assumed to be defined:
+// The following configuration properties are assumed to be defined:
 // RESOURCE_MANAGER_URL=<service base url>
 // RESOURCE_MANAGER_AUTH_TYPE=iam
-// RESOURCE_MANAGER_APIKEY=<IAM apikey>
+// RESOURCE_MANAGER_APIKEY=<IAM apikey of the service>
 // RESOURCE_MANAGER_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
-// RESOURCE_MANAGER_TEST_QUOTA_ID=<Quota Id used in testing>
-// RESOURCE_MANAGER_TEST_USER_ACCOUNT_ID=<User Id used in testing>
+// RESOURCE_MANAGER_QUOTA_ID=<quota ID>
+// RESOURCE_MANAGER_USER_ACCOUNT_ID=<account ID of the user with delete permission>
+//
+// ALT_RESOURCE_MANAGER_URL=<service base url>
+// ALT_RESOURCE_MANAGER_AUTH_TYPE=iam
+// ALT_RESOURCE_MANAGER_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// ALT_RESOURCE_MANAGER_APIKEY=<IAM apikey of the user with delete permission>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'resource_manager_v2.env';
+const configFile = 'resource_manager.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -53,14 +59,17 @@ describe('ResourceManagerV2', () => {
   
   // begin-common
   
-  const resourceManagerService = ResourceManagerV2.newInstance({});
+  const resourceManagerService = ResourceManagerV2.newInstance({ serviceName: ResourceManagerV2.DEFAULT_SERVICE_NAME});
+  const deleteResourceManagerService = ResourceManagerV2.newInstance(
+    {serviceName: 'ALT_RESOURCE_MANAGER'}
+  );
   
   // end-common
   
   const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
-  const testUserAccountId = config.testUserAccountId;
-  const testQuotaId = config.testQuotaId;
-  let resourceGroupId;
+  const userAccountId = config.userAccountId;
+  const quotaId = config.quotaId;
+  let resourceGroupId = null;
   
   test('createResourceGroup request example', done => {
     
@@ -74,7 +83,7 @@ describe('ResourceManagerV2', () => {
     
     // begin-create_resource_group
     const params = {
-      accountId: testUserAccountId,
+      accountId: userAccountId,
       name: "ExampleGroup"
     };
     
@@ -156,7 +165,7 @@ describe('ResourceManagerV2', () => {
     
     // begin-list_resource_groups
     const params = {
-      accountId: testUserAccountId
+      accountId: userAccountId
     }
     
     resourceManagerService.listResourceGroups(params)
@@ -185,7 +194,7 @@ describe('ResourceManagerV2', () => {
       id: resourceGroupId,
     };
     
-    resourceManagerService.deleteResourceGroup(params)
+    deleteResourceManagerService.deleteResourceGroup(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
@@ -231,7 +240,7 @@ describe('ResourceManagerV2', () => {
     // begin-get_quota_definition
     
     const params = {
-      id: testQuotaId,
+      id: quotaId,
     };
     
     resourceManagerService.getQuotaDefinition(params)
