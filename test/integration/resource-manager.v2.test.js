@@ -31,32 +31,30 @@ const describe = authHelper.prepareTests(configFile);
 describe('ResourceManagerV2_integration', () => {
   jest.setTimeout(timeout);
 
-  let canCreateRetrieveAndUpdateResourceGroupService;
-  let usersService;
-  let new_resource_group_id;
-  let url;
-  let authType;
-  let apiKey;
-  let authUrl;
-  let testQuotaId;
-  let testUserAccountId;
+  let resourceManagerService = null;
+  let resourceManagerUsersService = null;
+  let newResourceGroupId = null;
+  let url = null;
+  let authType = null;
+  let apiKey = null;
+  let authUrl = null;
+  let testQuotaId = null;
+  let testUserAccountId = null;
 
-  it('should successfully complete initialization', done => {
-    canCreateRetrieveAndUpdateResourceGroupService = ResourceManagerV2.newInstance({ serviceName: 'RMGR1' });
-    expect(canCreateRetrieveAndUpdateResourceGroupService).not.toBeNull();
-
-    usersService = ResourceManagerV2.newInstance({ serviceName: 'RMGR2' });
-    expect(usersService).not.toBeNull();
+  beforeAll('should successfully complete initialization', done => {
+    resourceManagerService = ResourceManagerV2.newInstance({ serviceName: 'RMGR1' });
+    expect(resourceManagerService).not.toBeNull();
+    resourceManagerUsersService = ResourceManagerV2.newInstance({ serviceName: 'RMGR2' });
+    expect(resourceManagerUsersService).not.toBeNull();
 
     const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
-
-    url = config.URL;
-    authType = config.AUTH_TYPE;
-    apiKey = config.APIKEY;
-    authUrl = config.AUTH_URL;
-    testQuotaId = config.TEST_QUOTA_ID;
-    testUserAccountId = config.TEST_USER_ACCOUNT_ID;
+    url = config.url;
+    authType = config.authType;
+    apiKey = config.apiKey;
+    authUrl = config.AuthUrl;
+    testQuotaId = config.testQuotaId;
+    testUserAccountId = config.testUserAccountId;
 
     expect(url).not.toBeNull();
     expect(authType).not.toBeNull();
@@ -68,29 +66,11 @@ describe('ResourceManagerV2_integration', () => {
     done();
   });
 
-  it('should create a new resource group in an account', done => {
-    const params = {
-      accountId: testUserAccountId,
-      name: 'TestGroup',
-    };
-    canCreateRetrieveAndUpdateResourceGroupService
-      .createResourceGroup(params)
-      .then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(201);
-        new_resource_group_id = response.result.id;
-        done();
-      })
-      .catch(err => {
-        done(err);
-      });
-  });
-
   it('should get a list of all resource groups in an account', done => {
     const params = {
       accountId: testUserAccountId,
     };
-    canCreateRetrieveAndUpdateResourceGroupService
+    resourceManagerService
       .listResourceGroups(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -102,13 +82,31 @@ describe('ResourceManagerV2_integration', () => {
       });
   });
 
+  it('should create a new resource group in an account', done => {
+    const params = {
+      accountId: testUserAccountId,
+      name: 'TestGroup',
+    };
+    resourceManagerService
+      .createResourceGroup(params)
+      .then(response => {
+        expect(response.hasOwnProperty('status')).toBe(true);
+        expect(response.status).toBe(201);
+        newResourceGroupId = response.result.id;
+        done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+
   it('should update a resource group by id', done => {
     const params = {
-      id: new_resource_group_id,
+      id: newResourceGroupId,
       name: 'TestGroup2',
       state: 'ACTIVE',
     };
-    canCreateRetrieveAndUpdateResourceGroupService
+    resourceManagerService
       .updateResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -122,9 +120,9 @@ describe('ResourceManagerV2_integration', () => {
 
   it('should retrieve a resource group by id', done => {
     const params = {
-      id: new_resource_group_id,
+      id: newResourceGroupId,
     };
-    canCreateRetrieveAndUpdateResourceGroupService
+    resourceManagerService
       .getResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -138,9 +136,9 @@ describe('ResourceManagerV2_integration', () => {
 
   it('should delete a resource group by id', done => {
     const params = {
-      id: new_resource_group_id,
+      id: newResourceGroupId,
     };
-    usersService
+    resourceManagerUsersService
       .deleteResourceGroup(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -153,7 +151,7 @@ describe('ResourceManagerV2_integration', () => {
   });
 
   it('should get a list of all quota definitions', done => {
-    canCreateRetrieveAndUpdateResourceGroupService
+    resourceManagerService
       .listQuotaDefinitions()
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
@@ -169,7 +167,7 @@ describe('ResourceManagerV2_integration', () => {
     const params = {
       id: testQuotaId,
     };
-    canCreateRetrieveAndUpdateResourceGroupService
+    resourceManagerService
       .getQuotaDefinition(params)
       .then(response => {
         expect(response.hasOwnProperty('status')).toBe(true);
