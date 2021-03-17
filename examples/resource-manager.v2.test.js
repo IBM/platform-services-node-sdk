@@ -67,8 +67,8 @@ describe('ResourceManagerV2', () => {
   // end-common
   
   const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
-  const userAccountId = config.userAccountId;
-  const quotaId = config.quotaId;
+  const exampleUserAccountId = config.userAccountId;
+  const exampleQuotaId = config.quotaId;
   let resourceGroupId = null;
   
   test('createResourceGroup request example', done => {
@@ -83,14 +83,14 @@ describe('ResourceManagerV2', () => {
     
     // begin-create_resource_group
     const params = {
-      accountId: userAccountId,
+      accountId: exampleUserAccountId,
       name: "ExampleGroup"
     };
     
     resourceManagerService.createResourceGroup(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
         resourceGroupId = res.result.id;
+        console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
         console.warn(err)
@@ -139,7 +139,7 @@ describe('ResourceManagerV2', () => {
     const params = {
       id: resourceGroupId,
       state: 'ACTIVE',
-      name: 'RenamedResourceGroup'
+      name: 'RenamedExampleGroup'
     };
     
     resourceManagerService.updateResourceGroup(params)
@@ -165,7 +165,8 @@ describe('ResourceManagerV2', () => {
     
     // begin-list_resource_groups
     const params = {
-      accountId: userAccountId
+      accountId: exampleUserAccountId,
+      includeDeleted: true,
     }
     
     resourceManagerService.listResourceGroups(params)
@@ -240,7 +241,7 @@ describe('ResourceManagerV2', () => {
     // begin-get_quota_definition
     
     const params = {
-      id: quotaId,
+      id: exampleQuotaId,
     };
     
     resourceManagerService.getQuotaDefinition(params)
