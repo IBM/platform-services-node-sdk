@@ -365,7 +365,8 @@ describe('CaseManagementV1', () => {
         return streamToPromise(res.result);
       })
       .then(contents => {
-        console.log(`downloadFile() Attachment content-type: ${responseContentType}\nAttachment contents: ${contents}`);
+        console.log('downloadFile() result:\n');
+        console.log(`Attachment content-type: ${responseContentType}\nAttachment contents: ${contents}`);
       })
       .catch(err => {
         console.warn(err)
