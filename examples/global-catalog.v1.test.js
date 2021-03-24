@@ -476,7 +476,8 @@ describe('GlobalCatalogV1', () => {
         return streamToPromise(res.result);
       })
       .then(contents => {
-        console.log(`getArtifact() result: Artifact content type: ${responseContentType}\nArtifact contents: ${contents}`);
+        console.log('getArtifact() result:\n');
+        console.log(`Artifact content type: ${responseContentType}\nArtifact contents: ${contents}`);
       })
       .catch(err => {
         console.warn(err)
