@@ -98,14 +98,14 @@ describe('PostureManagementV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(PostureManagementV1.DEFAULT_SERVICE_URL);
     });
   });
-  describe('createValidationScan', () => {
+  describe('createValidation', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation createValidationScan
+        // Construct the params object for operation createValidation
         const accountId = 'testString';
-        const scopeId = 1;
-        const profileId = 6;
-        const groupProfileId = 13;
+        const scopeId = '1';
+        const profileId = '6';
+        const groupProfileId = '13';
         const params = {
           accountId: accountId,
           scopeId: scopeId,
@@ -113,17 +113,17 @@ describe('PostureManagementV1', () => {
           groupProfileId: groupProfileId,
         };
 
-        const createValidationScanResult = postureManagementService.createValidationScan(params);
+        const createValidationResult = postureManagementService.createValidation(params);
 
         // all methods should return a Promise
-        expectToBePromise(createValidationScanResult);
+        expectToBePromise(createValidationResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/posture/v1/scans/validation', 'POST');
+        checkUrlAndMethod(options, '/posture/v1/scans/validations', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -146,7 +146,7 @@ describe('PostureManagementV1', () => {
           },
         };
 
-        postureManagementService.createValidationScan(params);
+        postureManagementService.createValidation(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -155,7 +155,7 @@ describe('PostureManagementV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await postureManagementService.createValidationScan({});
+          await postureManagementService.createValidation({});
         } catch (e) {
           err = e;
         }
@@ -165,20 +165,20 @@ describe('PostureManagementV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const createValidationScanPromise = postureManagementService.createValidationScan();
-        expectToBePromise(createValidationScanPromise);
+        const createValidationPromise = postureManagementService.createValidation();
+        expectToBePromise(createValidationPromise);
 
-        createValidationScanPromise.catch(err => {
+        createValidationPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
       });
     });
   });
-  describe('listProfile', () => {
+  describe('listProfiles', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation listProfile
+        // Construct the params object for operation listProfiles
         const accountId = 'testString';
         const name = 'testString';
         const params = {
@@ -186,10 +186,10 @@ describe('PostureManagementV1', () => {
           name: name,
         };
 
-        const listProfileResult = postureManagementService.listProfile(params);
+        const listProfilesResult = postureManagementService.listProfiles(params);
 
         // all methods should return a Promise
-        expectToBePromise(listProfileResult);
+        expectToBePromise(listProfilesResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -217,7 +217,7 @@ describe('PostureManagementV1', () => {
           },
         };
 
-        postureManagementService.listProfile(params);
+        postureManagementService.listProfiles(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -226,7 +226,7 @@ describe('PostureManagementV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await postureManagementService.listProfile({});
+          await postureManagementService.listProfiles({});
         } catch (e) {
           err = e;
         }
@@ -236,10 +236,10 @@ describe('PostureManagementV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const listProfilePromise = postureManagementService.listProfile();
-        expectToBePromise(listProfilePromise);
+        const listProfilesPromise = postureManagementService.listProfiles();
+        expectToBePromise(listProfilesPromise);
 
-        listProfilePromise.catch(err => {
+        listProfilesPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });

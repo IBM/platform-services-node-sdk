@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.29.0-cd9ba74f-20210305-183535
+ * IBM OpenAPI SDK Code Generator Version: 3.29.1-b338fb38-20210313-010605
  */
 
 
@@ -90,22 +90,22 @@ class PostureManagementV1 extends BaseService {
    ************************/
 
   /**
-   * Initiate a validation scan.
+   * Initiate a validations scan.
    *
-   * Validation scans determine a specified scope's adherence to regulatory controls by validating the configuration of
+   * Validations scans determine a specified scope's adherence to regulatory controls by validating the configuration of
    * the resources in your scope to the attached profile. To initiate a scan, you must have configured a collector,
    * provided credentials, and completed both a fact collection and discovery scan. [Learn
    * more](/docs/security-compliance?topic=security-compliance-schedule-scan).
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - Your IBM Cloud account ID.
-   * @param {number} [params.scopeId] - The unique ID of the scope.
-   * @param {number} [params.profileId] - The unique ID of the profile.
-   * @param {number} [params.groupProfileId] - The ID of the profile group.
+   * @param {string} [params.scopeId] - The unique ID of the scope.
+   * @param {string} [params.profileId] - The unique ID of the profile.
+   * @param {string} [params.groupProfileId] - The ID of the profile group.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<PostureManagementV1.Response<PostureManagementV1.Result>>}
    */
-  public createValidationScan(params: PostureManagementV1.CreateValidationScanParams): Promise<PostureManagementV1.Response<PostureManagementV1.Result>> {
+  public createValidation(params: PostureManagementV1.CreateValidationParams): Promise<PostureManagementV1.Response<PostureManagementV1.Result>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['accountId'];
 
@@ -124,11 +124,11 @@ class PostureManagementV1 extends BaseService {
       'account_id': _params.accountId
     };
 
-    const sdkHeaders = getSdkHeaders(PostureManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createValidationScan');
+    const sdkHeaders = getSdkHeaders(PostureManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createValidation');
 
     const parameters = {
       options: {
-        url: '/posture/v1/scans/validation',
+        url: '/posture/v1/scans/validations',
         method: 'POST',
         body,
         qs: query,
@@ -159,7 +159,7 @@ class PostureManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<PostureManagementV1.Response<PostureManagementV1.ProfilesList>>}
    */
-  public listProfile(params: PostureManagementV1.ListProfileParams): Promise<PostureManagementV1.Response<PostureManagementV1.ProfilesList>> {
+  public listProfiles(params: PostureManagementV1.ListProfilesParams): Promise<PostureManagementV1.Response<PostureManagementV1.ProfilesList>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['accountId'];
 
@@ -173,7 +173,7 @@ class PostureManagementV1 extends BaseService {
       'name': _params.name
     };
 
-    const sdkHeaders = getSdkHeaders(PostureManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listProfile');
+    const sdkHeaders = getSdkHeaders(PostureManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listProfiles');
 
     const parameters = {
       options: {
@@ -269,21 +269,21 @@ namespace PostureManagementV1 {
    * request interfaces
    ************************/
 
-  /** Parameters for the `createValidationScan` operation. */
-  export interface CreateValidationScanParams {
+  /** Parameters for the `createValidation` operation. */
+  export interface CreateValidationParams {
     /** Your IBM Cloud account ID. */
     accountId: string;
     /** The unique ID of the scope. */
-    scopeId?: number;
+    scopeId?: string;
     /** The unique ID of the profile. */
-    profileId?: number;
+    profileId?: string;
     /** The ID of the profile group. */
-    groupProfileId?: number;
+    groupProfileId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listProfile` operation. */
-  export interface ListProfileParams {
+  /** Parameters for the `listProfiles` operation. */
+  export interface ListProfilesParams {
     /** Your account ID. */
     accountId: string;
     /** The name of the profile. */
@@ -338,8 +338,6 @@ namespace PostureManagementV1 {
   export interface Profile {
     /** The name of the profile. */
     name?: string;
-    /** The number of goals that are in the profile. */
-    no_of_goals?: number;
     /** A description of the profile. */
     description?: string;
     /** The version of the profile. */
@@ -353,7 +351,7 @@ namespace PostureManagementV1 {
     /** The criteria that defines how a profile applies. */
     applicability_criteria?: ApplicabilityCriteria;
     /** An auto-generated unique identifying number of the profile. */
-    profile_id?: number;
+    profile_id?: string;
     /** The base profile that the controls are pulled from. */
     base_profile?: string;
     /** The type of profile. */
@@ -385,9 +383,9 @@ namespace PostureManagementV1 {
   /** Scan. */
   export interface Scan {
     /** An auto-generated unique identifier for the scan. */
-    scan_id?: number;
+    scan_id?: string;
     /** An auto-generated unique identifier for discovery. */
-    discover_id?: number;
+    discover_id?: string;
     /** The status of the collector as it completes a scan. */
     status?: string;
     /** The current status of the collector. */
@@ -403,7 +401,7 @@ namespace PostureManagementV1 {
     /** The user who most recently modified the scope. */
     modified_by?: string;
     /** An auto-generated unique identifier for the scope. */
-    scope_id?: number;
+    scope_id?: string;
     /** A unique name for your scope. */
     name?: string;
     /** Indicates whether scope is enabled/disabled. */
@@ -421,7 +419,7 @@ namespace PostureManagementV1 {
     /** The last time that a scan status for a scope was updated in UTC. */
     last_scan_status_updated_time?: string;
     /** The unique IDs of the collectors that are attached to the scope. */
-    collectors_id?: number[];
+    collectors_id?: string[];
     /** A list of the scans that have been run on the scope. */
     scans?: Scan[];
   }
