@@ -46,6 +46,7 @@ describe('PostureManagementV1_integration', () => {
 
   let scopesId;
   let profileId;
+  const groupProfileId = '0';
 
   jest.setTimeout(timeout);
 
@@ -82,6 +83,7 @@ describe('PostureManagementV1_integration', () => {
       accountId: accountId,
       scopeId: scopesId,
       profileId: profileId,
+      groupProfileId: groupProfileId,
     };
 
     const res = await postureManagementService.createValidation(params);
