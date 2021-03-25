@@ -68,6 +68,7 @@ describe('PostureManagementV1', () => {
   
   let profileId;
   let scopeId;
+  const groupProfileId = '0';
   
   test('listProfiles request example', done => {
 
@@ -141,6 +142,7 @@ describe('PostureManagementV1', () => {
       accountId: accountId,
       scopeId: scopeId,
       profileId: profileId,
+      groupProfileId: groupProfileId,
     };
     
     postureManagementService.createValidation(params)
