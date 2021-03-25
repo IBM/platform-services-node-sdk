@@ -197,7 +197,7 @@ describe('ResourceManagerV2', () => {
     
     deleteResourceManagerService.deleteResourceGroup(params)
       .then(res => {
-        console.log('deleteResourceGroup() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteResourceGroup() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
