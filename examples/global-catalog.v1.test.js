@@ -296,7 +296,7 @@ describe('GlobalCatalogV1', () => {
 
     globalCatalogService.restoreCatalogEntry(params)
       .then(res => {
-        console.log('restoreCatalogEntry() result:\n' + JSON.stringify(res, null, 2));
+        console.log('restoreCatalogEntry() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -353,7 +353,7 @@ describe('GlobalCatalogV1', () => {
 
     globalCatalogService.updateVisibility(params)
       .then(res => {
-        console.log('updateVisibility() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('updateVisibility() response status code: ' + res.status);
       })
       .catch(err => {
         console.log('updateVisibility() returned the following error: ' + err);
@@ -441,7 +441,7 @@ describe('GlobalCatalogV1', () => {
 
     globalCatalogService.uploadArtifact(params)
       .then(res => {
-        console.log('uploadArtifact() result:\n' + JSON.stringify(res, null, 2));
+        console.log('uploadArtifact() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -534,7 +534,7 @@ describe('GlobalCatalogV1', () => {
 
     globalCatalogService.deleteArtifact(params)
       .then(res => {
-        console.log('deleteArtifact() result:\n' + JSON.stringify(res, null, 2));
+        console.log('deleteArtifact() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -562,7 +562,7 @@ describe('GlobalCatalogV1', () => {
 
     globalCatalogService.deleteCatalogEntry(params)
       .then(res => {
-        console.log('deleteCatalogEntry() result:\n' + JSON.stringify(res, null, 2));
+        console.log('deleteCatalogEntry() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
