@@ -69,7 +69,7 @@ describe('PostureManagementV1', () => {
   let profileId;
   let scopeId;
   
-  test('listProfile request example', done => {
+  test('listProfiles request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -86,7 +86,7 @@ describe('PostureManagementV1', () => {
       name: profileName,
     };
 
-    postureManagementService.listProfile(params)
+    postureManagementService.listProfiles(params)
       .then(res => {
         profileId = res.result.profiles[0].profile_id;
         console.log(JSON.stringify(res.result, null, 2));
@@ -143,7 +143,7 @@ describe('PostureManagementV1', () => {
       profileId: profileId,
     };
     
-    postureManagementService.createValidationScan(params)
+    postureManagementService.createValidation(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
