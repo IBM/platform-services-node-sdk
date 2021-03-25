@@ -49,15 +49,16 @@ describe('PostureManagementV1_integration', () => {
 
   jest.setTimeout(timeout);
 
-  test('listProfile()', async () => {
+  test('listProfiles()', async () => {
     const params = {
       accountId: accountId,
       name: profileName,
     };
 
-    const res = await postureManagementService.listProfile(params);
+    const res = await postureManagementService.listProfiles(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    expect(res.result.profiles).toBeDefined();
     expect(res.result.profiles[0]).toBeDefined();
     expect(res.result.profiles[0].profile_id).toBeDefined();
     profileId = res.result.profiles[0].profile_id;
@@ -71,17 +72,19 @@ describe('PostureManagementV1_integration', () => {
     const res = await postureManagementService.listScopes(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    expect(res.result.scopes).toBeDefined();
     expect(res.result.scopes[0]).toBeDefined();
     expect(res.result.scopes[0].scope_id).toBeDefined();
     scopesId = res.result.scopes[0].scope_id;
   });
-  test('createValidationScan()', async () => {
+  test('createValidation()', async () => {
     const params = {
       accountId: accountId,
       scopeId: scopesId,
       profileId: profileId,
     };
-    const res = await postureManagementService.createValidationScan(params);
+
+    const res = await postureManagementService.createValidation(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
