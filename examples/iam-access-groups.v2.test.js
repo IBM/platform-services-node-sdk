@@ -225,7 +225,7 @@ describe('IamAccessGroupsV2', () => {
 
     iamAccessGroupsService.isMemberOfAccessGroup(params)
       .then(res => {
-        console.log('isMemberOfAccessGroup() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('isMemberOfAccessGroup() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -276,7 +276,7 @@ describe('IamAccessGroupsV2', () => {
 
     iamAccessGroupsService.removeMemberFromAccessGroup(params)
       .then(res => {
-        console.log('removeMemberFromAccessGroup() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('removeMemberFromAccessGroup() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -507,7 +507,7 @@ describe('IamAccessGroupsV2', () => {
 
     iamAccessGroupsService.removeAccessGroupRule(params)
       .then(res => {
-        console.log('removeAccessGroupRule() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('removeAccessGroupRule() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -583,7 +583,7 @@ describe('IamAccessGroupsV2', () => {
 
     iamAccessGroupsService.deleteAccessGroup(params)
       .then(res => {
-        console.log('deleteAccessGroup() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteAccessGroup() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
