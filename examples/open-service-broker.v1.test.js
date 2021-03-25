@@ -344,7 +344,7 @@ describe('OpenServiceBrokerV1', () => {
 
     openServiceBrokerService.deleteServiceBinding(params)
       .then(res => {
-        console.log('deleteServiceBinding() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteServiceBinding() response status: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
