@@ -348,7 +348,7 @@ describe('ConfigurationGovernanceV1', () => {
 
     configurationGovernanceService.deleteAttachment(params)
       .then(res => {
-        console.log('deleteAttachment() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteAttachment() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -373,7 +373,7 @@ describe('ConfigurationGovernanceV1', () => {
 
     configurationGovernanceService.deleteRule(params)
       .then(res => {
-        console.log('deleteRule() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteRule() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
