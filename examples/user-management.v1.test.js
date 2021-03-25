@@ -198,7 +198,7 @@ describe('UserManagementV1', () => {
 
     userManagementAdminService.removeUser(params)
       .then(res => {
-        console.log('removeUser() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('removeUser() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -259,7 +259,7 @@ describe('UserManagementV1', () => {
 
     userManagementService.updateUserProfile(params)
       .then(res => {
-        console.log('updateUserProfile() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('updateUserProfile() response status code:' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -321,7 +321,7 @@ describe('UserManagementV1', () => {
 
     userManagementService.updateUserSettings(params)
       .then(res => {
-        console.log('updateUserSettings() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('updateUserSettings() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
