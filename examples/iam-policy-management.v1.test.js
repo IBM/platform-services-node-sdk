@@ -285,7 +285,7 @@ describe('IamPolicyManagementV1', () => {
 
     iamPolicyManagementService.deletePolicy(params)
       .then(res => {
-        console.log('deletePolicy() result:\n' + JSON.stringify(res, null, 2));
+        console.log('deletePolicy() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
@@ -429,7 +429,7 @@ describe('IamPolicyManagementV1', () => {
 
     iamPolicyManagementService.deleteRole(params)
       .then(res => {
-        console.log('deleteRole() result:\n' + JSON.stringify(res, null, 2));
+        console.log('deleteRole() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err)
