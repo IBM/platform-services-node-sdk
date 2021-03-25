@@ -234,7 +234,7 @@ describe('IamIdentityV1', () => {
 
     iamIdentityService.lockApiKey(params)
       .then(res => {
-        console.log('lockApiKey() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('lockApiKey() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err);
@@ -261,7 +261,7 @@ describe('IamIdentityV1', () => {
 
     iamIdentityService.unlockApiKey(params)
       .then(res => {
-        console.log('unlockApiKey() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('unlockApiKey() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err);
@@ -288,7 +288,7 @@ describe('IamIdentityV1', () => {
 
     iamIdentityService.deleteApiKey(params)
       .then(res => {
-        console.log('deleteApiKey() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteApiKey() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err);
@@ -427,7 +427,7 @@ describe('IamIdentityV1', () => {
 
     iamIdentityService.lockServiceId(params)
       .then(res => {
-        console.log('lockServiceId() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('lockServiceId() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err);
@@ -454,7 +454,7 @@ describe('IamIdentityV1', () => {
 
     iamIdentityService.unlockServiceId(params)
       .then(res => {
-        console.log('unlockServiceId() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('unlockServiceId() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err);
@@ -482,7 +482,7 @@ describe('IamIdentityV1', () => {
 
     iamIdentityService.deleteServiceId(params)
       .then(res => {
-        console.log('deleteServiceId() result:\n' + JSON.stringify(res.result, null, 2));
+        console.log('deleteServiceId() response status code: ' + res.status);
       })
       .catch(err => {
         console.warn(err);
