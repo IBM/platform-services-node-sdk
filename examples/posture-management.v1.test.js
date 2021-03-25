@@ -79,8 +79,8 @@ describe('PostureManagementV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
-    // begin-list_profile
+  
+    // begin-list_profiles
 
     const params = {
       accountId: accountId,
@@ -95,8 +95,8 @@ describe('PostureManagementV1', () => {
       .catch(err => {
         console.warn(err)
       });
-
-    // end-list_profile
+  
+    // end-list_profiles
   });
   test('listScopes request example', done => {
 
@@ -107,7 +107,7 @@ describe('PostureManagementV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-
+  
     // begin-list_scopes
 
     const params = {
@@ -123,7 +123,7 @@ describe('PostureManagementV1', () => {
       .catch(err => {
         console.warn(err)
       });
-
+  
     // end-list_scopes
   });
   test('createValidationScan request example', done => {
@@ -135,8 +135,8 @@ describe('PostureManagementV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-    
-    // begin-create_validation_scan
+  
+    // begin-create_validation
     
     const params = {
       accountId: accountId,
@@ -152,7 +152,7 @@ describe('PostureManagementV1', () => {
       .catch(err => {
         console.warn(err)
       });
-    
-    // end-create_validation_scan
+  
+    // end-create_validation
   });
 });
