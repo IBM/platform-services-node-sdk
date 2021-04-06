@@ -50,7 +50,7 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
-describe.only('IamPolicyManagementV1', () => {
+describe('IamPolicyManagementV1', () => {
 
   let exampleAccountId;
   let examplePolicyId;
