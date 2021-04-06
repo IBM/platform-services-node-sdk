@@ -1,3 +1,24 @@
+## [0.18.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.18.2...v0.18.3) (2021-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#93](https://github.com/IBM/platform-services-node-sdk/issues/93)) ([3d03569](https://github.com/IBM/platform-services-node-sdk/commit/3d035690e7c1dcb99ec6e065c4ef488646f76f58))
+
+## [0.18.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.18.1...v0.18.2) (2021-04-01)
+
+
+### Bug Fixes
+
+* **IAM Access Groups:** update service after recent api changes ([#92](https://github.com/IBM/platform-services-node-sdk/issues/92)) ([efcfb24](https://github.com/IBM/platform-services-node-sdk/commit/efcfb24d72e0fa7c7a449b11e1e3e5e9cfdffcc9))
+
+## [0.18.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.18.0...v0.18.1) (2021-03-31)
+
+
+### Bug Fixes
+
+* **resource controller:** update sdk after recent api changes ([#91](https://github.com/IBM/platform-services-node-sdk/issues/91)) ([c01a258](https://github.com/IBM/platform-services-node-sdk/commit/c01a258054a35c593541aa3deeb1d9dbc831659a))
+
 # [0.18.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.17.18...v0.18.0) (2021-03-26)
 
 
