@@ -103,7 +103,7 @@ describe('EnterpriseManagementV1_integration', () => {
         nextDocid = null;
       }
     } while (nextDocid != null);
-    console.log(`listAccountGroups returned ${accountGroups.length} account groups.`);
+    console.log(`Received a total of ${accountGroups.length} account groups.`);
   });
   test('getAccountGroup()', async () => {
     const accountGroup = getRandomElementsIdFromList(accountGroups);
@@ -176,7 +176,7 @@ describe('EnterpriseManagementV1_integration', () => {
       }
     } while (nextDocid != null);
 
-    console.log(`The service returned ${accounts.length} accounts.`);
+    console.log(`Received a total of ${accounts.length} accounts.`);
   });
   test('getAccount()', async () => {
     const account = getRandomElementsIdFromList(accounts);
@@ -234,7 +234,7 @@ describe('EnterpriseManagementV1_integration', () => {
       }
     } while (nextDocid != null);
 
-    console.log(`The service returned ${enterprises.length} enterprises.`);
+    console.log(`Received a total of ${enterprises.length} enterprises.`);
   });
   test('getEnterprise()', async () => {
     const enterprise = getRandomElementsIdFromList(enterprises);
