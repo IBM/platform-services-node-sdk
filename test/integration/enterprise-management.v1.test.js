@@ -26,14 +26,17 @@ const timeout = 200000;
 // Location of our config file.
 const configFile = 'enterprise_management.env';
 
+const accountGroups = [];
+const accounts = [];
+const enterprises = [];
 const describe = authHelper.prepareTests(configFile);
-const firstExampleAccountName = 'First Example Account Name';
+let createdAccountId = undefined;
 
 describe('EnterpriseManagementV1_integration', () => {
   const enterpriseManagementService = EnterpriseManagementV1.newInstance({});
-  
+
   expect(enterpriseManagementService).not.toBeNull();
-  
+
   const config = readExternalSources(EnterpriseManagementV1.DEFAULT_SERVICE_NAME);
   expect(config).not.toBeNull();
   const url = config.url;
@@ -50,81 +53,76 @@ describe('EnterpriseManagementV1_integration', () => {
   expect(accountId).not.toBeNull();
   const accountIamId = config.accountIamId;
   expect(accountIamId).not.toBeNull();
-  
+
   jest.setTimeout(timeout);
-  
-  test.skip('createAccountGroup()', async () => {
+
+  test('createAccountGroup()', async () => {
     const accountGroupCrn = `crn:v1:bluemix:public:enterprise::a/${accountId}::enterprise:${enterpriseId}`;
     const params = {
       parent: accountGroupCrn,
-      name: firstExampleAccountName,
+      name: 'First Example Account Group Name',
       primaryContactIamId: accountIamId,
     };
+
     const res = await enterpriseManagementService.createAccountGroup(params);
+
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
   });
-  test.skip('listAccountGroups()', async () => {
+  test('listAccountGroups()', async () => {
     const params = {
       enterpriseId: enterpriseId,
     };
-    
+
     const res = await enterpriseManagementService.listAccountGroups(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
   test('listAccountGroups() with pagination', async () => {
-    const accountGroups = [];
-    let nextDocId = null;
+    let nextDocid = null;
     const limit = 10;
-    let counter = 1;
-    
-    try {
-      do {
-        console.log('iteration:', counter);
-        const params = {
-          enterpriseId: enterpriseId,
-          limit: limit,
-          nextDocId: nextDocId,
-        };
-        console.log('params:', params);
-        const res = await enterpriseManagementService.listAccountGroups(params);
-        expect(res).toBeDefined();
-        expect(res.result).toBeDefined();
-        console.log('size:', res.result.rows_count);
-        console.log(res.result);
-        accountGroups.push(...res.result.resources);
-        console.log('next_url:', res.result.next_url);
-        if (res.result.next_url) {
-          nextDocId = getNextDocId(res.result.next_url);
-        } else {
-          nextDocId = null;
-        }
-        console.log('next_docid:', nextDocId);
-        counter++;
-      } while (nextDocId != null);
-    } catch (err) {
-      console.log(err);
-    }
+
+    const params = {
+      enterpriseId: enterpriseId,
+      limit: limit,
+    };
+
+    do {
+      params.nextDocid = nextDocid;
+
+      const res = await enterpriseManagementService.listAccountGroups(params);
+      expect(res).toBeDefined();
+      expect(res.result).toBeDefined();
+
+      accountGroups.push(...res.result.resources);
+
+      if (res.result.next_url) {
+        nextDocid = getNextDocid(res.result.next_url);
+      } else {
+        nextDocid = null;
+      }
+    } while (nextDocid != null);
     console.log(`listAccountGroups returned ${accountGroups.length} account groups.`);
   });
-  test.skip('getAccountGroup()', async () => {
+  test('getAccountGroup()', async () => {
+    const accountGroup = getRandomElementsIdFromList(accountGroups);
     const params = {
-      accountGroupId: 'testString',
+      accountGroupId: accountGroup.id,
     };
-    
+
     const res = await enterpriseManagementService.getAccountGroup(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('updateAccountGroup()', async () => {
+  test('updateAccountGroup()', async () => {
+    const accountGroup = getRandomElementsIdFromList(accountGroups);
     const params = {
-      accountGroupId: 'testString',
-      name: 'testString',
-      primaryContactIamId: 'testString',
+      accountGroupId: accountGroup.id,
+      name: 'Updated Example Account Group Name',
+      primaryContactIamId: accountIamId,
     };
-    
+
     const res = await enterpriseManagementService.updateAccountGroup(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -136,50 +134,80 @@ describe('EnterpriseManagementV1_integration', () => {
       parent: 'testString',
       billingUnitId: 'testString',
     };
-    
+
     const res = await enterpriseManagementService.importAccountToEnterprise(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('createAccount()', async () => {
+  test('createAccount()', async () => {
+    const accountGroup = getRandomElementsIdFromList(accountGroups);
+    const crn = `crn:v1:bluemix:public:enterprise::a/${accountId}::account-group:${accountGroup.id}`;
     const params = {
-      parent: 'testString',
-      name: 'testString',
-      ownerIamId: 'testString',
+      parent: crn,
+      name: 'New Example Account',
+      ownerIamId: accountIamId,
     };
-    
+
     const res = await enterpriseManagementService.createAccount(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+
+    createdAccountId = res.result.account_id;
   });
-  test.skip('listAccounts()', async () => {
+  test('listAccounts()', async () => {
     const params = {
-      enterpriseId: 'testString',
-      accountGroupId: 'testString',
-      nextDocid: 'testString',
-      parent: 'testString',
-      limit: 38,
+      enterpriseId: enterpriseId,
     };
-    
+
     const res = await enterpriseManagementService.listAccounts(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('getAccount()', async () => {
+  test('listAccounts() with pagination', async () => {
+    let nextDocid = null;
+    const limit = 1;
+
     const params = {
-      accountId: 'testString',
+      enterpriseId: enterpriseId,
+      limit: limit,
     };
-    
+
+    do {
+      params.nextDocid = nextDocid;
+
+      const res = await enterpriseManagementService.listAccounts(params);
+      expect(res).toBeDefined();
+      expect(res.result).toBeDefined();
+
+      accounts.push(...res.result.resources);
+
+      if (res.result.next_url) {
+        nextDocid = getNextDocid(res.result.next_url);
+      } else {
+        nextDocid = null;
+      }
+    } while (nextDocid != null);
+
+    console.log(`The service returned ${accounts.length} accounts.`);
+  });
+  test('getAccount()', async () => {
+    const account = getRandomElementsIdFromList(accounts);
+    const params = {
+      accountId: account.id,
+    };
+
     const res = await enterpriseManagementService.getAccount(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('updateAccount()', async () => {
+  test('updateAccount()', async () => {
+    const accountGroup = getRandomElementsIdFromList(accountGroups);
+    const crn = `crn:v1:bluemix:public:enterprise::a/${accountId}::account-group:${accountGroup.id}`;
     const params = {
-      accountId: 'testString',
-      parent: 'testString',
+      accountId: createdAccountId,
+      parent: crn,
     };
-    
+
     const res = await enterpriseManagementService.updateAccount(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -191,48 +219,71 @@ describe('EnterpriseManagementV1_integration', () => {
       primaryContactIamId: 'testString',
       domain: 'testString',
     };
-    
+
     const res = await enterpriseManagementService.createEnterprise(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('listEnterprises()', async () => {
+  test('listEnterprises()', async () => {
     const params = {
-      enterpriseAccountId: 'testString',
-      accountGroupId: 'testString',
-      accountId: 'testString',
-      nextDocid: 'testString',
-      limit: 38,
+      accountId: accountId,
     };
-    
+
     const res = await enterpriseManagementService.listEnterprises(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('getEnterprise()', async () => {
+  test('listEnterprises() with pagination', async () => {
+    let nextDocid = null;
+    const limit = 1;
+
     const params = {
-      enterpriseId: 'testString',
+      accountId: accountId,
+      limit: limit,
     };
-    
+
+    do {
+      params.nextDocid = nextDocid;
+
+      const res = await enterpriseManagementService.listEnterprises(params);
+      expect(res).toBeDefined();
+      expect(res.result).toBeDefined();
+
+      enterprises.push(...res.result.resources);
+
+      if (res.result.next_url) {
+        nextDocid = getNextDocid(res.result.next_url);
+      } else {
+        nextDocid = null;
+      }
+    } while (nextDocid != null);
+
+    console.log(`The service returned ${enterprises.length} enterprises.`);
+  });
+  test('getEnterprise()', async () => {
+    const enterprise = getRandomElementsIdFromList(enterprises);
+    const params = {
+      enterpriseId: enterprise.id,
+    };
+
     const res = await enterpriseManagementService.getEnterprise(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('updateEnterprise()', async () => {
+  test('updateEnterprise()', async () => {
     const params = {
-      enterpriseId: 'testString',
-      name: 'testString',
-      domain: 'testString',
-      primaryContactIamId: 'testString',
+      enterpriseId: enterpriseId,
+      name: 'Updated Enterprise Name',
+      primaryContactIamId: accountIamId,
     };
-    
+
     const res = await enterpriseManagementService.updateEnterprise(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
 });
 
-function getNextDocId(urlstring) {
+function getNextDocid(urlstring) {
   let offset = null;
   if (urlstring) {
     // We use a bogus "baseurl" in case "urlstring" is a relative url.
@@ -241,4 +292,9 @@ function getNextDocId(urlstring) {
     offset = url.searchParams.get('next_docid');
   }
   return offset;
+}
+
+function getRandomElementsIdFromList(list) {
+  const randomNumber = Math.floor(Math.random() * list.length);
+  return list[randomNumber];
 }
