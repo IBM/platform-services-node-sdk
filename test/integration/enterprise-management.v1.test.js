@@ -127,18 +127,6 @@ describe('EnterpriseManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test.skip('importAccountToEnterprise()', async () => {
-    const params = {
-      enterpriseId: 'testString',
-      accountId: 'testString',
-      parent: 'testString',
-      billingUnitId: 'testString',
-    };
-
-    const res = await enterpriseManagementService.importAccountToEnterprise(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-  });
   test('createAccount()', async () => {
     const accountGroup = getRandomElementsIdFromList(accountGroups);
     const crn = `crn:v1:bluemix:public:enterprise::a/${accountId}::account-group:${accountGroup.id}`;
@@ -209,18 +197,6 @@ describe('EnterpriseManagementV1_integration', () => {
     };
 
     const res = await enterpriseManagementService.updateAccount(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-  });
-  test.skip('createEnterprise()', async () => {
-    const params = {
-      sourceAccountId: 'testString',
-      name: 'testString',
-      primaryContactIamId: 'testString',
-      domain: 'testString',
-    };
-
-    const res = await enterpriseManagementService.createEnterprise(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
