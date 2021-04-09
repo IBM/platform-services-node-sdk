@@ -56,9 +56,9 @@ const secondAccountGroupName = 'Second Example Account Group'
 const accountName = 'Example Account Name'
 const updatedEnterpriseName = 'Updated Enterprise Name'
 
-let accountId;
-let firstAccountGroupId;
-let secondAccountGroupId;
+let accountId = null;
+let firstAccountGroupId= null;
+let secondAccountGroupId = null;
 
 describe('EnterpriseManagementV1', () => {
 
@@ -477,6 +477,8 @@ describe('EnterpriseManagementV1', () => {
 
     const params = {
       enterpriseId: enterpriseId,
+      name: updatedEnterpriseName,
+      primaryContactIamId: enterpriseAccountIamId,
     };
 
     enterpriseManagementService.updateEnterprise(params)
