@@ -192,19 +192,17 @@ describe('EnterpriseManagementV1', () => {
 
     expect(accountGroupId).not.toBeNull();
 
-    originalLog('updateAccountGroup() result:');
-
     // begin-update_account_group
 
     const params = {
       accountGroupId: accountGroupId,
-      name: 'Updated Account Group',
+      name: 'Updated Example Account Group',
       primaryContactIamId: enterpriseAccountIamId,
     };
 
     enterpriseManagementService.updateAccountGroup(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        done();
       })
       .catch(err => {
         console.warn(err)
@@ -258,20 +256,18 @@ describe('EnterpriseManagementV1', () => {
       done(output);
     });
 
-    originalLog('importAccountToEnterprise() result:');
-
-    const accountId = 'standalone_account_id';
+    const importAccountId = '<accountid_to_be_imported>';
 
     // begin-import_account_to_enterprise
 
     const params = {
       enterpriseId: enterpriseId,
-      accountId: accountId,
+      accountId: importAccountId,
     };
 
     enterpriseManagementService.importAccountToEnterprise(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        done();
       })
       .catch(err => {
         console.warn(err)
@@ -352,8 +348,6 @@ describe('EnterpriseManagementV1', () => {
 
     const newParentCrn = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::account-group:' + newParentAccountGroupId;
 
-    originalLog('updateAccount() result:');
-
     // begin-update_account
 
     const params = {
@@ -363,7 +357,7 @@ describe('EnterpriseManagementV1', () => {
 
     enterpriseManagementService.updateAccount(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        done();
       })
       .catch(err => {
         console.warn(err)
@@ -383,13 +377,13 @@ describe('EnterpriseManagementV1', () => {
 
     originalLog('createEnterprise() result:');
 
-    const accountId = 'standalone_account_id';
-    const contactIamId = 'standalone_account_iam_id';
+    const srcAccountId = '<standalone_account_id>';
+    const contactIamId = '<standalone_account_iam_id>';
 
     // begin-create_enterprise
 
     const params = {
-      sourceAccountId: accountId,
+      sourceAccountId: srcAccountId,
       name: 'Example Enterprise',
       primaryContactIamId: contactIamId,
     };
@@ -470,8 +464,6 @@ describe('EnterpriseManagementV1', () => {
       done(output);
     });
 
-    originalLog('updateEnterprise() result:');
-
     // begin-update_enterprise
 
     const params = {
@@ -482,7 +474,7 @@ describe('EnterpriseManagementV1', () => {
 
     enterpriseManagementService.updateEnterprise(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        done();
       })
       .catch(err => {
         console.warn(err)
