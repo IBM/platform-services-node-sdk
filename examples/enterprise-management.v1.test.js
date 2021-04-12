@@ -32,7 +32,7 @@ const authHelper = require('../test/resources/auth-helper.js');
 // ENTERPRISE_MANAGEMENT_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
 // ENTERPRISE_MANAGEMENT_ENTERPRISE_ID=<ID of the enterprise>
 // ENTERPRISE_MANAGEMENT_ACCOUNT_ID=<enterprise account ID>
-// ENTERPRISE_MANAGEMENT_ACCOUNT_IAM_ID=<IAM ID of the enterprise account></IAM>
+// ENTERPRISE_MANAGEMENT_ACCOUNT_IAM_ID=<IAM ID of the enterprise account>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -50,15 +50,9 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
-const firstAccountGroupName = 'Example Account Group'
-const firstUpdatedAccountGroupName = 'Updated Example Account Group'
-const secondAccountGroupName = 'Second Example Account Group'
-const accountName = 'Example Account Name'
-const updatedEnterpriseName = 'Updated Enterprise Name'
-
 let accountId = null;
-let firstAccountGroupId= null;
-let secondAccountGroupId = null;
+let accountGroupId = null;
+let newParentAccountGroupId = null;
 
 describe('EnterpriseManagementV1', () => {
 
@@ -80,23 +74,23 @@ describe('EnterpriseManagementV1', () => {
 
   test('createAccountGroup request example', done => {
 
-    const parent = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::enterprise:' + enterpriseId;
+    const parentCrn = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::enterprise:' + enterpriseId;
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       const responseBody = JSON.parse(output);
 
-      firstAccountGroupId = responseBody.account_group_id
+      accountGroupId = responseBody.account_group_id
 
       const params = {
-        parent: parent,
-        name: secondAccountGroupName,
+        parent: parentCrn,
+        name: 'New Parent Account Group',
         primaryContactIamId: enterpriseAccountIamId,
       };
 
       enterpriseManagementService.createAccountGroup(params)
         .then(res => {
-          secondAccountGroupId = res.result.account_group_id
+          newParentAccountGroupId = res.result.account_group_id
           originalLog(JSON.stringify(res.result, null, 2));
           done();
         })
@@ -113,8 +107,8 @@ describe('EnterpriseManagementV1', () => {
     // begin-create_account_group
 
     const params = {
-      parent: parent,
-      name: firstAccountGroupName,
+      parent: parentCrn,
+      name: 'Example Account Group',
       primaryContactIamId: enterpriseAccountIamId,
     };
 
@@ -166,14 +160,14 @@ describe('EnterpriseManagementV1', () => {
       done(output);
     });
 
-    expect(firstAccountGroupId).not.toBeNull();
+    expect(accountGroupId).not.toBeNull();
 
     originalLog('getAccountGroup() result:');
 
     // begin-get_account_group
 
     const params = {
-      accountGroupId: firstAccountGroupId,
+      accountGroupId: accountGroupId,
     };
 
     enterpriseManagementService.getAccountGroup(params)
@@ -196,15 +190,15 @@ describe('EnterpriseManagementV1', () => {
       done(output);
     });
 
-    expect(firstAccountGroupId).not.toBeNull();
+    expect(accountGroupId).not.toBeNull();
 
     originalLog('updateAccountGroup() result:');
 
     // begin-update_account_group
 
     const params = {
-      accountGroupId: firstAccountGroupId,
-      name: firstUpdatedAccountGroupName,
+      accountGroupId: accountGroupId,
+      name: 'Updated Account Group',
       primaryContactIamId: enterpriseAccountIamId,
     };
 
@@ -230,17 +224,17 @@ describe('EnterpriseManagementV1', () => {
       done(output);
     });
 
-    expect(firstAccountGroupId).not.toBeNull();
+    expect(accountGroupId).not.toBeNull();
 
-    const parent = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::account-group:' + firstAccountGroupId;
+    const parentCrn = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::account-group:' + accountGroupId;
 
     originalLog('createAccount() result:');
 
     // begin-create_account
 
     const params = {
-      parent: parent,
-      name: accountName,
+      parent: parentCrn,
+      name: 'Example Account',
       ownerIamId: enterpriseAccountIamId,
     };
 
@@ -266,11 +260,13 @@ describe('EnterpriseManagementV1', () => {
 
     originalLog('importAccountToEnterprise() result:');
 
+    const accountId = 'standalone_account_id';
+
     // begin-import_account_to_enterprise
 
     const params = {
       enterpriseId: enterpriseId,
-      accountId: 'standalone_account_id',
+      accountId: accountId,
     };
 
     enterpriseManagementService.importAccountToEnterprise(params)
@@ -352,9 +348,9 @@ describe('EnterpriseManagementV1', () => {
     });
 
     expect(accountId).not.toBeNull();
-    expect(secondAccountGroupId).not.toBeNull();
+    expect(newParentAccountGroupId).not.toBeNull();
 
-    const newParent = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::account-group:' + secondAccountGroupId;
+    const newParentCrn = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::account-group:' + newParentAccountGroupId;
 
     originalLog('updateAccount() result:');
 
@@ -362,7 +358,7 @@ describe('EnterpriseManagementV1', () => {
 
     const params = {
       accountId: accountId,
-      parent: newParent,
+      parent: newParentCrn,
     };
 
     enterpriseManagementService.updateAccount(params)
@@ -387,12 +383,15 @@ describe('EnterpriseManagementV1', () => {
 
     originalLog('createEnterprise() result:');
 
+    const accountId = 'standalone_account_id';
+    const contactIamId = 'standalone_account_iam_id';
+
     // begin-create_enterprise
 
     const params = {
-      sourceAccountId: 'standalone_account_id',
-      name: 'Example Enterprise Name',
-      primaryContactIamId: 'standalone_account_iam_id',
+      sourceAccountId: accountId,
+      name: 'Example Enterprise',
+      primaryContactIamId: contactIamId,
     };
 
     enterpriseManagementService.createEnterprise(params)
@@ -477,7 +476,7 @@ describe('EnterpriseManagementV1', () => {
 
     const params = {
       enterpriseId: enterpriseId,
-      name: updatedEnterpriseName,
+      name: 'Updated Example Enterprise',
       primaryContactIamId: enterpriseAccountIamId,
     };
 

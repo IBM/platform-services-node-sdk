@@ -39,14 +39,7 @@ describe('EnterpriseManagementV1_integration', () => {
 
   const config = readExternalSources(EnterpriseManagementV1.DEFAULT_SERVICE_NAME);
   expect(config).not.toBeNull();
-  const url = config.url;
-  expect(url).not.toBeNull();
-  const authType = config.authtype;
-  expect(authType).not.toBeNull();
-  const authUrl = config.authUrl;
-  expect(authUrl).not.toBeNull();
-  const apiKey = config.apikey;
-  expect(apiKey).not.toBeNull();
+
   const enterpriseId = config.enterpriseId;
   expect(enterpriseId).not.toBeNull();
   const accountId = config.accountId;
@@ -79,7 +72,7 @@ describe('EnterpriseManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('listAccountGroups() with pagination', async () => {
+  test('listAccountGroups()', async () => {
     let nextDocid = null;
     const limit = 10;
 
@@ -143,15 +136,6 @@ describe('EnterpriseManagementV1_integration', () => {
     createdAccountId = res.result.account_id;
   });
   test('listAccounts()', async () => {
-    const params = {
-      enterpriseId: enterpriseId,
-    };
-
-    const res = await enterpriseManagementService.listAccounts(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-  });
-  test('listAccounts() with pagination', async () => {
     let nextDocid = null;
     const limit = 1;
 
@@ -201,15 +185,6 @@ describe('EnterpriseManagementV1_integration', () => {
     expect(res.result).toBeDefined();
   });
   test('listEnterprises()', async () => {
-    const params = {
-      accountId: accountId,
-    };
-
-    const res = await enterpriseManagementService.listEnterprises(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-  });
-  test('listEnterprises() with pagination', async () => {
     let nextDocid = null;
     const limit = 1;
 
