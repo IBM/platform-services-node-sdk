@@ -17,7 +17,7 @@
 
 'use strict';
 const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources, getQueryParam } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
@@ -97,7 +97,7 @@ describe('EnterpriseManagementV1_integration', () => {
       results = results.concat(res.result.resources);
 
       if (res.result.next_url) {
-        nextDocid = getNextDocid(res.result.next_url);
+        nextDocid = getQueryParam(res.result.next_url, 'next_docid');
       } else {
         nextDocid = null;
       }
@@ -162,7 +162,7 @@ describe('EnterpriseManagementV1_integration', () => {
       results = results.concat(res.result.resources);
 
       if (res.result.next_url) {
-        nextDocid = getNextDocid(res.result.next_url);
+        nextDocid = getQueryParam(res.result.next_url, 'next_docid');
       } else {
         nextDocid = null;
       }
@@ -211,7 +211,7 @@ describe('EnterpriseManagementV1_integration', () => {
       results = results.concat(res.result.resources);
 
       if (res.result.next_url) {
-        nextDocid = getNextDocid(res.result.next_url);
+        nextDocid = getQueryParam(res.result.next_url, 'next_docid');
       } else {
         nextDocid = null;
       }
@@ -242,14 +242,3 @@ describe('EnterpriseManagementV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 });
-
-function getNextDocid(urlstring) {
-  let offset = null;
-  if (urlstring) {
-    // We use a bogus "baseurl" in case "urlstring" is a relative url.
-    // This is fine since we're only trying to retrieve the "offset" query parameter.
-    const url = new URL(urlstring, 'https://fakehost.com');
-    offset = url.searchParams.get('next_docid');
-  }
-  return offset;
-}
