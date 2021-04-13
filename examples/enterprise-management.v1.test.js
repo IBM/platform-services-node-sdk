@@ -50,6 +50,8 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
+const timeout = 20000;
+
 let accountId = null;
 let accountGroupId = null;
 let newParentAccountGroupId = null;
@@ -71,6 +73,8 @@ describe('EnterpriseManagementV1', () => {
   expect(enterpriseId).not.toBeNull();
   expect(enterpriseAccountId).not.toBeNull();
   expect(enterpriseAccountIamId).not.toBeNull();
+
+  jest.setTimeout(timeout);
 
   test('createAccountGroup request example', done => {
 
