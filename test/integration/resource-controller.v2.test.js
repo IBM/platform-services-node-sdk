@@ -533,7 +533,7 @@ describe('ResourceControllerV2_integration', () => {
 
     do {
       try {
-        response = await service.listResourceInstances(params);
+        response = await service.listResourceAliasesForInstance(params);
       } catch (err) {
         done(err);
       }
