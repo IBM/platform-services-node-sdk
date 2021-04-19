@@ -107,8 +107,6 @@ describe('EnterpriseManagementV1', () => {
     });
 
     originalLog('createAccountGroup() result:');
-  
-    originalLog('() result:');
     // begin-create_account_group
 
     const params = {

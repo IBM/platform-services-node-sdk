@@ -362,7 +362,7 @@ describe('GlobalCatalogV1', () => {
         done();
       })
       .catch(err => {
-        console.warn('updateVisibility() returned the following error: ' + err);
+        console.warn(err);
       });
 
     // end-update_visibility
