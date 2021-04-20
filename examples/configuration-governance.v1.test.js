@@ -91,7 +91,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('createRules() result:');
     // begin-create_rules
 
@@ -129,7 +129,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('createAttachments() result:');
     // begin-create_attachments
 
@@ -166,7 +166,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('getAttachment() result:');
     // begin-get_attachment
 
@@ -202,7 +202,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('getRule() result:');
     // begin-get_rule
 
@@ -228,7 +228,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('listRules() result:');
     // begin-list_rules
 
@@ -254,7 +254,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('updateRule() result:');
     // begin-update_rule
 
@@ -289,7 +289,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('listAttachments() result:');
     // begin-list_attachments
 
@@ -315,7 +315,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('updateAttachment() result:');
     // begin-update_attachment
 
@@ -346,7 +346,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     // begin-delete_attachment
 
     const params = {
@@ -372,7 +372,7 @@ describe('ConfigurationGovernanceV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     // begin-delete_rule
 
     const params = {
