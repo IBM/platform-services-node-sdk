@@ -236,11 +236,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.resources.length).toBeGreaterThanOrEqual(1);
       expect(result.resources.length).toBeLessThanOrEqual(resultsPerPage);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
@@ -446,11 +442,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.resources.length).toBeGreaterThanOrEqual(1);
       expect(result.resources.length).toBeLessThanOrEqual(resultsPerPage);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
@@ -545,11 +537,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.rows_count).toEqual(1);
       expect(result.resources.length).toEqual(1);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
@@ -698,11 +686,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.resources.length).toBeGreaterThanOrEqual(1);
       expect(result.resources.length).toBeLessThanOrEqual(resultsPerPage);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
@@ -796,11 +780,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.rows_count).toEqual(1);
       expect(result.resources.length).toEqual(1);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
@@ -944,11 +924,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.resources.length).toBeGreaterThanOrEqual(1);
       expect(result.resources.length).toBeLessThanOrEqual(resultsPerPage);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
@@ -1039,11 +1015,7 @@ describe('ResourceControllerV2_integration', () => {
       expect(result.rows_count).toEqual(1);
       expect(result.resources.length).toEqual(1);
 
-      if (result.next_url) {
-        params.start = getQueryParam(result.next_url, 'start');
-      } else {
-        params.start = null;
-      }
+      params.start = getQueryParam(result.next_url, 'start');
     } while (params.start != null);
 
     done();
