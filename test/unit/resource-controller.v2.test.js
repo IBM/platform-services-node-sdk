@@ -369,7 +369,7 @@ describe('ResourceControllerV2', () => {
         const options = getOptions(createRequestMock);
 
         checkUrlAndMethod(options, '/v2/resource_instances/{id}', 'DELETE');
-        const expectedAccept = 'application/json';
+        const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.qs['recursive']).toEqual(recursive);

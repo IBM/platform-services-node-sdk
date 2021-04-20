@@ -778,7 +778,6 @@ describe('ResourceControllerV2', () => {
       done(output);
     });
 
-    originalLog('deleteResourceInstance() result:');
     // begin-delete_resource_instance
 
     const params = {
@@ -788,7 +787,7 @@ describe('ResourceControllerV2', () => {
 
     resourceControllerService.deleteResourceInstance(params)
       .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
+        done();
       })
       .catch(err => {
         console.warn(err)

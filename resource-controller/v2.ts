@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-bd714324-20210408-112704
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-77b4cbf2-20210420-134305
  */
 
 
@@ -95,7 +95,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource instances.
    *
-   * Get a list of all resource instances.
+   * View a list of all available resource instances. Resources is a broad term that could mean anything from a service
+   * instance to a virtual machine associated with the customer account.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - When you provision a new resource in the specified location for the selected plan,
@@ -161,7 +162,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Create (provision) a new resource instance.
    *
-   * Provision a new resource in the specified location for the selected plan.
+   * When you provision a service you get an instance of that service. An instance represents the resource with which
+   * you create, and additionally, represents a chargeable record of which billing can occur.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - The name of the instance. Must be 180 characters or less and cannot include any
@@ -224,7 +226,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a resource instance.
    *
-   * Retrieve a resource instance by ID.
+   * Retrieve a resource instance by ID. Find more details on a particular instance, like when it was provisioned and
+   * who provisioned it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
@@ -265,15 +268,16 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Delete a resource instance.
    *
-   * Delete a resource instance by ID.
+   * Delete a resource instance by ID. If the resource instance has any resource keys or aliases associated with it, use
+   * the `recursive=true` parameter to delete it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
    * @param {boolean} [params.recursive] - Will delete resource bindings, keys and aliases associated with the instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
    */
-  public deleteResourceInstance(params: ResourceControllerV2.DeleteResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+  public deleteResourceInstance(params: ResourceControllerV2.DeleteResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
@@ -301,7 +305,6 @@ class ResourceControllerV2 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
         }, _params.headers),
       }),
     };
@@ -312,7 +315,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource instance.
    *
-   * Update a resource instance by ID.
+   * You can use the ID to make updates to the resource instance, like changing the name or plan.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
@@ -369,7 +372,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource aliases for the instance.
    *
-   * Get a list of all resource aliases for the instance.
+   * Retrieving a list of all resource aliases can help you find out who's using the resource instance.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
@@ -420,7 +423,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all the resource keys for the instance.
    *
-   * Get a list of all the resource keys for the instance.
+   * You may have many resource keys for one resource instance. For example, you may have a different resource key for
+   * each user or each role.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
@@ -513,7 +517,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Unlock a resource instance.
    *
-   * Unlocks a resource instance by ID.
+   * Unlock a resource instance to update or delete it. Unlocking a resource instance does not affect child resources
+   * like aliases, bindings or keys.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
