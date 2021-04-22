@@ -32,7 +32,7 @@ const {
 
 const service = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://iam.cloud.ibm.com',
+  url: 'https://iam.test.cloud.ibm.com',
 };
 
 const iamIdentityService = new IamIdentityV1(service);
@@ -1266,6 +1266,7 @@ describe('IamIdentityV1', () => {
         const mfa = 'NONE';
         const sessionExpirationInSeconds = 'testString';
         const sessionInvalidationInSeconds = 'testString';
+        const maxSessionsPerIdentity = 'testString';
         const params = {
           ifMatch: ifMatch,
           accountId: accountId,
@@ -1275,6 +1276,7 @@ describe('IamIdentityV1', () => {
           mfa: mfa,
           sessionExpirationInSeconds: sessionExpirationInSeconds,
           sessionInvalidationInSeconds: sessionInvalidationInSeconds,
+          maxSessionsPerIdentity: maxSessionsPerIdentity,
         };
 
         const updateAccountSettingsResult = iamIdentityService.updateAccountSettings(params);
@@ -1298,6 +1300,7 @@ describe('IamIdentityV1', () => {
         expect(options.body['mfa']).toEqual(mfa);
         expect(options.body['session_expiration_in_seconds']).toEqual(sessionExpirationInSeconds);
         expect(options.body['session_invalidation_in_seconds']).toEqual(sessionInvalidationInSeconds);
+        expect(options.body['max_sessions_per_identity']).toEqual(maxSessionsPerIdentity);
         expect(options.path['account_id']).toEqual(accountId);
       });
 
