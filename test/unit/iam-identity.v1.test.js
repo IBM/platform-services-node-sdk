@@ -32,7 +32,7 @@ const {
 
 const service = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://iam.test.cloud.ibm.com',
+  url: 'https://iam.cloud.ibm.com',
 };
 
 const iamIdentityService = new IamIdentityV1(service);

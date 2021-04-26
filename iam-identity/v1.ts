@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-77b4cbf2-20210422-122303
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-46891d34-20210426-162952
  */
 
 
@@ -30,7 +30,7 @@ import { getSdkHeaders } from '../lib/common';
 
 class IamIdentityV1 extends BaseService {
 
-  static DEFAULT_SERVICE_URL: string = 'https://iam.test.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://iam.cloud.ibm.com';
   static DEFAULT_SERVICE_NAME: string = 'iam_identity';
 
   /*************************
