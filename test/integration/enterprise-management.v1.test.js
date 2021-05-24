@@ -1,4 +1,4 @@
-/* eslint-disable eqeqeq, no-console */
+/* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -102,8 +102,8 @@ describe('EnterpriseManagementV1_integration', () => {
       }
     } while (nextDocid != null);
 
-    expect(results.some((result) => result.id == accountGroupId)).toBe(true);
-    expect(results.some((result) => result.id == newParentAccountGroupId)).toBe(true);
+    expect(results.some((result) => result.id === accountGroupId)).toBe(true);
+    expect(results.some((result) => result.id === newParentAccountGroupId)).toBe(true);
 
     console.log(`Received a total of ${results.length} account groups.`);
   });
@@ -167,7 +167,7 @@ describe('EnterpriseManagementV1_integration', () => {
       }
     } while (nextDocid != null);
 
-    expect(results.some((result) => result.id == accountId)).toBe(true);
+    expect(results.some((result) => result.id === accountId)).toBe(true);
 
     console.log(`Received a total of ${results.length} accounts.`);
   });
@@ -216,7 +216,7 @@ describe('EnterpriseManagementV1_integration', () => {
       }
     } while (nextDocid != null);
 
-    expect(results.some((result) => result.id == enterpriseId)).toBe(true);
+    expect(results.some((result) => result.id === enterpriseId)).toBe(true);
 
     console.log(`Received a total of ${results.length} enterprises.`);
   });

@@ -1,4 +1,4 @@
-/* eslint-disable eqeqeq, no-console */
+/* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -21,7 +21,7 @@ const ConfigurationGovernanceV1 = require('../../dist/configuration-governance/v
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (25s).
-const timeout = 25000;
+const timeout = 60000;
 
 // Location of our config file.
 const configFile = 'configuration_governance.env';
@@ -80,7 +80,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
     // Load up our test-specific config properties.
     const config = readExternalSources(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
-    expect(config).not.toHaveLength(0);
     expect(configurationGovernanceService.baseOptions.serviceUrl).toEqual(config.url);
 
     // Retrieve and verify some additional test-related config properties.
@@ -136,8 +135,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
         expect(ruleResponse1.request_id).toEqual('request-0');
         expect(ruleResponse1.status_code).toEqual(201);
         ruleId1 = ruleResponse1.rule.rule_id;
-        expect(ruleId1).not.toBeNull();
-        expect(ruleId1 != '').toBe(true);
+        expect(ruleId1).toBeTruthy();
         done();
       })
       .catch((err) => {
@@ -171,8 +169,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
         expect(ruleResponse2.request_id.length).toBeGreaterThan(0);
         expect(ruleResponse2.status_code).toEqual(201);
         ruleId2 = ruleResponse2.rule.rule_id;
-        expect(ruleId2).not.toBeNull();
-        expect(ruleId2 != '').toBe(true);
+        expect(ruleId2).toBeTruthy();
         expect(ruleId1).not.toEqual(ruleId2);
         done();
       })
@@ -701,7 +698,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
             expect(att.excluded_scopes).toHaveLength(1);
           } else if (attachmentId2 === att.attachment_id) {
             expect(att.included_scope.note).toEqual('leaf account');
-            expect(att.excluded_scopes == null || att.excluded_scopes.length == 0).toBe(true);
+            expect(att.excluded_scopes === null || att.excluded_scopes.length === 0).toBe(true);
           } else {
             done(`Unrecognized attachmentId: ${att.attachment_id}`);
           }

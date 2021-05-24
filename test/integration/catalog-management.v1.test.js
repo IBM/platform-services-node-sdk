@@ -1,4 +1,4 @@
-/* eslint-disable eqeqeq, jest/no-try-expect, no-console */
+/* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -60,7 +60,7 @@ describe('CatalogManagementV1_integration', () => {
 
     try {
       for (let i = 0; i < resources.length; i++) {
-        if (resources[i].label == expectedLabel) {
+        if (resources[i].label === expectedLabel) {
           await service.deleteCatalog({ 'catalogIdentifier': resources[i].id });
         }
       }
@@ -78,7 +78,7 @@ describe('CatalogManagementV1_integration', () => {
 
     try {
       for (let i = 0; i < resources.length; i++) {
-        if (resources[i].label == expectedLabel) {
+        if (resources[i].label === expectedLabel) {
           await service.deleteCatalog({ 'catalogIdentifier': resources[i].id });
         }
       }
@@ -153,9 +153,9 @@ describe('CatalogManagementV1_integration', () => {
       done(err);
     }
 
-    if (listResponse.result.resources != undefined) {
+    if (listResponse.result.resources !== undefined) {
       for (let i = 0; i < listResponse.result.resources.length; i++) {
-        if (listResponse.result.resources[i].label == expectedLabel) {
+        if (listResponse.result.resources[i].label === expectedLabel) {
           catalogCount++;
           catalogIndex = i;
         }

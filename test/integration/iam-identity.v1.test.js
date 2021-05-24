@@ -1,4 +1,4 @@
-/* eslint-disable eqeqeq, no-console */
+/* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020, 2021.
  *
@@ -220,7 +220,7 @@ describe('IamIdentityV1_integration', () => {
         expect(result.limit).toEqual(pageSize);
         expect(result.apikeys).toBeDefined();
         for (const elem of result.apikeys) {
-          if (elem.name == apikeyName) {
+          if (elem.name === apikeyName) {
             apikeys.push(elem);
           }
         }
@@ -693,7 +693,7 @@ describe('IamIdentityV1_integration', () => {
       const apikeyResult = apikeyResponse.result;
       if (apikeyResult.apikeys) {
         for (const elem of apikeyResult.apikeys) {
-          if (elem.name == apikeyName) {
+          if (elem.name === apikeyName) {
             console.log('>>> Cleaning apikey: ', elem.id);
             const params = {
               id: elem.id,

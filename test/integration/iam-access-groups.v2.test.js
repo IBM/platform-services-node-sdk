@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-try-expect, no-console */
+/* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
