@@ -9,9 +9,7 @@ module.exports = {
       'plugins': ['node', 'jest', 'prettier'],
       'extends': ['airbnb-base', 'plugin:jest/recommended', 'plugin:jest/style', 'prettier'],
       'rules': {
-        // 'camelcase': 'off',
         'import/extensions': 'off',
-        // 'no-template-curly-in-string': 'off',
         'no-underscore-dangle': 'off',
         'prefer-const': 'error',
         'prettier/prettier': 'error',
@@ -26,17 +24,16 @@ module.exports = {
     {
       'files': ['*.test.js', '*.test.jsx'],
       'rules': {
-        // 'jest/expect-expect': 'off',
         'jest/no-commented-out-tests': 'off',
         'jest/no-conditional-expect': 'off',
         'jest/no-done-callback': 'off',
         'jest/no-standalone-expect': 'off',
+        'jest/no-try-expect': 'off',
         'no-await-in-loop': 'off',
         'no-plusplus': 'off',
         'no-prototype-builtins': 'off',
         'no-restricted-syntax': 'off',
         'no-shadow': 'off',
-        // 'no-unused-vars': 'off',
         'no-use-before-define': 'off',
       },
     },
