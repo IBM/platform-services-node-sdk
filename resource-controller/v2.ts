@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-77b4cbf2-20210420-134305
+ * IBM OpenAPI SDK Code Generator Version: 3.32.0-4c6a3129-20210514-210323
  */
 
 
@@ -116,7 +116,6 @@ class ResourceControllerV2 extends BaseService {
    * results is returned. This value is obtained from the 'next_url' field of the operation response.
    * @param {string} [params.state] - The state of the instance. If not specified, instances in state `active` and
    * `provisioning` are returned.
-   * @param {string} [params.orderDirection] - Order of results.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -136,7 +135,6 @@ class ResourceControllerV2 extends BaseService {
       'limit': _params.limit,
       'start': _params.start,
       'state': _params.state,
-      'order_direction': _params.orderDirection,
       'updated_from': _params.updatedFrom,
       'updated_to': _params.updatedTo
     };
@@ -269,7 +267,7 @@ class ResourceControllerV2 extends BaseService {
    * Delete a resource instance.
    *
    * Delete a resource instance by ID. If the resource instance has any resource keys or aliases associated with it, use
-   * the `recursive=true` parameter to delete it.
+   * the `recursive=true parameter` to delete it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
@@ -563,7 +561,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all of the resource keys.
    *
-   * List all resource keys.
+   * View all of the resource keys that exist for all of your resource instances.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - When you create a new key, a GUID (globally unique identifier) is assigned. This is
@@ -616,7 +614,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Create a new resource key.
    *
-   * Create a new resource key.
+   * A resource key is a saved credential you can use to authenticate with a resource instance.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - The name of the key.
@@ -666,7 +664,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get resource key by ID.
    *
-   * Get resource key by ID.
+   * View a resource key and all of its details, like the credentials for the key and who created it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the key.
@@ -707,7 +705,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Delete a resource key by ID.
    *
-   * Delete a resource key by ID.
+   * Deleting a resource key does not affect any resource instance or resource alias associated with the key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the key.
@@ -747,7 +745,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource key.
    *
-   * Update a resource key by ID.
+   * Use the resource key ID to update the name of the resource key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the key.
@@ -800,7 +798,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource bindings.
    *
-   * Get a list of all resource bindings.
+   * View all of the resource bindings that exist for all of your resource aliases.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - The short ID of the binding.
@@ -855,7 +853,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Create a new resource binding.
    *
-   * Create a new resource binding.
+   * A resource binding connects credentials to a resource alias. The credentials are in the form of a resource key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.source - The short or long ID of resource alias.
@@ -909,7 +907,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a resource binding.
    *
-   * Retrieve a resource binding by ID.
+   * View a resource binding and all of its details, like who created it, the credential, and the resource alias that
+   * the binding is associated with.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the binding.
@@ -950,7 +949,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Delete a resource binding.
    *
-   * Delete a resource binding by ID.
+   * Deleting a resource binding does not affect the resource alias that the binding is associated with.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the binding.
@@ -990,7 +989,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource binding.
    *
-   * Update a resource binding by ID.
+   * Use the resource binding ID to update the name of the resource binding.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the binding.
@@ -1043,7 +1042,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource aliases.
    *
-   * Get a list of all resource aliases.
+   * View all of the resource aliases that exist for every resource instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - Short ID of the alias.
@@ -1148,7 +1147,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a resource alias.
    *
-   * Retrieve a resource alias by ID.
+   * View a resource alias and all of its details, like who created it and the resource instance that it's associated
+   * with.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
@@ -1189,7 +1189,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Delete a resource alias.
    *
-   * Delete a resource alias by ID.
+   * If the resource alias has any resource keys or bindings associated with it, you must delete those child resources
+   * before deleting the resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
@@ -1229,7 +1230,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource alias.
    *
-   * Update a resource alias by ID.
+   * Use the resource alias ID to update the name of the resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
@@ -1278,7 +1279,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource bindings for the alias.
    *
-   * Get a list of all resource bindings for the alias.
+   * View all of the resource bindings associated with a specific resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
@@ -1333,7 +1334,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all reclamations.
    *
-   * Get a list of all reclamations.
+   * View all of the resource reclamations that exist for every resource instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - An alpha-numeric value identifying the account ID.
@@ -1370,8 +1371,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Perform a reclamation action.
    *
-   * Reclaim (provisionally delete) a resource so that it can no longer be used, or restore a resource so that it's
-   * usable again.
+   * Reclaim a resource instance so that it can no longer be used, or restore the resource instance so that it's usable
+   * again.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The ID associated with the reclamation.
@@ -1482,8 +1483,6 @@ namespace ResourceControllerV2 {
     start?: string;
     /** The state of the instance. If not specified, instances in state `active` and `provisioning` are returned. */
     state?: ListResourceInstancesConstants.State | string;
-    /** Order of results. */
-    orderDirection?: ListResourceInstancesConstants.OrderDirection | string;
     /** Start date inclusive filter. */
     updatedFrom?: string;
     /** End date inclusive filter. */
@@ -1498,11 +1497,6 @@ namespace ResourceControllerV2 {
       ACTIVE = 'active',
       PROVISIONING = 'provisioning',
       REMOVED = 'removed',
-    }
-    /** Order of results. */
-    export enum OrderDirection {
-      ASC = 'asc',
-      DESC = 'desc',
     }
   }
 
