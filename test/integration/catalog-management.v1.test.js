@@ -1445,7 +1445,7 @@ describe('CatalogManagementV1_integration', () => {
     }
   });
 
-  test('ibmPublishVersion() returns 404 when no such version', async () => {
+  test('ibmPublishVersion() returns 400 when no such version', async () => {
     try {
       const params = {
         versionLocId: `${versionLocatorId}ac`,
@@ -3352,7 +3352,7 @@ describe('CatalogManagementV1_integration', () => {
   test.skip('deleteCatalog() returns 400 when no such catalog', async () => {
     try {
       const params = {
-        catalogIdentifier: bogusCatalogId,
+        catalogIdentifier: `${catalogId}cc`,
       };
 
       await catalogManagementService.deleteCatalog(params);
