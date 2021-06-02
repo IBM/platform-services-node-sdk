@@ -18,10 +18,15 @@
  * IBM OpenAPI SDK Code Generator Version: 3.32.0-4c6a3129-20210514-210323
  */
 
-
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -30,8 +35,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class CatalogManagementV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://cm.globalcatalog.cloud.ibm.com/api/v1-beta';
+
   static DEFAULT_SERVICE_NAME: string = 'catalog_management';
 
   /*************************
@@ -64,7 +69,6 @@ class CatalogManagementV1 extends BaseService {
     }
     return service;
   }
-
 
   /**
    * Construct a CatalogManagementV1 object.
@@ -100,10 +104,16 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>>}
    */
-  public getCatalogAccount(params?: CatalogManagementV1.GetCatalogAccountParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>> {
-    const _params = Object.assign({}, params);
+  public getCatalogAccount(
+    params?: CatalogManagementV1.GetCatalogAccountParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>> {
+    const _params = { ...params };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAccount');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAccount'
+    );
 
     const parameters = {
       options: {
@@ -111,14 +121,19 @@ class CatalogManagementV1 extends BaseService {
         method: 'GET',
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update account settings.
@@ -132,16 +147,22 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public updateCatalogAccount(params?: CatalogManagementV1.UpdateCatalogAccountParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public updateCatalogAccount(
+    params?: CatalogManagementV1.UpdateCatalogAccountParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
 
     const body = {
       'id': _params.id,
       'hide_IBM_cloud_catalog': _params.hideIbmCloudCatalog,
-      'account_filters': _params.accountFilters
+      'account_filters': _params.accountFilters,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateCatalogAccount');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateCatalogAccount'
+    );
 
     const parameters = {
       options: {
@@ -150,14 +171,19 @@ class CatalogManagementV1 extends BaseService {
         body,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get catalog account audit log.
@@ -168,10 +194,16 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>>}
    */
-  public getCatalogAccountAudit(params?: CatalogManagementV1.GetCatalogAccountAuditParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
-    const _params = Object.assign({}, params);
+  public getCatalogAccountAudit(
+    params?: CatalogManagementV1.GetCatalogAccountAuditParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
+    const _params = { ...params };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAccountAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAccountAudit'
+    );
 
     const parameters = {
       options: {
@@ -179,14 +211,19 @@ class CatalogManagementV1 extends BaseService {
         method: 'GET',
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get catalog account filters.
@@ -198,14 +235,20 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AccumulatedFilters>>}
    */
-  public getCatalogAccountFilters(params?: CatalogManagementV1.GetCatalogAccountFiltersParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccumulatedFilters>> {
-    const _params = Object.assign({}, params);
+  public getCatalogAccountFilters(
+    params?: CatalogManagementV1.GetCatalogAccountFiltersParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccumulatedFilters>> {
+    const _params = { ...params };
 
     const query = {
-      'catalog': _params.catalog
+      'catalog': _params.catalog,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAccountFilters');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAccountFilters'
+    );
 
     const parameters = {
       options: {
@@ -214,14 +257,19 @@ class CatalogManagementV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /*************************
    * catalogs
@@ -237,10 +285,16 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogSearchResult>>}
    */
-  public listCatalogs(params?: CatalogManagementV1.ListCatalogsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogSearchResult>> {
-    const _params = Object.assign({}, params);
+  public listCatalogs(
+    params?: CatalogManagementV1.ListCatalogsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogSearchResult>> {
+    const _params = { ...params };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalogs');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listCatalogs'
+    );
 
     const parameters = {
       options: {
@@ -248,14 +302,19 @@ class CatalogManagementV1 extends BaseService {
         method: 'GET',
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a catalog.
@@ -279,8 +338,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>>}
    */
-  public createCatalog(params?: CatalogManagementV1.CreateCatalogParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
-    const _params = Object.assign({}, params);
+  public createCatalog(
+    params?: CatalogManagementV1.CreateCatalogParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
+    const _params = { ...params };
 
     const body = {
       'id': _params.id,
@@ -295,10 +356,14 @@ class CatalogManagementV1 extends BaseService {
       'owning_account': _params.owningAccount,
       'catalog_filters': _params.catalogFilters,
       'syndication_settings': _params.syndicationSettings,
-      'kind': _params.kind
+      'kind': _params.kind,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createCatalog');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createCatalog'
+    );
 
     const parameters = {
       options: {
@@ -307,15 +372,20 @@ class CatalogManagementV1 extends BaseService {
         body,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get catalog.
@@ -327,8 +397,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>>}
    */
-  public getCatalog(params: CatalogManagementV1.GetCatalogParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
-    const _params = Object.assign({}, params);
+  public getCatalog(
+    params: CatalogManagementV1.GetCatalogParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -337,7 +409,7 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalog');
@@ -349,14 +421,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update catalog.
@@ -381,8 +458,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>>}
    */
-  public replaceCatalog(params: CatalogManagementV1.ReplaceCatalogParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
-    const _params = Object.assign({}, params);
+  public replaceCatalog(
+    params: CatalogManagementV1.ReplaceCatalogParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -403,14 +482,18 @@ class CatalogManagementV1 extends BaseService {
       'owning_account': _params.owningAccount,
       'catalog_filters': _params.catalogFilters,
       'syndication_settings': _params.syndicationSettings,
-      'kind': _params.kind
+      'kind': _params.kind,
     };
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceCatalog');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceCatalog'
+    );
 
     const parameters = {
       options: {
@@ -420,15 +503,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete catalog.
@@ -440,8 +528,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteCatalog(params: CatalogManagementV1.DeleteCatalogParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteCatalog(
+    params: CatalogManagementV1.DeleteCatalogParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -450,10 +540,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteCatalog');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteCatalog'
+    );
 
     const parameters = {
       options: {
@@ -462,13 +556,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get catalog audit log.
@@ -480,8 +573,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>>}
    */
-  public getCatalogAudit(params: CatalogManagementV1.GetCatalogAuditParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
-    const _params = Object.assign({}, params);
+  public getCatalogAudit(
+    params: CatalogManagementV1.GetCatalogAuditParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -490,10 +585,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAudit'
+    );
 
     const parameters = {
       options: {
@@ -502,14 +601,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /*************************
    * offerings
@@ -536,8 +640,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>>}
    */
-  public getConsumptionOfferings(params?: CatalogManagementV1.GetConsumptionOfferingsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>> {
-    const _params = Object.assign({}, params);
+  public getConsumptionOfferings(
+    params?: CatalogManagementV1.GetConsumptionOfferingsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>> {
+    const _params = { ...params };
 
     const query = {
       'digest': _params.digest,
@@ -545,10 +651,14 @@ class CatalogManagementV1 extends BaseService {
       'select': _params.select,
       'includeHidden': _params.includeHidden,
       'limit': _params.limit,
-      'offset': _params.offset
+      'offset': _params.offset,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getConsumptionOfferings');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getConsumptionOfferings'
+    );
 
     const parameters = {
       options: {
@@ -557,14 +667,19 @@ class CatalogManagementV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get list of offerings.
@@ -585,8 +700,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>>}
    */
-  public listOfferings(params: CatalogManagementV1.ListOfferingsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>> {
-    const _params = Object.assign({}, params);
+  public listOfferings(
+    params: CatalogManagementV1.ListOfferingsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -599,14 +716,18 @@ class CatalogManagementV1 extends BaseService {
       'limit': _params.limit,
       'offset': _params.offset,
       'name': _params.name,
-      'sort': _params.sort
+      'sort': _params.sort,
     };
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listOfferings');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOfferings'
+    );
 
     const parameters = {
       options: {
@@ -616,14 +737,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create offering.
@@ -669,8 +795,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public createOffering(params: CatalogManagementV1.CreateOfferingParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public createOffering(
+    params: CatalogManagementV1.CreateOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -710,14 +838,18 @@ class CatalogManagementV1 extends BaseService {
       'disclaimer': _params.disclaimer,
       'hidden': _params.hidden,
       'provider': _params.provider,
-      'repo_info': _params.repoInfo
+      'repo_info': _params.repoInfo,
     };
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createOffering'
+    );
 
     const parameters = {
       options: {
@@ -727,15 +859,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Import offering version.
@@ -761,8 +898,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public importOfferingVersion(params: CatalogManagementV1.ImportOfferingVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public importOfferingVersion(
+    params: CatalogManagementV1.ImportOfferingVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -773,7 +912,7 @@ class CatalogManagementV1 extends BaseService {
     const body = {
       'tags': _params.tags,
       'target_kinds': _params.targetKinds,
-      'content': _params.content
+      'content': _params.content,
     };
 
     const query = {
@@ -781,15 +920,19 @@ class CatalogManagementV1 extends BaseService {
       'targetVersion': _params.targetVersion,
       'includeConfig': _params.includeConfig,
       'isVSI': _params.isVsi,
-      'repoType': _params.repoType
+      'repoType': _params.repoType,
     };
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'importOfferingVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'importOfferingVersion'
+    );
 
     const parameters = {
       options: {
@@ -800,15 +943,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Import offering.
@@ -834,8 +982,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public importOffering(params: CatalogManagementV1.ImportOfferingParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public importOffering(
+    params: CatalogManagementV1.ImportOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -846,7 +996,7 @@ class CatalogManagementV1 extends BaseService {
     const body = {
       'tags': _params.tags,
       'target_kinds': _params.targetKinds,
-      'content': _params.content
+      'content': _params.content,
     };
 
     const query = {
@@ -855,14 +1005,18 @@ class CatalogManagementV1 extends BaseService {
       'targetVersion': _params.targetVersion,
       'includeConfig': _params.includeConfig,
       'isVSI': _params.isVsi,
-      'repoType': _params.repoType
+      'repoType': _params.repoType,
     };
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'importOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'importOffering'
+    );
 
     const parameters = {
       options: {
@@ -873,16 +1027,21 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Auth-Token': _params.xAuthToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Auth-Token': _params.xAuthToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Reload offering.
@@ -905,8 +1064,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public reloadOffering(params: CatalogManagementV1.ReloadOfferingParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public reloadOffering(
+    params: CatalogManagementV1.ReloadOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId', 'targetVersion'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -917,21 +1078,25 @@ class CatalogManagementV1 extends BaseService {
     const body = {
       'tags': _params.tags,
       'target_kinds': _params.targetKinds,
-      'content': _params.content
+      'content': _params.content,
     };
 
     const query = {
       'targetVersion': _params.targetVersion,
       'zipurl': _params.zipurl,
-      'repoType': _params.repoType
+      'repoType': _params.repoType,
     };
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'reloadOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'reloadOffering'
+    );
 
     const parameters = {
       options: {
@@ -942,15 +1107,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get offering.
@@ -963,8 +1133,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public getOffering(params: CatalogManagementV1.GetOfferingParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public getOffering(
+    params: CatalogManagementV1.GetOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -974,7 +1146,7 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOffering');
@@ -986,14 +1158,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update offering.
@@ -1040,8 +1217,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public replaceOffering(params: CatalogManagementV1.ReplaceOfferingParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public replaceOffering(
+    params: CatalogManagementV1.ReplaceOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1081,15 +1260,19 @@ class CatalogManagementV1 extends BaseService {
       'disclaimer': _params.disclaimer,
       'hidden': _params.hidden,
       'provider': _params.provider,
-      'repo_info': _params.repoInfo
+      'repo_info': _params.repoInfo,
     };
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceOffering'
+    );
 
     const parameters = {
       options: {
@@ -1099,15 +1282,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete offering.
@@ -1120,8 +1308,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteOffering(params: CatalogManagementV1.DeleteOfferingParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteOffering(
+    params: CatalogManagementV1.DeleteOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1131,10 +1321,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOffering'
+    );
 
     const parameters = {
       options: {
@@ -1143,13 +1337,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get offering audit log.
@@ -1162,8 +1355,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>>}
    */
-  public getOfferingAudit(params: CatalogManagementV1.GetOfferingAuditParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
-    const _params = Object.assign({}, params);
+  public getOfferingAudit(
+    params: CatalogManagementV1.GetOfferingAuditParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1173,10 +1368,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingAudit'
+    );
 
     const parameters = {
       options: {
@@ -1185,14 +1384,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Upload icon for offering.
@@ -1206,8 +1410,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public replaceOfferingIcon(params: CatalogManagementV1.ReplaceOfferingIconParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public replaceOfferingIcon(
+    params: CatalogManagementV1.ReplaceOfferingIconParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId', 'fileName'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1218,10 +1424,14 @@ class CatalogManagementV1 extends BaseService {
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
       'offering_id': _params.offeringId,
-      'file_name': _params.fileName
+      'file_name': _params.fileName,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceOfferingIcon');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceOfferingIcon'
+    );
 
     const parameters = {
       options: {
@@ -1230,14 +1440,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Allow offering to be published.
@@ -1261,8 +1476,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ApprovalResult>>}
    */
-  public updateOfferingIbm(params: CatalogManagementV1.UpdateOfferingIbmParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ApprovalResult>> {
-    const _params = Object.assign({}, params);
+  public updateOfferingIbm(
+    params: CatalogManagementV1.UpdateOfferingIbmParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ApprovalResult>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId', 'approvalType', 'approved'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1274,10 +1491,14 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
       'offering_id': _params.offeringId,
       'approval_type': _params.approvalType,
-      'approved': _params.approved
+      'approved': _params.approved,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateOfferingIbm');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateOfferingIbm'
+    );
 
     const parameters = {
       options: {
@@ -1286,14 +1507,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get version updates.
@@ -1313,8 +1539,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionUpdateDescriptor[]>>}
    */
-  public getOfferingUpdates(params: CatalogManagementV1.GetOfferingUpdatesParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionUpdateDescriptor[]>> {
-    const _params = Object.assign({}, params);
+  public getOfferingUpdates(
+    params: CatalogManagementV1.GetOfferingUpdatesParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionUpdateDescriptor[]>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'offeringId', 'kind'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1328,15 +1556,19 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
       'region': _params.region,
       'resource_group_id': _params.resourceGroupId,
-      'namespace': _params.namespace
+      'namespace': _params.namespace,
     };
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'offering_id': _params.offeringId
+      'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingUpdates');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingUpdates'
+    );
 
     const parameters = {
       options: {
@@ -1346,14 +1578,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /*************************
    * versions
@@ -1369,8 +1606,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<string>>}
    */
-  public getOfferingAbout(params: CatalogManagementV1.GetOfferingAboutParams): Promise<CatalogManagementV1.Response<string>> {
-    const _params = Object.assign({}, params);
+  public getOfferingAbout(
+    params: CatalogManagementV1.GetOfferingAboutParams
+  ): Promise<CatalogManagementV1.Response<string>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1379,10 +1618,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingAbout');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingAbout'
+    );
 
     const parameters = {
       options: {
@@ -1391,14 +1634,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'text/markdown',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'text/markdown',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get version license content.
@@ -1412,8 +1660,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<string>>}
    */
-  public getOfferingLicense(params: CatalogManagementV1.GetOfferingLicenseParams): Promise<CatalogManagementV1.Response<string>> {
-    const _params = Object.assign({}, params);
+  public getOfferingLicense(
+    params: CatalogManagementV1.GetOfferingLicenseParams
+  ): Promise<CatalogManagementV1.Response<string>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId', 'licenseId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1423,10 +1673,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'version_loc_id': _params.versionLocId,
-      'license_id': _params.licenseId
+      'license_id': _params.licenseId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingLicense');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingLicense'
+    );
 
     const parameters = {
       options: {
@@ -1435,14 +1689,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'text/plain',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'text/plain',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get version's container images.
@@ -1455,8 +1714,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ImageManifest>>}
    */
-  public getOfferingContainerImages(params: CatalogManagementV1.GetOfferingContainerImagesParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ImageManifest>> {
-    const _params = Object.assign({}, params);
+  public getOfferingContainerImages(
+    params: CatalogManagementV1.GetOfferingContainerImagesParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ImageManifest>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1465,10 +1726,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingContainerImages');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingContainerImages'
+    );
 
     const parameters = {
       options: {
@@ -1477,14 +1742,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Deprecate version.
@@ -1496,8 +1766,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deprecateVersion(params: CatalogManagementV1.DeprecateVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deprecateVersion(
+    params: CatalogManagementV1.DeprecateVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1506,10 +1778,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deprecateVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deprecateVersion'
+    );
 
     const parameters = {
       options: {
@@ -1518,13 +1794,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish version to account members.
@@ -1536,8 +1811,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public accountPublishVersion(params: CatalogManagementV1.AccountPublishVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public accountPublishVersion(
+    params: CatalogManagementV1.AccountPublishVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1546,10 +1823,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'accountPublishVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'accountPublishVersion'
+    );
 
     const parameters = {
       options: {
@@ -1558,13 +1839,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish version to IBMers in public catalog.
@@ -1576,8 +1856,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public ibmPublishVersion(params: CatalogManagementV1.IbmPublishVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public ibmPublishVersion(
+    params: CatalogManagementV1.IbmPublishVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1586,10 +1868,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'ibmPublishVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'ibmPublishVersion'
+    );
 
     const parameters = {
       options: {
@@ -1598,13 +1884,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish version to all users in public catalog.
@@ -1616,8 +1901,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public publicPublishVersion(params: CatalogManagementV1.PublicPublishVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public publicPublishVersion(
+    params: CatalogManagementV1.PublicPublishVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1626,10 +1913,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'publicPublishVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'publicPublishVersion'
+    );
 
     const parameters = {
       options: {
@@ -1638,13 +1929,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Commit version.
@@ -1656,8 +1946,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public commitVersion(params: CatalogManagementV1.CommitVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public commitVersion(
+    params: CatalogManagementV1.CommitVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1666,10 +1958,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'commitVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitVersion'
+    );
 
     const parameters = {
       options: {
@@ -1678,13 +1974,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Copy version to new target kind.
@@ -1701,8 +1996,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public copyVersion(params: CatalogManagementV1.CopyVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public copyVersion(
+    params: CatalogManagementV1.CopyVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1713,11 +2010,11 @@ class CatalogManagementV1 extends BaseService {
     const body = {
       'tags': _params.tags,
       'target_kinds': _params.targetKinds,
-      'content': _params.content
+      'content': _params.content,
     };
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'copyVersion');
@@ -1730,14 +2027,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create working copy of version.
@@ -1749,8 +2051,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Version>>}
    */
-  public getOfferingWorkingCopy(params: CatalogManagementV1.GetOfferingWorkingCopyParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Version>> {
-    const _params = Object.assign({}, params);
+  public getOfferingWorkingCopy(
+    params: CatalogManagementV1.GetOfferingWorkingCopyParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Version>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1759,10 +2063,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingWorkingCopy');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingWorkingCopy'
+    );
 
     const parameters = {
       options: {
@@ -1771,14 +2079,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get offering/kind/version 'branch'.
@@ -1790,8 +2103,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
-  public getVersion(params: CatalogManagementV1.GetVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
-    const _params = Object.assign({}, params);
+  public getVersion(
+    params: CatalogManagementV1.GetVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1800,7 +2115,7 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getVersion');
@@ -1812,14 +2127,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete version.
@@ -1832,8 +2152,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteVersion(params: CatalogManagementV1.DeleteVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVersion(
+    params: CatalogManagementV1.DeleteVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1842,10 +2164,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVersion'
+    );
 
     const parameters = {
       options: {
@@ -1854,13 +2180,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /*************************
    * deploy
@@ -1878,8 +2203,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ClusterInfo>>}
    */
-  public getCluster(params: CatalogManagementV1.GetClusterParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ClusterInfo>> {
-    const _params = Object.assign({}, params);
+  public getCluster(
+    params: CatalogManagementV1.GetClusterParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ClusterInfo>> {
+    const _params = { ...params };
     const requiredParams = ['clusterId', 'region', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1888,11 +2215,11 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const query = {
-      'region': _params.region
+      'region': _params.region,
     };
 
     const path = {
-      'cluster_id': _params.clusterId
+      'cluster_id': _params.clusterId,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCluster');
@@ -1905,15 +2232,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get cluster namespaces.
@@ -1929,8 +2261,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.NamespaceSearchResult>>}
    */
-  public getNamespaces(params: CatalogManagementV1.GetNamespacesParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.NamespaceSearchResult>> {
-    const _params = Object.assign({}, params);
+  public getNamespaces(
+    params: CatalogManagementV1.GetNamespacesParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.NamespaceSearchResult>> {
+    const _params = { ...params };
     const requiredParams = ['clusterId', 'region', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1941,14 +2275,18 @@ class CatalogManagementV1 extends BaseService {
     const query = {
       'region': _params.region,
       'limit': _params.limit,
-      'offset': _params.offset
+      'offset': _params.offset,
     };
 
     const path = {
-      'cluster_id': _params.clusterId
+      'cluster_id': _params.clusterId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getNamespaces');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getNamespaces'
+    );
 
     const parameters = {
       options: {
@@ -1958,15 +2296,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Deploy operators.
@@ -1983,8 +2326,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>>}
    */
-  public deployOperators(params: CatalogManagementV1.DeployOperatorsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
-    const _params = Object.assign({}, params);
+  public deployOperators(
+    params: CatalogManagementV1.DeployOperatorsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
+    const _params = { ...params };
     const requiredParams = ['xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1997,10 +2342,14 @@ class CatalogManagementV1 extends BaseService {
       'region': _params.region,
       'namespaces': _params.namespaces,
       'all_namespaces': _params.allNamespaces,
-      'version_locator_id': _params.versionLocatorId
+      'version_locator_id': _params.versionLocatorId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deployOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deployOperators'
+    );
 
     const parameters = {
       options: {
@@ -2009,16 +2358,21 @@ class CatalogManagementV1 extends BaseService {
         body,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List operators.
@@ -2033,8 +2387,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>>}
    */
-  public listOperators(params: CatalogManagementV1.ListOperatorsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
-    const _params = Object.assign({}, params);
+  public listOperators(
+    params: CatalogManagementV1.ListOperatorsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
+    const _params = { ...params };
     const requiredParams = ['xAuthRefreshToken', 'clusterId', 'region', 'versionLocatorId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2045,10 +2401,14 @@ class CatalogManagementV1 extends BaseService {
     const query = {
       'cluster_id': _params.clusterId,
       'region': _params.region,
-      'version_locator_id': _params.versionLocatorId
+      'version_locator_id': _params.versionLocatorId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOperators'
+    );
 
     const parameters = {
       options: {
@@ -2057,15 +2417,20 @@ class CatalogManagementV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update operators.
@@ -2082,8 +2447,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>>}
    */
-  public replaceOperators(params: CatalogManagementV1.ReplaceOperatorsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
-    const _params = Object.assign({}, params);
+  public replaceOperators(
+    params: CatalogManagementV1.ReplaceOperatorsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
+    const _params = { ...params };
     const requiredParams = ['xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2096,10 +2463,14 @@ class CatalogManagementV1 extends BaseService {
       'region': _params.region,
       'namespaces': _params.namespaces,
       'all_namespaces': _params.allNamespaces,
-      'version_locator_id': _params.versionLocatorId
+      'version_locator_id': _params.versionLocatorId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceOperators'
+    );
 
     const parameters = {
       options: {
@@ -2108,16 +2479,21 @@ class CatalogManagementV1 extends BaseService {
         body,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete operators.
@@ -2132,8 +2508,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteOperators(params: CatalogManagementV1.DeleteOperatorsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteOperators(
+    params: CatalogManagementV1.DeleteOperatorsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['xAuthRefreshToken', 'clusterId', 'region', 'versionLocatorId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2144,10 +2522,14 @@ class CatalogManagementV1 extends BaseService {
     const query = {
       'cluster_id': _params.clusterId,
       'region': _params.region,
-      'version_locator_id': _params.versionLocatorId
+      'version_locator_id': _params.versionLocatorId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOperators'
+    );
 
     const parameters = {
       options: {
@@ -2156,14 +2538,19 @@ class CatalogManagementV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Install version.
@@ -2192,8 +2579,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public installVersion(params: CatalogManagementV1.InstallVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public installVersion(
+    params: CatalogManagementV1.InstallVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2215,14 +2604,18 @@ class CatalogManagementV1 extends BaseService {
       'vcenter_user': _params.vcenterUser,
       'vcenter_password': _params.vcenterPassword,
       'vcenter_location': _params.vcenterLocation,
-      'vcenter_datastore': _params.vcenterDatastore
+      'vcenter_datastore': _params.vcenterDatastore,
     };
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'installVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'installVersion'
+    );
 
     const parameters = {
       options: {
@@ -2232,15 +2625,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Pre-install version.
@@ -2269,8 +2667,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public preinstallVersion(params: CatalogManagementV1.PreinstallVersionParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public preinstallVersion(
+    params: CatalogManagementV1.PreinstallVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2292,14 +2692,18 @@ class CatalogManagementV1 extends BaseService {
       'vcenter_user': _params.vcenterUser,
       'vcenter_password': _params.vcenterPassword,
       'vcenter_location': _params.vcenterLocation,
-      'vcenter_datastore': _params.vcenterDatastore
+      'vcenter_datastore': _params.vcenterDatastore,
     };
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'preinstallVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'preinstallVersion'
+    );
 
     const parameters = {
       options: {
@@ -2309,15 +2713,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get version pre-install status.
@@ -2333,8 +2742,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.InstallStatus>>}
    */
-  public getPreinstall(params: CatalogManagementV1.GetPreinstallParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.InstallStatus>> {
-    const _params = Object.assign({}, params);
+  public getPreinstall(
+    params: CatalogManagementV1.GetPreinstallParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.InstallStatus>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2345,14 +2756,18 @@ class CatalogManagementV1 extends BaseService {
     const query = {
       'cluster_id': _params.clusterId,
       'region': _params.region,
-      'namespace': _params.namespace
+      'namespace': _params.namespace,
     };
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPreinstall');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPreinstall'
+    );
 
     const parameters = {
       options: {
@@ -2362,15 +2777,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Validate offering.
@@ -2399,8 +2819,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public validateInstall(params: CatalogManagementV1.ValidateInstallParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public validateInstall(
+    params: CatalogManagementV1.ValidateInstallParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2422,14 +2844,18 @@ class CatalogManagementV1 extends BaseService {
       'vcenter_user': _params.vcenterUser,
       'vcenter_password': _params.vcenterPassword,
       'vcenter_location': _params.vcenterLocation,
-      'vcenter_datastore': _params.vcenterDatastore
+      'vcenter_datastore': _params.vcenterDatastore,
     };
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'validateInstall');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'validateInstall'
+    );
 
     const parameters = {
       options: {
@@ -2439,15 +2865,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get offering install status.
@@ -2460,8 +2891,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Validation>>}
    */
-  public getValidationStatus(params: CatalogManagementV1.GetValidationStatusParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Validation>> {
-    const _params = Object.assign({}, params);
+  public getValidationStatus(
+    params: CatalogManagementV1.GetValidationStatusParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Validation>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2470,10 +2903,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getValidationStatus');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getValidationStatus'
+    );
 
     const parameters = {
       options: {
@@ -2482,15 +2919,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get override values.
@@ -2502,8 +2944,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.JsonObject>>}
    */
-  public getOverrideValues(params: CatalogManagementV1.GetOverrideValuesParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.JsonObject>> {
-    const _params = Object.assign({}, params);
+  public getOverrideValues(
+    params: CatalogManagementV1.GetOverrideValuesParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.JsonObject>> {
+    const _params = { ...params };
     const requiredParams = ['versionLocId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2512,10 +2956,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'version_loc_id': _params.versionLocId
+      'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOverrideValues');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOverrideValues'
+    );
 
     const parameters = {
       options: {
@@ -2524,14 +2972,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /*************************
    * objects
@@ -2553,8 +3006,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectSearchResult>>}
    */
-  public searchObjects(params: CatalogManagementV1.SearchObjectsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectSearchResult>> {
-    const _params = Object.assign({}, params);
+  public searchObjects(
+    params: CatalogManagementV1.SearchObjectsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectSearchResult>> {
+    const _params = { ...params };
     const requiredParams = ['query'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2567,10 +3022,14 @@ class CatalogManagementV1 extends BaseService {
       'limit': _params.limit,
       'offset': _params.offset,
       'collapse': _params.collapse,
-      'digest': _params.digest
+      'digest': _params.digest,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'searchObjects');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'searchObjects'
+    );
 
     const parameters = {
       options: {
@@ -2579,14 +3038,19 @@ class CatalogManagementV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List objects within a catalog.
@@ -2604,8 +3068,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectListResult>>}
    */
-  public listObjects(params: CatalogManagementV1.ListObjectsParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectListResult>> {
-    const _params = Object.assign({}, params);
+  public listObjects(
+    params: CatalogManagementV1.ListObjectsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectListResult>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2617,11 +3083,11 @@ class CatalogManagementV1 extends BaseService {
       'limit': _params.limit,
       'offset': _params.offset,
       'name': _params.name,
-      'sort': _params.sort
+      'sort': _params.sort,
     };
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listObjects');
@@ -2634,14 +3100,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create catalog object.
@@ -2672,8 +3143,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>>}
    */
-  public createObject(params: CatalogManagementV1.CreateObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
-    const _params = Object.assign({}, params);
+  public createObject(
+    params: CatalogManagementV1.CreateObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2700,14 +3173,18 @@ class CatalogManagementV1 extends BaseService {
       'state': _params.state,
       'catalog_id': _params.catalogId,
       'catalog_name': _params.catalogName,
-      'data': _params.data
+      'data': _params.data,
     };
 
     const path = {
-      'catalog_identifier': _params.catalogIdentifier
+      'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createObject'
+    );
 
     const parameters = {
       options: {
@@ -2717,15 +3194,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get catalog object.
@@ -2738,8 +3220,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>>}
    */
-  public getObject(params: CatalogManagementV1.GetObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
-    const _params = Object.assign({}, params);
+  public getObject(
+    params: CatalogManagementV1.GetObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2749,7 +3233,7 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
     const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObject');
@@ -2761,14 +3245,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update catalog object.
@@ -2800,8 +3289,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>>}
    */
-  public replaceObject(params: CatalogManagementV1.ReplaceObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
-    const _params = Object.assign({}, params);
+  public replaceObject(
+    params: CatalogManagementV1.ReplaceObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2828,15 +3319,19 @@ class CatalogManagementV1 extends BaseService {
       'state': _params.state,
       'catalog_id': _params.catalogId,
       'catalog_name': _params.catalogName,
-      'data': _params.data
+      'data': _params.data,
     };
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceObject'
+    );
 
     const parameters = {
       options: {
@@ -2846,15 +3341,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete catalog object.
@@ -2867,8 +3367,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteObject(params: CatalogManagementV1.DeleteObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteObject(
+    params: CatalogManagementV1.DeleteObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2878,10 +3380,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteObject'
+    );
 
     const parameters = {
       options: {
@@ -2890,13 +3396,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get catalog object audit log.
@@ -2909,8 +3414,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>>}
    */
-  public getObjectAudit(params: CatalogManagementV1.GetObjectAuditParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
-    const _params = Object.assign({}, params);
+  public getObjectAudit(
+    params: CatalogManagementV1.GetObjectAuditParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2920,10 +3427,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAudit'
+    );
 
     const parameters = {
       options: {
@@ -2932,14 +3443,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish object to account.
@@ -2952,8 +3468,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public accountPublishObject(params: CatalogManagementV1.AccountPublishObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public accountPublishObject(
+    params: CatalogManagementV1.AccountPublishObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2963,10 +3481,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'accountPublishObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'accountPublishObject'
+    );
 
     const parameters = {
       options: {
@@ -2975,13 +3497,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish object to share with allow list.
@@ -2994,8 +3515,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public sharedPublishObject(params: CatalogManagementV1.SharedPublishObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public sharedPublishObject(
+    params: CatalogManagementV1.SharedPublishObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3005,10 +3528,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'sharedPublishObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'sharedPublishObject'
+    );
 
     const parameters = {
       options: {
@@ -3017,13 +3544,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish object to share with IBMers.
@@ -3036,8 +3562,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public ibmPublishObject(params: CatalogManagementV1.IbmPublishObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public ibmPublishObject(
+    params: CatalogManagementV1.IbmPublishObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3047,10 +3575,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'ibmPublishObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'ibmPublishObject'
+    );
 
     const parameters = {
       options: {
@@ -3059,13 +3591,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Publish object to share with all users.
@@ -3078,8 +3609,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public publicPublishObject(params: CatalogManagementV1.PublicPublishObjectParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public publicPublishObject(
+    params: CatalogManagementV1.PublicPublishObjectParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3089,10 +3622,14 @@ class CatalogManagementV1 extends BaseService {
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'publicPublishObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'publicPublishObject'
+    );
 
     const parameters = {
       options: {
@@ -3101,13 +3638,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Add account ID to object access list.
@@ -3121,8 +3657,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public createObjectAccess(params: CatalogManagementV1.CreateObjectAccessParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public createObjectAccess(
+    params: CatalogManagementV1.CreateObjectAccessParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accountIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3133,10 +3671,14 @@ class CatalogManagementV1 extends BaseService {
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
       'object_identifier': _params.objectIdentifier,
-      'account_identifier': _params.accountIdentifier
+      'account_identifier': _params.accountIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createObjectAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createObjectAccess'
+    );
 
     const parameters = {
       options: {
@@ -3145,13 +3687,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Check for account ID in object access list.
@@ -3165,8 +3706,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccess>>}
    */
-  public getObjectAccess(params: CatalogManagementV1.GetObjectAccessParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccess>> {
-    const _params = Object.assign({}, params);
+  public getObjectAccess(
+    params: CatalogManagementV1.GetObjectAccessParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccess>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accountIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3177,10 +3720,14 @@ class CatalogManagementV1 extends BaseService {
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
       'object_identifier': _params.objectIdentifier,
-      'account_identifier': _params.accountIdentifier
+      'account_identifier': _params.accountIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAccess'
+    );
 
     const parameters = {
       options: {
@@ -3189,14 +3736,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Remove account ID from object access list.
@@ -3210,8 +3762,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteObjectAccess(params: CatalogManagementV1.DeleteObjectAccessParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteObjectAccess(
+    params: CatalogManagementV1.DeleteObjectAccessParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accountIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3222,10 +3776,14 @@ class CatalogManagementV1 extends BaseService {
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
       'object_identifier': _params.objectIdentifier,
-      'account_identifier': _params.accountIdentifier
+      'account_identifier': _params.accountIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteObjectAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteObjectAccess'
+    );
 
     const parameters = {
       options: {
@@ -3234,13 +3792,12 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get object access list.
@@ -3255,8 +3812,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccessListResult>>}
    */
-  public getObjectAccessList(params: CatalogManagementV1.GetObjectAccessListParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccessListResult>> {
-    const _params = Object.assign({}, params);
+  public getObjectAccessList(
+    params: CatalogManagementV1.GetObjectAccessListParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccessListResult>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3266,15 +3825,19 @@ class CatalogManagementV1 extends BaseService {
 
     const query = {
       'limit': _params.limit,
-      'offset': _params.offset
+      'offset': _params.offset,
     };
 
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAccessList'
+    );
 
     const parameters = {
       options: {
@@ -3284,14 +3847,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete accounts from object access list.
@@ -3306,8 +3874,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>>}
    */
-  public deleteObjectAccessList(params: CatalogManagementV1.DeleteObjectAccessListParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
-    const _params = Object.assign({}, params);
+  public deleteObjectAccessList(
+    params: CatalogManagementV1.DeleteObjectAccessListParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accounts'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3318,10 +3888,14 @@ class CatalogManagementV1 extends BaseService {
     const body = _params.accounts;
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteObjectAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteObjectAccessList'
+    );
 
     const parameters = {
       options: {
@@ -3331,15 +3905,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Add accounts to object access list.
@@ -3353,8 +3932,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>>}
    */
-  public addObjectAccessList(params: CatalogManagementV1.AddObjectAccessListParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
-    const _params = Object.assign({}, params);
+  public addObjectAccessList(
+    params: CatalogManagementV1.AddObjectAccessListParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
+    const _params = { ...params };
     const requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accounts'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3365,10 +3946,14 @@ class CatalogManagementV1 extends BaseService {
     const body = _params.accounts;
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
-      'object_identifier': _params.objectIdentifier
+      'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'addObjectAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addObjectAccessList'
+    );
 
     const parameters = {
       options: {
@@ -3378,15 +3963,20 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /*************************
    * instances
@@ -3414,8 +4004,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
-  public createOfferingInstance(params: CatalogManagementV1.CreateOfferingInstanceParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
-    const _params = Object.assign({}, params);
+  public createOfferingInstance(
+    params: CatalogManagementV1.CreateOfferingInstanceParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
+    const _params = { ...params };
     const requiredParams = ['xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3435,10 +4027,14 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
       'cluster_region': _params.clusterRegion,
       'cluster_namespaces': _params.clusterNamespaces,
-      'cluster_all_namespaces': _params.clusterAllNamespaces
+      'cluster_all_namespaces': _params.clusterAllNamespaces,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -3447,16 +4043,21 @@ class CatalogManagementV1 extends BaseService {
         body,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get Offering Instance.
@@ -3468,8 +4069,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
-  public getOfferingInstance(params: CatalogManagementV1.GetOfferingInstanceParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
-    const _params = Object.assign({}, params);
+  public getOfferingInstance(
+    params: CatalogManagementV1.GetOfferingInstanceParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
+    const _params = { ...params };
     const requiredParams = ['instanceIdentifier'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3478,10 +4081,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'instance_identifier': _params.instanceIdentifier
+      'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -3490,14 +4097,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update Offering Instance.
@@ -3522,8 +4134,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
-  public putOfferingInstance(params: CatalogManagementV1.PutOfferingInstanceParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
-    const _params = Object.assign({}, params);
+  public putOfferingInstance(
+    params: CatalogManagementV1.PutOfferingInstanceParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
+    const _params = { ...params };
     const requiredParams = ['instanceIdentifier', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3543,14 +4157,18 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
       'cluster_region': _params.clusterRegion,
       'cluster_namespaces': _params.clusterNamespaces,
-      'cluster_all_namespaces': _params.clusterAllNamespaces
+      'cluster_all_namespaces': _params.clusterAllNamespaces,
     };
 
     const path = {
-      'instance_identifier': _params.instanceIdentifier
+      'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'putOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'putOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -3560,16 +4178,21 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a version instance.
@@ -3582,8 +4205,10 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
    */
-  public deleteOfferingInstance(params: CatalogManagementV1.DeleteOfferingInstanceParams): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteOfferingInstance(
+    params: CatalogManagementV1.DeleteOfferingInstanceParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceIdentifier', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3592,10 +4217,14 @@ class CatalogManagementV1 extends BaseService {
     }
 
     const path = {
-      'instance_identifier': _params.instanceIdentifier
+      'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -3604,15 +4233,19 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'X-Auth-Refresh-Token': _params.xAuthRefreshToken
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
 }
 
 /*************************
@@ -3620,9 +4253,8 @@ class CatalogManagementV1 extends BaseService {
  ************************/
 
 namespace CatalogManagementV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -3633,7 +4265,7 @@ namespace CatalogManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -5672,7 +6304,6 @@ namespace CatalogManagementV1 {
      */
     messages?: JsonObject;
   }
-
 }
 
 export = CatalogManagementV1;
