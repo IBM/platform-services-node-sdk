@@ -214,8 +214,8 @@ describe('CatalogManagementV1_integration', () => {
 
   test('replaceCatalog() returns 404 when no such catalog', async () => {
     const params = {
-      catalogIdentifier: bogusCatalogId,
-      id: bogusCatalogId,
+      catalogIdentifier: `${catalogId}c`,
+      id: `${catalogId}c`,
       tags: ['node', 'sdk', 'catalog'],
       owningAccount: accountId,
       kind: kindVpe,
@@ -910,7 +910,7 @@ describe('CatalogManagementV1_integration', () => {
     });
   });
 
-  test.skip('getConsumptionOfferings()', async () => {
+  test('getConsumptionOfferings()', async () => {
     const params = {
       digest: true,
       catalog: catalogId,
