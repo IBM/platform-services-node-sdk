@@ -3002,7 +3002,9 @@ describe('CatalogManagementV1_integration', () => {
       offeringId: 'bogus-offering-id',
     };
 
-    await catalogManagementService.deleteOffering(params);
+    const res = await catalogManagementService.deleteOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
   });
 
   test('deleteOffering()', async () => {
@@ -3011,7 +3013,9 @@ describe('CatalogManagementV1_integration', () => {
       offeringId,
     };
 
-    await catalogManagementService.deleteOffering(params);
+    const res = await catalogManagementService.deleteOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
   });
 
   test('deleteCatalog() returns 403 when the user is not authorized', async () => {
