@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-/**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
- */
- 
-
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
- * Search for resources with the global and shared resource properties repository integrated in the IBM Cloud Platform.
+ * Search for resources with the global and shared resource properties repository integrated in the IBM Cloud platform.
  * The search repository stores and searches cloud resources attributes, which categorize or classify resources. A
- * resource is a physical or logical component that can be provisioned or reserved for an application or service
- * instance and is owned by resource providers, such as Cloud Foundry, IBM containers, or Resource Controller, in the
- * IBM Cloud platform. Resources are uniquely identified by a CRN (Cloud Resource Naming identifier) or by an IMS ID.
- * The properties of a resource include tags and system properties. Both properties are defined in an IBM Cloud billing
- * account, and span across many regions.
+ * resource is a physical or logical component that can be created or reserved for an application or service instance
+ * and is owned by resource providers, such as Cloud Foundry, IBM Kubernetes Service, or resource controller in IBM
+ * Cloud. Resources are uniquely identified by a Cloud Resource Name (CRN)  or by an IMS ID. The properties of a
+ * resource include tags and system properties. Both properties are defined in an IBM Cloud billing account, and span
+ * across many regions.
  */
 
 class GlobalSearchV2 extends BaseService {
@@ -54,8 +49,6 @@ class GlobalSearchV2 extends BaseService {
    */
 
   public static newInstance(options: UserOptions): GlobalSearchV2 {
-    options = options || {};
-
     if (!options.serviceName) {
       options.serviceName = this.DEFAULT_SERVICE_NAME;
     }
@@ -82,8 +75,6 @@ class GlobalSearchV2 extends BaseService {
    * @returns {GlobalSearchV2}
    */
   constructor(options: UserOptions) {
-    options = options || {};
-
     super(options);
     if (options.serviceUrl) {
       this.setServiceUrl(options.serviceUrl);
@@ -93,23 +84,26 @@ class GlobalSearchV2 extends BaseService {
   }
 
   /*************************
-   * resourceFinder
+   * search
    ************************/
 
   /**
-   * Find instances of resources.
+   * Find instances of resources (v3).
    *
-   * 'Find cloud foundry resources, resource controlled enabled resources, or storage and network resources running on
-   * classic infrastructure in a specific account ID. You can apply query strings if necessary. To filter results, you
-   * can insert a string using the Lucene syntax and the query string is parsed into a series of terms and operators. A
-   * term can be a single word or a phrase, in which case the search is performed for all the words, in the same order.
-   * To filter for a specific value regardless of the property that contains it, use an asterisk as the key name. Only
-   * resources that belong to the account ID and that are accessible by the client are returned. You must use this
-   * operation when you need to fetch more than `10000` resource items. The `/v2/resources/search` prohibits paginating
-   * through such a big number. On the first call, the operation returns a live cursor on the data that you must use on
-   * all the subsequent calls to get the next batch of results until you get the empty result set. By default, the
-   * fields returned for every resources are: "crn", "name", "family", "type", "account_id". You can specify the subset
-   * of the fields you want in your request.''.
+   * Find Cloud Foundry resources, IAM-enabled resources, or  storage and network resources running on classic
+   * infrastructure in a  specific account ID. You can apply query strings if necessary.
+   *
+   * To filter results, you can insert a string using the Lucene syntax and the  query string is parsed into a series of
+   * terms and operators. A term can be  a single word or a phrase, in which case the search is performed for all  the
+   * words, in the same order. To filter for a specific value regardless of  the property that contains it, type the
+   * search term without specifying a  field. Only resources that belong to the account ID and that are accessible  by
+   * the client are returned.
+   *
+   * You must use `/v3/resources/search` when you need to fetch more than `10000`  resource items. The
+   * `/v2/resources/search` prohibits paginating through such  a big number. On the first call, the operation returns a
+   * live cursor on the  data that you must use on all the subsequent calls to get the next batch of  results until you
+   * get the empty result set. By default, the fields returned  for every resource are "crn", "name", "family", "type",
+   * and "account_id". You  can specify the subset of the fields you want in your request.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.query] - The Lucene-formatted query string. Default to '*' if not set.
@@ -129,7 +123,7 @@ class GlobalSearchV2 extends BaseService {
    * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>>}
    */
   public search(params?: GlobalSearchV2.SearchParams): Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
 
     return new Promise((resolve, reject) => {
       const body = {
@@ -172,16 +166,16 @@ class GlobalSearchV2 extends BaseService {
    ************************/
 
   /**
-   * Get all supported resource types.
+   * DEPRECATED. Get all GhoST indices.
    *
-   * Retrieves a list of all the resource types supported by GhoST.
+   * Retrieves a list of all GhoST indices.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.SupportedTypesList>>}
    */
   public getSupportedTypes(params?: GlobalSearchV2.GetSupportedTypesParams): Promise<GlobalSearchV2.Response<GlobalSearchV2.SupportedTypesList>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
 
     return new Promise((resolve, reject) => {
       const sdkHeaders = getSdkHeaders(GlobalSearchV2.DEFAULT_SERVICE_NAME, 'v2', 'getSupportedTypes');
@@ -287,9 +281,9 @@ namespace GlobalSearchV2 {
     items: ResultItem[];
   }
 
-  /** A list of resource types supported by GhoST. */
+  /** A list of all GhoST indices. */
   export interface SupportedTypesList {
-    /** A list of resource types supported by GhoST. */
+    /** A list of all GhoST indices. */
     supported_types?: string[];
   }
 

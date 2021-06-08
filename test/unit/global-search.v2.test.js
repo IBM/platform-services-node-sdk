@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,7 @@
  */
 'use strict';
 
-// need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
-const { NoAuthAuthenticator, unitTestUtils } = core;
-
+const { NoAuthAuthenticator, unitTestUtils } = require('ibm-cloud-sdk-core');
 const GlobalSearchV2 = require('../../dist/global-search/v2');
 
 const {
@@ -35,73 +32,20 @@ const service = {
   url: 'https://api.global-search-tagging.cloud.ibm.com',
 };
 
-const globalSearchService = new GlobalSearchV2(service);
+const globalSearch = new GlobalSearchV2(service);
+const createRequestMock = jest.spyOn(globalSearch, 'createRequest');
 
 // dont actually create a request
-const createRequestMock = jest.spyOn(globalSearchService, 'createRequest');
 createRequestMock.mockImplementation(() => Promise.resolve());
-
-// dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
-getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 afterEach(() => {
   createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
 });
 
 describe('GlobalSearchV2', () => {
-  describe('the newInstance method', () => {
-    test('should use defaults when options not provided', () => {
-      const testInstance = GlobalSearchV2.newInstance();
-
-      expect(getAuthenticatorMock).toHaveBeenCalled();
-      expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
-      expect(testInstance.baseOptions.serviceName).toBe(GlobalSearchV2.DEFAULT_SERVICE_NAME);
-      expect(testInstance.baseOptions.serviceUrl).toBe(GlobalSearchV2.DEFAULT_SERVICE_URL);
-      expect(testInstance).toBeInstanceOf(GlobalSearchV2);
-    });
-
-    test('should set serviceName, serviceUrl, and authenticator when provided', () => {
-      const options = {
-        authenticator: new NoAuthAuthenticator(),
-        serviceUrl: 'custom.com',
-        serviceName: 'my-service',
-      };
-
-      const testInstance = GlobalSearchV2.newInstance(options);
-
-      expect(getAuthenticatorMock).not.toHaveBeenCalled();
-      expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
-      expect(testInstance.baseOptions.serviceUrl).toBe('custom.com');
-      expect(testInstance.baseOptions.serviceName).toBe('my-service');
-      expect(testInstance).toBeInstanceOf(GlobalSearchV2);
-    });
-  });
-  describe('the constructor', () => {
-    test('use user-given service url', () => {
-      const options = {
-        authenticator: new NoAuthAuthenticator(),
-        serviceUrl: 'custom.com',
-      };
-
-      const testInstance = new GlobalSearchV2(options);
-
-      expect(testInstance.baseOptions.serviceUrl).toBe('custom.com');
-    });
-
-    test('use default service url', () => {
-      const options = {
-        authenticator: new NoAuthAuthenticator(),
-      };
-
-      const testInstance = new GlobalSearchV2(options);
-
-      expect(testInstance.baseOptions.serviceUrl).toBe(GlobalSearchV2.DEFAULT_SERVICE_URL);
-    });
-  });
   describe('search', () => {
     describe('positive tests', () => {
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation search
         const query = 'testString';
@@ -109,8 +53,8 @@ describe('GlobalSearchV2', () => {
         const searchCursor = 'testString';
         const transactionId = 'testString';
         const accountId = 'testString';
-        const limit = 1;
-        const timeout = 0;
+        const limit = 38;
+        const timeout = 38;
         const sort = ['testString'];
         const params = {
           query: query,
@@ -123,7 +67,7 @@ describe('GlobalSearchV2', () => {
           sort: sort,
         };
 
-        const searchResult = globalSearchService.search(params);
+        const searchResult = globalSearch.search(params);
 
         // all methods should return a Promise
         expectToBePromise(searchResult);
@@ -158,24 +102,25 @@ describe('GlobalSearchV2', () => {
           },
         };
 
-        globalSearchService.search(params);
+        globalSearch.search(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
       test('should not have any problems when no parameters are passed in', () => {
         // invoke the method with no parameters
-        globalSearchService.search({});
+        globalSearch.search({});
         checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
   describe('getSupportedTypes', () => {
     describe('positive tests', () => {
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation getSupportedTypes
         const params = {};
 
-        const getSupportedTypesResult = globalSearchService.getSupportedTypes(params);
+        const getSupportedTypesResult = globalSearch.getSupportedTypes(params);
 
         // all methods should return a Promise
         expectToBePromise(getSupportedTypesResult);
@@ -202,13 +147,13 @@ describe('GlobalSearchV2', () => {
           },
         };
 
-        globalSearchService.getSupportedTypes(params);
+        globalSearch.getSupportedTypes(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
       test('should not have any problems when no parameters are passed in', () => {
         // invoke the method with no parameters
-        globalSearchService.getSupportedTypes({});
+        globalSearch.getSupportedTypes({});
         checkForSuccessfulExecution(createRequestMock);
       });
     });

@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-/**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
- */
- 
-
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
@@ -27,7 +22,10 @@ import { getSdkHeaders } from '../lib/common';
 /**
  * Manage your tags with the Tagging API in IBM Cloud. You can attach, detach, delete a tag or list all tags in your
  * billing account with the Tagging API. The tag name must be unique within a billing account. You can create tags in
- * two formats: `key:value` or `label`.
+ * two formats: `key:value` or `label`. The tagging API supports three types of tag: `user` `service`, and `access`
+ * tags. `service` tags cannot be attached to IMS resources. `service` tags must be in the form
+ * `service_prefix:tag_label` where `service_prefix` identifies the Service owning the tag. `access` tags cannot be
+ * attached to IMS and Cloud Foundry resources. They must be in the form `key:value`.
  */
 
 class GlobalTaggingV1 extends BaseService {
@@ -50,8 +48,6 @@ class GlobalTaggingV1 extends BaseService {
    */
 
   public static newInstance(options: UserOptions): GlobalTaggingV1 {
-    options = options || {};
-
     if (!options.serviceName) {
       options.serviceName = this.DEFAULT_SERVICE_NAME;
     }
@@ -78,8 +74,6 @@ class GlobalTaggingV1 extends BaseService {
    * @returns {GlobalTaggingV1}
    */
   constructor(options: UserOptions) {
-    options = options || {};
-
     super(options);
     if (options.serviceUrl) {
       this.setServiceUrl(options.serviceUrl);
@@ -99,36 +93,48 @@ class GlobalTaggingV1 extends BaseService {
    * specified resource.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To list GhoST
-   * tags and infrastructure tags use `ghost,ims`.
-   * @param {string} [params.attachedTo] - If you want to return only the list of tags attached to a specified resource,
-   * pass here the ID of the resource. For GhoST onboarded resources, the resource ID is the CRN; for IMS resources, it
-   * is the IMS ID. When using this parameter it is mandatory to specify the appropriate provider (`ims` or `ghost`).
+   * @param {string} [params.impersonateUser] - The user on whose behalf the get operation must be performed (_for
+   * administrators only_).
+   * @param {string} [params.accountId] - The ID of the billing account to list the tags for. If it is not set, then it
+   * is taken from the authorization token. This parameter is required if `tag_type` is set to `service`.
+   * @param {string} [params.tagType] - The type of the tag you want to list. Supported values are `user`, `service` and
+   * `access`.
    * @param {boolean} [params.fullData] - If set to `true`, this query returns the provider, `ghost`, `ims` or
    * `ghost,ims`, where the tag exists and the number of attached resources.
+   * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To list both
+   * Global Search and Tagging tags and infrastructure tags, use `ghost,ims`. `service` and `access` tags can only be
+   * attached to resources that are onboarded to Global Search and Tagging, so you should not set this parameter when
+   * listing them.
+   * @param {string} [params.attachedTo] - If you want to return only the list of tags attached to a specified resource,
+   * pass the ID of the resource on this parameter. For resources that are onboarded to Global Search and Tagging, the
+   * resource ID is the CRN; for IMS resources, it is the IMS ID. When using this parameter, you must specify the
+   * appropriate provider (`ims` or `ghost`).
    * @param {number} [params.offset] - The offset is the index of the item from which you want to start returning data
    * from.
    * @param {number} [params.limit] - The number of tags to return.
-   * @param {string} [params.orderByName] - Order the output by tag name.
    * @param {number} [params.timeout] - The search timeout bounds the search request to be executed within the specified
    * time value. It returns the hits accumulated until time runs out.
-   * @param {boolean} [params.attachedOnly] - Filter on attached tags. If true, returns only tags that are attached to
-   * one or more resources. If false returns all tags.
+   * @param {string} [params.orderByName] - Order the output by tag name.
+   * @param {boolean} [params.attachedOnly] - Filter on attached tags. If `true`, it returns only tags that are attached
+   * to one or more resources. If `false`, it returns all tags.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>>}
    */
   public listTags(params?: GlobalTaggingV1.ListTagsParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
 
     return new Promise((resolve, reject) => {
       const query = {
+        'impersonate_user': _params.impersonateUser,
+        'account_id': _params.accountId,
+        'tag_type': _params.tagType,
+        'full_data': _params.fullData,
         'providers': _params.providers,
         'attached_to': _params.attachedTo,
-        'full_data': _params.fullData,
         'offset': _params.offset,
         'limit': _params.limit,
-        'order_by_name': _params.orderByName,
         'timeout': _params.timeout,
+        'order_by_name': _params.orderByName,
         'attached_only': _params.attachedOnly
       };
 
@@ -152,21 +158,88 @@ class GlobalTaggingV1 extends BaseService {
   };
 
   /**
-   * Delete unused tags.
+   * Create an access tag.
    *
-   * Delete the tags that are not attatched to any resource.
+   * Create an access tag. To create an `access` tag, you must have the access listed in the [Granting users access to
+   * tag resources](https://cloud.ibm.com/docs/account?topic=account-access) documentation. `service` and `user` tags
+   * cannot be created upfront. They are created when they are attached for the first time to a resource.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string[]} params.tagNames - An array of tag names to create.
+   * @param {string} [params.impersonateUser] - The user on whose behalf the create operation must be performed (_for
+   * administrators only_).
+   * @param {string} [params.accountId] - The ID of the billing account where the tag must be created. It is a required
+   * parameter if `impersonate_user` is set.
+   * @param {string} [params.tagType] - The type of the tags you want to create. The only allowed value is `access`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>>}
+   */
+  public createTag(params: GlobalTaggingV1.CreateTagParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>> {
+    const _params = extend({}, params);
+    const requiredParams = ['tagNames'];
+
+    return new Promise((resolve, reject) => {
+      const missingParams = getMissingParams(_params, requiredParams);
+      if (missingParams) {
+        return reject(missingParams);
+      }
+
+      const body = {
+        'tag_names': _params.tagNames
+      };
+
+      const query = {
+        'impersonate_user': _params.impersonateUser,
+        'account_id': _params.accountId,
+        'tag_type': _params.tagType
+      };
+
+      const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'createTag');
+
+      const parameters = {
+        options: {
+          url: '/v3/tags',
+          method: 'POST',
+          body,
+          qs: query,
+        },
+        defaultOptions: extend(true, {}, this.baseOptions, {
+          headers: extend(true, sdkHeaders, {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }, _params.headers),
+        }),
+      };
+
+      return resolve(this.createRequest(parameters));
+    });
+  };
+
+  /**
+   * Delete all unused tags.
+   *
+   * Delete the tags that are not attached to any resource.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.providers] - Select a provider. Supported values are `ghost` and `ims`.
+   * @param {string} [params.impersonateUser] - The user on whose behalf the delete all operation must be performed
+   * (_for administrators only_).
+   * @param {string} [params.accountId] - The ID of the billing account to delete the tags for. If it is not set, then
+   * it is taken from the authorization token. It is a required parameter if `tag_type` is set to `service`.
+   * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
+   * `service` and `access` are not supported for IMS resources (`providers` parameter set to `ims`).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagsResult>>}
    */
   public deleteTagAll(params?: GlobalTaggingV1.DeleteTagAllParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagsResult>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
 
     return new Promise((resolve, reject) => {
       const query = {
-        'providers': _params.providers
+        'providers': _params.providers,
+        'impersonate_user': _params.impersonateUser,
+        'account_id': _params.accountId,
+        'tag_type': _params.tagType
       };
 
       const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteTagAll');
@@ -189,19 +262,25 @@ class GlobalTaggingV1 extends BaseService {
   };
 
   /**
-   * Delete a tag.
+   * Delete an unused tag.
    *
    * Delete an existing tag. A tag can be deleted only if it is not attached to any resource.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.tagName - The name of tag to be deleted.
-   * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To delete tag
-   * both in GhoST in IMS, use `ghost,ims`.
+   * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To delete tags
+   * both in Global Search and Tagging and in IMS, use `ghost,ims`.
+   * @param {string} [params.impersonateUser] - The user on whose behalf the delete operation must be performed (_for
+   * administrators only_).
+   * @param {string} [params.accountId] - The ID of the billing account to delete the tag for. It is a required
+   * parameter if `tag_type` is set to `service`, otherwise it is inferred from the authorization IAM token.
+   * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
+   * `service` and `access` are not supported for IMS resources (`providers` parameter set to `ims`).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagResults>>}
    */
   public deleteTag(params: GlobalTaggingV1.DeleteTagParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagResults>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
     const requiredParams = ['tagName'];
 
     return new Promise((resolve, reject) => {
@@ -211,7 +290,10 @@ class GlobalTaggingV1 extends BaseService {
       }
 
       const query = {
-        'providers': _params.providers
+        'providers': _params.providers,
+        'impersonate_user': _params.impersonateUser,
+        'account_id': _params.accountId,
+        'tag_type': _params.tagType
       };
 
       const path = {
@@ -239,22 +321,25 @@ class GlobalTaggingV1 extends BaseService {
   };
 
   /**
-   * Attach one or more tags.
+   * Attach tags.
    *
-   * Attaches one or more tags to one or more resources. To attach a tag to a resource managed by the Resource
-   * Controller, you must be an editor on the resource. To attach a tag to a Cloud Foundry resource, you must have space
-   * developer role. To attach a tag to IMS resources, depending on the resource, you need either `view hardware
-   * details`, `view virtual server details` or `manage storage` permission.
+   * Attaches one or more tags to one or more resources.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {Resource[]} params.resources - List of resources on which the tag or tags should be attached.
    * @param {string} [params.tagName] - The name of the tag to attach.
    * @param {string[]} [params.tagNames] - An array of tag names to attach.
+   * @param {string} [params.impersonateUser] - The user on whose behalf the attach operation must be performed (_for
+   * administrators only_).
+   * @param {string} [params.accountId] - The ID of the billing account where the resources to be tagged lives. It is a
+   * required parameter if `tag_type` is set to `service`. Otherwise, it is inferred from the authorization IAM token.
+   * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
+   * `service` and `access` are not supported for IMS resources.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>>}
    */
   public attachTag(params: GlobalTaggingV1.AttachTagParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
     const requiredParams = ['resources'];
 
     return new Promise((resolve, reject) => {
@@ -269,6 +354,12 @@ class GlobalTaggingV1 extends BaseService {
         'tag_names': _params.tagNames
       };
 
+      const query = {
+        'impersonate_user': _params.impersonateUser,
+        'account_id': _params.accountId,
+        'tag_type': _params.tagType
+      };
+
       const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'attachTag');
 
       const parameters = {
@@ -276,6 +367,7 @@ class GlobalTaggingV1 extends BaseService {
           url: '/v3/tags/attach',
           method: 'POST',
           body,
+          qs: query,
         },
         defaultOptions: extend(true, {}, this.baseOptions, {
           headers: extend(true, sdkHeaders, {
@@ -290,23 +382,25 @@ class GlobalTaggingV1 extends BaseService {
   };
 
   /**
-   * Detach one or more tags.
+   * Detach tags.
    *
-   * Detach one or more tags from one or more resources. To detach a tag from a Resource Controller managed resource,
-   * you must be an editor on the resource. To detach a tag to a Cloud Foundry resource, you must have `space developer`
-   * role.
-   *   To detach a tag to IMS resources, depending on the resource, you need either `view hardware details`, `view
-   * virtual server details` or `storage manage` permission.
+   * Detaches one or more tags from one or more resources.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {Resource[]} params.resources - List of resources on which the tag or tags should be detached.
    * @param {string} [params.tagName] - The name of the tag to detach.
    * @param {string[]} [params.tagNames] - An array of tag names to detach.
+   * @param {string} [params.impersonateUser] - The user on whose behalf the detach operation must be performed (_for
+   * administrators only_).
+   * @param {string} [params.accountId] - The ID of the billing account where the resources to be un-tagged lives. It is
+   * a required parameter if `tag_type` is set to `service`, otherwise it is inferred from the authorization IAM token.
+   * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
+   * `service` and `access` are not supported for IMS resources.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>>}
    */
   public detachTag(params: GlobalTaggingV1.DetachTagParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
-    const _params = Object.assign({}, params);
+    const _params = extend({}, params);
     const requiredParams = ['resources'];
 
     return new Promise((resolve, reject) => {
@@ -321,6 +415,12 @@ class GlobalTaggingV1 extends BaseService {
         'tag_names': _params.tagNames
       };
 
+      const query = {
+        'impersonate_user': _params.impersonateUser,
+        'account_id': _params.accountId,
+        'tag_type': _params.tagType
+      };
+
       const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'detachTag');
 
       const parameters = {
@@ -328,6 +428,7 @@ class GlobalTaggingV1 extends BaseService {
           url: '/v3/tags/detach',
           method: 'POST',
           body,
+          qs: query,
         },
         defaultOptions: extend(true, {}, this.baseOptions, {
           headers: extend(true, sdkHeaders, {
@@ -374,31 +475,41 @@ namespace GlobalTaggingV1 {
 
   /** Parameters for the `listTags` operation. */
   export interface ListTagsParams {
-    /** Select a provider. Supported values are `ghost` and `ims`. To list GhoST tags and infrastructure tags use
-     *  `ghost,ims`.
+    /** The user on whose behalf the get operation must be performed (_for administrators only_). */
+    impersonateUser?: string;
+    /** The ID of the billing account to list the tags for. If it is not set, then it is taken from the
+     *  authorization token. This parameter is required if `tag_type` is set to `service`.
      */
-    providers?: ListTagsConstants.Providers[] | string[];
-    /** If you want to return only the list of tags attached to a specified resource, pass here the ID of the
-     *  resource. For GhoST onboarded resources, the resource ID is the CRN; for IMS resources, it is the IMS ID. When
-     *  using this parameter it is mandatory to specify the appropriate provider (`ims` or `ghost`).
-     */
-    attachedTo?: string;
+    accountId?: string;
+    /** The type of the tag you want to list. Supported values are `user`, `service` and `access`. */
+    tagType?: ListTagsConstants.TagType | string;
     /** If set to `true`, this query returns the provider, `ghost`, `ims` or `ghost,ims`, where the tag exists and
      *  the number of attached resources.
      */
     fullData?: boolean;
+    /** Select a provider. Supported values are `ghost` and `ims`. To list both Global Search and Tagging tags and
+     *  infrastructure tags, use `ghost,ims`. `service` and `access` tags can only be attached to resources that are
+     *  onboarded to Global Search and Tagging, so you should not set this parameter when listing them.
+     */
+    providers?: ListTagsConstants.Providers[] | string[];
+    /** If you want to return only the list of tags attached to a specified resource, pass the ID of the resource on
+     *  this parameter. For resources that are onboarded to Global Search and Tagging, the resource ID is the CRN; for
+     *  IMS resources, it is the IMS ID. When using this parameter, you must specify the appropriate provider (`ims` or
+     *  `ghost`).
+     */
+    attachedTo?: string;
     /** The offset is the index of the item from which you want to start returning data from. */
     offset?: number;
     /** The number of tags to return. */
     limit?: number;
-    /** Order the output by tag name. */
-    orderByName?: ListTagsConstants.OrderByName | string;
     /** The search timeout bounds the search request to be executed within the specified time value. It returns the
      *  hits accumulated until time runs out.
      */
     timeout?: number;
-    /** Filter on attached tags. If true, returns only tags that are attached to one or more resources. If false
-     *  returns all tags.
+    /** Order the output by tag name. */
+    orderByName?: ListTagsConstants.OrderByName | string;
+    /** Filter on attached tags. If `true`, it returns only tags that are attached to one or more resources. If
+     *  `false`, it returns all tags.
      */
     attachedOnly?: boolean;
     headers?: OutgoingHttpHeaders;
@@ -406,7 +517,13 @@ namespace GlobalTaggingV1 {
 
   /** Constants for the `listTags` operation. */
   export namespace ListTagsConstants {
-    /** Select a provider. Supported values are `ghost` and `ims`. To list GhoST tags and infrastructure tags use `ghost,ims`. */
+    /** The type of the tag you want to list. Supported values are `user`, `service` and `access`. */
+    export enum TagType {
+      USER = 'user',
+      SERVICE = 'service',
+      ACCESS = 'access',
+    }
+    /** Select a provider. Supported values are `ghost` and `ims`. To list both Global Search and Tagging tags and infrastructure tags, use `ghost,ims`. `service` and `access` tags can only be attached to resources that are onboarded to Global Search and Tagging, so you should not set this parameter when listing them. */
     export enum Providers {
       GHOST = 'ghost',
       IMS = 'ims',
@@ -418,10 +535,43 @@ namespace GlobalTaggingV1 {
     }
   }
 
+  /** Parameters for the `createTag` operation. */
+  export interface CreateTagParams {
+    /** An array of tag names to create. */
+    tagNames: string[];
+    /** The user on whose behalf the create operation must be performed (_for administrators only_). */
+    impersonateUser?: string;
+    /** The ID of the billing account where the tag must be created. It is a required parameter if
+     *  `impersonate_user` is set.
+     */
+    accountId?: string;
+    /** The type of the tags you want to create. The only allowed value is `access`. */
+    tagType?: CreateTagConstants.TagType | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createTag` operation. */
+  export namespace CreateTagConstants {
+    /** The type of the tags you want to create. The only allowed value is `access`. */
+    export enum TagType {
+      ACCESS = 'access',
+    }
+  }
+
   /** Parameters for the `deleteTagAll` operation. */
   export interface DeleteTagAllParams {
     /** Select a provider. Supported values are `ghost` and `ims`. */
     providers?: DeleteTagAllConstants.Providers | string;
+    /** The user on whose behalf the delete all operation must be performed (_for administrators only_). */
+    impersonateUser?: string;
+    /** The ID of the billing account to delete the tags for. If it is not set, then it is taken from the
+     *  authorization token. It is a required parameter if `tag_type` is set to `service`.
+     */
+    accountId?: string;
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not
+     *  supported for IMS resources (`providers` parameter set to `ims`).
+     */
+    tagType?: DeleteTagAllConstants.TagType | string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -432,25 +582,47 @@ namespace GlobalTaggingV1 {
       GHOST = 'ghost',
       IMS = 'ims',
     }
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not supported for IMS resources (`providers` parameter set to `ims`). */
+    export enum TagType {
+      USER = 'user',
+      SERVICE = 'service',
+      ACCESS = 'access',
+    }
   }
 
   /** Parameters for the `deleteTag` operation. */
   export interface DeleteTagParams {
     /** The name of tag to be deleted. */
     tagName: string;
-    /** Select a provider. Supported values are `ghost` and `ims`. To delete tag both in GhoST in IMS, use
-     *  `ghost,ims`.
+    /** Select a provider. Supported values are `ghost` and `ims`. To delete tags both in Global Search and Tagging
+     *  and in IMS, use `ghost,ims`.
      */
     providers?: DeleteTagConstants.Providers[] | string[];
+    /** The user on whose behalf the delete operation must be performed (_for administrators only_). */
+    impersonateUser?: string;
+    /** The ID of the billing account to delete the tag for. It is a required parameter if `tag_type` is set to
+     *  `service`, otherwise it is inferred from the authorization IAM token.
+     */
+    accountId?: string;
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not
+     *  supported for IMS resources (`providers` parameter set to `ims`).
+     */
+    tagType?: DeleteTagConstants.TagType | string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `deleteTag` operation. */
   export namespace DeleteTagConstants {
-    /** Select a provider. Supported values are `ghost` and `ims`. To delete tag both in GhoST in IMS, use `ghost,ims`. */
+    /** Select a provider. Supported values are `ghost` and `ims`. To delete tags both in Global Search and Tagging and in IMS, use `ghost,ims`. */
     export enum Providers {
       GHOST = 'ghost',
       IMS = 'ims',
+    }
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not supported for IMS resources (`providers` parameter set to `ims`). */
+    export enum TagType {
+      USER = 'user',
+      SERVICE = 'service',
+      ACCESS = 'access',
     }
   }
 
@@ -462,7 +634,27 @@ namespace GlobalTaggingV1 {
     tagName?: string;
     /** An array of tag names to attach. */
     tagNames?: string[];
+    /** The user on whose behalf the attach operation must be performed (_for administrators only_). */
+    impersonateUser?: string;
+    /** The ID of the billing account where the resources to be tagged lives. It is a required parameter if
+     *  `tag_type` is set to `service`. Otherwise, it is inferred from the authorization IAM token.
+     */
+    accountId?: string;
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not
+     *  supported for IMS resources.
+     */
+    tagType?: AttachTagConstants.TagType | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `attachTag` operation. */
+  export namespace AttachTagConstants {
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not supported for IMS resources. */
+    export enum TagType {
+      USER = 'user',
+      SERVICE = 'service',
+      ACCESS = 'access',
+    }
   }
 
   /** Parameters for the `detachTag` operation. */
@@ -473,12 +665,46 @@ namespace GlobalTaggingV1 {
     tagName?: string;
     /** An array of tag names to detach. */
     tagNames?: string[];
+    /** The user on whose behalf the detach operation must be performed (_for administrators only_). */
+    impersonateUser?: string;
+    /** The ID of the billing account where the resources to be un-tagged lives. It is a required parameter if
+     *  `tag_type` is set to `service`, otherwise it is inferred from the authorization IAM token.
+     */
+    accountId?: string;
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not
+     *  supported for IMS resources.
+     */
+    tagType?: DetachTagConstants.TagType | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `detachTag` operation. */
+  export namespace DetachTagConstants {
+    /** The type of the tag. Supported values are `user`, `service` and `access`. `service` and `access` are not supported for IMS resources. */
+    export enum TagType {
+      USER = 'user',
+      SERVICE = 'service',
+      ACCESS = 'access',
+    }
   }
 
   /*************************
    * model interfaces
    ************************/
+
+  /** Results of a create tag(s) request. */
+  export interface CreateTagResults {
+    /** Array of results of an set_tags request. */
+    results?: CreateTagResultsResultsItem[];
+  }
+
+  /** CreateTagResultsResultsItem. */
+  export interface CreateTagResultsResultsItem {
+    /** The name of the tag created. */
+    tag_name?: string;
+    /** true if the tag was not created. */
+    is_error?: boolean;
+  }
 
   /** Results of a delete_tag request. */
   export interface DeleteTagResults {
@@ -496,20 +722,21 @@ namespace GlobalTaggingV1 {
     [propName: string]: any;
   }
 
-  /** The results of a deleting unattatched tags. */
+  /** Results of a deleting unattatched tags. */
   export interface DeleteTagsResult {
-    /** The number of tags deleted in the account. */
+    /** The number of tags that have been deleted. */
     total_count?: number;
-    /** An indicator that is set to true if there was an error deleting some of the tags. */
+    /** It is set to true if there is at least one tag operation in error. */
     errors?: boolean;
+    /** The list of tag operation results. */
     items?: DeleteTagsResultItem[];
   }
 
-  /** Result of deleting one unattached tag. */
+  /** Result of a delete_tags request. */
   export interface DeleteTagsResultItem {
-    /** The name of the tag that was deleted. */
+    /** The name of the deleted tag. */
     tag_name?: string;
-    /** An indicator that is set to true if there was an error deleting the tag. */
+    /** true if the tag was not deleted. */
     is_error?: boolean;
   }
 
@@ -529,13 +756,13 @@ namespace GlobalTaggingV1 {
 
   /** A list of tags. */
   export interface TagList {
-    /** The number of tags defined in the account. */
+    /** Set the occurrencies of the total tags associated to this account. */
     total_count?: number;
-    /** The offset specific at input time. */
+    /** The offset at which tags are returned. */
     offset?: number;
-    /** The limit specified at input time. */
+    /** The number of tags requested to be returned. */
     limit?: number;
-    /** This is an array of output results. */
+    /** Array of output results. */
     items?: Tag[];
   }
 
