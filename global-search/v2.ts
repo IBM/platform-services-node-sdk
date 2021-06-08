@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
+/**
+ * IBM OpenAPI SDK Code Generator Version: 3.29.1-b338fb38-20210313-010605
+ */
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -30,8 +39,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class GlobalSearchV2 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://api.global-search-tagging.cloud.ibm.com';
+
   static DEFAULT_SERVICE_NAME: string = 'global_search';
 
   /*************************
@@ -63,12 +72,11 @@ class GlobalSearchV2 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a GlobalSearchV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -152,14 +160,15 @@ class GlobalSearchV2 extends BaseService {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'transaction-id': _params.transactionId
-          }, _params.headers),
-        }),
-      };
+            'transaction-id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * resourceTypes
@@ -188,14 +197,14 @@ class GlobalSearchV2 extends BaseService {
         defaultOptions: extend(true, {}, this.baseOptions, {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -203,9 +212,8 @@ class GlobalSearchV2 extends BaseService {
  ************************/
 
 namespace GlobalSearchV2 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -216,7 +224,7 @@ namespace GlobalSearchV2 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -286,7 +294,6 @@ namespace GlobalSearchV2 {
     /** A list of all GhoST indices. */
     supported_types?: string[];
   }
-
 }
 
 export = GlobalSearchV2;

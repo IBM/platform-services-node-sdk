@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-d753183b-20201209-163011
  */
- 
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -31,7 +36,6 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class OpenServiceBrokerV1 extends BaseService {
-
   static DEFAULT_SERVICE_NAME: string = 'open_service_broker';
 
   /*************************
@@ -65,12 +69,11 @@ class OpenServiceBrokerV1 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a OpenServiceBrokerV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -108,38 +111,47 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874644Root>>}
    */
-  public getServiceInstanceState(params: OpenServiceBrokerV1.GetServiceInstanceStateParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874644Root>> {
-    const _params = Object.assign({}, params);
+  public getServiceInstanceState(
+    params: OpenServiceBrokerV1.GetServiceInstanceStateParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874644Root>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'getServiceInstanceState');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getServiceInstanceState'
+    );
 
-      const parameters = {
-        options: {
-          url: '/bluemix_v1/service_instances/{instance_id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/bluemix_v1/service_instances/{instance_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update the state of a provisioned service instance.
@@ -169,46 +181,55 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2448145Root>>}
    */
-  public replaceServiceInstanceState(params: OpenServiceBrokerV1.ReplaceServiceInstanceStateParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2448145Root>> {
-    const _params = Object.assign({}, params);
+  public replaceServiceInstanceState(
+    params: OpenServiceBrokerV1.ReplaceServiceInstanceStateParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2448145Root>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'enabled': _params.enabled,
-        'initiator_id': _params.initiatorId,
-        'reason_code': _params.reasonCode
-      };
+    const body = {
+      'enabled': _params.enabled,
+      'initiator_id': _params.initiatorId,
+      'reason_code': _params.reasonCode,
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceServiceInstanceState');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceServiceInstanceState'
+    );
 
-      const parameters = {
-        options: {
-          url: '/bluemix_v1/service_instances/{instance_id}',
-          method: 'PUT',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/bluemix_v1/service_instances/{instance_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * resourceInstances
@@ -233,16 +254,16 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {string} params.instanceId - The `instance_id` of a service instance is provided by the IBM Cloud platform.
    * This ID will be used for future requests to bind and deprovision, so the broker can use it to correlate the
    * resource it creates.
-   * @param {string} [params.organizationGuid] - Deprecated in favor of `context`. The identifier for the project space
-   * within the IBM Cloud platform organization. Although most brokers will not use this field, it might be helpful for
-   * executing operations on a user's behalf. It MUST be a non-empty string.
+   * @param {string} [params.organizationGuid] - Deprecated in favor of `context`. The IBM Cloud platform GUID for the
+   * organization under which the service instance is to be provisioned. Although most brokers will not use this field,
+   * it might be helpful for executing operations on a user's behalf. It MUST be a non-empty string.
    * @param {string} [params.planId] - The ID of the plan for which the service instance has been requested, which is
    * stored in the catalog.json of your broker. This value should be a GUID and it MUST be unique to a service.
    * @param {string} [params.serviceId] - The ID of the service stored in the catalog.json of your broker. This value
    * should be a GUID and it MUST be a non-empty string.
-   * @param {string} [params.spaceGuid] - Deprecated in favor of `context`. The IBM Cloud platform GUID for the
-   * organization under which the service instance is to be provisioned. Although most brokers will not use this field,
-   * it might be helpful for executing operations on a user's behalf. It MUST be a non-empty string.
+   * @param {string} [params.spaceGuid] - Deprecated in favor of `context`. The identifier for the project space within
+   * the IBM Cloud platform organization. Although most brokers will not use this field, it might be helpful for
+   * executing operations on a user's behalf. It MUST be a non-empty string.
    * @param {Context} [params.context] - Platform specific contextual information under which the service instance is to
    * be provisioned.
    * @param {JsonObject} [params.parameters] - Configuration options for the service instance. An opaque object,
@@ -256,54 +277,63 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079872Root>>}
    */
-  public replaceServiceInstance(params: OpenServiceBrokerV1.ReplaceServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079872Root>> {
-    const _params = Object.assign({}, params);
+  public replaceServiceInstance(
+    params: OpenServiceBrokerV1.ReplaceServiceInstanceParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079872Root>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'organization_guid': _params.organizationGuid,
-        'plan_id': _params.planId,
-        'service_id': _params.serviceId,
-        'space_guid': _params.spaceGuid,
-        'context': _params.context,
-        'parameters': _params.parameters
-      };
+    const body = {
+      'organization_guid': _params.organizationGuid,
+      'plan_id': _params.planId,
+      'service_id': _params.serviceId,
+      'space_guid': _params.spaceGuid,
+      'context': _params.context,
+      'parameters': _params.parameters,
+    };
 
-      const query = {
-        'accepts_incomplete': _params.acceptsIncomplete
-      };
+    const query = {
+      'accepts_incomplete': _params.acceptsIncomplete,
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceServiceInstance');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceServiceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/service_instances/{instance_id}',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/service_instances/{instance_id}',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a service instance.
@@ -337,53 +367,62 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>>}
    */
-  public updateServiceInstance(params: OpenServiceBrokerV1.UpdateServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>> {
-    const _params = Object.assign({}, params);
+  public updateServiceInstance(
+    params: OpenServiceBrokerV1.UpdateServiceInstanceParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'service_id': _params.serviceId,
-        'context': _params.context,
-        'parameters': _params.parameters,
-        'plan_id': _params.planId,
-        'previous_values': _params.previousValues
-      };
+    const body = {
+      'service_id': _params.serviceId,
+      'context': _params.context,
+      'parameters': _params.parameters,
+      'plan_id': _params.planId,
+      'previous_values': _params.previousValues,
+    };
 
-      const query = {
-        'accepts_incomplete': _params.acceptsIncomplete
-      };
+    const query = {
+      'accepts_incomplete': _params.acceptsIncomplete,
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'updateServiceInstance');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateServiceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/service_instances/{instance_id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/service_instances/{instance_id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete (deprovision) a service instance.
@@ -405,45 +444,54 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>>}
    */
-  public deleteServiceInstance(params: OpenServiceBrokerV1.DeleteServiceInstanceParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>> {
-    const _params = Object.assign({}, params);
+  public deleteServiceInstance(
+    params: OpenServiceBrokerV1.DeleteServiceInstanceParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079874Root>> {
+    const _params = { ...params };
     const requiredParams = ['serviceId', 'planId', 'instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'service_id': _params.serviceId,
-        'plan_id': _params.planId,
-        'accepts_incomplete': _params.acceptsIncomplete
-      };
+    const query = {
+      'service_id': _params.serviceId,
+      'plan_id': _params.planId,
+      'accepts_incomplete': _params.acceptsIncomplete,
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteServiceInstance');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteServiceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/service_instances/{instance_id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/service_instances/{instance_id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * catalog
@@ -465,27 +513,32 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874650Root>>}
    */
-  public listCatalog(params?: OpenServiceBrokerV1.ListCatalogParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874650Root>> {
-    const _params = Object.assign({}, params);
+  public listCatalog(
+    params?: OpenServiceBrokerV1.ListCatalogParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp1874650Root>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalog');
+    const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalog');
 
-      const parameters = {
-        options: {
-          url: '/v2/catalog',
-          method: 'GET',
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/catalog',
+        method: 'GET',
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * lastOperationAsync
@@ -517,45 +570,54 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079894Root>>}
    */
-  public getLastOperation(params: OpenServiceBrokerV1.GetLastOperationParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079894Root>> {
-    const _params = Object.assign({}, params);
+  public getLastOperation(
+    params: OpenServiceBrokerV1.GetLastOperationParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079894Root>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'operation': _params.operation,
-        'plan_id': _params.planId,
-        'service_id': _params.serviceId
-      };
+    const query = {
+      'operation': _params.operation,
+      'plan_id': _params.planId,
+      'service_id': _params.serviceId,
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'getLastOperation');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLastOperation'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/service_instances/{instance_id}/last_operation',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/service_instances/{instance_id}/last_operation',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * bindingsAndCredentials
@@ -592,48 +654,57 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079876Root>>}
    */
-  public replaceServiceBinding(params: OpenServiceBrokerV1.ReplaceServiceBindingParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079876Root>> {
-    const _params = Object.assign({}, params);
+  public replaceServiceBinding(
+    params: OpenServiceBrokerV1.ReplaceServiceBindingParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Resp2079876Root>> {
+    const _params = { ...params };
     const requiredParams = ['bindingId', 'instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'plan_id': _params.planId,
-        'service_id': _params.serviceId,
-        'bind_resource': _params.bindResource,
-        'parameters': _params.parameters
-      };
+    const body = {
+      'plan_id': _params.planId,
+      'service_id': _params.serviceId,
+      'bind_resource': _params.bindResource,
+      'parameters': _params.parameters,
+    };
 
-      const path = {
-        'binding_id': _params.bindingId,
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'binding_id': _params.bindingId,
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceServiceBinding');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceServiceBinding'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/service_instances/{instance_id}/service_bindings/{binding_id}',
-          method: 'PUT',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/service_instances/{instance_id}/service_bindings/{binding_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete (unbind) the credentials bound to a resource.
@@ -657,46 +728,54 @@ class OpenServiceBrokerV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Empty>>}
    */
-  public deleteServiceBinding(params: OpenServiceBrokerV1.DeleteServiceBindingParams): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteServiceBinding(
+    params: OpenServiceBrokerV1.DeleteServiceBindingParams
+  ): Promise<OpenServiceBrokerV1.Response<OpenServiceBrokerV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['bindingId', 'instanceId', 'planId', 'serviceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'plan_id': _params.planId,
-        'service_id': _params.serviceId
-      };
+    const query = {
+      'plan_id': _params.planId,
+      'service_id': _params.serviceId,
+    };
 
-      const path = {
-        'binding_id': _params.bindingId,
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'binding_id': _params.bindingId,
+      'instance_id': _params.instanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(OpenServiceBrokerV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteServiceBinding');
+    const sdkHeaders = getSdkHeaders(
+      OpenServiceBrokerV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteServiceBinding'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/service_instances/{instance_id}/service_bindings/{binding_id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/service_instances/{instance_id}/service_bindings/{binding_id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -704,9 +783,8 @@ class OpenServiceBrokerV1 extends BaseService {
  ************************/
 
 namespace OpenServiceBrokerV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -717,7 +795,7 @@ namespace OpenServiceBrokerV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -763,9 +841,9 @@ namespace OpenServiceBrokerV1 {
      *  future requests to bind and deprovision, so the broker can use it to correlate the resource it creates.
      */
     instanceId: string;
-    /** Deprecated in favor of `context`. The identifier for the project space within the IBM Cloud platform
-     *  organization. Although most brokers will not use this field, it might be helpful for executing operations on a
-     *  user's behalf. It MUST be a non-empty string.
+    /** Deprecated in favor of `context`. The IBM Cloud platform GUID for the organization under which the service
+     *  instance is to be provisioned. Although most brokers will not use this field, it might be helpful for executing
+     *  operations on a user's behalf. It MUST be a non-empty string.
      */
     organizationGuid?: string;
     /** The ID of the plan for which the service instance has been requested, which is stored in the catalog.json of
@@ -776,9 +854,9 @@ namespace OpenServiceBrokerV1 {
      *  a non-empty string.
      */
     serviceId?: string;
-    /** Deprecated in favor of `context`. The IBM Cloud platform GUID for the organization under which the service
-     *  instance is to be provisioned. Although most brokers will not use this field, it might be helpful for executing
-     *  operations on a user's behalf. It MUST be a non-empty string.
+    /** Deprecated in favor of `context`. The identifier for the project space within the IBM Cloud platform
+     *  organization. Although most brokers will not use this field, it might be helpful for executing operations on a
+     *  user's behalf. It MUST be a non-empty string.
      */
     spaceGuid?: string;
     /** Platform specific contextual information under which the service instance is to be provisioned. */
@@ -1115,7 +1193,6 @@ namespace OpenServiceBrokerV1 {
     /** Device object containing device_type specific details. Currently only shared devices are supported. */
     device: string;
   }
-
 }
 
 export = OpenServiceBrokerV1;

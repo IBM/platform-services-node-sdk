@@ -52,7 +52,6 @@ describe('GlobalTaggingV1', () => {
         const tagType = 'user';
         const fullData = true;
         const providers = ['ghost'];
-        const attachedTo = 'testString';
         const offset = 38;
         const limit = 38;
         const timeout = 38;
@@ -123,7 +122,6 @@ describe('GlobalTaggingV1', () => {
   });
   describe('createTag', () => {
     describe('positive tests', () => {
-
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createTag
         const tagNames = ['testString'];

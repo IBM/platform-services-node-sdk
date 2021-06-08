@@ -14,7 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-'use strict';
 
 const CaseManagementV1 = require('../../dist/case-management/v1');
 const authHelper = require('../resources/auth-helper.js');
@@ -46,16 +45,13 @@ describe('CaseManagementV1_integration', () => {
     },
   };
 
-  const resourceCrn = 'crn:v1:staging:public:cloud-object-storage:global:a/19c52e57800c4d8bb9aefc66b3e49755:61848e72-6ba6-415e-84e2-91f3915e194d::';
+  const resourceCrn =
+    'crn:v1:staging:public:cloud-object-storage:global:a/19c52e57800c4d8bb9aefc66b3e49755:61848e72-6ba6-415e-84e2-91f3915e194d::';
 
   const watchlistPayload = [
     {
       realm: 'IBMid',
-      user_id: 'ashwini.pc@ibm.com',
-    },
-    {
-      realm: 'IBMid',
-      user_id: 'bqegarci@us.ibm.com',
+      user_id: 'abc@ibm.com',
     },
   ];
 
@@ -65,7 +61,7 @@ describe('CaseManagementV1_integration', () => {
     contentType: 'image/png',
   };
 
-  test('should successfully complete initialization', done => {
+  test('should successfully complete initialization', (done) => {
     // Initialize the service client.
     service = CaseManagementV1.newInstance();
     expect(service).not.toBeNull();
@@ -87,7 +83,7 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully created a technical case', async done => {
+    test('Successfully created a technical case', async (done) => {
       try {
         response = await service.createCase(params);
         expect(response).toBeDefined();
@@ -108,7 +104,7 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Bad payload used to create a case', async done => {
+    test('Bad payload used to create a case', async (done) => {
       params.type = 'invalid_type';
       params.severity = null;
       params.offering = null;
@@ -133,7 +129,7 @@ describe('CaseManagementV1_integration', () => {
       params = {};
     });
 
-    test('Successfully got cases with default params', async done => {
+    test('Successfully got cases with default params', async (done) => {
       try {
         response = await service.getCases();
         expect(response).toBeDefined();
@@ -151,11 +147,15 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Successful got cases with non-default params', async done => {
+    test('Successful got cases with non-default params', async (done) => {
       params = {
         offset: 10,
         limit: 20,
-        fields: [CaseManagementV1.GetCaseConstants.Fields.NUMBER, CaseManagementV1.GetCaseConstants.Fields.SHORT_DESCRIPTION, CaseManagementV1.GetCaseConstants.Fields.SEVERITY],
+        fields: [
+          CaseManagementV1.GetCaseConstants.Fields.NUMBER,
+          CaseManagementV1.GetCaseConstants.Fields.SHORT_DESCRIPTION,
+          CaseManagementV1.GetCaseConstants.Fields.SEVERITY,
+        ],
       };
 
       try {
@@ -182,7 +182,7 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Failed to get cases with bad params', async done => {
+    test('Failed to get cases with bad params', async (done) => {
       params.fields = ['invalid_field'];
 
       try {
@@ -209,7 +209,7 @@ describe('CaseManagementV1_integration', () => {
       };
     });
 
-    test('Successfully got a case with default params', async done => {
+    test('Successfully got a case with default params', async (done) => {
       try {
         response = await service.getCase(params);
         expect(response).toBeDefined();
@@ -224,8 +224,11 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Successfully got a case with field filtering', async done => {
-      params.fields = [CaseManagementV1.GetCaseConstants.Fields.NUMBER, CaseManagementV1.GetCaseConstants.Fields.SEVERITY];
+    test('Successfully got a case with field filtering', async (done) => {
+      params.fields = [
+        CaseManagementV1.GetCaseConstants.Fields.NUMBER,
+        CaseManagementV1.GetCaseConstants.Fields.SEVERITY,
+      ];
 
       try {
         response = await service.getCase(params);
@@ -243,7 +246,7 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Failed to get a case with bad params', async done => {
+    test('Failed to get a case with bad params', async (done) => {
       params.fields = ['invalid_field'];
 
       try {
@@ -272,7 +275,7 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully added a comment to a case', async done => {
+    test('Successfully added a comment to a case', async (done) => {
       try {
         response = await service.addComment(params);
         expect(response).toBeDefined();
@@ -299,21 +302,23 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully added users to case watchlist', async done => {
+    test('Successfully added user to case watchlist', async (done) => {
       try {
         response = await service.addWatchlist(params);
         expect(response).toBeDefined();
         expect(response.status).toEqual(200);
 
         const { result } = response || {};
-        expect(result.added.length).toEqual(params.watchlist.length);
+
+        // We expect the call to fail because the fake user is not associated with the account.
+        expect(result.failed).toHaveLength(params.watchlist.length);
         done();
       } catch (err) {
         done(err);
       }
     });
 
-    test('Successfully removed users from case watchlist', async done => {
+    test('Successfully removed users from case watchlist', async (done) => {
       try {
         response = await service.removeWatchlist(params);
         expect(response).toBeDefined();
@@ -330,7 +335,7 @@ describe('CaseManagementV1_integration', () => {
     let params;
     let response;
 
-    test('Succefully resolve a case', async done => {
+    test('Succefully resolve a case', async (done) => {
       params = {
         caseNumber,
         statusPayload: {
@@ -354,7 +359,7 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Succefully unresolve a case', async done => {
+    test('Succefully unresolve a case', async (done) => {
       params = {
         caseNumber,
         statusPayload: {
@@ -386,7 +391,7 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully uploaded file', async done => {
+    test('Successfully uploaded file', async (done) => {
       params = {
         caseNumber,
         file: attachmentPayload,
@@ -408,7 +413,7 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Successfully downloaded a file', async done => {
+    test('Successfully downloaded a file', async (done) => {
       params = {
         caseNumber,
         fileId: attachmentId,
@@ -428,7 +433,7 @@ describe('CaseManagementV1_integration', () => {
       }
     });
 
-    test('Successfully deleted file', async done => {
+    test('Successfully deleted file', async (done) => {
       params = {
         caseNumber,
         fileId: attachmentId,
@@ -458,7 +463,7 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully added a resource', async done => {
+    test('Successfully added a resource', async (done) => {
       try {
         response = await service.addResource(params);
 

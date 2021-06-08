@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
+/**
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-a8493a65-20210115-083246
+ */
+
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -29,8 +39,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class GlobalTaggingV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://tags.global-search-tagging.cloud.ibm.com';
+
   static DEFAULT_SERVICE_NAME: string = 'global_tagging';
 
   /*************************
@@ -62,12 +72,11 @@ class GlobalTaggingV1 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a GlobalTaggingV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -101,6 +110,7 @@ class GlobalTaggingV1 extends BaseService {
    * `access`.
    * @param {boolean} [params.fullData] - If set to `true`, this query returns the provider, `ghost`, `ims` or
    * `ghost,ims`, where the tag exists and the number of attached resources.
+
    * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To list both
    * Global Search and Tagging tags and infrastructure tags, use `ghost,ims`. `service` and `access` tags can only be
    * attached to resources that are onboarded to Global Search and Tagging, so you should not set this parameter when
@@ -120,6 +130,7 @@ class GlobalTaggingV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>>}
    */
+
   public listTags(params?: GlobalTaggingV1.ListTagsParams): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>> {
     const _params = extend({}, params);
 
@@ -149,15 +160,18 @@ class GlobalTaggingV1 extends BaseService {
         defaultOptions: extend(true, {}, this.baseOptions, {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
+
    * Create an access tag.
    *
    * Create an access tag. To create an `access` tag, you must have the access listed in the [Granting users access to
@@ -253,13 +267,14 @@ class GlobalTaggingV1 extends BaseService {
         defaultOptions: extend(true, {}, this.baseOptions, {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete an unused tag.
@@ -312,13 +327,14 @@ class GlobalTaggingV1 extends BaseService {
         defaultOptions: extend(true, {}, this.baseOptions, {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Attach tags.
@@ -373,13 +389,14 @@ class GlobalTaggingV1 extends BaseService {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Detach tags.
@@ -434,14 +451,14 @@ class GlobalTaggingV1 extends BaseService {
           headers: extend(true, sdkHeaders, {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -449,9 +466,8 @@ class GlobalTaggingV1 extends BaseService {
  ************************/
 
 namespace GlobalTaggingV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -462,7 +478,7 @@ namespace GlobalTaggingV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -779,7 +795,6 @@ namespace GlobalTaggingV1 {
     /** It is `true` if the operation exits with an error. */
     is_error?: boolean;
   }
-
 }
 
 export = GlobalTaggingV1;

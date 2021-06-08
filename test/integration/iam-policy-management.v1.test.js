@@ -15,10 +15,8 @@
  * the License.
  */
 
-'use strict';
-
-const IamPolicyManagementV1 = require('../../dist/iam-policy-management/v1');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
+const IamPolicyManagementV1 = require('../../dist/iam-policy-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (25s).
@@ -39,7 +37,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testPolicyETag;
   let testPolicyId;
   const testUniqueId = Math.floor(Math.random() * 100000);
-  const testUserId = 'IBMid-SDKNode' + testUniqueId;
+  const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
   const testEditorRoleCrn = 'crn:v1:bluemix:public:iam::::role:Editor';
   const testServiceName = 'iam-groups';
@@ -65,24 +63,30 @@ describe('IamPolicyManagementV1_integration', () => {
     operator: 'stringEquals',
   };
   const policyResourceServiceAttribute = {
-    name: 'serviceName',
-    value: testServiceName,
+    name: 'serviceType',
+    value: 'service',
     operator: 'stringEquals',
+  };
+  const policyResourceTag = {
+    name: 'project',
+    operator: 'stringEquals',
+    value: 'prototype',
   };
   const policyResources = [
     {
       attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute],
+      tags: [policyResourceTag],
     },
   ];
 
   let testCustomRoleId;
   let testCustomRoleEtag;
-  const testCustomRoleName = 'TestNodeRole' + testUniqueId;
-  const testCustomRoleDisplayName = 'SDK ' + testCustomRoleName;
-  const testCustomRoleDescription = 'SDK ' + testCustomRoleName;
+  const testCustomRoleName = `TestNodeRole${testUniqueId}`;
+  const testCustomRoleDisplayName = `SDK ${testCustomRoleName}`;
+  const testCustomRoleDescription = `SDK ${testCustomRoleName}`;
   const testCustomRoleActions = ['iam-groups.groups.read'];
 
-  test('should successfully complete initialization', done => {
+  test('should successfully complete initialization', (done) => {
     // Initialize the service client.
     service = IamPolicyManagementV1.newInstance();
 
@@ -102,13 +106,12 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Access policy tests', () => {
-    test('Create an access policy', async done => {
+    test('Create an access policy', async (done) => {
       const params = {
         type: 'access',
         subjects: policySubjects,
         roles: policyRoles,
         resources: policyResources,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -122,22 +125,21 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(response.status).toEqual(201);
       const { result } = response || {};
       expect(result).toBeDefined();
-      expect(result['type']).toEqual(policyType);
-      expect(result['subjects']).toEqual(policySubjects);
-      expect(result['roles'][0]['role_id']).toEqual(policyRoles[0]['role_id']);
-      expect(result['resources']).toEqual(policyResources);
+      expect(result.type).toEqual(policyType);
+      expect(result.subjects).toEqual(policySubjects);
+      expect(result.roles[0].role_id).toEqual(policyRoles[0].role_id);
+      expect(result.resources).toEqual(policyResources);
 
       testPolicyId = result.id;
 
       done();
     });
 
-    test('Get an access policy', async done => {
+    test('Get an access policy', async (done) => {
       expect(testPolicyId).toBeDefined();
 
       const params = {
         policyId: testPolicyId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -152,17 +154,17 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(result.id).toEqual(testPolicyId);
-      expect(result['type']).toEqual(policyType);
-      expect(result['subjects']).toEqual(policySubjects);
-      expect(result['roles'][0]['role_id']).toEqual(policyRoles[0]['role_id']);
-      expect(result['resources']).toEqual(policyResources);
+      expect(result.type).toEqual(policyType);
+      expect(result.subjects).toEqual(policySubjects);
+      expect(result.roles[0].role_id).toEqual(policyRoles[0].role_id);
+      expect(result.resources).toEqual(policyResources);
 
       testPolicyETag = response.headers.etag;
 
       done();
     });
 
-    test('Update an access policy', async done => {
+    test('Update an access policy', async (done) => {
       expect(testPolicyId).toBeDefined();
       expect(testPolicyETag).toBeDefined();
 
@@ -179,7 +181,6 @@ describe('IamPolicyManagementV1_integration', () => {
         subjects: policySubjects,
         roles: updPolicyRoles,
         resources: policyResources,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -194,21 +195,52 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(result.id).toEqual(testPolicyId);
-      expect(result['type']).toEqual(policyType);
-      expect(result['subjects']).toEqual(policySubjects);
-      expect(result['roles'][0]['role_id']).toEqual(updPolicyRoles[0]['role_id']);
-      expect(result['resources']).toEqual(policyResources);
+      expect(result.type).toEqual(policyType);
+      expect(result.subjects).toEqual(policySubjects);
+      expect(result.roles[0].role_id).toEqual(updPolicyRoles[0].role_id);
+      expect(result.resources).toEqual(policyResources);
+
+      testPolicyETag = response.headers.etag;
 
       done();
     });
 
-    test('List access policies', async done => {
+    test('Patch an access policy', async (done) => {
+      expect(testPolicyId).toBeDefined();
+      expect(testPolicyETag).toBeDefined();
+
+      const params = {
+        policyId: testPolicyId,
+        ifMatch: testPolicyETag,
+        state: 'active',
+      };
+
+      let response;
+      try {
+        response = await service.patchPolicy(params);
+      } catch (err) {
+        done(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.id).toEqual(testPolicyId);
+      expect(result.type).toEqual(policyType);
+      expect(result.subjects).toEqual(policySubjects);
+      expect(result.state).toEqual('active');
+      expect(result.resources).toEqual(policyResources);
+
+      done();
+    });
+
+    test('List access policies', async (done) => {
       expect(testPolicyId).toBeDefined();
 
       const params = {
         accountId: testAccountId,
         iamId: testUserId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -237,12 +269,11 @@ describe('IamPolicyManagementV1_integration', () => {
       done();
     });
 
-    test('Clean up all test policies', async done => {
+    test('Clean up all test policies', async (done) => {
       // List all policies for the test user in the account
       const params = {
         accountId: testAccountId,
         iamId: testUserId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -268,7 +299,6 @@ describe('IamPolicyManagementV1_integration', () => {
         if (policy.id === testPolicyId || createdAt < fiveMinutesAgo) {
           const params = {
             policyId: policy.id,
-            headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
           };
 
           let response;
@@ -288,7 +318,7 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Custom roles tests', () => {
-    test('Create a custom role', async done => {
+    test('Create a custom role', async (done) => {
       const params = {
         displayName: testCustomRoleDisplayName,
         description: testCustomRoleDescription,
@@ -296,7 +326,6 @@ describe('IamPolicyManagementV1_integration', () => {
         accountId: testAccountId,
         serviceName: testServiceName,
         actions: testCustomRoleActions,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -310,24 +339,23 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(response.status).toEqual(201);
       const { result } = response || {};
       expect(result).toBeDefined();
-      expect(result['name']).toEqual(testCustomRoleName);
-      expect(result['display_name']).toEqual(testCustomRoleDisplayName);
-      expect(result['description']).toEqual(testCustomRoleDescription);
-      expect(result['account_id']).toEqual(testAccountId);
-      expect(result['service_name']).toEqual(testServiceName);
-      expect(result['actions']).toEqual(testCustomRoleActions);
+      expect(result.name).toEqual(testCustomRoleName);
+      expect(result.display_name).toEqual(testCustomRoleDisplayName);
+      expect(result.description).toEqual(testCustomRoleDescription);
+      expect(result.account_id).toEqual(testAccountId);
+      expect(result.service_name).toEqual(testServiceName);
+      expect(result.actions).toEqual(testCustomRoleActions);
 
       testCustomRoleId = result.id;
 
       done();
     });
 
-    test('Get a custom role', async done => {
+    test('Get a custom role', async (done) => {
       expect(testCustomRoleId).toBeDefined();
 
       const params = {
         roleId: testCustomRoleId,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -342,19 +370,19 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(result.id).toEqual(testCustomRoleId);
-      expect(result['name']).toEqual(testCustomRoleName);
-      expect(result['display_name']).toEqual(testCustomRoleDisplayName);
-      expect(result['description']).toEqual(testCustomRoleDescription);
-      expect(result['account_id']).toEqual(testAccountId);
-      expect(result['service_name']).toEqual(testServiceName);
-      expect(result['actions']).toEqual(testCustomRoleActions);
+      expect(result.name).toEqual(testCustomRoleName);
+      expect(result.display_name).toEqual(testCustomRoleDisplayName);
+      expect(result.description).toEqual(testCustomRoleDescription);
+      expect(result.account_id).toEqual(testAccountId);
+      expect(result.service_name).toEqual(testServiceName);
+      expect(result.actions).toEqual(testCustomRoleActions);
 
       testCustomRoleEtag = response.headers.etag;
 
       done();
     });
 
-    test('Update a custom role', async done => {
+    test('Update a custom role', async (done) => {
       expect(testCustomRoleId).toBeDefined();
       expect(testCustomRoleEtag).toBeDefined();
 
@@ -364,7 +392,7 @@ describe('IamPolicyManagementV1_integration', () => {
         roleId: testCustomRoleId,
         ifMatch: testCustomRoleEtag,
         description: updCustomRoleDescription,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
+        headers: { 'transaction-Id': `SDKNode-${testUniqueId}` },
       };
 
       let response;
@@ -379,23 +407,22 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(result.id).toEqual(testCustomRoleId);
-      expect(result['name']).toEqual(testCustomRoleName);
-      expect(result['display_name']).toEqual(testCustomRoleDisplayName);
-      expect(result['description']).toEqual(updCustomRoleDescription);
-      expect(result['account_id']).toEqual(testAccountId);
-      expect(result['service_name']).toEqual(testServiceName);
-      expect(result['actions']).toEqual(testCustomRoleActions);
+      expect(result.name).toEqual(testCustomRoleName);
+      expect(result.display_name).toEqual(testCustomRoleDisplayName);
+      expect(result.description).toEqual(updCustomRoleDescription);
+      expect(result.account_id).toEqual(testAccountId);
+      expect(result.service_name).toEqual(testServiceName);
+      expect(result.actions).toEqual(testCustomRoleActions);
 
       done();
     });
 
-    test('List custom roles', async done => {
+    test('List custom roles', async (done) => {
       expect(testCustomRoleId).toBeDefined();
 
       const params = {
         accountId: testAccountId,
         serviceName: testServiceName,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -424,12 +451,11 @@ describe('IamPolicyManagementV1_integration', () => {
       done();
     });
 
-    test('Clean up all test custom roles', async done => {
+    test('Clean up all test custom roles', async (done) => {
       // List all custom roles in the account
       const params = {
         accountId: testAccountId,
         serviceName: testServiceName,
-        headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
       };
 
       let response;
@@ -455,7 +481,6 @@ describe('IamPolicyManagementV1_integration', () => {
         if (role.id === testCustomRoleId || createdAt < fiveMinutesAgo) {
           const params = {
             roleId: role.id,
-            headers: { 'transaction-Id': 'SDKNode-' + testUniqueId },
           };
 
           let response;

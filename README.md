@@ -1,18 +1,17 @@
-[![Build Status](https://travis-ci.com/IBM/platform-services-node-sdk.svg?branch=master)](https://travis-ci.com/IBM/platform-services-node-sdk)
+[![Build Status](https://travis-ci.com/IBM/platform-services-node-sdk.svg?branch=main)](https://travis-ci.com/IBM/platform-services-node-sdk)
 [![Release](https://img.shields.io/github/v/release/IBM/platform-services-node-sdk)](https://github.com/IBM/platform-services-node-sdk/releases/latest)
 [![npm](https://img.shields.io/npm/v/ibm-platform-services)](https://www.npmjs.com/package/ibm-platform-services)
 ![npm](https://img.shields.io/npm/dm/ibm-platform-services)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![codecov](https://codecov.io/gh/IBM/platform-services-node-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/IBM/platform-services-node-sdk)
+[![codecov](https://codecov.io/gh/IBM/platform-services-node-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/IBM/platform-services-node-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![CLA assistant](https://cla-assistant.io/readme/badge/IBM/platform-services-node-sdk)](https://cla-assistant.io/IBM/platform-services-node-sdk)
+
 
 # IBM Cloud Platform Services Node.js SDK
 
 Node.js client library to interact with various 
 [IBM Cloud Platform Service APIs](https://cloud.ibm.com/docs?tab=api-docs&category=platform_services).
-
-Disclaimer: this SDK is being released initially as a **pre-release** version.
-Changes might occur which impact applications that use this SDK.
 
 ## Table of Contents
 
@@ -51,15 +50,21 @@ Service Name | Import Path
 [Case Management](https://cloud.ibm.com/apidocs/case-management) | ibm-platform-services/case-management/v1
 [Catalog Management](https://cloud.ibm.com/apidocs/resource-catalog/private-catalog) | ibm-platform-services/catalog-management/v1
 [Configuration Governance](https://cloud.ibm.com/apidocs/security-compliance/config) | ibm-platform-services/configuration-governance/v1
+[Enterprise Billing Units](https://cloud.ibm.com/apidocs/enterprise-apis/billing-unit) | ibm-platform-services/enterprise-billing-units/v1
 [Enterprise Management](https://cloud.ibm.com/apidocs/enterprise-apis/enterprise) | ibm-platform-services/enterprise-management/v1
+[Enterprise Usage Reports](https://cloud.ibm.com/apidocs/enterprise-apis/resource-usage-reports) | ibm-platform-services/enterprise-usage-reports/v1
 [Global Catalog](https://cloud.ibm.com/apidocs/resource-catalog/global-catalog) | ibm-platform-services/global-catalog/v1
 [Global Search](https://cloud.ibm.com/apidocs/search) | ibm-platform-services/global-search/v2
 [Global Tagging](https://cloud.ibm.com/apidocs/tagging) | ibm-platform-services/global-tagging/v1
 [IAM Access Groups](https://cloud.ibm.com/apidocs/iam-access-groups) | ibm-platform-services/iam-access-groups/v2
+[IAM Identity Service](https://cloud.ibm.com/apidocs/iam-identity-token-api) | ibm-platform-services/iam-identity/v1
 [IAM Policy Management](https://cloud.ibm.com/apidocs/iam-policy-management) | ibm-platform-services/iam-policy-management/v1
 [Open Service Broker](https://cloud.ibm.com/apidocs/resource-controller/ibm-cloud-osb-api) | ibm-platform-services/open-service-broker/v1
+[Posture Management](https://cloud.ibm.com/apidocs/security-compliance/posture) | ibm-platform-services/posture-management/v1
 [Resource Controller](https://cloud.ibm.com/apidocs/resource-controller/resource-controller) | ibm-platform-services/resource-controller/v2
 [Resource Manager](https://cloud.ibm.com/apidocs/resource-controller/resource-manager) | ibm-platform-services/resource-manager/v2
+[Usage Metering](https://cloud.ibm.com/apidocs/usage-metering) | ibm-platform-services/usage-metering/v4
+[Usage Reports](https://cloud.ibm.com/apidocs/metering-reporting) | ibm-platform-services/usage-reports/v4
 [User Management](https://cloud.ibm.com/apidocs/user-management) | ibm-platform-services/user-management/v1
 
 ## Prerequisites
@@ -75,7 +80,7 @@ npm install ibm-platform-services
 ```
 
 ## Using the SDK
-For general SDK usage information, please see [this link](https://github.com/IBM/ibm-cloud-sdk-common/blob/master/README.md)
+For general SDK usage information, please see [this link](https://github.com/IBM/ibm-cloud-sdk-common/blob/main/README.md)
 
 ## Questions
 

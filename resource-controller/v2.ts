@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
+ * IBM OpenAPI SDK Code Generator Version: 3.32.0-4c6a3129-20210514-210323
  */
- 
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -31,8 +36,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class ResourceControllerV2 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://resource-controller.cloud.ibm.com';
+
   static DEFAULT_SERVICE_NAME: string = 'resource_controller';
 
   /*************************
@@ -66,12 +71,11 @@ class ResourceControllerV2 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a ResourceControllerV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -95,7 +99,8 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource instances.
    *
-   * Get a list of all resource instances.
+   * View a list of all available resource instances. Resources is a broad term that could mean anything from a service
+   * instance to a virtual machine associated with the customer account.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - When you provision a new resource in the specified location for the selected plan,
@@ -107,54 +112,71 @@ class ResourceControllerV2 extends BaseService {
    * global catalog.
    * @param {string} [params.resourcePlanId] - The unique ID of the plan associated with the offering. This value is
    * provided by and stored in the global catalog.
-   * @param {string} [params.type] - The type of the instance. For example, `service_instance`.
-   * @param {string} [params.subType] - The sub-type of instance, e.g. `cfaas`.
-   * @param {string} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.type] - The type of the instance, for example, `service_instance`.
+   * @param {string} [params.subType] - The sub-type of instance, for example, `cfaas`.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * @param {string} [params.state] - The state of the instance. If not specified, instances in state `active` and
+   * `provisioning` are returned.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstancesList>>}
    */
-  public listResourceInstances(params?: ResourceControllerV2.ListResourceInstancesParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstancesList>> {
-    const _params = Object.assign({}, params);
+  public listResourceInstances(
+    params?: ResourceControllerV2.ListResourceInstancesParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstancesList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'guid': _params.guid,
-        'name': _params.name,
-        'resource_group_id': _params.resourceGroupId,
-        'resource_id': _params.resourceId,
-        'resource_plan_id': _params.resourcePlanId,
-        'type': _params.type,
-        'sub_type': _params.subType,
-        'limit': _params.limit,
-        'updated_from': _params.updatedFrom,
-        'updated_to': _params.updatedTo
-      };
+    const query = {
+      'guid': _params.guid,
+      'name': _params.name,
+      'resource_group_id': _params.resourceGroupId,
+      'resource_id': _params.resourceId,
+      'resource_plan_id': _params.resourcePlanId,
+      'type': _params.type,
+      'sub_type': _params.subType,
+      'limit': _params.limit,
+      'start': _params.start,
+      'state': _params.state,
+      'updated_from': _params.updatedFrom,
+      'updated_to': _params.updatedTo,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'listResourceInstances');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceInstances'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create (provision) a new resource instance.
    *
-   * Provision a new resource in the specified location for the selected plan.
+   * When you provision a service you get an instance of that service. An instance represents the resource with which
+   * you create, and additionally, represents a chargeable record of which billing can occur.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - The name of the instance. Must be 180 characters or less and cannot include any
@@ -169,142 +191,171 @@ class ResourceControllerV2 extends BaseService {
    * (cleaned up) during the processing of a region instance delete call.
    * @param {JsonObject} [params.parameters] - Configuration options represented as key-value pairs that are passed
    * through to the target resource brokers.
-   * @param {string} [params.entityLock] - Indicates if the resource instance is locked for further update or delete
+   * @param {boolean} [params.entityLock] - Indicates if the resource instance is locked for further update or delete
    * operations. It does not affect actions performed on child resources like aliases, bindings or keys. False by
    * default.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
-  public createResourceInstance(params: ResourceControllerV2.CreateResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
-    const _params = Object.assign({}, params);
+  public createResourceInstance(
+    params: ResourceControllerV2.CreateResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+    const _params = { ...params };
     const requiredParams = ['name', 'target', 'resourceGroup', 'resourcePlanId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'target': _params.target,
-        'resource_group': _params.resourceGroup,
-        'resource_plan_id': _params.resourcePlanId,
-        'tags': _params.tags,
-        'allow_cleanup': _params.allowCleanup,
-        'parameters': _params.parameters
-      };
+    const body = {
+      'name': _params.name,
+      'target': _params.target,
+      'resource_group': _params.resourceGroup,
+      'resource_plan_id': _params.resourcePlanId,
+      'tags': _params.tags,
+      'allow_cleanup': _params.allowCleanup,
+      'parameters': _params.parameters,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'createResourceInstance');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createResourceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Entity-Lock': _params.entityLock
-          }, _params.headers),
-        }),
-      };
+            'Entity-Lock': _params.entityLock,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get a resource instance.
    *
-   * Retrieve a resource instance by ID.
+   * Retrieve a resource instance by ID. Find more details on a particular instance, like when it was provisioned and
+   * who provisioned it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
-  public getResourceInstance(params: ResourceControllerV2.GetResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
-    const _params = Object.assign({}, params);
+  public getResourceInstance(
+    params: ResourceControllerV2.GetResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'getResourceInstance');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getResourceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a resource instance.
    *
-   * Delete a resource instance by ID.
+   * Delete a resource instance by ID. If the resource instance has any resource keys or aliases associated with it, use
+   * the `recursive=true parameter` to delete it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
+   * @param {boolean} [params.recursive] - Will delete resource bindings, keys and aliases associated with the instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
    */
-  public deleteResourceInstance(params: ResourceControllerV2.DeleteResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteResourceInstance(
+    params: ResourceControllerV2.DeleteResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const query = {
+      'recursive': _params.recursive,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'deleteResourceInstance');
+    const path = {
+      'id': _params.id,
+    };
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances/{id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteResourceInstance'
+    );
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a resource instance.
    *
-   * Update a resource instance by ID.
+   * You can use the ID to make updates to the resource instance, like changing the name or plan.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
@@ -318,47 +369,181 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
-  public updateResourceInstance(params: ResourceControllerV2.UpdateResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
-    const _params = Object.assign({}, params);
+  public updateResourceInstance(
+    params: ResourceControllerV2.UpdateResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'parameters': _params.parameters,
-        'resource_plan_id': _params.resourcePlanId,
-        'allow_cleanup': _params.allowCleanup
-      };
+    const body = {
+      'name': _params.name,
+      'parameters': _params.parameters,
+      'resource_plan_id': _params.resourcePlanId,
+      'allow_cleanup': _params.allowCleanup,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'updateResourceInstance');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'updateResourceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances/{id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get a list of all resource aliases for the instance.
+   *
+   * Retrieving a list of all resource aliases can help you find out who's using the resource instance.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The short or long ID of the instance.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>>}
+   */
+  public listResourceAliasesForInstance(
+    params: ResourceControllerV2.ListResourceAliasesForInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
+    const _params = { ...params };
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceAliasesForInstance'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}/resource_aliases',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get a list of all the resource keys for the instance.
+   *
+   * You may have many resource keys for one resource instance. For example, you may have a different resource key for
+   * each user or each role.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The short or long ID of the instance.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>>}
+   */
+  public listResourceKeysForInstance(
+    params: ResourceControllerV2.ListResourceKeysForInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>> {
+    const _params = { ...params };
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceKeysForInstance'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}/resource_keys',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 
   /**
    * Lock a resource instance.
@@ -371,81 +556,100 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
-  public lockResourceInstance(params: ResourceControllerV2.LockResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
-    const _params = Object.assign({}, params);
+  public lockResourceInstance(
+    params: ResourceControllerV2.LockResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'lockResourceInstance');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'lockResourceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances/{id}/lock',
-          method: 'POST',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}/lock',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Unlock a resource instance.
    *
-   * Unlocks a resource instance by ID.
+   * Unlock a resource instance to update or delete it. Unlocking a resource instance does not affect child resources
+   * like aliases, bindings or keys.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
-  public unlockResourceInstance(params: ResourceControllerV2.UnlockResourceInstanceParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
-    const _params = Object.assign({}, params);
+  public unlockResourceInstance(
+    params: ResourceControllerV2.UnlockResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'unlockResourceInstance');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'unlockResourceInstance'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_instances/{id}/lock',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}/lock',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * resourceKeys
@@ -454,7 +658,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all of the resource keys.
    *
-   * List all resource keys.
+   * View all of the resource keys that exist for all of your resource instances.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - When you create a new key, a GUID (globally unique identifier) is assigned. This is
@@ -463,49 +667,62 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} [params.resourceGroupId] - The short ID of the resource group.
    * @param {string} [params.resourceId] - The unique ID of the offering. This value is provided by and stored in the
    * global catalog.
-   * @param {string} [params.limit] - Limit on how many items should be returned.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>>}
    */
-  public listResourceKeys(params?: ResourceControllerV2.ListResourceKeysParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>> {
-    const _params = Object.assign({}, params);
+  public listResourceKeys(
+    params?: ResourceControllerV2.ListResourceKeysParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'guid': _params.guid,
-        'name': _params.name,
-        'resource_group_id': _params.resourceGroupId,
-        'resource_id': _params.resourceId,
-        'limit': _params.limit,
-        'updated_from': _params.updatedFrom,
-        'updated_to': _params.updatedTo
-      };
+    const query = {
+      'guid': _params.guid,
+      'name': _params.name,
+      'resource_group_id': _params.resourceGroupId,
+      'resource_id': _params.resourceId,
+      'limit': _params.limit,
+      'start': _params.start,
+      'updated_from': _params.updatedFrom,
+      'updated_to': _params.updatedTo,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'listResourceKeys');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceKeys'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_keys',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_keys',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a new resource key.
    *
-   * Create a new resource key.
+   * A resource key is a saved credential you can use to authenticate with a resource instance.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - The name of the key.
@@ -517,132 +734,153 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>>}
    */
-  public createResourceKey(params: ResourceControllerV2.CreateResourceKeyParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
-    const _params = Object.assign({}, params);
+  public createResourceKey(
+    params: ResourceControllerV2.CreateResourceKeyParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
+    const _params = { ...params };
     const requiredParams = ['name', 'source'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'source': _params.source,
-        'parameters': _params.parameters,
-        'role': _params.role
-      };
+    const body = {
+      'name': _params.name,
+      'source': _params.source,
+      'parameters': _params.parameters,
+      'role': _params.role,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'createResourceKey');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createResourceKey'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_keys',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_keys',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get resource key by ID.
    *
-   * Get resource key by ID.
+   * View a resource key and all of its details, like the credentials for the key and who created it.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>>}
    */
-  public getResourceKey(params: ResourceControllerV2.GetResourceKeyParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
-    const _params = Object.assign({}, params);
+  public getResourceKey(
+    params: ResourceControllerV2.GetResourceKeyParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'getResourceKey');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getResourceKey'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_keys/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_keys/{id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a resource key by ID.
    *
-   * Delete a resource key by ID.
+   * Deleting a resource key does not affect any resource instance or resource alias associated with the key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
    */
-  public deleteResourceKey(params: ResourceControllerV2.DeleteResourceKeyParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteResourceKey(
+    params: ResourceControllerV2.DeleteResourceKeyParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'deleteResourceKey');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteResourceKey'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_keys/{id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/v2/resource_keys/{id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a resource key.
    *
-   * Update a resource key by ID.
+   * Use the resource key ID to update the name of the resource key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the key.
@@ -651,44 +889,53 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>>}
    */
-  public updateResourceKey(params: ResourceControllerV2.UpdateResourceKeyParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
-    const _params = Object.assign({}, params);
+  public updateResourceKey(
+    params: ResourceControllerV2.UpdateResourceKeyParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'updateResourceKey');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'updateResourceKey'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_keys/{id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_keys/{id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * resourceBindings
@@ -697,7 +944,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource bindings.
    *
-   * Get a list of all resource bindings.
+   * View all of the resource bindings that exist for all of your resource aliases.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - The short ID of the binding.
@@ -705,57 +952,70 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} [params.resourceGroupId] - Short ID of the resource group.
    * @param {string} [params.resourceId] - The unique ID of the offering (service name). This value is provided by and
    * stored in the global catalog.
-   * @param {string} [params.regionBindingId] - Short ID of the binding in the specific targeted environment, e.g.
-   * service_binding_id in a given IBM Cloud environment.
-   * @param {string} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.regionBindingId] - Short ID of the binding in the specific targeted environment, for
+   * example, service_binding_id in a given IBM Cloud environment.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>>}
    */
-  public listResourceBindings(params?: ResourceControllerV2.ListResourceBindingsParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
-    const _params = Object.assign({}, params);
+  public listResourceBindings(
+    params?: ResourceControllerV2.ListResourceBindingsParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'guid': _params.guid,
-        'name': _params.name,
-        'resource_group_id': _params.resourceGroupId,
-        'resource_id': _params.resourceId,
-        'region_binding_id': _params.regionBindingId,
-        'limit': _params.limit,
-        'updated_from': _params.updatedFrom,
-        'updated_to': _params.updatedTo
-      };
+    const query = {
+      'guid': _params.guid,
+      'name': _params.name,
+      'resource_group_id': _params.resourceGroupId,
+      'resource_id': _params.resourceId,
+      'region_binding_id': _params.regionBindingId,
+      'limit': _params.limit,
+      'start': _params.start,
+      'updated_from': _params.updatedFrom,
+      'updated_to': _params.updatedTo,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'listResourceBindings');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceBindings'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_bindings',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_bindings',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a new resource binding.
    *
-   * Create a new resource binding.
+   * A resource binding connects credentials to a resource alias. The credentials are in the form of a resource key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.source - The short or long ID of resource alias.
-   * @param {string} params.target - The CRN of application to bind to in a specific environment, e.g. Dallas YP, CFEE
-   * instance.
+   * @param {string} params.target - The CRN of application to bind to in a specific environment, for example, Dallas
+   * YP, CFEE instance.
    * @param {string} [params.name] - The name of the binding. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
    * @param {ResourceBindingPostParameters} [params.parameters] - Configuration options represented as key-value pairs.
@@ -765,133 +1025,155 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
    */
-  public createResourceBinding(params: ResourceControllerV2.CreateResourceBindingParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
-    const _params = Object.assign({}, params);
+  public createResourceBinding(
+    params: ResourceControllerV2.CreateResourceBindingParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
+    const _params = { ...params };
     const requiredParams = ['source', 'target'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'source': _params.source,
-        'target': _params.target,
-        'name': _params.name,
-        'parameters': _params.parameters,
-        'role': _params.role
-      };
+    const body = {
+      'source': _params.source,
+      'target': _params.target,
+      'name': _params.name,
+      'parameters': _params.parameters,
+      'role': _params.role,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'createResourceBinding');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createResourceBinding'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_bindings',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_bindings',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get a resource binding.
    *
-   * Retrieve a resource binding by ID.
+   * View a resource binding and all of its details, like who created it, the credential, and the resource alias that
+   * the binding is associated with.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the binding.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
    */
-  public getResourceBinding(params: ResourceControllerV2.GetResourceBindingParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
-    const _params = Object.assign({}, params);
+  public getResourceBinding(
+    params: ResourceControllerV2.GetResourceBindingParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'getResourceBinding');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getResourceBinding'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_bindings/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_bindings/{id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a resource binding.
    *
-   * Delete a resource binding by ID.
+   * Deleting a resource binding does not affect the resource alias that the binding is associated with.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the binding.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
    */
-  public deleteResourceBinding(params: ResourceControllerV2.DeleteResourceBindingParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteResourceBinding(
+    params: ResourceControllerV2.DeleteResourceBindingParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'deleteResourceBinding');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteResourceBinding'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_bindings/{id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/v2/resource_bindings/{id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a resource binding.
    *
-   * Update a resource binding by ID.
+   * Use the resource binding ID to update the name of the resource binding.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the binding.
@@ -900,44 +1182,53 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
    */
-  public updateResourceBinding(params: ResourceControllerV2.UpdateResourceBindingParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
-    const _params = Object.assign({}, params);
+  public updateResourceBinding(
+    params: ResourceControllerV2.UpdateResourceBindingParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'updateResourceBinding');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'updateResourceBinding'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_bindings/{id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_bindings/{id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * resourceAliases
@@ -946,7 +1237,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all resource aliases.
    *
-   * Get a list of all resource aliases.
+   * View all of the resource aliases that exist for every resource instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.guid] - Short ID of the alias.
@@ -957,46 +1248,59 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} [params.resourceId] - The unique ID of the offering (service name). This value is provided by and
    * stored in the global catalog.
    * @param {string} [params.resourceGroupId] - Short ID of Resource group.
-   * @param {string} [params.limit] - Limit on how many items should be returned.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>>}
    */
-  public listResourceAliases(params?: ResourceControllerV2.ListResourceAliasesParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
-    const _params = Object.assign({}, params);
+  public listResourceAliases(
+    params?: ResourceControllerV2.ListResourceAliasesParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'guid': _params.guid,
-        'name': _params.name,
-        'resource_instance_id': _params.resourceInstanceId,
-        'region_instance_id': _params.regionInstanceId,
-        'resource_id': _params.resourceId,
-        'resource_group_id': _params.resourceGroupId,
-        'limit': _params.limit,
-        'updated_from': _params.updatedFrom,
-        'updated_to': _params.updatedTo
-      };
+    const query = {
+      'guid': _params.guid,
+      'name': _params.name,
+      'resource_instance_id': _params.resourceInstanceId,
+      'region_instance_id': _params.regionInstanceId,
+      'resource_id': _params.resourceId,
+      'resource_group_id': _params.resourceGroupId,
+      'limit': _params.limit,
+      'start': _params.start,
+      'updated_from': _params.updatedFrom,
+      'updated_to': _params.updatedTo,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'listResourceAliases');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceAliases'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_aliases',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_aliases',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a new resource alias.
@@ -1007,136 +1311,159 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} params.name - The name of the alias. Must be 180 characters or less and cannot include any special
    * characters other than `(space) - . _ :`.
    * @param {string} params.source - The short or long ID of resource instance.
-   * @param {string} params.target - The CRN of target name(space) in a specific environment, e.g. space in Dallas YP,
-   * CFEE instance etc.
+   * @param {string} params.target - The CRN of target name(space) in a specific environment, for example, space in
+   * Dallas YP, CFEE instance etc.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
    */
-  public createResourceAlias(params: ResourceControllerV2.CreateResourceAliasParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
-    const _params = Object.assign({}, params);
+  public createResourceAlias(
+    params: ResourceControllerV2.CreateResourceAliasParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
+    const _params = { ...params };
     const requiredParams = ['name', 'source', 'target'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'source': _params.source,
-        'target': _params.target
-      };
+    const body = {
+      'name': _params.name,
+      'source': _params.source,
+      'target': _params.target,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'createResourceAlias');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createResourceAlias'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_aliases',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_aliases',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get a resource alias.
    *
-   * Retrieve a resource alias by ID.
+   * View a resource alias and all of its details, like who created it and the resource instance that it's associated
+   * with.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
    */
-  public getResourceAlias(params: ResourceControllerV2.GetResourceAliasParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
-    const _params = Object.assign({}, params);
+  public getResourceAlias(
+    params: ResourceControllerV2.GetResourceAliasParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'getResourceAlias');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getResourceAlias'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_aliases/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_aliases/{id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a resource alias.
    *
-   * Delete a resource alias by ID.
+   * If the resource alias has any resource keys or bindings associated with it, you must delete those child resources
+   * before deleting the resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
    */
-  public deleteResourceAlias(params: ResourceControllerV2.DeleteResourceAliasParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteResourceAlias(
+    params: ResourceControllerV2.DeleteResourceAliasParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'deleteResourceAlias');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteResourceAlias'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_aliases/{id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/v2/resource_aliases/{id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a resource alias.
    *
-   * Update a resource alias by ID.
+   * Use the resource alias ID to update the name of the resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The short or long ID of the alias.
@@ -1145,44 +1472,115 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
    */
-  public updateResourceAlias(params: ResourceControllerV2.UpdateResourceAliasParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
-    const _params = Object.assign({}, params);
+  public updateResourceAlias(
+    params: ResourceControllerV2.UpdateResourceAliasParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'updateResourceAlias');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'updateResourceAlias'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/resource_aliases/{id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/resource_aliases/{id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get a list of all resource bindings for the alias.
+   *
+   * View all of the resource bindings associated with a specific resource alias.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The short or long ID of the alias.
+   * @param {number} [params.limit] - Limit on how many items should be returned.
+   * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
+   * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
+   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>>}
+   */
+  public listResourceBindingsForAlias(
+    params: ResourceControllerV2.ListResourceBindingsForAliasParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
+    const _params = { ...params };
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceBindingsForAlias'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/resource_aliases/{id}/resource_bindings',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * resourceReclamations
@@ -1191,7 +1589,7 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a list of all reclamations.
    *
-   * Get a list of all reclamations.
+   * View all of the resource reclamations that exist for every resource instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - An alpha-numeric value identifying the account ID.
@@ -1199,39 +1597,48 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>>}
    */
-  public listReclamations(params?: ResourceControllerV2.ListReclamationsParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>> {
-    const _params = Object.assign({}, params);
+  public listReclamations(
+    params?: ResourceControllerV2.ListReclamationsParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'account_id': _params.accountId,
-        'resource_instance_id': _params.resourceInstanceId
-      };
+    const query = {
+      'account_id': _params.accountId,
+      'resource_instance_id': _params.resourceInstanceId,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'listReclamations');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listReclamations'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v1/reclamations',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v1/reclamations',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Perform a reclamation action.
    *
-   * Reclaim (provisionally delete) a resource so that it can no longer be used, or restore a resource so that it's
-   * usable again.
+   * Reclaim a resource instance so that it can no longer be used, or restore the resource instance so that it's usable
+   * again.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The ID associated with the reclamation.
@@ -1242,47 +1649,55 @@ class ResourceControllerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Reclamation>>}
    */
-  public runReclamationAction(params: ResourceControllerV2.RunReclamationActionParams): Promise<ResourceControllerV2.Response<ResourceControllerV2.Reclamation>> {
-    const _params = Object.assign({}, params);
+  public runReclamationAction(
+    params: ResourceControllerV2.RunReclamationActionParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Reclamation>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'actionName'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'request_by': _params.requestBy,
-        'comment': _params.comment
-      };
+    const body = {
+      'request_by': _params.requestBy,
+      'comment': _params.comment,
+    };
 
-      const path = {
-        'id': _params.id,
-        'action_name': _params.actionName
-      };
+    const path = {
+      'id': _params.id,
+      'action_name': _params.actionName,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceControllerV2.DEFAULT_SERVICE_NAME, 'v2', 'runReclamationAction');
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'runReclamationAction'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v1/reclamations/{id}/actions/{action_name}',
-          method: 'POST',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v1/reclamations/{id}/actions/{action_name}',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -1290,9 +1705,8 @@ class ResourceControllerV2 extends BaseService {
  ************************/
 
 namespace ResourceControllerV2 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -1303,7 +1717,7 @@ namespace ResourceControllerV2 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1331,17 +1745,34 @@ namespace ResourceControllerV2 {
      *  catalog.
      */
     resourcePlanId?: string;
-    /** The type of the instance. For example, `service_instance`. */
+    /** The type of the instance, for example, `service_instance`. */
     type?: string;
-    /** The sub-type of instance, e.g. `cfaas`. */
+    /** The sub-type of instance, for example, `cfaas`. */
     subType?: string;
     /** Limit on how many items should be returned. */
-    limit?: string;
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
+    /** The state of the instance. If not specified, instances in state `active` and `provisioning` are returned. */
+    state?: ListResourceInstancesConstants.State | string;
     /** Start date inclusive filter. */
     updatedFrom?: string;
     /** End date inclusive filter. */
     updatedTo?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listResourceInstances` operation. */
+  export namespace ListResourceInstancesConstants {
+    /** The state of the instance. If not specified, instances in state `active` and `provisioning` are returned. */
+    export enum State {
+      ACTIVE = 'active',
+      PROVISIONING = 'provisioning',
+      REMOVED = 'removed',
+    }
   }
 
   /** Parameters for the `createResourceInstance` operation. */
@@ -1371,7 +1802,7 @@ namespace ResourceControllerV2 {
     /** Indicates if the resource instance is locked for further update or delete operations. It does not affect
      *  actions performed on child resources like aliases, bindings or keys. False by default.
      */
-    entityLock?: string;
+    entityLock?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1386,6 +1817,8 @@ namespace ResourceControllerV2 {
   export interface DeleteResourceInstanceParams {
     /** The short or long ID of the instance. */
     id: string;
+    /** Will delete resource bindings, keys and aliases associated with the instance. */
+    recursive?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1407,6 +1840,34 @@ namespace ResourceControllerV2 {
      *  region instance delete call.
      */
     allowCleanup?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listResourceAliasesForInstance` operation. */
+  export interface ListResourceAliasesForInstanceParams {
+    /** The short or long ID of the instance. */
+    id: string;
+    /** Limit on how many items should be returned. */
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listResourceKeysForInstance` operation. */
+  export interface ListResourceKeysForInstanceParams {
+    /** The short or long ID of the instance. */
+    id: string;
+    /** Limit on how many items should be returned. */
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1437,7 +1898,12 @@ namespace ResourceControllerV2 {
     /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
     resourceId?: string;
     /** Limit on how many items should be returned. */
-    limit?: string;
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
     /** Start date inclusive filter. */
     updatedFrom?: string;
     /** End date inclusive filter. */
@@ -1495,12 +1961,17 @@ namespace ResourceControllerV2 {
     resourceGroupId?: string;
     /** The unique ID of the offering (service name). This value is provided by and stored in the global catalog. */
     resourceId?: string;
-    /** Short ID of the binding in the specific targeted environment, e.g. service_binding_id in a given IBM Cloud
-     *  environment.
+    /** Short ID of the binding in the specific targeted environment, for example, service_binding_id in a given IBM
+     *  Cloud environment.
      */
     regionBindingId?: string;
     /** Limit on how many items should be returned. */
-    limit?: string;
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
     /** Start date inclusive filter. */
     updatedFrom?: string;
     /** End date inclusive filter. */
@@ -1512,7 +1983,7 @@ namespace ResourceControllerV2 {
   export interface CreateResourceBindingParams {
     /** The short or long ID of resource alias. */
     source: string;
-    /** The CRN of application to bind to in a specific environment, e.g. Dallas YP, CFEE instance. */
+    /** The CRN of application to bind to in a specific environment, for example, Dallas YP, CFEE instance. */
     target: string;
     /** The name of the binding. Must be 180 characters or less and cannot include any special characters other than
      *  `(space) - . _ :`.
@@ -1569,7 +2040,12 @@ namespace ResourceControllerV2 {
     /** Short ID of Resource group. */
     resourceGroupId?: string;
     /** Limit on how many items should be returned. */
-    limit?: string;
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
     /** Start date inclusive filter. */
     updatedFrom?: string;
     /** End date inclusive filter. */
@@ -1585,7 +2061,7 @@ namespace ResourceControllerV2 {
     name: string;
     /** The short or long ID of resource instance. */
     source: string;
-    /** The CRN of target name(space) in a specific environment, e.g. space in Dallas YP, CFEE instance etc. */
+    /** The CRN of target name(space) in a specific environment, for example, space in Dallas YP, CFEE instance etc. */
     target: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -1612,6 +2088,20 @@ namespace ResourceControllerV2 {
      *  than `(space) - . _ :`.
      */
     name: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listResourceBindingsForAlias` operation. */
+  export interface ListResourceBindingsForAliasParams {
+    /** The short or long ID of the alias. */
+    id: string;
+    /** Limit on how many items should be returned. */
+    limit?: number;
+    /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
+     *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
+     *  is obtained from the 'next_url' field of the operation response.
+     */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1665,6 +2155,8 @@ namespace ResourceControllerV2 {
     resource_plan_id: string;
     /** The date on which the plan was changed. */
     start_date: string;
+    /** The subject who made the plan change. */
+    requestor_id?: string;
   }
 
   /** A reclamation. */
@@ -1717,52 +2209,62 @@ namespace ResourceControllerV2 {
      *  indentifier managed by the resource controller that corresponds to the alias.
      */
     guid?: string;
-    /** The full Cloud Resource Name (CRN) associated with the alias. For more information about this format, see
-     *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
-     */
-    crn?: string;
     /** When you created a new alias, a relative URL path is created identifying the location of the alias. */
     url?: string;
-    /** The human-readable name of the alias. */
-    name?: string;
-    /** An alpha-numeric value identifying the account ID. */
-    account_id?: string;
-    /** The short ID of the resource group. */
-    resource_group_id?: string;
-    /** The long ID (full CRN) of the resource group. */
-    resource_group_crn?: string;
-    /** The CRN of the target namespace in the specific environment. */
-    target_crn?: string;
-    /** The state of the alias. */
-    state?: string;
-    /** The short ID of the resource instance that is being aliased. */
-    resource_instance_id?: string;
-    /** The short ID of the instance in the specific target environment, e.g. `service_instance_id` in a given IBM
-     *  Cloud environment.
-     */
-    region_instance_id?: string;
-    /** The relative path to the instance. */
-    resource_instance_url?: string;
-    /** The relative path to the resource bindings for the alias. */
-    resource_bindings_url?: string;
-    /** The relative path to the resource keys for the alias. */
-    resource_keys_url?: string;
     /** The date when the alias was created. */
     created_at?: string;
     /** The date when the alias was last updated. */
     updated_at?: string;
     /** The date when the alias was deleted. */
     deleted_at?: string;
+    /** The subject who created the alias. */
+    created_by?: string;
+    /** The subject who updated the alias. */
+    updated_by?: string;
+    /** The subject who deleted the alias. */
+    deleted_by?: string;
+    /** The human-readable name of the alias. */
+    name?: string;
+    /** The ID of the resource instance that is being aliased. */
+    resource_instance_id?: string;
+    /** The CRN of the target namespace in the specific environment. */
+    target_crn?: string;
+    /** An alpha-numeric value identifying the account ID. */
+    account_id?: string;
+    /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
+    resource_id?: string;
+    /** The ID of the resource group. */
+    resource_group_id?: string;
+    /** The CRN of the alias. For more information about this format, see [Cloud Resource
+     *  Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
+     */
+    crn?: string;
+    /** The ID of the instance in the specific target environment, for example, `service_instance_id` in a given IBM
+     *  Cloud environment.
+     */
+    region_instance_id?: string;
+    /** The CRN of the instance in the specific target environment. */
+    region_instance_crn?: string;
+    /** The state of the alias. */
+    state?: string;
+    /** A boolean that dictates if the alias was migrated from a previous CF instance. */
+    migrated?: boolean;
+    /** The relative path to the resource instance. */
+    resource_instance_url?: string;
+    /** The relative path to the resource bindings for the alias. */
+    resource_bindings_url?: string;
+    /** The relative path to the resource keys for the alias. */
+    resource_keys_url?: string;
   }
 
   /** A list of resource aliases. */
   export interface ResourceAliasesList {
+    /** The number of resource aliases in `resources`. */
+    rows_count: number;
     /** The URL for requesting the next page of results. */
     next_url: string;
     /** A list of resource aliases. */
     resources: ResourceAlias[];
-    /** The number of resource aliases in `resources`. */
-    rows_count: number;
   }
 
   /** A resource binding. */
@@ -1773,26 +2275,40 @@ namespace ResourceControllerV2 {
      *  internal identifier managed by the resource controller that corresponds to the binding.
      */
     guid?: string;
+    /** When you provision a new binding, a relative URL path is created identifying the location of the binding. */
+    url?: string;
+    /** The date when the binding was created. */
+    created_at?: string;
+    /** The date when the binding was last updated. */
+    updated_at?: string;
+    /** The date when the binding was deleted. */
+    deleted_at?: string;
+    /** The subject who created the binding. */
+    created_by?: string;
+    /** The subject who updated the binding. */
+    updated_by?: string;
+    /** The subject who deleted the binding. */
+    deleted_by?: string;
+    /** The CRN of resource alias associated to the binding. */
+    source_crn?: string;
+    /** The CRN of target resource, for example, application, in a specific environment. */
+    target_crn?: string;
     /** The full Cloud Resource Name (CRN) associated with the binding. For more information about this format, see
      *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
      */
     crn?: string;
-    /** When you provision a new binding, a relative URL path is created identifying the location of the binding. */
-    url?: string;
+    /** The ID of the binding in the specific target environment, for example, `service_binding_id` in a given IBM
+     *  Cloud environment.
+     */
+    region_binding_id?: string;
+    /** The CRN of the binding in the specific target environment. */
+    region_binding_crn?: string;
     /** The human-readable name of the binding. */
     name?: string;
     /** An alpha-numeric value identifying the account ID. */
     account_id?: string;
-    /** The short ID of the resource group. */
+    /** The ID of the resource group. */
     resource_group_id?: string;
-    /** The CRN of resource alias associated to the binding. */
-    source_crn?: string;
-    /** The CRN of target resource, e.g. application, in a specific environment. */
-    target_crn?: string;
-    /** The short ID of the binding in specific targeted environment, e.g. `service_binding_id` in a given IBM Cloud
-     *  environment.
-     */
-    region_binding_id?: string;
     /** The state of the binding. */
     state?: string;
     /** The credentials for the binding. Additional key-value pairs are passed through from the resource brokers.
@@ -1801,30 +2317,30 @@ namespace ResourceControllerV2 {
     credentials?: Credentials;
     /** Specifies whether the binding’s credentials support IAM. */
     iam_compatible?: boolean;
+    /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
+    resource_id?: string;
+    /** A boolean that dictates if the alias was migrated from a previous CF instance. */
+    migrated?: boolean;
     /** The relative path to the resource alias that this binding is associated with. */
     resource_alias_url?: string;
-    /** The date when the binding was created. */
-    created_at?: string;
-    /** The date when the binding was last updated. */
-    updated_at?: string;
-    /** The date when the binding was deleted. */
-    deleted_at?: string;
   }
 
   /** Configuration options represented as key-value pairs. Service defined options are passed through to the target resource brokers, whereas platform defined options are not. */
   export interface ResourceBindingPostParameters {
     /** An optional platform defined option to reuse an existing IAM serviceId for the role assignment. */
     serviceid_crn?: string;
+    /** ResourceBindingPostParameters accepts additional properties. */
+    [propName: string]: any;
   }
 
   /** A list of resource bindings. */
   export interface ResourceBindingsList {
+    /** The number of resource bindings in `resources`. */
+    rows_count: number;
     /** The URL for requesting the next page of results. */
     next_url: string;
     /** A list of resource bindings. */
     resources: ResourceBinding[];
-    /** The number of resource bindings in `resources`. */
-    rows_count: number;
   }
 
   /** A resource instance. */
@@ -1835,70 +2351,98 @@ namespace ResourceControllerV2 {
      *  internal identifier managed by the resource controller that corresponds to the instance.
      */
     guid?: string;
-    /** The full Cloud Resource Name (CRN) associated with the instance. For more information about this format, see
-     *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
-     */
-    crn?: string;
     /** When you provision a new resource, a relative URL path is created identifying the location of the instance. */
     url?: string;
-    /** The human-readable name of the instance. */
-    name?: string;
-    /** An alpha-numeric value identifying the account ID. */
-    account_id?: string;
-    /** The short ID of the resource group. */
-    resource_group_id?: string;
-    /** The long ID (full CRN) of the resource group. */
-    resource_group_crn?: string;
-    /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
-    resource_id?: string;
-    /** The unique ID of the plan associated with the offering. This value is provided by and stored in the global
-     *  catalog.
-     */
-    resource_plan_id?: string;
-    /** The full deployment CRN as defined in the global catalog. The Cloud Resource Name (CRN) of the deployment
-     *  location where the instance is provisioned.
-     */
-    target_crn?: string;
-    /** The current state of the instance. For example, if the instance is deleted, it will return removed. */
-    state?: string;
-    /** The type of the instance, e.g. `service_instance`. */
-    type?: string;
-    /** The sub-type of instance, e.g. `cfaas`. */
-    sub_type?: string;
-    /** A boolean that dictates if the resource instance should be deleted (cleaned up) during the processing of a
-     *  region instance delete call.
-     */
-    allow_cleanup?: boolean;
-    /** A boolean that dictates if the resource instance is locked or not. */
-    locked?: boolean;
-    /** The status of the last operation requested on the instance. */
-    last_operation?: JsonObject;
-    /** The resource-broker-provided URL to access administrative features of the instance. */
-    dashboard_url?: string;
-    /** The plan history of the instance. */
-    plan_history?: PlanHistoryItem[];
-    /** The relative path to the resource aliases for the instance. */
-    resource_aliases_url?: string;
-    /** The relative path to the resource bindings for the instance. */
-    resource_bindings_url?: string;
-    /** The relative path to the resource keys for the instance. */
-    resource_keys_url?: string;
     /** The date when the instance was created. */
     created_at?: string;
     /** The date when the instance was last updated. */
     updated_at?: string;
     /** The date when the instance was deleted. */
     deleted_at?: string;
+    /** The subject who created the instance. */
+    created_by?: string;
+    /** The subject who updated the instance. */
+    updated_by?: string;
+    /** The subject who deleted the instance. */
+    deleted_by?: string;
+    /** The date when the instance was scheduled for reclamation. */
+    scheduled_reclaim_at?: string;
+    /** The date when the instance under reclamation was restored. */
+    restored_at?: string;
+    /** The subject who restored the instance back from reclamation. */
+    restored_by?: string;
+    /** The subject who initiated the instance reclamation. */
+    scheduled_reclaim_by?: string;
+    /** The human-readable name of the instance. */
+    name?: string;
+    /** The deployment location where the instance was provisioned. */
+    region_id?: string;
+    /** An alpha-numeric value identifying the account ID. */
+    account_id?: string;
+    /** The unique ID of the reseller channel where the instance was provisioned from. */
+    reseller_channel_id?: string;
+    /** The unique ID of the plan associated with the offering. This value is provided by and stored in the global
+     *  catalog.
+     */
+    resource_plan_id?: string;
+    /** The ID of the resource group. */
+    resource_group_id?: string;
+    /** The CRN of the resource group. */
+    resource_group_crn?: string;
+    /** The deployment CRN as defined in the global catalog. The Cloud Resource Name (CRN) of the deployment
+     *  location where the instance is provisioned.
+     */
+    target_crn?: string;
+    /** The current configuration parameters of the instance. */
+    parameters?: JsonObject;
+    /** A boolean that dictates if the resource instance should be deleted (cleaned up) during the processing of a
+     *  region instance delete call.
+     */
+    allow_cleanup?: boolean;
+    /** The full Cloud Resource Name (CRN) associated with the instance. For more information about this format, see
+     *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
+     */
+    crn?: string;
+    /** The current state of the instance. For example, if the instance is deleted, it will return removed. */
+    state?: string;
+    /** The type of the instance, for example, `service_instance`. */
+    type?: string;
+    /** The sub-type of instance, for example, `cfaas`. */
+    sub_type?: string;
+    /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
+    resource_id?: string;
+    /** The resource-broker-provided URL to access administrative features of the instance. */
+    dashboard_url?: string;
+    /** The status of the last operation requested on the instance. */
+    last_operation?: JsonObject;
+    /** The relative path to the resource aliases for the instance. */
+    resource_aliases_url?: string;
+    /** The relative path to the resource bindings for the instance. */
+    resource_bindings_url?: string;
+    /** The relative path to the resource keys for the instance. */
+    resource_keys_url?: string;
+    /** The plan history of the instance. */
+    plan_history?: PlanHistoryItem[];
+    /** A boolean that dictates if the resource instance was migrated from a previous CF instance. */
+    migrated?: boolean;
+    /** Additional instance properties, contributed by the service and/or platform, are represented as key-value
+     *  pairs.
+     */
+    extensions?: JsonObject;
+    /** The CRN of the resource that has control of the instance. */
+    controlled_by?: string;
+    /** A boolean that dictates if the resource instance is locked or not. */
+    locked?: boolean;
   }
 
   /** A list of resource instances. */
   export interface ResourceInstancesList {
+    /** The number of resource instances in `resources`. */
+    rows_count: number;
     /** The URL for requesting the next page of results. */
     next_url: string;
     /** A list of resource instances. */
     resources: ResourceInstance[];
-    /** The number of resource instances in `resources`. */
-    rows_count: number;
   }
 
   /** A resource key. */
@@ -1909,54 +2453,67 @@ namespace ResourceControllerV2 {
      *  identifier managed by the resource controller that corresponds to the key.
      */
     guid?: string;
-    /** The full Cloud Resource Name (CRN) associated with the key. For more information about this format, see
-     *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
-     */
-    crn?: string;
     /** When you created a new key, a relative URL path is created identifying the location of the key. */
     url?: string;
-    /** The human-readable name of the key. */
-    name?: string;
-    /** An alpha-numeric value identifying the account ID. */
-    account_id?: string;
-    /** The short ID of the resource group. */
-    resource_group_id?: string;
-    /** The CRN of resource instance or alias associated to the key. */
-    source_crn?: string;
-    /** The state of the key. */
-    state?: string;
-    /** The credentials for the key. Additional key-value pairs are passed through from the resource brokers.  Refer
-     *  to service’s documentation for additional details.
-     */
-    credentials?: Credentials;
-    /** Specifies whether the key’s credentials support IAM. */
-    iam_compatible?: boolean;
-    /** The relative path to the resource. */
-    resource_instance_url?: string;
     /** The date when the key was created. */
     created_at?: string;
     /** The date when the key was last updated. */
     updated_at?: string;
     /** The date when the key was deleted. */
     deleted_at?: string;
+    /** The subject who created the key. */
+    created_by?: string;
+    /** The subject who updated the key. */
+    updated_by?: string;
+    /** The subject who deleted the key. */
+    deleted_by?: string;
+    /** The CRN of resource instance or alias associated to the key. */
+    source_crn?: string;
+    /** The human-readable name of the key. */
+    name?: string;
+    /** The full Cloud Resource Name (CRN) associated with the key. For more information about this format, see
+     *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
+     */
+    crn?: string;
+    /** The state of the key. */
+    state?: string;
+    /** An alpha-numeric value identifying the account ID. */
+    account_id?: string;
+    /** The ID of the resource group. */
+    resource_group_id?: string;
+    /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
+    resource_id?: string;
+    /** The credentials for the key. Additional key-value pairs are passed through from the resource brokers.  Refer
+     *  to service’s documentation for additional details.
+     */
+    credentials?: Credentials;
+    /** Specifies whether the key’s credentials support IAM. */
+    iam_compatible?: boolean;
+    /** A boolean that dictates if the alias was migrated from a previous CF instance. */
+    migrated?: boolean;
+    /** The relative path to the resource. */
+    resource_instance_url?: string;
+    /** The relative path to the resource alias that this binding is associated with. */
+    resource_alias_url?: string;
   }
 
   /** Configuration options represented as key-value pairs. Service defined options are passed through to the target resource brokers, whereas platform defined options are not. */
   export interface ResourceKeyPostParameters {
     /** An optional platform defined option to reuse an existing IAM serviceId for the role assignment. */
     serviceid_crn?: string;
+    /** ResourceKeyPostParameters accepts additional properties. */
+    [propName: string]: any;
   }
 
   /** A list of resource keys. */
   export interface ResourceKeysList {
+    /** The number of resource keys in `resources`. */
+    rows_count: number;
     /** The URL for requesting the next page of results. */
     next_url: string;
     /** A list of resource keys. */
     resources: ResourceKey[];
-    /** The number of resource keys in `resources`. */
-    rows_count: number;
   }
-
 }
 
 export = ResourceControllerV2;

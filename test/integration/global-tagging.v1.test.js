@@ -15,150 +15,464 @@
  * limitations under the License.
  */
 
-'use strict';
-
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
-const { IamAuthenticator } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
-const timeout = 10000; // ten seconds
+// testcase timeout value (30s).
+const timeout = 30000;
 
 // Location of our config file.
-const configFile = 'ghost.env';
+const configFile = 'global_tagging.env';
 
-// Use authHelper to skip tests if our configFile is not available.
 const describe = authHelper.prepareTests(configFile);
 
-// Retrieve the config file as an object.
-// We do this because we're going to directly use the
-// config properties, rather than let the SDK do it for us.
-const config = authHelper.loadConfig();
+const sdkLabel = 'node-sdk';
+const userTag1 = `${sdkLabel}-user-test1`;
+const userTag2 = `${sdkLabel}-user-test2`;
+const accessTag1 = `env:${sdkLabel}-public`;
+const accessTag2 = `region:${sdkLabel}-us-south`;
+
+let globalTaggingService;
+let resourceCrn;
 
 describe('GlobalTaggingV1_integration', () => {
   jest.setTimeout(timeout);
 
-  const tagName = 'node-sdk-' + Math.floor(Math.random() * 100000 + 1).toString();
-  const providers = ['ghost'];
-  const fullData = true;
-  const offset = 0;
-  const limit = 100;
-  const orderByName = 'asc';
-  const attachedOnly = false;
-  const attachedTo = config.GST_RESOURCE_CRN;
-  const fullData2 = false;
+  beforeAll(async () => {
+    console.log('Starting setup...');
+    globalTaggingService = GlobalTaggingV1.newInstance({});
+    expect(globalTaggingService).not.toBeNull();
 
-  const paramsAttachedTo = {
-    providers: providers,
-    attachedTo: attachedTo,
-    fullData: fullData2,
-    offset: offset,
-    limit: limit,
-    orderByName: orderByName,
-    timeout: timeout,
-    attachedOnly: attachedOnly,
-  };
+    const config = readExternalSources(GlobalTaggingV1.DEFAULT_SERVICE_NAME);
+    expect(config).not.toBeNull();
 
-  // Initialize the service client.
-  const options = {
-    authenticator: new IamAuthenticator({
-      apikey: config.GST_IINTERNA_APIKEY,
-    }),
-    serviceUrl: config.GST_TAGS_URL,
-  };
-  const globalTagging = new GlobalTaggingV1(options);
+    const serviceUrl = config.url;
+    expect(serviceUrl).toBeDefined();
 
-  test('should getAll tags', done => {
+    resourceCrn = config.resourceCrn;
+    expect(resourceCrn).toBeDefined();
+
+    console.log('Service URL: ', serviceUrl);
+    console.log('Resource CRN: ', resourceCrn);
+
+    await cleanTags(globalTaggingService, resourceCrn);
+
+    console.log('Finished setup.');
+  });
+
+  afterAll(async () => {
+    console.log('Starting teardown...');
+    await cleanTags(globalTaggingService, resourceCrn);
+    console.log('Finished teardown!');
+  });
+
+  test('createTag()', async () => {
     const params = {
-      providers: providers,
-      fullData: fullData,
-      offset: offset,
-      limit: limit,
-      orderByName: orderByName,
-      timeout: timeout,
-      attachedOnly: attachedOnly,
+      tagNames: [accessTag1, accessTag2],
+      tagType: 'access',
     };
 
-    return globalTagging.listTags(params).then(response => {
-      expect(response.hasOwnProperty('status')).toBe(true);
-      expect(response.status).toBe(200);
-      done();
+    const res = await globalTaggingService.createTag(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+
+    const { result } = res;
+    console.log('createTag() result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
     });
   });
 
-  test('should Attach tag', done => {
+  test('attachTag(user)', async () => {
+    // Request models needed by this operation.
     const resourceModel = {
-      resource_id: config.GST_RESOURCE_CRN,
-      resource_type: 'cf-application',
+      resource_id: resourceCrn,
     };
 
-    const resources = [resourceModel];
-    const tagNameArray = [tagName];
     const params = {
-      resources: resources,
-      tagNames: tagNameArray,
+      resources: [resourceModel],
+      tagNames: [userTag1, userTag2],
+      tagType: 'user',
     };
 
-    globalTagging.attachTag(params).then(response => {
-      // console.log('rispostaTagAttach', response.result.results[0]);
-      // console.log('risorsa', response.result.items[0]);
-      expect(response.hasOwnProperty('status')).toBe(true);
-      expect(response.status).toBe(200);
-      expect(response.result.results[0].isError).toBe('false');
+    const res = await globalTaggingService.attachTag(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toBe(200);
 
-      return globalTagging.listTags(paramsAttachedTo).then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.result.items)).toBe(true);
-        done();
-      });
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('attachTag(user) result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
     });
+
+    // Make sure the tags were in fact attached to the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'user');
+    expect(tagNames).toContain(userTag1);
+    expect(tagNames).toContain(userTag2);
   });
 
-  test('should Detach tag', done => {
+  test('attachTag(access)', async () => {
+    // Request models needed by this operation.
     const resourceModel = {
-      resource_id: config.GST_RESOURCE_CRN,
-      resource_type: 'cf-application',
+      resource_id: resourceCrn,
     };
 
-    const resources = [resourceModel];
-    const tagNameArray = [tagName];
     const params = {
-      resources: resources,
-      tagNames: tagNameArray,
+      resources: [resourceModel],
+      tagNames: [accessTag1, accessTag2],
+      tagType: 'access',
     };
 
-    globalTagging.detachTag(params).then(response => {
-      expect(response.hasOwnProperty('status')).toBe(true);
-      expect(response.status).toBe(200);
-      expect(response.result.results[0].isError).toBe('false');
+    const res = await globalTaggingService.attachTag(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toBe(200);
 
-      return globalTagging.listTags(paramsAttachedTo).then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.result.items)).toBe(true);
-        done();
-      });
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('attachTag(access) result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact attached to the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'access');
+    expect(tagNames).toContain(accessTag1);
+    expect(tagNames).toContain(accessTag2);
+  });
+
+  test('listTags(user)', async () => {
+    const results = [];
+    let offset = 0;
+    let moreResults = true;
+    while (moreResults) {
+      const params = {
+        offset,
+        limit: 500,
+        tagType: 'user',
+      };
+
+      const res = await globalTaggingService.listTags(params);
+      expect(res).not.toBeNull();
+      expect(res.status).toBe(200);
+
+      const { result } = res;
+      expect(result).toBeDefined();
+      expect(result.items).toBeDefined();
+
+      if (result.items.length > 0) {
+        results.push(...result.items);
+        offset += result.items.length;
+      } else {
+        moreResults = false;
+      }
+    }
+    console.log(`\nRetrieved a total of ${results.length} user tags.\n`);
+
+    const matches = [];
+    results.forEach((tag) => {
+      if (tag.name.includes(sdkLabel)) {
+        matches.push(tag.name);
+      }
+    });
+    console.log(`Found ${matches.length} user tags containing our label: [${matches}]`);
+  });
+
+  test('listTags(access)', async () => {
+    const results = [];
+    let offset = 0;
+    let moreResults = true;
+    while (moreResults) {
+      const params = {
+        offset,
+        limit: 500,
+        tagType: 'access',
+      };
+
+      const res = await globalTaggingService.listTags(params);
+      expect(res).not.toBeNull();
+      expect(res.status).toBe(200);
+
+      const { result } = res;
+      expect(result).toBeDefined();
+      expect(result.items).toBeDefined();
+
+      if (result.items.length > 0) {
+        results.push(...result.items);
+        offset += result.items.length;
+      } else {
+        moreResults = false;
+      }
+    }
+
+    console.log(`\nRetrieved a total of ${results.length} access tags.\n`);
+
+    const matches = [];
+    results.forEach((tag) => {
+      if (tag.name.includes(sdkLabel)) {
+        matches.push(tag.name);
+      }
+    });
+    console.log(`Found ${matches.length} access tags containing our label: [${matches}]`);
+  });
+
+  test('detachTag(user)', async () => {
+    // Request models needed by this operation.
+    const resourceModel = {
+      resource_id: resourceCrn,
+    };
+
+    const params = {
+      resources: [resourceModel],
+      tagNames: [userTag1, userTag2],
+      tagType: 'user',
+    };
+
+    const res = await globalTaggingService.detachTag(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('detachTag(user) result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact detached from the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'user');
+    expect(tagNames).not.toContain(userTag1);
+    expect(tagNames).not.toContain(userTag2);
+  });
+
+  test('detachTag(access)', async () => {
+    // Request models needed by this operation.
+    const resourceModel = {
+      resource_id: resourceCrn,
+    };
+
+    const params = {
+      resources: [resourceModel],
+      tagNames: [accessTag1, accessTag2],
+      tagType: 'access',
+    };
+
+    const res = await globalTaggingService.detachTag(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('detachTag(access) result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact detached from the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'access');
+    expect(tagNames).not.toContain(accessTag1);
+    expect(tagNames).not.toContain(accessTag2);
+  });
+
+  test('deleteTag(user)', async () => {
+    const params = {
+      tagName: userTag1,
+      tagType: 'user',
+    };
+
+    const res = await globalTaggingService.deleteTag(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('deleteTag(user) result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
     });
   });
 
-  test('should Delete tag', done => {
-    const providers = ['ghost'];
+  test('deleteTag(access)', async () => {
     const params = {
-      tagName: tagName,
-      providers: providers,
+      tagName: accessTag1,
+      tagType: 'access',
     };
 
-    globalTagging.deleteTag(params).then(response => {
-      expect(response.hasOwnProperty('status')).toBe(true);
-      expect(response.status).toBe(200);
-      expect(response.result.results[0].isError).toBe('false');
+    const res = await globalTaggingService.deleteTag(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('deleteTag(access) result: ', result);
 
-      return globalTagging.listTags(paramsAttachedTo).then(response => {
-        expect(response.hasOwnProperty('status')).toBe(true);
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.result.items)).toBe(true);
-        done();
-      });
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+  });
+
+  test('deleteTagAll(user)', async () => {
+    const params = {
+      tagType: 'user',
+    };
+
+    const res = await globalTaggingService.deleteTagAll(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('deleteTagAll(user) result: ', result);
+
+    expect(result.items).toBeDefined();
+    result.items.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+  });
+
+  test('deleteTagAll(access)', async () => {
+    const params = {
+      tagType: 'access',
+    };
+
+    const res = await globalTaggingService.deleteTagAll(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('deleteTagAll(access) result: ', result);
+
+    expect(result.items).toBeDefined();
+    result.items.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
     });
   });
 });
+
+async function getTagNamesForResource(service, resourceId, tagType) {
+  const tagNames = [];
+
+  const params = {
+    offset: 0,
+    limit: 1000,
+    attachedTo: resourceId,
+    tagType,
+  };
+  const res = await service.listTags(params);
+  expect(res).toBeDefined();
+  expect(res.status).toBe(200);
+  const { result } = res;
+  if (result.items) {
+    result.items.forEach((tag) => {
+      tagNames.push(tag.name);
+    });
+  }
+
+  return tagNames;
+}
+
+async function detachTag(service, resourceId, tag, tagType) {
+  const resourceModel = {
+    resource_id: resourceId,
+  };
+
+  const params = {
+    resources: [resourceModel],
+    tagNames: [tag],
+    tagType,
+  };
+
+  const res = await globalTaggingService.detachTag(params);
+  expect(res.status).toBe(200);
+  const { result } = res;
+  expect(result).toBeDefined();
+}
+
+async function deleteTag(service, tag, tagType) {
+  const params = {
+    tagName: tag,
+    tagType,
+  };
+
+  const res = await service.deleteTag(params);
+  expect(res).toBeDefined();
+  const { result } = res;
+  expect(result).toBeDefined();
+
+  expect(result.results).toBeDefined();
+  result.results.forEach((elem) => {
+    expect(elem.is_error).toBe(false);
+  });
+}
+
+async function listTagsWithLabel(service, tagType, label) {
+  const tagNames = [];
+
+  let offset = 0;
+  let moreResults = true;
+
+  while (moreResults) {
+    const params = {
+      offset,
+      limit: 500,
+      tagType,
+    };
+
+    const res = await globalTaggingService.listTags(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toBe(200);
+
+    const { result } = res;
+    expect(result).toBeDefined();
+    expect(result.items).toBeDefined();
+
+    if (result.items.length > 0) {
+      for (const item of result.items) {
+        if (item.name.includes(label)) {
+          tagNames.push(item.name);
+        }
+      }
+      offset += result.items.length;
+    } else {
+      moreResults = false;
+    }
+  }
+
+  return tagNames;
+}
+
+async function cleanTags(service, resourceId) {
+  // Detach all user and access tags that contain our label.
+  let tags;
+  tags = await getTagNamesForResource(service, resourceId, 'user');
+  for (const tag of tags) {
+    if (tag.includes(sdkLabel)) {
+      console.log(`Detaching user tag ${tag} from resource ${resourceId}`);
+      await detachTag(service, resourceId, tag, 'user');
+    }
+  }
+
+  tags = await getTagNamesForResource(service, resourceId, 'user');
+  console.log(`Resource now has these user tags: [${tags}]`);
+
+  tags = await getTagNamesForResource(service, resourceId, 'access');
+  for (const tag of tags) {
+    if (tag.includes(sdkLabel)) {
+      console.log(`Detaching access tag ${tag} from resource ${resourceId}`);
+      await detachTag(service, resourceId, tag, 'access');
+    }
+  }
+
+  tags = await getTagNamesForResource(service, resourceId, 'access');
+  console.log(`Resource now has these access tags: [${tags}]`);
+
+  // Delete all user and access tags that contain our label.
+  tags = await listTagsWithLabel(service, 'user', sdkLabel);
+  for (const tag of tags) {
+    console.log(`Deleting user tag: ${tag}`);
+    await deleteTag(service, tag, 'user');
+  }
+
+  tags = await listTagsWithLabel(service, 'access', sdkLabel);
+  for (const tag of tags) {
+    console.log(`Deleting access tag: ${tag}`);
+    await deleteTag(service, tag, 'access');
+  }
+}

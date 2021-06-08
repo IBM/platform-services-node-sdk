@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,6 +110,11 @@ describe('IamPolicyManagementV1', () => {
         const accessGroupId = 'testString';
         const type = 'testString';
         const serviceType = 'testString';
+        const tagName = 'testString';
+        const tagValue = 'testString';
+        const sort = 'testString';
+        const format = 'testString';
+        const state = 'testString';
         const params = {
           accountId: accountId,
           acceptLanguage: acceptLanguage,
@@ -117,6 +122,11 @@ describe('IamPolicyManagementV1', () => {
           accessGroupId: accessGroupId,
           type: type,
           serviceType: serviceType,
+          tagName: tagName,
+          tagValue: tagValue,
+          sort: sort,
+          format: format,
+          state: state,
         };
 
         const listPoliciesResult = iamPolicyManagementService.listPolicies(params);
@@ -139,6 +149,11 @@ describe('IamPolicyManagementV1', () => {
         expect(options.qs['access_group_id']).toEqual(accessGroupId);
         expect(options.qs['type']).toEqual(type);
         expect(options.qs['service_type']).toEqual(serviceType);
+        expect(options.qs['tag_name']).toEqual(tagName);
+        expect(options.qs['tag_value']).toEqual(tagValue);
+        expect(options.qs['sort']).toEqual(sort);
+        expect(options.qs['format']).toEqual(format);
+        expect(options.qs['state']).toEqual(state);
       });
 
       test('should prioritize user-given headers', () => {
@@ -210,9 +225,17 @@ describe('IamPolicyManagementV1', () => {
         operator: 'testString',
       };
 
+      // ResourceTag
+      const resourceTagModel = {
+        name: 'testString',
+        value: 'testString',
+        operator: 'testString',
+      };
+
       // PolicyResource
       const policyResourceModel = {
         attributes: [resourceAttributeModel],
+        tags: [resourceTagModel],
       };
 
       test('should pass the right params to createRequest', () => {
@@ -221,12 +244,14 @@ describe('IamPolicyManagementV1', () => {
         const subjects = [policySubjectModel];
         const roles = [policyRoleModel];
         const resources = [policyResourceModel];
+        const description = 'testString';
         const acceptLanguage = 'testString';
         const params = {
           type: type,
           subjects: subjects,
           roles: roles,
           resources: resources,
+          description: description,
           acceptLanguage: acceptLanguage,
         };
 
@@ -249,6 +274,7 @@ describe('IamPolicyManagementV1', () => {
         expect(options.body['subjects']).toEqual(subjects);
         expect(options.body['roles']).toEqual(roles);
         expect(options.body['resources']).toEqual(resources);
+        expect(options.body['description']).toEqual(description);
       });
 
       test('should prioritize user-given headers', () => {
@@ -326,9 +352,17 @@ describe('IamPolicyManagementV1', () => {
         operator: 'testString',
       };
 
+      // ResourceTag
+      const resourceTagModel = {
+        name: 'testString',
+        value: 'testString',
+        operator: 'testString',
+      };
+
       // PolicyResource
       const policyResourceModel = {
         attributes: [resourceAttributeModel],
+        tags: [resourceTagModel],
       };
 
       test('should pass the right params to createRequest', () => {
@@ -339,6 +373,7 @@ describe('IamPolicyManagementV1', () => {
         const subjects = [policySubjectModel];
         const roles = [policyRoleModel];
         const resources = [policyResourceModel];
+        const description = 'testString';
         const params = {
           policyId: policyId,
           ifMatch: ifMatch,
@@ -346,6 +381,7 @@ describe('IamPolicyManagementV1', () => {
           subjects: subjects,
           roles: roles,
           resources: resources,
+          description: description,
         };
 
         const updatePolicyResult = iamPolicyManagementService.updatePolicy(params);
@@ -367,6 +403,7 @@ describe('IamPolicyManagementV1', () => {
         expect(options.body['subjects']).toEqual(subjects);
         expect(options.body['roles']).toEqual(roles);
         expect(options.body['resources']).toEqual(resources);
+        expect(options.body['description']).toEqual(description);
         expect(options.path['policy_id']).toEqual(policyId);
       });
 
@@ -552,6 +589,82 @@ describe('IamPolicyManagementV1', () => {
         expectToBePromise(deletePolicyPromise);
 
         deletePolicyPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('patchPolicy', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation patchPolicy
+        const policyId = 'testString';
+        const ifMatch = 'testString';
+        const state = 'testString';
+        const params = {
+          policyId: policyId,
+          ifMatch: ifMatch,
+          state: state,
+        };
+
+        const patchPolicyResult = iamPolicyManagementService.patchPolicy(params);
+
+        // all methods should return a Promise
+        expectToBePromise(patchPolicyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/v1/policies/{policy_id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(options.body['state']).toEqual(state);
+        expect(options.path['policy_id']).toEqual(policyId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyId = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          policyId,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.patchPolicy(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await iamPolicyManagementService.patchPolicy({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const patchPolicyPromise = iamPolicyManagementService.patchPolicy();
+        expectToBePromise(patchPolicyPromise);
+
+        patchPolicyPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });

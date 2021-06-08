@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-4883cbcd-20210301-143711
  */
- 
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -29,8 +34,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class ResourceManagerV2 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://resource-controller.cloud.ibm.com/v2';
+
   static DEFAULT_SERVICE_NAME: string = 'resource_manager';
 
   /*************************
@@ -64,12 +69,11 @@ class ResourceManagerV2 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a ResourceManagerV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net/v2'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -97,38 +101,53 @@ class ResourceManagerV2 extends BaseService {
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - The ID of the account that contains the resource groups that you want to get.
-   * @param {string} [params.date] - The date would be in a format of YYYY-MM which returns resource groups exclude the
-   * deleted ones before this month.
+   * @param {string} [params.date] - The date in the format of YYYY-MM which returns resource groups. Deleted resource
+   * groups will be excluded before this month.
+   * @param {string} [params.name] - The name of the resource group.
+   * @param {boolean} [params._default] - Boolean value to specify whether or not to list default resource groups.
+   * @param {boolean} [params.includeDeleted] - Boolean value to specify whether or not to list default resource groups.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroupList>>}
    */
-  public listResourceGroups(params?: ResourceManagerV2.ListResourceGroupsParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroupList>> {
-    const _params = Object.assign({}, params);
+  public listResourceGroups(
+    params?: ResourceManagerV2.ListResourceGroupsParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroupList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'account_id': _params.accountId,
-        'date': _params.date
-      };
+    const query = {
+      'account_id': _params.accountId,
+      'date': _params.date,
+      'name': _params.name,
+      'default': _params._default,
+      'include_deleted': _params.includeDeleted,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'listResourceGroups');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listResourceGroups'
+    );
 
-      const parameters = {
-        options: {
-          url: '/resource_groups',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/resource_groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a new resource group.
@@ -141,34 +160,43 @@ class ResourceManagerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.ResCreateResourceGroup>>}
    */
-  public createResourceGroup(params?: ResourceManagerV2.CreateResourceGroupParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResCreateResourceGroup>> {
-    const _params = Object.assign({}, params);
+  public createResourceGroup(
+    params?: ResourceManagerV2.CreateResourceGroupParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResCreateResourceGroup>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const body = {
-        'name': _params.name,
-        'account_id': _params.accountId
-      };
+    const body = {
+      'name': _params.name,
+      'account_id': _params.accountId,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'createResourceGroup');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createResourceGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/resource_groups',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/resource_groups',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get a resource group.
@@ -180,38 +208,47 @@ class ResourceManagerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroup>>}
    */
-  public getResourceGroup(params: ResourceManagerV2.GetResourceGroupParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroup>> {
-    const _params = Object.assign({}, params);
+  public getResourceGroup(
+    params: ResourceManagerV2.GetResourceGroupParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'getResourceGroup');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getResourceGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/resource_groups/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/resource_groups/{id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a resource group.
@@ -225,45 +262,54 @@ class ResourceManagerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroup>>}
    */
-  public updateResourceGroup(params: ResourceManagerV2.UpdateResourceGroupParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroup>> {
-    const _params = Object.assign({}, params);
+  public updateResourceGroup(
+    params: ResourceManagerV2.UpdateResourceGroupParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.ResourceGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'state': _params.state
-      };
+    const body = {
+      'name': _params.name,
+      'state': _params.state,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'updateResourceGroup');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'updateResourceGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/resource_groups/{id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/resource_groups/{id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a resource group.
@@ -275,37 +321,40 @@ class ResourceManagerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.Empty>>}
    */
-  public deleteResourceGroup(params: ResourceManagerV2.DeleteResourceGroupParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteResourceGroup(
+    params: ResourceManagerV2.DeleteResourceGroupParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'deleteResourceGroup');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteResourceGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/resource_groups/{id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/resource_groups/{id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * quotaDefinition
@@ -320,27 +369,36 @@ class ResourceManagerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>>}
    */
-  public listQuotaDefinitions(params?: ResourceManagerV2.ListQuotaDefinitionsParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>> {
-    const _params = Object.assign({}, params);
+  public listQuotaDefinitions(
+    params?: ResourceManagerV2.ListQuotaDefinitionsParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinitionList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'listQuotaDefinitions');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listQuotaDefinitions'
+    );
 
-      const parameters = {
-        options: {
-          url: '/quota_definitions',
-          method: 'GET',
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/quota_definitions',
+        method: 'GET',
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get a quota definition.
@@ -352,39 +410,47 @@ class ResourceManagerV2 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>>}
    */
-  public getQuotaDefinition(params: ResourceManagerV2.GetQuotaDefinitionParams): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>> {
-    const _params = Object.assign({}, params);
+  public getQuotaDefinition(
+    params: ResourceManagerV2.GetQuotaDefinitionParams
+  ): Promise<ResourceManagerV2.Response<ResourceManagerV2.QuotaDefinition>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(ResourceManagerV2.DEFAULT_SERVICE_NAME, 'v2', 'getQuotaDefinition');
+    const sdkHeaders = getSdkHeaders(
+      ResourceManagerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getQuotaDefinition'
+    );
 
-      const parameters = {
-        options: {
-          url: '/quota_definitions/{id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/quota_definitions/{id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -392,9 +458,8 @@ class ResourceManagerV2 extends BaseService {
  ************************/
 
 namespace ResourceManagerV2 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -405,7 +470,7 @@ namespace ResourceManagerV2 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -420,10 +485,16 @@ namespace ResourceManagerV2 {
   export interface ListResourceGroupsParams {
     /** The ID of the account that contains the resource groups that you want to get. */
     accountId?: string;
-    /** The date would be in a format of YYYY-MM which returns resource groups exclude the deleted ones before this
-     *  month.
+    /** The date in the format of YYYY-MM which returns resource groups. Deleted resource groups will be excluded
+     *  before this month.
      */
     date?: string;
+    /** The name of the resource group. */
+    name?: string;
+    /** Boolean value to specify whether or not to list default resource groups. */
+    _default?: boolean;
+    /** Boolean value to specify whether or not to list default resource groups. */
+    includeDeleted?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -518,7 +589,7 @@ namespace ResourceManagerV2 {
     /** An alpha-numeric value identifying the resource group. */
     id?: string;
     /** The full CRN (cloud resource name) associated with the resource group. For more on this format, see [Cloud
-     *  Resource Names](https://cloud.ibm.com/docs/resources?topic=resources-crn).
+     *  Resource Names](https://cloud.ibm.com/docs/account?topic=account-crn).
      */
     crn?: string;
   }
@@ -528,7 +599,7 @@ namespace ResourceManagerV2 {
     /** An alpha-numeric value identifying the resource group. */
     id?: string;
     /** The full CRN (cloud resource name) associated with the resource group. For more on this format, see [Cloud
-     *  Resource Names](https://cloud.ibm.com/docs/resources?topic=resources-crn).
+     *  Resource Names](https://cloud.ibm.com/docs/account?topic=account-crn).
      */
     crn?: string;
     /** An alpha-numeric value identifying the account ID. */
@@ -568,13 +639,12 @@ namespace ResourceManagerV2 {
     /** The human-readable name of the quota. */
     resource_id?: string;
     /** The full CRN (cloud resource name) associated with the quota. For more on this format, see
-     *  https://cloud.ibm.com/docs/resources?topic=resources-crn#crn.
+     *  https://cloud.ibm.com/docs/account?topic=account-crn.
      */
     crn?: string;
     /** The limit number of this resource. */
     limit?: number;
   }
-
 }
 
 export = ResourceManagerV2;

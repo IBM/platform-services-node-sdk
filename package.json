@@ -1,6 +1,6 @@
 {
   "name": "ibm-platform-services",
-  "version": "0.12.1",
+  "version": "0.18.9",
   "description": "Node.js client library for IBM Cloud Platform Services",
   "repository": {
     "type": "git",
@@ -13,10 +13,8 @@
   "scripts": {
     "eslint:fix": "eslint . --fix",
     "eslint:check": "eslint . --cache",
-    "tslint:fix": "tslint --fix -p . -c tslint.json",
-    "tslint:check": "tslint -p . -c ./tslint.json",
-    "lint": "npm run eslint:check && npm run tslint:check",
-    "lint-fix": "npm run eslint:fix && npm run tslint:fix",
+    "lint": "npm run eslint:check",
+    "lint-fix": "npm run eslint:fix",
     "build": "tsc && cp package.json dist/",
     "prepublishOnly": "npm run build",
     "postversion": "tsc-publish --no-checks --dry-run",
@@ -38,7 +36,7 @@
   "dependencies": {
     "@types/node": "^12.0.8",
     "extend": "^3.0.2",
-    "ibm-cloud-sdk-core": "^2.4.5"
+    "ibm-cloud-sdk-core": "^2.10.3"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.4",
@@ -70,7 +68,8 @@
     "collectCoverage": true,
     "coverageDirectory": "./coverage/",
     "coveragePathIgnorePatterns": [
-      "<rootDir>/test/"
+      "<rootDir>/test/",
+      "<rootDir>/examples/"
     ],
     "testEnvironment": "node",
     "verbose": false,

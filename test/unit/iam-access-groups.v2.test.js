@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,8 +104,8 @@ describe('IamAccessGroupsV2', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createAccessGroup
         const accountId = 'testString';
-        const name = 'testString';
-        const description = 'testString';
+        const name = 'Managers';
+        const description = 'Group for managers';
         const transactionId = 'testString';
         const params = {
           accountId: accountId,
@@ -137,7 +137,7 @@ describe('IamAccessGroupsV2', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const accountId = 'testString';
-        const name = 'testString';
+        const name = 'Managers';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -347,8 +347,8 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation updateAccessGroup
         const accessGroupId = 'testString';
         const ifMatch = 'testString';
-        const name = 'testString';
-        const description = 'testString';
+        const name = 'Awesome Managers';
+        const description = 'Group for awesome managers.';
         const transactionId = 'testString';
         const params = {
           accessGroupId: accessGroupId,
@@ -497,151 +497,6 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
-  describe('getAccountSettings', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAccountSettings
-        const accountId = 'testString';
-        const transactionId = 'testString';
-        const params = {
-          accountId: accountId,
-          transactionId: transactionId,
-        };
-
-        const getAccountSettingsResult = iamAccessGroupsService.getAccountSettings(params);
-
-        // all methods should return a Promise
-        expectToBePromise(getAccountSettingsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/groups/settings', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['account_id']).toEqual(accountId);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const accountId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          accountId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        iamAccessGroupsService.getAccountSettings(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await iamAccessGroupsService.getAccountSettings({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const getAccountSettingsPromise = iamAccessGroupsService.getAccountSettings();
-        expectToBePromise(getAccountSettingsPromise);
-
-        getAccountSettingsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
-      });
-    });
-  });
-  describe('updateAccountSettings', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation updateAccountSettings
-        const accountId = 'testString';
-        const publicAccessEnabled = true;
-        const transactionId = 'testString';
-        const params = {
-          accountId: accountId,
-          publicAccessEnabled: publicAccessEnabled,
-          transactionId: transactionId,
-        };
-
-        const updateAccountSettingsResult = iamAccessGroupsService.updateAccountSettings(params);
-
-        // all methods should return a Promise
-        expectToBePromise(updateAccountSettingsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/groups/settings', 'PATCH');
-        const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['public_access_enabled']).toEqual(publicAccessEnabled);
-        expect(options.qs['account_id']).toEqual(accountId);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const accountId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          accountId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        iamAccessGroupsService.updateAccountSettings(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await iamAccessGroupsService.updateAccountSettings({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const updateAccountSettingsPromise = iamAccessGroupsService.updateAccountSettings();
-        expectToBePromise(updateAccountSettingsPromise);
-
-        updateAccountSettingsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
-      });
-    });
-  });
   describe('isMemberOfAccessGroup', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -724,8 +579,8 @@ describe('IamAccessGroupsV2', () => {
 
       // AddGroupMembersRequestMembersItem
       const addGroupMembersRequestMembersItemModel = {
-        iam_id: 'testString',
-        type: 'testString',
+        iam_id: 'IBMid-user1',
+        type: 'user',
       };
 
       test('should pass the right params to createRequest', () => {
@@ -806,8 +661,8 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation listAccessGroupMembers
         const accessGroupId = 'testString';
         const transactionId = 'testString';
-        const limit = 72.5;
-        const offset = 72.5;
+        const limit = 38;
+        const offset = 38;
         const type = 'testString';
         const verbose = true;
         const sort = 'testString';
@@ -967,7 +822,7 @@ describe('IamAccessGroupsV2', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation removeMembersFromAccessGroup
         const accessGroupId = 'testString';
-        const members = ['testString'];
+        const members = ['IBMId-user1', 'iam-ServiceId-123'];
         const transactionId = 'testString';
         const params = {
           accessGroupId: accessGroupId,
@@ -1118,8 +973,8 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation addMemberToMultipleAccessGroups
         const accountId = 'testString';
         const iamId = 'testString';
-        const type = 'testString';
-        const groups = ['testString'];
+        const type = 'user';
+        const groups = ['access-group-id-1'];
         const transactionId = 'testString';
         const params = {
           accountId: accountId,
@@ -1200,18 +1055,18 @@ describe('IamAccessGroupsV2', () => {
 
       // RuleConditions
       const ruleConditionsModel = {
-        claim: 'testString',
-        operator: 'testString',
-        value: 'testString',
+        claim: 'isManager',
+        operator: 'EQUALS',
+        value: 'true',
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation addAccessGroupRule
         const accessGroupId = 'testString';
-        const expiration = 38;
-        const realmName = 'testString';
+        const expiration = 12;
+        const realmName = 'https://idp.example.org/SAML2';
         const conditions = [ruleConditionsModel];
-        const name = 'testString';
+        const name = 'Manager group rule';
         const transactionId = 'testString';
         const params = {
           accessGroupId: accessGroupId,
@@ -1247,8 +1102,8 @@ describe('IamAccessGroupsV2', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const accessGroupId = 'testString';
-        const expiration = 38;
-        const realmName = 'testString';
+        const expiration = 12;
+        const realmName = 'https://idp.example.org/SAML2';
         const conditions = [ruleConditionsModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
@@ -1445,9 +1300,9 @@ describe('IamAccessGroupsV2', () => {
 
       // RuleConditions
       const ruleConditionsModel = {
-        claim: 'testString',
-        operator: 'testString',
-        value: 'testString',
+        claim: 'isManager',
+        operator: 'EQUALS',
+        value: 'true',
       };
 
       test('should pass the right params to createRequest', () => {
@@ -1455,10 +1310,10 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const ruleId = 'testString';
         const ifMatch = 'testString';
-        const expiration = 38;
-        const realmName = 'testString';
+        const expiration = 12;
+        const realmName = 'https://idp.example.org/SAML2';
         const conditions = [ruleConditionsModel];
-        const name = 'testString';
+        const name = 'Manager group rule';
         const transactionId = 'testString';
         const params = {
           accessGroupId: accessGroupId,
@@ -1500,8 +1355,8 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const ruleId = 'testString';
         const ifMatch = 'testString';
-        const expiration = 38;
-        const realmName = 'testString';
+        const expiration = 12;
+        const realmName = 'https://idp.example.org/SAML2';
         const conditions = [ruleConditionsModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
@@ -1617,6 +1472,151 @@ describe('IamAccessGroupsV2', () => {
         expectToBePromise(removeAccessGroupRulePromise);
 
         removeAccessGroupRulePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getAccountSettings', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getAccountSettings
+        const accountId = 'testString';
+        const transactionId = 'testString';
+        const params = {
+          accountId: accountId,
+          transactionId: transactionId,
+        };
+
+        const getAccountSettingsResult = iamAccessGroupsService.getAccountSettings(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getAccountSettingsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/groups/settings', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(options.qs['account_id']).toEqual(accountId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.getAccountSettings(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await iamAccessGroupsService.getAccountSettings({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getAccountSettingsPromise = iamAccessGroupsService.getAccountSettings();
+        expectToBePromise(getAccountSettingsPromise);
+
+        getAccountSettingsPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateAccountSettings', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateAccountSettings
+        const accountId = 'testString';
+        const publicAccessEnabled = true;
+        const transactionId = 'testString';
+        const params = {
+          accountId: accountId,
+          publicAccessEnabled: publicAccessEnabled,
+          transactionId: transactionId,
+        };
+
+        const updateAccountSettingsResult = iamAccessGroupsService.updateAccountSettings(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateAccountSettingsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/groups/settings', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(options.body['public_access_enabled']).toEqual(publicAccessEnabled);
+        expect(options.qs['account_id']).toEqual(accountId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.updateAccountSettings(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateAccountSettings({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateAccountSettingsPromise = iamAccessGroupsService.updateAccountSettings();
+        expectToBePromise(updateAccountSettingsPromise);
+
+        updateAccountSettingsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });

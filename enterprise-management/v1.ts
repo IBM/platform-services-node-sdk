@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
+ * IBM OpenAPI SDK Code Generator Version: 3.30.0-bd714324-20210406-200538
  */
- 
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -30,8 +35,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class EnterpriseManagementV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://enterprise.cloud.ibm.com/v1';
+
   static DEFAULT_SERVICE_NAME: string = 'enterprise_management';
 
   /*************************
@@ -65,12 +70,11 @@ class EnterpriseManagementV1 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a EnterpriseManagementV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net/v1'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -88,212 +92,255 @@ class EnterpriseManagementV1 extends BaseService {
   }
 
   /*************************
-   * accountGroupOperations
+   * enterpriseOperations
    ************************/
 
   /**
-   * Create an account group.
+   * Create an enterprise.
    *
-   * Create a new account group, which can be used to group together multiple accounts. To create an account group, you
-   * must have an existing enterprise. The API creates an account group entity under the parent that is specified in the
-   * payload of the request. The request also takes in the name and the primary contact of this new account group.
+   * Create a new enterprise, which you can use to centrally manage multiple accounts. To create an enterprise, you must
+   * have an active Subscription account. <br/><br/>The API creates an enterprise entity, which is the root of the
+   * enterprise hierarchy. It also creates a new enterprise account that is used to manage the enterprise. All
+   * subscriptions, support entitlements, credits, and discounts from the source subscription account are migrated to
+   * the enterprise account, and the source account becomes a child account in the hierarchy. The user that you assign
+   * as the enterprise primary contact is also assigned as the owner of the enterprise account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.parent - The CRN of the parent under which the account group will be created. The parent can
-   * be an existing account group or the enterprise itself.
-   * @param {string} params.name - The name of the account group. This field must have 3 - 60 characters.
-   * @param {string} params.primaryContactIamId - The IAM ID of the primary contact for this account group, such as
-   * `IBMid-0123ABC`. The IAM ID must already exist.
+   * @param {string} params.sourceAccountId - The ID of the account that is used to create the enterprise.
+   * @param {string} params.name - The name of the enterprise. This field must have 3 - 60 characters.
+   * @param {string} params.primaryContactIamId - The IAM ID of the enterprise primary contact, such as `IBMid-0123ABC`.
+   * The IAM ID must already exist.
+   * @param {string} [params.domain] - A domain or subdomain for the enterprise, such as `example.com` or
+   * `my.example.com`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountGroupResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateEnterpriseResponse>>}
    */
-  public createAccountGroup(params: EnterpriseManagementV1.CreateAccountGroupParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountGroupResponse>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['parent', 'name', 'primaryContactIamId'];
+  public createEnterprise(
+    params: EnterpriseManagementV1.CreateEnterpriseParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateEnterpriseResponse>> {
+    const _params = { ...params };
+    const requiredParams = ['sourceAccountId', 'name', 'primaryContactIamId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'parent': _params.parent,
-        'name': _params.name,
-        'primary_contact_iam_id': _params.primaryContactIamId
-      };
+    const body = {
+      'source_account_id': _params.sourceAccountId,
+      'name': _params.name,
+      'primary_contact_iam_id': _params.primaryContactIamId,
+      'domain': _params.domain,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createAccountGroup');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createEnterprise'
+    );
 
-      const parameters = {
-        options: {
-          url: '/account-groups',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/enterprises',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
-   * List account groups.
+   * List enterprises.
    *
-   * Retrieve all account groups based on the values that are passed in the query parameters. If no query parameter is
-   * passed, all of the account groups in the enterprise for which the calling identity has access are returned.
-   * <br/><br/>You can use pagination parameters to filter the results. The `limit` field can be used to limit the
-   * number of results that are displayed for this method.<br/><br/>This method ensures that only the account groups
-   * that the user has access to are returned. Access can be controlled either through a policy on a specific account
-   * group, or account-level platform services access roles, such as Administrator, Editor, Operator, or Viewer. When
-   * you call the method with the `enterprise_id`, `parent_account_group_id` or `parent` query parameter, all of the
-   * account groups that are immediate children of this entity are returned. Authentication is performed on all account
-   * groups before they are returned to the user to ensure that only those account groups are returned to which the
-   * calling identity has access.
+   * Retrieve all enterprises for a given ID by passing the IDs on query parameters. If no ID is passed, the enterprises
+   * for which the calling identity is the primary contact are returned. You can use pagination parameters to filter the
+   * results. <br/><br/>This method ensures that only the enterprises that the user has access to are returned. Access
+   * can be controlled either through a policy on a specific enterprise, or account-level platform services access
+   * roles, such as Administrator, Editor, Operator, or Viewer. When you call the method with the
+   * `enterprise_account_id` or `account_id` query parameter, the account ID in the token is compared with that in the
+   * query parameter. If these account IDs match, authentication isn't performed and the enterprise information is
+   * returned. If the account IDs don't match, authentication is performed and only then is the enterprise information
+   * returned in the response.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.enterpriseId] - Get account groups that are either immediate children or are a part of the
-   * hierarchy for a given enterprise ID.
-   * @param {string} [params.parentAccountGroupId] - Get account groups that are either immediate children or are a part
-   * of the hierarchy for a given account group ID.
-   * @param {string} [params.parent] - Get account groups that are either immediate children or are a part of the
-   * hierarchy for a given parent CRN.
+   * @param {string} [params.enterpriseAccountId] - Get enterprises for a given enterprise account ID.
+   * @param {string} [params.accountGroupId] - Get enterprises for a given account group ID.
+   * @param {string} [params.accountId] - Get enterprises for a given account ID.
+   * @param {string} [params.nextDocid] - The first item to be returned in the page of results. This value can be
+   * obtained from the next_url property from the previous call of the operation. If not specified, then the first page
+   * of results is returned.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between `0` and `100`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountGroupsResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListEnterprisesResponse>>}
    */
-  public listAccountGroups(params?: EnterpriseManagementV1.ListAccountGroupsParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountGroupsResponse>> {
-    const _params = Object.assign({}, params);
+  public listEnterprises(
+    params?: EnterpriseManagementV1.ListEnterprisesParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListEnterprisesResponse>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'enterprise_id': _params.enterpriseId,
-        'parent_account_group_id': _params.parentAccountGroupId,
-        'parent': _params.parent,
-        'limit': _params.limit
-      };
+    const query = {
+      'enterprise_account_id': _params.enterpriseAccountId,
+      'account_group_id': _params.accountGroupId,
+      'account_id': _params.accountId,
+      'next_docid': _params.nextDocid,
+      'limit': _params.limit,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listAccountGroups');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listEnterprises'
+    );
 
-      const parameters = {
-        options: {
-          url: '/account-groups',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/enterprises',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
-   * Get account group by ID.
+   * Get enterprise by ID.
    *
-   * Retrieve an account by the `account_group_id` parameter. All data related to the account group is returned only if
-   * the caller has access to retrieve the account group.
+   * Retrieve an enterprise by the `enterprise_id` parameter. All data related to the enterprise is returned only if the
+   * caller has access to retrieve the enterprise.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountGroupId - The ID of the account group to retrieve.
+   * @param {string} params.enterpriseId - The ID of the enterprise to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>>}
    */
-  public getAccountGroup(params: EnterpriseManagementV1.GetAccountGroupParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['accountGroupId'];
+  public getEnterprise(
+    params: EnterpriseManagementV1.GetEnterpriseParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>> {
+    const _params = { ...params };
+    const requiredParams = ['enterpriseId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'account_group_id': _params.accountGroupId
-      };
+    const path = {
+      'enterprise_id': _params.enterpriseId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountGroup');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getEnterprise'
+    );
 
-      const parameters = {
-        options: {
-          url: '/account-groups/{account_group_id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/enterprises/{enterprise_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
-   * Update an account group.
+   * Update an enterprise.
    *
-   * Update the name or IAM ID of the primary contact for an existing account group. The new primary contact must
+   * Update the name, domain, or IAM ID of the primary contact for an existing enterprise. The new primary contact must
    * already be a user in the enterprise account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountGroupId - The ID of the account group to retrieve.
-   * @param {string} [params.name] - The new name of the account group. This field must have 3 - 60 characters.
-   * @param {string} [params.primaryContactIamId] - The IAM ID of the user to be the new primary contact for the account
-   * group.
+   * @param {string} params.enterpriseId - The ID of the enterprise to retrieve.
+   * @param {string} [params.name] - The new name of the enterprise. This field must have 3 - 60 characters.
+   * @param {string} [params.domain] - The new domain of the enterprise. This field has a limit of 60 characters.
+   * @param {string} [params.primaryContactIamId] - The IAM ID of the user to be the new primary contact for the
+   * enterprise.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
    */
-  public updateAccountGroup(params: EnterpriseManagementV1.UpdateAccountGroupParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['accountGroupId'];
+  public updateEnterprise(
+    params: EnterpriseManagementV1.UpdateEnterpriseParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+    const _params = { ...params };
+    const requiredParams = ['enterpriseId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'primary_contact_iam_id': _params.primaryContactIamId
-      };
+    const body = {
+      'name': _params.name,
+      'domain': _params.domain,
+      'primary_contact_iam_id': _params.primaryContactIamId,
+    };
 
-      const path = {
-        'account_group_id': _params.accountGroupId
-      };
+    const path = {
+      'enterprise_id': _params.enterpriseId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateAccountGroup');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateEnterprise'
+    );
 
-      const parameters = {
-        options: {
-          url: '/account-groups/{account_group_id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/enterprises/{enterprise_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * accountOperations
@@ -320,53 +367,62 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
    */
-  public importAccountToEnterprise(params: EnterpriseManagementV1.ImportAccountToEnterpriseParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public importAccountToEnterprise(
+    params: EnterpriseManagementV1.ImportAccountToEnterpriseParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['enterpriseId', 'accountId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'parent': _params.parent,
-        'billing_unit_id': _params.billingUnitId
-      };
+    const body = {
+      'parent': _params.parent,
+      'billing_unit_id': _params.billingUnitId,
+    };
 
-      const path = {
-        'enterprise_id': _params.enterpriseId,
-        'account_id': _params.accountId
-      };
+    const path = {
+      'enterprise_id': _params.enterpriseId,
+      'account_id': _params.accountId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'importAccountToEnterprise');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'importAccountToEnterprise'
+    );
 
-      const parameters = {
-        options: {
-          url: '/enterprises/{enterprise_id}/import/accounts/{account_id}',
-          method: 'PUT',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/enterprises/{enterprise_id}/import/accounts/{account_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a new account in an enterprise.
    *
    * Create a new account as a part of an existing enterprise. The API creates an account entity under the parent that
    * is specified in the payload of the request. The request also takes in the name and the owner of this new account.
-   * The owner must have a valid IBMid that's registered with {{site.data.keyword.cloud_notm}}, but they don't need to
-   * be a user in the enterprise account.
+   * The owner must have a valid IBMid that's registered with IBM Cloud, but they don't need to be a user in the
+   * enterprise account.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.parent - The CRN of the parent under which the account will be created. The parent can be an
@@ -377,41 +433,50 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>>}
    */
-  public createAccount(params: EnterpriseManagementV1.CreateAccountParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>> {
-    const _params = Object.assign({}, params);
+  public createAccount(
+    params: EnterpriseManagementV1.CreateAccountParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>> {
+    const _params = { ...params };
     const requiredParams = ['parent', 'name', 'ownerIamId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'parent': _params.parent,
-        'name': _params.name,
-        'owner_iam_id': _params.ownerIamId
-      };
+    const body = {
+      'parent': _params.parent,
+      'name': _params.name,
+      'owner_iam_id': _params.ownerIamId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createAccount');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createAccount'
+    );
 
-      const parameters = {
-        options: {
-          url: '/accounts',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/accounts',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * List accounts.
@@ -431,41 +496,54 @@ class EnterpriseManagementV1 extends BaseService {
    * hierarchy for a given enterprise ID.
    * @param {string} [params.accountGroupId] - Get accounts that are either immediate children or are a part of the
    * hierarchy for a given account group ID.
+   * @param {string} [params.nextDocid] - The first item to be returned in the page of results. This value can be
+   * obtained from the next_url property from the previous call of the operation. If not specified, then the first page
+   * of results is returned.
    * @param {string} [params.parent] - Get accounts that are either immediate children or are a part of the hierarchy
    * for a given parent CRN.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between `0` and `100`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountsResponse>>}
    */
-  public listAccounts(params?: EnterpriseManagementV1.ListAccountsParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountsResponse>> {
-    const _params = Object.assign({}, params);
+  public listAccounts(
+    params?: EnterpriseManagementV1.ListAccountsParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountsResponse>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'enterprise_id': _params.enterpriseId,
-        'account_group_id': _params.accountGroupId,
-        'parent': _params.parent,
-        'limit': _params.limit
-      };
+    const query = {
+      'enterprise_id': _params.enterpriseId,
+      'account_group_id': _params.accountGroupId,
+      'next_docid': _params.nextDocid,
+      'parent': _params.parent,
+      'limit': _params.limit,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listAccounts');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAccounts'
+    );
 
-      const parameters = {
-        options: {
-          url: '/accounts',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/accounts',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get account by ID.
@@ -478,38 +556,47 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>>}
    */
-  public getAccount(params: EnterpriseManagementV1.GetAccountParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>> {
-    const _params = Object.assign({}, params);
+  public getAccount(
+    params: EnterpriseManagementV1.GetAccountParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>> {
+    const _params = { ...params };
     const requiredParams = ['accountId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'account_id': _params.accountId
-      };
+    const path = {
+      'account_id': _params.accountId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccount');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAccount'
+    );
 
-      const parameters = {
-        options: {
-          url: '/accounts/{account_id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/accounts/{account_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Move an account within the enterprise.
@@ -522,255 +609,300 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
    */
-  public updateAccount(params: EnterpriseManagementV1.UpdateAccountParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public updateAccount(
+    params: EnterpriseManagementV1.UpdateAccountParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'parent'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'parent': _params.parent
-      };
+    const body = {
+      'parent': _params.parent,
+    };
 
-      const path = {
-        'account_id': _params.accountId
-      };
+    const path = {
+      'account_id': _params.accountId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateAccount');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateAccount'
+    );
 
-      const parameters = {
-        options: {
-          url: '/accounts/{account_id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/accounts/{account_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
-   * enterpriseOperations
+   * accountGroupOperations
    ************************/
 
   /**
-   * Create an enterprise.
+   * Create an account group.
    *
-   * Create a new enterprise, which you can use to centrally manage multiple accounts. To create an enterprise, you must
-   * have an active Subscription account. <br/><br/>The API creates an enterprise entity, which is the root of the
-   * enterprise hierarchy. It also creates a new enterprise account that is used to manage the enterprise. All
-   * subscriptions, support entitlements, credits, and discounts from the source subscription account are migrated to
-   * the enterprise account, and the source account becomes a child account in the hierarchy. The user that you assign
-   * as the enterprise primary contact is also assigned as the owner of the enterprise account.
+   * Create a new account group, which can be used to group together multiple accounts. To create an account group, you
+   * must have an existing enterprise. The API creates an account group entity under the parent that is specified in the
+   * payload of the request. The request also takes in the name and the primary contact of this new account group.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.sourceAccountId - The ID of the account that is used to create the enterprise.
-   * @param {string} params.name - The name of the enterprise. This field must have 3 - 60 characters.
-   * @param {string} params.primaryContactIamId - The IAM ID of the enterprise primary contact, such as `IBMid-0123ABC`.
-   * The IAM ID must already exist.
-   * @param {string} [params.domain] - A domain or subdomain for the enterprise, such as `example.com` or
-   * `my.example.com`.
+   * @param {string} params.parent - The CRN of the parent under which the account group will be created. The parent can
+   * be an existing account group or the enterprise itself.
+   * @param {string} params.name - The name of the account group. This field must have 3 - 60 characters.
+   * @param {string} params.primaryContactIamId - The IAM ID of the primary contact for this account group, such as
+   * `IBMid-0123ABC`. The IAM ID must already exist.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateEnterpriseResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountGroupResponse>>}
    */
-  public createEnterprise(params: EnterpriseManagementV1.CreateEnterpriseParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateEnterpriseResponse>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['sourceAccountId', 'name', 'primaryContactIamId'];
+  public createAccountGroup(
+    params: EnterpriseManagementV1.CreateAccountGroupParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountGroupResponse>> {
+    const _params = { ...params };
+    const requiredParams = ['parent', 'name', 'primaryContactIamId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'source_account_id': _params.sourceAccountId,
-        'name': _params.name,
-        'primary_contact_iam_id': _params.primaryContactIamId,
-        'domain': _params.domain
-      };
+    const body = {
+      'parent': _params.parent,
+      'name': _params.name,
+      'primary_contact_iam_id': _params.primaryContactIamId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createEnterprise');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createAccountGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/enterprises',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/account-groups',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
-   * List enterprises.
+   * List account groups.
    *
-   * Retrieve all enterprises for a given ID by passing the IDs on query parameters. If no ID is passed, the enterprises
-   * for which the calling identity is the primary contact are returned. You can use pagination parameters to filter the
-   * results. <br/><br/>This method ensures that only the enterprises that the user has access to are returned. Access
-   * can be controlled either through a policy on a specific enterprise, or account-level platform services access
-   * roles, such as Administrator, Editor, Operator, or Viewer. When you call the method with the
-   * `enterprise_account_id` or `account_id` query parameter, the account ID in the token is compared with that in the
-   * query parameter. If these account IDs match, authentication isn't performed and the enterprise information is
-   * returned. If the account IDs don't match, authentication is performed and only then is the enterprise information
-   * returned in the response.
+   * Retrieve all account groups based on the values that are passed in the query parameters. If no query parameter is
+   * passed, all of the account groups in the enterprise for which the calling identity has access are returned.
+   * <br/><br/>You can use pagination parameters to filter the results. The `limit` field can be used to limit the
+   * number of results that are displayed for this method.<br/><br/>This method ensures that only the account groups
+   * that the user has access to are returned. Access can be controlled either through a policy on a specific account
+   * group, or account-level platform services access roles, such as Administrator, Editor, Operator, or Viewer. When
+   * you call the method with the `enterprise_id`, `parent_account_group_id` or `parent` query parameter, all of the
+   * account groups that are immediate children of this entity are returned. Authentication is performed on all account
+   * groups before they are returned to the user to ensure that only those account groups are returned to which the
+   * calling identity has access.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.enterpriseAccountId] - Get enterprises for a given enterprise account ID.
-   * @param {string} [params.accountGroupId] - Get enterprises for a given account group ID.
-   * @param {string} [params.accountId] - Get enterprises for a given account ID.
+   * @param {string} [params.enterpriseId] - Get account groups that are either immediate children or are a part of the
+   * hierarchy for a given enterprise ID.
+   * @param {string} [params.parentAccountGroupId] - Get account groups that are either immediate children or are a part
+   * of the hierarchy for a given account group ID.
+   * @param {string} [params.nextDocid] - The first item to be returned in the page of results. This value can be
+   * obtained from the next_url property from the previous call of the operation. If not specified, then the first page
+   * of results is returned.
+   * @param {string} [params.parent] - Get account groups that are either immediate children or are a part of the
+   * hierarchy for a given parent CRN.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between `0` and `100`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListEnterprisesResponse>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountGroupsResponse>>}
    */
-  public listEnterprises(params?: EnterpriseManagementV1.ListEnterprisesParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListEnterprisesResponse>> {
-    const _params = Object.assign({}, params);
+  public listAccountGroups(
+    params?: EnterpriseManagementV1.ListAccountGroupsParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountGroupsResponse>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'enterprise_account_id': _params.enterpriseAccountId,
-        'account_group_id': _params.accountGroupId,
-        'account_id': _params.accountId,
-        'limit': _params.limit
-      };
+    const query = {
+      'enterprise_id': _params.enterpriseId,
+      'parent_account_group_id': _params.parentAccountGroupId,
+      'next_docid': _params.nextDocid,
+      'parent': _params.parent,
+      'limit': _params.limit,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listEnterprises');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAccountGroups'
+    );
 
-      const parameters = {
-        options: {
-          url: '/enterprises',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/account-groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
-   * Get enterprise by ID.
+   * Get account group by ID.
    *
-   * Retrieve an enterprise by the `enterprise_id` parameter. All data related to the enterprise is returned only if the
-   * caller has access to retrieve the enterprise.
+   * Retrieve an account by the `account_group_id` parameter. All data related to the account group is returned only if
+   * the caller has access to retrieve the account group.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.enterpriseId - The ID of the enterprise to retrieve.
+   * @param {string} params.accountGroupId - The ID of the account group to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>>}
    */
-  public getEnterprise(params: EnterpriseManagementV1.GetEnterpriseParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['enterpriseId'];
+  public getAccountGroup(
+    params: EnterpriseManagementV1.GetAccountGroupParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>> {
+    const _params = { ...params };
+    const requiredParams = ['accountGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'enterprise_id': _params.enterpriseId
-      };
+    const path = {
+      'account_group_id': _params.accountGroupId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getEnterprise');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAccountGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/enterprises/{enterprise_id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/account-groups/{account_group_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
-   * Update an enterprise.
+   * Update an account group.
    *
-   * Update the name, domain, or IAM ID of the primary contact for an existing enterprise. The new primary contact must
+   * Update the name or IAM ID of the primary contact for an existing account group. The new primary contact must
    * already be a user in the enterprise account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.enterpriseId - The ID of the enterprise to retrieve.
-   * @param {string} [params.name] - The new name of the enterprise. This field must have 3 - 60 characters.
-   * @param {string} [params.domain] - The new domain of the enterprise. This field has a limit of 60 characters.
-   * @param {string} [params.primaryContactIamId] - The IAM ID of the user to be the new primary contact for the
-   * enterprise.
+   * @param {string} params.accountGroupId - The ID of the account group to retrieve.
+   * @param {string} [params.name] - The new name of the account group. This field must have 3 - 60 characters.
+   * @param {string} [params.primaryContactIamId] - The IAM ID of the user to be the new primary contact for the account
+   * group.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
    */
-  public updateEnterprise(params: EnterpriseManagementV1.UpdateEnterpriseParams): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['enterpriseId'];
+  public updateAccountGroup(
+    params: EnterpriseManagementV1.UpdateAccountGroupParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+    const _params = { ...params };
+    const requiredParams = ['accountGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'domain': _params.domain,
-        'primary_contact_iam_id': _params.primaryContactIamId
-      };
+    const body = {
+      'name': _params.name,
+      'primary_contact_iam_id': _params.primaryContactIamId,
+    };
 
-      const path = {
-        'enterprise_id': _params.enterpriseId
-      };
+    const path = {
+      'account_group_id': _params.accountGroupId,
+    };
 
-      const sdkHeaders = getSdkHeaders(EnterpriseManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateEnterprise');
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateAccountGroup'
+    );
 
-      const parameters = {
-        options: {
-          url: '/enterprises/{enterprise_id}',
-          method: 'PATCH',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/account-groups/{account_group_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -778,9 +910,8 @@ class EnterpriseManagementV1 extends BaseService {
  ************************/
 
 namespace EnterpriseManagementV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -791,7 +922,7 @@ namespace EnterpriseManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -802,52 +933,52 @@ namespace EnterpriseManagementV1 {
    * request interfaces
    ************************/
 
-  /** Parameters for the `createAccountGroup` operation. */
-  export interface CreateAccountGroupParams {
-    /** The CRN of the parent under which the account group will be created. The parent can be an existing account
-     *  group or the enterprise itself.
-     */
-    parent: string;
-    /** The name of the account group. This field must have 3 - 60 characters. */
+  /** Parameters for the `createEnterprise` operation. */
+  export interface CreateEnterpriseParams {
+    /** The ID of the account that is used to create the enterprise. */
+    sourceAccountId: string;
+    /** The name of the enterprise. This field must have 3 - 60 characters. */
     name: string;
-    /** The IAM ID of the primary contact for this account group, such as `IBMid-0123ABC`. The IAM ID must already
-     *  exist.
-     */
+    /** The IAM ID of the enterprise primary contact, such as `IBMid-0123ABC`. The IAM ID must already exist. */
     primaryContactIamId: string;
+    /** A domain or subdomain for the enterprise, such as `example.com` or `my.example.com`. */
+    domain?: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listAccountGroups` operation. */
-  export interface ListAccountGroupsParams {
-    /** Get account groups that are either immediate children or are a part of the hierarchy for a given enterprise
-     *  ID.
+  /** Parameters for the `listEnterprises` operation. */
+  export interface ListEnterprisesParams {
+    /** Get enterprises for a given enterprise account ID. */
+    enterpriseAccountId?: string;
+    /** Get enterprises for a given account group ID. */
+    accountGroupId?: string;
+    /** Get enterprises for a given account ID. */
+    accountId?: string;
+    /** The first item to be returned in the page of results. This value can be obtained from the next_url property
+     *  from the previous call of the operation. If not specified, then the first page of results is returned.
      */
-    enterpriseId?: string;
-    /** Get account groups that are either immediate children or are a part of the hierarchy for a given account
-     *  group ID.
-     */
-    parentAccountGroupId?: string;
-    /** Get account groups that are either immediate children or are a part of the hierarchy for a given parent CRN. */
-    parent?: string;
+    nextDocid?: string;
     /** Return results up to this limit. Valid values are between `0` and `100`. */
     limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getAccountGroup` operation. */
-  export interface GetAccountGroupParams {
-    /** The ID of the account group to retrieve. */
-    accountGroupId: string;
+  /** Parameters for the `getEnterprise` operation. */
+  export interface GetEnterpriseParams {
+    /** The ID of the enterprise to retrieve. */
+    enterpriseId: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `updateAccountGroup` operation. */
-  export interface UpdateAccountGroupParams {
-    /** The ID of the account group to retrieve. */
-    accountGroupId: string;
-    /** The new name of the account group. This field must have 3 - 60 characters. */
+  /** Parameters for the `updateEnterprise` operation. */
+  export interface UpdateEnterpriseParams {
+    /** The ID of the enterprise to retrieve. */
+    enterpriseId: string;
+    /** The new name of the enterprise. This field must have 3 - 60 characters. */
     name?: string;
-    /** The IAM ID of the user to be the new primary contact for the account group. */
+    /** The new domain of the enterprise. This field has a limit of 60 characters. */
+    domain?: string;
+    /** The IAM ID of the user to be the new primary contact for the enterprise. */
     primaryContactIamId?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -888,6 +1019,10 @@ namespace EnterpriseManagementV1 {
     enterpriseId?: string;
     /** Get accounts that are either immediate children or are a part of the hierarchy for a given account group ID. */
     accountGroupId?: string;
+    /** The first item to be returned in the page of results. This value can be obtained from the next_url property
+     *  from the previous call of the operation. If not specified, then the first page of results is returned.
+     */
+    nextDocid?: string;
     /** Get accounts that are either immediate children or are a part of the hierarchy for a given parent CRN. */
     parent?: string;
     /** Return results up to this limit. Valid values are between `0` and `100`. */
@@ -911,48 +1046,56 @@ namespace EnterpriseManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `createEnterprise` operation. */
-  export interface CreateEnterpriseParams {
-    /** The ID of the account that is used to create the enterprise. */
-    sourceAccountId: string;
-    /** The name of the enterprise. This field must have 3 - 60 characters. */
+  /** Parameters for the `createAccountGroup` operation. */
+  export interface CreateAccountGroupParams {
+    /** The CRN of the parent under which the account group will be created. The parent can be an existing account
+     *  group or the enterprise itself.
+     */
+    parent: string;
+    /** The name of the account group. This field must have 3 - 60 characters. */
     name: string;
-    /** The IAM ID of the enterprise primary contact, such as `IBMid-0123ABC`. The IAM ID must already exist. */
+    /** The IAM ID of the primary contact for this account group, such as `IBMid-0123ABC`. The IAM ID must already
+     *  exist.
+     */
     primaryContactIamId: string;
-    /** A domain or subdomain for the enterprise, such as `example.com` or `my.example.com`. */
-    domain?: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listEnterprises` operation. */
-  export interface ListEnterprisesParams {
-    /** Get enterprises for a given enterprise account ID. */
-    enterpriseAccountId?: string;
-    /** Get enterprises for a given account group ID. */
-    accountGroupId?: string;
-    /** Get enterprises for a given account ID. */
-    accountId?: string;
+  /** Parameters for the `listAccountGroups` operation. */
+  export interface ListAccountGroupsParams {
+    /** Get account groups that are either immediate children or are a part of the hierarchy for a given enterprise
+     *  ID.
+     */
+    enterpriseId?: string;
+    /** Get account groups that are either immediate children or are a part of the hierarchy for a given account
+     *  group ID.
+     */
+    parentAccountGroupId?: string;
+    /** The first item to be returned in the page of results. This value can be obtained from the next_url property
+     *  from the previous call of the operation. If not specified, then the first page of results is returned.
+     */
+    nextDocid?: string;
+    /** Get account groups that are either immediate children or are a part of the hierarchy for a given parent CRN. */
+    parent?: string;
     /** Return results up to this limit. Valid values are between `0` and `100`. */
     limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getEnterprise` operation. */
-  export interface GetEnterpriseParams {
-    /** The ID of the enterprise to retrieve. */
-    enterpriseId: string;
+  /** Parameters for the `getAccountGroup` operation. */
+  export interface GetAccountGroupParams {
+    /** The ID of the account group to retrieve. */
+    accountGroupId: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `updateEnterprise` operation. */
-  export interface UpdateEnterpriseParams {
-    /** The ID of the enterprise to retrieve. */
-    enterpriseId: string;
-    /** The new name of the enterprise. This field must have 3 - 60 characters. */
+  /** Parameters for the `updateAccountGroup` operation. */
+  export interface UpdateAccountGroupParams {
+    /** The ID of the account group to retrieve. */
+    accountGroupId: string;
+    /** The new name of the account group. This field must have 3 - 60 characters. */
     name?: string;
-    /** The new domain of the enterprise. This field has a limit of 60 characters. */
-    domain?: string;
-    /** The IAM ID of the user to be the new primary contact for the enterprise. */
+    /** The IAM ID of the user to be the new primary contact for the account group. */
     primaryContactIamId?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -1114,7 +1257,6 @@ namespace EnterpriseManagementV1 {
     /** A list of enterprise objects. */
     resources?: Enterprise[];
   }
-
 }
 
 export = EnterpriseManagementV1;

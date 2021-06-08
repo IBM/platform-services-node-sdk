@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
+ * IBM OpenAPI SDK Code Generator Version: 3.29.1-b338fb38-20210313-010605
  */
- 
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -29,8 +34,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class IamPolicyManagementV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://iam.cloud.ibm.com';
+
   static DEFAULT_SERVICE_NAME: string = 'iam_policy_management';
 
   /*************************
@@ -64,12 +69,11 @@ class IamPolicyManagementV1 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a IamPolicyManagementV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -94,10 +98,10 @@ class IamPolicyManagementV1 extends BaseService {
    * Get policies by attributes.
    *
    * Get policies and filter by attributes. While managing policies, you may want to retrieve policies in the account
-   * and filter by attribute values. This can be done through query parameters. Currently, we only support the following
-   * attributes: account_id, iam_id, access_group_id, type, and service_type. account_id is a required query parameter.
-   * Only policies that have the specified attributes and that the caller has read access to are returned. If the caller
-   * does not have read access to any policies an empty array is returned.
+   * and filter by attribute values. This can be done through query parameters. Currently, only the following attributes
+   * are supported: account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a
+   * required query parameter. Only policies that have the specified attributes and that the caller has read access to
+   * are returned. If the caller does not have read access to any policies an empty array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID in which the policies belong to.
@@ -106,46 +110,66 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.accessGroupId] - The access group id.
    * @param {string} [params.type] - The type of policy (access or authorization).
    * @param {string} [params.serviceType] - The type of service.
+   * @param {string} [params.tagName] - The name of the access management tag in the policy.
+   * @param {string} [params.tagValue] - The value of the access management tag in the policy.
+   * @param {string} [params.sort] - Sort the results by any of the top level policy fields (id, created_at,
+   * created_by_id, last_modified_at, etc).
+   * @param {string} [params.format] - Include additional data per policy returned [include_last_permit, display].
+   * @param {string} [params.state] - The state of the policy, 'active' or 'deleted'.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>>}
    */
-  public listPolicies(params: IamPolicyManagementV1.ListPoliciesParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>> {
-    const _params = Object.assign({}, params);
+  public listPolicies(
+    params: IamPolicyManagementV1.ListPoliciesParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>> {
+    const _params = { ...params };
     const requiredParams = ['accountId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account_id': _params.accountId,
-        'iam_id': _params.iamId,
-        'access_group_id': _params.accessGroupId,
-        'type': _params.type,
-        'service_type': _params.serviceType
-      };
+    const query = {
+      'account_id': _params.accountId,
+      'iam_id': _params.iamId,
+      'access_group_id': _params.accessGroupId,
+      'type': _params.type,
+      'service_type': _params.serviceType,
+      'tag_name': _params.tagName,
+      'tag_value': _params.tagValue,
+      'sort': _params.sort,
+      'format': _params.format,
+      'state': _params.state,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicies');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicies'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v1/policies',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v1/policies',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-            'Accept-Language': _params.acceptLanguage
-          }, _params.headers),
-        }),
-      };
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a policy.
@@ -154,17 +178,23 @@ class IamPolicyManagementV1 extends BaseService {
    * **authorization**. A policy administrator might want to create an access policy which grants access to a user,
    * service-id, or an access group. They might also want to create an authorization policy and setup access between
    * services.
-   * ### Access To create an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
+   *
+   * ### Access
+   *
+   * To create an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
    * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
    * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
    * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
    * **`serviceName`**,  or **`resourceGroupId`** attribute and the **`accountId`** attribute.` If the subject is a
    * locked service-id, the request will fail.
-   * ### Authorization Authorization policies are supported by services on a case by case basis. Refer to service
-   * documentation to verify their support of authorization policies. To create an authorization policy, use **`"type":
-   * "authorization"`** in the body. The subject attributes must match the supported authorization subjects of the
-   * resource. Multiple subject attributes might be provided. The following attributes are supported:
+   *
+   * ### Authorization
+   *
+   * Authorization policies are supported by services on a case by case basis. Refer to service documentation to verify
+   * their support of authorization policies. To create an authorization policy, use **`"type": "authorization"`** in
+   * the body. The subject attributes must match the supported authorization subjects of the resource. Multiple subject
+   * attributes might be provided. The following attributes are supported:
    *   serviceName, serviceInstance, region, resourceType, resource, accountId The policy roles must be a subset of the
    * supported authorization roles supported by the target service. The user must also have the same level of access or
    * greater to the target resource in order to grant the role. The resource attributes must be a subset of a service's
@@ -176,63 +206,80 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
    * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
    * @param {PolicyResource[]} params.resources - The resources associated with a policy.
+   * @param {string} [params.description] - Customer-defined description.
    * @param {string} [params.acceptLanguage] - Translation language code.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
-  public createPolicy(params: IamPolicyManagementV1.CreatePolicyParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
-    const _params = Object.assign({}, params);
+  public createPolicy(
+    params: IamPolicyManagementV1.CreatePolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
+    const _params = { ...params };
     const requiredParams = ['type', 'subjects', 'roles', 'resources'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'type': _params.type,
-        'subjects': _params.subjects,
-        'roles': _params.roles,
-        'resources': _params.resources
-      };
+    const body = {
+      'type': _params.type,
+      'subjects': _params.subjects,
+      'roles': _params.roles,
+      'resources': _params.resources,
+      'description': _params.description,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicy'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v1/policies',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v1/policies',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Accept-Language': _params.acceptLanguage
-          }, _params.headers),
-        }),
-      };
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a policy.
    *
    * Update a policy to grant access between a subject and a resource. A policy administrator might want to update an
    * existing policy. The policy type cannot be changed (You cannot change an access policy to an authorization policy).
-   * ### Access To update an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
+   *
+   * ### Access
+   *
+   * To update an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
    * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
    * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
    * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
    * **`serviceName`**,  or **`resourceGroupId`** attribute and the **`accountId`** attribute.` If the subject is a
    * locked service-id, the request will fail.
-   * ### Authorization To update an authorization policy, use **`"type": "authorization"`** in the body. The subject
-   * attributes must match the supported authorization subjects of the resource. Multiple subject attributes might be
-   * provided. The following attributes are supported:
+   *
+   * ### Authorization
+   *
+   * To update an authorization policy, use **`"type": "authorization"`** in the body. The subject attributes must match
+   * the supported authorization subjects of the resource. Multiple subject attributes might be provided. The following
+   * attributes are supported:
    *   serviceName, serviceInstance, region, resourceType, resource, accountId The policy roles must be a subset of the
    * supported authorization roles supported by the target service. The user must also have the same level of access or
    * greater to the target resource in order to grant the role. The resource attributes must be a subset of a service's
@@ -248,51 +295,62 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
    * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
    * @param {PolicyResource[]} params.resources - The resources associated with a policy.
+   * @param {string} [params.description] - Customer-defined description.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
-  public updatePolicy(params: IamPolicyManagementV1.UpdatePolicyParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
-    const _params = Object.assign({}, params);
+  public updatePolicy(
+    params: IamPolicyManagementV1.UpdatePolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
+    const _params = { ...params };
     const requiredParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'type': _params.type,
-        'subjects': _params.subjects,
-        'roles': _params.roles,
-        'resources': _params.resources
-      };
+    const body = {
+      'type': _params.type,
+      'subjects': _params.subjects,
+      'roles': _params.roles,
+      'resources': _params.resources,
+      'description': _params.description,
+    };
 
-      const path = {
-        'policy_id': _params.policyId
-      };
+    const path = {
+      'policy_id': _params.policyId,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePolicy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updatePolicy'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v1/policies/{policy_id}',
-          method: 'PUT',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v1/policies/{policy_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'If-Match': _params.ifMatch
-          }, _params.headers),
-        }),
-      };
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Retrieve a policy by ID.
@@ -304,38 +362,43 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
-  public getPolicy(params: IamPolicyManagementV1.GetPolicyParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
-    const _params = Object.assign({}, params);
+  public getPolicy(
+    params: IamPolicyManagementV1.GetPolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
+    const _params = { ...params };
     const requiredParams = ['policyId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'policy_id': _params.policyId
-      };
+    const path = {
+      'policy_id': _params.policyId,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicy');
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicy');
 
-      const parameters = {
-        options: {
-          url: '/v1/policies/{policy_id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v1/policies/{policy_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a policy by ID.
@@ -348,37 +411,104 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>>}
    */
-  public deletePolicy(params: IamPolicyManagementV1.DeletePolicyParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deletePolicy(
+    params: IamPolicyManagementV1.DeletePolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['policyId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'policy_id': _params.policyId
-      };
+    const path = {
+      'policy_id': _params.policyId,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicy'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v1/policies/{policy_id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/v1/policies/{policy_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Restore a deleted policy by ID.
+   *
+   * Restore a policy that has recently been deleted. A policy administrator might want to restore a deleted policy. To
+   * restore a policy, use **`"state": "active"`** in the body.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyId - The policy ID.
+   * @param {string} params.ifMatch - The revision number for updating a policy and must match the ETag value of the
+   * existing policy. The Etag can be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag
+   * response header.
+   * @param {string} [params.state] - The policy state; either 'active' or 'deleted'.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
+   */
+  public patchPolicy(
+    params: IamPolicyManagementV1.PatchPolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
+    const _params = { ...params };
+    const requiredParams = ['policyId', 'ifMatch'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'state': _params.state,
+    };
+
+    const path = {
+      'policy_id': _params.policyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'patchPolicy'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policies/{policy_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * roles
@@ -399,34 +529,39 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>>}
    */
-  public listRoles(params?: IamPolicyManagementV1.ListRolesParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>> {
-    const _params = Object.assign({}, params);
+  public listRoles(
+    params?: IamPolicyManagementV1.ListRolesParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'account_id': _params.accountId,
-        'service_name': _params.serviceName
-      };
+    const query = {
+      'account_id': _params.accountId,
+      'service_name': _params.serviceName,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listRoles');
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listRoles');
 
-      const parameters = {
-        options: {
-          url: '/v2/roles',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/roles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-            'Accept-Language': _params.acceptLanguage
-          }, _params.headers),
-        }),
-      };
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a role.
@@ -448,45 +583,54 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>>}
    */
-  public createRole(params: IamPolicyManagementV1.CreateRoleParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
-    const _params = Object.assign({}, params);
+  public createRole(
+    params: IamPolicyManagementV1.CreateRoleParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
+    const _params = { ...params };
     const requiredParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'display_name': _params.displayName,
-        'actions': _params.actions,
-        'name': _params.name,
-        'account_id': _params.accountId,
-        'service_name': _params.serviceName,
-        'description': _params.description
-      };
+    const body = {
+      'display_name': _params.displayName,
+      'actions': _params.actions,
+      'name': _params.name,
+      'account_id': _params.accountId,
+      'service_name': _params.serviceName,
+      'description': _params.description,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createRole');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createRole'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/roles',
-          method: 'POST',
-          body,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/roles',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Accept-Language': _params.acceptLanguage
-          }, _params.headers),
-        }),
-      };
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a role.
@@ -505,47 +649,56 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>>}
    */
-  public updateRole(params: IamPolicyManagementV1.UpdateRoleParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
-    const _params = Object.assign({}, params);
+  public updateRole(
+    params: IamPolicyManagementV1.UpdateRoleParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
+    const _params = { ...params };
     const requiredParams = ['roleId', 'ifMatch'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'display_name': _params.displayName,
-        'description': _params.description,
-        'actions': _params.actions
-      };
+    const body = {
+      'display_name': _params.displayName,
+      'description': _params.description,
+      'actions': _params.actions,
+    };
 
-      const path = {
-        'role_id': _params.roleId
-      };
+    const path = {
+      'role_id': _params.roleId,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateRole');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateRole'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/roles/{role_id}',
-          method: 'PUT',
-          body,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/roles/{role_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'If-Match': _params.ifMatch
-          }, _params.headers),
-        }),
-      };
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Retrieve a role by ID.
@@ -557,38 +710,43 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>>}
    */
-  public getRole(params: IamPolicyManagementV1.GetRoleParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
-    const _params = Object.assign({}, params);
+  public getRole(
+    params: IamPolicyManagementV1.GetRoleParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
+    const _params = { ...params };
     const requiredParams = ['roleId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'role_id': _params.roleId
-      };
+    const path = {
+      'role_id': _params.roleId,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getRole');
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getRole');
 
-      const parameters = {
-        options: {
-          url: '/v2/roles/{role_id}',
-          method: 'GET',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/v2/roles/{role_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a role by ID.
@@ -600,38 +758,40 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>>}
    */
-  public deleteRole(params: IamPolicyManagementV1.DeleteRoleParams): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteRole(
+    params: IamPolicyManagementV1.DeleteRoleParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['roleId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const path = {
-        'role_id': _params.roleId
-      };
+    const path = {
+      'role_id': _params.roleId,
+    };
 
-      const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteRole');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteRole'
+    );
 
-      const parameters = {
-        options: {
-          url: '/v2/roles/{role_id}',
-          method: 'DELETE',
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/v2/roles/{role_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -639,9 +799,8 @@ class IamPolicyManagementV1 extends BaseService {
  ************************/
 
 namespace IamPolicyManagementV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -652,7 +811,7 @@ namespace IamPolicyManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -677,6 +836,18 @@ namespace IamPolicyManagementV1 {
     type?: string;
     /** The type of service. */
     serviceType?: string;
+    /** The name of the access management tag in the policy. */
+    tagName?: string;
+    /** The value of the access management tag in the policy. */
+    tagValue?: string;
+    /** Sort the results by any of the top level policy fields (id, created_at, created_by_id, last_modified_at,
+     *  etc).
+     */
+    sort?: string;
+    /** Include additional data per policy returned [include_last_permit, display]. */
+    format?: string;
+    /** The state of the policy, 'active' or 'deleted'. */
+    state?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -690,6 +861,8 @@ namespace IamPolicyManagementV1 {
     roles: PolicyRole[];
     /** The resources associated with a policy. */
     resources: PolicyResource[];
+    /** Customer-defined description. */
+    description?: string;
     /** Translation language code. */
     acceptLanguage?: string;
     headers?: OutgoingHttpHeaders;
@@ -711,6 +884,8 @@ namespace IamPolicyManagementV1 {
     roles: PolicyRole[];
     /** The resources associated with a policy. */
     resources: PolicyResource[];
+    /** Customer-defined description. */
+    description?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -725,6 +900,19 @@ namespace IamPolicyManagementV1 {
   export interface DeletePolicyParams {
     /** The policy ID. */
     policyId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `patchPolicy` operation. */
+  export interface PatchPolicyParams {
+    /** The policy ID. */
+    policyId: string;
+    /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
+     *  be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag response header.
+     */
+    ifMatch: string;
+    /** The policy state; either 'active' or 'deleted'. */
+    state?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -829,6 +1017,8 @@ namespace IamPolicyManagementV1 {
     id?: string;
     /** The policy type; either 'access' or 'authorization'. */
     type?: string;
+    /** Customer-defined description. */
+    description?: string;
     /** The subjects associated with a policy. */
     subjects?: PolicySubject[];
     /** A set of role cloud resource names (CRNs) granted by the policy. */
@@ -857,6 +1047,8 @@ namespace IamPolicyManagementV1 {
   export interface PolicyResource {
     /** List of resource attributes. */
     attributes?: ResourceAttribute[];
+    /** List of access management tags. */
+    tags?: ResourceTag[];
   }
 
   /** A role associated with a policy. */
@@ -882,6 +1074,16 @@ namespace IamPolicyManagementV1 {
     /** The value of an attribute. */
     value: string;
     /** The operator of an attribute. */
+    operator?: string;
+  }
+
+  /** A tag associated with a resource. */
+  export interface ResourceTag {
+    /** The name of an access management tag. */
+    name: string;
+    /** The value of an access management tag. */
+    value: string;
+    /** The operator of an access management tag. */
     operator?: string;
   }
 
@@ -914,7 +1116,6 @@ namespace IamPolicyManagementV1 {
     /** The value of an attribute. */
     value: string;
   }
-
 }
 
 export = IamPolicyManagementV1;

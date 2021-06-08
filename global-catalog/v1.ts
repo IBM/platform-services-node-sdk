@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-ef5e13c2-20200915-144510
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-4c92c221-20210211-060810
  */
- 
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -34,8 +39,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class GlobalCatalogV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://globalcatalog.cloud.ibm.com/api/v1';
+
   static DEFAULT_SERVICE_NAME: string = 'global_catalog';
 
   /*************************
@@ -69,12 +74,11 @@ class GlobalCatalogV1 extends BaseService {
     return service;
   }
 
-
   /**
    * Construct a GlobalCatalogV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net/api/v1'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -121,43 +125,62 @@ class GlobalCatalogV1 extends BaseService {
    * returned are of the language preferred by your browser through the Accept-Langauge header, which allows an override
    * of the header. Languages are specified in standard form, such as `en-us`. To include all languages use a wildcard
    * (*).
-   * @param {string} [params.complete] - Returns all available fields for all languages. Use the value `?complete=true`
+   * @param {boolean} [params.catalog] - Checks to see if a catalog's object is visible, or if it's filtered by service,
+   * plan, deployment, or region. Use the value `?catalog=true`. If a `200` code is returned, the object is visible. If
+   * a `403` code is returned, the object is not visible for the user.
+   * @param {boolean} [params.complete] - Returns all available fields for all languages. Use the value `?complete=true`
    * as shortcut for ?include=*&languages=*.
+   * @param {number} [params.offset] - Useful for pagination, specifies index (origin 0) of first item to return in
+   * response.
+   * @param {number} [params.limit] - Useful for pagination, specifies the maximum number of items to return in the
+   * response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>>}
    */
-  public listCatalogEntries(params?: GlobalCatalogV1.ListCatalogEntriesParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>> {
-    const _params = Object.assign({}, params);
+  public listCatalogEntries(
+    params?: GlobalCatalogV1.ListCatalogEntriesParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>> {
+    const _params = { ...params };
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'account': _params.account,
-        'include': _params.include,
-        'q': _params.q,
-        'sort-by': _params.sortBy,
-        'descending': _params.descending,
-        'languages': _params.languages,
-        'complete': _params.complete
-      };
+    const query = {
+      'account': _params.account,
+      'include': _params.include,
+      'q': _params.q,
+      'sort-by': _params.sortBy,
+      'descending': _params.descending,
+      'languages': _params.languages,
+      'catalog': _params.catalog,
+      'complete': _params.complete,
+      '_offset': _params.offset,
+      '_limit': _params.limit,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalogEntries');
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listCatalogEntries'
+    );
 
-      const parameters = {
-        options: {
-          url: '/',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create a catalog entry.
@@ -189,61 +212,80 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>>}
    */
-  public createCatalogEntry(params: GlobalCatalogV1.CreateCatalogEntryParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['name', 'kind', 'overviewUi', 'images', 'disabled', 'tags', 'provider', 'id'];
+  public createCatalogEntry(
+    params: GlobalCatalogV1.CreateCatalogEntryParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
+    const _params = { ...params };
+    const requiredParams = [
+      'name',
+      'kind',
+      'overviewUi',
+      'images',
+      'disabled',
+      'tags',
+      'provider',
+      'id',
+    ];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'kind': _params.kind,
-        'overview_ui': _params.overviewUi,
-        'images': _params.images,
-        'disabled': _params.disabled,
-        'tags': _params.tags,
-        'provider': _params.provider,
-        'id': _params.id,
-        'parent_id': _params.parentId,
-        'group': _params.group,
-        'active': _params.active,
-        'metadata': _params.metadata
-      };
+    const body = {
+      'name': _params.name,
+      'kind': _params.kind,
+      'overview_ui': _params.overviewUi,
+      'images': _params.images,
+      'disabled': _params.disabled,
+      'tags': _params.tags,
+      'provider': _params.provider,
+      'id': _params.id,
+      'parent_id': _params.parentId,
+      'group': _params.group,
+      'active': _params.active,
+      'metadata': _params.metadata,
+    };
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'createCatalogEntry');
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createCatalogEntry'
+    );
 
-      const parameters = {
-        options: {
-          url: '/',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get a specific catalog object.
    *
    * This endpoint returns a specific catalog entry using the object's unique identifier, for example
-   * `/_*service_name*?complete=true`. This endpoint is ETag enabled.
+   * `/_*service_name*?complete=true`. This endpoint is ETag enabled. This can be used by an unauthenticated user for
+   * publicly available services.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The catalog entry's unqiue ID.
@@ -258,7 +300,7 @@ class GlobalCatalogV1 extends BaseService {
    * returned are of the language preferred by your browser through the Accept-Langauge header, which allows an override
    * of the header. Languages are specified in standard form, such as `en-us`. To include all languages use a wildcard
    * (*).
-   * @param {string} [params.complete] - Returns all available fields for all languages. Use the value `?complete=true`
+   * @param {boolean} [params.complete] - Returns all available fields for all languages. Use the value `?complete=true`
    * as shortcut for ?include=*&languages=*.
    * @param {number} [params.depth] - Return the children down to the requested depth. Use * to include the entire
    * children tree. If there are more children than the maximum permitted an error will be returned. Be judicious with
@@ -266,47 +308,52 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>>}
    */
-  public getCatalogEntry(params: GlobalCatalogV1.GetCatalogEntryParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
-    const _params = Object.assign({}, params);
+  public getCatalogEntry(
+    params: GlobalCatalogV1.GetCatalogEntryParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account,
-        'include': _params.include,
-        'languages': _params.languages,
-        'complete': _params.complete,
-        'depth': _params.depth
-      };
+    const query = {
+      'account': _params.account,
+      'include': _params.include,
+      'languages': _params.languages,
+      'complete': _params.complete,
+      'depth': _params.depth,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogEntry');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogEntry');
 
-      const parameters = {
-        options: {
-          url: '/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update a catalog entry.
@@ -341,60 +388,78 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>>}
    */
-  public updateCatalogEntry(params: GlobalCatalogV1.UpdateCatalogEntryParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
-    const _params = Object.assign({}, params);
-    const requiredParams = ['id', 'name', 'kind', 'overviewUi', 'images', 'disabled', 'tags', 'provider'];
+  public updateCatalogEntry(
+    params: GlobalCatalogV1.UpdateCatalogEntryParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
+    const _params = { ...params };
+    const requiredParams = [
+      'id',
+      'name',
+      'kind',
+      'overviewUi',
+      'images',
+      'disabled',
+      'tags',
+      'provider',
+    ];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'kind': _params.kind,
-        'overview_ui': _params.overviewUi,
-        'images': _params.images,
-        'disabled': _params.disabled,
-        'tags': _params.tags,
-        'provider': _params.provider,
-        'parent_id': _params.parentId,
-        'group': _params.group,
-        'active': _params.active,
-        'metadata': _params.metadata
-      };
+    const body = {
+      'name': _params.name,
+      'kind': _params.kind,
+      'overview_ui': _params.overviewUi,
+      'images': _params.images,
+      'disabled': _params.disabled,
+      'tags': _params.tags,
+      'provider': _params.provider,
+      'parent_id': _params.parentId,
+      'group': _params.group,
+      'active': _params.active,
+      'metadata': _params.metadata,
+    };
 
-      const query = {
-        'account': _params.account,
-        'move': _params.move
-      };
+    const query = {
+      'account': _params.account,
+      'move': _params.move,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'updateCatalogEntry');
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateCatalogEntry'
+    );
 
-      const parameters = {
-        options: {
-          url: '/{id}',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete a catalog entry.
@@ -413,48 +478,52 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
    */
-  public deleteCatalogEntry(params: GlobalCatalogV1.DeleteCatalogEntryParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteCatalogEntry(
+    params: GlobalCatalogV1.DeleteCatalogEntryParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account,
-        'force': _params.force
-      };
+    const query = {
+      'account': _params.account,
+      'force': _params.force,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteCatalogEntry');
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteCatalogEntry'
+    );
 
-      const parameters = {
-        options: {
-          url: '/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get child catalog entries of a specific kind.
    *
-   * Fetch child catalog entries for a catalog entry with a specific id. This endpoint is ETag enabled.
+   * Fetch child catalog entries for a catalog entry with a specific id. This endpoint is ETag enabled. This can be used
+   * by an unauthenticated user for publicly available services.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The parent catalog entry's ID.
@@ -475,54 +544,65 @@ class GlobalCatalogV1 extends BaseService {
    * returned are of the language preferred by your browser through the Accept-Langauge header. This allows an override
    * of the header. Languages are specified in standard form, such as `en-us`. To include all languages use the wildcard
    * (*).
-   * @param {string} [params.complete] - Use the value `?complete=true` as shortcut for ?include=*&languages=*.
+   * @param {boolean} [params.complete] - Use the value `?complete=true` as shortcut for ?include=*&languages=*.
+   * @param {number} [params.offset] - Useful for pagination, specifies index (origin 0) of first item to return in
+   * response.
+   * @param {number} [params.limit] - Useful for pagination, specifies the maximum number of items to return in the
+   * response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>>}
    */
-  public getChildObjects(params: GlobalCatalogV1.GetChildObjectsParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>> {
-    const _params = Object.assign({}, params);
+  public getChildObjects(
+    params: GlobalCatalogV1.GetChildObjectsParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'kind'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account,
-        'include': _params.include,
-        'q': _params.q,
-        'sort-by': _params.sortBy,
-        'descending': _params.descending,
-        'languages': _params.languages,
-        'complete': _params.complete
-      };
+    const query = {
+      'account': _params.account,
+      'include': _params.include,
+      'q': _params.q,
+      'sort-by': _params.sortBy,
+      'descending': _params.descending,
+      'languages': _params.languages,
+      'complete': _params.complete,
+      '_offset': _params.offset,
+      '_limit': _params.limit,
+    };
 
-      const path = {
-        'id': _params.id,
-        'kind': _params.kind
-      };
+    const path = {
+      'id': _params.id,
+      'kind': _params.kind,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getChildObjects');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getChildObjects');
 
-      const parameters = {
-        options: {
-          url: '/{id}/{kind}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}/{kind}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Restore archived catalog entry.
@@ -537,42 +617,45 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
    */
-  public restoreCatalogEntry(params: GlobalCatalogV1.RestoreCatalogEntryParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public restoreCatalogEntry(
+    params: GlobalCatalogV1.RestoreCatalogEntryParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'restoreCatalogEntry');
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'restoreCatalogEntry'
+    );
 
-      const parameters = {
-        options: {
-          url: '/{id}/restore',
-          method: 'PUT',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/{id}/restore',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * visibility
@@ -593,43 +676,48 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Visibility>>}
    */
-  public getVisibility(params: GlobalCatalogV1.GetVisibilityParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Visibility>> {
-    const _params = Object.assign({}, params);
+  public getVisibility(
+    params: GlobalCatalogV1.GetVisibilityParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Visibility>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getVisibility');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getVisibility');
 
-      const parameters = {
-        options: {
-          url: '/{id}/visibility',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}/visibility',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Update visibility.
@@ -648,50 +736,59 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
    */
-  public updateVisibility(params: GlobalCatalogV1.UpdateVisibilityParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public updateVisibility(
+    params: GlobalCatalogV1.UpdateVisibilityParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'extendable': _params.extendable,
-        'include': _params.include,
-        'exclude': _params.exclude
-      };
+    const body = {
+      'extendable': _params.extendable,
+      'include': _params.include,
+      'exclude': _params.exclude,
+    };
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVisibility');
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVisibility'
+    );
 
-      const parameters = {
-        options: {
-          url: '/{id}/visibility',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}/visibility',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * pricing
@@ -701,7 +798,7 @@ class GlobalCatalogV1 extends BaseService {
    * Get the pricing for an object.
    *
    * This endpoint returns the pricing for an object. Static pricing is defined in the catalog. Dynamic pricing is
-   * stored in Bluemix Pricing Catalog.
+   * stored in IBM Cloud Pricing Catalog. This can be used by an unauthenticated user for publicly available services.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The object's unique ID.
@@ -711,43 +808,48 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingGet>>}
    */
-  public getPricing(params: GlobalCatalogV1.GetPricingParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingGet>> {
-    const _params = Object.assign({}, params);
+  public getPricing(
+    params: GlobalCatalogV1.GetPricingParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingGet>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getPricing');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getPricing');
 
-      const parameters = {
-        options: {
-          url: '/{id}/pricing',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}/pricing',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * audit
@@ -776,47 +878,52 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.AuditSearchResult>>}
    */
-  public getAuditLogs(params: GlobalCatalogV1.GetAuditLogsParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.AuditSearchResult>> {
-    const _params = Object.assign({}, params);
+  public getAuditLogs(
+    params: GlobalCatalogV1.GetAuditLogsParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.AuditSearchResult>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account,
-        'ascending': _params.ascending,
-        'startat': _params.startat,
-        '_offset': _params.offset,
-        '_limit': _params.limit
-      };
+    const query = {
+      'account': _params.account,
+      'ascending': _params.ascending,
+      'startat': _params.startat,
+      '_offset': _params.offset,
+      '_limit': _params.limit,
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getAuditLogs');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getAuditLogs');
 
-      const parameters = {
-        options: {
-          url: '/{id}/logs',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{id}/logs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /*************************
    * artifact
@@ -835,43 +942,48 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Artifacts>>}
    */
-  public listArtifacts(params: GlobalCatalogV1.ListArtifactsParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Artifacts>> {
-    const _params = Object.assign({}, params);
+  public listArtifacts(
+    params: GlobalCatalogV1.ListArtifactsParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Artifacts>> {
+    const _params = { ...params };
     const requiredParams = ['objectId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'object_id': _params.objectId
-      };
+    const path = {
+      'object_id': _params.objectId,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'listArtifacts');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'listArtifacts');
 
-      const parameters = {
-        options: {
-          url: '/{object_id}/artifacts',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
+    const parameters = {
+      options: {
+        url: '/{object_id}/artifacts',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
             'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Get artifact.
@@ -888,45 +1000,50 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream|Buffer>>}
    */
-  public getArtifact(params: GlobalCatalogV1.GetArtifactParams): Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream|Buffer>> {
-    const _params = Object.assign({}, params);
+  public getArtifact(
+    params: GlobalCatalogV1.GetArtifactParams
+  ): Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream | Buffer>> {
+    const _params = { ...params };
     const requiredParams = ['objectId', 'artifactId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'object_id': _params.objectId,
-        'artifact_id': _params.artifactId
-      };
+    const path = {
+      'object_id': _params.objectId,
+      'artifact_id': _params.artifactId,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getArtifact');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'getArtifact');
 
-      const parameters = {
-        options: {
-          url: '/{object_id}/artifacts/{artifact_id}',
-          method: 'GET',
-          qs: query,
-          path,
-          responseType: 'stream',
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': _params.accept
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/{object_id}/artifacts/{artifact_id}',
+        method: 'GET',
+        qs: query,
+        path,
+        responseType: 'stream',
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': _params.accept,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Upload artifact.
@@ -944,46 +1061,51 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
    */
-  public uploadArtifact(params: GlobalCatalogV1.UploadArtifactParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public uploadArtifact(
+    params: GlobalCatalogV1.UploadArtifactParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['objectId', 'artifactId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.artifact;
-      const query = {
-        'account': _params.account
-      };
+    const body = _params.artifact;
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'object_id': _params.objectId,
-        'artifact_id': _params.artifactId
-      };
+    const path = {
+      'object_id': _params.objectId,
+      'artifact_id': _params.artifactId,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'uploadArtifact');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'uploadArtifact');
 
-      const parameters = {
-        options: {
-          url: '/{object_id}/artifacts/{artifact_id}',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Content-Type': _params.contentType
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/{object_id}/artifacts/{artifact_id}',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': _params.contentType,
+          },
+          _params.headers
+        ),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
+    return this.createRequest(parameters);
+  }
 
   /**
    * Delete artifact.
@@ -999,44 +1121,42 @@ class GlobalCatalogV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
    */
-  public deleteArtifact(params: GlobalCatalogV1.DeleteArtifactParams): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteArtifact(
+    params: GlobalCatalogV1.DeleteArtifactParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['objectId', 'artifactId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'account': _params.account
-      };
+    const query = {
+      'account': _params.account,
+    };
 
-      const path = {
-        'object_id': _params.objectId,
-        'artifact_id': _params.artifactId
-      };
+    const path = {
+      'object_id': _params.objectId,
+      'artifact_id': _params.artifactId,
+    };
 
-      const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteArtifact');
+    const sdkHeaders = getSdkHeaders(GlobalCatalogV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteArtifact');
 
-      const parameters = {
-        options: {
-          url: '/{object_id}/artifacts/{artifact_id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/{object_id}/artifacts/{artifact_id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
-  };
-
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -1044,9 +1164,8 @@ class GlobalCatalogV1 extends BaseService {
  ************************/
 
 namespace GlobalCatalogV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -1057,7 +1176,7 @@ namespace GlobalCatalogV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1100,10 +1219,19 @@ namespace GlobalCatalogV1 {
      *  are specified in standard form, such as `en-us`. To include all languages use a wildcard (*).
      */
     languages?: string;
+    /** Checks to see if a catalog's object is visible, or if it's filtered by service, plan, deployment, or region.
+     *  Use the value `?catalog=true`. If a `200` code is returned, the object is visible. If a `403` code is returned,
+     *  the object is not visible for the user.
+     */
+    catalog?: boolean;
     /** Returns all available fields for all languages. Use the value `?complete=true` as shortcut for
      *  ?include=*&languages=*.
      */
-    complete?: string;
+    complete?: boolean;
+    /** Useful for pagination, specifies index (origin 0) of first item to return in response. */
+    offset?: number;
+    /** Useful for pagination, specifies the maximum number of items to return in the response. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1180,7 +1308,7 @@ namespace GlobalCatalogV1 {
     /** Returns all available fields for all languages. Use the value `?complete=true` as shortcut for
      *  ?include=*&languages=*.
      */
-    complete?: string;
+    complete?: boolean;
     /** Return the children down to the requested depth. Use * to include the entire children tree. If there are
      *  more children than the maximum permitted an error will be returned. Be judicious with this as it can cause a
      *  large number of database accesses and can result in a large amount of data returned.
@@ -1295,7 +1423,11 @@ namespace GlobalCatalogV1 {
      */
     languages?: string;
     /** Use the value `?complete=true` as shortcut for ?include=*&languages=*. */
-    complete?: string;
+    complete?: boolean;
+    /** Useful for pagination, specifies index (origin 0) of first item to return in response. */
+    offset?: number;
+    /** Useful for pagination, specifies the maximum number of items to return in the response. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1412,7 +1544,7 @@ namespace GlobalCatalogV1 {
     objectId: string;
     /** The artifact's ID. */
     artifactId: string;
-    artifact?: NodeJS.ReadableStream|Buffer;
+    artifact?: NodeJS.ReadableStream | Buffer;
     /** The type of the input. */
     contentType?: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1615,19 +1747,20 @@ namespace GlobalCatalogV1 {
     metadata?: CatalogEntryMetadata;
     /** Catalog entry's unique ID. It's the same across all catalog instances. */
     id?: string;
-    catalog_crn?: any;
+    /** The CRN associated with the catalog entry. */
+    catalog_crn?: string;
     /** URL to get details about this object. */
-    url?: any;
+    url?: string;
     /** URL to get details about children of this object. */
-    children_url?: any;
+    children_url?: string;
     /** tags to indicate the locations this service is deployable to. */
-    geo_tags?: any;
+    geo_tags?: string[];
     /** tags to indicate the type of pricing plans this service supports. */
-    pricing_tags?: any;
+    pricing_tags?: string[];
     /** Date created. */
-    created?: any;
+    created?: string;
     /** Date last updated. */
-    updated?: any;
+    updated?: string;
   }
 
   /** Model used to describe metadata object returned. */
@@ -1782,7 +1915,7 @@ namespace GlobalCatalogV1 {
     type?: string;
     /** message describing action. */
     message?: string;
-    /** JSON object containing details on changes made to object data. */
+    /** An object containing details on changes made to object data. */
     data?: JsonObject;
   }
 
@@ -2114,7 +2247,6 @@ namespace GlobalCatalogV1 {
      */
     _accountid_?: string;
   }
-
 }
 
 export = GlobalCatalogV1;
