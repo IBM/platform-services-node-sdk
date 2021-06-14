@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.32.0-4c6a3129-20210514-210323
+ * IBM OpenAPI SDK Code Generator Version: 3.33.0-caf29bd0-20210603-225214
  */
 
 import * as extend from 'extend';
@@ -3990,6 +3990,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.xAuthRefreshToken - IAM Refresh token.
    * @param {string} [params.id] - provisioned instance ID (part of the CRN).
+   * @param {string} [params.rev] - Cloudant revision.
    * @param {string} [params.url] - url reference to this object.
    * @param {string} [params.crn] - platform CRN for this instance.
    * @param {string} [params.label] - the label for this instance.
@@ -4001,6 +4002,15 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.clusterRegion] - Cluster region (e.g., us-south).
    * @param {string[]} [params.clusterNamespaces] - List of target namespaces to install into.
    * @param {boolean} [params.clusterAllNamespaces] - designate to install into all namespaces.
+   * @param {string} [params.schematicsWorkspaceId] - Id of the schematics workspace, for offering instances provisioned
+   * through schematics.
+   * @param {string} [params.resourceGroupId] - Id of the resource group to provision the offering instance into.
+   * @param {string} [params.installPlan] - Type of install plan (also known as approval strategy) for operator
+   * subscriptions. Can be either automatic, which automatically upgrades operators to the latest in a channel, or
+   * manual, which requires approval on the cluster.
+   * @param {string} [params.channel] - Channel to pin the operator subscription to.
+   * @param {JsonObject} [params.metadata] - Map of metadata values for this offering instance.
+   * @param {OfferingInstanceLastOperation} [params.lastOperation] - the last operation performed and status.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
@@ -4017,6 +4027,7 @@ class CatalogManagementV1 extends BaseService {
 
     const body = {
       'id': _params.id,
+      '_rev': _params.rev,
       'url': _params.url,
       'crn': _params.crn,
       'label': _params.label,
@@ -4028,6 +4039,12 @@ class CatalogManagementV1 extends BaseService {
       'cluster_region': _params.clusterRegion,
       'cluster_namespaces': _params.clusterNamespaces,
       'cluster_all_namespaces': _params.clusterAllNamespaces,
+      'schematics_workspace_id': _params.schematicsWorkspaceId,
+      'resource_group_id': _params.resourceGroupId,
+      'install_plan': _params.installPlan,
+      'channel': _params.channel,
+      'metadata': _params.metadata,
+      'last_operation': _params.lastOperation,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -4120,6 +4137,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} params.instanceIdentifier - Version Instance identifier.
    * @param {string} params.xAuthRefreshToken - IAM Refresh token.
    * @param {string} [params.id] - provisioned instance ID (part of the CRN).
+   * @param {string} [params.rev] - Cloudant revision.
    * @param {string} [params.url] - url reference to this object.
    * @param {string} [params.crn] - platform CRN for this instance.
    * @param {string} [params.label] - the label for this instance.
@@ -4131,6 +4149,15 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.clusterRegion] - Cluster region (e.g., us-south).
    * @param {string[]} [params.clusterNamespaces] - List of target namespaces to install into.
    * @param {boolean} [params.clusterAllNamespaces] - designate to install into all namespaces.
+   * @param {string} [params.schematicsWorkspaceId] - Id of the schematics workspace, for offering instances provisioned
+   * through schematics.
+   * @param {string} [params.resourceGroupId] - Id of the resource group to provision the offering instance into.
+   * @param {string} [params.installPlan] - Type of install plan (also known as approval strategy) for operator
+   * subscriptions. Can be either automatic, which automatically upgrades operators to the latest in a channel, or
+   * manual, which requires approval on the cluster.
+   * @param {string} [params.channel] - Channel to pin the operator subscription to.
+   * @param {JsonObject} [params.metadata] - Map of metadata values for this offering instance.
+   * @param {OfferingInstanceLastOperation} [params.lastOperation] - the last operation performed and status.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
@@ -4147,6 +4174,7 @@ class CatalogManagementV1 extends BaseService {
 
     const body = {
       'id': _params.id,
+      '_rev': _params.rev,
       'url': _params.url,
       'crn': _params.crn,
       'label': _params.label,
@@ -4158,6 +4186,12 @@ class CatalogManagementV1 extends BaseService {
       'cluster_region': _params.clusterRegion,
       'cluster_namespaces': _params.clusterNamespaces,
       'cluster_all_namespaces': _params.clusterAllNamespaces,
+      'schematics_workspace_id': _params.schematicsWorkspaceId,
+      'resource_group_id': _params.resourceGroupId,
+      'install_plan': _params.installPlan,
+      'channel': _params.channel,
+      'metadata': _params.metadata,
+      'last_operation': _params.lastOperation,
     };
 
     const path = {
@@ -5345,6 +5379,8 @@ namespace CatalogManagementV1 {
     xAuthRefreshToken: string;
     /** provisioned instance ID (part of the CRN). */
     id?: string;
+    /** Cloudant revision. */
+    rev?: string;
     /** url reference to this object. */
     url?: string;
     /** platform CRN for this instance. */
@@ -5367,6 +5403,21 @@ namespace CatalogManagementV1 {
     clusterNamespaces?: string[];
     /** designate to install into all namespaces. */
     clusterAllNamespaces?: boolean;
+    /** Id of the schematics workspace, for offering instances provisioned through schematics. */
+    schematicsWorkspaceId?: string;
+    /** Id of the resource group to provision the offering instance into. */
+    resourceGroupId?: string;
+    /** Type of install plan (also known as approval strategy) for operator subscriptions. Can be either automatic,
+     *  which automatically upgrades operators to the latest in a channel, or manual, which requires approval on the
+     *  cluster.
+     */
+    installPlan?: string;
+    /** Channel to pin the operator subscription to. */
+    channel?: string;
+    /** Map of metadata values for this offering instance. */
+    metadata?: JsonObject;
+    /** the last operation performed and status. */
+    lastOperation?: OfferingInstanceLastOperation;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -5385,6 +5436,8 @@ namespace CatalogManagementV1 {
     xAuthRefreshToken: string;
     /** provisioned instance ID (part of the CRN). */
     id?: string;
+    /** Cloudant revision. */
+    rev?: string;
     /** url reference to this object. */
     url?: string;
     /** platform CRN for this instance. */
@@ -5407,6 +5460,21 @@ namespace CatalogManagementV1 {
     clusterNamespaces?: string[];
     /** designate to install into all namespaces. */
     clusterAllNamespaces?: boolean;
+    /** Id of the schematics workspace, for offering instances provisioned through schematics. */
+    schematicsWorkspaceId?: string;
+    /** Id of the resource group to provision the offering instance into. */
+    resourceGroupId?: string;
+    /** Type of install plan (also known as approval strategy) for operator subscriptions. Can be either automatic,
+     *  which automatically upgrades operators to the latest in a channel, or manual, which requires approval on the
+     *  cluster.
+     */
+    installPlan?: string;
+    /** Channel to pin the operator subscription to. */
+    channel?: string;
+    /** Map of metadata values for this offering instance. */
+    metadata?: JsonObject;
+    /** the last operation performed and status. */
+    lastOperation?: OfferingInstanceLastOperation;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -5979,6 +6047,8 @@ namespace CatalogManagementV1 {
   export interface OfferingInstance {
     /** provisioned instance ID (part of the CRN). */
     id?: string;
+    /** Cloudant revision. */
+    _rev?: string;
     /** url reference to this object. */
     url?: string;
     /** platform CRN for this instance. */
@@ -6001,6 +6071,35 @@ namespace CatalogManagementV1 {
     cluster_namespaces?: string[];
     /** designate to install into all namespaces. */
     cluster_all_namespaces?: boolean;
+    /** Id of the schematics workspace, for offering instances provisioned through schematics. */
+    schematics_workspace_id?: string;
+    /** Id of the resource group to provision the offering instance into. */
+    resource_group_id?: string;
+    /** Type of install plan (also known as approval strategy) for operator subscriptions. Can be either automatic,
+     *  which automatically upgrades operators to the latest in a channel, or manual, which requires approval on the
+     *  cluster.
+     */
+    install_plan?: string;
+    /** Channel to pin the operator subscription to. */
+    channel?: string;
+    /** Map of metadata values for this offering instance. */
+    metadata?: JsonObject;
+    /** the last operation performed and status. */
+    last_operation?: OfferingInstanceLastOperation;
+  }
+
+  /** the last operation performed and status. */
+  export interface OfferingInstanceLastOperation {
+    /** last operation performed. */
+    operation?: string;
+    /** state after the last operation performed. */
+    state?: string;
+    /** additional information about the last operation. */
+    message?: string;
+    /** transaction id from the last operation. */
+    transaction_id?: string;
+    /** Date and time last updated. */
+    updated?: string;
   }
 
   /** Paginated offering search result. */
