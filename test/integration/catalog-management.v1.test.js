@@ -42,16 +42,12 @@ describe('CatalogManagementV1_integration', () => {
     'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml';
 
   const bogusVersionLocatorId = 'bogus-version-locator-id';
-  const bogusCatalogId = 'bogus-catalog-id';
-  const bogusOfferingId = 'bogus-offering-id';
-  const bogusCatalogAccountId = 'bogus-catalog-account-id';
-  const bogusLicenseId = 'bogus-licence-id';
   const bogusRevision = 'bogus-revision';
 
   const labelNodeSdk = 'node-sdk';
   const repoTypeGitPublic = 'git_public';
 
-  const objectName = 'nodeSdk5';
+  const objectName = 'object_created_by_node_sdk6';
 
   let catalogId;
   let offeringId;
@@ -475,12 +471,12 @@ describe('CatalogManagementV1_integration', () => {
     expect(catalogId).toBeDefined();
     expect(offeringId).toBeDefined();
 
-    const updatedName = 'updated-offering-name-by-node-sdk';
+    const updatedOfferingName = 'updated-offering-name-by-node-sdk';
     const params = {
       catalogIdentifier: catalogId,
       offeringId,
       id: offeringId,
-      name: updatedName,
+      name: updatedOfferingName,
       catalogId,
     };
 
@@ -491,7 +487,7 @@ describe('CatalogManagementV1_integration', () => {
 
     expect(res.result.id).toBe(offeringId);
     expect(res.result.catalog_id).toBe(catalogId);
-    expect(res.result.name).toBe(updatedName);
+    expect(res.result.name).toBe(updatedOfferingName);
   });
 
   // ====
@@ -539,17 +535,44 @@ describe('CatalogManagementV1_integration', () => {
   test('listOfferings() returns list of offerings', async () => {
     expect(catalogId).toBeDefined();
 
-    const params = {
-      catalogIdentifier: catalogId,
-    };
+    let offset = 0;
+    const limit = 50;
+    let fetch = true;
+    let amountOfOfferings = 0;
+    let isOfferingFound = false;
 
-    const res = await catalogManagementServiceAuthorized.listOfferings(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
+    while (fetch) {
+      const params = {
+        catalogIdentifier: catalogId,
+        limit,
+        offset,
+      };
 
-    const result = res.result.resources.find(({ id }) => id === offeringId);
-    expect(result).not.toBeNull();
+      const res = await catalogManagementServiceAuthorized.listOfferings(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+
+      if (
+        res.result.resources !== undefined &&
+        res.result.resources !== null &&
+        res.result.resources.length > 0
+      ) {
+        amountOfOfferings += res.result.resources.length;
+        offset += 50;
+
+        if (isOfferingFound === false) {
+          const result = res.result.resources.find(({ id }) => id === offeringId);
+          if (result !== undefined) {
+            isOfferingFound = true;
+          }
+        }
+      } else {
+        fetch = false;
+      }
+    }
+    expect(isOfferingFound).toBe(true);
+    console.log('Amount of offerings: ', amountOfOfferings);
   });
 
   // ====
@@ -2322,11 +2345,11 @@ describe('CatalogManagementV1_integration', () => {
       versionLocatorId,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.replaceOperators(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
+    await expect(catalogManagementServiceAuthorized.replaceOperators(params)).rejects.toMatchObject(
+      {
+        status: 404,
+      }
+    );
   });
 
   test('replaceOperators() returns 400 when backend input validation fails', async () => {
@@ -2798,19 +2821,37 @@ describe('CatalogManagementV1_integration', () => {
   });
 
   test('searchObjects()', async () => {
-    const params = {
-      query: `name: ${objectName}`,
-      collapse: true,
-      digest: true,
-    };
+    let offset = 0;
+    const limit = 50;
+    let fetch = true;
+    let amountOfObjects = 0;
 
-    const res = await catalogManagementServiceAuthorized.searchObjects(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-    const result = res.result.resources.find(({ id }) => id === objectId);
-    expect(result).toBeDefined();
-    expect(result).not.toBeNull();
+    while (fetch) {
+      const params = {
+        query: 'name: object*',
+        collapse: true,
+        digest: true,
+        limit,
+        offset,
+      };
+
+      const res = await catalogManagementServiceAuthorized.searchObjects(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+
+      if (
+        res.result.resources !== undefined &&
+        res.result.resources !== null &&
+        res.result.resources.length > 0
+      ) {
+        offset += 50;
+        amountOfObjects += res.result.resources.length;
+      } else {
+        fetch = false;
+      }
+    }
+    console.log('Amount of objects: ', amountOfObjects);
   });
 
   // ====
@@ -2844,18 +2885,44 @@ describe('CatalogManagementV1_integration', () => {
   test('listObjects()', async () => {
     expect(catalogId).toBeDefined();
 
-    const params = {
-      catalogIdentifier: catalogId,
-    };
+    let offset = 0;
+    const limit = 50;
+    let fetch = true;
+    let amountOfObjects = 0;
+    let isObjectFound = false;
 
-    const res = await catalogManagementServiceAuthorized.listObjects(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
+    while (fetch) {
+      const params = {
+        catalogIdentifier: catalogId,
+        limit,
+        offset,
+      };
 
-    const result = res.result.resources.find(({ id }) => id === objectId);
-    expect(result).toBeDefined();
-    expect(result).not.toBeNull();
+      const res = await catalogManagementServiceAuthorized.listObjects(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+
+      if (
+        res.result.resources !== undefined &&
+        res.result.resources !== null &&
+        res.result.resources.length > 0
+      ) {
+        amountOfObjects += res.result.resources.length;
+        offset += 50;
+
+        if (isObjectFound === false) {
+          const result = res.result.resources.find(({ id }) => id === objectId);
+          if (result !== undefined) {
+            isObjectFound = true;
+          }
+        }
+      } else {
+        fetch = false;
+      }
+    }
+    expect(isObjectFound).toBe(true);
+    console.log('Amount of objects: ', amountOfObjects);
   });
 
   // ====
