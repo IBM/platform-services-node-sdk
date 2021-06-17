@@ -1,3 +1,17 @@
+## [0.18.11](https://github.com/IBM/platform-services-node-sdk/compare/v0.18.10...v0.18.11) (2021-06-15)
+
+
+### Bug Fixes
+
+* **IAM Identity:** re-gen service after recent API changes ([#112](https://github.com/IBM/platform-services-node-sdk/issues/112)) ([b85cbda](https://github.com/IBM/platform-services-node-sdk/commit/b85cbda3cb520fa94767027cd90122b9ec31a461))
+
+## [0.18.10](https://github.com/IBM/platform-services-node-sdk/compare/v0.18.9...v0.18.10) (2021-06-09)
+
+
+### Bug Fixes
+
+* **Global Search/Tagging:** regenerated services with latest API definition ([#111](https://github.com/IBM/platform-services-node-sdk/issues/111)) ([aa44356](https://github.com/IBM/platform-services-node-sdk/commit/aa4435684b86fb2aa1c3dc0f10aee9202ba8afed))
+
 ## [0.18.9](https://github.com/IBM/platform-services-node-sdk/compare/v0.18.8...v0.18.9) (2021-06-01)
 
 
