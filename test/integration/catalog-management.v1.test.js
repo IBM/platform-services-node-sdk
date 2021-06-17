@@ -48,6 +48,7 @@ describe('CatalogManagementV1_integration', () => {
   const repoTypeGitPublic = 'git_public';
 
   const objectName = 'object_created_by_node_sdk6';
+  const objectCrn = 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com';
 
   let catalogId;
   let offeringId;
@@ -696,7 +697,7 @@ describe('CatalogManagementV1_integration', () => {
       catalogIdentifier: catalogId,
       offeringId: `invalid-${offeringId}`,
       targetVersion: '0.0.2',
-      kinds: [kindVpe],
+      kinds: [kindRoks],
       zipurl: importOfferingZipUrl,
       repoType: repoTypeGitPublic,
     };
@@ -768,7 +769,7 @@ describe('CatalogManagementV1_integration', () => {
       catalogIdentifier: catalogId,
       catalogId,
       name: objectName,
-      crn: 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com',
+      crn: objectCrn,
       parentId: 'bogus region name',
       kind: kindVpe,
       publish: publishObjectModel,
@@ -798,7 +799,7 @@ describe('CatalogManagementV1_integration', () => {
       catalogIdentifier: catalogId,
       catalogId,
       name: objectName,
-      crn: 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com',
+      crn: objectCrn,
       parentId: regionUsSouth,
       kind: kindVpe,
       publish: publishObjectModel,
@@ -828,7 +829,7 @@ describe('CatalogManagementV1_integration', () => {
       catalogIdentifier: `invalid-${catalogId}`,
       catalogId: `invalid-${catalogId}`,
       name: objectName,
-      crn: 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com',
+      crn: objectCrn,
       parentId: regionUsSouth,
       kind: kindVpe,
       publish: publishObjectModel,
@@ -857,7 +858,7 @@ describe('CatalogManagementV1_integration', () => {
       catalogIdentifier: catalogId,
       catalogId,
       name: objectName,
-      crn: 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com',
+      crn: objectCrn,
       parentId: regionUsSouth,
       kind: kindVpe,
       publish: publishObjectModel,
@@ -1463,7 +1464,7 @@ describe('CatalogManagementV1_integration', () => {
     );
   });
 
-  test('getOfferingAbout() returns 404 when no such offering', async () => {
+  test('getOfferingAbout() returns 404 when no such version', async () => {
     expect(versionLocatorId).toBeDefined();
 
     const params = {
@@ -1760,7 +1761,7 @@ describe('CatalogManagementV1_integration', () => {
     });
   });
 
-  test('ibmPublishVersion() returns 400 when no such version', async () => {
+  test('ibmPublishVersion() returns 404 when no such version', async () => {
     expect(versionLocatorId).toBeDefined();
 
     const params = {
@@ -1899,7 +1900,7 @@ describe('CatalogManagementV1_integration', () => {
     );
   });
 
-  // workflow of versions is unknown for me
+  // workflow of versions
   // Error: Could not find a working copy for the active version with id
   test.skip('commitVersion()', async () => {
     expect(versionLocatorId).toBeDefined();
@@ -2014,7 +2015,7 @@ describe('CatalogManagementV1_integration', () => {
     });
   });
 
-  // workflow problem
+  // requires published state which this user cannot create
   // Error: Cannot create a working copy for version 60cb36c3-39fd-40ed-9887-6bc98aa7b7be.  The version
   // must be in a published state, deprecated state, or invalidated state to create a working copy
   test.skip('getOfferingWorkingCopy() returns the offering working copy', async () => {
@@ -2142,7 +2143,6 @@ describe('CatalogManagementV1_integration', () => {
     });
   });
 
-  // possibly the user is not granted
   test.skip('getNamespaces() returns 403 when user is not authorized', async () => {
     const params = {
       clusterId,
@@ -2233,7 +2233,7 @@ describe('CatalogManagementV1_integration', () => {
       xAuthRefreshToken: refreshTokenAuthorized,
       clusterId,
       region: regionUsSouth,
-      namespaces: ['node-sdk'],
+      allNamespaces: true,
       versionLocatorId,
     };
 
@@ -3812,7 +3812,7 @@ describe('CatalogManagementV1_integration', () => {
     );
   });
 
-  test.skip('deleteVersion() deletes the version', async () => {
+  test('deleteVersion() deletes the version', async () => {
     expect(versionLocatorId).toBeDefined();
 
     const params = {
@@ -3947,7 +3947,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObjectAccessList() returns 403 when user is not authorized', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
@@ -3964,7 +3964,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObjectAccessList() returns 404 when no such catalog', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: `invalid-${catalogId}`,
@@ -3981,7 +3981,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObjectAccessList() deletes access list of the object', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
@@ -4001,7 +4001,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObjectAccess() returns 403 when user is not authorized', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
@@ -4018,7 +4018,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObjectAccess() returns 404 when no such object', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: `invalid-${catalogId}`,
@@ -4035,7 +4035,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObjectAccess() deletes access to object', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
@@ -4055,7 +4055,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObject() returns 403 when user is not authorized', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
@@ -4069,7 +4069,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObject() returns 200 when no such object', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
@@ -4083,7 +4083,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObject() deletes the object', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    expect(objectId).toBeDefined();
 
     const params = {
       catalogIdentifier: catalogId,
