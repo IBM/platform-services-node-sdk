@@ -48,7 +48,8 @@ describe('CatalogManagementV1_integration', () => {
   const repoTypeGitPublic = 'git_public';
 
   const objectName = 'object_created_by_node_sdk6';
-  const objectCrn = 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com';
+  const objectCrn =
+    'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com';
 
   let catalogId;
   let offeringId;
@@ -563,6 +564,7 @@ describe('CatalogManagementV1_integration', () => {
         offset += 50;
 
         if (isOfferingFound === false) {
+          // eslint-disable-next-line no-loop-func
           const result = res.result.resources.find(({ id }) => id === offeringId);
           if (result !== undefined) {
             isOfferingFound = true;
@@ -2912,6 +2914,7 @@ describe('CatalogManagementV1_integration', () => {
         offset += 50;
 
         if (isObjectFound === false) {
+          // eslint-disable-next-line no-loop-func
           const result = res.result.resources.find(({ id }) => id === objectId);
           if (result !== undefined) {
             isObjectFound = true;
