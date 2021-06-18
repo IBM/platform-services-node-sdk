@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources, getQueryParam } = require('ibm-cloud-sdk-core');
 const CatalogManagementV1 = require('../../dist/catalog-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -47,13 +47,15 @@ describe('CatalogManagementV1_integration', () => {
   const labelNodeSdk = 'node-sdk';
   const repoTypeGitPublic = 'git_public';
 
-  const objectName = 'object_created_by_node_sdk6';
+  const objectName = 'object_created_by_node_sdk10';
   const objectCrn =
     'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com';
 
   let catalogId;
   let offeringId;
+  const createdOfferingIds = [];
   let objectId;
+  const createdObjectIds = [];
   let versionLocatorId;
   let offeringInstanceId;
   let refreshTokenAuthorized;
@@ -329,19 +331,24 @@ describe('CatalogManagementV1_integration', () => {
   test('createOffering() creates an offering', async () => {
     expect(catalogId).toBeDefined();
 
-    const params = {
-      catalogIdentifier: catalogId,
-      label: labelNodeSdk,
-      name: 'offering-created-by-node-sdk',
-    };
+    for (let i = 0; i < 2; i++) {
+      const params = {
+        catalogIdentifier: catalogId,
+        label: labelNodeSdk,
+        name: `offering-created-by-node-sdk-${i}`,
+      };
 
-    const res = await catalogManagementServiceAuthorized.createOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
+      const res = await catalogManagementServiceAuthorized.createOffering(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(201);
 
-    expect(res.result).toBeDefined();
-    expect(res.result.id).toBeDefined();
-    offeringId = res.result.id;
+      expect(res.result).toBeDefined();
+      expect(res.result.id).toBeDefined();
+      if (offeringId === undefined) {
+        offeringId = res.result.id;
+      }
+      createdOfferingIds.push(res.result.id);
+    }
   });
 
   // ====
@@ -538,10 +545,9 @@ describe('CatalogManagementV1_integration', () => {
     expect(catalogId).toBeDefined();
 
     let offset = 0;
-    const limit = 50;
+    const limit = 1;
     let fetch = true;
     let amountOfOfferings = 0;
-    let isOfferingFound = false;
 
     while (fetch) {
       const params = {
@@ -555,26 +561,18 @@ describe('CatalogManagementV1_integration', () => {
       expect(res.status).toBe(200);
       expect(res.result).toBeDefined();
 
-      if (
-        res.result.resources !== undefined &&
-        res.result.resources !== null &&
-        res.result.resources.length > 0
-      ) {
-        amountOfOfferings += res.result.resources.length;
-        offset += 50;
+      const offsetValue = getQueryParam(res.result.next, 'offset');
 
-        if (isOfferingFound === false) {
-          // eslint-disable-next-line no-loop-func
-          const result = res.result.resources.find(({ id }) => id === offeringId);
-          if (result !== undefined) {
-            isOfferingFound = true;
-          }
-        }
+      if (offsetValue) {
+        offset = offsetValue;
       } else {
         fetch = false;
       }
+
+      if (res.result.resource_count > 0) {
+        amountOfOfferings += res.result.resource_count;
+      }
     }
-    expect(isOfferingFound).toBe(true);
     console.log('Amount of offerings: ', amountOfOfferings);
   });
 
@@ -846,34 +844,39 @@ describe('CatalogManagementV1_integration', () => {
   test('createObject() creates an object', async () => {
     expect(catalogId).toBeDefined();
 
-    const publishObjectModel = {
-      permit_ibm_public_publish: true,
-      ibm_approved: true,
-      public_approved: true,
-    };
+    for (let i = 0; i < 2; i++) {
+      const publishObjectModel = {
+        permit_ibm_public_publish: true,
+        ibm_approved: true,
+        public_approved: true,
+      };
 
-    const stateModel = {
-      current: 'new',
-    };
+      const stateModel = {
+        current: 'new',
+      };
 
-    const params = {
-      catalogIdentifier: catalogId,
-      catalogId,
-      name: objectName,
-      crn: objectCrn,
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      publish: publishObjectModel,
-      state: stateModel,
-    };
+      const params = {
+        catalogIdentifier: catalogId,
+        catalogId,
+        name: `${objectName}_${i}`,
+        crn: objectCrn,
+        parentId: regionUsSouth,
+        kind: kindVpe,
+        publish: publishObjectModel,
+        state: stateModel,
+      };
 
-    const res = await catalogManagementServiceAuthorized.createObject(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result).toBeDefined();
-    expect(res.result.id).toBeDefined();
+      const res = await catalogManagementServiceAuthorized.createObject(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(201);
+      expect(res.result).toBeDefined();
+      expect(res.result.id).toBeDefined();
 
-    objectId = res.result.id;
+      if (objectId === undefined) {
+        objectId = res.result.id;
+      }
+      createdObjectIds.push(res.result.id);
+    }
   });
 
   // ====
@@ -2824,7 +2827,7 @@ describe('CatalogManagementV1_integration', () => {
 
   test('searchObjects()', async () => {
     let offset = 0;
-    const limit = 50;
+    const limit = 1;
     let fetch = true;
     let amountOfObjects = 0;
 
@@ -2842,15 +2845,16 @@ describe('CatalogManagementV1_integration', () => {
       expect(res.status).toBe(200);
       expect(res.result).toBeDefined();
 
-      if (
-        res.result.resources !== undefined &&
-        res.result.resources !== null &&
-        res.result.resources.length > 0
-      ) {
-        offset += 50;
-        amountOfObjects += res.result.resources.length;
+      const offsetValue = getQueryParam(res.result.next, 'offset');
+
+      if (offsetValue) {
+        offset = offsetValue;
       } else {
         fetch = false;
+      }
+
+      if (res.result.resource_count > 0) {
+        amountOfObjects += res.result.resource_count;
       }
     }
     console.log('Amount of objects: ', amountOfObjects);
@@ -2888,10 +2892,9 @@ describe('CatalogManagementV1_integration', () => {
     expect(catalogId).toBeDefined();
 
     let offset = 0;
-    const limit = 50;
+    const limit = 1;
     let fetch = true;
     let amountOfObjects = 0;
-    let isObjectFound = false;
 
     while (fetch) {
       const params = {
@@ -2905,26 +2908,18 @@ describe('CatalogManagementV1_integration', () => {
       expect(res.status).toBe(200);
       expect(res.result).toBeDefined();
 
-      if (
-        res.result.resources !== undefined &&
-        res.result.resources !== null &&
-        res.result.resources.length > 0
-      ) {
-        amountOfObjects += res.result.resources.length;
-        offset += 50;
+      const offsetValue = getQueryParam(res.result.next, 'offset');
 
-        if (isObjectFound === false) {
-          // eslint-disable-next-line no-loop-func
-          const result = res.result.resources.find(({ id }) => id === objectId);
-          if (result !== undefined) {
-            isObjectFound = true;
-          }
-        }
+      if (offsetValue) {
+        offset = offsetValue;
       } else {
         fetch = false;
       }
+
+      if (res.result.resource_count > 0) {
+        amountOfObjects += res.result.resource_count;
+      }
     }
-    expect(isObjectFound).toBe(true);
     console.log('Amount of objects: ', amountOfObjects);
   });
 
@@ -4086,17 +4081,18 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteObject() deletes the object', async () => {
     expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
 
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
+    for (let i = 0; i < createdObjectIds.length; i++) {
+      const params = {
+        catalogIdentifier: catalogId,
+        objectIdentifier: createdObjectIds[i],
+      };
 
-    const res = await catalogManagementServiceAuthorized.deleteObject(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
+      const res = await catalogManagementServiceAuthorized.deleteObject(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    }
   });
 
   // ====
@@ -4135,16 +4131,17 @@ describe('CatalogManagementV1_integration', () => {
 
   test('deleteOffering() deletes the offering', async () => {
     expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
 
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-    };
+    for (let i = 0; i < createdOfferingIds.length; i++) {
+      const params = {
+        catalogIdentifier: catalogId,
+        offeringId: createdOfferingIds[i],
+      };
 
-    const res = await catalogManagementServiceAuthorized.deleteOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
+      const res = await catalogManagementServiceAuthorized.deleteOffering(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+    }
   });
 
   // ====
@@ -4190,26 +4187,30 @@ describe('CatalogManagementV1_integration', () => {
   });
 
   afterAll(async () => {
-    try {
-      const params = {
-        catalogIdentifier: catalogId,
-        objectIdentifier: objectId,
-      };
+    for (let i = 0; i < createdObjectIds.length; i++) {
+      try {
+        const params = {
+          catalogIdentifier: catalogId,
+          objectIdentifier: createdObjectIds[i],
+        };
 
-      await catalogManagementServiceAuthorized.deleteObject(params);
-    } catch (e) {
-      console.log('Cleanup: Object is already deleted.');
+        await catalogManagementServiceAuthorized.deleteObject(params);
+      } catch (e) {
+        console.log('Cleanup: Object is already deleted.');
+      }
     }
 
-    try {
-      const params = {
-        catalogIdentifier: catalogId,
-        offeringId,
-      };
+    for (let i = 0; i < createdOfferingIds.length; i++) {
+      try {
+        const params = {
+          catalogIdentifier: catalogId,
+          offeringId: createdOfferingIds[i],
+        };
 
-      await catalogManagementServiceAuthorized.deleteOffering(params);
-    } catch (e) {
-      console.log('Cleanup: Offering is already deleted.');
+        await catalogManagementServiceAuthorized.deleteOffering(params);
+      } catch (e) {
+        console.log('Cleanup: Offering is already deleted.');
+      }
     }
 
     try {
