@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -24,7 +24,7 @@ const CatalogManagementV1 = require('../dist/catalog-management/v1');
 // eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
 // You can use the readExternalSources method to access additional configuration values
-// const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
 // This file provides an example of how to use the Catalog Management service.
@@ -39,7 +39,7 @@ const authHelper = require('../test/resources/auth-helper.js');
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'catalog_management_v1.env';
+const configFile = 'catalog_mgmt.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -58,8 +58,31 @@ describe('CatalogManagementV1', () => {
 
   // end-common
 
+  let bearerToken;
+  let catalogId;
+  let offeringId;
+  let versionLocatorId;
+  let offeringInstanceId;
+  let objectId;
+
   // To access additional configuration values, uncomment this line and extract the values from config
-  // const config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
+  const config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
+  expect(config).not.toBeNull();
+
+  const accountId = config.accountId;
+  expect(accountId).not.toBeUndefined();
+
+  const gitTokenForPublicRepo = config.gitToken;
+  expect(gitTokenForPublicRepo).not.toBeUndefined();
+
+  const clusterId = config.clusterId;
+  expect(clusterId).not.toBeUndefined();
+
+  test('Acquire bearer token', async () => {
+    await catalogManagementService.getCatalogAccount();
+    bearerToken = catalogManagementService.getAuthenticator().getRefreshToken()
+    expect(bearerToken).not.toBeUndefined();
+  })
 
   test('createCatalog request example', done => {
 
@@ -74,8 +97,16 @@ describe('CatalogManagementV1', () => {
     originalLog('createCatalog() result:');
     // begin-create_catalog
 
-    catalogManagementService.createCatalog({})
+    const params = {
+      label: 'Catalog Management Service',
+      tags: ['node', 'sdk'],
+      kind: 'vpe',
+      owningAccount: accountId
+    }
+
+    catalogManagementService.createCatalog(params)
     .then(res => {
+      catalogId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
     })
     .catch(err => {
@@ -99,7 +130,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_catalog
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
     };
 
     catalogManagementService.getCatalog(params)
@@ -127,7 +158,11 @@ describe('CatalogManagementV1', () => {
     // begin-replace_catalog
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      id: catalogId,
+      tags: ['node', 'sdk', 'updated'],
+      owningAccount: accountId,
+      kind: 'vpe',
     };
 
     catalogManagementService.replaceCatalog(params)
@@ -179,11 +214,13 @@ describe('CatalogManagementV1', () => {
     // begin-create_offering
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      name: 'offering-name'
     };
 
     catalogManagementService.createOffering(params)
     .then(res => {
+      offeringId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
     })
     .catch(err => {
@@ -207,8 +244,8 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
     };
 
     catalogManagementService.getOffering(params)
@@ -222,7 +259,7 @@ describe('CatalogManagementV1', () => {
     // end-get_offering
   });
 
-  test('replaceOffering request example', done => {
+  test.skip('replaceOffering request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -236,8 +273,10 @@ describe('CatalogManagementV1', () => {
     // begin-replace_offering
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
+      id: offeringId,
+      name: 'updated-offering-name'
     };
 
     catalogManagementService.replaceOffering(params)
@@ -265,7 +304,9 @@ describe('CatalogManagementV1', () => {
     // begin-list_offerings
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      limit: 100,
+      offset: 0,
     };
 
     catalogManagementService.listOfferings(params)
@@ -293,11 +334,19 @@ describe('CatalogManagementV1', () => {
     // begin-import_offering
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      tags: ['node', 'sdk'],
+      target_kinds: ['roks'],
+      zipurl: 'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml',
+      offeringId: offeringId,
+      targetVersion: '0.0.2',
+      repoType: 'git_public',
+      xAuthToken: gitTokenForPublicRepo,
     };
 
     catalogManagementService.importOffering(params)
     .then(res => {
+      versionLocatorId = res.result.kinds[0].versions[0].version_locator;
       console.log(JSON.stringify(res.result, null, 2));
     })
     .catch(err => {
@@ -307,7 +356,7 @@ describe('CatalogManagementV1', () => {
     // end-import_offering
   });
 
-  test('reloadOffering request example', done => {
+  test.skip('reloadOffering request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -321,9 +370,13 @@ describe('CatalogManagementV1', () => {
     // begin-reload_offering
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
-      targetVersion: 'testString',
+      catalogIdentifier: catalogId,
+      tags: ['node', 'sdk'],
+      target_kinds: ['roks'],
+      zipurl: 'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml',
+      offeringId: offeringId,
+      targetVersion: '0.0.2',
+      repoType: 'git_public',
     };
 
     catalogManagementService.reloadOffering(params)
@@ -350,12 +403,30 @@ describe('CatalogManagementV1', () => {
     originalLog('createObject() result:');
     // begin-create_object
 
+    const publishObjectModel = {
+      permit_ibm_public_publish: true,
+      ibm_approved: true,
+      public_approved: true,
+    };
+
+    const stateModel = {
+      current: 'new',
+    };
+
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      catalogId: catalogId,
+      name: 'object_in_ibm_cloud',
+      crn: 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com',
+      parentId: 'us-south',
+      kind: 'vpe',
+      publish: publishObjectModel,
+      state: stateModel,
     };
 
     catalogManagementService.createObject(params)
     .then(res => {
+      objectId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
     })
     .catch(err => {
@@ -379,8 +450,8 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_audit
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
     };
 
     catalogManagementService.getOfferingAudit(params)
@@ -418,7 +489,7 @@ describe('CatalogManagementV1', () => {
     // end-get_catalog_account
   });
 
-  test('updateCatalogAccount request example', done => {
+  test.skip('updateCatalogAccount request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -455,12 +526,12 @@ describe('CatalogManagementV1', () => {
     // begin-get_catalog_account_audit
 
     catalogManagementService.getCatalogAccountAudit({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      console.log(JSON.stringify(res.result, null, 2));
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-get_catalog_account_audit
   });
@@ -504,7 +575,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_catalog_audit
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
     };
 
     catalogManagementService.getCatalogAudit(params)
@@ -556,8 +627,12 @@ describe('CatalogManagementV1', () => {
     // begin-import_offering_version
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
+      targetKinds: ['roks'],
+      zipurl: 'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml',
+      targetVersion: '0.0.3',
+      repoType: 'git_public',
     };
 
     catalogManagementService.importOfferingVersion(params)
@@ -571,7 +646,7 @@ describe('CatalogManagementV1', () => {
     // end-import_offering_version
   });
 
-  test('replaceOfferingIcon request example', done => {
+  test.skip('replaceOfferingIcon request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -585,9 +660,9 @@ describe('CatalogManagementV1', () => {
     // begin-replace_offering_icon
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
-      fileName: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
+      fileName: 'offering_icon.png',
     };
 
     catalogManagementService.replaceOfferingIcon(params)
@@ -601,7 +676,7 @@ describe('CatalogManagementV1', () => {
     // end-replace_offering_icon
   });
 
-  test('updateOfferingIbm request example', done => {
+  test.skip('updateOfferingIbm request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -615,8 +690,8 @@ describe('CatalogManagementV1', () => {
     // begin-update_offering_ibm
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
       approvalType: 'allow_request',
       approved: 'true',
     };
@@ -632,7 +707,7 @@ describe('CatalogManagementV1', () => {
     // end-update_offering_ibm
   });
 
-  test('getOfferingUpdates request example', done => {
+  test.skip('getOfferingUpdates request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -646,9 +721,13 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_updates
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
-      kind: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
+      kind: 'roks',
+      version: '0.0.2',
+      clusterId: clusterId,
+      region: 'us-south',
+      namespace: 'application-development-namespace',
     };
 
     catalogManagementService.getOfferingUpdates(params)
@@ -662,7 +741,7 @@ describe('CatalogManagementV1', () => {
     // end-get_offering_updates
   });
 
-  test('getOfferingAbout request example', done => {
+  test.skip('getOfferingAbout request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -676,7 +755,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_about
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.getOfferingAbout(params)
@@ -690,7 +769,7 @@ describe('CatalogManagementV1', () => {
     // end-get_offering_about
   });
 
-  test('getOfferingLicense request example', done => {
+  test.skip('getOfferingLicense request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -704,8 +783,8 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_license
 
     const params = {
-      versionLocId: 'testString',
-      licenseId: 'testString',
+      versionLocId: versionLocatorId,
+      licenseId: 'license-id',
     };
 
     catalogManagementService.getOfferingLicense(params)
@@ -733,7 +812,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_container_images
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.getOfferingContainerImages(params)
@@ -747,7 +826,7 @@ describe('CatalogManagementV1', () => {
     // end-get_offering_container_images
   });
 
-  test('deprecateVersion request example', done => {
+  test.skip('deprecateVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -760,7 +839,7 @@ describe('CatalogManagementV1', () => {
     // begin-deprecate_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.deprecateVersion(params)
@@ -774,7 +853,7 @@ describe('CatalogManagementV1', () => {
     // end-deprecate_version
   });
 
-  test('accountPublishVersion request example', done => {
+  test.skip('accountPublishVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -787,7 +866,7 @@ describe('CatalogManagementV1', () => {
     // begin-account_publish_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.accountPublishVersion(params)
@@ -801,7 +880,7 @@ describe('CatalogManagementV1', () => {
     // end-account_publish_version
   });
 
-  test('ibmPublishVersion request example', done => {
+  test.skip('ibmPublishVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -814,7 +893,7 @@ describe('CatalogManagementV1', () => {
     // begin-ibm_publish_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.ibmPublishVersion(params)
@@ -828,7 +907,7 @@ describe('CatalogManagementV1', () => {
     // end-ibm_publish_version
   });
 
-  test('publicPublishVersion request example', done => {
+  test.skip('publicPublishVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -841,7 +920,7 @@ describe('CatalogManagementV1', () => {
     // begin-public_publish_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.publicPublishVersion(params)
@@ -855,7 +934,7 @@ describe('CatalogManagementV1', () => {
     // end-public_publish_version
   });
 
-  test('commitVersion request example', done => {
+  test.skip('commitVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -868,7 +947,7 @@ describe('CatalogManagementV1', () => {
     // begin-commit_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.commitVersion(params)
@@ -882,7 +961,7 @@ describe('CatalogManagementV1', () => {
     // end-commit_version
   });
 
-  test('copyVersion request example', done => {
+  test.skip('copyVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -895,7 +974,8 @@ describe('CatalogManagementV1', () => {
     // begin-copy_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
+      targetKinds: ['roks'],
     };
 
     catalogManagementService.copyVersion(params)
@@ -909,7 +989,7 @@ describe('CatalogManagementV1', () => {
     // end-copy_version
   });
 
-  test('getOfferingWorkingCopy request example', done => {
+  test.skip('getOfferingWorkingCopy request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -923,7 +1003,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_working_copy
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.getOfferingWorkingCopy(params)
@@ -951,7 +1031,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.getVersion(params)
@@ -965,7 +1045,7 @@ describe('CatalogManagementV1', () => {
     // end-get_version
   });
 
-  test('getCluster request example', done => {
+  test.skip('getCluster request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -979,9 +1059,9 @@ describe('CatalogManagementV1', () => {
     // begin-get_cluster
 
     const params = {
-      clusterId: 'testString',
-      region: 'testString',
-      xAuthRefreshToken: 'testString',
+      clusterId: clusterId,
+      region: 'us-south',
+      xAuthRefreshToken: bearerToken,
     };
 
     catalogManagementService.getCluster(params)
@@ -995,7 +1075,7 @@ describe('CatalogManagementV1', () => {
     // end-get_cluster
   });
 
-  test('getNamespaces request example', done => {
+  test.skip('getNamespaces request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1009,9 +1089,9 @@ describe('CatalogManagementV1', () => {
     // begin-get_namespaces
 
     const params = {
-      clusterId: 'testString',
-      region: 'testString',
-      xAuthRefreshToken: 'testString',
+      clusterId: clusterId,
+      region: 'us-south',
+      xAuthRefreshToken: bearerToken,
     };
 
     catalogManagementService.getNamespaces(params)
@@ -1025,7 +1105,7 @@ describe('CatalogManagementV1', () => {
     // end-get_namespaces
   });
 
-  test('deployOperators request example', done => {
+  test.skip('deployOperators request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1039,7 +1119,11 @@ describe('CatalogManagementV1', () => {
     // begin-deploy_operators
 
     const params = {
-      xAuthRefreshToken: 'testString',
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      allNamespaces: true,
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.deployOperators(params)
@@ -1053,7 +1137,7 @@ describe('CatalogManagementV1', () => {
     // end-deploy_operators
   });
 
-  test('listOperators request example', done => {
+  test.skip('listOperators request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1067,10 +1151,10 @@ describe('CatalogManagementV1', () => {
     // begin-list_operators
 
     const params = {
-      xAuthRefreshToken: 'testString',
-      clusterId: 'testString',
-      region: 'testString',
-      versionLocatorId: 'testString',
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.listOperators(params)
@@ -1084,7 +1168,7 @@ describe('CatalogManagementV1', () => {
     // end-list_operators
   });
 
-  test('replaceOperators request example', done => {
+  test.skip('replaceOperators request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1098,7 +1182,11 @@ describe('CatalogManagementV1', () => {
     // begin-replace_operators
 
     const params = {
-      xAuthRefreshToken: 'testString',
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      allNamespaces: true,
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.replaceOperators(params)
@@ -1112,7 +1200,7 @@ describe('CatalogManagementV1', () => {
     // end-replace_operators
   });
 
-  test('installVersion request example', done => {
+  test.skip('installVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1125,8 +1213,11 @@ describe('CatalogManagementV1', () => {
     // begin-install_version
 
     const params = {
-      versionLocId: 'testString',
-      xAuthRefreshToken: 'testString',
+      versionLocId: versionLocatorId,
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.installVersion(params)
@@ -1140,7 +1231,7 @@ describe('CatalogManagementV1', () => {
     // end-install_version
   });
 
-  test('preinstallVersion request example', done => {
+  test.skip('preinstallVersion request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1153,8 +1244,11 @@ describe('CatalogManagementV1', () => {
     // begin-preinstall_version
 
     const params = {
-      versionLocId: 'testString',
-      xAuthRefreshToken: 'testString',
+      versionLocId: versionLocatorId,
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.preinstallVersion(params)
@@ -1168,7 +1262,7 @@ describe('CatalogManagementV1', () => {
     // end-preinstall_version
   });
 
-  test('getPreinstall request example', done => {
+  test.skip('getPreinstall request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1182,8 +1276,10 @@ describe('CatalogManagementV1', () => {
     // begin-get_preinstall
 
     const params = {
-      versionLocId: 'testString',
-      xAuthRefreshToken: 'testString',
+      versionLocId: versionLocatorId,
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
     };
 
     catalogManagementService.getPreinstall(params)
@@ -1197,7 +1293,7 @@ describe('CatalogManagementV1', () => {
     // end-get_preinstall
   });
 
-  test('validateInstall request example', done => {
+  test.skip('validateInstall request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1210,8 +1306,11 @@ describe('CatalogManagementV1', () => {
     // begin-validate_install
 
     const params = {
-      versionLocId: 'testString',
-      xAuthRefreshToken: 'testString',
+      versionLocId: versionLocatorId,
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.validateInstall(params)
@@ -1239,8 +1338,8 @@ describe('CatalogManagementV1', () => {
     // begin-get_validation_status
 
     const params = {
-      versionLocId: 'testString',
-      xAuthRefreshToken: 'testString',
+      versionLocId: versionLocatorId,
+      xAuthRefreshToken: bearerToken,
     };
 
     catalogManagementService.getValidationStatus(params)
@@ -1254,7 +1353,7 @@ describe('CatalogManagementV1', () => {
     // end-get_validation_status
   });
 
-  test('getOverrideValues request example', done => {
+  test.skip('getOverrideValues request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1268,7 +1367,7 @@ describe('CatalogManagementV1', () => {
     // begin-get_override_values
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.getOverrideValues(params)
@@ -1296,7 +1395,11 @@ describe('CatalogManagementV1', () => {
     // begin-search_objects
 
     const params = {
-      query: 'testString',
+      query: 'name: object*',
+      collapse: true,
+      digest: true,
+      limit: 100,
+      offset: 0,
     };
 
     catalogManagementService.searchObjects(params)
@@ -1324,7 +1427,9 @@ describe('CatalogManagementV1', () => {
     // begin-list_objects
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      limit: 100,
+      offset: 0,
     };
 
     catalogManagementService.listObjects(params)
@@ -1338,7 +1443,7 @@ describe('CatalogManagementV1', () => {
     // end-list_objects
   });
 
-  test('replaceObject request example', done => {
+  test.skip('replaceObject request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1352,8 +1457,13 @@ describe('CatalogManagementV1', () => {
     // begin-replace_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
+      id: objectId,
+      name: 'updated-object-name',
+      parentId: 'us-south',
+      kind: 'vpe',
+      catalogId: catalogId,
     };
 
     catalogManagementService.replaceObject(params)
@@ -1381,8 +1491,8 @@ describe('CatalogManagementV1', () => {
     // begin-get_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.getObject(params)
@@ -1410,8 +1520,8 @@ describe('CatalogManagementV1', () => {
     // begin-get_object_audit
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.getObjectAudit(params)
@@ -1438,22 +1548,22 @@ describe('CatalogManagementV1', () => {
     // begin-account_publish_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.accountPublishObject(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-account_publish_object
   });
 
-  test('sharedPublishObject request example', done => {
+  test.skip('sharedPublishObject request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1466,22 +1576,22 @@ describe('CatalogManagementV1', () => {
     // begin-shared_publish_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.sharedPublishObject(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-shared_publish_object
   });
 
-  test('ibmPublishObject request example', done => {
+  test.skip('ibmPublishObject request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1494,22 +1604,22 @@ describe('CatalogManagementV1', () => {
     // begin-ibm_publish_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.ibmPublishObject(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-ibm_publish_object
   });
 
-  test('publicPublishObject request example', done => {
+  test.skip('publicPublishObject request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1522,17 +1632,17 @@ describe('CatalogManagementV1', () => {
     // begin-public_publish_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.publicPublishObject(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-public_publish_object
   });
@@ -1550,18 +1660,18 @@ describe('CatalogManagementV1', () => {
     // begin-create_object_access
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
-      accountIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
+      accountIdentifier: accountId,
     };
 
     catalogManagementService.createObjectAccess(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-create_object_access
   });
@@ -1580,18 +1690,18 @@ describe('CatalogManagementV1', () => {
     // begin-get_object_access
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
-      accountIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
+      accountIdentifier: accountId,
     };
 
     catalogManagementService.getObjectAccess(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      console.log(JSON.stringify(res.result, null, 2));
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-get_object_access
   });
@@ -1610,9 +1720,9 @@ describe('CatalogManagementV1', () => {
     // begin-add_object_access_list
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
-      accounts: ['testString'],
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
+      accounts: [accountId],
     };
 
     catalogManagementService.addObjectAccessList(params)
@@ -1640,22 +1750,22 @@ describe('CatalogManagementV1', () => {
     // begin-get_object_access_list
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.getObjectAccessList(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      console.log(JSON.stringify(res.result, null, 2));
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-get_object_access_list
   });
 
-  test('createOfferingInstance request example', done => {
+  test.skip('createOfferingInstance request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1669,21 +1779,30 @@ describe('CatalogManagementV1', () => {
     // begin-create_offering_instance
 
     const params = {
-      xAuthRefreshToken: 'testString',
+      xAuthRefreshToken: bearerToken,
+      id: offeringId,
+      catalogId: catalogId,
+      offeringId: offeringId,
+      kindFormat: 'vpe',
+      version: '0.0.2',
+      clusterId: clusterId,
+      clusterRegion: 'us-south',
+      clusterAllNamespaces: true,
     };
 
     catalogManagementService.createOfferingInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      offeringInstanceId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-create_offering_instance
   });
 
-  test('getOfferingInstance request example', done => {
+  test.skip('getOfferingInstance request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1697,21 +1816,21 @@ describe('CatalogManagementV1', () => {
     // begin-get_offering_instance
 
     const params = {
-      instanceIdentifier: 'testString',
+      instanceIdentifier: offeringInstanceId,
     };
 
     catalogManagementService.getOfferingInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      console.log(JSON.stringify(res.result, null, 2));
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-get_offering_instance
   });
 
-  test('putOfferingInstance request example', done => {
+  test.skip('putOfferingInstance request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1725,17 +1844,25 @@ describe('CatalogManagementV1', () => {
     // begin-put_offering_instance
 
     const params = {
-      instanceIdentifier: 'testString',
-      xAuthRefreshToken: 'testString',
+      instanceIdentifier: offeringInstanceId,
+      xAuthRefreshToken: bearerToken,
+      id: offeringId,
+      catalogId: catalogId,
+      offeringId: offeringId,
+      kindFormat: 'vpe',
+      version: '0.0.2',
+      clusterId: clusterId,
+      clusterRegion: 'us-south',
+      clusterAllNamespaces: true,
     };
 
     catalogManagementService.putOfferingInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      console.log(JSON.stringify(res.result, null, 2));
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-put_offering_instance
   });
@@ -1753,21 +1880,21 @@ describe('CatalogManagementV1', () => {
     // begin-delete_version
 
     const params = {
-      versionLocId: 'testString',
+      versionLocId: versionLocatorId,
     };
 
     catalogManagementService.deleteVersion(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-delete_version
   });
 
-  test('deleteOperators request example', done => {
+  test.skip('deleteOperators request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1780,24 +1907,24 @@ describe('CatalogManagementV1', () => {
     // begin-delete_operators
 
     const params = {
-      xAuthRefreshToken: 'testString',
-      clusterId: 'testString',
-      region: 'testString',
-      versionLocatorId: 'testString',
+      xAuthRefreshToken: bearerToken,
+      clusterId: clusterId,
+      region: 'us-south',
+      versionLocatorId: versionLocatorId,
     };
 
     catalogManagementService.deleteOperators(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-delete_operators
   });
 
-  test('deleteOfferingInstance request example', done => {
+  test.skip('deleteOfferingInstance request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -1811,16 +1938,16 @@ describe('CatalogManagementV1', () => {
 
     const params = {
       instanceIdentifier: 'testString',
-      xAuthRefreshToken: 'testString',
+      xAuthRefreshToken: bearerToken,
     };
 
     catalogManagementService.deleteOfferingInstance(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-delete_offering_instance
   });
@@ -1839,9 +1966,9 @@ describe('CatalogManagementV1', () => {
     // begin-delete_object_access_list
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
-      accounts: ['testString'],
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
+      accounts: [accountId],
     };
 
     catalogManagementService.deleteObjectAccessList(params)
@@ -1868,9 +1995,9 @@ describe('CatalogManagementV1', () => {
     // begin-delete_object_access
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
-      accountIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
+      accountIdentifier: accountId,
     };
 
     catalogManagementService.deleteObjectAccess(params)
@@ -1897,8 +2024,8 @@ describe('CatalogManagementV1', () => {
     // begin-delete_object
 
     const params = {
-      catalogIdentifier: 'testString',
-      objectIdentifier: 'testString',
+      catalogIdentifier: catalogId,
+      objectIdentifier: objectId,
     };
 
     catalogManagementService.deleteObject(params)
@@ -1925,17 +2052,17 @@ describe('CatalogManagementV1', () => {
     // begin-delete_offering
 
     const params = {
-      catalogIdentifier: 'testString',
-      offeringId: 'testString',
+      catalogIdentifier: catalogId,
+      offeringId: offeringId,
     };
 
     catalogManagementService.deleteOffering(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-delete_offering
   });
@@ -1953,16 +2080,16 @@ describe('CatalogManagementV1', () => {
     // begin-delete_catalog
 
     const params = {
-      catalogIdentifier: 'testString',
+      catalogIdentifier: catalogId,
     };
 
     catalogManagementService.deleteCatalog(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    .then(res => {
+      done();
+    })
+    .catch(err => {
+      console.warn(err)
+    });
 
     // end-delete_catalog
   });
