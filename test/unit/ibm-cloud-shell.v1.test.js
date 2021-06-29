@@ -30,7 +30,7 @@ const {
 
 const ibmCloudShellServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://api.shell.test.cloud.ibm.com',
+  url: 'https://api.shell.cloud.ibm.com',
 };
 
 const ibmCloudShellService = new IbmCloudShellV1(ibmCloudShellServiceOptions);
@@ -98,19 +98,19 @@ describe('IbmCloudShellV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(IbmCloudShellV1.DEFAULT_SERVICE_URL);
     });
   });
-  describe('getAccountSettingsById', () => {
+  describe('getAccountSettings', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAccountSettingsById
+        // Construct the params object for operation getAccountSettings
         const accountId = '12345678-abcd-1a2b-a1b2-1234567890ab';
         const params = {
           accountId: accountId,
         };
 
-        const getAccountSettingsByIdResult = ibmCloudShellService.getAccountSettingsById(params);
+        const getAccountSettingsResult = ibmCloudShellService.getAccountSettings(params);
 
         // all methods should return a Promise
-        expectToBePromise(getAccountSettingsByIdResult);
+        expectToBePromise(getAccountSettingsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -137,7 +137,7 @@ describe('IbmCloudShellV1', () => {
           },
         };
 
-        ibmCloudShellService.getAccountSettingsById(params);
+        ibmCloudShellService.getAccountSettings(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -146,7 +146,7 @@ describe('IbmCloudShellV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await ibmCloudShellService.getAccountSettingsById({});
+          await ibmCloudShellService.getAccountSettings({});
         } catch (e) {
           err = e;
         }
@@ -156,17 +156,17 @@ describe('IbmCloudShellV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const getAccountSettingsByIdPromise = ibmCloudShellService.getAccountSettingsById();
-        expectToBePromise(getAccountSettingsByIdPromise);
+        const getAccountSettingsPromise = ibmCloudShellService.getAccountSettings();
+        expectToBePromise(getAccountSettingsPromise);
 
-        getAccountSettingsByIdPromise.catch(err => {
+        getAccountSettingsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
       });
     });
   });
-  describe('updateAccountSettingsById', () => {
+  describe('updateAccountSettings', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
@@ -199,42 +199,28 @@ describe('IbmCloudShellV1', () => {
       ];
 
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation updateAccountSettingsById
+        // Construct the params object for operation updateAccountSettings
         const accountId = '12345678-abcd-1a2b-a1b2-1234567890ab';
-        const newId = 'ac-12345678-abcd-1a2b-a1b2-1234567890ab';
-        const newRev = '130-12345678-abcd-1a2b-a1b2-1234567890ab';
-        const newAccountId = '12345678-abcd-1a2b-a1b2-1234567890ab';
-        const newCreatedAt = 1600079615;
-        const newCreatedBy = 'IBMid-1000000000';
-        const newDefaultEnableNewFeatures = true;
-        const newDefaultEnableNewRegions = true;
-        const newEnabled = true;
-        const newFeatures = featureModel;
-        const newRegions = regionSettingModel;
-        const newType = 'account_settings';
-        const newUpdatedAt = 1624359948;
-        const newUpdatedBy = 'IBMid-1000000000';
+        const rev = '130-12345678-abcd-1a2b-a1b2-1234567890ab';
+        const defaultEnableNewFeatures = true;
+        const defaultEnableNewRegions = true;
+        const enabled = true;
+        const features = featureModel;
+        const regions = regionSettingModel;
         const params = {
           accountId: accountId,
-          newId: newId,
-          newRev: newRev,
-          newAccountId: newAccountId,
-          newCreatedAt: newCreatedAt,
-          newCreatedBy: newCreatedBy,
-          newDefaultEnableNewFeatures: newDefaultEnableNewFeatures,
-          newDefaultEnableNewRegions: newDefaultEnableNewRegions,
-          newEnabled: newEnabled,
-          newFeatures: newFeatures,
-          newRegions: newRegions,
-          newType: newType,
-          newUpdatedAt: newUpdatedAt,
-          newUpdatedBy: newUpdatedBy,
+          rev: rev,
+          defaultEnableNewFeatures: defaultEnableNewFeatures,
+          defaultEnableNewRegions: defaultEnableNewRegions,
+          enabled: enabled,
+          features: features,
+          regions: regions,
         };
 
-        const updateAccountSettingsByIdResult = ibmCloudShellService.updateAccountSettingsById(params);
+        const updateAccountSettingsResult = ibmCloudShellService.updateAccountSettings(params);
 
         // all methods should return a Promise
-        expectToBePromise(updateAccountSettingsByIdResult);
+        expectToBePromise(updateAccountSettingsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -245,25 +231,18 @@ describe('IbmCloudShellV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['_id']).toEqual(newId);
-        expect(options.body['_rev']).toEqual(newRev);
-        expect(options.body['account_id']).toEqual(newAccountId);
-        expect(options.body['created_at']).toEqual(newCreatedAt);
-        expect(options.body['created_by']).toEqual(newCreatedBy);
-        expect(options.body['default_enable_new_features']).toEqual(newDefaultEnableNewFeatures);
-        expect(options.body['default_enable_new_regions']).toEqual(newDefaultEnableNewRegions);
-        expect(options.body['enabled']).toEqual(newEnabled);
-        expect(options.body['features']).toEqual(newFeatures);
-        expect(options.body['regions']).toEqual(newRegions);
-        expect(options.body['type']).toEqual(newType);
-        expect(options.body['updated_at']).toEqual(newUpdatedAt);
-        expect(options.body['updated_by']).toEqual(newUpdatedBy);
+        expect(options.body['_rev']).toEqual(rev);
+        expect(options.body['default_enable_new_features']).toEqual(defaultEnableNewFeatures);
+        expect(options.body['default_enable_new_regions']).toEqual(defaultEnableNewRegions);
+        expect(options.body['enabled']).toEqual(enabled);
+        expect(options.body['features']).toEqual(features);
+        expect(options.body['regions']).toEqual(regions);
         expect(options.path['account_id']).toEqual(accountId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
+        const accountId = '12345678-abcd-1a2b-a1b2-1234567890ab';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -274,7 +253,7 @@ describe('IbmCloudShellV1', () => {
           },
         };
 
-        ibmCloudShellService.updateAccountSettingsById(params);
+        ibmCloudShellService.updateAccountSettings(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -283,7 +262,7 @@ describe('IbmCloudShellV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await ibmCloudShellService.updateAccountSettingsById({});
+          await ibmCloudShellService.updateAccountSettings({});
         } catch (e) {
           err = e;
         }
@@ -293,10 +272,10 @@ describe('IbmCloudShellV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const updateAccountSettingsByIdPromise = ibmCloudShellService.updateAccountSettingsById();
-        expectToBePromise(updateAccountSettingsByIdPromise);
+        const updateAccountSettingsPromise = ibmCloudShellService.updateAccountSettings();
+        expectToBePromise(updateAccountSettingsPromise);
 
-        updateAccountSettingsByIdPromise.catch(err => {
+        updateAccountSettingsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });

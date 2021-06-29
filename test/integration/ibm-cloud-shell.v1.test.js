@@ -37,22 +37,29 @@ describe('IbmCloudShellV1_integration', () => {
 
   jest.setTimeout(timeout);
 
-  test('getAccountSettingsById()', async () => {
+  const { accountId } = config;
+  expect(accountId).not.toBeNull();
+
+  test('getAccountSettings()', async () => {
     const params = {
-      accountId: '12345678-abcd-1a2b-a1b2-1234567890ab',
+      accountId,
     };
 
-    const res = await ibmCloudShellService.getAccountSettingsById(params);
+    const res = await ibmCloudShellService.getAccountSettings(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('updateAccountSettingsById()', async () => {
+  test('updateAccountSettings()', async () => {
+    const getRes = await ibmCloudShellService.getAccountSettings({
+      accountId,
+    });
+    const existingAccountSettings = getRes.result;
     // Request models needed by this operation.
 
     // Feature
     const featureModel = [
       {
-        enabled: true,
+        enabled: false,
         key: 'server.file_manager',
       },
       {
@@ -68,35 +75,32 @@ describe('IbmCloudShellV1_integration', () => {
         key: 'eu-de',
       },
       {
-        enabled: true,
+        enabled: false,
         key: 'jp-tok',
       },
       {
-        enabled: true,
+        enabled: false,
         key: 'us-south',
       },
     ];
 
-    const accountId = '12345678-abcd-1a2b-a1b2-1234567890ab';
     const params = {
       accountId,
-      newId: `ac${accountId}`,
-      newRev: `130-${accountId}`,
-      newAccountId: accountId,
-      newCreatedAt: 1600079615,
-      newCreatedBy: 'IBMid-1000000000',
-      newDefaultEnableNewFeatures: true,
-      newDefaultEnableNewRegions: true,
-      newEnabled: true,
-      newFeatures: featureModel,
-      newRegions: regionSettingModel,
-      newType: 'account_settings',
-      newUpdatedAt: 1624359948,
-      newUpdatedBy: 'IBMid-1000000000',
+      rev: existingAccountSettings._rev,
+      defaultEnableNewFeatures: false,
+      defaultEnableNewRegions: true,
+      enabled: true,
+      features: featureModel,
+      regions: regionSettingModel,
     };
 
-    const res = await ibmCloudShellService.updateAccountSettingsById(params);
+    const res = await ibmCloudShellService.updateAccountSettings(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    expect(res.result.default_enable_new_features).toEqual(false);
+    expect(res.result.default_enable_new_regions).toEqual(true);
+    expect(res.result.enabled).toEqual(true);
+    expect(res.result.features).toEqual(featureModel);
+    expect(res.result.regions).toEqual(regionSettingModel);
   });
 });

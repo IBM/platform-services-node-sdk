@@ -34,6 +34,7 @@ const authHelper = require('../test/resources/auth-helper.js');
 // IBM_CLOUD_SHELL_AUTH_TYPE=iam
 // IBM_CLOUD_SHELL_APIKEY=<IAM apikey>
 // IBM_CLOUD_SHELL_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// IBM_CLOUD_SHELL_ACCOUNT_ID=<IBM Cloud account ID>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -59,9 +60,10 @@ describe('IbmCloudShellV1', () => {
   // end-common
 
   // To access additional configuration values, uncomment this line and extract the values from config
-  // const config = readExternalSources(IbmCloudShellV1.DEFAULT_SERVICE_NAME);
-
-  test('getAccountSettingsById request example', done => {
+  const config = readExternalSources(IbmCloudShellV1.DEFAULT_SERVICE_NAME);
+  let accountId = config.accountId;
+  
+  test('getAccountSettings request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -71,14 +73,14 @@ describe('IbmCloudShellV1', () => {
       done(output);
     });
 
-    originalLog('getAccountSettingsById() result:');
-    // begin-get_account_settings_by_id
+    originalLog('getAccountSettings() result:');
+    // begin-get_account_settings
 
     const params = {
-      accountId: '12345678-abcd-1a2b-a1b2-1234567890ab',
+      accountId: accountId,
     };
 
-    ibmCloudShellService.getAccountSettingsById(params)
+    ibmCloudShellService.getAccountSettings(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
@@ -86,9 +88,9 @@ describe('IbmCloudShellV1', () => {
         console.warn(err)
       });
 
-    // end-get_account_settings_by_id
+    // end-get_account_settings
   });
-  test('updateAccountSettingsById request example', done => {
+  test('updateAccountSettings request example', done => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -98,8 +100,8 @@ describe('IbmCloudShellV1', () => {
       done(output);
     });
 
-    originalLog('updateAccountSettingsById() result:');
-    // begin-update_account_settings_by_id
+    originalLog('updateAccountSettings() result:');
+    // begin-update_account_settings
 
     // Feature
     const featureModel = [
@@ -129,25 +131,17 @@ describe('IbmCloudShellV1', () => {
       },
     ];
 
-    const accountId = '12345678-abcd-1a2b-a1b2-1234567890ab';
     const params = {
-      accountId,
-      newId: `ac${accountId}`,
-      newRev: `130-${accountId}`,
-      newAccountId: accountId,
-      newCreatedAt: 1600079615,
-      newCreatedBy: 'IBMid-1000000000',
-      newDefaultEnableNewFeatures: true,
-      newDefaultEnableNewRegions: true,
-      newEnabled: true,
-      newFeatures: featureModel,
-      newRegions: regionSettingModel,
-      newType: 'account_settings',
-      newUpdatedAt: 1624359948,
-      newUpdatedBy: 'IBMid-1000000000',
+      accountId: accountId,
+      rev: '130-${accountId}',
+      defaultEnableNewFeatures: true,
+      defaultEnableNewRegions: true,
+      enabled: true,
+      features: featureModel,
+      regions: regionSettingModel,
     };
 
-    ibmCloudShellService.updateAccountSettingsById(params)
+    ibmCloudShellService.updateAccountSettings(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
@@ -155,6 +149,6 @@ describe('IbmCloudShellV1', () => {
         console.warn(err)
       });
 
-    // end-update_account_settings_by_id
+    // end-update_account_settings
   });
 });

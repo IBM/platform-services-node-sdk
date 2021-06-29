@@ -34,7 +34,7 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class IbmCloudShellV1 extends BaseService {
-  static DEFAULT_SERVICE_URL: string = 'https://api.shell.test.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://api.shell.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'ibm_cloud_shell';
 
@@ -107,8 +107,8 @@ class IbmCloudShellV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IbmCloudShellV1.Response<IbmCloudShellV1.AccountSettings>>}
    */
-  public getAccountSettingsById(
-    params: IbmCloudShellV1.GetAccountSettingsByIdParams
+  public getAccountSettings(
+    params: IbmCloudShellV1.GetAccountSettingsParams
   ): Promise<IbmCloudShellV1.Response<IbmCloudShellV1.AccountSettings>> {
     const _params = { ...params };
     const requiredParams = ['accountId'];
@@ -125,7 +125,7 @@ class IbmCloudShellV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IbmCloudShellV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'getAccountSettingsById'
+      'getAccountSettings'
     );
 
     const parameters = {
@@ -159,28 +159,21 @@ class IbmCloudShellV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account ID in which the account settings belong to.
-   * @param {string} [params.newId] - Unique id of the settings object.
-   * @param {string} [params.newRev] - Unique revision number for the settings object.
-   * @param {string} [params.newAccountId] - The id of the account the settings belong to.
-   * @param {number} [params.newCreatedAt] - Creation timestamp.
-   * @param {string} [params.newCreatedBy] - IAM ID of creator.
-   * @param {boolean} [params.newDefaultEnableNewFeatures] - You can choose which Cloud Shell features are available in
-   * the account and whether any new features are enabled as they become available. The feature settings apply only to
-   * the enabled Cloud Shell locations.
-   * @param {boolean} [params.newDefaultEnableNewRegions] - Set whether Cloud Shell is enabled in a specific location
-   * for the account. The location determines where user and session data are stored. By default, users are routed to
-   * the nearest available location.
-   * @param {boolean} [params.newEnabled] - When enabled, Cloud Shell is available to all users in the account.
-   * @param {Feature[]} [params.newFeatures] - List of Cloud Shell features.
-   * @param {RegionSetting[]} [params.newRegions] - List of Cloud Shell region settings.
-   * @param {string} [params.newType] - Type of api response object.
-   * @param {number} [params.newUpdatedAt] - Timestamp of last update.
-   * @param {string} [params.newUpdatedBy] - IAM ID of last updater.
+   * @param {string} [params.rev] - Unique revision number for the settings object.
+   * @param {boolean} [params.defaultEnableNewFeatures] - You can choose which Cloud Shell features are available in the
+   * account and whether any new features are enabled as they become available. The feature settings apply only to the
+   * enabled Cloud Shell locations.
+   * @param {boolean} [params.defaultEnableNewRegions] - Set whether Cloud Shell is enabled in a specific location for
+   * the account. The location determines where user and session data are stored. By default, users are routed to the
+   * nearest available location.
+   * @param {boolean} [params.enabled] - When enabled, Cloud Shell is available to all users in the account.
+   * @param {Feature[]} [params.features] - List of Cloud Shell features.
+   * @param {RegionSetting[]} [params.regions] - List of Cloud Shell region settings.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IbmCloudShellV1.Response<IbmCloudShellV1.AccountSettings>>}
    */
-  public updateAccountSettingsById(
-    params: IbmCloudShellV1.UpdateAccountSettingsByIdParams
+  public updateAccountSettings(
+    params: IbmCloudShellV1.UpdateAccountSettingsParams
   ): Promise<IbmCloudShellV1.Response<IbmCloudShellV1.AccountSettings>> {
     const _params = { ...params };
     const requiredParams = ['accountId'];
@@ -191,19 +184,12 @@ class IbmCloudShellV1 extends BaseService {
     }
 
     const body = {
-      '_id': _params.newId,
-      '_rev': _params.newRev,
-      'account_id': _params.newAccountId,
-      'created_at': _params.newCreatedAt,
-      'created_by': _params.newCreatedBy,
-      'default_enable_new_features': _params.newDefaultEnableNewFeatures,
-      'default_enable_new_regions': _params.newDefaultEnableNewRegions,
-      'enabled': _params.newEnabled,
-      'features': _params.newFeatures,
-      'regions': _params.newRegions,
-      'type': _params.newType,
-      'updated_at': _params.newUpdatedAt,
-      'updated_by': _params.newUpdatedBy,
+      '_rev': _params.rev,
+      'default_enable_new_features': _params.defaultEnableNewFeatures,
+      'default_enable_new_regions': _params.defaultEnableNewRegions,
+      'enabled': _params.enabled,
+      'features': _params.features,
+      'regions': _params.regions,
     };
 
     const path = {
@@ -213,7 +199,7 @@ class IbmCloudShellV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IbmCloudShellV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'updateAccountSettingsById'
+      'updateAccountSettings'
     );
 
     const parameters = {
@@ -268,47 +254,33 @@ namespace IbmCloudShellV1 {
    * request interfaces
    ************************/
 
-  /** Parameters for the `getAccountSettingsById` operation. */
-  export interface GetAccountSettingsByIdParams {
+  /** Parameters for the `getAccountSettings` operation. */
+  export interface GetAccountSettingsParams {
     /** The account ID in which the account settings belong to. */
     accountId: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `updateAccountSettingsById` operation. */
-  export interface UpdateAccountSettingsByIdParams {
+  /** Parameters for the `updateAccountSettings` operation. */
+  export interface UpdateAccountSettingsParams {
     /** The account ID in which the account settings belong to. */
     accountId: string;
-    /** Unique id of the settings object. */
-    newId?: string;
     /** Unique revision number for the settings object. */
-    newRev?: string;
-    /** The id of the account the settings belong to. */
-    newAccountId?: string;
-    /** Creation timestamp. */
-    newCreatedAt?: number;
-    /** IAM ID of creator. */
-    newCreatedBy?: string;
+    rev?: string;
     /** You can choose which Cloud Shell features are available in the account and whether any new features are
      *  enabled as they become available. The feature settings apply only to the enabled Cloud Shell locations.
      */
-    newDefaultEnableNewFeatures?: boolean;
+    defaultEnableNewFeatures?: boolean;
     /** Set whether Cloud Shell is enabled in a specific location for the account. The location determines where
      *  user and session data are stored. By default, users are routed to the nearest available location.
      */
-    newDefaultEnableNewRegions?: boolean;
+    defaultEnableNewRegions?: boolean;
     /** When enabled, Cloud Shell is available to all users in the account. */
-    newEnabled?: boolean;
+    enabled?: boolean;
     /** List of Cloud Shell features. */
-    newFeatures?: Feature[];
+    features?: Feature[];
     /** List of Cloud Shell region settings. */
-    newRegions?: RegionSetting[];
-    /** Type of api response object. */
-    newType?: string;
-    /** Timestamp of last update. */
-    newUpdatedAt?: number;
-    /** IAM ID of last updater. */
-    newUpdatedBy?: string;
+    regions?: RegionSetting[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -325,7 +297,7 @@ namespace IbmCloudShellV1 {
     /** The id of the account the settings belong to. */
     account_id?: string;
     /** Creation timestamp. */
-    created_at?: number;
+    created_at?: string;
     /** IAM ID of creator. */
     created_by?: string;
     /** You can choose which Cloud Shell features are available in the account and whether any new features are
@@ -345,7 +317,7 @@ namespace IbmCloudShellV1 {
     /** Type of api response object. */
     type?: string;
     /** Timestamp of last update. */
-    updated_at?: number;
+    updated_at?: string;
     /** IAM ID of last updater. */
     updated_by?: string;
   }
