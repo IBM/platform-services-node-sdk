@@ -48,6 +48,7 @@ describe('IbmCloudShellV1_integration', () => {
     const res = await ibmCloudShellService.getAccountSettings(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    expect(res.status).toEqual(200);
   });
   test('updateAccountSettings()', async () => {
     const getRes = await ibmCloudShellService.getAccountSettings({
@@ -97,6 +98,7 @@ describe('IbmCloudShellV1_integration', () => {
     const res = await ibmCloudShellService.updateAccountSettings(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    expect(res.status).toEqual(200);
     expect(res.result.default_enable_new_features).toEqual(false);
     expect(res.result.default_enable_new_regions).toEqual(true);
     expect(res.result.enabled).toEqual(true);

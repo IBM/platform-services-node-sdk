@@ -62,6 +62,7 @@ describe('IbmCloudShellV1', () => {
   // To access additional configuration values, uncomment this line and extract the values from config
   const config = readExternalSources(IbmCloudShellV1.DEFAULT_SERVICE_NAME);
   let accountId = config.accountId;
+  expect(accountId).not.toBeNull();
   
   test('getAccountSettings request example', done => {
 
