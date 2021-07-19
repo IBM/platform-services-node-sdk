@@ -1,0 +1,99 @@
+/*
+ * (C) Copyright IBM Corp. 2021.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+package com.ibm.cloud.network_based_access_control_admin_api.v1.model;
+
+import com.ibm.cloud.network_based_access_control_admin_api.v1.model.Environment;
+import com.ibm.cloud.network_based_access_control_admin_api.v1.model.EnvironmentAttribute;
+import com.ibm.cloud.network_based_access_control_admin_api.v1.model.Resource;
+import com.ibm.cloud.network_based_access_control_admin_api.v1.model.ResourceAttribute;
+import com.ibm.cloud.network_based_access_control_admin_api.v1.model.ResourceTagAttribute;
+import com.ibm.cloud.network_based_access_control_admin_api.v1.model.UpdatePolicyOptions;
+import com.ibm.cloud.network_based_access_control_admin_api.v1.utils.TestUtilities;
+import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
+
+/**
+ * Unit test class for the UpdatePolicyOptions model.
+ */
+public class UpdatePolicyOptionsTest {
+  final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
+  final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
+
+  @Test
+  public void testUpdatePolicyOptions() throws Throwable {
+    EnvironmentAttribute environmentAttributeModel = new EnvironmentAttribute.Builder()
+      .name("testString")
+      .value("testString")
+      .build();
+    assertEquals(environmentAttributeModel.name(), "testString");
+    assertEquals(environmentAttributeModel.value(), "testString");
+
+    Environment environmentModel = new Environment.Builder()
+      .attributes(new java.util.ArrayList<EnvironmentAttribute>(java.util.Arrays.asList(environmentAttributeModel)))
+      .build();
+    assertEquals(environmentModel.attributes(), new java.util.ArrayList<EnvironmentAttribute>(java.util.Arrays.asList(environmentAttributeModel)));
+
+    ResourceAttribute resourceAttributeModel = new ResourceAttribute.Builder()
+      .name("testString")
+      .value("testString")
+      .operator("testString")
+      .build();
+    assertEquals(resourceAttributeModel.name(), "testString");
+    assertEquals(resourceAttributeModel.value(), "testString");
+    assertEquals(resourceAttributeModel.operator(), "testString");
+
+    ResourceTagAttribute resourceTagAttributeModel = new ResourceTagAttribute.Builder()
+      .name("testString")
+      .value("testString")
+      .operator("testString")
+      .build();
+    assertEquals(resourceTagAttributeModel.name(), "testString");
+    assertEquals(resourceTagAttributeModel.value(), "testString");
+    assertEquals(resourceTagAttributeModel.operator(), "testString");
+
+    Resource resourceModel = new Resource.Builder()
+      .attributes(new java.util.ArrayList<ResourceAttribute>(java.util.Arrays.asList(resourceAttributeModel)))
+      .tags(new java.util.ArrayList<ResourceTagAttribute>(java.util.Arrays.asList(resourceTagAttributeModel)))
+      .build();
+    assertEquals(resourceModel.attributes(), new java.util.ArrayList<ResourceAttribute>(java.util.Arrays.asList(resourceAttributeModel)));
+    assertEquals(resourceModel.tags(), new java.util.ArrayList<ResourceTagAttribute>(java.util.Arrays.asList(resourceTagAttributeModel)));
+
+    UpdatePolicyOptions updatePolicyOptionsModel = new UpdatePolicyOptions.Builder()
+      .policyId("testString")
+      .ifMatch("testString")
+      .description("testString")
+      .environments(new java.util.ArrayList<Environment>(java.util.Arrays.asList(environmentModel)))
+      .resources(new java.util.ArrayList<Resource>(java.util.Arrays.asList(resourceModel)))
+      .transactionId("testString")
+      .build();
+    assertEquals(updatePolicyOptionsModel.policyId(), "testString");
+    assertEquals(updatePolicyOptionsModel.ifMatch(), "testString");
+    assertEquals(updatePolicyOptionsModel.description(), "testString");
+    assertEquals(updatePolicyOptionsModel.environments(), new java.util.ArrayList<Environment>(java.util.Arrays.asList(environmentModel)));
+    assertEquals(updatePolicyOptionsModel.resources(), new java.util.ArrayList<Resource>(java.util.Arrays.asList(resourceModel)));
+    assertEquals(updatePolicyOptionsModel.transactionId(), "testString");
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdatePolicyOptionsError() throws Throwable {
+    new UpdatePolicyOptions.Builder().build();
+  }
+
+}
