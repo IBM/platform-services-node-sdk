@@ -40,7 +40,7 @@ Node.js client library to interact with various
 <!-- tocstop -->
 
 <!-- --------------------------------------------------------------- -->
-## Important!
+## Migration
 
 `ibm-platform-services` package has been deprecated! 
 The Platform Services Node SDK is available as `@ibm-cloud/platform-services` from now on.
