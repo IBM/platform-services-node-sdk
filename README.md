@@ -52,7 +52,7 @@ npm uninstall ibm-platform-services
 npm install @ibm-cloud/platform-services
 ```
 
-The following path changes also needed in the files where services are in use:
+You will also need to modify any references to the old package `ibm-platform-services` within import/require statements so they reflect the new package `@ibm-cloud/platform-services`.  Here is an example:
 
 ```javascript
 
