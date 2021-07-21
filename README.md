@@ -43,7 +43,7 @@ Node.js client library to interact with various
 ## Migration
 
 `ibm-platform-services` package has been deprecated! 
-The Platform Services Node SDK is available as `@ibm-cloud/platform-services` from now on.
+The Platform Services Node SDK is now available as `@ibm-cloud/platform-services`.
 
 For using the new package the old version of Platform Services has to be removed, and the new
 one is installed like below:
