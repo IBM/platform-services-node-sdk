@@ -56,7 +56,7 @@ You will also need to modify any references to the old package `ibm-platform-ser
 
 ```javascript
 
-// prior to package deprecation
+// A 'require' statement that reflects the old package name:
 const UserManagementV1 = require('ibm-platform-services/user-management/v1');
 
 // with the new package
