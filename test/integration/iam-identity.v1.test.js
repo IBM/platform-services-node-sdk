@@ -1471,6 +1471,25 @@ describe('IamIdentityV1_integration', () => {
           expect(response.status).toEqual(204);
         }
       }
+
+      // list profiles
+      const profileParams = {
+        accountId,
+      };
+
+      const profilesResponse = await iamIdentityService.listProfile(profileParams);
+      const profilesResult = profilesResponse.result;
+      if (profilesResult.profiles) {
+        for (const elem of profilesResult.profiles) {
+          console.log('Cleaning profile: ', elem.id);
+          const params = {
+            profileId: elem.id,
+          };
+          const response = await iamIdentityService.deleteProfile(params);
+          expect(response).not.toBeNull();
+          expect(response.status).toEqual(204);
+        }
+      }
       console.log('Finished cleaning resources!');
     } catch (err) {
       console.log(err);
