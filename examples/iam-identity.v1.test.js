@@ -577,6 +577,7 @@ describe('IamIdentityV1', () => {
 
     const params = {
       accountId: accountId,
+      includeHistory: false,
     };
 
     iamIdentityService.listProfile(params)
@@ -630,7 +631,7 @@ describe('IamIdentityV1', () => {
     });
   
     originalLog('createClaimRule() result:');
-    // begin-create_claimRile
+    // begin-create_claimRule
 
     const val = "{'Europe_Group'}";
     const profileClaimRuleConditionsModel = {
