@@ -1,3 +1,24 @@
+# [0.20.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.19.6...v0.20.0) (2021-09-02)
+
+
+### Features
+
+* **iam-identity:** adding trusted profiles ([#126](https://github.com/IBM/platform-services-node-sdk/issues/126)) ([460d636](https://github.com/IBM/platform-services-node-sdk/commit/460d636144b2649f82e20fdc7804c4c5fda14353))
+
+## [0.19.6](https://github.com/IBM/platform-services-node-sdk/compare/v0.19.5...v0.19.6) (2021-08-18)
+
+
+### Bug Fixes
+
+* bump node core version to 2.12.2 ([#125](https://github.com/IBM/platform-services-node-sdk/issues/125)) ([0d8f483](https://github.com/IBM/platform-services-node-sdk/commit/0d8f483c7ba7fc3eb0a7a6faad106b85b154f32e))
+
+## [0.19.5](https://github.com/IBM/platform-services-node-sdk/compare/v0.19.4...v0.19.5) (2021-08-10)
+
+
+### Bug Fixes
+
+* update dependencies to avoid vulnerability alerts ([#124](https://github.com/IBM/platform-services-node-sdk/issues/124)) ([204440a](https://github.com/IBM/platform-services-node-sdk/commit/204440aa02db12d1b5abf0a8f31bb5861c785983))
+
 ## [0.19.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.19.3...v0.19.4) (2021-07-29)
 
 
