@@ -84,7 +84,7 @@ describe('IamIdentityV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('createApiKey() result:');
     // begin-create_api_key
 
@@ -113,7 +113,7 @@ describe('IamIdentityV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('listApiKeys() result:');
     // begin-list_api_keys
 
@@ -141,7 +141,7 @@ describe('IamIdentityV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('getApiKeysDetails() result:');
     // begin-get_api_keys_details
 
@@ -170,7 +170,7 @@ describe('IamIdentityV1', () => {
     });
 
     expect(apikeyId).not.toBeNull();
-  
+
     originalLog('getApiKey() result:');
     // begin-get_api_key
 
@@ -200,7 +200,7 @@ describe('IamIdentityV1', () => {
 
     expect(apikeyId).not.toBeNull();
     expect(apikeyEtag).not.toBeNull();
-  
+
     originalLog('updateApiKey() result:');
     // begin-update_api_key
 
@@ -309,7 +309,7 @@ describe('IamIdentityV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('createServiceId() result:');
     // begin-create_service_id
 
@@ -340,7 +340,7 @@ describe('IamIdentityV1', () => {
     });
 
     expect(svcId).not.toBeNull();
-  
+
     originalLog('getServiceId() result:');
     // begin-get_service_id
 
@@ -367,7 +367,7 @@ describe('IamIdentityV1', () => {
     consoleWarnMock.mockImplementation(output => {
       done(output);
     });
-  
+
     originalLog('listServiceIds() result:');
     // begin-list_service_ids
 
@@ -397,7 +397,7 @@ describe('IamIdentityV1', () => {
 
     expect(svcId).not.toBeNull();
     expect(svcIdEtag).not.toBeNull();
-  
+
     originalLog('updateServiceId() result:');
     // begin-update_service_id
 
@@ -510,7 +510,7 @@ describe('IamIdentityV1', () => {
     });
 
     expect(accountSettingsEtag).toBeNull();
-  
+
     originalLog('getAccountSettings() result:');
     // begin-getAccountSettings
 
@@ -540,7 +540,7 @@ describe('IamIdentityV1', () => {
     });
 
     expect(accountSettingsEtag).not.toBeNull();
-  
+
     originalLog('updateAccountSettings() result:');
     // begin-updateAccountSettings
 
