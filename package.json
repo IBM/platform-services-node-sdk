@@ -27,7 +27,8 @@
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
     "report-coverage": "codecov",
-    "check-packages": "installed-check -e -d -v"
+    "check-packages": "installed-check -e -d -v",
+    "all": "npm run test-unit && npm run lint"
   },
   "license": "Apache-2.0",
   "publishConfig": {
