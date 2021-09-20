@@ -33,6 +33,7 @@ let zoneId;
 let zoneEtag;
 let ruleId;
 let ruleEtag;
+const noExistingZoneId = '648961210dab8fdffac52cc2f28e200f';
 
 describe('ContextBasedRestrictionsV1_integration', () => {
   const contextBasedRestrictionsService = ContextBasedRestrictionsV1.newInstance({});
@@ -93,21 +94,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     zoneEtag = res.headers.etag;
 
     done();
-
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 400
-    // 401
-    // 403
-    // 409
-    // 429
-    // 503
-    //
   });
 
   test('createZone() - 400', async () => {
+    // 400 - The zone could not be created due to an invalid or missing input parameter or request body.
     // Request models needed by this operation.
 
     // AddressIPAddress
@@ -126,6 +116,29 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
     await expect(contextBasedRestrictionsService.createZone(params)).rejects.toMatchObject({
       status: 400,
+    });
+  });
+
+  test('createZone() - 409', async () => {
+    // The zone could not be created due to an already existing zone with the same name.
+    // Request models needed by this operation.
+
+    // AddressIPAddress
+    const addressModel = {
+      type: 'ipAddress',
+      value: '169.23.57.235',
+    };
+
+    const params = {
+      name: 'an example of zone',
+      accountId,
+      addresses: [addressModel],
+      description: 'this is an example of zone with existing zone name',
+      transactionId: 'testString',
+    };
+
+    await expect(contextBasedRestrictionsService.createZone(params)).rejects.toMatchObject({
+      status: 409,
     });
   });
 
@@ -154,6 +167,20 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     //
   });
 
+  test('listZones() - 400', async () => {
+    // The zones could not be retrieved due to an invalid or missing input parameter.
+    const params = {
+      accountId: 'invalidAccountId',
+      // transactionId: 'testString',
+      // name: 'testString',
+      // sort: 'testString',
+    };
+
+    await expect(contextBasedRestrictionsService.listZones(params)).rejects.toMatchObject({
+      status: 400,
+    });
+  });
+
   test('getZone() - 200', async () => {
     const params = {
       zoneId,
@@ -164,17 +191,18 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+  });
 
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 401
-    // 403
-    // 404
-    // 429
-    // 503
-    //
+  test('getZone() - 404', async () => {
+    // The zone could not be found. Verify that the specified zone ID is valid.
+    const params = {
+      zoneId: noExistingZoneId,
+      // transactionId: 'testString',
+    };
+
+    await expect(contextBasedRestrictionsService.getZone(params)).rejects.toMatchObject({
+      status: 404,
+    });
   });
 
   test('replaceZone() - 200', async () => {
@@ -201,18 +229,32 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+  });
 
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 400
-    // 401
-    // 403
-    // 404
-    // 429
-    // 503
-    //
+  test('replaceZone() - 400', async () => {
+    // The zone could not be updated due to an invalid or missing input parameter.
+    // Request models needed by this operation.
+
+    // AddressIPAddress
+    const addressModel = {
+      type: 'Address',
+      value: '169.24.57.235',
+    };
+
+    const params = {
+      zoneId,
+      ifMatch: zoneEtag,
+      name: 'an example of an invalid zone',
+      accountId,
+      addresses: [addressModel],
+      description: 'this is an example of an invalid zone',
+      // excluded: [addressModel],
+      // transactionId: 'testString',
+    };
+
+    await expect(contextBasedRestrictionsService.replaceZone(params)).rejects.toMatchObject({
+      status: 400,
+    });
   });
 
   test('listAvailableServicerefTargets() - 200', async () => {
@@ -224,15 +266,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 401
-    // 429
-    // 503
-    //
   });
 
   test('createRule() - 201', async (done) => {
