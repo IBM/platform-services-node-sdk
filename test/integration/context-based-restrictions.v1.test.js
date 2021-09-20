@@ -33,8 +33,8 @@ let zoneId;
 let zoneEtag;
 let ruleId;
 let ruleEtag;
-const noExistingZoneId = '648961210dab8fdffac52cc2f28e200f';
-const noExistingRuleId = '648961210dab8fdffac52cc2f28e200f';
+const unexistingZoneId = '648961210dab8fdffac52cc2f28e200f';
+const unexistingRuleId = '648961210dab8fdffac52cc2f28e200f';
 
 describe('ContextBasedRestrictionsV1_integration', () => {
   const contextBasedRestrictionsService = ContextBasedRestrictionsV1.newInstance({});
@@ -42,7 +42,14 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   expect(contextBasedRestrictionsService).not.toBeNull();
 
   const config = readExternalSources(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME);
-  const { apikey: apiKey, url: URL, authUrl, authType, accountid: accountId, serviceName } = config;
+  const {
+    apikey: apiKey,
+    url: URL,
+    authUrl,
+    authType,
+    testAccountId: accountId,
+    testServiceName: serviceName,
+  } = config;
 
   expect(config).not.toBeNull();
   expect(accountId).not.toBeNull();
@@ -76,7 +83,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       accountId,
       addresses: [addressModel],
       description: 'this is an example of zone',
-      // excluded: [addressModel],
       transactionId: 'testString',
     };
 
@@ -98,7 +104,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('createZone() - 400', async () => {
-    // 400 - The zone could not be created due to an invalid or missing input parameter or request body.
+    // 400 - The zone could not be created due to an invalid type 'invalideType'.
     // Request models needed by this operation.
 
     // AddressIPAddress
@@ -146,35 +152,19 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   test('listZones() - 200', async () => {
     const params = {
       accountId,
-      // transactionId: 'testString',
-      // name: 'testString',
-      // sort: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.listZones(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 400
-    // 401
-    // 403
-    // 429
-    // 503
-    //
   });
 
   test('listZones() - 400', async () => {
-    // The zones could not be retrieved due to an invalid or missing input parameter.
+    // The zones could not be retrieved due to an invalid accountId.
+
     const params = {
       accountId: 'invalidAccountId',
-      // transactionId: 'testString',
-      // name: 'testString',
-      // sort: 'testString',
     };
 
     await expect(contextBasedRestrictionsService.listZones(params)).rejects.toMatchObject({
@@ -185,7 +175,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   test('getZone() - 200', async () => {
     const params = {
       zoneId,
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.getZone(params);
@@ -195,10 +184,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('getZone() - 404', async () => {
-    // The zone could not be found. Verify that the specified zone ID is valid.
+    // The zone could not be found due to unexisting zone ID.
+
     const params = {
-      zoneId: noExistingZoneId,
-      // transactionId: 'testString',
+      zoneId: unexistingZoneId,
     };
 
     await expect(contextBasedRestrictionsService.getZone(params)).rejects.toMatchObject({
@@ -222,8 +211,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       accountId,
       addresses: [addressModel],
       description: 'this is an example of updated zone',
-      // excluded: [addressModel],
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.replaceZone(params);
@@ -233,7 +220,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('replaceZone() - 400', async () => {
-    // The zone could not be updated due to an invalid or missing input parameter.
+    // The zone could not be updated due to invalid type 'Address'.
     // Request models needed by this operation.
 
     // AddressIPAddress
@@ -249,8 +236,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       accountId,
       addresses: [addressModel],
       description: 'this is an example of an invalid zone',
-      // excluded: [addressModel],
-      // transactionId: 'testString',
     };
 
     await expect(contextBasedRestrictionsService.replaceZone(params)).rejects.toMatchObject({
@@ -313,7 +298,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       contexts: [ruleContextModel],
       resources: [resourceModel],
       description: 'this is an example of rule',
-      // transactionId: 'testString',
     };
 
     let res;
@@ -334,7 +318,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('createRule() - 400', async () => {
-    // The rule could not be created due to an invalid or missing input parameter or request body.
+    // The rule could not be created due to an missing accountId object from input.
     // Request models needed by this operation.
 
     // RuleContextAttribute
@@ -347,13 +331,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
-
-    // ResourceAttribute
-    // const resourceAttributeAccountIdModel = {
-    //   name: 'accountId',
-    //   value: accountId,
-    //   operator: 'stringEquals',
-    // };
 
     const resourceAttributeServiceNameModel = {
       name: 'serviceName',
@@ -370,7 +347,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
     // Resource
     const resourceModel = {
-      // attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       attributes: [resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
     };
@@ -379,7 +355,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       contexts: [ruleContextModel],
       resources: [resourceModel],
       description: 'this is an example of rule missing accountId input',
-      // transactionId: 'testString',
     };
 
     await expect(contextBasedRestrictionsService.createRule(params)).rejects.toMatchObject({
@@ -390,15 +365,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   test('listRules() - 200', async () => {
     const params = {
       accountId,
-      // transactionId: 'testString',
-      // region: 'testString',
-      // resource: 'testString',
-      // resourceType: 'testString',
-      // serviceInstance: 'testString',
-      // serviceName: 'testString',
-      // serviceType: 'testString',
-      // zoneId: 'testString',
-      // sort: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.listRules(params);
@@ -408,18 +374,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('listRules() - 400', async () => {
-    // The rules could not be retrieved due to an invalid or missing input parameter.
+    // The rules could not be retrieved due to invalid accountId.
+
     const params = {
       accountId: 'invalidAccountId',
-      // transactionId: 'testString',
-      // region: 'testString',
-      // resource: 'testString',
-      // resourceType: 'testString',
-      // serviceInstance: 'testString',
-      // serviceName: 'testString',
-      // serviceType: 'testString',
-      // zoneId: 'testString',
-      // sort: 'testString',
     };
 
     await expect(contextBasedRestrictionsService.listRules(params)).rejects.toMatchObject({
@@ -430,7 +388,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   test('getRule() - 200', async () => {
     const params = {
       ruleId,
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.getRule(params);
@@ -440,11 +397,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('getRule() - 404', async () => {
-    // The rule could not be found. Verify that the specified rule ID is valid.
+    // The rule could not be found due to unexisting rule ID .
 
     const params = {
-      ruleId: noExistingRuleId,
-      // transactionId: 'testString',
+      ruleId: unexistingRuleId,
     };
 
     await expect(contextBasedRestrictionsService.getRule(params)).rejects.toMatchObject({
@@ -498,7 +454,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       contexts: [ruleContextModel],
       resources: [resourceModel],
       description: 'this is an example of updated rule',
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.replaceRule(params);
@@ -507,13 +462,13 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('replaceRule() - 400', async () => {
-    // The rule could not be updated due to an invalid or missing input parameter.
+  test('replaceRule() - 412', async () => {
+    // The rule could not be updated due to unsupported attribute name 'networkZoneID'.
     // Request models needed by this operation.
 
     // RuleContextAttribute
     const ruleContextAttributeModel = {
-      name: 'networkZoneId',
+      name: 'networkZoneID',
       value: zoneId,
     };
 
@@ -554,80 +509,119 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       contexts: [ruleContextModel],
       resources: [resourceModel],
       description: 'this is an example of updated rule',
-      // transactionId: 'testString',
     };
 
-    const res = await contextBasedRestrictionsService.replaceRule(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
+    await expect(contextBasedRestrictionsService.replaceRule(params)).rejects.toMatchObject({
+      status: 412,
+    });
   });
 
-  test('getAccountSettings()', async () => {
+  test('replaceRule() - 404', async () => {
+    // The rule could not be found due to unexisting rule ID.
+    // Request models needed by this operation.
+
+    // RuleContextAttribute
+    const ruleContextAttributeModel = {
+      name: 'networkZoneId',
+      value: zoneId,
+    };
+
+    // RuleContext
+    const ruleContextModel = {
+      attributes: [ruleContextAttributeModel],
+    };
+
+    // ResourceAttribute
+    const resourceAttributeAccountIdModel = {
+      name: 'accountId',
+      value: accountId,
+      operator: 'stringEquals',
+    };
+
+    const resourceAttributeServiceNameModel = {
+      name: 'serviceName',
+      value: serviceName,
+      operator: 'stringEquals',
+    };
+
+    // ResourceTagAttribute
+    const resourceTagAttributeModel = {
+      name: 'TagName-2',
+      value: 'aTagValue-2',
+      operator: 'stringEquals',
+    };
+
+    // Resource
+    const resourceModel = {
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
+      tags: [resourceTagAttributeModel],
+    };
+
+    const params = {
+      ruleId: unexistingRuleId,
+      ifMatch: ruleEtag,
+      contexts: [ruleContextModel],
+      resources: [resourceModel],
+      description: 'this is an example of updated rule',
+    };
+
+    await expect(contextBasedRestrictionsService.replaceRule(params)).rejects.toMatchObject({
+      status: 404,
+    });
+  });
+
+  test('getAccountSettings() - 200', async () => {
     const params = {
       accountId,
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.getAccountSettings(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 401
-    // 403
-    // 429
-    // 503
-    //
   });
 
   test('deleteRule() - 204', async () => {
     const params = {
       ruleId,
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.deleteRule(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
+  });
 
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 401
-    // 403
-    // 404
-    // 429
-    // 503
-    //
+  test('deleteRule() - 404', async () => {
+    // The rule could not be deleted due to unexisting rule ID.
+    const params = {
+      ruleId: unexistingRuleId,
+    };
+
+    await expect(contextBasedRestrictionsService.deleteRule(params)).rejects.toMatchObject({
+      status: 404,
+    });
   });
 
   test('deleteZone() - 204', async () => {
     const params = {
       zoneId,
-      // transactionId: 'testString',
     };
 
     const res = await contextBasedRestrictionsService.deleteZone(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
+  });
 
-    //
-    // The following status codes aren't covered by tests.
-    // Please provide integration tests for these too.
-    //
-    // 401
-    // 403
-    // 404
-    // 429
-    // 503
-    //
+  test('deleteZone() - 404', async () => {
+    // The zone could not be deleted due to unexisting zone ID.
+    const params = {
+      zoneId: unexistingZoneId,
+    };
+
+    await expect(contextBasedRestrictionsService.deleteZone(params)).rejects.toMatchObject({
+      status: 404,
+    });
   });
 });
