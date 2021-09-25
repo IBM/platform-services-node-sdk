@@ -115,11 +115,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZone>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>>}
    */
   public createZone(
     params?: ContextBasedRestrictionsV1.CreateZoneParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZone>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
 
     const body = {
@@ -174,11 +174,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {string} [params.sort] - Sorts results by using a valid sort field. To learn more, see
    * [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZonePage>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ZoneList>>}
    */
   public listZones(
     params: ContextBasedRestrictionsV1.ListZonesParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZonePage>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ZoneList>> {
     const _params = { ...params };
     const requiredParams = ['accountId'];
 
@@ -233,11 +233,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZone>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>>}
    */
   public getZone(
     params: ContextBasedRestrictionsV1.GetZoneParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZone>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const requiredParams = ['zoneId'];
 
@@ -297,11 +297,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZone>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>>}
    */
   public replaceZone(
     params: ContextBasedRestrictionsV1.ReplaceZoneParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutZone>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const requiredParams = ['zoneId', 'ifMatch'];
 
@@ -417,11 +417,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.type] - Specifies the types of services to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetPage>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetList>>}
    */
   public listAvailableServicerefTargets(
     params?: ContextBasedRestrictionsV1.ListAvailableServicerefTargetsParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetPage>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetList>> {
     const _params = { ...params };
 
     const query = {
@@ -472,11 +472,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRule>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>>}
    */
   public createRule(
     params?: ContextBasedRestrictionsV1.CreateRuleParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRule>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
 
     const body = {
@@ -535,11 +535,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {string} [params.sort] - Sorts results by using a valid sort field. To learn more, see
    * [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRulePage>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.RuleList>>}
    */
   public listRules(
     params: ContextBasedRestrictionsV1.ListRulesParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRulePage>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.RuleList>> {
     const _params = { ...params };
     const requiredParams = ['accountId'];
 
@@ -600,11 +600,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRule>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>>}
    */
   public getRule(
     params: ContextBasedRestrictionsV1.GetRuleParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRule>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const requiredParams = ['ruleId'];
 
@@ -662,11 +662,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRule>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>>}
    */
   public replaceRule(
     params: ContextBasedRestrictionsV1.ReplaceRuleParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutRule>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const requiredParams = ['ruleId', 'ifMatch'];
 
@@ -787,11 +787,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * **Note:** To help with debugging, we strongly recommend that you generate and supply a `Transaction-Id` with each
    * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutAccountSettings>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.AccountSettings>>}
    */
   public getAccountSettings(
     params: ContextBasedRestrictionsV1.GetAccountSettingsParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OutAccountSettings>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.AccountSettings>> {
     const _params = { ...params };
     const requiredParams = ['accountId'];
 
@@ -1084,14 +1084,8 @@ namespace ContextBasedRestrictionsV1 {
    * model interfaces
    ************************/
 
-  /** A zone address. */
-  export interface Address {
-    /** The type of address. */
-    type?: string;
-  }
-
   /** An output account settings. */
-  export interface OutAccountSettings {
+  export interface AccountSettings {
     /** The globally unique ID of the account settings. */
     id: string;
     /** The account settings CRN. */
@@ -1116,100 +1110,10 @@ namespace ContextBasedRestrictionsV1 {
     last_modified_by_id: string;
   }
 
-  /** An output rule. */
-  export interface OutRule {
-    /** The globally unique ID of the rule. */
-    id: string;
-    /** The rule CRN. */
-    crn: string;
-    /** The description of the rule. */
-    description?: string;
-    /** The contexts this rule applies to. */
-    contexts: RuleContext[];
-    /** The resources this rule apply to. */
-    resources: Resource[];
-    /** The href link to the resource. */
-    href: string;
-    /** The time the resource was created. */
-    created_at: string;
-    /** IAM ID of the user or service which created the resource. */
-    created_by_id: string;
-    /** The last time the resource was modified. */
-    last_modified_at: string;
-    /** IAM ID of the user or service which modified the resource. */
-    last_modified_by_id: string;
-  }
-
-  /** The response object of the ListRules operation. */
-  export interface OutRulePage {
-    /** The number of returned results. */
-    count: number;
-    /** The returned rules. */
-    rules: OutRule[];
-  }
-
-  /** An output zone. */
-  export interface OutZone {
-    /** The globally unique ID of the zone. */
-    id: string;
-    /** The zone CRN. */
-    crn: string;
-    /** The name of the zone. */
-    name: string;
-    /** The id of the account owning this zone. */
-    account_id: string;
-    /** The description of the zone. */
-    description?: string;
-    /** The list of addresses in the zone. */
-    addresses: Address[];
-    /** The list of excluded addresses in the zone. */
-    excluded?: Address[];
-    /** The href link to the resource. */
-    href: string;
-    /** The time the resource was created. */
-    created_at: string;
-    /** IAM ID of the user or service which created the resource. */
-    created_by_id: string;
-    /** The last time the resource was modified. */
-    last_modified_at: string;
-    /** IAM ID of the user or service which modified the resource. */
-    last_modified_by_id: string;
-  }
-
-  /** The response object of the ListZones operation. */
-  export interface OutZonePage {
-    /** The number of returned results. */
-    count: number;
-    /** The returned zones. */
-    zones: OutZoneSummary[];
-  }
-
-  /** An output zone summary. */
-  export interface OutZoneSummary {
-    /** The globally unique ID of the zone. */
-    id: string;
-    /** The zone CRN. */
-    crn: string;
-    /** The name of the zone. */
-    name: string;
-    /** The description of the zone. */
-    description?: string;
-    /** A preview of addresses in the zone (3 addresses maximum). */
-    addresses_preview: Address[];
-    /** The number of addresses in the zone. */
-    address_count: number;
-    /** The number of excluded addresses in the zone. */
-    excluded_count: number;
-    /** The href link to the resource. */
-    href: string;
-    /** The time the resource was created. */
-    created_at: string;
-    /** IAM ID of the user or service which created the resource. */
-    created_by_id: string;
-    /** The last time the resource was modified. */
-    last_modified_at: string;
-    /** IAM ID of the user or service which modified the resource. */
-    last_modified_by_id: string;
+  /** A zone address. */
+  export interface Address {
+    /** The type of address. */
+    type?: string;
   }
 
   /** An rule resource. */
@@ -1240,6 +1144,30 @@ namespace ContextBasedRestrictionsV1 {
     operator?: string;
   }
 
+  /** An output rule. */
+  export interface Rule {
+    /** The globally unique ID of the rule. */
+    id: string;
+    /** The rule CRN. */
+    crn: string;
+    /** The description of the rule. */
+    description: string;
+    /** The contexts this rule applies to. */
+    contexts: RuleContext[];
+    /** The resources this rule apply to. */
+    resources: Resource[];
+    /** The href link to the resource. */
+    href: string;
+    /** The time the resource was created. */
+    created_at: string;
+    /** IAM ID of the user or service which created the resource. */
+    created_by_id: string;
+    /** The last time the resource was modified. */
+    last_modified_at: string;
+    /** IAM ID of the user or service which modified the resource. */
+    last_modified_by_id: string;
+  }
+
   /** A rule context. */
   export interface RuleContext {
     /** The attributes. */
@@ -1254,30 +1182,104 @@ namespace ContextBasedRestrictionsV1 {
     value: string;
   }
 
+  /** The response object of the ListRules operation. */
+  export interface RuleList {
+    /** The number of returned results. */
+    count: number;
+    /** The returned rules. */
+    rules: Rule[];
+  }
+
   /** Summary information about a service reference target. */
   export interface ServiceRefTarget {
     /** The name of the service. */
-    service_name?: string;
+    service_name: string;
     /** The type of the service. */
     service_type?: string;
   }
 
-  /** A page of service reference targets. */
-  export interface ServiceRefTargetPage {
+  /** A list of service reference targets. */
+  export interface ServiceRefTargetList {
+    /** The number of returned results. */
+    count: number;
     /** The list of service reference targets. */
-    targets?: ServiceRefTarget[];
+    targets: ServiceRefTarget[];
   }
 
   /** A service reference value. */
   export interface ServiceRefValue {
     /** The id of the account owning the service. */
-    account_id?: string;
+    account_id: string;
     /** The service type. */
     service_type?: string;
     /** The service name. */
     service_name?: string;
     /** The service instance. */
     service_instance?: string;
+  }
+
+  /** An output zone. */
+  export interface Zone {
+    /** The globally unique ID of the zone. */
+    id: string;
+    /** The zone CRN. */
+    crn: string;
+    /** The name of the zone. */
+    name: string;
+    /** The id of the account owning this zone. */
+    account_id: string;
+    /** The description of the zone. */
+    description: string;
+    /** The list of addresses in the zone. */
+    addresses: Address[];
+    /** The list of excluded addresses in the zone. */
+    excluded: Address[];
+    /** The href link to the resource. */
+    href: string;
+    /** The time the resource was created. */
+    created_at: string;
+    /** IAM ID of the user or service which created the resource. */
+    created_by_id: string;
+    /** The last time the resource was modified. */
+    last_modified_at: string;
+    /** IAM ID of the user or service which modified the resource. */
+    last_modified_by_id: string;
+  }
+
+  /** The response object of the ListZones operation. */
+  export interface ZoneList {
+    /** The number of returned results. */
+    count: number;
+    /** The returned zones. */
+    zones: ZoneSummary[];
+  }
+
+  /** An output zone summary. */
+  export interface ZoneSummary {
+    /** The globally unique ID of the zone. */
+    id: string;
+    /** The zone CRN. */
+    crn: string;
+    /** The name of the zone. */
+    name: string;
+    /** The description of the zone. */
+    description?: string;
+    /** A preview of addresses in the zone (3 addresses maximum). */
+    addresses_preview: Address[];
+    /** The number of addresses in the zone. */
+    address_count: number;
+    /** The number of excluded addresses in the zone. */
+    excluded_count: number;
+    /** The href link to the resource. */
+    href: string;
+    /** The time the resource was created. */
+    created_at: string;
+    /** IAM ID of the user or service which created the resource. */
+    created_by_id: string;
+    /** The last time the resource was modified. */
+    last_modified_at: string;
+    /** IAM ID of the user or service which modified the resource. */
+    last_modified_by_id: string;
   }
 
   /** A single IP address. */
