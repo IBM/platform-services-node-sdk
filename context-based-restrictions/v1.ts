@@ -1224,6 +1224,10 @@ namespace ContextBasedRestrictionsV1 {
     id: string;
     /** The zone CRN. */
     crn: string;
+    /** The number of addresses in the zone. */
+    address_count: number;
+    /** The number of excluded addresses in the zone. */
+    excluded_count: number;
     /** The name of the zone. */
     name: string;
     /** The id of the account owning this zone. */

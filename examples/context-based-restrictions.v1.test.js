@@ -84,7 +84,6 @@ describe('ContextBasedRestrictionsV1', () => {
       accountId: '12ab34cd56ef78ab90cd12ef34ab56cd',
       addresses: [addressModel],
       description: 'this is an example of zone',
-      excluded: [addressModel],
     };
 
     contextBasedRestrictionsService
@@ -169,7 +168,7 @@ describe('ContextBasedRestrictionsV1', () => {
     // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
-      value: '169.23.56.234',
+      value: '169.23.57.235',
     };
 
     const params = {
@@ -179,7 +178,6 @@ describe('ContextBasedRestrictionsV1', () => {
       accountId: '12ab34cd56ef78ab90cd12ef34ab56cd',
       addresses: [addressModel],
       description: 'this is an example of zone',
-      excluded: [addressModel],
     };
 
     contextBasedRestrictionsService
