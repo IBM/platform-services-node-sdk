@@ -193,7 +193,7 @@ describe('ContextBasedRestrictionsV1', () => {
 
     const addressModel = {
       type: 'ipAddress',
-      value: '169.23.57.235',
+      value: '169.23.56.234',
     };
 
     const params = {
@@ -267,7 +267,7 @@ describe('ContextBasedRestrictionsV1', () => {
       attributes: [ruleContextAttributeModel],
     };
 
-    const resourceAttributeModel = {
+    const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
     };
@@ -279,7 +279,7 @@ describe('ContextBasedRestrictionsV1', () => {
     };
 
     const resourceModel = {
-      attributes: [resourceAttributeModel, resourceAttributeServiceNameModel],
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
     };
 
     const params = {
@@ -383,7 +383,7 @@ describe('ContextBasedRestrictionsV1', () => {
       attributes: [ruleContextAttributeModel],
     };
 
-    const resourceAttributeModel = {
+    const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
     };
@@ -399,7 +399,7 @@ describe('ContextBasedRestrictionsV1', () => {
     };
 
     const resourceModel = {
-      attributes: [resourceAttributeModel, resourceAttributeServiceNameModel],
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
     };
 
