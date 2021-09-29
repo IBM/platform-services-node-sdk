@@ -72,19 +72,16 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   contextBasedRestrictionsService.enableRetries();
 
   test('createZone() - 201', async (done) => {
-    // Request models needed by this operation.
-
-    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
     };
 
     const params = {
-      name: 'an example of zone',
+      name: 'SDK TEST - an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of zone',
+      description: 'SDK TEST - this is an example of zone',
       transactionId: uuidv4(),
     };
 
@@ -105,21 +102,19 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     done();
   });
 
-  test('createZone() - 400 - with invalid ip address format', async () => {
-    // 400 - The zone could not be created due to an invalid ip address format.
-    // Request models needed by this operation.
+  test('createZone() - 400 -  Create a zone with "invalid ip address format" error', async () => {
+    // The zone could not be created due to an invalid ip address format.
 
-    // AddressIPAddress
     const addressModel = {
       type: 'invalideType',
       value: '169.23.56.234.',
     };
 
     const params = {
-      name: 'an zone with invalid ip address format',
+      name: 'SDK TEST - another example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of zone with invalid ip address format',
+      description: 'SDK TEST - this is another example of zone',
       transactionId: uuidv4(),
     };
 
@@ -128,21 +123,19 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('createZone() - 409 - existing zone with the same name', async () => {
+  test('createZone() - 409 - Create a zone with "duplicated name" error', async () => {
     // The zone could not be created due to an already existing zone with the same name.
-    // Request models needed by this operation.
 
-    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.23.57.235',
     };
 
     const params = {
-      name: 'an example of zone',
+      name: 'SDK TEST - an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of zone with existing zone name',
+      description: 'SDK TEST - this is an example of zone',
       transactionId: uuidv4(),
     };
 
@@ -163,7 +156,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('listZones() - 400 - invalid accountId', async () => {
+  test('listZones() - 400 - List zones with "invalid AccountID parameter" error', async () => {
     // The zones could not be retrieved due to an invalid accountId.
 
     const params = {
@@ -176,7 +169,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('listZones() - 400 - missing required parameter: accountId', async () => {
+  test('listZones() - 400 - List zones with "missing AccountID parameter" error', async () => {
     // The zones could not be retrieved due to missing accountId.
 
     const params = {
@@ -188,7 +181,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('getZone() - 200', async () => {
+  test('getZone() - 200 - Get the specified zone', async () => {
     const params = {
       zoneId,
       transactionId: uuidv4(),
@@ -200,7 +193,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('getZone() - 400 - missing required parameter: zoneId', async () => {
+  test('getZone() - 400 - Get zone with "missing required ZoneID parameter" error', async () => {
     // The zone could not be found due to missing zone ID.
 
     const params = {
@@ -212,7 +205,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('getZone() - 404 - unexisting zone ID', async () => {
+  test('getZone() - 404 - Get zone with "zone not found" error', async () => {
     // The zone could not be found due to unexisting zone ID.
 
     const params = {
@@ -225,10 +218,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('replaceZone() - 200', async () => {
-    // Request models needed by this operation.
-
-    // AddressIPAddress
+  test('replaceZone() - 200 - Update the specified zone', async () => {
     const addressModel = {
       type: 'ipAddress',
       value: '169.24.57.235',
@@ -237,10 +227,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     const params = {
       zoneId,
       ifMatch: zoneEtag,
-      name: 'an example of updated zone',
+      name: 'SDK TEST - an example of updated zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of updated zone',
+      description: 'SDK TEST - this is an example of updated zone',
       transactionId: uuidv4(),
     };
 
@@ -252,9 +242,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
   test('replaceZone() - 400 - invalid type: Address', async () => {
     // The zone could not be updated due to invalid type 'Address'.
-    // Request models needed by this operation.
 
-    // AddressIPAddress
     const addressModel = {
       type: 'Address',
       value: '169.24.57.235',
@@ -263,10 +251,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     const params = {
       zoneId,
       ifMatch: zoneEtag,
-      name: 'an example of an invalid zone',
+      name: 'SDK TEST - an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of an invalid zone',
+      description: 'SDK TEST - this is an example of zone',
       transactionId: uuidv4(),
     };
 
@@ -275,11 +263,9 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('replaceZone() - 400 - missing required parameter: ifMatch', async () => {
+  test('replaceZone() - 400 - Update zone with "Missing required parameters: ifMatch" error', async () => {
     // The zone could not be updated due to missing required parameter: ifMatch'.
-    // Request models needed by this operation.
 
-    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.24.57.235',
@@ -287,10 +273,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
     const params = {
       zoneId,
-      name: 'an example of an invalid zone',
+      name: 'SDK TEST - an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of an invalid zone',
+      description: 'SDK TEST - this is an example of zone',
       transactionId: uuidv4(),
     };
 
@@ -299,11 +285,9 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('replaceZone() - 404 - zone not found', async () => {
+  test('replaceZone() - 404 - Update zone with "zone not found" error', async () => {
     // The zone could not be updated due to zone is not found.
-    // Request models needed by this operation.
 
-    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.24.57.235',
@@ -312,10 +296,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     const params = {
       zoneId: unexistingZoneId,
       ifMatch: zoneEtag,
-      name: 'an example of zone not found',
+      name: 'SDK TEST - an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of zone not found',
+      description: 'SDK TEST - this is an example of zone',
       transactionId: uuidv4(),
     };
 
@@ -324,11 +308,9 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('replaceZone() - 412 - invalid IfMath parameter', async () => {
+  test('replaceZone() - 412 - Update zone with "invalid IfMath parameter" error', async () => {
     // The zone could not be updated due to invalid IfMath parameter.
-    // Request models needed by this operation.
 
-    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.24.57.235',
@@ -337,10 +319,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     const params = {
       zoneId,
       ifMatch: 'abc',
-      name: 'an example of invalid IfMath parameter',
+      name: 'SDK TEST - an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'this is an example of invalid IfMath parameter',
+      description: 'SDK TEST - this is an example of zone',
       transactionId: uuidv4(),
     };
 
@@ -349,7 +331,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('listAvailableServicerefTargets() - 200', async () => {
+  test('listAvailableServicerefTargets() - 200 - List available service reference targets', async () => {
     const params = {
       type: 'all',
       transactionId: uuidv4(),
@@ -361,7 +343,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('listAvailableServicerefTargets() - 400 - invalid type', async () => {
+  test('listAvailableServicerefTargets() - 400 - List available service reference targets with "invalid type parameter" error', async () => {
     // type value is not supported
     const params = {
       type: 'invalid-type',
@@ -375,21 +357,16 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('createRule() - 201', async (done) => {
-    // Request models needed by this operation.
-
-    // RuleContextAttribute
+  test('createRule() - 201 - Create a rule', async (done) => {
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
     };
 
-    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
 
-    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
@@ -402,14 +379,12 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       operator: 'stringEquals',
     };
 
-    // ResourceTagAttribute
     const resourceTagAttributeModel = {
       name: 'aTagName',
       value: 'aTagValue',
       operator: 'stringEquals',
     };
 
-    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
@@ -418,7 +393,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     const params = {
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'this is an example of rule',
+      description: 'SDK TEST - this is an example of rule',
       transactionId: uuidv4(),
     };
 
@@ -439,7 +414,52 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     done();
   });
 
-  test('listRules() - 200', async () => {
+  test('createRule() - 400 - Create a rule with "service not cbr enabled" error', async () => {
+    const ruleContextAttributeModel = {
+      name: 'networkZoneId',
+      value: zoneId,
+    };
+
+    const ruleContextModel = {
+      attributes: [ruleContextAttributeModel],
+    };
+
+    const resourceAttributeAccountIdModel = {
+      name: 'accountId',
+      value: accountId,
+      operator: 'stringEquals',
+    };
+
+    const resourceAttributeServiceNameModel = {
+      name: 'serviceName',
+      value: 'cbr-not-enabled',
+      operator: 'stringEquals',
+    };
+
+    const resourceTagAttributeModel = {
+      name: 'aTagName',
+      value: 'aTagValue',
+      operator: 'stringEquals',
+    };
+
+    const resourceModel = {
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
+      tags: [resourceTagAttributeModel],
+    };
+
+    const params = {
+      contexts: [ruleContextModel],
+      resources: [resourceModel],
+      description: 'SDK TEST - this is an example of rule',
+      transactionId: uuidv4(),
+    };
+
+    await expect(contextBasedRestrictionsService.createRule(params)).rejects.toMatchObject({
+      status: 400,
+    });
+  });
+
+  test('listRules() - 200 - List rules', async () => {
     const params = {
       accountId,
       transactionId: uuidv4(),
@@ -451,7 +471,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('listRules() - 400 - invalid accountId', async () => {
+  test('listRules() - 400 - List rules with "invalid AccountID parameter" error', async () => {
     // The rules could not be retrieved due to invalid accountId.
 
     const params = {
@@ -464,7 +484,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('listRules() - 400 - missing accountId', async () => {
+  test('listRules() - 400 - List rules with "missing required AccountID parameter" error', async () => {
     // The rules could not be retrieved due to missing accountId.
 
     const params = {
@@ -476,7 +496,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('getRule() - 200', async () => {
+  test('getRule() - 200 - Get the specified rule', async () => {
     const params = {
       ruleId,
       transactionId: uuidv4(),
@@ -488,7 +508,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('getRule() - 404 - unexisting ruleId', async () => {
+  test('getRule() - 404 - Get rule with "rule not found" error', async () => {
     // The rule could not be found due to unexisting rule ID .
 
     const params = {
@@ -501,7 +521,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('getRule() - 400 - missing ruleId', async () => {
+  test('getRule() - 400 - Get rule with "Missing required parameters: ruleId" error', async () => {
     // The rule could not be found due to missing ruleId .
 
     const params = {
@@ -513,21 +533,16 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('replaceRule() - 200', async () => {
-    // Request models needed by this operation.
-
-    // RuleContextAttribute
+  test('replaceRule() - 200 - Update the specified rule', async () => {
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
     };
 
-    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
 
-    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
@@ -540,14 +555,12 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       operator: 'stringEquals',
     };
 
-    // ResourceTagAttribute
     const resourceTagAttributeModel = {
       name: 'TagName-2',
       value: 'aTagValue-2',
       operator: 'stringEquals',
     };
 
-    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
@@ -558,7 +571,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       ifMatch: ruleEtag,
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'this is an example of updated rule',
+      description: 'SDK TEST - this is an example of updated rule',
       transactionId: uuidv4(),
     };
 
@@ -568,22 +581,18 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('replaceRule() - 400 - missing ifMatch', async () => {
+  test('replaceRule() - 400 - Update rule with "Missing required parameters: ifMatch" error', async () => {
     // The rule could not be found due to missing ifMatch.
-    // Request models needed by this operation.
 
-    // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
     };
 
-    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
 
-    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
@@ -596,14 +605,12 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       operator: 'stringEquals',
     };
 
-    // ResourceTagAttribute
     const resourceTagAttributeModel = {
       name: 'TagName-2',
       value: 'aTagValue-2',
       operator: 'stringEquals',
     };
 
-    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
@@ -613,7 +620,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       ruleId: unexistingRuleId,
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'this is an example of updated rule',
+      description: 'SDK TEST - this is an example of rule',
       transactionId: uuidv4(),
     };
 
@@ -622,22 +629,18 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('replaceRule() - 404 - unexisting rule ID', async () => {
+  test('replaceRule() - 404 - Update rule with "rule not found" error', async () => {
     // The rule could not be found due to unexisting rule ID.
-    // Request models needed by this operation.
 
-    // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
     };
 
-    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
 
-    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
@@ -650,14 +653,12 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       operator: 'stringEquals',
     };
 
-    // ResourceTagAttribute
     const resourceTagAttributeModel = {
       name: 'TagName-2',
       value: 'aTagValue-2',
       operator: 'stringEquals',
     };
 
-    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
@@ -668,7 +669,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       ifMatch: ruleEtag,
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'this is an example of updated rule',
+      description: 'SDK TEST - this is an example of rule',
       transactionId: uuidv4(),
     };
 
@@ -679,20 +680,16 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
   test('replaceRule() - 412 - unsupported attribute name: networkZoneID', async () => {
     // The rule could not be updated due to unsupported attribute name 'networkZoneID'.
-    // Request models needed by this operation.
 
-    // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneID',
       value: zoneId,
     };
 
-    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
 
-    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
@@ -705,14 +702,12 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       operator: 'stringEquals',
     };
 
-    // ResourceTagAttribute
     const resourceTagAttributeModel = {
       name: 'TagName-2',
       value: 'aTagValue-2',
       operator: 'stringEquals',
     };
 
-    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
@@ -723,7 +718,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       ifMatch: ruleEtag,
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'this is an example of updated rule',
+      description: 'SDK TEST - this is an example of rule',
       transactionId: uuidv4(),
     };
 
@@ -732,7 +727,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('getAccountSettings() - 200', async () => {
+  test('getAccountSettings() - 200 - Get the specified account settings', async () => {
     const params = {
       accountId,
       transactionId: uuidv4(),
@@ -744,7 +739,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('getAccountSettings() - 400 - missing accountId', async () => {
+  test('getAccountSettings() - 400 - Get account settings with "Missing required parameters: accountId" error', async () => {
     const params = {
       transactionId: uuidv4(),
     };
@@ -754,7 +749,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('getAccountSettings() - 400 - invalid accountId', async () => {
+  test('getAccountSettings() - 400 - Get account settings with "invalid AccountID parameter" error', async () => {
     const params = {
       accountId: invalidID,
       transactionId: uuidv4(),
@@ -765,19 +760,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('deleteRule() - 204', async () => {
-    const params = {
-      ruleId,
-      transactionId: uuidv4(),
-    };
-
-    const res = await contextBasedRestrictionsService.deleteRule(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(204);
-    expect(res.result).toBeDefined();
-  });
-
-  test('deleteRule() - 400 - missing ruleId', async () => {
+  test('deleteRule() - 400 - Delete rule with "Missing required parameters: ruleId" error', async () => {
     // The rule could not be deleted due to unexisting ruleId.
     const params = {
       transactionId: uuidv4(),
@@ -788,7 +771,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('deleteRule() - 404 - unexisting ruleId', async () => {
+  test('deleteRule() - 404 - Delete rule with "rule not found" error', async () => {
     // The rule could not be deleted due to unexisting rule ID.
     const params = {
       ruleId: unexistingRuleId,
@@ -800,19 +783,19 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('deleteZone() - 204', async () => {
+  test('deleteRule() - 204 - Delete the specified zone', async () => {
     const params = {
-      zoneId,
+      ruleId,
       transactionId: uuidv4(),
     };
 
-    const res = await contextBasedRestrictionsService.deleteZone(params);
+    const res = await contextBasedRestrictionsService.deleteRule(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
   });
 
-  test('deleteZone() - 404 - unexisting zone ID', async () => {
+  test('deleteZone() - 404 - Delete zone with "zone not found" error', async () => {
     // The zone could not be deleted due to unexisting zone ID.
     const params = {
       zoneId: unexistingZoneId,
@@ -824,7 +807,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('deleteZone() - 404 - missing zone ID', async () => {
+  test('deleteZone() - 404 - Delete zone with "Missing required parameters: zoneId" error', async () => {
     // The zone could not be deleted due to missing zone ID.
     const params = {
       transactionId: uuidv4(),
@@ -833,5 +816,17 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     await expect(contextBasedRestrictionsService.deleteZone(params)).rejects.toMatchObject({
       'message': 'Missing required parameters: zoneId',
     });
+  });
+
+  test('deleteZone() - 204 - Delete the specified zone', async () => {
+    const params = {
+      zoneId,
+      transactionId: uuidv4(),
+    };
+
+    const res = await contextBasedRestrictionsService.deleteZone(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
   });
 });
