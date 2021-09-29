@@ -23,7 +23,7 @@ const ContextBasedRestrictionsV1 = require('../dist/context-based-restrictions/v
 // eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
 // You can use the readExternalSources method to access additional configuration values
-// const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
 // This file provides an example of how to use the Context Based Restrictions service.
@@ -33,6 +33,8 @@ const authHelper = require('../test/resources/auth-helper.js');
 // CONTEXT_BASED_RESTRICTIONS_AUTH_TYPE=iam
 // CONTEXT_BASED_RESTRICTIONS_APIKEY=<IAM apikey>
 // CONTEXT_BASED_RESTRICTIONS_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// CONTEXT_BASED_RESTRICTIONS_TEST_ACCOUNT_ID=<the id of the account under which test CBR zones and rules are created>
+// CONTEXT_BASED_RESTRICTIONS_TEST_SERVICE_NAME=<the name of the service to be associated with the test CBR rules>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -56,10 +58,37 @@ describe('ContextBasedRestrictionsV1', () => {
 
   // end-common
 
-  // To access additional configuration values, uncomment this line and extract the values from config
-  // const config = readExternalSources(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME);
+  // Access additional configuration values from external file
+  const config = readExternalSources(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME);
+  const {
+    apikey: apiKey,
+    url: URL,
+    authUrl,
+    authType,
+    testAccountId: accountId,
+    testServiceName: serviceName,
+  } = config;
 
-  test('createZone request example', (done) => {
+  expect(config).not.toBeNull();
+  expect(accountId).not.toBeNull();
+  expect(accountId).toBeDefined();
+  expect(apiKey).not.toBeNull();
+  expect(apiKey).toBeDefined();
+  expect(URL).not.toBeNull();
+  expect(URL).toBeDefined();
+  expect(authUrl).not.toBeNull();
+  expect(authUrl).toBeDefined();
+  expect(authType).not.toBeNull();
+  expect(authType).toBeDefined();
+  expect(serviceName).not.toBeNull();
+  expect(serviceName).toBeDefined();
+
+  let zoneId;
+  let zoneEtag;
+  let ruleId;
+  let ruleEtag;
+
+  test('createZone request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -81,14 +110,17 @@ describe('ContextBasedRestrictionsV1', () => {
 
     const params = {
       name: 'an example of zone',
-      accountId: '12ab34cd56ef78ab90cd12ef34ab56cd',
+      accountId,
       addresses: [addressModel],
       description: 'this is an example of zone',
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .createZone(params)
       .then((res) => {
+        zoneId = res.result.id;
+        zoneEtag = res.headers.etag;
+
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch((err) => {
@@ -97,7 +129,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-create_zone
   });
-  test('listZones request example', (done) => {
+
+  test('listZones request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -110,10 +143,10 @@ describe('ContextBasedRestrictionsV1', () => {
     // begin-list_zones
 
     const params = {
-      accountId: 'testString',
+      accountId,
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .listZones(params)
       .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -124,7 +157,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-list_zones
   });
-  test('getZone request example', (done) => {
+
+  test('getZone request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -137,10 +171,10 @@ describe('ContextBasedRestrictionsV1', () => {
     // begin-get_zone
 
     const params = {
-      zoneId: 'testString',
+      zoneId,
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .getZone(params)
       .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -151,7 +185,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-get_zone
   });
-  test('replaceZone request example', (done) => {
+
+  test('replaceZone request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -172,17 +207,20 @@ describe('ContextBasedRestrictionsV1', () => {
     };
 
     const params = {
-      zoneId: 'testString',
-      ifMatch: 'testString',
-      name: 'an example of zone',
-      accountId: '12ab34cd56ef78ab90cd12ef34ab56cd',
+      zoneId,
+      ifMatch: zoneEtag,
+      name: 'an example of zone to be replaced',
+      accountId,
       addresses: [addressModel],
-      description: 'this is an example of zone',
+      description: 'this is an example of zone to be replaced',
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .replaceZone(params)
       .then((res) => {
+        zoneId = res.result.id;
+        zoneEtag = res.headers.etag;
+
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch((err) => {
@@ -191,7 +229,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-replace_zone
   });
-  test('listAvailableServicerefTargets request example', (done) => {
+
+  test('listAvailableServicerefTargets request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -203,7 +242,7 @@ describe('ContextBasedRestrictionsV1', () => {
     originalLog('listAvailableServicerefTargets() result:');
     // begin-list_available_serviceref_targets
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .listAvailableServicerefTargets({})
       .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -214,7 +253,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-list_available_serviceref_targets
   });
-  test('createRule request example', (done) => {
+
+  test('createRule request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -231,7 +271,7 @@ describe('ContextBasedRestrictionsV1', () => {
     // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
-      value: '65810ac762004f22ac19f8f8edf70a34',
+      value: zoneId,
     };
 
     // RuleContext
@@ -242,12 +282,18 @@ describe('ContextBasedRestrictionsV1', () => {
     // ResourceAttribute
     const resourceAttributeModel = {
       name: 'accountId',
-      value: '12ab34cd56ef78ab90cd12ef34ab56cd',
+      value: accountId,
+    };
+
+    const resourceAttributeServiceNameModel = {
+      name: 'serviceName',
+      value: serviceName,
+      operator: 'stringEquals',
     };
 
     // Resource
     const resourceModel = {
-      attributes: [resourceAttributeModel],
+      attributes: [resourceAttributeModel, resourceAttributeServiceNameModel],
     };
 
     const params = {
@@ -256,9 +302,12 @@ describe('ContextBasedRestrictionsV1', () => {
       description: 'this is an example of rule',
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .createRule(params)
       .then((res) => {
+        ruleId = res.result.id;
+        ruleEtag = res.headers.etag;
+
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch((err) => {
@@ -267,7 +316,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-create_rule
   });
-  test('listRules request example', (done) => {
+
+  test('listRules request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -280,10 +330,10 @@ describe('ContextBasedRestrictionsV1', () => {
     // begin-list_rules
 
     const params = {
-      accountId: 'testString',
+      accountId,
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .listRules(params)
       .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -294,7 +344,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-list_rules
   });
-  test('getRule request example', (done) => {
+
+  test('getRule request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -307,10 +358,10 @@ describe('ContextBasedRestrictionsV1', () => {
     // begin-get_rule
 
     const params = {
-      ruleId: 'testString',
+      ruleId,
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .getRule(params)
       .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -321,7 +372,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-get_rule
   });
-  test('replaceRule request example', (done) => {
+
+  test('replaceRule request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -338,7 +390,7 @@ describe('ContextBasedRestrictionsV1', () => {
     // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
-      value: '76921bd873115033bd2a0909fe081b45',
+      value: zoneId,
     };
 
     // RuleContext
@@ -349,25 +401,40 @@ describe('ContextBasedRestrictionsV1', () => {
     // ResourceAttribute
     const resourceAttributeModel = {
       name: 'accountId',
-      value: '12ab34cd56ef78ab90cd12ef34ab56cd',
+      value: accountId,
+    };
+
+    const resourceAttributeServiceNameModel = {
+      name: 'serviceName',
+      value: serviceName,
+    };
+
+    // ResourceTagAttribute
+    const resourceTagAttributeModel = {
+      name: 'TagName',
+      value: 'aTagValue',
     };
 
     // Resource
     const resourceModel = {
-      attributes: [resourceAttributeModel],
+      attributes: [resourceAttributeModel, resourceAttributeServiceNameModel],
+      tags: [resourceTagAttributeModel],
     };
 
     const params = {
-      ruleId: 'testString',
-      ifMatch: 'testString',
+      ruleId,
+      ifMatch: ruleEtag,
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'this is an example of rule',
+      description: 'this is an example of rule to be replaced',
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .replaceRule(params)
       .then((res) => {
+        ruleId = res.result.id;
+        ruleEtag = res.headers.etag;
+
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch((err) => {
@@ -376,7 +443,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-replace_rule
   });
-  test('getAccountSettings request example', (done) => {
+
+  test('getAccountSettings request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -389,10 +457,10 @@ describe('ContextBasedRestrictionsV1', () => {
     // begin-get_account_settings
 
     const params = {
-      accountId: 'testString',
+      accountId,
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .getAccountSettings(params)
       .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
@@ -403,33 +471,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     // end-get_account_settings
   });
-  test('deleteZone request example', (done) => {
-    consoleLogMock.mockImplementation((output) => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation((output) => {
-      done(output);
-    });
 
-    // begin-delete_zone
-
-    const params = {
-      zoneId: 'testString',
-    };
-
-    contextBasedRestrictionsService
-      .deleteZone(params)
-      .then((res) => {
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
-
-    // end-delete_zone
-  });
-  test('deleteRule request example', (done) => {
+  test('deleteRule request example', async (done) => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
@@ -441,10 +484,10 @@ describe('ContextBasedRestrictionsV1', () => {
     // begin-delete_rule
 
     const params = {
-      ruleId: 'testString',
+      ruleId,
     };
 
-    contextBasedRestrictionsService
+    await contextBasedRestrictionsService
       .deleteRule(params)
       .then((res) => {
         done();
@@ -454,5 +497,32 @@ describe('ContextBasedRestrictionsV1', () => {
       });
 
     // end-delete_rule
+  });
+
+  test('deleteZone request example', async (done) => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      done(output);
+    });
+
+    // begin-delete_zone
+
+    const params = {
+      zoneId,
+    };
+
+    await contextBasedRestrictionsService
+      .deleteZone(params)
+      .then((res) => {
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+
+    // end-delete_zone
   });
 });
