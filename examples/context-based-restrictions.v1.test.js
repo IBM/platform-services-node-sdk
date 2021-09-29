@@ -91,6 +91,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('createZone() result:');
 
+    // begin-create_zone
+
     const addressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
@@ -114,6 +116,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-create_zone
   });
 
   test('listZones request example', async (done) => {
@@ -127,6 +131,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('listZones() result:');
 
+    // begin-list_zones
+
     const params = {
       accountId,
     };
@@ -139,6 +145,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-list_zones
   });
 
   test('getZone request example', async (done) => {
@@ -152,6 +160,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('getZone() result:');
 
+    // begin-get_zone
+
     const params = {
       zoneId,
     };
@@ -164,6 +174,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-get_zone
   });
 
   test('replaceZone request example', async (done) => {
@@ -176,6 +188,8 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     originalLog('replaceZone() result:');
+
+    // begin-replace_zone
 
     const addressModel = {
       type: 'ipAddress',
@@ -202,6 +216,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-replace_zone
   });
 
   test('listAvailableServicerefTargets request example', async (done) => {
@@ -215,6 +231,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('listAvailableServicerefTargets() result:');
 
+    // begin-list_available_serviceref_targets
+
     await contextBasedRestrictionsService
       .listAvailableServicerefTargets({})
       .then((res) => {
@@ -223,6 +241,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-list_available_serviceref_targets
   });
 
   test('createRule request example', async (done) => {
@@ -235,6 +255,8 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     originalLog('createRule() result:');
+
+    // begin-create_rule
 
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
@@ -277,6 +299,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-create_rule
   });
 
   test('listRules request example', async (done) => {
@@ -290,6 +314,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('listRules() result:');
 
+    // begin-list_rules
+
     const params = {
       accountId,
     };
@@ -302,6 +328,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-list_rules
   });
 
   test('getRule request example', async (done) => {
@@ -315,6 +343,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('getRule() result:');
 
+    // begin-get_rule
+
     const params = {
       ruleId,
     };
@@ -327,6 +357,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-get_rule
   });
 
   test('replaceRule request example', async (done) => {
@@ -339,6 +371,8 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     originalLog('replaceRule() result:');
+
+    // begin-replace_rule
 
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
@@ -388,6 +422,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-replace_rule
   });
 
   test('getAccountSettings request example', async (done) => {
@@ -401,6 +437,8 @@ describe('ContextBasedRestrictionsV1', () => {
 
     originalLog('getAccountSettings() result:');
 
+    // begin-get_account_settings
+
     const params = {
       accountId,
     };
@@ -413,6 +451,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-get_account_settings
   });
 
   test('deleteRule request example', async (done) => {
@@ -423,6 +463,8 @@ describe('ContextBasedRestrictionsV1', () => {
     consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
+
+    // begin-delete_rule
 
     const params = {
       ruleId,
@@ -436,6 +478,8 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-delete_rule
   });
 
   test('deleteZone request example', async (done) => {
@@ -446,6 +490,8 @@ describe('ContextBasedRestrictionsV1', () => {
     consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
+
+    // begin-delete_zone
 
     const params = {
       zoneId,
@@ -459,5 +505,7 @@ describe('ContextBasedRestrictionsV1', () => {
       .catch((err) => {
         console.warn(err);
       });
+
+    // end-delete_zone
   });
 });
