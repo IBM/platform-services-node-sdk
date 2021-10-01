@@ -1,3 +1,10 @@
+# [0.21.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.20.3...v0.21.0) (2021-10-01)
+
+
+### Features
+
+* **CBR:** Added Context-Based-Restrictions ([#136](https://github.com/IBM/platform-services-node-sdk/issues/136)) ([c9d00c9](https://github.com/IBM/platform-services-node-sdk/commit/c9d00c9379977b07c1b3f09d32ecc7a973d3403b))
+
 ## [0.20.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.20.2...v0.20.3) (2021-09-09)
 
 
