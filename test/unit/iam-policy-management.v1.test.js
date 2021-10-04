@@ -175,7 +175,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.listPolicies({});
@@ -184,7 +184,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -302,7 +301,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.createPolicy({});
@@ -311,7 +310,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -436,7 +434,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.updatePolicy({});
@@ -445,7 +443,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -504,7 +501,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.getPolicy({});
@@ -513,7 +510,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -572,7 +568,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.deletePolicy({});
@@ -581,7 +577,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -648,7 +643,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.patchPolicy({});
@@ -657,7 +652,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -796,7 +790,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.createRole({});
@@ -805,7 +799,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -878,7 +871,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.updateRole({});
@@ -887,7 +880,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -946,7 +938,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.getRole({});
@@ -955,7 +947,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1014,7 +1005,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamPolicyManagementService.deleteRole({});
@@ -1023,7 +1014,6 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
