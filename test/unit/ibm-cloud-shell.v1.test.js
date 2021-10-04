@@ -143,7 +143,7 @@ describe('IbmCloudShellV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await ibmCloudShellService.getAccountSettings({});
@@ -152,7 +152,6 @@ describe('IbmCloudShellV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -259,7 +258,7 @@ describe('IbmCloudShellV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await ibmCloudShellService.updateAccountSettings({});
@@ -268,7 +267,6 @@ describe('IbmCloudShellV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
