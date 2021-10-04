@@ -167,7 +167,7 @@ describe('UsageMeteringV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageMeteringService.reportResourceUsage({});
@@ -176,7 +176,6 @@ describe('UsageMeteringV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
