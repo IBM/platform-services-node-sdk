@@ -152,7 +152,7 @@ describe('PostureManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await postureManagementService.createValidation({});
@@ -161,7 +161,6 @@ describe('PostureManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -223,7 +222,7 @@ describe('PostureManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await postureManagementService.listProfiles({});
@@ -232,7 +231,6 @@ describe('PostureManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -294,7 +292,7 @@ describe('PostureManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await postureManagementService.listScopes({});
@@ -303,7 +301,6 @@ describe('PostureManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
