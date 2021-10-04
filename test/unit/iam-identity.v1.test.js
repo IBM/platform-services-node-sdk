@@ -237,7 +237,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.createApiKey({});
@@ -246,7 +246,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -359,7 +358,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.getApiKey({});
@@ -368,7 +367,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -438,7 +436,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.updateApiKey({});
@@ -447,7 +445,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -506,7 +503,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.deleteApiKey({});
@@ -515,7 +512,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -574,7 +570,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.lockApiKey({});
@@ -583,7 +579,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -642,7 +637,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.unlockApiKey({});
@@ -651,7 +646,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -803,7 +797,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.createServiceId({});
@@ -812,7 +806,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -874,7 +867,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.getServiceId({});
@@ -883,7 +876,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -956,7 +948,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.updateServiceId({});
@@ -965,7 +957,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1024,7 +1015,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.deleteServiceId({});
@@ -1033,7 +1024,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1092,7 +1082,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.lockServiceId({});
@@ -1101,7 +1091,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1160,7 +1149,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.unlockServiceId({});
@@ -1169,7 +1158,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1236,7 +1224,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.createProfile({});
@@ -1245,7 +1233,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1322,7 +1309,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.listProfiles({});
@@ -1331,7 +1318,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1390,7 +1376,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.getProfile({});
@@ -1399,7 +1385,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1469,7 +1454,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.updateProfile({});
@@ -1478,7 +1463,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1537,7 +1521,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.deleteProfile({});
@@ -1546,7 +1530,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1654,7 +1637,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.createClaimRule({});
@@ -1663,7 +1646,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1722,7 +1704,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.listClaimRules({});
@@ -1731,7 +1713,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1795,7 +1776,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.getClaimRule({});
@@ -1804,7 +1785,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1922,7 +1902,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.updateClaimRule({});
@@ -1931,7 +1911,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1995,7 +1974,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.deleteClaimRule({});
@@ -2004,7 +1983,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2085,7 +2063,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.createLink({});
@@ -2094,7 +2072,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2153,7 +2130,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.listLinks({});
@@ -2162,7 +2139,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2226,7 +2202,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.getLink({});
@@ -2235,7 +2211,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2299,7 +2274,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.deleteLink({});
@@ -2308,7 +2283,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2370,7 +2344,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.getAccountSettings({});
@@ -2379,7 +2353,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2464,7 +2437,7 @@ describe('IamIdentityV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamIdentityService.updateAccountSettings({});
@@ -2473,7 +2446,6 @@ describe('IamIdentityV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
