@@ -157,7 +157,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.createEnterprise({});
@@ -166,7 +166,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -285,7 +284,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.getEnterprise({});
@@ -294,7 +293,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -362,7 +360,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.updateEnterprise({});
@@ -371,7 +369,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -441,7 +438,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.importAccountToEnterprise({});
@@ -450,7 +447,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -519,7 +515,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.createAccount({});
@@ -528,7 +524,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -647,7 +642,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.getAccount({});
@@ -656,7 +651,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -720,7 +714,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.updateAccount({});
@@ -729,7 +723,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -798,7 +791,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.createAccountGroup({});
@@ -807,7 +800,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -926,7 +918,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.getAccountGroup({});
@@ -935,7 +927,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1000,7 +991,7 @@ describe('EnterpriseManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseManagementService.updateAccountGroup({});
@@ -1009,7 +1000,6 @@ describe('EnterpriseManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
