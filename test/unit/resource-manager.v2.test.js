@@ -255,7 +255,7 @@ describe('ResourceManagerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceManagerService.getResourceGroup({});
@@ -264,7 +264,6 @@ describe('ResourceManagerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -329,7 +328,7 @@ describe('ResourceManagerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceManagerService.updateResourceGroup({});
@@ -338,7 +337,6 @@ describe('ResourceManagerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -397,7 +395,7 @@ describe('ResourceManagerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceManagerService.deleteResourceGroup({});
@@ -406,7 +404,6 @@ describe('ResourceManagerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -509,7 +506,7 @@ describe('ResourceManagerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceManagerService.getQuotaDefinition({});
@@ -518,7 +515,6 @@ describe('ResourceManagerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
