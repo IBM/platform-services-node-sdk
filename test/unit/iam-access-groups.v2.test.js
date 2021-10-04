@@ -155,7 +155,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.createAccessGroup({});
@@ -164,7 +164,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -244,7 +243,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.listAccessGroups({});
@@ -253,7 +252,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -318,7 +316,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.getAccessGroup({});
@@ -327,7 +325,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -400,7 +397,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.updateAccessGroup({});
@@ -409,7 +406,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -474,7 +470,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.deleteAccessGroup({});
@@ -483,7 +479,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -550,7 +545,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.isMemberOfAccessGroup({});
@@ -559,7 +554,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -632,7 +626,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.addMembersToAccessGroup({});
@@ -641,7 +635,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -718,7 +711,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.listAccessGroupMembers({});
@@ -727,7 +720,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -794,7 +786,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.removeMemberFromAccessGroup({});
@@ -803,7 +795,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -868,7 +859,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.removeMembersFromAccessGroup({});
@@ -877,7 +868,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -944,7 +934,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.removeMemberFromAllAccessGroups({});
@@ -953,7 +943,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1026,7 +1015,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.addMemberToMultipleAccessGroups({});
@@ -1035,7 +1024,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1124,7 +1112,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.addAccessGroupRule({});
@@ -1133,7 +1121,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1195,7 +1182,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.listAccessGroupRules({});
@@ -1204,7 +1191,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1271,7 +1257,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.getAccessGroupRule({});
@@ -1280,7 +1266,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1379,7 +1364,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.replaceAccessGroupRule({});
@@ -1388,7 +1373,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1455,7 +1439,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.removeAccessGroupRule({});
@@ -1464,7 +1448,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1526,7 +1509,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.getAccountSettings({});
@@ -1535,7 +1518,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1600,7 +1582,7 @@ describe('IamAccessGroupsV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await iamAccessGroupsService.updateAccountSettings({});
@@ -1609,7 +1591,6 @@ describe('IamAccessGroupsV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
