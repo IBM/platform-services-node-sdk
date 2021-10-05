@@ -28,24 +28,31 @@ const configFile = 'posture_management.env';
 const describe = authHelper.prepareTests(configFile);
 
 describe('PostureManagementV1_integration', () => {
-  const postureManagementService = PostureManagementV1.newInstance({});
-
-  expect(postureManagementService).not.toBeNull();
-
-  const config = readExternalSources(PostureManagementV1.DEFAULT_SERVICE_NAME);
-  expect(config).not.toBeNull();
-  const apiKey = config.apikey;
-  expect(apiKey).toBeDefined();
-  const { accountId } = config;
-  expect(accountId).toBeDefined();
-  const { profileName } = config;
-  expect(profileName).toBeDefined();
-  const { scopesName } = config;
-  expect(scopesName).toBeDefined();
-
+  let postureManagementService;
+  let apiKey;
+  let accountId;
+  let profileName;
+  let scopesName;
   let scopesId;
   let profileId;
   const groupProfileId = '0';
+
+  test('Init', async () => {
+    postureManagementService = PostureManagementV1.newInstance({});
+
+    expect(postureManagementService).not.toBeNull();
+
+    const config = readExternalSources(PostureManagementV1.DEFAULT_SERVICE_NAME);
+    expect(config).not.toBeNull();
+    apiKey = config.apikey;
+    expect(apiKey).toBeDefined();
+    accountId = config;
+    expect(accountId).toBeDefined();
+    profileName = config;
+    expect(profileName).toBeDefined();
+    scopesName = config;
+    expect(scopesName).toBeDefined();
+  });
 
   jest.setTimeout(timeout);
 
