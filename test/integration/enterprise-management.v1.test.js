@@ -34,21 +34,30 @@ let accountGroupId = null;
 let newParentAccountGroupId = null;
 
 describe('EnterpriseManagementV1_integration', () => {
-  const enterpriseManagementService = EnterpriseManagementV1.newInstance({});
-
-  expect(enterpriseManagementService).not.toBeNull();
-
-  const config = readExternalSources(EnterpriseManagementV1.DEFAULT_SERVICE_NAME);
-  expect(config).not.toBeNull();
-
-  const { enterpriseId } = config;
-  expect(enterpriseId).not.toBeNull();
-  const enterpriseAccountId = config.accountId;
-  expect(enterpriseAccountId).not.toBeNull();
-  const enterpriseAccountIamId = config.accountIamId;
-  expect(enterpriseAccountIamId).not.toBeNull();
+  let enterpriseManagementService;
+  let config;
+  let enterpriseId;
+  let enterpriseAccountId;
+  let enterpriseAccountIamId;
 
   jest.setTimeout(timeout);
+
+  test('Init', async () => {
+    enterpriseManagementService = EnterpriseManagementV1.newInstance({});
+    expect(enterpriseManagementService).not.toBeNull();
+
+    config = readExternalSources(EnterpriseManagementV1.DEFAULT_SERVICE_NAME);
+    expect(config).not.toBeNull();
+
+    enterpriseId = config.enterpriseId;
+    expect(enterpriseId).not.toBeNull();
+
+    enterpriseAccountId = config.accountId;
+    expect(enterpriseAccountId).not.toBeNull();
+
+    enterpriseAccountIamId = config.accountIamId;
+    expect(enterpriseAccountIamId).not.toBeNull();
+  });
 
   test('createAccountGroup()', async () => {
     const parentCrn = `crn:v1:bluemix:public:enterprise::a/${enterpriseAccountId}::enterprise:${enterpriseId}`;
