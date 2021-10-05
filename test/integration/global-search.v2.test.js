@@ -33,12 +33,15 @@ const transactionId = uuidv4();
 describe('GlobalSearchV2_integration', () => {
   jest.setTimeout(timeout);
 
-  const globalSearchService = GlobalSearchV2.newInstance({});
+  let globalSearchService;
+  let config;
 
-  const config = readExternalSources(GlobalSearchV2.DEFAULT_SERVICE_NAME);
-
-  expect(globalSearchService).not.toBeNull();
-  expect(config).not.toBeNull();
+  test('Init', async () => {
+    globalSearchService = GlobalSearchV2.newInstance({});
+    config = readExternalSources(GlobalSearchV2.DEFAULT_SERVICE_NAME);
+    expect(globalSearchService).not.toBeNull();
+    expect(config).not.toBeNull();
+  });
 
   test('search()', async () => {
     const searchResults = [];
