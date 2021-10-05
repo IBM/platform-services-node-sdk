@@ -34,25 +34,28 @@ let enterpriseId;
 let billingMonth;
 
 describe('EnterpriseUsageReportsV1_integration', () => {
-  service = EnterpriseUsageReportsV1.newInstance({});
 
-  const config = readExternalSources(EnterpriseUsageReportsV1.DEFAULT_SERVICE_NAME);
+  test('Init', async () => {
+    service = EnterpriseUsageReportsV1.newInstance({});
 
-  expect(service).not.toBeNull();
-  expect(config).not.toBeNull();
+    const config = readExternalSources(EnterpriseUsageReportsV1.DEFAULT_SERVICE_NAME);
 
-  accountId = config.accountId;
-  accountGroupId = config.accountGroupId;
-  enterpriseId = config.enterpriseId;
-  billingMonth = config.billingMonth;
-  expect(accountId).not.toBeNull();
-  expect(accountGroupId).not.toBeNull();
-  expect(enterpriseId).not.toBeNull();
-  expect(billingMonth).not.toBeNull();
+    expect(service).not.toBeNull();
+    expect(config).not.toBeNull();
+
+    accountId = config.accountId;
+    accountGroupId = config.accountGroupId;
+    enterpriseId = config.enterpriseId;
+    billingMonth = config.billingMonth;
+    expect(accountId).not.toBeNull();
+    expect(accountGroupId).not.toBeNull();
+    expect(enterpriseId).not.toBeNull();
+    expect(billingMonth).not.toBeNull();
+  });
 
   jest.setTimeout(timeout);
 
-  test('getResourceUsageReportEnterprise()', async (done) => {
+  test('getResourceUsageReportEnterprise()', async () => {
     const results = [];
     let offset = null;
     try {
@@ -84,17 +87,16 @@ describe('EnterpriseUsageReportsV1_integration', () => {
       } while (offset != null);
     } catch (err) {
       console.log(err);
-      done(err);
+      console.log(`An error occurred: `, JSON.stringify(err));
     }
 
     // Make sure we found some reports.
     const numReports = results.length;
     // console.log(`getResourceUsageReport() response contained ${numReports} total reports`);
     expect(numReports).toBeGreaterThan(0);
-    done();
   });
 
-  test('getResourceUsageReportAccount()', async (done) => {
+  test('getResourceUsageReportAccount()', async () => {
     const results = [];
     let offset = null;
     try {
@@ -126,17 +128,16 @@ describe('EnterpriseUsageReportsV1_integration', () => {
       } while (offset != null);
     } catch (err) {
       console.log(err);
-      done(err);
+      console.log(`An error occurred: `, JSON.stringify(err));
     }
 
     // Make sure we found some reports.
     const numReports = results.length;
     // console.log(`getResourceUsageReport() response contained ${numReports} total reports`);
     expect(numReports).toBeGreaterThan(0);
-    done();
   });
 
-  test('getResourceUsageReportAccountGroup()', async (done) => {
+  test('getResourceUsageReportAccountGroup()', async () => {
     const results = [];
     let offset = null;
     try {
@@ -168,14 +169,13 @@ describe('EnterpriseUsageReportsV1_integration', () => {
       } while (offset != null);
     } catch (err) {
       console.log(err);
-      done(err);
+      console.log(`An error occurred: `, JSON.stringify(err));
     }
 
     // Make sure we found some reports.
     const numReports = results.length;
     // console.log(`getResourceUsageReport() response contained ${numReports} total reports`);
     expect(numReports).toBeGreaterThan(0);
-    done();
   });
 });
 
