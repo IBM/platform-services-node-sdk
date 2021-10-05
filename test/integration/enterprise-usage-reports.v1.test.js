@@ -34,7 +34,6 @@ let enterpriseId;
 let billingMonth;
 
 describe('EnterpriseUsageReportsV1_integration', () => {
-
   test('Init', async () => {
     service = EnterpriseUsageReportsV1.newInstance({});
 
