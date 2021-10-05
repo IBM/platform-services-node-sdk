@@ -24,7 +24,7 @@ const IbmCloudShellV1 = require('../dist/ibm-cloud-shell/v1');
 // eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
 // You can use the readExternalSources method to access additional configuration values
-// const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
 // This file provides an example of how to use the IBM Cloud Shell service.
@@ -63,7 +63,7 @@ describe('IbmCloudShellV1', () => {
   const config = readExternalSources(IbmCloudShellV1.DEFAULT_SERVICE_NAME);
   let accountId = config.accountId;
   expect(accountId).not.toBeNull();
-  
+
   test('getAccountSettings request example', done => {
 
     consoleLogMock.mockImplementation(output => {
