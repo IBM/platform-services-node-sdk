@@ -48,6 +48,7 @@ const describe = authHelper.prepareTests(configFile);
 
 // Save original console.log
 const originalLog = console.log;
+const originalWarn = console.warn;
 
 // Mocks for console.log and console.warn
 const consoleLogMock = jest.spyOn(console, 'log');
@@ -87,14 +88,14 @@ describe('CatalogManagementV1', () => {
     expect(bearerToken).not.toBeUndefined();
   })
 
-  test('createCatalog request example', done => {
+  test('createCatalog request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createCatalog() result:');
@@ -107,26 +108,25 @@ describe('CatalogManagementV1', () => {
       owningAccount: accountId
     }
 
-    catalogManagementService.createCatalog(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.createCatalog(params)
       catalogId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
+    } catch (err) {
       console.warn(err)
-    });
+    }
 
     // end-create_catalog
   });
 
-  test('getCatalog request example', done => {
+  test('getCatalog request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getCatalog() result:');
@@ -136,25 +136,24 @@ describe('CatalogManagementV1', () => {
       catalogIdentifier: catalogId,
     };
 
-    catalogManagementService.getCatalog(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getCatalog(params)
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_catalog
   });
 
-  test('replaceCatalog request example', done => {
+  test('replaceCatalog request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceCatalog() result:');
@@ -168,49 +167,47 @@ describe('CatalogManagementV1', () => {
       kind: 'vpe',
     };
 
-    catalogManagementService.replaceCatalog(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.replaceCatalog(params)
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_catalog
   });
 
-  test('listCatalogs request example', done => {
+  test('listCatalogs request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listCatalogs() result:');
     // begin-list_catalogs
 
-    catalogManagementService.listCatalogs({})
-    .then(res => {
+    try {
+      const res = await catalogManagementService.listCatalogs({})
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_catalogs
   });
 
-  test('createOffering request example', done => {
+  test('createOffering request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createOffering() result:');
@@ -221,26 +218,25 @@ describe('CatalogManagementV1', () => {
       name: 'offering-name'
     };
 
-    catalogManagementService.createOffering(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.createOffering(params);
       offeringId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_offering
   });
 
-  test('getOffering request example', done => {
+  test('getOffering request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOffering() result:');
@@ -251,25 +247,24 @@ describe('CatalogManagementV1', () => {
       offeringId: offeringId,
     };
 
-    catalogManagementService.getOffering(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOffering(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
+    } catch (err) {
       console.warn(err)
-    });
+    }
 
     // end-get_offering
   });
 
-  test.skip('replaceOffering request example', done => {
+  test.skip('replaceOffering request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceOffering() result:');
@@ -282,25 +277,24 @@ describe('CatalogManagementV1', () => {
       name: 'updated-offering-name'
     };
 
-    catalogManagementService.replaceOffering(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.replaceOffering(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_offering
   });
 
-  test('listOfferings request example', done => {
+  test('listOfferings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listOfferings() result:');
@@ -312,25 +306,24 @@ describe('CatalogManagementV1', () => {
       offset: 0,
     };
 
-    catalogManagementService.listOfferings(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.listOfferings(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_offerings
   });
 
-  test('importOffering request example', done => {
+  test('importOffering request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('importOffering() result:');
@@ -347,26 +340,25 @@ describe('CatalogManagementV1', () => {
       xAuthToken: gitTokenForPublicRepo,
     };
 
-    catalogManagementService.importOffering(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.importOffering(params);
       versionLocatorId = res.result.kinds[0].versions[0].version_locator;
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-import_offering
   });
 
-  test.skip('reloadOffering request example', done => {
+  test.skip('reloadOffering request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('reloadOffering() result:');
@@ -382,25 +374,25 @@ describe('CatalogManagementV1', () => {
       repoType: 'git_public',
     };
 
-    catalogManagementService.reloadOffering(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.reloadOffering(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-reload_offering
   });
 
-  test('createObject request example', done => {
+  test('createObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createObject() result:');
@@ -427,26 +419,26 @@ describe('CatalogManagementV1', () => {
       state: stateModel,
     };
 
-    catalogManagementService.createObject(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.createObject(params);
       objectId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_object
   });
 
-  test('getOfferingAudit request example', done => {
+  test('getOfferingAudit request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingAudit() result:');
@@ -457,121 +449,120 @@ describe('CatalogManagementV1', () => {
       offeringId: offeringId,
     };
 
-    catalogManagementService.getOfferingAudit(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingAudit(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_audit
   });
 
-  test('getCatalogAccount request example', done => {
+  test('getCatalogAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getCatalogAccount() result:');
     // begin-get_catalog_account
 
-    catalogManagementService.getCatalogAccount({})
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getCatalogAccount({});
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_catalog_account
   });
 
-  test.skip('updateCatalogAccount request example', done => {
+  test.skip('updateCatalogAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-update_catalog_account
 
-    catalogManagementService.updateCatalogAccount({})
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.updateCatalogAccount({});
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_catalog_account
   });
 
-  test('getCatalogAccountAudit request example', done => {
+  test('getCatalogAccountAudit request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getCatalogAccountAudit() result:');
     // begin-get_catalog_account_audit
 
-    catalogManagementService.getCatalogAccountAudit({})
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getCatalogAccountAudit({});
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_catalog_account_audit
   });
 
 
-  test('getCatalogAccountFilters request example', done => {
+  test('getCatalogAccountFilters request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getCatalogAccountFilters() result:');
     // begin-get_catalog_account_filters
 
-    catalogManagementService.getCatalogAccountFilters({})
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getCatalogAccountFilters({});
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_catalog_account_filters
   });
 
-  test('getCatalogAudit request example', done => {
+  test('getCatalogAudit request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getCatalogAudit() result:');
@@ -581,49 +572,49 @@ describe('CatalogManagementV1', () => {
       catalogIdentifier: catalogId,
     };
 
-    catalogManagementService.getCatalogAudit(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getCatalogAudit(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_catalog_audit
   });
 
-  test('getConsumptionOfferings request example', done => {
+  test('getConsumptionOfferings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getConsumptionOfferings() result:');
     // begin-get_consumption_offerings
 
-    catalogManagementService.getConsumptionOfferings({})
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getConsumptionOfferings({});
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_consumption_offerings
   });
 
-  test('importOfferingVersion request example', done => {
+  test('importOfferingVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('importOfferingVersion() result:');
@@ -638,25 +629,25 @@ describe('CatalogManagementV1', () => {
       repoType: 'git_public',
     };
 
-    catalogManagementService.importOfferingVersion(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.importOfferingVersion(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-import_offering_version
   });
 
-  test.skip('replaceOfferingIcon request example', done => {
+  test.skip('replaceOfferingIcon request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceOfferingIcon() result:');
@@ -668,25 +659,25 @@ describe('CatalogManagementV1', () => {
       fileName: 'offering_icon.png',
     };
 
-    catalogManagementService.replaceOfferingIcon(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.replaceOfferingIcon(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_offering_icon
   });
 
-  test.skip('updateOfferingIbm request example', done => {
+  test.skip('updateOfferingIbm request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateOfferingIbm() result:');
@@ -699,25 +690,25 @@ describe('CatalogManagementV1', () => {
       approved: 'true',
     };
 
-    catalogManagementService.updateOfferingIbm(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.updateOfferingIbm(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_offering_ibm
   });
 
-  test.skip('getOfferingUpdates request example', done => {
+  test.skip('getOfferingUpdates request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingUpdates() result:');
@@ -733,25 +724,25 @@ describe('CatalogManagementV1', () => {
       namespace: 'application-development-namespace',
     };
 
-    catalogManagementService.getOfferingUpdates(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingUpdates(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_updates
   });
 
-  test.skip('getOfferingAbout request example', done => {
+  test.skip('getOfferingAbout request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingAbout() result:');
@@ -761,25 +752,25 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.getOfferingAbout(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingAbout(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_about
   });
 
-  test.skip('getOfferingLicense request example', done => {
+  test.skip('getOfferingLicense request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingLicense() result:');
@@ -790,25 +781,25 @@ describe('CatalogManagementV1', () => {
       licenseId: 'license-id',
     };
 
-    catalogManagementService.getOfferingLicense(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingLicense(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_license
   });
 
-  test('getOfferingContainerImages request example', done => {
+  test('getOfferingContainerImages request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingContainerImages() result:');
@@ -818,25 +809,25 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.getOfferingContainerImages(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingContainerImages(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_container_images
   });
 
-  test.skip('deprecateVersion request example', done => {
+  test.skip('deprecateVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-deprecate_version
@@ -845,25 +836,24 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.deprecateVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deprecateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-deprecate_version
   });
 
-  test.skip('accountPublishVersion request example', done => {
+  test.skip('accountPublishVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-account_publish_version
@@ -872,25 +862,24 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.accountPublishVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.accountPublishVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-account_publish_version
   });
 
-  test.skip('ibmPublishVersion request example', done => {
+  test.skip('ibmPublishVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-ibm_publish_version
@@ -899,25 +888,24 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.ibmPublishVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.ibmPublishVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-ibm_publish_version
   });
 
-  test.skip('publicPublishVersion request example', done => {
+  test.skip('publicPublishVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-public_publish_version
@@ -926,25 +914,24 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.publicPublishVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.publicPublishVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-public_publish_version
   });
 
-  test.skip('commitVersion request example', done => {
+  test.skip('commitVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-commit_version
@@ -953,25 +940,24 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.commitVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.commitVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-commit_version
   });
 
-  test.skip('copyVersion request example', done => {
+  test.skip('copyVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-copy_version
@@ -981,25 +967,24 @@ describe('CatalogManagementV1', () => {
       targetKinds: ['roks'],
     };
 
-    catalogManagementService.copyVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.copyVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-copy_version
   });
 
-  test.skip('getOfferingWorkingCopy request example', done => {
+  test.skip('getOfferingWorkingCopy request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingWorkingCopy() result:');
@@ -1009,25 +994,25 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.getOfferingWorkingCopy(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingWorkingCopy(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_working_copy
   });
 
-  test('getVersion request example', done => {
+  test('getVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getVersion() result:');
@@ -1037,25 +1022,25 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.getVersion(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getVersion(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_version
   });
 
-  test.skip('getCluster request example', done => {
+  test.skip('getCluster request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getCluster() result:');
@@ -1067,25 +1052,25 @@ describe('CatalogManagementV1', () => {
       xAuthRefreshToken: bearerToken,
     };
 
-    catalogManagementService.getCluster(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getCluster(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_cluster
   });
 
-  test.skip('getNamespaces request example', done => {
+  test.skip('getNamespaces request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getNamespaces() result:');
@@ -1097,25 +1082,25 @@ describe('CatalogManagementV1', () => {
       xAuthRefreshToken: bearerToken,
     };
 
-    catalogManagementService.getNamespaces(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getNamespaces(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_namespaces
   });
 
-  test.skip('deployOperators request example', done => {
+  test.skip('deployOperators request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('deployOperators() result:');
@@ -1129,25 +1114,25 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.deployOperators(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.deployOperators(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-deploy_operators
   });
 
-  test.skip('listOperators request example', done => {
+  test.skip('listOperators request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listOperators() result:');
@@ -1160,25 +1145,25 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.listOperators(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.listOperators(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_operators
   });
 
-  test.skip('replaceOperators request example', done => {
+  test.skip('replaceOperators request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceOperators() result:');
@@ -1192,25 +1177,25 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.replaceOperators(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.replaceOperators(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_operators
   });
 
-  test.skip('installVersion request example', done => {
+  test.skip('installVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-install_version
@@ -1223,25 +1208,24 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.installVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.installVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-install_version
   });
 
-  test.skip('preinstallVersion request example', done => {
+  test.skip('preinstallVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-preinstall_version
@@ -1254,25 +1238,24 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.preinstallVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.preinstallVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-preinstall_version
   });
 
-  test.skip('getPreinstall request example', done => {
+  test.skip('getPreinstall request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getPreinstall() result:');
@@ -1285,25 +1268,25 @@ describe('CatalogManagementV1', () => {
       region: 'us-south',
     };
 
-    catalogManagementService.getPreinstall(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getPreinstall(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_preinstall
   });
 
-  test.skip('validateInstall request example', done => {
+  test.skip('validateInstall request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-validate_install
@@ -1316,25 +1299,24 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.validateInstall(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.validateInstall(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-validate_install
   });
 
-  test('getValidationStatus request example', done => {
+  test('getValidationStatus request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getValidationStatus() result:');
@@ -1345,25 +1327,25 @@ describe('CatalogManagementV1', () => {
       xAuthRefreshToken: bearerToken,
     };
 
-    catalogManagementService.getValidationStatus(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getValidationStatus(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_validation_status
   });
 
-  test.skip('getOverrideValues request example', done => {
+  test.skip('getOverrideValues request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOverrideValues() result:');
@@ -1373,25 +1355,25 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.getOverrideValues(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOverrideValues(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_override_values
   });
 
-  test('searchObjects request example', done => {
+  test('searchObjects request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('searchObjects() result:');
@@ -1405,25 +1387,25 @@ describe('CatalogManagementV1', () => {
       offset: 0,
     };
 
-    catalogManagementService.searchObjects(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.searchObjects(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-search_objects
   });
 
-  test('listObjects request example', done => {
+  test('listObjects request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listObjects() result:');
@@ -1435,25 +1417,25 @@ describe('CatalogManagementV1', () => {
       offset: 0,
     };
 
-    catalogManagementService.listObjects(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.listObjects(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_objects
   });
 
-  test.skip('replaceObject request example', done => {
+  test.skip('replaceObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceObject() result:');
@@ -1469,25 +1451,25 @@ describe('CatalogManagementV1', () => {
       catalogId: catalogId,
     };
 
-    catalogManagementService.replaceObject(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.replaceObject(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_object
   });
 
-  test('getObject request example', done => {
+  test('getObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getObject() result:');
@@ -1498,25 +1480,25 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.getObject(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getObject(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_object
   });
 
-  test('getObjectAudit request example', done => {
+  test('getObjectAudit request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getObjectAudit() result:');
@@ -1527,25 +1509,25 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.getObjectAudit(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getObjectAudit(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_object_audit
   });
 
-  test('accountPublishObject request example', done => {
+  test('accountPublishObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-account_publish_object
@@ -1555,25 +1537,24 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.accountPublishObject(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.accountPublishObject(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-account_publish_object
   });
 
-  test.skip('sharedPublishObject request example', done => {
+  test.skip('sharedPublishObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-shared_publish_object
@@ -1583,25 +1564,24 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.sharedPublishObject(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.sharedPublishObject(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-shared_publish_object
   });
 
-  test.skip('ibmPublishObject request example', done => {
+  test.skip('ibmPublishObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-ibm_publish_object
@@ -1611,25 +1591,24 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.ibmPublishObject(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.ibmPublishObject(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-ibm_publish_object
   });
 
-  test.skip('publicPublishObject request example', done => {
+  test.skip('publicPublishObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-public_publish_object
@@ -1639,25 +1618,24 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.publicPublishObject(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.publicPublishObject(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-public_publish_object
   });
 
-  test('createObjectAccess request example', done => {
+  test('createObjectAccess request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-create_object_access
@@ -1668,25 +1646,24 @@ describe('CatalogManagementV1', () => {
       accountIdentifier: accountId,
     };
 
-    catalogManagementService.createObjectAccess(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.createObjectAccess(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_object_access
   });
 
-  test('getObjectAccess request example', done => {
+  test('getObjectAccess request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getObjectAccess() result:');
@@ -1698,25 +1675,25 @@ describe('CatalogManagementV1', () => {
       accountIdentifier: accountId,
     };
 
-    catalogManagementService.getObjectAccess(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getObjectAccess(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_object_access
   });
 
-  test('addObjectAccessList request example', done => {
+  test('addObjectAccessList request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('addObjectAccessList() result:');
@@ -1728,25 +1705,25 @@ describe('CatalogManagementV1', () => {
       accounts: [accountId],
     };
 
-    catalogManagementService.addObjectAccessList(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.addObjectAccessList(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-add_object_access_list
   });
 
-  test('getObjectAccessList request example', done => {
+  test('getObjectAccessList request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getObjectAccessList() result:');
@@ -1757,25 +1734,25 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.getObjectAccessList(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getObjectAccessList(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_object_access_list
   });
 
-  test.skip('createOfferingInstance request example', done => {
+  test.skip('createOfferingInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createOfferingInstance() result:');
@@ -1793,26 +1770,26 @@ describe('CatalogManagementV1', () => {
       clusterAllNamespaces: true,
     };
 
-    catalogManagementService.createOfferingInstance(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.createOfferingInstance(params);
       offeringInstanceId = res.result.id;
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_offering_instance
   });
 
-  test.skip('getOfferingInstance request example', done => {
+  test.skip('getOfferingInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getOfferingInstance() result:');
@@ -1822,25 +1799,25 @@ describe('CatalogManagementV1', () => {
       instanceIdentifier: offeringInstanceId,
     };
 
-    catalogManagementService.getOfferingInstance(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.getOfferingInstance(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_offering_instance
   });
 
-  test.skip('putOfferingInstance request example', done => {
+  test.skip('putOfferingInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('putOfferingInstance() result:');
@@ -1859,25 +1836,25 @@ describe('CatalogManagementV1', () => {
       clusterAllNamespaces: true,
     };
 
-    catalogManagementService.putOfferingInstance(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.putOfferingInstance(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-put_offering_instance
   });
 
-  test('deleteVersion request example', done => {
+  test('deleteVersion request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_version
@@ -1886,25 +1863,24 @@ describe('CatalogManagementV1', () => {
       versionLocId: versionLocatorId,
     };
 
-    catalogManagementService.deleteVersion(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_version
   });
 
-  test.skip('deleteOperators request example', done => {
+  test.skip('deleteOperators request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_operators
@@ -1916,25 +1892,24 @@ describe('CatalogManagementV1', () => {
       versionLocatorId: versionLocatorId,
     };
 
-    catalogManagementService.deleteOperators(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteOperators(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_operators
   });
 
-  test.skip('deleteOfferingInstance request example', done => {
+  test.skip('deleteOfferingInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_offering_instance
@@ -1944,25 +1919,24 @@ describe('CatalogManagementV1', () => {
       xAuthRefreshToken: bearerToken,
     };
 
-    catalogManagementService.deleteOfferingInstance(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteOfferingInstance(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_offering_instance
   });
 
-  test('deleteObjectAccessList request example', done => {
+  test('deleteObjectAccessList request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('deleteObjectAccessList() result:');
@@ -1974,25 +1948,25 @@ describe('CatalogManagementV1', () => {
       accounts: [accountId],
     };
 
-    catalogManagementService.deleteObjectAccessList(params)
-    .then(res => {
+    try {
+      const res = await catalogManagementService.deleteObjectAccessList(params);
       console.log(JSON.stringify(res.result, null, 2));
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_object_access_list
   });
 
-  test('deleteObjectAccess request example', done => {
+  test('deleteObjectAccess request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_object_access
@@ -2003,25 +1977,24 @@ describe('CatalogManagementV1', () => {
       accountIdentifier: accountId,
     };
 
-    catalogManagementService.deleteObjectAccess(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteObjectAccess(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_object_access
   });
 
-  test('deleteObject request example', done => {
+  test('deleteObject request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_object
@@ -2031,25 +2004,24 @@ describe('CatalogManagementV1', () => {
       objectIdentifier: objectId,
     };
 
-    catalogManagementService.deleteObject(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteObject(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_object
   });
 
-  test('deleteOffering request example', done => {
+  test('deleteOffering request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_offering
@@ -2059,25 +2031,24 @@ describe('CatalogManagementV1', () => {
       offeringId: offeringId,
     };
 
-    catalogManagementService.deleteOffering(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteOffering(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_offering
   });
 
-  test('deleteCatalog request example', done => {
+  test('deleteCatalog request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
+
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_catalog
@@ -2086,13 +2057,11 @@ describe('CatalogManagementV1', () => {
       catalogIdentifier: catalogId,
     };
 
-    catalogManagementService.deleteCatalog(params)
-    .then(res => {
-      done();
-    })
-    .catch(err => {
-      console.warn(err)
-    });
+    try {
+      await catalogManagementService.deleteCatalog(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_catalog
   });
