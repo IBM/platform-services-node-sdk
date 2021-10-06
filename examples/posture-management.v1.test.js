@@ -61,25 +61,25 @@ describe('PostureManagementV1', () => {
   const accountId = config.accountId;
   const profileName = config.profileName;
   const scopesName = config.scopesName;
-  
+
   expect(accountId).toBeDefined();
   expect(profileName).toBeDefined();
   expect(scopesName).toBeDefined();
-  
+
   let profileId;
   let scopeId;
   const groupProfileId = '0';
-  
-  test('listProfiles request example', done => {
+
+  test('listProfiles request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listProfiles() result:');
     // begin-list_profiles
 
@@ -88,27 +88,25 @@ describe('PostureManagementV1', () => {
       name: profileName,
     };
 
-    postureManagementService.listProfiles(params)
-      .then(res => {
-        profileId = res.result.profiles[0].profile_id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-  
+    try {
+      const result = await postureManagementService.listProfiles(params);
+      profileId = result.result.profiles[0].profile_id;
+    } catch (e){
+      console.warn(e);
+    }
+
     // end-list_profiles
   });
-  test('listScopes request example', done => {
+  test('listScopes request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listScopes() result:');
     // begin-list_scopes
 
@@ -117,45 +115,42 @@ describe('PostureManagementV1', () => {
       name: scopesName,
     };
 
-    postureManagementService.listScopes(params)
-      .then(res => {
-        scopeId = res.result.scopes[0].scope_id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-  
+    try {
+      const result = await postureManagementService.listScopes(params);
+      scopeId = result.result.scopes[0].scope_id;
+    } catch (e){
+      console.warn(e);
+    }
+
     // end-list_scopes
   });
-  test('createValidationScan request example', done => {
-    
+  test('createValidationScan request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createValidation() result:');
     // begin-create_validation
-    
+
     const params = {
       accountId: accountId,
       scopeId: scopeId,
       profileId: profileId,
       groupProfileId: groupProfileId,
     };
-    
-    postureManagementService.createValidation(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-  
+
+    try {
+      const result = await postureManagementService.createValidation(params);
+      console.log(JSON.stringify(result.result, null, 2));
+    } catch (e) {
+      console.warn(e);
+    }
+
     // end-create_validation
   });
 });
