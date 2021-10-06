@@ -80,7 +80,7 @@ describe('ResourceControllerV2_integration', () => {
 
   test('should successfully complete initialization', async () => {
     // Initialize the service client.
-    service = ResourceControllerV2.newInstance();
+    service = ResourceControllerV2.newInstance({});
     expect(service).not.toBeNull();
 
     config = readExternalSources(ResourceControllerV2.DEFAULT_SERVICE_NAME);
