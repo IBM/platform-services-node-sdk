@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -60,18 +60,18 @@ describe('GlobalSearchV2', () => {
 
   const config = readExternalSources(GlobalSearchV2.DEFAULT_SERVICE_NAME);
 
-  test('search request example', done => {
+  test('search request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     const searchCursor = undefined;
-  
+
     originalLog('search() result:');
     // begin-search
 
@@ -81,36 +81,34 @@ describe('GlobalSearchV2', () => {
       searchCursor: searchCursor,
     };
 
-    globalSearchService.search(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalSearchService.search(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-search
   });
-  test('getSupportedTypes request example', done => {
+  test('getSupportedTypes request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getSupportedTypes() result:');
     // begin-get_supported_types
 
-    globalSearchService.getSupportedTypes({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalSearchService.getSupportedTypes({});
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_supported_types
   });
