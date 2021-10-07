@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -66,15 +66,16 @@ describe('IamAccessGroupsV2', () => {
   let testClaimRuleId;
   let testClaimRuleETag;
 
-  test('createAccessGroup request example', done => {
+  test('createAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createAccessGroup() result:');
     // begin-create_access_group
 
@@ -84,26 +85,26 @@ describe('IamAccessGroupsV2', () => {
       description: 'Group for managers'
     };
 
-    iamAccessGroupsService.createAccessGroup(params)
-      .then(res => {
-        testGroupId = res.result.id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.createAccessGroup(params);
+      testGroupId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_access_group
   });
-  test('getAccessGroup request example', done => {
+  test('getAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getAccessGroup() result:');
     // begin-get_access_group
 
@@ -111,26 +112,26 @@ describe('IamAccessGroupsV2', () => {
       accessGroupId: testGroupId,
     };
 
-    iamAccessGroupsService.getAccessGroup(params)
-      .then(res => {
-        testGroupETag = res.headers['etag'];
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.getAccessGroup(params);
+      testGroupETag = res.headers['etag'];
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_access_group
   });
-  test('updateAccessGroup request example', done => {
+  test('updateAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('updateAccessGroup() result:');
     // begin-update_access_group
 
@@ -141,25 +142,25 @@ describe('IamAccessGroupsV2', () => {
       description: 'Group for awesome managers'
     };
 
-    iamAccessGroupsService.updateAccessGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.updateAccessGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_access_group
   });
-  test('listAccessGroups request example', done => {
+  test('listAccessGroups request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listAccessGroups() result:');
     // begin-list_access_groups
 
@@ -167,25 +168,25 @@ describe('IamAccessGroupsV2', () => {
       accountId: testAccountId,
     };
 
-    iamAccessGroupsService.listAccessGroups(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.listAccessGroups(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_access_groups
   });
-  test('addMembersToAccessGroup request example', done => {
+  test('addMembersToAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('addMembersToAccessGroup() result:');
     // begin-add_members_to_access_group
 
@@ -202,23 +203,23 @@ describe('IamAccessGroupsV2', () => {
       members: [groupMember1, groupMember2],
     };
 
-    iamAccessGroupsService.addMembersToAccessGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.addMembersToAccessGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-add_members_to_access_group
   });
-  test('isMemberOfAccessGroup request example', done => {
+  test('isMemberOfAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-is_member_of_access_group
@@ -228,25 +229,24 @@ describe('IamAccessGroupsV2', () => {
       iamId: 'IBMid-user1',
     };
 
-    iamAccessGroupsService.isMemberOfAccessGroup(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await iamAccessGroupsService.isMemberOfAccessGroup(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-is_member_of_access_group
   });
-  test('listAccessGroupMembers request example', done => {
+  test('listAccessGroupMembers request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listAccessGroupMembers() result:');
     // begin-list_access_group_members
 
@@ -254,23 +254,23 @@ describe('IamAccessGroupsV2', () => {
       accessGroupId: testGroupId,
     };
 
-    iamAccessGroupsService.listAccessGroupMembers(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.listAccessGroupMembers(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_access_group_members
   });
-  test('removeMemberFromAccessGroup request example', done => {
+  test('removeMemberFromAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-remove_member_from_access_group
@@ -280,25 +280,24 @@ describe('IamAccessGroupsV2', () => {
       iamId: 'IBMid-user1',
     };
 
-    iamAccessGroupsService.removeMemberFromAccessGroup(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await iamAccessGroupsService.removeMemberFromAccessGroup(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-remove_member_from_access_group
   });
-  test('removeMembersFromAccessGroup request example', done => {
+  test('removeMembersFromAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('removeMembersFromAccessGroup() result:');
     // begin-remove_members_from_access_group
 
@@ -307,25 +306,25 @@ describe('IamAccessGroupsV2', () => {
       members: ['iam-ServiceId-123']
     };
 
-    iamAccessGroupsService.removeMembersFromAccessGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.removeMembersFromAccessGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-remove_members_from_access_group
   });
-  test('addMemberToMultipleAccessGroups request example', done => {
+  test('addMemberToMultipleAccessGroups request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('addMemberToMultipleAccessGroups() result:');
     // begin-add_member_to_multiple_access_groups
 
@@ -336,25 +335,25 @@ describe('IamAccessGroupsV2', () => {
       groups: [testGroupId]
     };
 
-    iamAccessGroupsService.addMemberToMultipleAccessGroups(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.addMemberToMultipleAccessGroups(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-add_member_to_multiple_access_groups
   });
-  test('removeMemberFromAllAccessGroups request example', done => {
+  test('removeMemberFromAllAccessGroups request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('removeMemberFromAllAccessGroups() result:');
     // begin-remove_member_from_all_access_groups
 
@@ -363,25 +362,25 @@ describe('IamAccessGroupsV2', () => {
       iamId: 'IBMid-user1',
     };
 
-    iamAccessGroupsService.removeMemberFromAllAccessGroups(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.removeMemberFromAllAccessGroups(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-remove_member_from_all_access_groups
   });
-  test('addAccessGroupRule request example', done => {
+  test('addAccessGroupRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('addAccessGroupRule() result:');
     // begin-add_access_group_rule
 
@@ -399,26 +398,26 @@ describe('IamAccessGroupsV2', () => {
       ],
     };
 
-    iamAccessGroupsService.addAccessGroupRule(params)
-      .then(res => {
-        testClaimRuleId = res.result.id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.addAccessGroupRule(params);
+      testClaimRuleId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-add_access_group_rule
   });
-  test('getAccessGroupRule request example', done => {
+  test('getAccessGroupRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getAccessGroupRule() result:');
     // begin-get_access_group_rule
 
@@ -427,26 +426,26 @@ describe('IamAccessGroupsV2', () => {
       ruleId: testClaimRuleId,
     };
 
-    iamAccessGroupsService.getAccessGroupRule(params)
-      .then(res => {
-        testClaimRuleETag = res.headers['etag'];
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.getAccessGroupRule(params);
+      testClaimRuleETag = res.headers['etag'];
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_access_group_rule
   });
-  test('replaceAccessGroupRule request example', done => {
+  test('replaceAccessGroupRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('replaceAccessGroupRule() result:');
     // begin-replace_access_group_rule
 
@@ -466,25 +465,25 @@ describe('IamAccessGroupsV2', () => {
       ]
     };
 
-    iamAccessGroupsService.replaceAccessGroupRule(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.replaceAccessGroupRule(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_access_group_rule
   });
-  test('listAccessGroupRules request example', done => {
+  test('listAccessGroupRules request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listAccessGroupRules() result:');
     // begin-list_access_group_rules
 
@@ -492,23 +491,23 @@ describe('IamAccessGroupsV2', () => {
       accessGroupId: testGroupId,
     };
 
-    iamAccessGroupsService.listAccessGroupRules(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.listAccessGroupRules(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_access_group_rules
   });
-  test('removeAccessGroupRule request example', done => {
+  test('removeAccessGroupRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-remove_access_group_rule
@@ -518,25 +517,24 @@ describe('IamAccessGroupsV2', () => {
       ruleId: testClaimRuleId,
     };
 
-    iamAccessGroupsService.removeAccessGroupRule(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await iamAccessGroupsService.removeAccessGroupRule(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-remove_access_group_rule
   });
-  test('getAccountSettings request example', done => {
+  test('getAccountSettings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getAccountSettings() result:');
     // begin-get_account_settings
 
@@ -544,25 +542,25 @@ describe('IamAccessGroupsV2', () => {
       accountId: testAccountId,
     };
 
-    iamAccessGroupsService.getAccountSettings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.getAccountSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_account_settings
   });
-  test('updateAccountSettings request example', done => {
+  test('updateAccountSettings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('updateAccountSettings() result:');
     // begin-update_account_settings
 
@@ -571,23 +569,23 @@ describe('IamAccessGroupsV2', () => {
       publicAccessEnabled: true,
     };
 
-    iamAccessGroupsService.updateAccountSettings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamAccessGroupsService.updateAccountSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_account_settings
   });
-  test('deleteAccessGroup request example', done => {
+  test('deleteAccessGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_access_group
@@ -596,13 +594,11 @@ describe('IamAccessGroupsV2', () => {
       accessGroupId: testGroupId,
     };
 
-    iamAccessGroupsService.deleteAccessGroup(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await iamAccessGroupsService.deleteAccessGroup(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_access_group
   });
