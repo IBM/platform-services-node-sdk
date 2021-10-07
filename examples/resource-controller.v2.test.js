@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -85,14 +85,14 @@ describe('ResourceControllerV2', () => {
   let keyUpdateName = 'RcSdkKeyUpdate1Node';
   let targetRegion = 'global';
 
-  test('createResourceInstance request example', done => {
+  test('createResourceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createResourceInstance() result:');
@@ -105,25 +105,24 @@ describe('ResourceControllerV2', () => {
       resourcePlanId: resourcePlanId,
     };
 
-    resourceControllerService.createResourceInstance(params)
-      .then(res => {
-        instanceGuid = res.result.guid;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.createResourceInstance(params)
+      instanceGuid = res.result.guid;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_resource_instance
   });
-  test('getResourceInstance request example', done => {
+  test('getResourceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getResourceInstance() result:');
@@ -133,24 +132,23 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
-    resourceControllerService.getResourceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.getResourceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_instance
   });
-  test('listResourceInstances request example', done => {
+  test('listResourceInstances request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listResourceInstances() result:');
@@ -160,24 +158,23 @@ describe('ResourceControllerV2', () => {
       name: resourceInstanceName,
     };
 
-    resourceControllerService.listResourceInstances(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const async = await resourceControllerService.listResourceInstances(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_instances
   });
-  test('updateResourceInstance request example', done => {
+  test('updateResourceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateResourceInstance() result:');
@@ -193,24 +190,23 @@ describe('ResourceControllerV2', () => {
       parameters: parameters,
     };
 
-    resourceControllerService.updateResourceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.updateResourceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_resource_instance
   });
-  test('createResourceAlias request example', done => {
+  test('createResourceAlias request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createResourceAlias() result:');
@@ -222,25 +218,24 @@ describe('ResourceControllerV2', () => {
       target: aliasTargetCRN,
     };
 
-    resourceControllerService.createResourceAlias(params)
-      .then(res => {
-        aliasGuid = res.result.guid;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.createResourceAlias(params);
+      aliasGuid = res.result.guid;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_resource_alias
   });
-  test('getResourceAlias request example', done => {
+  test('getResourceAlias request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getResourceAlias() result:');
@@ -250,24 +245,23 @@ describe('ResourceControllerV2', () => {
       id: aliasGuid,
     };
 
-    resourceControllerService.getResourceAlias(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.getResourceAlias(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_alias
   });
-  test('listResourceAliases request example', done => {
+  test('listResourceAliases request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listResourceAliases() result:');
@@ -277,25 +271,23 @@ describe('ResourceControllerV2', () => {
       name: aliasName,
     };
 
-    resourceControllerService.listResourceAliases(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.listResourceAliases(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_aliases
   });
-  test('updateResourceAlias request example', done => {
+  test('updateResourceAlias request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      originalLog(output);
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateResourceAlias() result:');
@@ -306,24 +298,23 @@ describe('ResourceControllerV2', () => {
       name: aliasUpdateName,
     };
 
-    resourceControllerService.updateResourceAlias(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.updateResourceAlias(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_resource_alias
   });
-  test('listResourceAliasesForInstance request example', done => {
+  test('listResourceAliasesForInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(instanceGuid).toBeTruthy();
@@ -335,24 +326,23 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
-    resourceControllerService.listResourceAliasesForInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.listResourceAliasesForInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_aliases_for_instance
   });
-  test('createResourceBinding request example', done => {
+  test('createResourceBinding request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createResourceBinding() result:');
@@ -369,25 +359,24 @@ describe('ResourceControllerV2', () => {
       parameters: parameters,
     };
 
-    resourceControllerService.createResourceBinding(params)
-      .then(res => {
-        bindingGuid = res.result.guid;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.createResourceBinding(params);
+      bindingGuid = res.result.guid;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_resource_binding
   });
-  test('getResourceBinding request example', done => {
+  test('getResourceBinding request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getResourceBinding() result:');
@@ -397,24 +386,23 @@ describe('ResourceControllerV2', () => {
       id: bindingGuid,
     };
 
-    resourceControllerService.getResourceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.getResourceBinding(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_binding
   });
-  test('listResourceBindings request example', done => {
+  test('listResourceBindings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listResourceBindings() result:');
@@ -424,24 +412,23 @@ describe('ResourceControllerV2', () => {
       name: bindingName,
     };
 
-    resourceControllerService.listResourceBindings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.listResourceBindings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_bindings
   });
-  test('updateResourceBinding request example', done => {
+  test('updateResourceBinding request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateResourceBinding() result:');
@@ -452,24 +439,23 @@ describe('ResourceControllerV2', () => {
       name: bindingUpdateName,
     };
 
-    resourceControllerService.updateResourceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.updateResourceBinding(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_resource_binding
   });
-  test('listResourceBindingsForAlias request example', done => {
+  test('listResourceBindingsForAlias request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(aliasGuid).toBeTruthy();
@@ -481,24 +467,23 @@ describe('ResourceControllerV2', () => {
       id: aliasGuid,
     };
 
-    resourceControllerService.listResourceBindingsForAlias(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.listResourceBindingsForAlias(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_bindings_for_alias
   });
-  test('createResourceKey request example', done => {
+  test('createResourceKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createResourceKey() result:');
@@ -514,25 +499,24 @@ describe('ResourceControllerV2', () => {
       parameters: parameters,
     };
 
-    resourceControllerService.createResourceKey(params)
-      .then(res => {
-        instanceKeyGuid = res.result.guid;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.createResourceKey(params);
+      instanceKeyGuid = res.result.guid;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_resource_key
   });
-  test('getResourceKey request example', done => {
+  test('getResourceKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getResourceKey() result:');
@@ -542,24 +526,23 @@ describe('ResourceControllerV2', () => {
       id: instanceKeyGuid,
     };
 
-    resourceControllerService.getResourceKey(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.getResourceKey(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_key
   });
-  test('listResourceKeys request example', done => {
+  test('listResourceKeys request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listResourceKeys() result:');
@@ -569,24 +552,23 @@ describe('ResourceControllerV2', () => {
       name: keyName,
     };
 
-    resourceControllerService.listResourceKeys(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.listResourceKeys(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_keys
   });
-  test('updateResourceKey request example', done => {
+  test('updateResourceKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateResourceKey() result:');
@@ -597,24 +579,23 @@ describe('ResourceControllerV2', () => {
       name: keyUpdateName,
     };
 
-    resourceControllerService.updateResourceKey(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.updateResourceKey(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_resource_key
   });
-  test('listResourceKeysForInstance request example', done => {
+  test('listResourceKeysForInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(instanceGuid).toBeTruthy();
@@ -626,24 +607,23 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
-    resourceControllerService.listResourceKeysForInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.listResourceKeysForInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_resource_keys_for_instance
   });
-  test('deleteResourceBinding request example', done => {
+  test('deleteResourceBinding request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_resource_binding
@@ -652,24 +632,22 @@ describe('ResourceControllerV2', () => {
       id: bindingGuid,
     };
 
-    resourceControllerService.deleteResourceBinding(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await resourceControllerService.deleteResourceBinding(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_resource_binding
   });
-  test('deleteResourceKey request example', done => {
+  test('deleteResourceKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_resource_key
@@ -678,24 +656,22 @@ describe('ResourceControllerV2', () => {
       id: instanceKeyGuid,
     };
 
-    resourceControllerService.deleteResourceKey(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await resourceControllerService.deleteResourceKey(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_resource_key
   });
-  test('deleteResourceAlias request example', done => {
+  test('deleteResourceAlias request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_resource_alias
@@ -704,24 +680,22 @@ describe('ResourceControllerV2', () => {
       id: aliasGuid,
     };
 
-    resourceControllerService.deleteResourceAlias(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await resourceControllerService.deleteResourceAlias(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_resource_alias
   });
-  test('lockResourceInstance request example', done => {
+  test('lockResourceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('lockResourceInstance() result:');
@@ -731,24 +705,23 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
-    resourceControllerService.lockResourceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.lockResourceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-lock_resource_instance
   });
-  test('unlockResourceInstance request example', done => {
+  test('unlockResourceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('unlockResourceInstance() result:');
@@ -758,24 +731,23 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
-    resourceControllerService.unlockResourceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.unlockResourceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-unlock_resource_instance
   });
-  test('deleteResourceInstance request example', async done => {
+  test('deleteResourceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_resource_instance
@@ -785,25 +757,23 @@ describe('ResourceControllerV2', () => {
       recursive: false,
     };
 
-    resourceControllerService.deleteResourceInstance(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await resourceControllerService.deleteResourceInstance(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_resource_instance
     await new Promise(resolve => setTimeout(resolve, 20000));
   });
-  test('listReclamations request example', async done => {
+  test('listReclamations request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
     await new Promise(resolve => setTimeout(resolve, 20000));
 
@@ -814,30 +784,29 @@ describe('ResourceControllerV2', () => {
       accountId: accountId,
     };
 
-    resourceControllerService.listReclamations(params)
-      .then(res => {
-        var resources = res.result.resources;
-        resources.forEach(reclaim => {
-          if (reclaim.resource_instance_id.toString() === instanceGuid) {
-            reclamationId = reclaim.id;
-          }
-        });
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
+    try {
+      const res = await resourceControllerService.listReclamations(params);
+      var resources = res.result.resources;
+      resources.forEach(reclaim => {
+        if (reclaim.resource_instance_id.toString() === instanceGuid) {
+          reclamationId = reclaim.id;
+        }
       });
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_reclamations
   });
-  test('runReclamationAction request example', done => {
+  test('runReclamationAction request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('runReclamationAction() result:');
@@ -848,13 +817,12 @@ describe('ResourceControllerV2', () => {
       actionName: 'reclaim',
     };
 
-    resourceControllerService.runReclamationAction(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await resourceControllerService.runReclamationAction(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-run_reclamation_action
   });
