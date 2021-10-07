@@ -159,7 +159,7 @@ describe('ResourceControllerV2', () => {
     };
 
     try {
-      const async = await resourceControllerService.listResourceInstances(params);
+      const res = await resourceControllerService.listResourceInstances(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
