@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -65,16 +65,16 @@ describe('GlobalTaggingV1', () => {
 
   let resourceCrn = config.resourceCrn;
 
-  test('createTag request example', done => {
+  test('createTag request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createTag() result:');
     // begin-create_tag
 
@@ -83,26 +83,26 @@ describe('GlobalTaggingV1', () => {
       tagType: 'access',
     };
 
-    globalTaggingService.createTag(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalTaggingService.createTag(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_tag
   });
 
-  test('listTags request example', done => {
+  test('listTags request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listTags() result:');
     // begin-list_tags
 
@@ -114,25 +114,25 @@ describe('GlobalTaggingV1', () => {
       orderByName: 'asc',
     };
 
-    globalTaggingService.listTags(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalTaggingService.listTags(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_tags
   });
-  test('attachTag request example', done => {
+  test('attachTag request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('attachTag() result:');
     // begin-attach_tag
 
@@ -146,25 +146,25 @@ describe('GlobalTaggingV1', () => {
       tagType: 'user',
     };
 
-    globalTaggingService.attachTag(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalTaggingService.attachTag(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-attach_tag
   });
-  test('detachTag request example', done => {
+  test('detachTag request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('detachTag() result:');
     // begin-detach_tag
 
@@ -178,25 +178,25 @@ describe('GlobalTaggingV1', () => {
       tagType: 'user',
     };
 
-    globalTaggingService.detachTag(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalTaggingService.detachTag(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-detach_tag
   });
-  test('deleteTag request example', done => {
+  test('deleteTag request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('deleteTag() result:');
     // begin-delete_tag
 
@@ -205,25 +205,25 @@ describe('GlobalTaggingV1', () => {
       tagType: 'access',
     };
 
-    globalTaggingService.deleteTag(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalTaggingService.deleteTag(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_tag
   });
-  test('deleteTagAll request example', done => {
+  test('deleteTagAll request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('deleteTagAll() result:');
     // begin-delete_tag_all
 
@@ -231,13 +231,12 @@ describe('GlobalTaggingV1', () => {
       tagType: 'access',
     };
 
-    globalTaggingService.deleteTagAll(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalTaggingService.deleteTagAll(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_tag_all
   });
