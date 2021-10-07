@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -64,15 +64,16 @@ describe('EnterpriseUsageReportsV1', () => {
   let enterpriseId = config.enterpriseId;
   let billingMonth = config.billingMonth;
 
-  test('getResourceUsageReport request example', done => {
+  test('getResourceUsageReport request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getResourceUsageReport() result:');
     // begin-get_resource_usage_report
 
@@ -82,13 +83,12 @@ describe('EnterpriseUsageReportsV1', () => {
       limit: 10,
     };
 
-    enterpriseUsageReportsService.getResourceUsageReport(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseUsageReportsService.getResourceUsageReport(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_usage_report
   });
