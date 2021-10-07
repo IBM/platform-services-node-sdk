@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -55,14 +55,14 @@ describe('UsageMeteringV4', () => {
 
   // end-common
 
-  test('reportResourceUsage request example', done => {
+  test('reportResourceUsage request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     const startTime = Date.now();
@@ -72,7 +72,7 @@ describe('UsageMeteringV4', () => {
     const resourceInstanceId = "crn:v1:staging:public:cloudantnosqldb:us-south:a/f5086e3df886495991303628d21da513:3aafbbee-88e2-4d29-b144-9d267d97064c::";
     const planId = "cloudant-standard";
     const region = "us-south";
-  
+
     originalLog('reportResourceUsage() result:');
     // begin-report_resource_usage
 
@@ -82,18 +82,18 @@ describe('UsageMeteringV4', () => {
       measure: 'LOOKUP',
       quantity: 0,
     },
-    {
-      measure: 'WRITE',
-      quantity: 0,
-    },
-    {
-      measure: 'QUERY',
-      quantity: 0,
-    },
-    {
-      measure: 'GIGABYTE',
-      quantity: 0,
-    }];
+      {
+        measure: 'WRITE',
+        quantity: 0,
+      },
+      {
+        measure: 'QUERY',
+        quantity: 0,
+      },
+      {
+        measure: 'GIGABYTE',
+        quantity: 0,
+      }];
 
     const resourceInstanceUsageModel = {
       resource_instance_id: resourceInstanceId,
@@ -109,13 +109,12 @@ describe('UsageMeteringV4', () => {
       resourceUsage: [resourceInstanceUsageModel],
     };
 
-    usageMeteringService.reportResourceUsage(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageMeteringService.reportResourceUsage(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-report_resource_usage
   });
