@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -46,6 +46,7 @@ const describe = authHelper.prepareTests(configFile);
 
 // Save original console.log
 const originalLog = console.log;
+const originalWarn = console.warn;
 
 // Mocks for console.log and console.warn
 const consoleLogMock = jest.spyOn(console, 'log');
@@ -64,14 +65,14 @@ describe('IbmCloudShellV1', () => {
   let accountId = config.accountId;
   expect(accountId).not.toBeNull();
 
-  test('getAccountSettings request example', done => {
+  test('getAccountSettings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getAccountSettings() result:');
@@ -81,24 +82,23 @@ describe('IbmCloudShellV1', () => {
       accountId: accountId,
     };
 
-    ibmCloudShellService.getAccountSettings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await ibmCloudShellService.getAccountSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-get_account_settings
   });
-  test('updateAccountSettings request example', done => {
+  test('updateAccountSettings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateAccountSettings() result:');
@@ -142,13 +142,13 @@ describe('IbmCloudShellV1', () => {
       regions: regionSettingModel,
     };
 
-    ibmCloudShellService.updateAccountSettings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+
+    try {
+      const res = await ibmCloudShellService.updateAccountSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-update_account_settings
   });
