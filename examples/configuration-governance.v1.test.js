@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -22,6 +22,7 @@ const ConfigurationGovernanceV1 = require('../dist/configuration-governance/v1')
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
 const { v4: uuidv4 } = require('uuid');
+const { json } = require('stream/consumers');
 
 //
 // This file provides an example of how to use the Configuration Governance service.
@@ -76,58 +77,74 @@ describe('ConfigurationGovernanceV1', () => {
   let enterpriseScopeId = config.enterpriseScopeId;
   let subacctScopeId = config.subacctScopeId;
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     // Clean any existing test rules before we start the actual tests.
-    await cleanRules(testLabel, done);
+    await cleanRules(testLabel);
   });
 
-  test('createRules request example', done => {
+  test('createRules request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       let responseBody = JSON.parse(output);
       ruleId = responseBody.rules[0].rule.rule_id;
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('createRules() result:');
     // begin-create_rules
 
     const params = {
-      rules: [{ request_id: '3cebc877-58e7-44a5-a292-32114fa73558', rule: { account_id: accountId, name: 'Disable public access', description: 'Ensure that public access to account resources is disabled.', labels: ['Access', 'IAM'], target: { service_name: serviceName, resource_kind: 'service' }, required_config: { description: 'Public access check', and: [{ property: 'public_access_enabled', operator: 'is_false' }] }, enforcement_actions: [{ action: 'disallow' }, { action: 'audit_log' }] } }],
+      rules: [{
+        request_id: '3cebc877-58e7-44a5-a292-32114fa73558',
+        rule: {
+          account_id: accountId,
+          name: 'Disable public access',
+          description: 'Ensure that public access to account resources is disabled.',
+          labels: ['Access', 'IAM'],
+          target: { service_name: serviceName, resource_kind: 'service' },
+          required_config: {
+            description: 'Public access check',
+            and: [{ property: 'public_access_enabled', operator: 'is_false' }]
+          },
+          enforcement_actions: [{ action: 'disallow' }, { action: 'audit_log' }]
+        }
+      }],
     };
 
-    configurationGovernanceService.createRules(params)
-      .then(res => {
-        const { result, status } = res;
-        if (status === 201) {
-          console.log(JSON.stringify(result, null, 2));
-        } else {
-          // some rules may have failed
-          for (rule of result.rules) {
-            if (rule.errors !== undefined && rule.errors.length > 0) {
-              throw new Error(rule.errors[0].message)
-            }
+    try {
+      const res = await configurationGovernanceService.createRules(params);
+      const { result, status } = res;
+
+      if (status === 201) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        // some rules may have failed
+        for (rule of result.rules) {
+          if (rule.errors !== undefined && rule.errors.length > 0) {
+            throw new Error(rule.errors[0].message)
           }
         }
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+      }
+
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_rules
   });
-  test('createAttachments request example', done => {
+  test('createAttachments request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       let responseBody = JSON.parse(output);
       attachmentId = responseBody.attachments[0].attachment_id;
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
     });
 
     originalLog('createAttachments() result:');
@@ -135,36 +152,32 @@ describe('ConfigurationGovernanceV1', () => {
 
     const params = {
       ruleId: ruleId,
-      attachments: [{ attachment_id: 'attachment-4301178a-8028-4220-9cb6-dfb86f09da99', account_id: accountId, rule_id: 'rule-702d1db7-ca4a-414b-8464-2b517a065c14', included_scope: { note: 'My enterprise', scope_id: enterpriseScopeId, scope_type: 'enterprise' }, excluded_scopes: [{ note: 'Development account', scope_id: subacctScopeId, scope_type: 'enterprise.account' }] }],
+      attachments: [{
+        attachment_id: 'attachment-4301178a-8028-4220-9cb6-dfb86f09da99',
+        account_id: accountId,
+        rule_id: 'rule-702d1db7-ca4a-414b-8464-2b517a065c14',
+        included_scope: { note: 'My enterprise', scope_id: enterpriseScopeId, scope_type: 'enterprise' },
+        excluded_scopes: [{ note: 'Development account', scope_id: subacctScopeId, scope_type: 'enterprise.account' }]
+      }],
     };
 
-    configurationGovernanceService.createAttachments(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await configurationGovernanceService.createAttachments(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-create_attachments
   });
-  test('getAttachment request example', done => {
+  test('getAttachment request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      let responseBody = JSON.parse(output);
-      configurationGovernanceService.getAttachment({
-        ruleId: ruleId,
-        attachmentId: attachmentId,
-      }).then(res => {
-        attachmentEtag = res.headers['etag'];
-        done();
-      })
-        .catch(err => {
-          console.warn(err)
-        });
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('getAttachment() result:');
@@ -175,32 +188,24 @@ describe('ConfigurationGovernanceV1', () => {
       attachmentId: attachmentId,
     };
 
-    configurationGovernanceService.getAttachment(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    let res;
+    try {
+      res = await configurationGovernanceService.getAttachment(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_attachment
+    attachmentEtag = res.headers['etag'];
   });
-  test('getRule request example', done => {
+  test('getRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      let responseBody = JSON.parse(output);
-      configurationGovernanceService.getRule({
-        ruleId: ruleId,
-      }).then(res => {
-        ruleEtag = res.headers['etag'];
-        done();
-      })
-        .catch(err => {
-          console.warn(err)
-        });
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
     });
 
     originalLog('getRule() result:');
@@ -210,23 +215,25 @@ describe('ConfigurationGovernanceV1', () => {
       ruleId: ruleId,
     };
 
-    configurationGovernanceService.getRule(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    let res;
+    try {
+      res = await configurationGovernanceService.getRule(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_rule
+    ruleEtag = res.headers['etag'];
   });
-  test('listRules request example', done => {
+  test('listRules request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listRules() result:');
@@ -236,23 +243,23 @@ describe('ConfigurationGovernanceV1', () => {
       accountId: accountId,
     };
 
-    configurationGovernanceService.listRules(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await configurationGovernanceService.listRules(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_rules
   });
-  test('updateRule request example', done => {
+  test('updateRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateRule() result:');
@@ -271,23 +278,23 @@ describe('ConfigurationGovernanceV1', () => {
       labels: ['SOC2', 'ITCS300'],
     };
 
-    configurationGovernanceService.updateRule(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await configurationGovernanceService.updateRule(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_rule
   });
-  test('listAttachments request example', done => {
+  test('listAttachments request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('listAttachments() result:');
@@ -297,23 +304,23 @@ describe('ConfigurationGovernanceV1', () => {
       ruleId: ruleId,
     };
 
-    configurationGovernanceService.listAttachments(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await configurationGovernanceService.listAttachments(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_attachments
   });
-  test('updateAttachment request example', done => {
+  test('updateAttachment request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     originalLog('updateAttachment() result:');
@@ -328,23 +335,23 @@ describe('ConfigurationGovernanceV1', () => {
       excludedScopes: [{ note: 'Development account', scope_id: subacctScopeId, scope_type: 'enterprise.account' }],
     };
 
-    configurationGovernanceService.updateAttachment(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await configurationGovernanceService.updateAttachment(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_attachment
   });
-  test('deleteAttachment request example', done => {
+  test('deleteAttachment request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_attachment
@@ -354,23 +361,22 @@ describe('ConfigurationGovernanceV1', () => {
       attachmentId: attachmentId,
     };
 
-    configurationGovernanceService.deleteAttachment(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await configurationGovernanceService.deleteAttachment(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_attachment
   });
-  test('deleteRule request example', done => {
+  test('deleteRule request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_rule
@@ -379,18 +385,16 @@ describe('ConfigurationGovernanceV1', () => {
       ruleId: ruleId,
     };
 
-    configurationGovernanceService.deleteRule(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await configurationGovernanceService.deleteRule(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_rule
   });
 
-  async function cleanRules(label, done) {
+  async function cleanRules(label) {
     console.log('Cleaning rules...');
 
     try {
@@ -425,10 +429,8 @@ describe('ConfigurationGovernanceV1', () => {
         }
       }
       console.log(`Finished cleaning rules...`);
-      done();
     } catch (err) {
       console.log(err);
-      done(err);
     }
   }
 
