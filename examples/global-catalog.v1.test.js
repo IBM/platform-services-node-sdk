@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -66,16 +66,16 @@ describe('GlobalCatalogV1', () => {
   let catalogEntryId;
 
 
-  test('createCatalogEntry request example', done => {
+  test('createCatalogEntry request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createCatalogEntry() result:');
     // begin-create_catalog_entry
     const overviewModelEN = {
@@ -118,28 +118,27 @@ describe('GlobalCatalogV1', () => {
       metadata: metadataModel,
     };
 
-    globalCatalogService.createCatalogEntry(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.createCatalogEntry(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_catalog_entry
   });
-  test('getCatalogEntry request example', done => {
+  test('getCatalogEntry request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('getCatalogEntry() result:');
     // begin-get_catalog_entry
 
@@ -148,28 +147,27 @@ describe('GlobalCatalogV1', () => {
       complete: true,
     };
 
-    globalCatalogService.getCatalogEntry(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.getCatalogEntry(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_catalog_entry
   });
-  test('updateCatalogEntry request example', done => {
+  test('updateCatalogEntry request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('updateCatalogEntry() result:');
     // begin-update_catalog_entry
     const overviewModelEN = {
@@ -210,26 +208,25 @@ describe('GlobalCatalogV1', () => {
       metadata: metadataModel,
     };
 
-    globalCatalogService.updateCatalogEntry(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.updateCatalogEntry(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_catalog_entry
   });
-  test('listCatalogEntries request example', done => {
+  test('listCatalogEntries request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listCatalogEntries() result:');
     // begin-list_catalog_entries
     const params = {
@@ -238,28 +235,27 @@ describe('GlobalCatalogV1', () => {
       q: 'kind:template tag:example-tag-1',
       complete: true,
     };
-    globalCatalogService.listCatalogEntries(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.listCatalogEntries(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_catalog_entries
   });
-  test('getChildObjects request example', done => {
+  test('getChildObjects request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('getChildObjects() result:');
     // begin-get_child_objects
 
@@ -271,24 +267,23 @@ describe('GlobalCatalogV1', () => {
       complete: true,
     };
 
-    globalCatalogService.getChildObjects(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.getChildObjects(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_child_objects
   });
-  test('restoreCatalogEntry request example', done => {
+  test('restoreCatalogEntry request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
@@ -299,28 +294,26 @@ describe('GlobalCatalogV1', () => {
       id: catalogEntryId,
     };
 
-    globalCatalogService.restoreCatalogEntry(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await globalCatalogService.restoreCatalogEntry(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-restore_catalog_entry
   });
-  test('getVisibility request example', done => {
+  test('getVisibility request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('getVisibility() result:');
     // begin-get_visibility
 
@@ -328,24 +321,23 @@ describe('GlobalCatalogV1', () => {
       id: catalogEntryId,
     };
 
-    globalCatalogService.getVisibility(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.getVisibility(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_visibility
   });
-  test('updateVisibility request example', done => {
+  test('updateVisibility request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
@@ -357,28 +349,26 @@ describe('GlobalCatalogV1', () => {
       extendable: false,
     };
 
-    globalCatalogService.updateVisibility(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-      });
+    try {
+      await globalCatalogService.updateVisibility(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_visibility
   });
-  test('getPricing request example', done => {
+  test('getPricing request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('getPricing() result:');
     // begin-get_pricing
 
@@ -386,28 +376,27 @@ describe('GlobalCatalogV1', () => {
       id: catalogEntryId,
     };
 
-    globalCatalogService.getPricing(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.getPricing(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_pricing
   });
-  test('getAuditLogs request example', done => {
+  test('getAuditLogs request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('getAuditLogs() result:');
     // begin-get_audit_logs
 
@@ -417,24 +406,23 @@ describe('GlobalCatalogV1', () => {
       limit: 10,
     };
 
-    globalCatalogService.getAuditLogs(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.getAuditLogs(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_audit_logs
   });
-  test('uploadArtifact request example', done => {
+  test('uploadArtifact request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
@@ -447,30 +435,28 @@ describe('GlobalCatalogV1', () => {
       contentType: 'text/plain',
     };
 
-    globalCatalogService.uploadArtifact(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await globalCatalogService.uploadArtifact(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-upload_artifact
   });
-  test('getArtifact request example', done => {
+  test('getArtifact request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
 
     let responseContentType = null;
-  
+
     originalLog('getArtifact() result:');
     // begin-get_artifact
 
@@ -479,32 +465,29 @@ describe('GlobalCatalogV1', () => {
       artifactId: 'artifact.txt',
     };
 
-    globalCatalogService.getArtifact(params)
-      .then(res => {
-        responseContentType = res.headers['content-type'];
-        return streamToPromise(res.result);
-      })
-      .then(contents => {
-        console.log(contents);
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.getArtifact(params);
+      responseContentType = res.headers['content-type'];
+      const result = res.result;
+      console.log(result);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_artifact
   });
-  test('listArtifacts request example', done => {
+  test('listArtifacts request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
-  
+
     originalLog('listArtifacts() result:');
     // begin-list_artifacts
 
@@ -512,24 +495,23 @@ describe('GlobalCatalogV1', () => {
       objectId: catalogEntryId,
     };
 
-    globalCatalogService.listArtifacts(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await globalCatalogService.listArtifacts(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_artifacts
   });
-  test('deleteArtifact request example', done => {
+  test('deleteArtifact request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
@@ -541,24 +523,22 @@ describe('GlobalCatalogV1', () => {
       artifactId: 'artifact.txt',
     };
 
-    globalCatalogService.deleteArtifact(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await globalCatalogService.deleteArtifact(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_artifact
   });
-  test('deleteCatalogEntry request example', done => {
+  test('deleteCatalogEntry request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(catalogEntryId).not.toBeNull();
@@ -569,13 +549,11 @@ describe('GlobalCatalogV1', () => {
       id: catalogEntryId,
     };
 
-    globalCatalogService.deleteCatalogEntry(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await globalCatalogService.deleteCatalogEntry(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_catalog_entry
   });
