@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -82,21 +82,21 @@ describe('UserManagementV1', () => {
 
   let deleteUserId = null;
 
-  test('inviteUsers request example', done => {
+  test('inviteUsers request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(memberEmail).not.toBeNull();
     expect(viewerRoleId).not.toBeNull();
     expect(accountId).not.toBeNull();
     expect(accessGroupId).not.toBeNull();
-  
+
     originalLog('inviteUsers() result:');
     // begin-invite_users
 
@@ -136,29 +136,28 @@ describe('UserManagementV1', () => {
       accessGroups: [accessGroupId],
     };
 
-    userManagementAdminService.inviteUsers(params)
-      .then(res => {
-        deleteUserId = res.result.resources[0].id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await userManagementAdminService.inviteUsers(params);
+      deleteUserId = res.result.resources[0].id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-invite_users
   });
-  test('listUsers request example', done => {
+  test('listUsers request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
-  
+
     originalLog('listUsers() result:');
     // begin-list_users
 
@@ -168,24 +167,23 @@ describe('UserManagementV1', () => {
       limit: 100,
     };
 
-    userManagementService.listUsers(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await userManagementService.listUsers(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_users
   });
-  test('removeUser request example', done => {
+  test('removeUser request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
@@ -198,29 +196,27 @@ describe('UserManagementV1', () => {
       iamId: deleteUserId,
     };
 
-    userManagementAdminService.removeUser(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await userManagementAdminService.removeUser(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-remove_user
   });
-  test('getUserProfile request example', done => {
+  test('getUserProfile request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
     expect(userId).not.toBeNull();
-  
+
     originalLog('getUserProfile() result:');
     // begin-get_user_profile
 
@@ -229,24 +225,23 @@ describe('UserManagementV1', () => {
       iamId: userId,
     };
 
-    userManagementService.getUserProfile(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await userManagementService.getUserProfile(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_user_profile
   });
-  test('updateUserProfile request example', done => {
+  test('updateUserProfile request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
@@ -260,29 +255,27 @@ describe('UserManagementV1', () => {
       phonenumber: '123456789',
     };
 
-    userManagementService.updateUserProfile(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await userManagementService.updateUserProfile(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_user_profile
   });
-  test('getUserSettings request example', done => {
+  test('getUserSettings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
     expect(userId).not.toBeNull();
-  
+
     originalLog('getUserSettings() result:');
     // begin-get_user_settings
 
@@ -291,24 +284,23 @@ describe('UserManagementV1', () => {
       iamId: userId,
     };
 
-    userManagementService.getUserSettings(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await userManagementService.getUserSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_user_settings
   });
-  test('updateUserSettings request example', done => {
+  test('updateUserSettings request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
@@ -323,13 +315,11 @@ describe('UserManagementV1', () => {
       allowedIpAddresses: '192.168.0.2,192.168.0.3',
     };
 
-    userManagementService.updateUserSettings(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await userManagementService.updateUserSettings(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_user_settings
   });
