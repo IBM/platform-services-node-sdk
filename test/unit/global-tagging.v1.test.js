@@ -231,7 +231,7 @@ describe('GlobalTaggingV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalTaggingService.createTag({});
@@ -240,7 +240,6 @@ describe('GlobalTaggingV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -368,7 +367,7 @@ describe('GlobalTaggingV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalTaggingService.deleteTag({});
@@ -377,7 +376,6 @@ describe('GlobalTaggingV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -459,7 +457,7 @@ describe('GlobalTaggingV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalTaggingService.attachTag({});
@@ -468,7 +466,6 @@ describe('GlobalTaggingV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -550,7 +547,7 @@ describe('GlobalTaggingV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalTaggingService.detachTag({});
@@ -559,7 +556,6 @@ describe('GlobalTaggingV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {

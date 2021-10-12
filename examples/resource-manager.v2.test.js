@@ -56,209 +56,208 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('ResourceManagerV2', () => {
-  
+
   // begin-common
-  
-  const resourceManagerService = ResourceManagerV2.newInstance({ serviceName: ResourceManagerV2.DEFAULT_SERVICE_NAME});
+
+  const resourceManagerService = ResourceManagerV2.newInstance({ serviceName: ResourceManagerV2.DEFAULT_SERVICE_NAME });
   const deleteResourceManagerService = ResourceManagerV2.newInstance(
-    {serviceName: 'ALT_RESOURCE_MANAGER'}
+    { serviceName: 'ALT_RESOURCE_MANAGER' }
   );
-  
+
   // end-common
-  
+
   const config = readExternalSources(ResourceManagerV2.DEFAULT_SERVICE_NAME);
   const exampleUserAccountId = config.userAccountId;
   const exampleQuotaId = config.quotaId;
   let resourceGroupId = null;
-  
-  test('createResourceGroup request example', done => {
-    
+
+  test('createResourceGroup request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createResourceGroup() result:');
     // begin-create_resource_group
     const params = {
       accountId: exampleUserAccountId,
       name: "ExampleGroup"
     };
-    
-    resourceManagerService.createResourceGroup(params)
-      .then(res => {
-        resourceGroupId = res.result.id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      const res = await resourceManagerService.createResourceGroup(params)
+      resourceGroupId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-create_resource_group
   });
-  test('getResourceGroup request example', done => {
-    
+  test('getResourceGroup request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getResourceGroup() result:');
     // begin-get_resource_group
-    
+
     const params = {
       id: resourceGroupId,
     };
-    
-    resourceManagerService.getResourceGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      const res = await resourceManagerService.getResourceGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-get_resource_group
   });
-  test('updateResourceGroup request example', done => {
-    
+  test('updateResourceGroup request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('updateResourceGroup() result:');
     // begin-update_resource_group
-    
+
     const params = {
       id: resourceGroupId,
       state: 'ACTIVE',
       name: 'RenamedExampleGroup'
     };
-    
-    resourceManagerService.updateResourceGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      const res = await resourceManagerService.updateResourceGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-update_resource_group
   });
-  
-  test('listResourceGroups request example', done => {
-    
+
+  test('listResourceGroups request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listResourceGroups() result:');
     // begin-list_resource_groups
     const params = {
       accountId: exampleUserAccountId,
       includeDeleted: true,
     }
-    
-    resourceManagerService.listResourceGroups(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      const res = await resourceManagerService.listResourceGroups(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-list_resource_groups
   });
-  test('deleteResourceGroup request example', done => {
-    
+  test('deleteResourceGroup request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-    
+
     // begin-delete_resource_group
-    
+
     const params = {
       id: resourceGroupId,
     };
-    
-    deleteResourceManagerService.deleteResourceGroup(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      await deleteResourceManagerService.deleteResourceGroup(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-delete_resource_group
   });
-  
-  test('listQuotaDefinitions request example', done => {
-    
+
+  test('listQuotaDefinitions request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listQuotaDefinitions() result:');
     // begin-list_quota_definitions
-    
-    resourceManagerService.listQuotaDefinitions({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      const res = await resourceManagerService.listQuotaDefinitions({});
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-list_quota_definitions
   });
-  test('getQuotaDefinition request example', done => {
-    
+  test('getQuotaDefinition request example', async () => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getQuotaDefinition() result:');
     // begin-get_quota_definition
-    
+
     const params = {
       id: exampleQuotaId,
     };
-    
-    resourceManagerService.getQuotaDefinition(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-    
+
+    try {
+      const res = await resourceManagerService.getQuotaDefinition(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-get_quota_definition
   });
-  
+
 });

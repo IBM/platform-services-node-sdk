@@ -194,7 +194,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.createRules({});
@@ -203,7 +203,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -280,7 +279,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.listRules({});
@@ -289,7 +288,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -351,7 +349,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.getRule({});
@@ -360,7 +358,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -490,7 +487,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.updateRule({});
@@ -499,7 +496,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -561,7 +557,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.deleteRule({});
@@ -570,7 +566,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -653,7 +648,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.createAttachments({});
@@ -662,7 +657,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -730,7 +724,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.listAttachments({});
@@ -739,7 +733,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -806,7 +799,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.getAttachment({});
@@ -815,7 +808,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -909,7 +901,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.updateAttachment({});
@@ -918,7 +910,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -985,7 +976,7 @@ describe('ConfigurationGovernanceV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await configurationGovernanceService.deleteAttachment({});
@@ -994,7 +985,6 @@ describe('ConfigurationGovernanceV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {

@@ -510,7 +510,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.createCatalogEntry({});
@@ -519,7 +519,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -593,7 +592,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.getCatalogEntry({});
@@ -602,7 +601,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -954,7 +952,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.updateCatalogEntry({});
@@ -963,7 +961,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1028,7 +1025,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.deleteCatalogEntry({});
@@ -1037,7 +1034,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1128,7 +1124,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.getChildObjects({});
@@ -1137,7 +1133,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1199,7 +1194,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.restoreCatalogEntry({});
@@ -1208,7 +1203,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1270,7 +1264,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.getVisibility({});
@@ -1279,7 +1273,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1362,7 +1355,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.updateVisibility({});
@@ -1371,7 +1364,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1433,7 +1425,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.getPricing({});
@@ -1442,7 +1434,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1516,7 +1507,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.getAuditLogs({});
@@ -1525,7 +1516,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1587,7 +1577,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.listArtifacts({});
@@ -1596,7 +1586,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1667,7 +1656,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.getArtifact({});
@@ -1676,7 +1665,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1749,7 +1737,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.uploadArtifact({});
@@ -1758,7 +1746,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1825,7 +1812,7 @@ describe('GlobalCatalogV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await globalCatalogService.deleteArtifact({});
@@ -1834,7 +1821,6 @@ describe('GlobalCatalogV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {

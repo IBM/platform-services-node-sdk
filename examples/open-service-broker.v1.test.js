@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -78,15 +78,17 @@ describe('OpenServiceBrokerV1', () => {
   let reasonCode = 'IBMCLOUD_ACCT_SUSPEND';
   let operation = 'Provision_45';
 
-  test('getServiceInstanceState request example', done => {
+  test('getServiceInstanceState request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getServiceInstanceState() result:');
     // begin-get_service_instance_state
 
@@ -94,25 +96,26 @@ describe('OpenServiceBrokerV1', () => {
       instanceId: instanceId,
     };
 
-    openServiceBrokerService.getServiceInstanceState(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.getServiceInstanceState(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_service_instance_state
   });
-  test('replaceServiceInstanceState request example', done => {
+  test('replaceServiceInstanceState request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('replaceServiceInstanceState() result:');
     // begin-replace_service_instance_state
 
@@ -123,25 +126,26 @@ describe('OpenServiceBrokerV1', () => {
       reasonCode: reasonCode,
     };
 
-    openServiceBrokerService.replaceServiceInstanceState(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.replaceServiceInstanceState(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_service_instance_state
   });
-  test('replaceServiceInstance request example', done => {
+  test('replaceServiceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('replaceServiceInstance() result:');
     // begin-replace_service_instance
 
@@ -151,7 +155,7 @@ describe('OpenServiceBrokerV1', () => {
       platform: 'ibmcloud',
     };
 
-    const pars = { example: 'property'};
+    const pars = { example: 'property' };
 
     const params = {
       instanceId: instanceId,
@@ -164,25 +168,26 @@ describe('OpenServiceBrokerV1', () => {
       acceptsIncomplete: true,
     };
 
-    openServiceBrokerService.replaceServiceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.replaceServiceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_service_instance
   });
-  test('updateServiceInstance request example', done => {
+  test('updateServiceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('updateServiceInstance() result:');
     // begin-update_service_instance
 
@@ -192,8 +197,8 @@ describe('OpenServiceBrokerV1', () => {
       platform: 'ibmcloud',
     };
 
-    const pars = { example: 'property'};
-    const prevValues = { previous: 'values'};
+    const pars = { example: 'property' };
+    const prevValues = { previous: 'values' };
 
     const params = {
       instanceId: instanceId,
@@ -205,47 +210,49 @@ describe('OpenServiceBrokerV1', () => {
       acceptsIncomplete: true,
     };
 
-    openServiceBrokerService.updateServiceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.updateServiceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_service_instance
   });
-  test('listCatalog request example', done => {
+  test('listCatalog request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listCatalog() result:');
     // begin-list_catalog
 
-    openServiceBrokerService.listCatalog({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.listCatalog({});
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_catalog
   });
-  test('getLastOperation request example', done => {
+  test('getLastOperation request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getLastOperation() result:');
     // begin-get_last_operation
 
@@ -256,35 +263,36 @@ describe('OpenServiceBrokerV1', () => {
       serviceId: serviceId,
     };
 
-    openServiceBrokerService.getLastOperation(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.getLastOperation(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_last_operation
   });
-  test('replaceServiceBinding request example', done => {
+  test('replaceServiceBinding request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('replaceServiceBinding() result:');
     // begin-replace_service_binding
 
-    const pars = { example: 'property'};
+    const pars = { example: 'property' };
 
     const bindResource = {
       account_id: accountId,
       serviceid_crn: appGuid,
     };
-    
+
     const params = {
       bindingId: bindingId,
       bindResource: bindResource,
@@ -294,25 +302,26 @@ describe('OpenServiceBrokerV1', () => {
       parameters: pars,
     };
 
-    openServiceBrokerService.replaceServiceBinding(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.replaceServiceBinding(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_service_binding
   });
-  test('deleteServiceInstance request example', done => {
+  test('deleteServiceInstance request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('deleteServiceInstance() result:');
     // begin-delete_service_instance
 
@@ -322,23 +331,24 @@ describe('OpenServiceBrokerV1', () => {
       instanceId: instanceId,
     };
 
-    openServiceBrokerService.deleteServiceInstance(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await openServiceBrokerService.deleteServiceInstance(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_service_instance
   });
-  test('deleteServiceBinding request example', done => {
+  test('deleteServiceBinding request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_service_binding
@@ -350,13 +360,11 @@ describe('OpenServiceBrokerV1', () => {
       serviceId: serviceId,
     };
 
-    openServiceBrokerService.deleteServiceBinding(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await openServiceBrokerService.deleteServiceBinding(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_service_binding
   });

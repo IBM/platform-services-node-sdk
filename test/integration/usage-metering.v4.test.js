@@ -29,11 +29,15 @@ const verbose = true;
 const describe = authHelper.prepareTests(configFile);
 
 describe('UsageMeteringV4_integration', () => {
-  const usageMeteringService = UsageMeteringV4.newInstance({});
-
-  expect(usageMeteringService).not.toBeNull();
-
   jest.setTimeout(timeout);
+
+  let usageMeteringService;
+
+  test('Init', async () => {
+    usageMeteringService = UsageMeteringV4.newInstance({});
+
+    expect(usageMeteringService).not.toBeNull();
+  });
 
   test('reportResourceUsage()', async () => {
     // Request models needed by this operation.

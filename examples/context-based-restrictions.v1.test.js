@@ -45,6 +45,7 @@ const configFile = 'context_based_restrictions_v1.env';
 const describe = authHelper.prepareTests(configFile);
 
 const originalLog = console.log;
+const originalWarn = console.warn;
 
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
@@ -80,13 +81,14 @@ describe('ContextBasedRestrictionsV1', () => {
   let ruleId;
   let ruleRev;
 
-  test('createZone request example', async (done) => {
+  test('createZone request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('createZone() result:');
@@ -105,28 +107,26 @@ describe('ContextBasedRestrictionsV1', () => {
       description: 'SDK TEST - this is an example of zone',
     };
 
-    await contextBasedRestrictionsService
-      .createZone(params)
-      .then((res) => {
-        zoneId = res.result.id;
-        zoneRev = res.headers.etag;
-
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.createZone(params);
+      zoneId = res.result.id;
+      zoneRev = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_zone
   });
 
-  test('listZones request example', async (done) => {
+  test('listZones request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('listZones() result:');
@@ -137,25 +137,24 @@ describe('ContextBasedRestrictionsV1', () => {
       accountId,
     };
 
-    await contextBasedRestrictionsService
-      .listZones(params)
-      .then((res) => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.listZones(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_zones
   });
 
-  test('getZone request example', async (done) => {
+  test('getZone request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('getZone() result:');
@@ -166,25 +165,24 @@ describe('ContextBasedRestrictionsV1', () => {
       zoneId,
     };
 
-    await contextBasedRestrictionsService
-      .getZone(params)
-      .then((res) => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.getZone(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_zone
   });
 
-  test('replaceZone request example', async (done) => {
+  test('replaceZone request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceZone() result:');
@@ -205,53 +203,51 @@ describe('ContextBasedRestrictionsV1', () => {
       description: 'SDK TEST - this is an example of updated zone',
     };
 
-    await contextBasedRestrictionsService
-      .replaceZone(params)
-      .then((res) => {
-        zoneId = res.result.id;
-        zoneRev = res.headers.etag;
+    try {
+      const res = await contextBasedRestrictionsService.replaceZone(params);
+      zoneId = res.result.id;
+      zoneRev = res.headers.etag;
 
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_zone
   });
 
-  test('listAvailableServicerefTargets request example', async (done) => {
+  test('listAvailableServicerefTargets request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('listAvailableServicerefTargets() result:');
 
     // begin-list_available_serviceref_targets
 
-    await contextBasedRestrictionsService
-      .listAvailableServicerefTargets({})
-      .then((res) => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.listAvailableServicerefTargets({});
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_available_serviceref_targets
   });
 
-  test('createRule request example', async (done) => {
+  test('createRule request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('createRule() result:');
@@ -288,28 +284,26 @@ describe('ContextBasedRestrictionsV1', () => {
       description: 'SDK TEST - this is an example of rule',
     };
 
-    await contextBasedRestrictionsService
-      .createRule(params)
-      .then((res) => {
-        ruleId = res.result.id;
-        ruleRev = res.headers.etag;
-
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.createRule(params);
+      ruleId = res.result.id;
+      ruleRev = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_rule
   });
 
-  test('listRules request example', async (done) => {
+  test('listRules request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('listRules() result:');
@@ -320,25 +314,24 @@ describe('ContextBasedRestrictionsV1', () => {
       accountId,
     };
 
-    await contextBasedRestrictionsService
-      .listRules(params)
-      .then((res) => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.listRules(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_rules
   });
 
-  test('getRule request example', async (done) => {
+  test('getRule request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('getRule() result:');
@@ -349,25 +342,24 @@ describe('ContextBasedRestrictionsV1', () => {
       ruleId,
     };
 
-    await contextBasedRestrictionsService
-      .getRule(params)
-      .then((res) => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.getRule(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_rule
   });
 
-  test('replaceRule request example', async (done) => {
+  test('replaceRule request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('replaceRule() result:');
@@ -411,28 +403,26 @@ describe('ContextBasedRestrictionsV1', () => {
       description: 'SDK TEST - this is an example of updated rule',
     };
 
-    await contextBasedRestrictionsService
-      .replaceRule(params)
-      .then((res) => {
-        ruleId = res.result.id;
-        ruleRev = res.headers.etag;
-
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.replaceRule(params);
+      ruleId = res.result.id;
+      ruleRev = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-replace_rule
   });
 
-  test('getAccountSettings request example', async (done) => {
+  test('getAccountSettings request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('getAccountSettings() result:');
@@ -443,25 +433,24 @@ describe('ContextBasedRestrictionsV1', () => {
       accountId,
     };
 
-    await contextBasedRestrictionsService
-      .getAccountSettings(params)
-      .then((res) => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      const res = await contextBasedRestrictionsService.getAccountSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_account_settings
   });
 
-  test('deleteRule request example', async (done) => {
+  test('deleteRule request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_rule
@@ -470,25 +459,23 @@ describe('ContextBasedRestrictionsV1', () => {
       ruleId,
     };
 
-    await contextBasedRestrictionsService
-      .deleteRule(params)
-      .then((res) => {
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      await contextBasedRestrictionsService.deleteRule(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_rule
   });
 
-  test('deleteZone request example', async (done) => {
+  test('deleteZone request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation((output) => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_zone
@@ -497,14 +484,11 @@ describe('ContextBasedRestrictionsV1', () => {
       zoneId,
     };
 
-    await contextBasedRestrictionsService
-      .deleteZone(params)
-      .then((res) => {
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    try {
+      await contextBasedRestrictionsService.deleteZone(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_zone
   });

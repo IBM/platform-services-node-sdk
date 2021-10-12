@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -67,15 +67,17 @@ describe('UsageReportsV4', () => {
   let orgId = config.orgId;
   let billingMonth = config.billingMonth;
 
-  test('getAccountSummary request example', done => {
+  test('getAccountSummary request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getAccountSummary() result:');
     // begin-get_account_summary
 
@@ -84,25 +86,26 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getAccountSummary(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getAccountSummary(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_account_summary
   });
-  test('getAccountUsage request example', done => {
+  test('getAccountUsage request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getAccountUsage() result:');
     // begin-get_account_usage
 
@@ -111,25 +114,26 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getAccountUsage(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getAccountUsage(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_account_usage
   });
-  test('getResourceGroupUsage request example', done => {
+  test('getResourceGroupUsage request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getResourceGroupUsage() result:');
     // begin-get_resource_group_usage
 
@@ -139,25 +143,26 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getResourceGroupUsage(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getResourceGroupUsage(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_group_usage
   });
-  test('getOrgUsage request example', done => {
+  test('getOrgUsage request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getOrgUsage() result:');
     // begin-get_org_usage
 
@@ -167,25 +172,26 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getOrgUsage(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getOrgUsage(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_org_usage
   });
-  test('getResourceUsageAccount request example', done => {
+  test('getResourceUsageAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getResourceUsageAccount() result:');
     // begin-get_resource_usage_account
 
@@ -194,25 +200,26 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getResourceUsageAccount(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getResourceUsageAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_usage_account
   });
-  test('getResourceUsageResourceGroup request example', done => {
+  test('getResourceUsageResourceGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getResourceUsageResourceGroup() result:');
     // begin-get_resource_usage_resource_group
 
@@ -222,25 +229,26 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getResourceUsageResourceGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getResourceUsageResourceGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_usage_resource_group
   });
-  test('getResourceUsageOrg request example', done => {
+  test('getResourceUsageOrg request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getResourceUsageOrg() result:');
     // begin-get_resource_usage_org
 
@@ -250,13 +258,12 @@ describe('UsageReportsV4', () => {
       billingmonth: billingMonth,
     };
 
-    usageReportsService.getResourceUsageOrg(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await usageReportsService.getResourceUsageOrg(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_resource_usage_org
   });

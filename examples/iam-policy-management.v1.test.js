@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -73,17 +73,17 @@ describe('IamPolicyManagementV1', () => {
   expect(config).toHaveProperty('testAccountId');
   exampleAccountId = config.testAccountId;
 
-  test('createPolicy request example', done => {
+  test('createPolicy request example', async () => {
     expect(exampleAccountId).not.toBeNull();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createPolicy() result:');
     // begin-create_policy
 
@@ -130,28 +130,28 @@ describe('IamPolicyManagementV1', () => {
       resources: policyResources,
     };
 
-    iamPolicyManagementService.createPolicy(params)
-      .then(res => {
-        examplePolicyId = res.result.id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.createPolicy(params);
+      examplePolicyId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-create_policy
   });
-  test('getPolicy request example', done => {
+  test('getPolicy request example', async () => {
     expect(examplePolicyId).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getPolicy() result:');
     // begin-get_policy
 
@@ -159,30 +159,30 @@ describe('IamPolicyManagementV1', () => {
       policyId: examplePolicyId,
     };
 
-    iamPolicyManagementService.getPolicy(params)
-      .then(res => {
-        examplePolicyETag = res.headers.etag;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.getPolicy(params);
+      examplePolicyETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-get_policy
   });
-  test('updatePolicy request example', done => {
+  test('updatePolicy request example', async () => {
     expect(exampleAccountId).not.toBeNull();
     expect(examplePolicyId).toBeDefined();
     expect(examplePolicyETag).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('updatePolicy() result:');
     // begin-update_policy
 
@@ -231,29 +231,29 @@ describe('IamPolicyManagementV1', () => {
       resources: policyResources,
     };
 
-    iamPolicyManagementService.updatePolicy(params)
-      .then(res => {
-        examplePolicyETag = res.headers.etag;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.updatePolicy(params);
+      examplePolicyETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-update_policy
   });
-  test('patchPolicy request example', done => {
+  test('patchPolicy request example', async () => {
     expect(examplePolicyId).toBeDefined();
     expect(examplePolicyETag).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('patchPolicy() result:');
     // begin-patch_policy
 
@@ -263,27 +263,27 @@ describe('IamPolicyManagementV1', () => {
       state: 'active'
     };
 
-    iamPolicyManagementService.patchPolicy(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.patchPolicy(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-patch_policy
   });
-  test('listPolicies request example', done => {
+  test('listPolicies request example', async () => {
     expect(exampleAccountId).not.toBeNull();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listPolicies() result:');
     // begin-list_policies
 
@@ -293,24 +293,24 @@ describe('IamPolicyManagementV1', () => {
       format: 'include_last_permit',
     };
 
-    iamPolicyManagementService.listPolicies(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.listPolicies(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_policies
   });
-  test('deletePolicy request example', done => {
+  test('deletePolicy request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_policy
@@ -319,27 +319,26 @@ describe('IamPolicyManagementV1', () => {
       policyId: examplePolicyId,
     };
 
-    iamPolicyManagementService.deletePolicy(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await iamPolicyManagementService.deletePolicy(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_policy
   });
-  test('createRole request example', done => {
+  test('createRole request example', async () => {
     expect(exampleAccountId).not.toBeNull();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createRole() result:');
     // begin-create_role
 
@@ -351,28 +350,28 @@ describe('IamPolicyManagementV1', () => {
       serviceName: exampleServiceName,
     };
 
-    iamPolicyManagementService.createRole(params)
-      .then(res => {
-        exampleCustomRoleId = res.result.id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.createRole(params);
+      exampleCustomRoleId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_role
   });
-  test('getRole request example', done => {
+  test('getRole request example', async () => {
     expect(exampleCustomRoleId).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getRole() result:');
     // begin-get_role
 
@@ -380,29 +379,29 @@ describe('IamPolicyManagementV1', () => {
       roleId: exampleCustomRoleId,
     };
 
-    iamPolicyManagementService.getRole(params)
-      .then(res => {
-        exampleCustomRoleEtag = res.headers.etag;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.getRole(params);
+      exampleCustomRoleEtag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_role
   });
-  test('updateRole request example', done => {
+  test('updateRole request example', async () => {
     expect(exampleCustomRoleId).toBeDefined();
     expect(exampleCustomRoleEtag).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('updateRole() result:');
     // begin-update_role
 
@@ -413,26 +412,26 @@ describe('IamPolicyManagementV1', () => {
       actions: updatedRoleActions,
     };
 
-    iamPolicyManagementService.updateRole(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.updateRole(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_role
   });
-  test('listRoles request example', done => {
+  test('listRoles request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listRoles() result:');
     // begin-list_roles
 
@@ -440,25 +439,25 @@ describe('IamPolicyManagementV1', () => {
       accountId: exampleAccountId,
     };
 
-    iamPolicyManagementService.listRoles(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await iamPolicyManagementService.listRoles(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_roles
   });
-  test('deleteRole request example', done => {
+  test('deleteRole request example', async () => {
     expect(exampleCustomRoleId).toBeDefined();
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     // begin-delete_role
@@ -467,13 +466,11 @@ describe('IamPolicyManagementV1', () => {
       roleId: exampleCustomRoleId,
     };
 
-    iamPolicyManagementService.deleteRole(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await iamPolicyManagementService.deleteRole(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-delete_role
   });

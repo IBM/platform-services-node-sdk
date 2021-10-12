@@ -39,39 +39,53 @@ const unexistingRuleId = '648961210dab8fdffac52cc2f28e200f';
 const invalidID = 'this_is_an_invalid_id';
 
 describe('ContextBasedRestrictionsV1_integration', () => {
-  const contextBasedRestrictionsService = ContextBasedRestrictionsV1.newInstance({});
+  let contextBasedRestrictionsService;
+  let config;
+  let apiKey;
+  let url;
+  let authUrl;
+  let authType;
+  let accountId;
+  let serviceName;
 
-  expect(contextBasedRestrictionsService).not.toBeNull();
+  test('Init', async () => {
+    contextBasedRestrictionsService = ContextBasedRestrictionsV1.newInstance({});
 
-  const config = readExternalSources(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME);
-  const {
-    apikey: apiKey,
-    url: URL,
-    authUrl,
-    authType,
-    testAccountId: accountId,
-    testServiceName: serviceName,
-  } = config;
+    expect(contextBasedRestrictionsService).not.toBeNull();
 
-  expect(config).not.toBeNull();
-  expect(accountId).not.toBeNull();
-  expect(accountId).toBeDefined();
-  expect(apiKey).not.toBeNull();
-  expect(apiKey).toBeDefined();
-  expect(URL).not.toBeNull();
-  expect(URL).toBeDefined();
-  expect(authUrl).not.toBeNull();
-  expect(authUrl).toBeDefined();
-  expect(authType).not.toBeNull();
-  expect(authType).toBeDefined();
-  expect(serviceName).not.toBeNull();
-  expect(serviceName).toBeDefined();
+    config = readExternalSources(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME);
+    expect(config).not.toBeNull();
 
-  jest.setTimeout(timeout);
+    apiKey = config.apikey;
+    expect(apiKey).not.toBeNull();
+    expect(apiKey).toBeDefined();
 
-  contextBasedRestrictionsService.enableRetries();
+    url = config.url;
+    expect(url).not.toBeNull();
+    expect(url).toBeDefined();
 
-  test('createZone() - 201', async (done) => {
+    authUrl = config.authUrl;
+    expect(authUrl).not.toBeNull();
+    expect(authUrl).toBeDefined();
+
+    authType = config.authType;
+    expect(authType).not.toBeNull();
+    expect(authType).toBeDefined();
+
+    accountId = config.accountId;
+    expect(accountId).not.toBeNull();
+    expect(accountId).toBeDefined();
+
+    serviceName = config.serviceName;
+    expect(serviceName).not.toBeNull();
+    expect(serviceName).toBeDefined();
+
+    jest.setTimeout(timeout);
+
+    contextBasedRestrictionsService.enableRetries();
+  });
+
+  test('createZone() - 201', async () => {
     const addressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
@@ -89,7 +103,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     try {
       res = await contextBasedRestrictionsService.createZone(params);
     } catch (err) {
-      done(err);
+      console.log(`An error occurred: `, JSON.stringify(err));
     }
 
     expect(res).toBeDefined();
@@ -98,8 +112,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
     zoneId = res.result.id;
     zoneEtag = res.headers.etag;
-
-    done();
   });
 
   test('createZone() - 400 -  Create a zone with "invalid ip address format" error', async () => {

@@ -144,7 +144,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.getServiceInstanceState({});
@@ -153,7 +153,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -221,7 +220,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.replaceServiceInstanceState({});
@@ -230,7 +229,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -319,7 +317,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.replaceServiceInstance({});
@@ -328,7 +326,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -414,7 +411,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.updateServiceInstance({});
@@ -423,7 +420,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -495,7 +491,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.deleteServiceInstance({});
@@ -504,7 +500,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -616,7 +611,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.getLastOperation({});
@@ -625,7 +620,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -712,7 +706,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.replaceServiceBinding({});
@@ -721,7 +715,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -795,7 +788,7 @@ describe('OpenServiceBrokerV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await openServiceBrokerService.deleteServiceBinding({});
@@ -804,7 +797,6 @@ describe('OpenServiceBrokerV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
