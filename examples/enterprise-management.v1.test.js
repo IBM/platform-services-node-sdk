@@ -85,6 +85,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -115,6 +116,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -141,6 +143,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -169,6 +172,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -194,11 +198,10 @@ describe('EnterpriseManagementV1', () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      // const responseBody = JSON.parse(output);
-      // accountId = responseBody.account_id;
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -233,6 +236,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -260,6 +264,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -286,6 +291,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -314,6 +320,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -344,6 +351,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -376,6 +384,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -402,6 +411,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -428,6 +438,7 @@ describe('EnterpriseManagementV1', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 

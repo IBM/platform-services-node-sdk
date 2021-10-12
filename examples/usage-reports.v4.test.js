@@ -74,6 +74,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -101,6 +102,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -128,6 +130,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -156,6 +159,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -184,6 +188,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -211,6 +216,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -239,6 +245,7 @@ describe('UsageReportsV4', () => {
     });
     consoleWarnMock.mockImplementation(output => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 

@@ -87,6 +87,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -124,6 +125,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -151,6 +153,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -178,6 +181,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -218,6 +222,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -241,6 +246,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -296,6 +302,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -323,6 +330,8 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('getRule() result:');
@@ -349,6 +358,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -411,6 +421,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -438,6 +449,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -462,6 +474,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
     consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
