@@ -1,3 +1,10 @@
+## [0.21.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.21.0...v0.21.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* **jest:** vulnerability fix ([#139](https://github.com/IBM/platform-services-node-sdk/issues/139)) ([ff04e5e](https://github.com/IBM/platform-services-node-sdk/commit/ff04e5edd5ab81476c18523401c9713c5952d825))
+
 # [0.21.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.20.3...v0.21.0) (2021-10-01)
 
 
