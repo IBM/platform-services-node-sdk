@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const IamPolicyManagementV1 = require('../../dist/iam-policy-management/v1');
@@ -30,12 +30,12 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const iamPolicyManagementServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://iam.cloud.ibm.com',
 };
 
-const iamPolicyManagementService = new IamPolicyManagementV1(service);
+const iamPolicyManagementService = new IamPolicyManagementV1(iamPolicyManagementServiceOptions);
 
 // dont actually create a request
 const createRequestMock = jest.spyOn(iamPolicyManagementService, 'createRequest');
@@ -102,19 +102,19 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('listPolicies', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listPoliciesTest() {
         // Construct the params object for operation listPolicies
         const accountId = 'testString';
-        const acceptLanguage = 'testString';
+        const acceptLanguage = 'default';
         const iamId = 'testString';
         const accessGroupId = 'testString';
-        const type = 'testString';
-        const serviceType = 'testString';
+        const type = 'access';
+        const serviceType = 'service';
         const tagName = 'testString';
         const tagValue = 'testString';
-        const sort = 'testString';
-        const format = 'testString';
-        const state = 'testString';
+        const sort = 'id';
+        const format = 'include_last_permit';
+        const state = 'active';
         const params = {
           accountId: accountId,
           acceptLanguage: acceptLanguage,
@@ -137,23 +137,38 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/policies', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/policies', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['iam_id']).toEqual(iamId);
-        expect(options.qs['access_group_id']).toEqual(accessGroupId);
-        expect(options.qs['type']).toEqual(type);
-        expect(options.qs['service_type']).toEqual(serviceType);
-        expect(options.qs['tag_name']).toEqual(tagName);
-        expect(options.qs['tag_value']).toEqual(tagValue);
-        expect(options.qs['sort']).toEqual(sort);
-        expect(options.qs['format']).toEqual(format);
-        expect(options.qs['state']).toEqual(state);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.iam_id).toEqual(iamId);
+        expect(mockRequestOptions.qs.access_group_id).toEqual(accessGroupId);
+        expect(mockRequestOptions.qs.type).toEqual(type);
+        expect(mockRequestOptions.qs.service_type).toEqual(serviceType);
+        expect(mockRequestOptions.qs.tag_name).toEqual(tagName);
+        expect(mockRequestOptions.qs.tag_value).toEqual(tagValue);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs.format).toEqual(format);
+        expect(mockRequestOptions.qs.state).toEqual(state);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listPoliciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listPoliciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listPoliciesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -175,7 +190,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.listPolicies({});
@@ -187,11 +202,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const listPoliciesPromise = iamPolicyManagementService.listPolicies();
         expectToBePromise(listPoliciesPromise);
 
-        listPoliciesPromise.catch(err => {
+        listPoliciesPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -238,14 +253,14 @@ describe('IamPolicyManagementV1', () => {
         tags: [resourceTagModel],
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createPolicyTest() {
         // Construct the params object for operation createPolicy
         const type = 'testString';
         const subjects = [policySubjectModel];
         const roles = [policyRoleModel];
         const resources = [policyResourceModel];
         const description = 'testString';
-        const acceptLanguage = 'testString';
+        const acceptLanguage = 'default';
         const params = {
           type: type,
           subjects: subjects,
@@ -263,18 +278,33 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/policies', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v1/policies', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['subjects']).toEqual(subjects);
-        expect(options.body['roles']).toEqual(roles);
-        expect(options.body['resources']).toEqual(resources);
-        expect(options.body['description']).toEqual(description);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.subjects).toEqual(subjects);
+        expect(mockRequestOptions.body.roles).toEqual(roles);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.description).toEqual(description);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -302,7 +332,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.createPolicy({});
@@ -314,11 +344,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const createPolicyPromise = iamPolicyManagementService.createPolicy();
         expectToBePromise(createPolicyPromise);
 
-        createPolicyPromise.catch(err => {
+        createPolicyPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -365,7 +395,7 @@ describe('IamPolicyManagementV1', () => {
         tags: [resourceTagModel],
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updatePolicyTest() {
         // Construct the params object for operation updatePolicy
         const policyId = 'testString';
         const ifMatch = 'testString';
@@ -392,19 +422,34 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/policies/{policy_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v1/policies/{policy_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['subjects']).toEqual(subjects);
-        expect(options.body['roles']).toEqual(roles);
-        expect(options.body['resources']).toEqual(resources);
-        expect(options.body['description']).toEqual(description);
-        expect(options.path['policy_id']).toEqual(policyId);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.subjects).toEqual(subjects);
+        expect(mockRequestOptions.body.roles).toEqual(roles);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updatePolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __updatePolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __updatePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -436,7 +481,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.updatePolicy({});
@@ -448,11 +493,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const updatePolicyPromise = iamPolicyManagementService.updatePolicy();
         expectToBePromise(updatePolicyPromise);
 
-        updatePolicyPromise.catch(err => {
+        updatePolicyPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -461,7 +506,7 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('getPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getPolicyTest() {
         // Construct the params object for operation getPolicy
         const policyId = 'testString';
         const params = {
@@ -476,13 +521,28 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/policies/{policy_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/policies/{policy_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['policy_id']).toEqual(policyId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -504,7 +564,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.getPolicy({});
@@ -516,11 +576,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const getPolicyPromise = iamPolicyManagementService.getPolicy();
         expectToBePromise(getPolicyPromise);
 
-        getPolicyPromise.catch(err => {
+        getPolicyPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -529,7 +589,7 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('deletePolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deletePolicyTest() {
         // Construct the params object for operation deletePolicy
         const policyId = 'testString';
         const params = {
@@ -544,13 +604,28 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/policies/{policy_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v1/policies/{policy_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['policy_id']).toEqual(policyId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deletePolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deletePolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deletePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -572,7 +647,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.deletePolicy({});
@@ -584,11 +659,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const deletePolicyPromise = iamPolicyManagementService.deletePolicy();
         expectToBePromise(deletePolicyPromise);
 
-        deletePolicyPromise.catch(err => {
+        deletePolicyPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -597,11 +672,11 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('patchPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __patchPolicyTest() {
         // Construct the params object for operation patchPolicy
         const policyId = 'testString';
         const ifMatch = 'testString';
-        const state = 'testString';
+        const state = 'active';
         const params = {
           policyId: policyId,
           ifMatch: ifMatch,
@@ -616,15 +691,30 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/policies/{policy_id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v1/policies/{policy_id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
-        expect(options.body['state']).toEqual(state);
-        expect(options.path['policy_id']).toEqual(policyId);
+        expect(mockRequestOptions.body.state).toEqual(state);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __patchPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __patchPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __patchPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -648,7 +738,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.patchPolicy({});
@@ -660,11 +750,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const patchPolicyPromise = iamPolicyManagementService.patchPolicy();
         expectToBePromise(patchPolicyPromise);
 
-        patchPolicyPromise.catch(err => {
+        patchPolicyPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -673,15 +763,19 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('listRoles', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listRolesTest() {
         // Construct the params object for operation listRoles
-        const acceptLanguage = 'testString';
+        const acceptLanguage = 'default';
         const accountId = 'testString';
-        const serviceName = 'testString';
+        const serviceName = 'iam-groups';
+        const sourceServiceName = 'iam-groups';
+        const policyType = 'authorization';
         const params = {
           acceptLanguage: acceptLanguage,
           accountId: accountId,
           serviceName: serviceName,
+          sourceServiceName: sourceServiceName,
+          policyType: policyType,
         };
 
         const listRolesResult = iamPolicyManagementService.listRoles(params);
@@ -692,15 +786,32 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/roles', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/roles', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['service_name']).toEqual(serviceName);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.service_name).toEqual(serviceName);
+        expect(mockRequestOptions.qs.source_service_name).toEqual(sourceServiceName);
+        expect(mockRequestOptions.qs.policy_type).toEqual(policyType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listRolesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listRolesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listRolesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -727,15 +838,15 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('createRole', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createRoleTest() {
         // Construct the params object for operation createRole
         const displayName = 'testString';
         const actions = ['testString'];
-        const name = 'testString';
+        const name = 'Developer';
         const accountId = 'testString';
-        const serviceName = 'testString';
+        const serviceName = 'iam-groups';
         const description = 'testString';
-        const acceptLanguage = 'testString';
+        const acceptLanguage = 'default';
         const params = {
           displayName: displayName,
           actions: actions,
@@ -754,28 +865,43 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/roles', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/roles', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
-        expect(options.body['display_name']).toEqual(displayName);
-        expect(options.body['actions']).toEqual(actions);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['account_id']).toEqual(accountId);
-        expect(options.body['service_name']).toEqual(serviceName);
-        expect(options.body['description']).toEqual(description);
+        expect(mockRequestOptions.body.display_name).toEqual(displayName);
+        expect(mockRequestOptions.body.actions).toEqual(actions);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.service_name).toEqual(serviceName);
+        expect(mockRequestOptions.body.description).toEqual(description);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createRoleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createRoleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createRoleTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const displayName = 'testString';
         const actions = ['testString'];
-        const name = 'testString';
+        const name = 'Developer';
         const accountId = 'testString';
-        const serviceName = 'testString';
+        const serviceName = 'iam-groups';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -796,7 +922,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.createRole({});
@@ -808,11 +934,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const createRolePromise = iamPolicyManagementService.createRole();
         expectToBePromise(createRolePromise);
 
-        createRolePromise.catch(err => {
+        createRolePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -821,7 +947,7 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('updateRole', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateRoleTest() {
         // Construct the params object for operation updateRole
         const roleId = 'testString';
         const ifMatch = 'testString';
@@ -844,17 +970,32 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/roles/{role_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v2/roles/{role_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
-        expect(options.body['display_name']).toEqual(displayName);
-        expect(options.body['description']).toEqual(description);
-        expect(options.body['actions']).toEqual(actions);
-        expect(options.path['role_id']).toEqual(roleId);
+        expect(mockRequestOptions.body.display_name).toEqual(displayName);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.actions).toEqual(actions);
+        expect(mockRequestOptions.path.role_id).toEqual(roleId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateRoleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __updateRoleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __updateRoleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -878,7 +1019,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.updateRole({});
@@ -890,11 +1031,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const updateRolePromise = iamPolicyManagementService.updateRole();
         expectToBePromise(updateRolePromise);
 
-        updateRolePromise.catch(err => {
+        updateRolePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -903,7 +1044,7 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('getRole', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getRoleTest() {
         // Construct the params object for operation getRole
         const roleId = 'testString';
         const params = {
@@ -918,13 +1059,28 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/roles/{role_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/roles/{role_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['role_id']).toEqual(roleId);
+        expect(mockRequestOptions.path.role_id).toEqual(roleId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRoleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getRoleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getRoleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -946,7 +1102,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.getRole({});
@@ -958,11 +1114,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const getRolePromise = iamPolicyManagementService.getRole();
         expectToBePromise(getRolePromise);
 
-        getRolePromise.catch(err => {
+        getRolePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -971,7 +1127,7 @@ describe('IamPolicyManagementV1', () => {
   });
   describe('deleteRole', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteRoleTest() {
         // Construct the params object for operation deleteRole
         const roleId = 'testString';
         const params = {
@@ -986,13 +1142,28 @@ describe('IamPolicyManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/roles/{role_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/roles/{role_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['role_id']).toEqual(roleId);
+        expect(mockRequestOptions.path.role_id).toEqual(roleId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteRoleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deleteRoleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deleteRoleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1014,7 +1185,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await iamPolicyManagementService.deleteRole({});
@@ -1026,11 +1197,11 @@ describe('IamPolicyManagementV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const deleteRolePromise = iamPolicyManagementService.deleteRole();
         expectToBePromise(deleteRolePromise);
 
-        deleteRolePromise.catch(err => {
+        deleteRolePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
