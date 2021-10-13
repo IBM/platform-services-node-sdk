@@ -144,7 +144,7 @@ describe('EnterpriseBillingUnitsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseBillingUnitsService.getBillingUnit({});
@@ -153,7 +153,6 @@ describe('EnterpriseBillingUnitsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -266,7 +265,7 @@ describe('EnterpriseBillingUnitsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseBillingUnitsService.listBillingOptions({});
@@ -275,7 +274,6 @@ describe('EnterpriseBillingUnitsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -340,7 +338,7 @@ describe('EnterpriseBillingUnitsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await enterpriseBillingUnitsService.getCreditPools({});
@@ -349,7 +347,6 @@ describe('EnterpriseBillingUnitsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {

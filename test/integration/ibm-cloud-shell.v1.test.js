@@ -28,17 +28,21 @@ const configFile = 'ibm_cloud_shell_v1.env';
 const describe = authHelper.prepareTests(configFile);
 
 describe('IbmCloudShellV1_integration', () => {
-  const ibmCloudShellService = IbmCloudShellV1.newInstance({});
+  let ibmCloudShellService;
+  let accountId;
+  test('Init', async () => {
+    ibmCloudShellService = IbmCloudShellV1.newInstance({});
 
-  expect(ibmCloudShellService).not.toBeNull();
+    expect(ibmCloudShellService).not.toBeNull();
 
-  const config = readExternalSources(IbmCloudShellV1.DEFAULT_SERVICE_NAME);
-  expect(config).not.toBeNull();
+    const config = readExternalSources(IbmCloudShellV1.DEFAULT_SERVICE_NAME);
+    expect(config).not.toBeNull();
 
-  jest.setTimeout(timeout);
+    jest.setTimeout(timeout);
 
-  const { accountId } = config;
-  expect(accountId).not.toBeNull();
+    accountId = config.accountId;
+    expect(accountId).not.toBeNull();
+  });
 
   test('getAccountSettings()', async () => {
     const params = {

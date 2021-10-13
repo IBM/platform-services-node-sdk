@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -76,34 +76,17 @@ describe('EnterpriseManagementV1', () => {
 
   jest.setTimeout(timeout);
 
-  test('createAccountGroup request example', done => {
+  test('createAccountGroup request example', async () => {
 
     const parentCrn = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::enterprise:' + enterpriseId;
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      const responseBody = JSON.parse(output);
-
-      accountGroupId = responseBody.account_group_id
-
-      const params = {
-        parent: parentCrn,
-        name: 'New Parent Account Group',
-        primaryContactIamId: enterpriseAccountIamId,
-      };
-
-      enterpriseManagementService.createAccountGroup(params)
-        .then(res => {
-          newParentAccountGroupId = res.result.account_group_id
-          originalLog(JSON.stringify(res.result, null, 2));
-          done();
-        })
-        .catch(err => {
-          done(err)
-        });
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('createAccountGroup() result:');
@@ -115,24 +98,26 @@ describe('EnterpriseManagementV1', () => {
       primaryContactIamId: enterpriseAccountIamId,
     };
 
-    enterpriseManagementService.createAccountGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    let res;
+    try {
+      res = await enterpriseManagementService.createAccountGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_account_group
+    accountGroupId = res.accountGroupId;
   });
-  test('listAccountGroups request example', done => {
+  test('listAccountGroups request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('listAccountGroups() result:');
@@ -142,24 +127,24 @@ describe('EnterpriseManagementV1', () => {
       enterpriseId: enterpriseId,
     };
 
-    enterpriseManagementService.listAccountGroups(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.listAccountGroups(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_account_groups
   });
-  test('getAccountGroup request example', done => {
+  test('getAccountGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(accountGroupId).not.toBeNull();
@@ -171,24 +156,24 @@ describe('EnterpriseManagementV1', () => {
       accountGroupId: accountGroupId,
     };
 
-    enterpriseManagementService.getAccountGroup(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.getAccountGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_account_group
   });
-  test('updateAccountGroup request example', done => {
+  test('updateAccountGroup request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(accountGroupId).not.toBeNull();
@@ -201,26 +186,23 @@ describe('EnterpriseManagementV1', () => {
       primaryContactIamId: enterpriseAccountIamId,
     };
 
-    enterpriseManagementService.updateAccountGroup(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await enterpriseManagementService.updateAccountGroup(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_account_group
   });
-  test('createAccount request example', done => {
+  test('createAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      const responseBody = JSON.parse(output);
-      accountId = responseBody.account_id;
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(accountGroupId).not.toBeNull();
@@ -236,24 +218,26 @@ describe('EnterpriseManagementV1', () => {
       ownerIamId: enterpriseAccountIamId,
     };
 
-    enterpriseManagementService.createAccount(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    let res;
+    try {
+      res = await enterpriseManagementService.createAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_account
+    accountId = res.result.accountId;
   });
-  test.skip('importAccountToEnterprise request example', done => {
+  test.skip('importAccountToEnterprise request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     const importAccountId = '<accountid_to_be_imported>';
@@ -265,24 +249,23 @@ describe('EnterpriseManagementV1', () => {
       accountId: importAccountId,
     };
 
-    enterpriseManagementService.importAccountToEnterprise(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await enterpriseManagementService.importAccountToEnterprise(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-import_account_to_enterprise
   });
-  test('listAccounts request example', done => {
+  test('listAccounts request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('listAccounts() result:');
@@ -292,24 +275,24 @@ describe('EnterpriseManagementV1', () => {
       enterpriseId: enterpriseId,
     };
 
-    enterpriseManagementService.listAccounts(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.listAccounts(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_accounts
   });
-  test('getAccount request example', done => {
+  test('getAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
@@ -321,24 +304,24 @@ describe('EnterpriseManagementV1', () => {
       accountId: accountId,
     };
 
-    enterpriseManagementService.getAccount(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.getAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_account
   });
-  test('updateAccount request example', done => {
+  test('updateAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(accountId).not.toBeNull();
@@ -353,24 +336,23 @@ describe('EnterpriseManagementV1', () => {
       parent: newParentCrn,
     };
 
-    enterpriseManagementService.updateAccount(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await enterpriseManagementService.updateAccount(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_account
   });
-  test.skip('createEnterprise request example', done => {
+  test.skip('createEnterprise request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('createEnterprise() result:');
@@ -386,24 +368,24 @@ describe('EnterpriseManagementV1', () => {
       primaryContactIamId: contactIamId,
     };
 
-    enterpriseManagementService.createEnterprise(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.createEnterprise(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-create_enterprise
   });
-  test('listEnterprises request example', done => {
+  test('listEnterprises request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('listEnterprises() result:');
@@ -413,24 +395,24 @@ describe('EnterpriseManagementV1', () => {
       accountId: enterpriseAccountId,
     };
 
-    enterpriseManagementService.listEnterprises(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.listEnterprises(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_enterprises
   });
-  test('getEnterprise request example', done => {
+  test('getEnterprise request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     originalLog('getEnterprise() result:');
@@ -440,24 +422,24 @@ describe('EnterpriseManagementV1', () => {
       enterpriseId: enterpriseId,
     };
 
-    enterpriseManagementService.getEnterprise(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseManagementService.getEnterprise(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_enterprise
   });
-  test('updateEnterprise request example', done => {
+  test('updateEnterprise request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     // begin-update_enterprise
@@ -468,13 +450,11 @@ describe('EnterpriseManagementV1', () => {
       primaryContactIamId: enterpriseAccountIamId,
     };
 
-    enterpriseManagementService.updateEnterprise(params)
-      .then(res => {
-        done();
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      await enterpriseManagementService.updateEnterprise(params);
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-update_enterprise
   });

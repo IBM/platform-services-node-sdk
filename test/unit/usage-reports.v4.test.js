@@ -149,7 +149,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getAccountSummary({});
@@ -158,7 +158,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -228,7 +227,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getAccountUsage({});
@@ -237,7 +236,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -312,7 +310,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getResourceGroupUsage({});
@@ -321,7 +319,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -415,7 +412,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getResourceUsageAccount({});
@@ -424,7 +421,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -517,7 +513,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getResourceUsageResourceGroup({});
@@ -526,7 +522,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -619,7 +614,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getResourceUsageOrg({});
@@ -628,7 +623,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -703,7 +697,7 @@ describe('UsageReportsV4', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await usageReportsService.getOrgUsage({});
@@ -712,7 +706,6 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {

@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2020.
  *
@@ -64,69 +64,69 @@ describe('EnterpriseBillingUnitsV1', () => {
   let enterpriseId = config.enterpriseId;
   let billingUnitId = config.billingUnitId;
 
-  test('getBillingUnit request example', done => {
+  test('getBillingUnit request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getBillingUnit() result:');
     // begin-get_billing_unit
-    true
     const params = {
       billingUnitId: billingUnitId,
     };
 
-    enterpriseBillingUnitsService.getBillingUnit(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseBillingUnitsService.getBillingUnit(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_billing_unit
   });
-  test('listBillingUnits request example', done => {
+  test('listBillingUnits request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listBillingUnits() result:');
     // begin-list_billing_units
 
     const params = {
       enterpriseId: enterpriseId,
     };
-    enterpriseBillingUnitsService.listBillingUnits(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseBillingUnitsService.listBillingUnits(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_billing_units
   });
-  test('listBillingOptions request example', done => {
+  test('listBillingOptions request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('listBillingOptions() result:');
     // begin-list_billing_options
 
@@ -134,26 +134,26 @@ describe('EnterpriseBillingUnitsV1', () => {
       billingUnitId: billingUnitId,
     };
 
-    enterpriseBillingUnitsService.listBillingOptions(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseBillingUnitsService.listBillingOptions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-list_billing_options
   });
-  test('getCreditPools request example', done => {
+  test('getCreditPools request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getCreditPools() result:');
     // begin-get_credit_pools
 
@@ -161,13 +161,12 @@ describe('EnterpriseBillingUnitsV1', () => {
       billingUnitId: billingUnitId,
     };
 
-    enterpriseBillingUnitsService.getCreditPools(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await enterpriseBillingUnitsService.getCreditPools(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-get_credit_pools
   });

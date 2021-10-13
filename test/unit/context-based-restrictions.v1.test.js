@@ -255,7 +255,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.listZones({});
@@ -264,7 +264,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -341,7 +340,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.getZone({});
@@ -350,7 +349,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -455,7 +453,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.replaceZone({});
@@ -464,7 +462,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -541,7 +538,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.deleteZone({});
@@ -550,7 +547,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -819,7 +815,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.listRules({});
@@ -828,7 +824,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -905,7 +900,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.getRule({});
@@ -914,7 +909,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1038,7 +1032,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.replaceRule({});
@@ -1047,7 +1041,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1124,7 +1117,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.deleteRule({});
@@ -1133,7 +1126,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1210,7 +1202,7 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await contextBasedRestrictionsService.getAccountSettings({});
@@ -1219,7 +1211,6 @@ describe('ContextBasedRestrictionsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {

@@ -253,7 +253,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.createResourceInstance({});
@@ -262,7 +262,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -321,7 +320,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.getResourceInstance({});
@@ -330,7 +329,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -392,7 +390,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.deleteResourceInstance({});
@@ -401,7 +399,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -472,7 +469,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.updateResourceInstance({});
@@ -481,7 +478,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -546,7 +542,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.listResourceAliasesForInstance({});
@@ -555,7 +551,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -620,7 +615,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.listResourceKeysForInstance({});
@@ -629,7 +624,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -688,7 +682,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.lockResourceInstance({});
@@ -697,7 +691,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -756,7 +749,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.unlockResourceInstance({});
@@ -765,7 +758,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -912,7 +904,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.createResourceKey({});
@@ -921,7 +913,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -980,7 +971,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.getResourceKey({});
@@ -989,7 +980,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1048,7 +1038,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.deleteResourceKey({});
@@ -1057,7 +1047,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1121,7 +1110,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.updateResourceKey({});
@@ -1130,7 +1119,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1283,7 +1271,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.createResourceBinding({});
@@ -1292,7 +1280,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1351,7 +1338,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.getResourceBinding({});
@@ -1360,7 +1347,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1419,7 +1405,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.deleteResourceBinding({});
@@ -1428,7 +1414,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1492,7 +1477,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.updateResourceBinding({});
@@ -1501,7 +1486,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1645,7 +1629,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.createResourceAlias({});
@@ -1654,7 +1638,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1713,7 +1696,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.getResourceAlias({});
@@ -1722,7 +1705,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1781,7 +1763,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.deleteResourceAlias({});
@@ -1790,7 +1772,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1854,7 +1835,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.updateResourceAlias({});
@@ -1863,7 +1844,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -1928,7 +1908,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.listResourceBindingsForAlias({});
@@ -1937,7 +1917,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {
@@ -2058,7 +2037,7 @@ describe('ResourceControllerV2', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await resourceControllerService.runReclamationAction({});
@@ -2067,7 +2046,6 @@ describe('ResourceControllerV2', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', done => {

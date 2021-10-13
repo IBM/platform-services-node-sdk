@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -65,15 +65,17 @@ describe('CaseManagementV1', () => {
   let caseNumber = null;
   let attachmentId = null;
 
-  test('createCase request example', done => {
+  test('createCase request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
-      done();
+      originalLog(output);
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('createCase() result:');
     // begin-createCase
 
@@ -95,29 +97,29 @@ describe('CaseManagementV1', () => {
       severity: 4,
     };
 
-    caseManagementService.createCase(params)
-      .then(res => {
-        caseNumber = res.result.number
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.createCase(params);
+      caseNumber = res.result.number
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-createCase
   });
-  test('getCase request example', done => {
+  test('getCase request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
-  
+
     originalLog('getCase() result:');
     // begin-getCase
 
@@ -133,26 +135,27 @@ describe('CaseManagementV1', () => {
       fields: fieldsToReturn,
     };
 
-    caseManagementService.getCase(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+
+      const res = await caseManagementService.getCase(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-getCase
   });
-  test('getCases request example', done => {
+  test('getCases request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
-  
+
     originalLog('getCases() result:');
     // begin-getCases
 
@@ -163,29 +166,30 @@ describe('CaseManagementV1', () => {
       sort: CaseManagementV1.GetCasesConstants.Fields.UPDATED_AT,
     };
 
-    caseManagementService.getCases({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.getCases({})
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch
+      (err) {
+      console.warn(err);
+    }
 
     // end-getCases
   });
-  test('addComment request example', done => {
 
+  test('addComment request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
-  
+
     originalLog('addComment() result:');
     // begin-addComment
 
@@ -194,28 +198,28 @@ describe('CaseManagementV1', () => {
       comment: 'This is an example comment,',
     };
 
-    caseManagementService.addComment(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.addComment(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-addComment
   });
-  test('addWatchlist request example', done => {
+  test('addWatchlist request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
-  
+
     originalLog('addWatchlist() result:');
     // begin-addWatchlist
 
@@ -228,28 +232,28 @@ describe('CaseManagementV1', () => {
       watchlist: watchlistUsers,
     };
 
-    caseManagementService.addWatchlist(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.addWatchlist(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-addWatchlist
   });
-  test('removeWatchlist request example', done => {
+  test('removeWatchlist request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
-  
+
     originalLog('removeWatchlist() result:');
     // begin-removeWatchlist
 
@@ -262,29 +266,29 @@ describe('CaseManagementV1', () => {
       watchlist: watchlistUsers,
     };
 
-    caseManagementService.removeWatchlist(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.removeWatchlist(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-removeWatchlist
   });
-  test('addResource request example', done => {
+  test('addResource request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
     expect(resourceCrn).not.toBeNull();
-  
+
     originalLog('addResource() result:');
     // begin-addResource
 
@@ -294,28 +298,28 @@ describe('CaseManagementV1', () => {
       note: 'This resource is the service that is having the problem.',
     };
 
-    caseManagementService.addResource(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.addResource(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-addResource
   });
-  test('uploadFile request example', done => {
+  test('uploadFile request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
-  
+
     originalLog('uploadFile() result:');
     // begin-uploadFile
 
@@ -334,32 +338,32 @@ describe('CaseManagementV1', () => {
       file: filesToUpload,
     };
 
-    caseManagementService.uploadFile(params)
-      .then(res => {
-        attachmentId = res.result.id;
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.uploadFile(params)
+      attachmentId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-uploadFile
   });
-  test('downloadFile request example', done => {
+  test('downloadFile request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
     expect(attachmentId).not.toBeNull();
 
     let responseContentType = null;
-  
+
     originalLog('downloadFile() result:');
     // begin-downloadFile
 
@@ -368,33 +372,30 @@ describe('CaseManagementV1', () => {
       fileId: attachmentId,
     };
 
-    caseManagementService.downloadFile(params)
-      .then(res => {
-        responseContentType = res.headers['content-type'];
-        return streamToPromise(res.result);
-      })
-      .then(contents => {
-        console.log(contents);
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.downloadFile(params);
+      responseContentType = res.headers['content-type'];
+      console.log(res.result);
+    } catch (err) {
+      console.warn(err)
+    }
 
     // end-downloadFile
   });
-  test('deleteFile request example', done => {
+  test('deleteFile request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
     expect(attachmentId).not.toBeNull();
-  
+
     originalLog('deleteFile() result:');
     // begin-deleteFile
 
@@ -403,28 +404,28 @@ describe('CaseManagementV1', () => {
       fileId: attachmentId,
     };
 
-    caseManagementService.deleteFile(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.deleteFile(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-deleteFile
   });
-  test('updateCaseStatus request example', done => {
+  test('updateCaseStatus request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
-      done();
     });
     consoleWarnMock.mockImplementation(output => {
-      done(output);
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
     });
 
     expect(caseNumber).not.toBeNull();
-  
+
     originalLog('updateCaseStatus() result:');
     // begin-updateCaseStatus
 
@@ -439,13 +440,12 @@ describe('CaseManagementV1', () => {
       statusPayload: statusPayloadModel,
     };
 
-    caseManagementService.updateCaseStatus(params)
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
+    try {
+      const res = await caseManagementService.updateCaseStatus(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
 
     // end-updateCaseStatus
   });

@@ -555,7 +555,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getCatalog({});
@@ -564,7 +564,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -726,7 +725,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.replaceCatalog({});
@@ -735,7 +734,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -794,7 +792,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteCatalog({});
@@ -803,7 +801,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -862,7 +859,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getCatalogAudit({});
@@ -871,7 +868,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1009,7 +1005,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.listOfferings({});
@@ -1018,7 +1014,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1338,7 +1333,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.createOffering({});
@@ -1347,7 +1342,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1439,7 +1433,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.importOfferingVersion({});
@@ -1448,7 +1442,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1537,7 +1530,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.importOffering({});
@@ -1546,7 +1539,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1634,7 +1626,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.reloadOffering({});
@@ -1643,7 +1635,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -1707,7 +1698,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOffering({});
@@ -1716,7 +1707,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2041,7 +2031,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.replaceOffering({});
@@ -2050,7 +2040,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2118,7 +2107,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteOffering({});
@@ -2127,7 +2116,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2195,7 +2183,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingAudit({});
@@ -2204,7 +2192,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2277,7 +2264,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.replaceOfferingIcon({});
@@ -2286,7 +2273,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2364,7 +2350,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.updateOfferingIbm({});
@@ -2373,7 +2359,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2461,7 +2446,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingUpdates({});
@@ -2470,7 +2455,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2529,7 +2513,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingAbout({});
@@ -2538,7 +2522,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2602,7 +2585,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingLicense({});
@@ -2611,7 +2594,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2671,7 +2653,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingContainerImages({});
@@ -2680,7 +2662,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2740,7 +2721,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deprecateVersion({});
@@ -2749,7 +2730,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2808,7 +2788,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.accountPublishVersion({});
@@ -2817,7 +2797,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2876,7 +2855,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.ibmPublishVersion({});
@@ -2885,7 +2864,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -2944,7 +2922,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.publicPublishVersion({});
@@ -2953,7 +2931,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3012,7 +2989,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.commitVersion({});
@@ -3021,7 +2998,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3089,7 +3065,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.copyVersion({});
@@ -3098,7 +3074,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3158,7 +3133,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingWorkingCopy({});
@@ -3167,7 +3142,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3226,7 +3200,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getVersion({});
@@ -3235,7 +3209,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3294,7 +3267,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteVersion({});
@@ -3303,7 +3276,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3372,7 +3344,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getCluster({});
@@ -3381,7 +3353,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3456,7 +3427,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getNamespaces({});
@@ -3465,7 +3436,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3539,7 +3509,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deployOperators({});
@@ -3548,7 +3518,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3622,7 +3591,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.listOperators({});
@@ -3631,7 +3600,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3705,7 +3673,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.replaceOperators({});
@@ -3714,7 +3682,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3788,7 +3755,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteOperators({});
@@ -3797,7 +3764,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -3913,7 +3879,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.installVersion({});
@@ -3922,7 +3888,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4038,7 +4003,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.preinstallVersion({});
@@ -4047,7 +4012,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4120,7 +4084,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getPreinstall({});
@@ -4129,7 +4093,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4245,7 +4208,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.validateInstall({});
@@ -4254,7 +4217,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4318,7 +4280,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getValidationStatus({});
@@ -4327,7 +4289,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4386,7 +4347,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOverrideValues({});
@@ -4395,7 +4356,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4466,7 +4426,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.searchObjects({});
@@ -4475,7 +4435,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4546,7 +4505,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.listObjects({});
@@ -4555,7 +4514,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4691,7 +4649,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.createObject({});
@@ -4700,7 +4658,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4768,7 +4725,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getObject({});
@@ -4777,7 +4734,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4922,7 +4878,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.replaceObject({});
@@ -4931,7 +4887,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -4999,7 +4954,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteObject({});
@@ -5008,7 +4963,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5076,7 +5030,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getObjectAudit({});
@@ -5085,7 +5039,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5153,7 +5106,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.accountPublishObject({});
@@ -5162,7 +5115,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5230,7 +5182,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.sharedPublishObject({});
@@ -5239,7 +5191,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5307,7 +5258,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.ibmPublishObject({});
@@ -5316,7 +5267,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5384,7 +5334,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.publicPublishObject({});
@@ -5393,7 +5343,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5466,7 +5415,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.createObjectAccess({});
@@ -5475,7 +5424,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5548,7 +5496,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getObjectAccess({});
@@ -5557,7 +5505,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5630,7 +5577,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteObjectAccess({});
@@ -5639,7 +5586,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5713,7 +5659,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getObjectAccessList({});
@@ -5722,7 +5668,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5796,7 +5741,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteObjectAccessList({});
@@ -5805,7 +5750,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -5878,7 +5822,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.addObjectAccessList({});
@@ -5887,7 +5831,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -6015,7 +5958,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.createOfferingInstance({});
@@ -6024,7 +5967,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -6083,7 +6025,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.getOfferingInstance({});
@@ -6092,7 +6034,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -6224,7 +6165,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.putOfferingInstance({});
@@ -6233,7 +6174,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
@@ -6298,7 +6238,7 @@ describe('CatalogManagementV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async (done) => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await catalogManagementService.deleteOfferingInstance({});
@@ -6307,7 +6247,6 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
       test('should reject promise when required params are not given', (done) => {
