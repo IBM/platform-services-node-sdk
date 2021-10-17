@@ -1869,8 +1869,8 @@ describe('ResourceControllerV2_integration', () => {
   //   done();
   // });
 
-  afterAll(() => {
-    cleanUp();
+  afterAll(async () => {
+    await cleanUp();
   }, 120000);
 
   async function cleanUp() {
