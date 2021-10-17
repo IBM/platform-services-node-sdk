@@ -423,7 +423,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       });
   });
 
-  test('deleteRule', async (done) => {
+  test('deleteRule', async () => {
     expect(ruleId2).not.toBeNull();
     expect(ruleId2).not.toBeUndefined();
 
@@ -449,7 +449,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
       listRulesResp = await configurationGovernanceService.listRules(listRuleParams);
     } catch (err) {
       log(err);
-      done(err);
     }
 
     expect(deleteRuleResp).not.toBeNull();
@@ -465,7 +464,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
     // Next, make sure we can not do a get on the deleted rule.
     const rule = await getRule(ruleId2);
     expect(rule).toBeNull();
-    done();
   });
 
   test('deleteRuleInvalidRuleId', (done) => {
@@ -487,7 +485,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       });
   });
 
-  test('createAttachment1', async (done) => {
+  test('createAttachment1', async () => {
     expect(ruleId1).not.toBeNull();
     expect(ruleId1).not.toBeUndefined();
 
@@ -508,7 +506,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
       createAttachmentsResp = await configurationGovernanceService.createAttachments(params);
     } catch (err) {
       log(err);
-      done(err);
     }
 
     expect(createAttachmentsResp).not.toBeNull();
@@ -527,10 +524,9 @@ describe('ConfigurationGovernanceV1_integration', () => {
     expect(rule).not.toBeNull();
     expect(rule.number_of_attachments).not.toBeNull();
     expect(rule.number_of_attachments).toEqual(1);
-    done();
   });
 
-  test('createAttachment2', async (done) => {
+  test('createAttachment2', async () => {
     expect(ruleId1).not.toBeNull();
     expect(ruleId1).not.toBeUndefined();
 
@@ -550,7 +546,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
       createAttachmentsResp = await configurationGovernanceService.createAttachments(params);
     } catch (err) {
       log(err);
-      done(err);
     }
 
     expect(createAttachmentsResp).not.toBeNull();
@@ -569,7 +564,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
     expect(rule).not.toBeNull();
     expect(rule.number_of_attachments).not.toBeNull();
     expect(rule.number_of_attachments).toEqual(2);
-    done();
   });
 
   test('createAttachmentInvalidScopeType', (done) => {
@@ -788,7 +782,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       });
   });
 
-  test('deleteAttachment', async (done) => {
+  test('deleteAttachment', async () => {
     expect(ruleId1).not.toBeNull();
     expect(ruleId1).not.toBeUndefined();
 
@@ -819,7 +813,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
       );
     } catch (err) {
       log(err);
-      done(err);
     }
 
     expect(deleteAttachmentResp).not.toBeNull();
@@ -835,7 +828,6 @@ describe('ConfigurationGovernanceV1_integration', () => {
     // Next, make sure we cannot retrieve the deleted attachment via a get.
     const attachment = await getAttachment(ruleId1, attachmentId2);
     expect(attachment).toBeNull();
-    done();
   });
 
   test('deleteAttachmentInvalidAttachmentId', (done) => {
