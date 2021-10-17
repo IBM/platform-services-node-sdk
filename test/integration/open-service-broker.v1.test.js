@@ -61,7 +61,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     done();
   });
 
-  test('00 - Create A Service Instance', async (done) => {
+  test('00 - Create A Service Instance', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test00-${transactionId}`,
     };
@@ -90,7 +90,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.replaceServiceInstance(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -99,11 +99,9 @@ describe('OpenServiceBrokerV1_integration', () => {
 
     const { result } = response;
     expect(result.dashboard_url).toBeDefined();
-
-    done();
   });
 
-  test('01 - Update Service Instance', async (done) => {
+  test('01 - Update Service Instance', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test01-${transactionId}`,
     };
@@ -132,7 +130,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.updateServiceInstance(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -142,11 +140,9 @@ describe('OpenServiceBrokerV1_integration', () => {
     const { result } = response;
     expect(result.service_instance_id).toEqual(testInstanceId);
     expect(result.plan_id).toEqual(testPlanId1);
-
-    done();
   });
 
-  test('02 - Disable Service Instance State', async (done) => {
+  test('02 - Disable Service Instance State', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test02-${transactionId}`,
     };
@@ -163,7 +159,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.replaceServiceInstanceState(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -173,11 +169,9 @@ describe('OpenServiceBrokerV1_integration', () => {
     const { result } = response;
     expect(result.active).toBeDefined();
     expect(result.enabled).toBeDefined();
-
-    done();
   });
 
-  test('03 - Enable Service Instance State', async (done) => {
+  test('03 - Enable Service Instance State', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test03-${transactionId}`,
     };
@@ -194,7 +188,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.replaceServiceInstanceState(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -204,11 +198,9 @@ describe('OpenServiceBrokerV1_integration', () => {
     const { result } = response;
     expect(result.active).toBeDefined();
     expect(result.enabled).toBeDefined();
-
-    done();
   });
 
-  test('04 - Bind Service Instance', async (done) => {
+  test('04 - Bind Service Instance', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test04-${transactionId}`,
     };
@@ -232,7 +224,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.replaceServiceBinding(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -241,10 +233,9 @@ describe('OpenServiceBrokerV1_integration', () => {
 
     const { result } = response;
     expect(result.credentials).toBeDefined();
-    done();
   });
 
-  test('05 - Get Service Instance State', async (done) => {
+  test('05 - Get Service Instance State', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test05-${transactionId}`,
     };
@@ -258,7 +249,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.getServiceInstanceState(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -269,10 +260,9 @@ describe('OpenServiceBrokerV1_integration', () => {
     console.log(`Result-defined!: ${JSON.stringify(result)}`);
     expect(result.active).toBeDefined();
     expect(result.enabled).toBeDefined();
-    done();
   });
 
-  test('06 - Get Catalog Metadata', async (done) => {
+  test('06 - Get Catalog Metadata', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test06-${transactionId}`,
     };
@@ -285,7 +275,7 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.listCatalog(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -297,11 +287,9 @@ describe('OpenServiceBrokerV1_integration', () => {
     expect(result.services[0].name).toBeDefined();
     expect(result.services[0].bindable).toBeDefined();
     expect(result.services[0].plan_updateable).toBeDefined();
-
-    done();
   });
 
-  test('07 - Delete Service Binding', async (done) => {
+  test('07 - Delete Service Binding', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test07-${transactionId}`,
     };
@@ -318,15 +306,14 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.deleteServiceBinding(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
     expect(response.status).toEqual(200);
-    done();
   });
 
-  test('08 - Delete Service Instance', async (done) => {
+  test('08 - Delete Service Instance', async () => {
     const customHeader = {
       'Transaction-Id': `osb-sdk-node-test08-${transactionId}`,
     };
@@ -342,12 +329,11 @@ describe('OpenServiceBrokerV1_integration', () => {
     try {
       response = await service.deleteServiceInstance(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
     expect(response.status).toEqual(200);
     expect(response.result).toBeDefined();
-    done();
   });
 });
