@@ -81,6 +81,7 @@ describe('UserManagementV1', () => {
   let accessGroupId = config.accessGroupId;
 
   let deleteUserId = null;
+  jest.setTimeout(30000);
 
   test('inviteUsers request example', async () => {
 
