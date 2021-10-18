@@ -61,11 +61,10 @@ describe('CaseManagementV1_integration', () => {
     contentType: 'image/png',
   };
 
-  test('should successfully complete initialization', (done) => {
+  test('should successfully complete initialization', async () => {
     // Initialize the service client.
     service = CaseManagementV1.newInstance();
     expect(service).not.toBeNull();
-    done();
   });
 
   describe('Create a case', () => {
@@ -83,28 +82,22 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully created a technical case', async (done) => {
-      try {
-        response = await service.createCase(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-        const { result } = response || {};
+    test('Successfully created a technical case', async () => {
+      response = await service.createCase(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
 
-        expect(result).toBeDefined();
-        expect(result.number).toBeDefined();
-        expect(result.short_description).toEqual(params.subject);
-        expect(result.description).toEqual(params.description);
+      expect(result).toBeDefined();
+      expect(result.number).toBeDefined();
+      expect(result.short_description).toEqual(params.subject);
+      expect(result.description).toEqual(params.description);
 
-        caseNumber = result.number;
-        console.log('\nCase number: ', caseNumber);
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      caseNumber = result.number;
+      console.log('\nCase number: ', caseNumber);
     });
 
-    test('Bad payload used to create a case', async (done) => {
+    test('Bad payload used to create a case', async () => {
       params.type = 'invalid_type';
       params.severity = null;
       params.offering = null;
@@ -113,10 +106,7 @@ describe('CaseManagementV1_integration', () => {
         response = await service.createCase(params);
       } catch (err) {
         expect(err.status).toEqual(400);
-        done();
       }
-
-      done();
     });
   });
 
@@ -129,25 +119,19 @@ describe('CaseManagementV1_integration', () => {
       params = {};
     });
 
-    test('Successfully got cases with default params', async (done) => {
-      try {
-        response = await service.getCases();
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-        const { result } = response || {};
+    test('Successfully got cases with default params', async () => {
+      response = await service.getCases();
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
 
-        expect(result.total_count).toBeDefined();
-        expect(result.first).toBeDefined();
-        expect(result.last).toBeDefined();
-        expect(result.cases).toBeDefined();
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      expect(result.total_count).toBeDefined();
+      expect(result.first).toBeDefined();
+      expect(result.last).toBeDefined();
+      expect(result.cases).toBeDefined();
     });
 
-    test('Successful got cases with non-default params', async (done) => {
+    test('Successful got cases with non-default params', async () => {
       params = {
         offset: 10,
         limit: 20,
@@ -158,31 +142,25 @@ describe('CaseManagementV1_integration', () => {
         ],
       };
 
-      try {
-        response = await service.getCases(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-        const { result } = response || {};
+      response = await service.getCases(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
 
-        expect(result.total_count).toBeDefined();
-        expect(result.first).toBeDefined();
-        expect(result.last).toBeDefined();
-        expect(result.cases).toBeDefined();
+      expect(result.total_count).toBeDefined();
+      expect(result.first).toBeDefined();
+      expect(result.last).toBeDefined();
+      expect(result.cases).toBeDefined();
 
-        const testCase = result.cases[0];
-        expect(testCase).toBeDefined();
-        expect(testCase.number).toBeDefined();
-        expect(testCase.short_description).toBeDefined();
-        expect(testCase.severity).toBeDefined();
-        expect(testCase.comments).not.toBeDefined();
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      const testCase = result.cases[0];
+      expect(testCase).toBeDefined();
+      expect(testCase.number).toBeDefined();
+      expect(testCase.short_description).toBeDefined();
+      expect(testCase.severity).toBeDefined();
+      expect(testCase.comments).not.toBeDefined();
     });
 
-    test('Failed to get cases with bad params', async (done) => {
+    test('Failed to get cases with bad params', async () => {
       params.fields = ['invalid_field'];
 
       try {
@@ -190,11 +168,7 @@ describe('CaseManagementV1_integration', () => {
       } catch (err) {
         expect(err).toBeDefined();
         expect(err.status).toEqual(400);
-        done();
-        return;
       }
-
-      done('Expected error response');
     });
   });
 
@@ -209,44 +183,32 @@ describe('CaseManagementV1_integration', () => {
       };
     });
 
-    test('Successfully got a case with default params', async (done) => {
-      try {
-        response = await service.getCase(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-        const { result } = response || {};
+    test('Successfully got a case with default params', async () => {
+      response = await service.getCase(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
 
-        expect(result.number).toEqual(caseNumber);
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      expect(result.number).toEqual(caseNumber);
     });
 
-    test('Successfully got a case with field filtering', async (done) => {
+    test('Successfully got a case with field filtering', async () => {
       params.fields = [
         CaseManagementV1.GetCaseConstants.Fields.NUMBER,
         CaseManagementV1.GetCaseConstants.Fields.SEVERITY,
       ];
 
-      try {
-        response = await service.getCase(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-        const { result } = response || {};
+      response = await service.getCase(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
 
-        expect(result.number).toEqual(caseNumber);
-        expect(result.severity).toBeDefined();
-        expect(result.contact).not.toBeDefined();
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      expect(result.number).toEqual(caseNumber);
+      expect(result.severity).toBeDefined();
+      expect(result.contact).not.toBeDefined();
     });
 
-    test('Failed to get a case with bad params', async (done) => {
+    test('Failed to get a case with bad params', async () => {
       params.fields = ['invalid_field'];
 
       try {
@@ -254,11 +216,7 @@ describe('CaseManagementV1_integration', () => {
       } catch (err) {
         expect(err).toBeDefined();
         expect(err.status).toEqual(400);
-        done();
-        return;
       }
-
-      done('Expected error response');
     });
   });
 
@@ -275,18 +233,13 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully added a comment to a case', async (done) => {
-      try {
-        response = await service.addComment(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+    test('Successfully added a comment to a case', async () => {
+      response = await service.addComment(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
-        expect(result.value).toEqual(commentValue);
-        done();
-      } catch (err) {
-        done(err);
-      }
+      const { result } = response || {};
+      expect(result.value).toEqual(commentValue);
     });
   });
 
@@ -302,32 +255,21 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully added user to case watchlist', async (done) => {
-      try {
-        response = await service.addWatchlist(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+    test('Successfully added user to case watchlist', async () => {
+      response = await service.addWatchlist(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
+      const { result } = response || {};
 
-        // We expect the call to fail because the fake user is not associated with the account.
-        expect(result.failed).toHaveLength(params.watchlist.length);
-        done();
-      } catch (err) {
-        done(err);
-      }
+      // We expect the call to fail because the fake user is not associated with the account.
+      expect(result.failed).toHaveLength(params.watchlist.length);
     });
 
-    test('Successfully removed users from case watchlist', async (done) => {
-      try {
-        response = await service.removeWatchlist(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+    test('Successfully removed users from case watchlist', async () => {
+      response = await service.removeWatchlist(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
     });
   });
 
@@ -335,7 +277,7 @@ describe('CaseManagementV1_integration', () => {
     let params;
     let response;
 
-    test('Succefully resolve a case', async (done) => {
+    test('Succefully resolve a case', async () => {
       params = {
         caseNumber,
         statusPayload: {
@@ -345,21 +287,15 @@ describe('CaseManagementV1_integration', () => {
         },
       };
 
-      try {
-        response = await service.updateCaseStatus(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+      response = await service.updateCaseStatus(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
-        expect(result.status).toEqual('Resolved');
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      const { result } = response || {};
+      expect(result.status).toEqual('Resolved');
     });
 
-    test('Succefully unresolve a case', async (done) => {
+    test('Succefully unresolve a case', async () => {
       params = {
         caseNumber,
         statusPayload: {
@@ -368,18 +304,12 @@ describe('CaseManagementV1_integration', () => {
         },
       };
 
-      try {
-        response = await service.updateCaseStatus(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+      response = await service.updateCaseStatus(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
-        expect(result.status).toEqual('In Progress');
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      const { result } = response || {};
+      expect(result.status).toEqual('In Progress');
     });
   });
 
@@ -391,63 +321,46 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully uploaded file', async (done) => {
+    test('Successfully uploaded file', async () => {
       params = {
         caseNumber,
         file: attachmentPayload,
       };
 
-      try {
-        response = await service.uploadFile(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+      response = await service.uploadFile(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
-        expect(result.id).toBeDefined();
-        expect(result.filename).toEqual(params.file.filename);
+      const { result } = response || {};
+      expect(result.id).toBeDefined();
+      expect(result.filename).toEqual(params.file.filename);
 
-        attachmentId = result.id;
-        done();
-      } catch (err) {
-        done(err);
-      }
+      attachmentId = result.id;
     });
 
-    test('Successfully downloaded a file', async (done) => {
+    test('Successfully downloaded a file', async () => {
       params = {
         caseNumber,
         fileId: attachmentId,
       };
 
-      try {
-        response = await service.downloadFile(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+      response = await service.downloadFile(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
-        expect(result).toBeDefined();
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      const { result } = response || {};
+      expect(result).toBeDefined();
     });
 
-    test('Successfully deleted file', async (done) => {
+    test('Successfully deleted file', async () => {
       params = {
         caseNumber,
         fileId: attachmentId,
       };
 
-      try {
-        response = await service.deleteFile(params);
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      response = await service.deleteFile(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
     });
   });
 
@@ -463,20 +376,14 @@ describe('CaseManagementV1_integration', () => {
       response = undefined;
     });
 
-    test('Successfully added a resource', async (done) => {
-      try {
-        response = await service.addResource(params);
+    test('Successfully added a resource', async () => {
+      response = await service.addResource(params);
 
-        expect(response).toBeDefined();
-        expect(response.status).toEqual(200);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
 
-        const { result } = response || {};
-        expect(result.crn).toEqual(params.crn);
-
-        done();
-      } catch (err) {
-        done(err);
-      }
+      const { result } = response || {};
+      expect(result.crn).toEqual(params.crn);
     });
   });
 });
