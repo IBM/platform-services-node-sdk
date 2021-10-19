@@ -168,7 +168,7 @@ describe('UsageReportsV4_integration', () => {
         done(err);
       });
   });
-  test('getResourceUsageAccount()', async (done) => {
+  test('getResourceUsageAccount()', async () => {
     const resources = [];
     let offset = null;
 
@@ -202,16 +202,14 @@ describe('UsageReportsV4_integration', () => {
       } while (offset != null);
     } catch (err) {
       console.log(err);
-      done(err);
     }
 
     // Make sure we found some resources.
     const numResources = resources.length;
     // console.log(`getResourceUsageAccount() response contained ${numResources} total resources`);
     expect(numResources).toBeGreaterThan(0);
-    done();
   });
-  test('getResourceUsageResourceGroup()', async (done) => {
+  test('getResourceUsageResourceGroup()', async () => {
     const resources = [];
     let offset = null;
 
@@ -246,16 +244,14 @@ describe('UsageReportsV4_integration', () => {
       } while (offset != null);
     } catch (err) {
       console.log(err);
-      done(err);
     }
 
     // Make sure we found some resources.
     const numResources = resources.length;
     // console.log(`getResourceUsageResourceGroup() response contained ${numResources} total resources`);
     expect(numResources).toBeGreaterThan(0);
-    done();
   });
-  test('getResourceUsageOrg()', async (done) => {
+  test('getResourceUsageOrg()', async () => {
     const resources = [];
     let offset = null;
 
@@ -290,13 +286,11 @@ describe('UsageReportsV4_integration', () => {
       } while (offset != null);
     } catch (err) {
       console.log(err);
-      done(err);
     }
 
     // Make sure we found some resources.
     const numResources = resources.length;
     // console.log(`getResourceUsageOrg() response contained ${numResources} total resources`);
     expect(numResources).toBeGreaterThan(0);
-    done();
   });
 });

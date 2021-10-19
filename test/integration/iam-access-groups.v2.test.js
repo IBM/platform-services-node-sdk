@@ -63,7 +63,7 @@ describe('IamAccessGroupsV2_integration', () => {
     done();
   });
 
-  test('Create an access group', async (done) => {
+  test('Create an access group', async () => {
     const params = {
       accountId: testAccountId,
       name: testGroupName,
@@ -73,7 +73,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.createAccessGroup(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -84,11 +84,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.name).toEqual(testGroupName);
 
     testGroupId = result.id;
-
-    done();
   });
 
-  test('Get an access group', async (done) => {
+  test('Get an access group', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -99,7 +97,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.getAccessGroup(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -112,11 +110,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.description).toEqual('');
 
     testGroupETag = response.headers.etag;
-
-    done();
   });
 
-  test('Update an access group', async (done) => {
+  test('Update an access group', async () => {
     expect(testGroupId).toBeDefined();
     expect(testGroupETag).toBeDefined();
 
@@ -130,7 +126,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.updateAccessGroup(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -141,11 +137,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.id).toEqual(testGroupId);
     expect(result.name).toEqual(testGroupName);
     expect(result.description).toEqual(testGroupDescription);
-
-    done();
   });
 
-  test('List access groups', async (done) => {
+  test('List access groups', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -157,7 +151,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.listAccessGroups(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -175,11 +169,9 @@ describe('IamAccessGroupsV2_integration', () => {
       }
     }
     expect(foundTestGroup).toBeTruthy();
-
-    done();
   });
 
-  test('Add members to an access group', async (done) => {
+  test('Add members to an access group', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -196,7 +188,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.addMembersToAccessGroup(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -216,11 +208,9 @@ describe('IamAccessGroupsV2_integration', () => {
       }
     }
     expect(foundTestUser).toBeTruthy();
-
-    done();
   });
 
-  test('Add member to multiple access groups', async (done) => {
+  test('Add member to multiple access groups', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -234,7 +224,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.addMemberToMultipleAccessGroups(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -253,11 +243,9 @@ describe('IamAccessGroupsV2_integration', () => {
       }
     }
     expect(foundTestGroup).toBeTruthy();
-
-    done();
   });
 
-  test('Check access group membership', async (done) => {
+  test('Check access group membership', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -269,16 +257,14 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.isMemberOfAccessGroup(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
     expect(response.status).toEqual(204);
-
-    done();
   });
 
-  test('List access group memberships', async (done) => {
+  test('List access group memberships', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -289,7 +275,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.listAccessGroupMembers(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -307,11 +293,9 @@ describe('IamAccessGroupsV2_integration', () => {
       }
     }
     expect(foundTestUser).toBeTruthy();
-
-    done();
   });
 
-  test('Delete access group membership', async (done) => {
+  test('Delete access group membership', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -323,16 +307,14 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.removeMemberFromAccessGroup(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
     expect(response.status).toEqual(204);
-
-    done();
   });
 
-  test('Delete member from all groups', async (done) => {
+  test('Delete member from all groups', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -345,11 +327,10 @@ describe('IamAccessGroupsV2_integration', () => {
     } catch (err) {
       expect(err.status).toEqual(404);
       expect(err.message).toContain(testUserId);
-      done();
     }
   });
 
-  test('Delete multiple members from an access group', async (done) => {
+  test('Delete multiple members from an access group', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -362,11 +343,10 @@ describe('IamAccessGroupsV2_integration', () => {
     } catch (err) {
       expect(err.status).toEqual(404);
       expect(err.message).toContain(testGroupId);
-      done();
     }
   });
 
-  test('Create an access group rule', async (done) => {
+  test('Create an access group rule', async () => {
     expect(testGroupId).toBeDefined();
 
     const testExpiration = 24;
@@ -388,7 +368,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.addAccessGroupRule(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -400,11 +380,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.expiration).toEqual(testExpiration);
 
     testClaimRuleId = result.id;
-
-    done();
   });
 
-  test('Get an access group rule', async (done) => {
+  test('Get an access group rule', async () => {
     expect(testGroupId).toBeDefined();
     expect(testClaimRuleId).toBeDefined();
 
@@ -417,7 +395,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.getAccessGroupRule(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -429,11 +407,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.id).toEqual(testClaimRuleId);
 
     testClaimRuleETag = response.headers.etag;
-
-    done();
   });
 
-  test('List access group rules', async (done) => {
+  test('List access group rules', async () => {
     expect(testGroupId).toBeDefined();
 
     const params = {
@@ -444,7 +420,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.listAccessGroupRules(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -462,11 +438,9 @@ describe('IamAccessGroupsV2_integration', () => {
       }
     }
     expect(foundTestClaimRule).toBeTruthy();
-
-    done();
   });
 
-  test('Update an access group rule', async (done) => {
+  test('Update an access group rule', async () => {
     expect(testGroupId).toBeDefined();
     expect(testClaimRuleId).toBeDefined();
 
@@ -491,7 +465,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.replaceAccessGroupRule(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -501,11 +475,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.account_id).toEqual(testAccountId);
     expect(result.access_group_id).toEqual(testGroupId);
     expect(result.id).toEqual(testClaimRuleId);
-
-    done();
   });
 
-  test('Delete an access group rule', async (done) => {
+  test('Delete an access group rule', async () => {
     expect(testGroupId).toBeDefined();
     expect(testClaimRuleId).toBeDefined();
 
@@ -518,16 +490,14 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.removeAccessGroupRule(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
     expect(response.status).toEqual(204);
-
-    done();
   });
 
-  test('Get account settings', async (done) => {
+  test('Get account settings', async () => {
     const params = {
       accountId: testAccountId,
     };
@@ -536,7 +506,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.getAccountSettings(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -546,11 +516,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result.account_id).toEqual(testAccountId);
 
     testAccountSettings = result;
-
-    done();
   });
 
-  test('Update account settings', async (done) => {
+  test('Update account settings', async () => {
     const params = {
       accountId: testAccountId,
       publicAccessEnabled: testAccountSettings.public_access_enabled,
@@ -560,7 +528,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.updateAccountSettings(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -569,11 +537,9 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(result).toBeDefined();
     expect(result.account_id).toEqual(testAccountId);
     expect(result.public_access_enabled).toEqual(testAccountSettings.public_access_enabled);
-
-    done();
   });
 
-  test('Clean up all test groups', async (done) => {
+  test('Clean up all test groups', async () => {
     // List all groups in the account (minus the public access group)
     const params = {
       accountId: testAccountId,
@@ -584,7 +550,7 @@ describe('IamAccessGroupsV2_integration', () => {
     try {
       response = await service.listAccessGroups(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -611,7 +577,7 @@ describe('IamAccessGroupsV2_integration', () => {
           try {
             response = await service.deleteAccessGroup(params);
           } catch (err) {
-            done(err);
+            console.warn(err);
           }
 
           expect(response).toBeDefined();
@@ -619,7 +585,5 @@ describe('IamAccessGroupsV2_integration', () => {
         }
       }
     }
-
-    done();
   });
 });

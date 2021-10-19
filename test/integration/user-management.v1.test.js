@@ -116,7 +116,7 @@ describe('UserManagementV1_integration', () => {
         done(err);
       });
   });
-  test('listUsers()', async (done) => {
+  test('listUsers()', async () => {
     const results = [];
     let start = null;
 
@@ -149,14 +149,12 @@ describe('UserManagementV1_integration', () => {
       } while (start != null);
     } catch (err) {
       console.log(err);
-      done(err);
     }
 
     // Make sure we found some users.
     const numUsers = results.length;
     console.log(`listUsers() response contained ${numUsers} total users`);
     expect(numUsers).toBeGreaterThan(0);
-    done();
   });
   test('inviteUsers()', (done) => {
     // Request models needed by this operation.

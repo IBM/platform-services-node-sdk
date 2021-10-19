@@ -369,7 +369,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('createRule() - 201 - Create a rule', async (done) => {
+  test('createRule() - 201 - Create a rule', async () => {
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
@@ -413,7 +413,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     try {
       res = await contextBasedRestrictionsService.createRule(params);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(res).toBeDefined();
@@ -422,8 +422,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
     ruleId = res.result.id;
     ruleEtag = res.headers.etag;
-
-    done();
   });
 
   test('createRule() - 400 - Create a rule with "service not cbr enabled" error', async () => {

@@ -212,7 +212,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('listApiKeys()', async (done) => {
+  test('listApiKeys()', async () => {
     const pageSize = 1;
     let pageToken = null;
     const apikeys = [];
@@ -244,12 +244,10 @@ describe('IamIdentityV1_integration', () => {
       } while (pageToken != null);
     } catch (err) {
       console.log(err);
-      done(err);
     }
 
     // Make sure we found the two apikeys that we created previously.
     expect(apikeys).toHaveLength(2);
-    done();
   });
 
   test('updateApiKey()', (done) => {
@@ -283,7 +281,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('lockApiKey()', async (done) => {
+  test('lockApiKey()', (done) => {
     expect(apikeyId2).toBeDefined();
     expect(apikeyId2).not.toBeNull();
     const params = {
@@ -307,7 +305,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('unlockApiKey()', async (done) => {
+  test('unlockApiKey()', (done) => {
     expect(apikeyId2).toBeDefined();
     expect(apikeyId2).not.toBeNull();
     const params = {
@@ -331,7 +329,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteApiKey1()', async (done) => {
+  test('deleteApiKey1()', (done) => {
     expect(apikeyId1).toBeDefined();
     expect(apikeyId1).not.toBeNull();
     const params = {
@@ -356,7 +354,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteApiKey2()', async (done) => {
+  test('deleteApiKey2()', (done) => {
     expect(apikeyId2).toBeDefined();
     expect(apikeyId2).not.toBeNull();
     const params = {
@@ -545,7 +543,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteServiceId()', async (done) => {
+  test('deleteServiceId()', (done) => {
     expect(serviceId1).toBeDefined();
     expect(serviceId1).not.toBeNull();
     const params = {
@@ -654,7 +652,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('listProfiles()', async (done) => {
+  test('listProfiles()', async () => {
     const pageSize = 1;
     let pageToken = null;
     const profiles = [];
@@ -683,11 +681,9 @@ describe('IamIdentityV1_integration', () => {
       } while (pageToken != null);
     } catch (err) {
       console.log(err);
-      done(err);
     }
 
     expect(profiles).toHaveLength(2);
-    done();
   });
 
   test('updateProfile()', (done) => {
@@ -720,7 +716,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteProfile1()', async (done) => {
+  test('deleteProfile1()', (done) => {
     expect(profileId1).toBeDefined();
     expect(profileId1).not.toBeNull();
     const params = {
@@ -848,7 +844,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('listClaimRules()', async (done) => {
+  test('listClaimRules()', async () => {
     const claimRules = [];
     const params = {
       profileId: profileId2,
@@ -865,7 +861,6 @@ describe('IamIdentityV1_integration', () => {
       }
     }
     expect(claimRules).toHaveLength(2);
-    done();
   });
 
   test('updateClaimRule()', (done) => {
@@ -910,7 +905,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteClaimRule1()', async (done) => {
+  test('deleteClaimRule1()', (done) => {
     expect(claimRuleId1).toBeDefined();
     expect(claimRuleId1).not.toBeNull();
     const params = {
@@ -997,7 +992,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('listLinks()', async (done) => {
+  test('listLinks()', async () => {
     const links = [];
     const params = {
       profileId: profileId2,
@@ -1014,10 +1009,9 @@ describe('IamIdentityV1_integration', () => {
       }
     }
     expect(links).toHaveLength(1);
-    done();
   });
 
-  test('deleteLink()', async (done) => {
+  test('deleteLink()', (done) => {
     expect(linkId).toBeDefined();
     expect(linkId).not.toBeNull();
     const params = {
@@ -1042,7 +1036,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteClaimRule2()', async (done) => {
+  test('deleteClaimRule2()', (done) => {
     expect(claimRuleId2).toBeDefined();
     expect(claimRuleId2).not.toBeNull();
     const params = {
@@ -1067,7 +1061,7 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
-  test('deleteProfile2()', async (done) => {
+  test('deleteProfile2()', (done) => {
     expect(profileId2).toBeDefined();
     expect(profileId2).not.toBeNull();
     const params = {

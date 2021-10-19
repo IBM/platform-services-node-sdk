@@ -127,23 +127,21 @@ describe('GlobalCatalogV1_integration', () => {
     service = GlobalCatalogV1.newInstance();
   });
 
-  beforeEach(async (done) => {
+  beforeEach(async () => {
     await service.deleteCatalogEntry(forceDelete);
-    done();
   });
 
-  afterEach(async (done) => {
+  afterEach(async () => {
     await service.deleteCatalogEntry(forceDelete);
-    done();
   });
 
-  test('Create catalog entry', async (done) => {
+  test('Create catalog entry', async () => {
     let response;
 
     try {
       response = await service.createCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -158,18 +156,16 @@ describe('GlobalCatalogV1_integration', () => {
     expect(result.disabled).toEqual(defaultEntry.disabled);
     expect(result.tags).toEqual(defaultEntry.tags);
     expect(result.provider).toEqual(defaultEntry.provider);
-
-    done();
   });
 
-  test('Get catalog entry', async (done) => {
+  test('Get catalog entry', async () => {
     let response;
 
     try {
       await service.createCatalogEntry(defaultEntry);
       response = await service.getCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -185,18 +181,16 @@ describe('GlobalCatalogV1_integration', () => {
     expect(result.disabled).toEqual(defaultEntry.disabled);
     expect(result.tags).toEqual(defaultEntry.tags);
     expect(result.provider).toEqual(defaultEntry.provider);
-
-    done();
   });
 
-  test('Update catalog entry', async (done) => {
+  test('Update catalog entry', async () => {
     let response;
 
     try {
       await service.createCatalogEntry(defaultEntry);
       response = await service.updateCatalogEntry(updatedEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -212,18 +206,16 @@ describe('GlobalCatalogV1_integration', () => {
     expect(result.disabled).toEqual(updatedEntry.disabled);
     expect(result.tags).toEqual(updatedEntry.tags);
     expect(result.provider).toEqual(updatedEntry.provider);
-
-    done();
   });
 
-  test('Delete catalog entry', async (done) => {
+  test('Delete catalog entry', async () => {
     let response;
 
     try {
       await service.createCatalogEntry(defaultEntry);
       response = await service.deleteCatalogEntry(forceDelete);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -231,29 +223,26 @@ describe('GlobalCatalogV1_integration', () => {
 
     const { result } = response || {};
     expect(result).toBeDefined();
-
-    done();
   });
 
-  test('Fail to get catalog entry after deletion', async (done) => {
+  test('Fail to get catalog entry after deletion', async () => {
     expect.assertions(1);
 
     try {
       await service.createCatalogEntry(defaultEntry);
       await service.deleteCatalogEntry(forceDelete);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     try {
       await service.getCatalogEntry(defaultEntry);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Fail to get catalog entry that does not exist', async (done) => {
+  test('Fail to get catalog entry that does not exist', async () => {
     expect.assertions(1);
 
     try {
@@ -261,18 +250,17 @@ describe('GlobalCatalogV1_integration', () => {
       await service.getCatalogEntry(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Fail to delete catalog entry that does not exist', async (done) => {
+  test('Fail to delete catalog entry that does not exist', async () => {
     let response;
 
     try {
       const args = { 'id': 'bogus' };
       response = await service.deleteCatalogEntry(args);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -280,45 +268,41 @@ describe('GlobalCatalogV1_integration', () => {
 
     const { result } = response || {};
     expect(result).toBeDefined();
-
-    done();
   });
 
-  test('Fail to update catalog entry that does not exist', async (done) => {
+  test('Fail to update catalog entry that does not exist', async () => {
     expect.assertions(1);
 
     try {
       await service.getCatalogEntry(updatedEntry);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Fail to create catalog entry that already exists', async (done) => {
+  test('Fail to create catalog entry that already exists', async () => {
     expect.assertions(1);
 
     try {
       await service.createCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     try {
       await service.createCatalogEntry(defaultEntry);
     } catch (err) {
       expect(err.status).toEqual(409);
-      done();
     }
   });
 
-  test('List catalog entry', async (done) => {
+  test('List catalog entry', async () => {
     let response;
 
     try {
       response = await service.listCatalogEntries();
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -330,11 +314,9 @@ describe('GlobalCatalogV1_integration', () => {
     const { resources } = result || {};
     expect(resources).toBeDefined();
     expect(resources.length).toBeGreaterThan(0);
-
-    done();
   });
 
-  test('Get child catalog entry', async (done) => {
+  test('Get child catalog entry', async () => {
     let response;
 
     try {
@@ -342,7 +324,7 @@ describe('GlobalCatalogV1_integration', () => {
       await service.createCatalogEntry(defaultChildEntry);
       response = await service.getChildObjects(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -366,22 +348,19 @@ describe('GlobalCatalogV1_integration', () => {
     expect(resources[0].disabled).toEqual(defaultChildEntry.disabled);
     expect(resources[0].tags).toEqual(defaultChildEntry.tags);
     expect(resources[0].provider).toEqual(defaultChildEntry.provider);
-
-    done();
   });
 
-  test('Fail to get child catalog entry that does not exist', async (done) => {
+  test('Fail to get child catalog entry that does not exist', async () => {
     expect.assertions(1);
     try {
       const args = { 'id': 'bogus', 'kind': 'bogus' };
       await service.getChildObjects(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Restore catalog entry', async (done) => {
+  test('Restore catalog entry', async () => {
     let response;
 
     try {
@@ -389,7 +368,7 @@ describe('GlobalCatalogV1_integration', () => {
       await service.deleteCatalogEntry(defaultEntry);
       response = await service.restoreCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -398,7 +377,7 @@ describe('GlobalCatalogV1_integration', () => {
     try {
       response = await service.getCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.log(err);
     }
 
     expect(response).toBeDefined();
@@ -414,11 +393,9 @@ describe('GlobalCatalogV1_integration', () => {
     expect(result.disabled).toEqual(defaultEntry.disabled);
     expect(result.tags).toEqual(defaultEntry.tags);
     expect(result.provider).toEqual(defaultEntry.provider);
-
-    done();
   });
 
-  test('Fail to restore catalog entry that does not exist', async (done) => {
+  test('Fail to restore catalog entry that does not exist', async () => {
     expect.assertions(1);
 
     try {
@@ -426,18 +403,17 @@ describe('GlobalCatalogV1_integration', () => {
       await service.getCatalogEntry(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Get catalog entry visibility', async (done) => {
+  test('Get catalog entry visibility', async () => {
     let response;
 
     try {
       await service.createCatalogEntry(defaultEntry);
       response = await service.getVisibility(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -446,39 +422,35 @@ describe('GlobalCatalogV1_integration', () => {
     const { result } = response || {};
     expect(result).toBeDefined();
     expect(result.restrictions).toEqual(defaultEntry.restrictions);
-
-    done();
   });
 
-  test('Fail to get visibility for catalog entry that does not exist', async (done) => {
+  test('Fail to get visibility for catalog entry that does not exist', async () => {
     expect.assertions(1);
     try {
       const args = { 'id': 'bogus' };
       await service.getVisibility(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Update catalog entry visibility', async (done) => {
+  test('Update catalog entry visibility', async () => {
     expect.assertions(1);
 
     try {
       await service.createCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     try {
       await service.updateVisibility(defaultEntry);
     } catch (err) {
       expect(err.status).toEqual(403);
-      done();
     }
   });
 
-  test('Fail to update visibility for catalog entry that does not exist', async (done) => {
+  test('Fail to update visibility for catalog entry that does not exist', async () => {
     expect.assertions(1);
 
     try {
@@ -486,24 +458,22 @@ describe('GlobalCatalogV1_integration', () => {
       await service.updateVisibility(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Fail to get catalog entry pricing', async (done) => {
+  test('Fail to get catalog entry pricing', async () => {
     expect.assertions(1);
 
     try {
       await service.createCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     try {
       await service.getPricing(defaultEntry);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
 
     try {
@@ -511,11 +481,10 @@ describe('GlobalCatalogV1_integration', () => {
       await service.getPricing(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('List catalog entry artifacts', async (done) => {
+  test('List catalog entry artifacts', async () => {
     let response;
 
     const args = {
@@ -531,7 +500,7 @@ describe('GlobalCatalogV1_integration', () => {
       await service.uploadArtifact(args);
       response = await service.listArtifacts(args);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -549,18 +518,16 @@ describe('GlobalCatalogV1_integration', () => {
       `${service.baseOptions.serviceUrl}/${defaultEntry.id}/artifacts/${defaultEntry.artifactId}`
     );
     expect(resources[0].size).toEqual(23);
-
-    done();
   });
 
-  test('Fail to list catalog entry artifacts', async (done) => {
+  test('Fail to list catalog entry artifacts', async () => {
     let response;
 
     try {
       const args = { 'objectId': 'bogus' };
       response = await service.listArtifacts(args);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -569,11 +536,9 @@ describe('GlobalCatalogV1_integration', () => {
     const { result } = response || {};
     expect(result).toBeDefined();
     expect(result.count).toEqual(0);
-
-    done();
   });
 
-  test('Get catalog entry artifact', async (done) => {
+  test('Get catalog entry artifact', async () => {
     let response;
 
     const args = {
@@ -589,7 +554,7 @@ describe('GlobalCatalogV1_integration', () => {
       await service.uploadArtifact(args);
       response = await service.getArtifact(args);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -598,17 +563,15 @@ describe('GlobalCatalogV1_integration', () => {
     const { result } = response || {};
     expect(result).toBeDefined();
     // expect(JSON.parse(result.read().toString())).toEqual(defaultEntry.artifact);
-
-    done();
   });
 
-  test('Fail to get catalog entry artifact', async (done) => {
+  test('Fail to get catalog entry artifact', async () => {
     expect.assertions(2);
 
     try {
       await service.createCatalogEntry(defaultEntry);
     } catch (err) {
-      done(err);
+      console.log(err);
     }
 
     try {
@@ -616,7 +579,6 @@ describe('GlobalCatalogV1_integration', () => {
       await service.getArtifact(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
 
     try {
@@ -624,11 +586,10 @@ describe('GlobalCatalogV1_integration', () => {
       await service.getArtifact(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Create catalog entry artifact', async (done) => {
+  test('Create catalog entry artifact', async () => {
     let response;
 
     const args = {
@@ -643,7 +604,7 @@ describe('GlobalCatalogV1_integration', () => {
       await service.createCatalogEntry(defaultEntry);
       response = await service.uploadArtifact(args);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -651,11 +612,9 @@ describe('GlobalCatalogV1_integration', () => {
 
     const { result } = response || {};
     expect(result).toBeDefined();
-
-    done();
   });
 
-  test('Fail to create catalog entry artifact', async (done) => {
+  test('Fail to create catalog entry artifact', async () => {
     expect.assertions(1);
 
     const args = {
@@ -670,11 +629,10 @@ describe('GlobalCatalogV1_integration', () => {
       await service.uploadArtifact(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 
-  test('Delete catalog entry artifact', async (done) => {
+  test('Delete catalog entry artifact', async () => {
     let response;
 
     const args = {
@@ -690,7 +648,7 @@ describe('GlobalCatalogV1_integration', () => {
       await service.uploadArtifact(args);
       response = await service.deleteArtifact(args);
     } catch (err) {
-      done(err);
+      console.warn(err);
     }
 
     expect(response).toBeDefined();
@@ -698,11 +656,9 @@ describe('GlobalCatalogV1_integration', () => {
 
     const { result } = response || {};
     expect(result).toBeDefined();
-
-    done();
   });
 
-  test('Fail to delete catalog entry artifact', async (done) => {
+  test('Fail to delete catalog entry artifact', async () => {
     expect.assertions(1);
 
     try {
@@ -710,7 +666,6 @@ describe('GlobalCatalogV1_integration', () => {
       await service.deleteArtifact(args);
     } catch (err) {
       expect(err.status).toEqual(404);
-      done();
     }
   });
 });
