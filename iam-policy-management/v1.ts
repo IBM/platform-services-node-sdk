@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.29.1-b338fb38-20210313-010605
+ * IBM OpenAPI SDK Code Generator Version: 3.39.0-748eb4ca-20210917-165907
  */
 
 import * as extend from 'extend';
@@ -31,6 +31,8 @@ import { getSdkHeaders } from '../lib/common';
 
 /**
  * IAM Policy Management API
+ *
+ * API Version: 1.0.1
  */
 
 class IamPolicyManagementV1 extends BaseService {
@@ -105,17 +107,33 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID in which the policies belong to.
-   * @param {string} [params.acceptLanguage] - Translation language code.
-   * @param {string} [params.iamId] - The IAM ID used to identify the subject.
-   * @param {string} [params.accessGroupId] - The access group id.
-   * @param {string} [params.type] - The type of policy (access or authorization).
-   * @param {string} [params.serviceType] - The type of service.
-   * @param {string} [params.tagName] - The name of the access management tag in the policy.
-   * @param {string} [params.tagValue] - The value of the access management tag in the policy.
-   * @param {string} [params.sort] - Sort the results by any of the top level policy fields (id, created_at,
-   * created_by_id, last_modified_at, etc).
-   * @param {string} [params.format] - Include additional data per policy returned [include_last_permit, display].
-   * @param {string} [params.state] - The state of the policy, 'active' or 'deleted'.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.iamId] - Optional IAM ID used to identify the subject.
+   * @param {string} [params.accessGroupId] - Optional access group id.
+   * @param {string} [params.type] - Optional type of policy.
+   * @param {string} [params.serviceType] - Optional type of service.
+   * @param {string} [params.tagName] - Optional name of the access management tag in the policy.
+   * @param {string} [params.tagValue] - Optional value of the access management tag in the policy.
+   * @param {string} [params.sort] - Optional top level policy field to sort results. Ascending sort is default.
+   * Descending sort available by prepending '-' to field. Example '-last_modified_at'.
+   * @param {string} [params.format] - Include additional data per policy returned
+   * * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times
+   * it has done so
+   * * `display` - returns the list of all actions included in each of the policy roles.
+   * @param {string} [params.state] - The state of the policy.
+   * * `active` - returns active policies
+   * * `deleted` - returns non-active policies.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>>}
    */
@@ -201,13 +219,36 @@ class IamPolicyManagementV1 extends BaseService {
    * or the platform's supported attributes. Both the policy subject and the policy resource must include the
    * **`serviceName`** and **`accountId`** attributes.
    *
+   * ### Attribute Operators
+   *
+   * Currently, only the `stringEquals` and the `stringMatch` operators are available. Resource attributes may support
+   * one or both operators.  For more information, see [how to assign access by using wildcards
+   * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
+   *
+   * ### Attribute Validations
+   *
+   * Policy attribute values must be between 1 and 1,000 characters in length. If location related attributes like
+   * geography, country, metro, region, satellite, and locationvalues are supported by the service, they are validated
+   * against Global Catalog locations.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
    * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
    * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
    * @param {PolicyResource[]} params.resources - The resources associated with a policy.
    * @param {string} [params.description] - Customer-defined description.
-   * @param {string} [params.acceptLanguage] - Translation language code.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
@@ -285,6 +326,18 @@ class IamPolicyManagementV1 extends BaseService {
    * greater to the target resource in order to grant the role. The resource attributes must be a subset of a service's
    * or the platform's supported attributes. Both the policy subject and the policy resource must include the
    * **`serviceName`** and **`accountId`** attributes.
+   *
+   * ### Attribute Operators
+   *
+   * Currently, only the `stringEquals` and the `stringMatch` operators are available. Resource attributes might support
+   * one or both operators.  For more information, see [how to assign access by using wildcards
+   * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
+   *
+   * ### Attribute Validations
+   *
+   * Policy attribute values must be between 1 and 1,000 characters in length. If location related attributes like
+   * geography, country, metro, region, satellite, and locationvalues are supported by the service, they are validated
+   * against Global Catalog locations.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyId - The policy ID.
@@ -457,7 +510,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.ifMatch - The revision number for updating a policy and must match the ETag value of the
    * existing policy. The Etag can be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag
    * response header.
-   * @param {string} [params.state] - The policy state; either 'active' or 'deleted'.
+   * @param {string} [params.state] - The policy state.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
@@ -509,7 +562,6 @@ class IamPolicyManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * roles
    ************************/
@@ -518,14 +570,27 @@ class IamPolicyManagementV1 extends BaseService {
    * Get roles by filters.
    *
    * Get roles based on the filters. While managing roles, you may want to retrieve roles and filter by usages. This can
-   * be done through query parameters. Currently, we only support the following attributes: account_id, and
-   * service_name. Only roles that match the filter and that the caller has read access to are returned. If the caller
-   * does not have read access to any roles an empty array is returned.
+   * be done through query parameters. Currently, we only support the following attributes: account_id, service_name,
+   * source_service_name and policy_type. Only roles that match the filter and that the caller has read access to are
+   * returned. If the caller does not have read access to any roles an empty array is returned.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.acceptLanguage] - Translation language code.
-   * @param {string} [params.accountId] - The account GUID in which the roles belong to.
-   * @param {string} [params.serviceName] - The name of service.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.accountId] - Optional account GUID in which the roles belong to.
+   * @param {string} [params.serviceName] - Optional name of IAM enabled service.
+   * @param {string} [params.sourceServiceName] - Optional name of source IAM enabled service.
+   * @param {string} [params.policyType] - Optional Policy Type.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>>}
    */
@@ -537,6 +602,8 @@ class IamPolicyManagementV1 extends BaseService {
     const query = {
       'account_id': _params.accountId,
       'service_name': _params.serviceName,
+      'source_service_name': _params.sourceServiceName,
+      'policy_type': _params.policyType,
     };
 
     const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listRoles');
@@ -573,13 +640,25 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.displayName - The display name of the role that is shown in the console.
-   * @param {string[]} params.actions - The actions of the role.
+   * @param {string[]} params.actions - The actions of the role. Please refer to [IAM roles and
+   * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
    * @param {string} params.name - The name of the role that is used in the CRN. Can only be alphanumeric and has to be
    * capitalized.
    * @param {string} params.accountId - The account GUID.
    * @param {string} params.serviceName - The service name.
    * @param {string} [params.description] - The description of the role.
-   * @param {string} [params.acceptLanguage] - Translation language code.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>>}
    */
@@ -645,7 +724,8 @@ class IamPolicyManagementV1 extends BaseService {
    * header.
    * @param {string} [params.displayName] - The display name of the role that is shown in the console.
    * @param {string} [params.description] - The description of the role.
-   * @param {string[]} [params.actions] - The actions of the role.
+   * @param {string[]} [params.actions] - The actions of the role. Please refer to [IAM roles and
+   * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>>}
    */
@@ -826,29 +906,80 @@ namespace IamPolicyManagementV1 {
   export interface ListPoliciesParams {
     /** The account GUID in which the policies belong to. */
     accountId: string;
-    /** Translation language code. */
-    acceptLanguage?: string;
-    /** The IAM ID used to identify the subject. */
-    iamId?: string;
-    /** The access group id. */
-    accessGroupId?: string;
-    /** The type of policy (access or authorization). */
-    type?: string;
-    /** The type of service. */
-    serviceType?: string;
-    /** The name of the access management tag in the policy. */
-    tagName?: string;
-    /** The value of the access management tag in the policy. */
-    tagValue?: string;
-    /** Sort the results by any of the top level policy fields (id, created_at, created_by_id, last_modified_at,
-     *  etc).
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
      */
-    sort?: string;
-    /** Include additional data per policy returned [include_last_permit, display]. */
-    format?: string;
-    /** The state of the policy, 'active' or 'deleted'. */
-    state?: string;
+    acceptLanguage?: string;
+    /** Optional IAM ID used to identify the subject. */
+    iamId?: string;
+    /** Optional access group id. */
+    accessGroupId?: string;
+    /** Optional type of policy. */
+    type?: ListPoliciesConstants.Type | string;
+    /** Optional type of service. */
+    serviceType?: ListPoliciesConstants.ServiceType | string;
+    /** Optional name of the access management tag in the policy. */
+    tagName?: string;
+    /** Optional value of the access management tag in the policy. */
+    tagValue?: string;
+    /** Optional top level policy field to sort results. Ascending sort is default. Descending sort available by
+     *  prepending '-' to field. Example '-last_modified_at'.
+     */
+    sort?: ListPoliciesConstants.Sort | string;
+    /** Include additional data per policy returned
+     *  * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of
+     *  times it has done so
+     *  * `display` - returns the list of all actions included in each of the policy roles.
+     */
+    format?: ListPoliciesConstants.Format | string;
+    /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
+    state?: ListPoliciesConstants.State | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listPolicies` operation. */
+  export namespace ListPoliciesConstants {
+    /** Optional type of policy. */
+    export enum Type {
+      ACCESS = 'access',
+      AUTHORIZATION = 'authorization',
+    }
+    /** Optional type of service. */
+    export enum ServiceType {
+      SERVICE = 'service',
+      PLATFORM_SERVICE = 'platform_service',
+    }
+    /** Optional top level policy field to sort results. Ascending sort is default. Descending sort available by prepending '-' to field. Example '-last_modified_at'. */
+    export enum Sort {
+      ID = 'id',
+      TYPE = 'type',
+      HREF = 'href',
+      CREATED_AT = 'created_at',
+      CREATED_BY_ID = 'created_by_id',
+      LAST_MODIFIED_AT = 'last_modified_at',
+      LAST_MODIFIED_BY_ID = 'last_modified_by_id',
+      STATE = 'state',
+    }
+    /** Include additional data per policy returned * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times it has done so * `display` - returns the list of all actions included in each of the policy roles. */
+    export enum Format {
+      INCLUDE_LAST_PERMIT = 'include_last_permit',
+      DISPLAY = 'display',
+    }
+    /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
   }
 
   /** Parameters for the `createPolicy` operation. */
@@ -863,7 +994,19 @@ namespace IamPolicyManagementV1 {
     resources: PolicyResource[];
     /** Customer-defined description. */
     description?: string;
-    /** Translation language code. */
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
     acceptLanguage?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -911,19 +1054,44 @@ namespace IamPolicyManagementV1 {
      *  be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag response header.
      */
     ifMatch: string;
-    /** The policy state; either 'active' or 'deleted'. */
-    state?: string;
+    /** The policy state. */
+    state?: PatchPolicyConstants.State | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `patchPolicy` operation. */
+  export namespace PatchPolicyConstants {
+    /** The policy state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
   }
 
   /** Parameters for the `listRoles` operation. */
   export interface ListRolesParams {
-    /** Translation language code. */
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
     acceptLanguage?: string;
-    /** The account GUID in which the roles belong to. */
+    /** Optional account GUID in which the roles belong to. */
     accountId?: string;
-    /** The name of service. */
+    /** Optional name of IAM enabled service. */
     serviceName?: string;
+    /** Optional name of source IAM enabled service. */
+    sourceServiceName?: string;
+    /** Optional Policy Type. */
+    policyType?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -931,7 +1099,9 @@ namespace IamPolicyManagementV1 {
   export interface CreateRoleParams {
     /** The display name of the role that is shown in the console. */
     displayName: string;
-    /** The actions of the role. */
+    /** The actions of the role. Please refer to [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
     actions: string[];
     /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
     name: string;
@@ -941,7 +1111,19 @@ namespace IamPolicyManagementV1 {
     serviceName: string;
     /** The description of the role. */
     description?: string;
-    /** Translation language code. */
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
     acceptLanguage?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -958,7 +1140,9 @@ namespace IamPolicyManagementV1 {
     displayName?: string;
     /** The description of the role. */
     description?: string;
-    /** The actions of the role. */
+    /** The actions of the role. Please refer to [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
     actions?: string[];
     headers?: OutgoingHttpHeaders;
   }
@@ -983,15 +1167,19 @@ namespace IamPolicyManagementV1 {
 
   /** An additional set of properties associated with a role. */
   export interface CustomRole {
-    /** The role ID. */
+    /** The role ID. Composed of hexadecimal characters. */
     id?: string;
     /** The display name of the role that is shown in the console. */
     display_name?: string;
     /** The description of the role. */
     description?: string;
-    /** The actions of the role. */
+    /** The actions of the role. Please refer to [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
     actions?: string[];
-    /** The role CRN. */
+    /** The role Cloud Resource Name (CRN). Example CRN:
+     *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
+     */
     crn?: string;
     /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
     name?: string;
@@ -1035,6 +1223,8 @@ namespace IamPolicyManagementV1 {
     last_modified_at?: string;
     /** The iam ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
+    /** The policy state. */
+    state?: string;
   }
 
   /** A collection of policies. */
@@ -1053,7 +1243,9 @@ namespace IamPolicyManagementV1 {
 
   /** A role associated with a policy. */
   export interface PolicyRole {
-    /** The role cloud resource name granted by the policy. */
+    /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
+     *  'crn:v1:bluemix:public:iam::::role:Editor'.
+     */
     role_id: string;
     /** The display name of the role. */
     display_name?: string;
@@ -1093,9 +1285,13 @@ namespace IamPolicyManagementV1 {
     display_name?: string;
     /** The description of the role. */
     description?: string;
-    /** The actions of the role. */
+    /** The actions of the role. Please refer to [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
     actions?: string[];
-    /** The role CRN. */
+    /** The role Cloud Resource Name (CRN). Example CRN:
+     *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
+     */
     crn?: string;
   }
 
