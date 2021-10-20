@@ -1,3 +1,10 @@
+# [0.22.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.21.1...v0.22.0) (2021-10-20)
+
+
+### Features
+
+* **IAM Policy Management:** support of new query params for v2/roles ([#141](https://github.com/IBM/platform-services-node-sdk/issues/141)) ([e19e101](https://github.com/IBM/platform-services-node-sdk/commit/e19e1012b914c885402818459874595a3d7c26d7))
+
 ## [0.21.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.21.0...v0.21.1) (2021-10-12)
 
 
