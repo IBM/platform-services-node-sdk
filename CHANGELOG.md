@@ -1,3 +1,10 @@
+## [0.22.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.0...v0.22.1) (2021-10-27)
+
+
+### Bug Fixes
+
+* **Resource Manager:** update resource manager endpoint URL ([#143](https://github.com/IBM/platform-services-node-sdk/issues/143)) ([c2bd976](https://github.com/IBM/platform-services-node-sdk/commit/c2bd97633801927d0adf6c433c4e483220e0b12c))
+
 # [0.22.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.21.1...v0.22.0) (2021-10-20)
 
 
