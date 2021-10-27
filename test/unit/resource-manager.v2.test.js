@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const ResourceManagerV2 = require('../../dist/resource-manager/v2');
@@ -29,12 +29,12 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const resourceManagerServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://resource-controller.cloud.ibm.com/v2',
+  url: 'https://resource-controller.cloud.ibm.com',
 };
 
-const resourceManagerService = new ResourceManagerV2(service);
+const resourceManagerService = new ResourceManagerV2(resourceManagerServiceOptions);
 
 // dont actually create a request
 const createRequestMock = jest.spyOn(resourceManagerService, 'createRequest');
@@ -101,7 +101,7 @@ describe('ResourceManagerV2', () => {
   });
   describe('listResourceGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceGroupsTest() {
         // Construct the params object for operation listResourceGroups
         const accountId = 'testString';
         const date = 'testString';
@@ -124,17 +124,32 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/resource_groups', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_groups', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['date']).toEqual(date);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['default']).toEqual(_default);
-        expect(options.qs['include_deleted']).toEqual(includeDeleted);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.date).toEqual(date);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.default).toEqual(_default);
+        expect(mockRequestOptions.qs.include_deleted).toEqual(includeDeleted);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __listResourceGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __listResourceGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -161,7 +176,7 @@ describe('ResourceManagerV2', () => {
   });
   describe('createResourceGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createResourceGroupTest() {
         // Construct the params object for operation createResourceGroup
         const name = 'test1';
         const accountId = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
@@ -178,14 +193,29 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/resource_groups', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_groups', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createResourceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __createResourceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __createResourceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -212,7 +242,7 @@ describe('ResourceManagerV2', () => {
   });
   describe('getResourceGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getResourceGroupTest() {
         // Construct the params object for operation getResourceGroup
         const id = 'testString';
         const params = {
@@ -227,13 +257,28 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/resource_groups/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_groups/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getResourceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __getResourceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __getResourceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -266,20 +311,21 @@ describe('ResourceManagerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getResourceGroupPromise = resourceManagerService.getResourceGroup();
-        expectToBePromise(getResourceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceManagerService.getResourceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getResourceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('updateResourceGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateResourceGroupTest() {
         // Construct the params object for operation updateResourceGroup
         const id = 'testString';
         const name = 'testString';
@@ -298,15 +344,30 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/resource_groups/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_groups/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['state']).toEqual(state);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.state).toEqual(state);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateResourceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __updateResourceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __updateResourceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -339,20 +400,21 @@ describe('ResourceManagerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateResourceGroupPromise = resourceManagerService.updateResourceGroup();
-        expectToBePromise(updateResourceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceManagerService.updateResourceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updateResourceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('deleteResourceGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteResourceGroupTest() {
         // Construct the params object for operation deleteResourceGroup
         const id = 'testString';
         const params = {
@@ -367,13 +429,28 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/resource_groups/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_groups/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteResourceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __deleteResourceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __deleteResourceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -406,20 +483,21 @@ describe('ResourceManagerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteResourceGroupPromise = resourceManagerService.deleteResourceGroup();
-        expectToBePromise(deleteResourceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceManagerService.deleteResourceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteResourceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('listQuotaDefinitions', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listQuotaDefinitionsTest() {
         // Construct the params object for operation listQuotaDefinitions
         const params = {};
 
@@ -431,12 +509,27 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/quota_definitions', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/quota_definitions', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listQuotaDefinitionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __listQuotaDefinitionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __listQuotaDefinitionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -463,7 +556,7 @@ describe('ResourceManagerV2', () => {
   });
   describe('getQuotaDefinition', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getQuotaDefinitionTest() {
         // Construct the params object for operation getQuotaDefinition
         const id = 'testString';
         const params = {
@@ -478,13 +571,28 @@ describe('ResourceManagerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/quota_definitions/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/quota_definitions/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getQuotaDefinitionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.enableRetries();
+        __getQuotaDefinitionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceManagerService.disableRetries();
+        __getQuotaDefinitionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -517,14 +625,15 @@ describe('ResourceManagerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getQuotaDefinitionPromise = resourceManagerService.getQuotaDefinition();
-        expectToBePromise(getQuotaDefinitionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceManagerService.getQuotaDefinition();
+        } catch (e) {
+          err = e;
+        }
 
-        getQuotaDefinitionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
