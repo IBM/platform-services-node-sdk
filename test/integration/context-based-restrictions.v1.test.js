@@ -72,11 +72,11 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(authType).not.toBeNull();
     expect(authType).toBeDefined();
 
-    accountId = config.accountId;
+    accountId = config.testAccountId;
     expect(accountId).not.toBeNull();
     expect(accountId).toBeDefined();
 
-    serviceName = config.serviceName;
+    serviceName = config.testServiceName;
     expect(serviceName).not.toBeNull();
     expect(serviceName).toBeDefined();
 
@@ -831,7 +831,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   test('deleteZone() - 204 - Delete the specified zone', async () => {
     const params = {
       zoneId,
-      transactionId: uuidv4(),
+      xCorrelationId: uuidv4(),
     };
 
     const res = await contextBasedRestrictionsService.deleteZone(params);
