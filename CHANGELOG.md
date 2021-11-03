@@ -1,3 +1,10 @@
+## [0.22.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.1...v0.22.2) (2021-11-03)
+
+
+### Bug Fixes
+
+* **Context-Based Restrictions:** add support for the X-Correlation-Id header ([#145](https://github.com/IBM/platform-services-node-sdk/issues/145)) ([0f66331](https://github.com/IBM/platform-services-node-sdk/commit/0f66331f53c5da8359368553ba94719475d09864))
+
 ## [0.22.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.0...v0.22.1) (2021-10-27)
 
 
