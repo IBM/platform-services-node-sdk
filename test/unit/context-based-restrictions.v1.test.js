@@ -117,6 +117,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const addresses = [addressModel];
         const description = 'this is an example of zone';
         const excluded = [addressModel];
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           name: name,
@@ -124,6 +125,7 @@ describe('ContextBasedRestrictionsV1', () => {
           addresses: addresses,
           description: description,
           excluded: excluded,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -141,6 +143,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.account_id).toEqual(accountId);
@@ -191,11 +194,13 @@ describe('ContextBasedRestrictionsV1', () => {
       function __listZonesTest() {
         // Construct the params object for operation listZones
         const accountId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const name = 'testString';
         const sort = 'testString';
         const params = {
           accountId: accountId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
           name: name,
           sort: sort,
@@ -215,6 +220,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.name).toEqual(name);
@@ -282,9 +288,11 @@ describe('ContextBasedRestrictionsV1', () => {
       function __getZoneTest() {
         // Construct the params object for operation getZone
         const zoneId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           zoneId: zoneId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -302,6 +310,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.path.zone_id).toEqual(zoneId);
       }
@@ -381,6 +390,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const addresses = [addressModel];
         const description = 'this is an example of zone';
         const excluded = [addressModel];
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           zoneId: zoneId,
@@ -390,6 +400,7 @@ describe('ContextBasedRestrictionsV1', () => {
           addresses: addresses,
           description: description,
           excluded: excluded,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -408,6 +419,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.account_id).toEqual(accountId);
@@ -480,9 +492,11 @@ describe('ContextBasedRestrictionsV1', () => {
       function __deleteZoneTest() {
         // Construct the params object for operation deleteZone
         const zoneId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           zoneId: zoneId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -500,6 +514,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.path.zone_id).toEqual(zoneId);
       }
@@ -564,8 +579,12 @@ describe('ContextBasedRestrictionsV1', () => {
     describe('positive tests', () => {
       function __listAvailableServicerefTargetsTest() {
         // Construct the params object for operation listAvailableServicerefTargets
+        const xCorrelationId = 'testString';
+        const transactionId = 'testString';
         const type = 'all';
         const params = {
+          xCorrelationId: xCorrelationId,
+          transactionId: transactionId,
           type: type,
         };
 
@@ -583,6 +602,8 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.type).toEqual(type);
       }
 
@@ -663,11 +684,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const contexts = [ruleContextModel];
         const resources = [resourceModel];
         const description = 'this is an example of rule';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           contexts: contexts,
           resources: resources,
           description: description,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -685,6 +708,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.body.contexts).toEqual(contexts);
         expect(mockRequestOptions.body.resources).toEqual(resources);
@@ -733,6 +757,7 @@ describe('ContextBasedRestrictionsV1', () => {
       function __listRulesTest() {
         // Construct the params object for operation listRules
         const accountId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const region = 'testString';
         const resource = 'testString';
@@ -744,6 +769,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const sort = 'testString';
         const params = {
           accountId: accountId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
           region: region,
           resource: resource,
@@ -769,6 +795,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.region).toEqual(region);
@@ -842,9 +869,11 @@ describe('ContextBasedRestrictionsV1', () => {
       function __getRuleTest() {
         // Construct the params object for operation getRule
         const ruleId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -862,6 +891,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
       }
@@ -964,6 +994,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const contexts = [ruleContextModel];
         const resources = [resourceModel];
         const description = 'this is an example of rule';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
@@ -971,6 +1002,7 @@ describe('ContextBasedRestrictionsV1', () => {
           contexts: contexts,
           resources: resources,
           description: description,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -989,6 +1021,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.body.contexts).toEqual(contexts);
         expect(mockRequestOptions.body.resources).toEqual(resources);
@@ -1059,9 +1092,11 @@ describe('ContextBasedRestrictionsV1', () => {
       function __deleteRuleTest() {
         // Construct the params object for operation deleteRule
         const ruleId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -1079,6 +1114,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
       }
@@ -1144,9 +1180,11 @@ describe('ContextBasedRestrictionsV1', () => {
       function __getAccountSettingsTest() {
         // Construct the params object for operation getAccountSettings
         const accountId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const params = {
           accountId: accountId,
+          xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
@@ -1164,6 +1202,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
