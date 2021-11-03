@@ -40,6 +40,7 @@ let SUBACCT_SCOPE_ID;
 
 // Generate a txn-id to be used during this test run.
 const transactionId = uuidv4();
+const xCorrelationId = uuidv4();
 
 // Variables to hold various id's and object instances (these could perhaps be configured via links).
 let ruleId1;
@@ -119,6 +120,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       rules: [ruleRequest1],
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -153,6 +155,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       rules: [ruleRequest2],
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -189,6 +192,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       rules: [ruleRequestBad],
       transactionId,
+      xCorrelationId,
     };
 
     // An error will be reported within the resultentry, but the operation itself will
@@ -207,7 +211,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
         const ruleResponse = result.rules[0];
         expect(ruleResponse.request_id).toEqual('request-1');
         expect(ruleResponse.status_code).toEqual(400);
-        expect(ruleResponse.trace).toEqual(transactionId);
+        expect(ruleResponse.trace).toEqual(xCorrelationId);
         expect(ruleResponse.errors.length).toBeGreaterThan(0);
         expect(ruleResponse.errors[0].code).toEqual('rule_error');
         done();
@@ -227,6 +231,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       rules: [ruleRequest1],
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceServiceNoAccess
@@ -244,6 +249,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       accountId: ACCOUNT_ID,
       transactionId,
+      xCorrelationId,
       labels: TEST_LABEL,
       limit: 1000,
       offset: 0,
@@ -274,6 +280,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       accountId: ACCOUNT_ID,
       transactionId,
+      xCorrelationId,
       labels: TEST_LABEL,
       limit: 1000,
       offset: 0,
@@ -299,6 +306,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: ruleId1,
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -328,6 +336,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: 'BOGUS_ID',
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -366,6 +375,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleType: rule1.rule_type,
       labels: rule1.labels,
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -408,6 +418,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleType: rule1.rule_type,
       labels: rule1.labels,
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -430,6 +441,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: ruleId2,
       transactionId,
+      xCorrelationId,
     };
 
     let deleteRuleResp;
@@ -441,6 +453,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       const listRuleParams = {
         accountId: ACCOUNT_ID,
         transactionId,
+        xCorrelationId,
         labels: TEST_LABEL,
         limit: 1000,
         offset: 0,
@@ -472,6 +485,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: 'BOGUS_RULE_ID',
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -501,6 +515,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachments: [attachmentRequestModel],
       transactionId,
+      xCorrelationId,
     };
 
     let createAttachmentsResp;
@@ -543,6 +558,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachments: [attachmentRequestModel],
       transactionId,
+      xCorrelationId,
     };
 
     let createAttachmentsResp;
@@ -586,6 +602,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachments: [attachmentRequestModel],
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -612,6 +629,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachmentId: attachmentId1,
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -655,6 +673,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachmentId: 'BOGUS_ID',
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -674,6 +693,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: ruleId1,
       transactionId,
+      xCorrelationId,
       limit: 1000,
       offset: 0,
     };
@@ -732,6 +752,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       includedScope: updatedScope,
       excludedScopes: attachment1.excluded_scopes,
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -773,6 +794,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       includedScope: updatedScope,
       excludedScopes: attachment1.excluded_scopes,
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -799,6 +821,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachmentId: attachmentId2,
       transactionId,
+      xCorrelationId,
     };
 
     let deleteAttachmentResp;
@@ -810,6 +833,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       const listAttachmentsParams = {
         ruleId: ruleId1,
         transactionId,
+        xCorrelationId,
         limit: 1000,
         offset: 0,
       };
@@ -846,6 +870,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       ruleId: ruleId1,
       attachmentId: 'BOGUS_ID',
       transactionId,
+      xCorrelationId,
     };
 
     configurationGovernanceService
@@ -887,6 +912,7 @@ async function cleanRules(label, done) {
       limit: 1000,
       offset: 0,
       transactionId,
+      xCorrelationId,
     };
 
     const res = await configurationGovernanceService.listRules(params);
@@ -903,6 +929,7 @@ async function cleanRules(label, done) {
         const deleteRuleParams = {
           ruleId: rule.rule_id,
           transactionId,
+          xCorrelationId,
         };
 
         log(`Deleting rule: name=${rule.name} id=${rule.rule_id}`);
@@ -1022,6 +1049,7 @@ async function getRule(ruleId) {
     const params = {
       ruleId,
       transactionId,
+      xCorrelationId,
     };
 
     const res = await configurationGovernanceService.getRule(params);
@@ -1042,6 +1070,7 @@ async function getAttachment(ruleId, attachmentId) {
       ruleId,
       attachmentId,
       transactionId,
+      xCorrelationId,
     };
 
     const res = await configurationGovernanceService.getAttachment(params);
