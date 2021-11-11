@@ -26,6 +26,7 @@ module.exports = {
       'rules': {
         'jest/no-commented-out-tests': 'off',
         'jest/no-conditional-expect': 'off',
+        'jest/no-disabled-tests': 'off',
         'jest/no-done-callback': 'off',
         'jest/no-standalone-expect': 'off',
         'jest/no-try-expect': 'off',
