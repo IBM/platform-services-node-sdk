@@ -26,7 +26,6 @@
     "test-travis": "jest --runInBand --testNamePattern='^((?!@slow).)*$' test/",
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
-    "report-coverage": "codecov",
     "check-packages": "installed-check -e -d -v",
     "all": "npm run test-unit && npm run lint"
   },
@@ -49,7 +48,6 @@
     "@typescript-eslint/parser": "^4.24.0",
     "async": "^3.2.0",
     "axios": "^0.21.4",
-    "codecov": "^3.7.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.26.0",
     "eslint-config-airbnb-base": "^14.2.1",
