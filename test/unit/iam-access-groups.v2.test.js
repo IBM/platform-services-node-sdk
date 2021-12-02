@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const IamAccessGroupsV2 = require('../../dist/iam-access-groups/v2');
@@ -31,7 +31,7 @@ const {
 
 const iamAccessGroupsServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://iam.cloud.ibm.com/v2',
+  url: 'https://iam.cloud.ibm.com',
 };
 
 const iamAccessGroupsService = new IamAccessGroupsV2(iamAccessGroupsServiceOptions);
@@ -101,7 +101,7 @@ describe('IamAccessGroupsV2', () => {
   });
   describe('createAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createAccessGroupTest() {
         // Construct the params object for operation createAccessGroup
         const accountId = 'testString';
         const name = 'Managers';
@@ -122,16 +122,31 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['description']).toEqual(description);
-        expect(options.qs['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __createAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __createAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -166,29 +181,30 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createAccessGroupPromise = iamAccessGroupsService.createAccessGroup();
-        expectToBePromise(createAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        createAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('listAccessGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listAccessGroupsTest() {
         // Construct the params object for operation listAccessGroups
         const accountId = 'testString';
         const transactionId = 'testString';
         const iamId = 'testString';
         const limit = 38;
         const offset = 38;
-        const sort = 'testString';
-        const showFederated = true;
-        const hidePublicAccess = true;
+        const sort = 'name';
+        const showFederated = false;
+        const hidePublicAccess = false;
         const params = {
           accountId: accountId,
           transactionId: transactionId,
@@ -208,20 +224,35 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['iam_id']).toEqual(iamId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['offset']).toEqual(offset);
-        expect(options.qs['sort']).toEqual(sort);
-        expect(options.qs['show_federated']).toEqual(showFederated);
-        expect(options.qs['hide_public_access']).toEqual(hidePublicAccess);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.iam_id).toEqual(iamId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs.show_federated).toEqual(showFederated);
+        expect(mockRequestOptions.qs.hide_public_access).toEqual(hidePublicAccess);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAccessGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __listAccessGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __listAccessGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -254,24 +285,25 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listAccessGroupsPromise = iamAccessGroupsService.listAccessGroups();
-        expectToBePromise(listAccessGroupsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAccessGroups();
+        } catch (e) {
+          err = e;
+        }
 
-        listAccessGroupsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('getAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getAccessGroupTest() {
         // Construct the params object for operation getAccessGroup
         const accessGroupId = 'testString';
         const transactionId = 'testString';
-        const showFederated = true;
+        const showFederated = false;
         const params = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
@@ -286,15 +318,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['show_federated']).toEqual(showFederated);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.qs.show_federated).toEqual(showFederated);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __getAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __getAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -327,20 +374,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getAccessGroupPromise = iamAccessGroupsService.getAccessGroup();
-        expectToBePromise(getAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('updateAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateAccessGroupTest() {
         // Construct the params object for operation updateAccessGroup
         const accessGroupId = 'testString';
         const ifMatch = 'testString';
@@ -363,17 +411,32 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['description']).toEqual(description);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __updateAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __updateAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -408,24 +471,25 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateAccessGroupPromise = iamAccessGroupsService.updateAccessGroup();
-        expectToBePromise(updateAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updateAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('deleteAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteAccessGroupTest() {
         // Construct the params object for operation deleteAccessGroup
         const accessGroupId = 'testString';
         const transactionId = 'testString';
-        const force = true;
+        const force = false;
         const params = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
@@ -440,15 +504,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['force']).toEqual(force);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.qs.force).toEqual(force);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __deleteAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __deleteAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -481,20 +560,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteAccessGroupPromise = iamAccessGroupsService.deleteAccessGroup();
-        expectToBePromise(deleteAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('isMemberOfAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __isMemberOfAccessGroupTest() {
         // Construct the params object for operation isMemberOfAccessGroup
         const accessGroupId = 'testString';
         const iamId = 'testString';
@@ -513,15 +593,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/members/{iam_id}', 'HEAD');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/members/{iam_id}', 'HEAD');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __isMemberOfAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __isMemberOfAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __isMemberOfAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -556,14 +651,15 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const isMemberOfAccessGroupPromise = iamAccessGroupsService.isMemberOfAccessGroup();
-        expectToBePromise(isMemberOfAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.isMemberOfAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        isMemberOfAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -577,7 +673,7 @@ describe('IamAccessGroupsV2', () => {
         type: 'user',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __addMembersToAccessGroupTest() {
         // Construct the params object for operation addMembersToAccessGroup
         const accessGroupId = 'testString';
         const members = [addGroupMembersRequestMembersItemModel];
@@ -596,15 +692,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/members', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/members', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['members']).toEqual(members);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.body.members).toEqual(members);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addMembersToAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __addMembersToAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __addMembersToAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -637,27 +748,28 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addMembersToAccessGroupPromise = iamAccessGroupsService.addMembersToAccessGroup();
-        expectToBePromise(addMembersToAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.addMembersToAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        addMembersToAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('listAccessGroupMembers', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listAccessGroupMembersTest() {
         // Construct the params object for operation listAccessGroupMembers
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const limit = 38;
         const offset = 38;
         const type = 'testString';
-        const verbose = true;
+        const verbose = false;
         const sort = 'testString';
         const params = {
           accessGroupId: accessGroupId,
@@ -677,19 +789,34 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/members', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/members', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['offset']).toEqual(offset);
-        expect(options.qs['type']).toEqual(type);
-        expect(options.qs['verbose']).toEqual(verbose);
-        expect(options.qs['sort']).toEqual(sort);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+        expect(mockRequestOptions.qs.type).toEqual(type);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAccessGroupMembersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __listAccessGroupMembersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __listAccessGroupMembersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -722,20 +849,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listAccessGroupMembersPromise = iamAccessGroupsService.listAccessGroupMembers();
-        expectToBePromise(listAccessGroupMembersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAccessGroupMembers();
+        } catch (e) {
+          err = e;
+        }
 
-        listAccessGroupMembersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('removeMemberFromAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeMemberFromAccessGroupTest() {
         // Construct the params object for operation removeMemberFromAccessGroup
         const accessGroupId = 'testString';
         const iamId = 'testString';
@@ -754,15 +882,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/members/{iam_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/members/{iam_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeMemberFromAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __removeMemberFromAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __removeMemberFromAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -797,20 +940,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeMemberFromAccessGroupPromise = iamAccessGroupsService.removeMemberFromAccessGroup();
-        expectToBePromise(removeMemberFromAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.removeMemberFromAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        removeMemberFromAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('removeMembersFromAccessGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeMembersFromAccessGroupTest() {
         // Construct the params object for operation removeMembersFromAccessGroup
         const accessGroupId = 'testString';
         const members = ['IBMId-user1', 'iam-ServiceId-123'];
@@ -829,15 +973,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/members/delete', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/members/delete', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['members']).toEqual(members);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.body.members).toEqual(members);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeMembersFromAccessGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __removeMembersFromAccessGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __removeMembersFromAccessGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -870,20 +1029,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeMembersFromAccessGroupPromise = iamAccessGroupsService.removeMembersFromAccessGroup();
-        expectToBePromise(removeMembersFromAccessGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.removeMembersFromAccessGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        removeMembersFromAccessGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('removeMemberFromAllAccessGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeMemberFromAllAccessGroupsTest() {
         // Construct the params object for operation removeMemberFromAllAccessGroups
         const accountId = 'testString';
         const iamId = 'testString';
@@ -902,15 +1062,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/_allgroups/members/{iam_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/_allgroups/members/{iam_id}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeMemberFromAllAccessGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __removeMemberFromAllAccessGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __removeMemberFromAllAccessGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -945,20 +1120,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeMemberFromAllAccessGroupsPromise = iamAccessGroupsService.removeMemberFromAllAccessGroups();
-        expectToBePromise(removeMemberFromAllAccessGroupsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.removeMemberFromAllAccessGroups();
+        } catch (e) {
+          err = e;
+        }
 
-        removeMemberFromAllAccessGroupsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('addMemberToMultipleAccessGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addMemberToMultipleAccessGroupsTest() {
         // Construct the params object for operation addMemberToMultipleAccessGroups
         const accountId = 'testString';
         const iamId = 'testString';
@@ -981,17 +1157,32 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/_allgroups/members/{iam_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/_allgroups/members/{iam_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['groups']).toEqual(groups);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.groups).toEqual(groups);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addMemberToMultipleAccessGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __addMemberToMultipleAccessGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __addMemberToMultipleAccessGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1026,14 +1217,15 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addMemberToMultipleAccessGroupsPromise = iamAccessGroupsService.addMemberToMultipleAccessGroups();
-        expectToBePromise(addMemberToMultipleAccessGroupsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.addMemberToMultipleAccessGroups();
+        } catch (e) {
+          err = e;
+        }
 
-        addMemberToMultipleAccessGroupsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1048,7 +1240,7 @@ describe('IamAccessGroupsV2', () => {
         value: 'true',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __addAccessGroupRuleTest() {
         // Construct the params object for operation addAccessGroupRule
         const accessGroupId = 'testString';
         const expiration = 12;
@@ -1073,18 +1265,33 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/rules', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/rules', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['expiration']).toEqual(expiration);
-        expect(options.body['realm_name']).toEqual(realmName);
-        expect(options.body['conditions']).toEqual(conditions);
-        expect(options.body['name']).toEqual(name);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.body.expiration).toEqual(expiration);
+        expect(mockRequestOptions.body.realm_name).toEqual(realmName);
+        expect(mockRequestOptions.body.conditions).toEqual(conditions);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addAccessGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __addAccessGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __addAccessGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1123,20 +1330,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addAccessGroupRulePromise = iamAccessGroupsService.addAccessGroupRule();
-        expectToBePromise(addAccessGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.addAccessGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        addAccessGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('listAccessGroupRules', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listAccessGroupRulesTest() {
         // Construct the params object for operation listAccessGroupRules
         const accessGroupId = 'testString';
         const transactionId = 'testString';
@@ -1153,14 +1361,29 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/rules', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/rules', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAccessGroupRulesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __listAccessGroupRulesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __listAccessGroupRulesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1193,20 +1416,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listAccessGroupRulesPromise = iamAccessGroupsService.listAccessGroupRules();
-        expectToBePromise(listAccessGroupRulesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAccessGroupRules();
+        } catch (e) {
+          err = e;
+        }
 
-        listAccessGroupRulesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('getAccessGroupRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getAccessGroupRuleTest() {
         // Construct the params object for operation getAccessGroupRule
         const accessGroupId = 'testString';
         const ruleId = 'testString';
@@ -1225,15 +1449,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/rules/{rule_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/rules/{rule_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+        expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAccessGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __getAccessGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __getAccessGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1268,14 +1507,15 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getAccessGroupRulePromise = iamAccessGroupsService.getAccessGroupRule();
-        expectToBePromise(getAccessGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getAccessGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        getAccessGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1290,7 +1530,7 @@ describe('IamAccessGroupsV2', () => {
         value: 'true',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __replaceAccessGroupRuleTest() {
         // Construct the params object for operation replaceAccessGroupRule
         const accessGroupId = 'testString';
         const ruleId = 'testString';
@@ -1319,20 +1559,35 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/rules/{rule_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/rules/{rule_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['expiration']).toEqual(expiration);
-        expect(options.body['realm_name']).toEqual(realmName);
-        expect(options.body['conditions']).toEqual(conditions);
-        expect(options.body['name']).toEqual(name);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(mockRequestOptions.body.expiration).toEqual(expiration);
+        expect(mockRequestOptions.body.realm_name).toEqual(realmName);
+        expect(mockRequestOptions.body.conditions).toEqual(conditions);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+        expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceAccessGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __replaceAccessGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __replaceAccessGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1375,20 +1630,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const replaceAccessGroupRulePromise = iamAccessGroupsService.replaceAccessGroupRule();
-        expectToBePromise(replaceAccessGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.replaceAccessGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        replaceAccessGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('removeAccessGroupRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeAccessGroupRuleTest() {
         // Construct the params object for operation removeAccessGroupRule
         const accessGroupId = 'testString';
         const ruleId = 'testString';
@@ -1407,15 +1663,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/{access_group_id}/rules/{rule_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/{access_group_id}/rules/{rule_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['access_group_id']).toEqual(accessGroupId);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
+        expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeAccessGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __removeAccessGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __removeAccessGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1450,20 +1721,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeAccessGroupRulePromise = iamAccessGroupsService.removeAccessGroupRule();
-        expectToBePromise(removeAccessGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.removeAccessGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        removeAccessGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('getAccountSettings', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getAccountSettingsTest() {
         // Construct the params object for operation getAccountSettings
         const accountId = 'testString';
         const transactionId = 'testString';
@@ -1480,14 +1752,29 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/settings', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/settings', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAccountSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __getAccountSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __getAccountSettingsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1520,20 +1807,21 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getAccountSettingsPromise = iamAccessGroupsService.getAccountSettings();
-        expectToBePromise(getAccountSettingsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getAccountSettings();
+        } catch (e) {
+          err = e;
+        }
 
-        getAccountSettingsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
   describe('updateAccountSettings', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateAccountSettingsTest() {
         // Construct the params object for operation updateAccountSettings
         const accountId = 'testString';
         const publicAccessEnabled = true;
@@ -1552,15 +1840,30 @@ describe('IamAccessGroupsV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/groups/settings', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/groups/settings', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['public_access_enabled']).toEqual(publicAccessEnabled);
-        expect(options.qs['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.body.public_access_enabled).toEqual(publicAccessEnabled);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateAccountSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __updateAccountSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __updateAccountSettingsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1593,14 +1896,15 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateAccountSettingsPromise = iamAccessGroupsService.updateAccountSettings();
-        expectToBePromise(updateAccountSettingsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateAccountSettings();
+        } catch (e) {
+          err = e;
+        }
 
-        updateAccountSettingsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
