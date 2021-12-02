@@ -1143,7 +1143,14 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.ReplaceAccessGroupRuleParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Rule>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'ruleId', 'ifMatch', 'expiration', 'realmName', 'conditions'];
+    const requiredParams = [
+      'accessGroupId',
+      'ruleId',
+      'ifMatch',
+      'expiration',
+      'realmName',
+      'conditions',
+    ];
 
     const missingParams = getMissingParams(_params, requiredParams);
     if (missingParams) {
