@@ -1,3 +1,10 @@
+## [0.22.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.3...v0.22.4) (2021-12-03)
+
+
+### Bug Fixes
+
+* **IAM Access Groups:** update service after service url adjustment ([#148](https://github.com/IBM/platform-services-node-sdk/issues/148)) ([c0ffb6c](https://github.com/IBM/platform-services-node-sdk/commit/c0ffb6c887c7084a62b2642434b2fe3e4aa856b2))
+
 ## [0.22.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.2...v0.22.3) (2021-11-11)
 
 
