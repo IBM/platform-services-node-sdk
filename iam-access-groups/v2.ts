@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.34.1-ad041667-20210617-195430
+ * IBM OpenAPI SDK Code Generator Version: 3.43.0-49eab5c7-20211117-152138
  */
 
 import * as extend from 'extend';
@@ -32,10 +32,12 @@ import { getSdkHeaders } from '../lib/common';
 /**
  * The IAM Access Groups API allows for the management of access groups (Create, Read, Update, Delete) as well as the
  * management of memberships and rules within the group container.
+ *
+ * API Version: 2.0
  */
 
 class IamAccessGroupsV2 extends BaseService {
-  static DEFAULT_SERVICE_URL: string = 'https://iam.cloud.ibm.com/v2';
+  static DEFAULT_SERVICE_URL: string = 'https://iam.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'iam_access_groups';
 
@@ -146,7 +148,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups',
+        url: '/v2/groups',
         method: 'POST',
         body,
         qs: query,
@@ -224,7 +226,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups',
+        url: '/v2/groups',
         method: 'GET',
         qs: query,
       },
@@ -289,7 +291,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}',
+        url: '/v2/groups/{access_group_id}',
         method: 'GET',
         qs: query,
         path,
@@ -359,7 +361,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}',
+        url: '/v2/groups/{access_group_id}',
         method: 'PATCH',
         body,
         path,
@@ -426,7 +428,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}',
+        url: '/v2/groups/{access_group_id}',
         method: 'DELETE',
         qs: query,
         path,
@@ -445,7 +447,6 @@ class IamAccessGroupsV2 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * membershipOperations
    ************************/
@@ -491,7 +492,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/members/{iam_id}',
+        url: '/v2/groups/{access_group_id}/members/{iam_id}',
         method: 'HEAD',
         path,
       },
@@ -556,7 +557,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/members',
+        url: '/v2/groups/{access_group_id}/members',
         method: 'PUT',
         body,
         path,
@@ -631,7 +632,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/members',
+        url: '/v2/groups/{access_group_id}/members',
         method: 'GET',
         qs: query,
         path,
@@ -692,7 +693,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/members/{iam_id}',
+        url: '/v2/groups/{access_group_id}/members/{iam_id}',
         method: 'DELETE',
         path,
       },
@@ -756,7 +757,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/members/delete',
+        url: '/v2/groups/{access_group_id}/members/delete',
         method: 'POST',
         body,
         path,
@@ -824,7 +825,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/_allgroups/members/{iam_id}',
+        url: '/v2/groups/_allgroups/members/{iam_id}',
         method: 'DELETE',
         qs: query,
         path,
@@ -898,7 +899,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/_allgroups/members/{iam_id}',
+        url: '/v2/groups/_allgroups/members/{iam_id}',
         method: 'PUT',
         body,
         qs: query,
@@ -920,7 +921,6 @@ class IamAccessGroupsV2 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * ruleOperations
    ************************/
@@ -977,7 +977,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/rules',
+        url: '/v2/groups/{access_group_id}/rules',
         method: 'POST',
         body,
         path,
@@ -1037,7 +1037,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/rules',
+        url: '/v2/groups/{access_group_id}/rules',
         method: 'GET',
         path,
       },
@@ -1097,7 +1097,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/rules/{rule_id}',
+        url: '/v2/groups/{access_group_id}/rules/{rule_id}',
         method: 'GET',
         path,
       },
@@ -1177,7 +1177,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/rules/{rule_id}',
+        url: '/v2/groups/{access_group_id}/rules/{rule_id}',
         method: 'PUT',
         body,
         path,
@@ -1240,7 +1240,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/{access_group_id}/rules/{rule_id}',
+        url: '/v2/groups/{access_group_id}/rules/{rule_id}',
         method: 'DELETE',
         path,
       },
@@ -1258,7 +1258,6 @@ class IamAccessGroupsV2 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * accountSettings
    ************************/
@@ -1302,7 +1301,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/settings',
+        url: '/v2/groups/settings',
         method: 'GET',
         qs: query,
       },
@@ -1370,7 +1369,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/groups/settings',
+        url: '/v2/groups/settings',
         method: 'PATCH',
         body,
         qs: query,
