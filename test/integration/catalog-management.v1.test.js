@@ -500,6 +500,69 @@ describe('CatalogManagementV1_integration', () => {
   });
 
   // ====
+  // Update Offerings
+  // ====
+
+  test('updateOffering() updates offering', async () => {
+    expect(catalogId).toBeDefined();
+
+    const params = {
+      catalogIdentifier: catalogId,
+      label: labelNodeSdk,
+      name: `offering-created-by-node-sdk-update-test`,
+    };
+
+    const res = await catalogManagementServiceAuthorized.createOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+
+    expect(res.result).toBeDefined();
+    expect(res.result.id).toBeDefined();
+    createdOfferingIds.push(res.result.id);
+
+    const jsonPatchOperation = {
+      op: 'replace',
+      path: '/name',
+      value: 'updated-offering-name-by-node-sdk-patch',
+    };
+
+    const updateParams = {
+      catalogIdentifier: catalogId,
+      offeringId: res.result.id,
+      ifMatch: `"${res.result._rev}"`,
+      updates: [jsonPatchOperation],
+    };
+
+    const res2 = await catalogManagementServiceAuthorized.updateOffering(updateParams);
+    expect(res2).toBeDefined();
+    expect(res2.status).toBe(200);
+    expect(res2.result).toBeDefined();
+    expect(res2.result.name).toBe('updated-offering-name-by-node-sdk-patch');
+  });
+
+  test('updateOffering() returns 412 on bad request', async () => {
+    expect(catalogId).toBeDefined();
+    expect(offeringId).toBeDefined();
+
+    const jsonPatchOperation = {
+      op: 'replace',
+      path: '/name',
+      value: 'updated-offering-name-by-node-sdk-patch',
+    };
+
+    const params = {
+      catalogIdentifier: catalogId,
+      offeringId,
+      ifMatch: bogusRevision,
+      updates: [jsonPatchOperation],
+    };
+
+    await expect(catalogManagementServiceAuthorized.updateOffering(params)).rejects.toMatchObject({
+      status: 412,
+    });
+  });
+
+  // ====
   // List Offerings
   // ====
 
