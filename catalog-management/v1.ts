@@ -413,11 +413,7 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getCatalog'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalog');
 
     const parameters = {
       options: {
@@ -561,13 +557,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -1173,11 +1163,7 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getOffering'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOffering');
 
     const parameters = {
       options: {
@@ -1433,13 +1419,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2040,13 +2020,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2155,13 +2129,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2206,13 +2174,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2257,13 +2219,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2308,13 +2264,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2357,11 +2307,7 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'copyVersion'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'copyVersion');
 
     const parameters = {
       options: {
@@ -2462,11 +2408,7 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVersion'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getVersion');
 
     const parameters = {
       options: {
@@ -2528,13 +2470,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2575,11 +2511,7 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getCluster'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCluster');
 
     const parameters = {
       options: {
@@ -3446,11 +3378,7 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listObjects'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listObjects');
 
     const parameters = {
       options: {
@@ -3596,11 +3524,7 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      CatalogManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getObject'
-    );
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObject');
 
     const parameters = {
       options: {
@@ -3760,13 +3684,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3867,13 +3785,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3920,13 +3832,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3973,13 +3879,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -4026,13 +3926,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -4081,13 +3975,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -4192,13 +4080,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
