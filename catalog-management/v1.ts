@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.33.0-caf29bd0-20210603-225214
+ * IBM OpenAPI SDK Code Generator Version: 3.43.0-49eab5c7-20211117-152138
  */
 
 import * as extend from 'extend';
@@ -32,6 +32,8 @@ import { getSdkHeaders } from '../lib/common';
 /**
  * This is the API to use for managing private catalogs for IBM Cloud. Private catalogs provide a way to centrally
  * manage access to products in the IBM Cloud catalog and your own catalogs.
+ *
+ * API Version: 1.0
  */
 
 class CatalogManagementV1 extends BaseService {
@@ -270,7 +272,6 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * catalogs
    ************************/
@@ -614,7 +615,6 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * offerings
    ************************/
@@ -766,8 +766,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.name] - The programmatic name of this offering.
    * @param {string} [params.offeringIconUrl] - URL for an icon associated with this offering.
    * @param {string} [params.offeringDocsUrl] - URL for an additional docs with this offering.
-   * @param {string} [params.offeringSupportUrl] - URL to be displayed in the Consumption UI for getting support on this
-   * offering.
+   * @param {string} [params.offeringSupportUrl] - [deprecated] - Use offering.support instead.  URL to be displayed in
+   * the Consumption UI for getting support on this offering.
    * @param {string[]} [params.tags] - List of tags associated with this catalog.
    * @param {string[]} [params.keywords] - List of keywords associated with offering, typically used to search for it.
    * @param {Rating} [params.rating] - Repository info for offerings.
@@ -790,8 +790,12 @@ class CatalogManagementV1 extends BaseService {
    * @param {JsonObject} [params.metadata] - Map of metadata values for this offering.
    * @param {string} [params.disclaimer] - A disclaimer for this offering.
    * @param {boolean} [params.hidden] - Determine if this offering should be displayed in the Consumption UI.
-   * @param {string} [params.provider] - Provider of this offering.
+   * @param {string} [params.provider] - Deprecated - Provider of this offering.
+   * @param {ProviderInfo} [params.providerInfo] - Information on the provider for this offering, or omitted if no
+   * provider information is given.
    * @param {RepoInfo} [params.repoInfo] - Repository info for offerings.
+   * @param {Support} [params.support] - Offering Support information.
+   * @param {MediaItem[]} [params.media] - A list of media items related to this offering.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
@@ -838,7 +842,10 @@ class CatalogManagementV1 extends BaseService {
       'disclaimer': _params.disclaimer,
       'hidden': _params.hidden,
       'provider': _params.provider,
+      'provider_info': _params.providerInfo,
       'repo_info': _params.repoInfo,
+      'support': _params.support,
+      'media': _params.media,
     };
 
     const path = {
@@ -1130,6 +1137,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.catalogIdentifier - Catalog identifier.
    * @param {string} params.offeringId - Offering identification.
+   * @param {string} [params.type] - Offering Parameter Type.  Valid values are 'name' or 'id'.  Default is 'id'.
+   * @param {boolean} [params.digest] - Return the digest format of the specified offering.  Default is false.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
@@ -1144,6 +1153,11 @@ class CatalogManagementV1 extends BaseService {
       return Promise.reject(missingParams);
     }
 
+    const query = {
+      'type': _params.type,
+      'digest': _params.digest,
+    };
+
     const path = {
       'catalog_identifier': _params.catalogIdentifier,
       'offering_id': _params.offeringId,
@@ -1155,6 +1169,7 @@ class CatalogManagementV1 extends BaseService {
       options: {
         url: '/catalogs/{catalog_identifier}/offerings/{offering_id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -1188,8 +1203,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.name] - The programmatic name of this offering.
    * @param {string} [params.offeringIconUrl] - URL for an icon associated with this offering.
    * @param {string} [params.offeringDocsUrl] - URL for an additional docs with this offering.
-   * @param {string} [params.offeringSupportUrl] - URL to be displayed in the Consumption UI for getting support on this
-   * offering.
+   * @param {string} [params.offeringSupportUrl] - [deprecated] - Use offering.support instead.  URL to be displayed in
+   * the Consumption UI for getting support on this offering.
    * @param {string[]} [params.tags] - List of tags associated with this catalog.
    * @param {string[]} [params.keywords] - List of keywords associated with offering, typically used to search for it.
    * @param {Rating} [params.rating] - Repository info for offerings.
@@ -1212,8 +1227,12 @@ class CatalogManagementV1 extends BaseService {
    * @param {JsonObject} [params.metadata] - Map of metadata values for this offering.
    * @param {string} [params.disclaimer] - A disclaimer for this offering.
    * @param {boolean} [params.hidden] - Determine if this offering should be displayed in the Consumption UI.
-   * @param {string} [params.provider] - Provider of this offering.
+   * @param {string} [params.provider] - Deprecated - Provider of this offering.
+   * @param {ProviderInfo} [params.providerInfo] - Information on the provider for this offering, or omitted if no
+   * provider information is given.
    * @param {RepoInfo} [params.repoInfo] - Repository info for offerings.
+   * @param {Support} [params.support] - Offering Support information.
+   * @param {MediaItem[]} [params.media] - A list of media items related to this offering.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
@@ -1260,7 +1279,10 @@ class CatalogManagementV1 extends BaseService {
       'disclaimer': _params.disclaimer,
       'hidden': _params.hidden,
       'provider': _params.provider,
+      'provider_info': _params.providerInfo,
       'repo_info': _params.repoInfo,
+      'support': _params.support,
+      'media': _params.media,
     };
 
     const path = {
@@ -1288,6 +1310,66 @@ class CatalogManagementV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update offering.
+   *
+   * Update an offering.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.catalogIdentifier - Catalog identifier.
+   * @param {string} params.offeringId - Offering identification.
+   * @param {string} params.ifMatch - Offering etag contained in quotes.
+   * @param {JsonPatchOperation[]} [params.updates] -
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
+   */
+  public updateOffering(
+    params: CatalogManagementV1.UpdateOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
+    const requiredParams = ['catalogIdentifier', 'offeringId', 'ifMatch'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = _params.updates;
+    const path = {
+      'catalog_identifier': _params.catalogIdentifier,
+      'offering_id': _params.offeringId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateOffering'
+    );
+
+    const parameters = {
+      options: {
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -1466,7 +1548,7 @@ class CatalogManagementV1 extends BaseService {
    * automatically be disapproved. if disapprove `allow_request` then all rights to publish will be removed. This is
    * because the process steps always go first through `allow` to `ibm` and then to `public`. `ibm` cannot be skipped.
    * Only users with Approval IAM authority can use this. Approvers should use the catalog and offering id from the
-   * public catalog since they wouldn't have access to the private offering.'.
+   * public catalog since they wouldn't have access to the private offering.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.catalogIdentifier - Catalog identifier.
@@ -1522,6 +1604,72 @@ class CatalogManagementV1 extends BaseService {
   }
 
   /**
+   * Allows offering to be deprecated.
+   *
+   * Approve or disapprove the offering to be deprecated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.catalogIdentifier - Catalog identifier.
+   * @param {string} params.offeringId - Offering identification.
+   * @param {string} params.setting - Set deprecation (true) or cancel deprecation (false).
+   * @param {string} [params.description] - Additional information that users can provide to be displayed in deprecation
+   * notification.
+   * @param {number} [params.daysUntilDeprecate] - Specifies the amount of days until product is not available in
+   * catalog.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
+   */
+  public deprecateOffering(
+    params: CatalogManagementV1.DeprecateOfferingParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
+    const requiredParams = ['catalogIdentifier', 'offeringId', 'setting'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'description': _params.description,
+      'days_until_deprecate': _params.daysUntilDeprecate,
+    };
+
+    const path = {
+      'catalog_identifier': _params.catalogIdentifier,
+      'offering_id': _params.offeringId,
+      'setting': _params.setting,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deprecateOffering'
+    );
+
+    const parameters = {
+      options: {
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{setting}',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Get version updates.
    *
    * Get available updates for the specified version.
@@ -1530,12 +1678,20 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} params.catalogIdentifier - Catalog identifier.
    * @param {string} params.offeringId - Offering identification.
    * @param {string} params.kind - The kind of offering (e.g, helm, ova, terraform ...).
+   * @param {string} params.xAuthRefreshToken - IAM Refresh token.
+   * @param {string} [params.target] - The target kind of the currently installed version (e.g. iks, roks, etc).
    * @param {string} [params.version] - optionaly provide an existing version to check updates for if one is not given,
    * all version will be returned.
    * @param {string} [params.clusterId] - The id of the cluster where this version was installed.
    * @param {string} [params.region] - The region of the cluster where this version was installed.
    * @param {string} [params.resourceGroupId] - The resource group id of the cluster where this version was installed.
    * @param {string} [params.namespace] - The namespace of the cluster where this version was installed.
+   * @param {string} [params.sha] - The sha value of the currently installed version.
+   * @param {string} [params.channel] - Optionally provide the channel value of the currently installed version.
+   * @param {string[]} [params.namespaces] - Optionally provide a list of namespaces used for the currently installed
+   * version.
+   * @param {boolean} [params.allNamespaces] - Optionally indicate that the current version was installed in all
+   * namespaces.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionUpdateDescriptor[]>>}
    */
@@ -1543,7 +1699,7 @@ class CatalogManagementV1 extends BaseService {
     params: CatalogManagementV1.GetOfferingUpdatesParams
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionUpdateDescriptor[]>> {
     const _params = { ...params };
-    const requiredParams = ['catalogIdentifier', 'offeringId', 'kind'];
+    const requiredParams = ['catalogIdentifier', 'offeringId', 'kind', 'xAuthRefreshToken'];
 
     const missingParams = getMissingParams(_params, requiredParams);
     if (missingParams) {
@@ -1552,11 +1708,16 @@ class CatalogManagementV1 extends BaseService {
 
     const query = {
       'kind': _params.kind,
+      'target': _params.target,
       'version': _params.version,
       'cluster_id': _params.clusterId,
       'region': _params.region,
       'resource_group_id': _params.resourceGroupId,
       'namespace': _params.namespace,
+      'sha': _params.sha,
+      'channel': _params.channel,
+      'namespaces': _params.namespaces,
+      'all_namespaces': _params.allNamespaces,
     };
 
     const path = {
@@ -1583,6 +1744,7 @@ class CatalogManagementV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+            'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
           },
           _params.headers
         ),
@@ -1592,6 +1754,70 @@ class CatalogManagementV1 extends BaseService {
     return this.createRequest(parameters);
   }
 
+  /**
+   * Get offering source.
+   *
+   * Get an offering's source.  This request requires authorization, even for public offerings.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.version - The version being requested.
+   * @param {string} [params.accept] - The type of the response: application/yaml, application/json, or
+   * application/x-gzip.
+   * @param {string} [params.catalogId] - Catlaog ID.  If not specified, this value will default to the public catalog.
+   * @param {string} [params.name] - Offering name.  An offering name or ID must be specified.
+   * @param {string} [params.id] - Offering id.  An offering name or ID must be specified.
+   * @param {string} [params.kind] - The kind of offering (e.g. helm, ova, terraform...).
+   * @param {string} [params.channel] - The channel value of the specified version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<NodeJS.ReadableStream>>}
+   */
+  public getOfferingSource(
+    params: CatalogManagementV1.GetOfferingSourceParams
+  ): Promise<CatalogManagementV1.Response<NodeJS.ReadableStream>> {
+    const _params = { ...params };
+    const requiredParams = ['version'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': _params.version,
+      'catalogID': _params.catalogId,
+      'name': _params.name,
+      'id': _params.id,
+      'kind': _params.kind,
+      'channel': _params.channel,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingSource'
+    );
+
+    const parameters = {
+      options: {
+        url: '/offering/source',
+        method: 'GET',
+        qs: query,
+        responseType: 'stream',
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': _params.accept,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * versions
    ************************/
@@ -1757,7 +1983,7 @@ class CatalogManagementV1 extends BaseService {
   }
 
   /**
-   * Deprecate version.
+   * Deprecate version immediately.
    *
    * Deprecate the specified version.
    *
@@ -1795,6 +2021,70 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Sets version to be deprecated in a certain time period.
+   *
+   * Set or cancel the version to be deprecated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {string} params.setting - Set deprecation (true) or cancel deprecation (false).
+   * @param {string} [params.description] - Additional information that users can provide to be displayed in deprecation
+   * notification.
+   * @param {number} [params.daysUntilDeprecate] - Specifies the amount of days until product is not available in
+   * catalog.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>>}
+   */
+  public setDeprecateVersion(
+    params: CatalogManagementV1.SetDeprecateVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Empty>> {
+    const _params = { ...params };
+    const requiredParams = ['versionLocId', 'setting'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'description': _params.description,
+      'days_until_deprecate': _params.daysUntilDeprecate,
+    };
+
+    const path = {
+      'version_loc_id': _params.versionLocId,
+      'setting': _params.setting,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setDeprecateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}/deprecate/{setting}',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -2186,7 +2476,6 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * deploy
    ************************/
@@ -2985,7 +3274,6 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * objects
    ************************/
@@ -3977,7 +4265,6 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * instances
    ************************/
@@ -4505,7 +4792,9 @@ namespace CatalogManagementV1 {
     offeringIconUrl?: string;
     /** URL for an additional docs with this offering. */
     offeringDocsUrl?: string;
-    /** URL to be displayed in the Consumption UI for getting support on this offering. */
+    /** [deprecated] - Use offering.support instead.  URL to be displayed in the Consumption UI for getting support
+     *  on this offering.
+     */
     offeringSupportUrl?: string;
     /** List of tags associated with this catalog. */
     tags?: string[];
@@ -4549,10 +4838,16 @@ namespace CatalogManagementV1 {
     disclaimer?: string;
     /** Determine if this offering should be displayed in the Consumption UI. */
     hidden?: boolean;
-    /** Provider of this offering. */
+    /** Deprecated - Provider of this offering. */
     provider?: string;
+    /** Information on the provider for this offering, or omitted if no provider information is given. */
+    providerInfo?: ProviderInfo;
     /** Repository info for offerings. */
     repoInfo?: RepoInfo;
+    /** Offering Support information. */
+    support?: Support;
+    /** A list of media items related to this offering. */
+    media?: MediaItem[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -4635,6 +4930,10 @@ namespace CatalogManagementV1 {
     catalogIdentifier: string;
     /** Offering identification. */
     offeringId: string;
+    /** Offering Parameter Type.  Valid values are 'name' or 'id'.  Default is 'id'. */
+    type?: string;
+    /** Return the digest format of the specified offering.  Default is false. */
+    digest?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -4660,7 +4959,9 @@ namespace CatalogManagementV1 {
     offeringIconUrl?: string;
     /** URL for an additional docs with this offering. */
     offeringDocsUrl?: string;
-    /** URL to be displayed in the Consumption UI for getting support on this offering. */
+    /** [deprecated] - Use offering.support instead.  URL to be displayed in the Consumption UI for getting support
+     *  on this offering.
+     */
     offeringSupportUrl?: string;
     /** List of tags associated with this catalog. */
     tags?: string[];
@@ -4704,10 +5005,28 @@ namespace CatalogManagementV1 {
     disclaimer?: string;
     /** Determine if this offering should be displayed in the Consumption UI. */
     hidden?: boolean;
-    /** Provider of this offering. */
+    /** Deprecated - Provider of this offering. */
     provider?: string;
+    /** Information on the provider for this offering, or omitted if no provider information is given. */
+    providerInfo?: ProviderInfo;
     /** Repository info for offerings. */
     repoInfo?: RepoInfo;
+    /** Offering Support information. */
+    support?: Support;
+    /** A list of media items related to this offering. */
+    media?: MediaItem[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateOffering` operation. */
+  export interface UpdateOfferingParams {
+    /** Catalog identifier. */
+    catalogIdentifier: string;
+    /** Offering identification. */
+    offeringId: string;
+    /** Offering etag contained in quotes. */
+    ifMatch: string;
+    updates?: JsonPatchOperation[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -4757,12 +5076,37 @@ namespace CatalogManagementV1 {
   export namespace UpdateOfferingIbmConstants {
     /** Type of approval, ibm or public. */
     export enum ApprovalType {
+      PC_MANAGED = 'pc_managed',
       ALLOW_REQUEST = 'allow_request',
       IBM = 'ibm',
       PUBLIC = 'public',
     }
     /** Approve (true) or disapprove (false). */
     export enum Approved {
+      TRUE = 'true',
+      FALSE = 'false',
+    }
+  }
+
+  /** Parameters for the `deprecateOffering` operation. */
+  export interface DeprecateOfferingParams {
+    /** Catalog identifier. */
+    catalogIdentifier: string;
+    /** Offering identification. */
+    offeringId: string;
+    /** Set deprecation (true) or cancel deprecation (false). */
+    setting: DeprecateOfferingConstants.Setting | string;
+    /** Additional information that users can provide to be displayed in deprecation notification. */
+    description?: string;
+    /** Specifies the amount of days until product is not available in catalog. */
+    daysUntilDeprecate?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `deprecateOffering` operation. */
+  export namespace DeprecateOfferingConstants {
+    /** Set deprecation (true) or cancel deprecation (false). */
+    export enum Setting {
       TRUE = 'true',
       FALSE = 'false',
     }
@@ -4776,6 +5120,10 @@ namespace CatalogManagementV1 {
     offeringId: string;
     /** The kind of offering (e.g, helm, ova, terraform ...). */
     kind: string;
+    /** IAM Refresh token. */
+    xAuthRefreshToken: string;
+    /** The target kind of the currently installed version (e.g. iks, roks, etc). */
+    target?: string;
     /** optionaly provide an existing version to check updates for if one is not given, all version will be
      *  returned.
      */
@@ -4788,7 +5136,44 @@ namespace CatalogManagementV1 {
     resourceGroupId?: string;
     /** The namespace of the cluster where this version was installed. */
     namespace?: string;
+    /** The sha value of the currently installed version. */
+    sha?: string;
+    /** Optionally provide the channel value of the currently installed version. */
+    channel?: string;
+    /** Optionally provide a list of namespaces used for the currently installed version. */
+    namespaces?: string[];
+    /** Optionally indicate that the current version was installed in all namespaces. */
+    allNamespaces?: boolean;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getOfferingSource` operation. */
+  export interface GetOfferingSourceParams {
+    /** The version being requested. */
+    version: string;
+    /** The type of the response: application/yaml, application/json, or application/x-gzip. */
+    accept?: GetOfferingSourceConstants.Accept | string;
+    /** Catlaog ID.  If not specified, this value will default to the public catalog. */
+    catalogId?: string;
+    /** Offering name.  An offering name or ID must be specified. */
+    name?: string;
+    /** Offering id.  An offering name or ID must be specified. */
+    id?: string;
+    /** The kind of offering (e.g. helm, ova, terraform...). */
+    kind?: string;
+    /** The channel value of the specified version. */
+    channel?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `getOfferingSource` operation. */
+  export namespace GetOfferingSourceConstants {
+    /** The type of the response: application/yaml, application/json, or application/x-gzip. */
+    export enum Accept {
+      APPLICATION_YAML = 'application/yaml',
+      APPLICATION_JSON = 'application/json',
+      APPLICATION_X_GZIP = 'application/x-gzip',
+    }
   }
 
   /** Parameters for the `getOfferingAbout` operation. */
@@ -4819,6 +5204,28 @@ namespace CatalogManagementV1 {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `setDeprecateVersion` operation. */
+  export interface SetDeprecateVersionParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
+    /** Set deprecation (true) or cancel deprecation (false). */
+    setting: SetDeprecateVersionConstants.Setting | string;
+    /** Additional information that users can provide to be displayed in deprecation notification. */
+    description?: string;
+    /** Specifies the amount of days until product is not available in catalog. */
+    daysUntilDeprecate?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `setDeprecateVersion` operation. */
+  export namespace SetDeprecateVersionConstants {
+    /** Set deprecation (true) or cancel deprecation (false). */
+    export enum Setting {
+      TRUE = 'true',
+      FALSE = 'false',
+    }
   }
 
   /** Parameters for the `accountPublishVersion` operation. */
@@ -5833,6 +6240,18 @@ namespace CatalogManagementV1 {
     errors?: JsonObject[];
   }
 
+  /** This model represents an individual patch operation to be performed on a JSON document, as defined by RFC 6902. */
+  export interface JsonPatchOperation {
+    /** The operation to be performed. */
+    op: string;
+    /** The JSON Pointer that identifies the field that is the target of the operation. */
+    path: string;
+    /** The JSON Pointer that identifies the field that is the source of the operation. */
+    from?: string;
+    /** The value to be used within the operation. */
+    value?: any;
+  }
+
   /** Offering kind. */
   export interface Kind {
     /** Unique ID. */
@@ -5871,6 +6290,18 @@ namespace CatalogManagementV1 {
     url?: string;
     /** License description. */
     description?: string;
+  }
+
+  /** Offering Media information. */
+  export interface MediaItem {
+    /** URL of the specified media item. */
+    url?: string;
+    /** Caption for this media item. */
+    caption?: string;
+    /** Type of this media item. */
+    type?: string;
+    /** Thumbnail URL for this media item. */
+    thumbnail_url?: string;
   }
 
   /** Paginated list of namespace search results. */
@@ -5993,7 +6424,9 @@ namespace CatalogManagementV1 {
     offering_icon_url?: string;
     /** URL for an additional docs with this offering. */
     offering_docs_url?: string;
-    /** URL to be displayed in the Consumption UI for getting support on this offering. */
+    /** [deprecated] - Use offering.support instead.  URL to be displayed in the Consumption UI for getting support
+     *  on this offering.
+     */
     offering_support_url?: string;
     /** List of tags associated with this catalog. */
     tags?: string[];
@@ -6037,10 +6470,16 @@ namespace CatalogManagementV1 {
     disclaimer?: string;
     /** Determine if this offering should be displayed in the Consumption UI. */
     hidden?: boolean;
-    /** Provider of this offering. */
+    /** Deprecated - Provider of this offering. */
     provider?: string;
+    /** Information on the provider for this offering, or omitted if no provider information is given. */
+    provider_info?: ProviderInfo;
     /** Repository info for offerings. */
     repo_info?: RepoInfo;
+    /** Offering Support information. */
+    support?: Support;
+    /** A list of media items related to this offering. */
+    media?: MediaItem[];
   }
 
   /** A offering instance resource (provision instance of a catalog offering). */
@@ -6170,6 +6609,14 @@ namespace CatalogManagementV1 {
     deployments?: Deployment[];
   }
 
+  /** Information on the provider for this offering, or omitted if no provider information is given. */
+  export interface ProviderInfo {
+    /** The id of this provider. */
+    id?: string;
+    /** The name of this provider. */
+    name?: string;
+  }
+
   /** Publish information. */
   export interface PublishObject {
     /** Is it permitted to request publishing to IBM or Public. */
@@ -6240,6 +6687,16 @@ namespace CatalogManagementV1 {
     pending_requested?: string;
     /** one of: new, validated, account-published, ibm-published, public-published. */
     previous?: string;
+  }
+
+  /** Offering Support information. */
+  export interface Support {
+    /** URL to be displayed in the Consumption UI for getting support on this offering. */
+    url?: string;
+    /** Support process as provided by an ISV. */
+    process?: string;
+    /** A list of country codes indicating where support is provided. */
+    locations?: string[];
   }
 
   /** Feature information. */
@@ -6396,6 +6853,8 @@ namespace CatalogManagementV1 {
     required_resources?: Resource[];
     /** Version of package. */
     package_version?: string;
+    /** The SHA value of this version. */
+    sha?: string;
     /** true if the current version can be upgraded to this version, false otherwise. */
     can_update?: boolean;
     /** If can_update is false, this map will contain messages for each failed check, otherwise it will be omitted.
