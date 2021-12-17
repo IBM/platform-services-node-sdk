@@ -2393,8 +2393,8 @@ describe('CatalogManagementV1', () => {
       const jsonPatchOperationModel = {
         op: 'add',
         path: 'testString',
-        value: { foo: 'bar' },
         from: 'testString',
+        value: 'testString',
       };
 
       function __updateOfferingTest() {

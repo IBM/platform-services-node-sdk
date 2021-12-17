@@ -1484,6 +1484,7 @@ describe('CatalogManagementV1_integration', () => {
       clusterId,
       region: regionUsSouth,
       namespaces: namespaceNode,
+      xAuthRefreshToken: refreshTokenNotAuthorized,
     };
 
     await expect(
