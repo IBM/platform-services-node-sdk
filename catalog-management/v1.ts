@@ -1649,7 +1649,7 @@ class CatalogManagementV1 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{approved}',
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{setting}',
         method: 'POST',
         body,
         path,

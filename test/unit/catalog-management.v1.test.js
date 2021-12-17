@@ -2885,7 +2885,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{approved}', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{setting}', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
