@@ -1,3 +1,10 @@
+## [0.22.5](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.4...v0.22.5) (2021-12-17)
+
+
+### Bug Fixes
+
+* **Catalog Management:** update service to add patch operation ([#150](https://github.com/IBM/platform-services-node-sdk/issues/150)) ([01ff1f6](https://github.com/IBM/platform-services-node-sdk/commit/01ff1f69f17fb479096a0ed29e74f1bc4ff71689))
+
 ## [0.22.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.3...v0.22.4) (2021-12-03)
 
 
