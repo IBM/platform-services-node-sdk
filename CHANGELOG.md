@@ -1,3 +1,10 @@
+## [0.22.6](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.5...v0.22.6) (2022-01-05)
+
+
+### Bug Fixes
+
+* use npm v8 and package lock v2 ([#151](https://github.com/IBM/platform-services-node-sdk/issues/151)) ([4101c4a](https://github.com/IBM/platform-services-node-sdk/commit/4101c4ad2f928a171c345f0025b60ef5fe820587))
+
 ## [0.22.5](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.4...v0.22.5) (2021-12-17)
 
 
