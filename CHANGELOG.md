@@ -1,3 +1,10 @@
+## [0.22.7](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.6...v0.22.7) (2022-01-19)
+
+
+### Bug Fixes
+
+* bump follow-redirects to avoid vulnerability ([#152](https://github.com/IBM/platform-services-node-sdk/issues/152)) ([4cd1e04](https://github.com/IBM/platform-services-node-sdk/commit/4cd1e04954632a10d5ed4c0ee4f823e80e45e743))
+
 ## [0.22.6](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.5...v0.22.6) (2022-01-05)
 
 
