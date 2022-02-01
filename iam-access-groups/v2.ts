@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.43.0-49eab5c7-20211117-152138
+ * IBM OpenAPI SDK Code Generator Version: 3.43.4-432d779b-20220119-173927
  */
 
 import * as extend from 'extend';
@@ -24,7 +24,7 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
@@ -124,11 +124,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.CreateAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Group>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'name'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'name'];
+    const _validParams = ['accountId', 'name', 'description', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -186,7 +186,7 @@ class IamAccessGroupsV2 extends BaseService {
    * useful for tracking calls through multiple services by using one identifier. The header key must be set to
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
-   * @param {string} [params.iamId] - Return groups for member id (IBMid or Service Id).
+   * @param {string} [params.iamId] - Return groups for member id (IBMid, Service Id or Profile Id).
    * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
    * @param {number} [params.offset] - The offset of the first result item to be returned.
    * @param {string} [params.sort] - Sort the results by id, name, description, or is_federated flag.
@@ -201,11 +201,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.ListAccessGroupsParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GroupsList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'transactionId', 'iamId', 'limit', 'offset', 'sort', 'showFederated', 'hidePublicAccess', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -268,11 +268,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.GetAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Group>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId'];
+    const _validParams = ['accessGroupId', 'transactionId', 'showFederated', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -337,11 +337,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.UpdateAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Group>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'ifMatch'];
+    const _validParams = ['accessGroupId', 'ifMatch', 'name', 'description', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -405,11 +405,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.DeleteAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId'];
+    const _validParams = ['accessGroupId', 'transactionId', 'force', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -472,11 +472,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.IsMemberOfAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'iamId'];
+    const _validParams = ['accessGroupId', 'iamId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -514,10 +514,11 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Add members to an access group.
    *
-   * Use this API to add users (`IBMid-...`) or service IDs (`iam-ServiceId-...`) to an access group. Any member added
-   * gains access to resources defined in the group's policies. To revoke a given user's access, simply remove them from
-   * the group. There is no limit to the number of members one group can have, but each `iam_id` can only be added to 50
-   * groups. Additionally, this API request payload can add up to 50 members per call.
+   * Use this API to add users (`IBMid-...`), service IDs (`iam-ServiceId-...`) or trusted profiles (`iam-Profile-...`)
+   * to an access group. Any member added gains access to resources defined in the group's policies. To revoke a given
+   * members's access, simply remove them from the group. There is no limit to the number of members one group can have,
+   * but each `iam_id` can only be added to 50 groups. Additionally, this API request payload can add up to 50 members
+   * per call.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accessGroupId - The access group identifier.
@@ -534,11 +535,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.AddMembersToAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.AddGroupMembersResponse>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId'];
+    const _validParams = ['accessGroupId', 'members', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -583,9 +584,9 @@ class IamAccessGroupsV2 extends BaseService {
    * List access group members.
    *
    * List all members of a given group using this API. Parameters for pagination and sorting can be used to filter the
-   * results. The most useful query parameter may be the `verbose` flag. If `verbose=true`, user and service ID names
-   * will be retrieved for each `iam_id`. If performance is a concern, leave the `verbose` parameter off so that name
-   * information does not get retrieved.
+   * results. The most useful query parameter may be the `verbose` flag. If `verbose=true`, user, service ID and trusted
+   * profile names will be retrieved for each `iam_id`. If performance is a concern, leave the `verbose` parameter off
+   * so that name information does not get retrieved.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accessGroupId - The access group identifier.
@@ -596,7 +597,8 @@ class IamAccessGroupsV2 extends BaseService {
    * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
    * @param {number} [params.offset] - The offset of the first result item to be returned.
    * @param {string} [params.type] - Filter the results by member type.
-   * @param {boolean} [params.verbose] - Return user's email and name for each user id or the name for each service id.
+   * @param {boolean} [params.verbose] - Return user's email and name for each user id or the name for each service id
+   * or trusted profile.
    * @param {string} [params.sort] - If verbose is true, sort the results by id, name, or email.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GroupMembersList>>}
@@ -605,11 +607,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.ListAccessGroupMembersParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GroupMembersList>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId'];
+    const _validParams = ['accessGroupId', 'transactionId', 'limit', 'offset', 'type', 'verbose', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -673,11 +675,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.RemoveMemberFromAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'iamId'];
+    const _validParams = ['accessGroupId', 'iamId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -734,11 +736,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.RemoveMembersFromAccessGroupParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.DeleteGroupBulkMembersResponse>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId'];
+    const _validParams = ['accessGroupId', 'members', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -802,11 +804,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.RemoveMemberFromAllAccessGroupsParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.DeleteFromAllGroupsResponse>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -858,7 +860,7 @@ class IamAccessGroupsV2 extends BaseService {
    * iam_id then account_id must match the account of the IAM ID. If a user IAM ID is specified in iam_id then then
    * account_id must match the account of the Authorization token.
    * @param {string} params.iamId - The IAM identifier.
-   * @param {string} [params.type] - The type of the member, must be either "user" or "service".
+   * @param {string} [params.type] - The type of the member, must be either "user", "service" or "trusted profile".
    * @param {string[]} [params.groups] - The ids of the access groups a given member is to be added to.
    * @param {string} [params.transactionId] - An optional transaction ID can be passed to your request, which can be
    * useful for tracking calls through multiple services by using one identifier. The header key must be set to
@@ -871,11 +873,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.AddMemberToMultipleAccessGroupsParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.AddMembershipMultipleGroupsResponse>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'type', 'groups', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -951,11 +953,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.AddAccessGroupRuleParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Rule>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'expiration', 'realmName', 'conditions'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'expiration', 'realmName', 'conditions'];
+    const _validParams = ['accessGroupId', 'expiration', 'realmName', 'conditions', 'name', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1018,11 +1020,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.ListAccessGroupRulesParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.RulesList>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId'];
+    const _validParams = ['accessGroupId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1077,11 +1079,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.GetAccessGroupRuleParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Rule>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'ruleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'ruleId'];
+    const _validParams = ['accessGroupId', 'ruleId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1143,18 +1145,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.ReplaceAccessGroupRuleParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Rule>> {
     const _params = { ...params };
-    const requiredParams = [
-      'accessGroupId',
-      'ruleId',
-      'ifMatch',
-      'expiration',
-      'realmName',
-      'conditions',
-    ];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'ruleId', 'ifMatch', 'expiration', 'realmName', 'conditions'];
+    const _validParams = ['accessGroupId', 'ruleId', 'ifMatch', 'expiration', 'realmName', 'conditions', 'name', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1220,11 +1215,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.RemoveAccessGroupRuleParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['accessGroupId', 'ruleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accessGroupId', 'ruleId'];
+    const _validParams = ['accessGroupId', 'ruleId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1282,11 +1277,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.GetAccountSettingsParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.AccountSettings>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -1346,11 +1341,11 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.UpdateAccountSettingsParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.AccountSettings>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'publicAccessEnabled', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1453,7 +1448,7 @@ namespace IamAccessGroupsV2 {
      *  anything that you choose. If no transaction ID is passed in, then a random ID is generated.
      */
     transactionId?: string;
-    /** Return groups for member id (IBMid or Service Id). */
+    /** Return groups for member id (IBMid, Service Id or Profile Id). */
     iamId?: string;
     /** Return up to this limit of results where limit is between 0 and 100. */
     limit?: number;
@@ -1565,7 +1560,7 @@ namespace IamAccessGroupsV2 {
     offset?: number;
     /** Filter the results by member type. */
     type?: string;
-    /** Return user's email and name for each user id or the name for each service id. */
+    /** Return user's email and name for each user id or the name for each service id or trusted profile. */
     verbose?: boolean;
     /** If verbose is true, sort the results by id, name, or email. */
     sort?: string;
@@ -1626,7 +1621,7 @@ namespace IamAccessGroupsV2 {
     accountId: string;
     /** The IAM identifier. */
     iamId: string;
-    /** The type of the member, must be either "user" or "service". */
+    /** The type of the member, must be either "user", "service" or "trusted profile". */
     type?: string;
     /** The ids of the access groups a given member is to be added to. */
     groups?: string[];
@@ -1778,9 +1773,9 @@ namespace IamAccessGroupsV2 {
 
   /** AddGroupMembersRequestMembersItem. */
   export interface AddGroupMembersRequestMembersItem {
-    /** The IBMid or Service Id of the member. */
+    /** The IBMid, Service Id or Profile Id of the member. */
     iam_id: string;
-    /** The type of the member, must be either "user" or "service". */
+    /** The type of the member, must be either "user", "service" or "trusted profile". */
     type: string;
   }
 

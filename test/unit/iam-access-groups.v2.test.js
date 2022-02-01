@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,14 +107,14 @@ describe('IamAccessGroupsV2', () => {
         const name = 'Managers';
         const description = 'Group for managers';
         const transactionId = 'testString';
-        const params = {
+        const createAccessGroupParams = {
           accountId: accountId,
           name: name,
           description: description,
           transactionId: transactionId,
         };
 
-        const createAccessGroupResult = iamAccessGroupsService.createAccessGroup(params);
+        const createAccessGroupResult = iamAccessGroupsService.createAccessGroup(createAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(createAccessGroupResult);
@@ -155,7 +155,7 @@ describe('IamAccessGroupsV2', () => {
         const name = 'Managers';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createAccessGroupParams = {
           accountId,
           name,
           headers: {
@@ -164,7 +164,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.createAccessGroup(params);
+        iamAccessGroupsService.createAccessGroup(createAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -205,7 +205,7 @@ describe('IamAccessGroupsV2', () => {
         const sort = 'name';
         const showFederated = false;
         const hidePublicAccess = false;
-        const params = {
+        const listAccessGroupsParams = {
           accountId: accountId,
           transactionId: transactionId,
           iamId: iamId,
@@ -216,7 +216,7 @@ describe('IamAccessGroupsV2', () => {
           hidePublicAccess: hidePublicAccess,
         };
 
-        const listAccessGroupsResult = iamAccessGroupsService.listAccessGroups(params);
+        const listAccessGroupsResult = iamAccessGroupsService.listAccessGroups(listAccessGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(listAccessGroupsResult);
@@ -260,7 +260,7 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listAccessGroupsParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -268,7 +268,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.listAccessGroups(params);
+        iamAccessGroupsService.listAccessGroups(listAccessGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -304,13 +304,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const showFederated = false;
-        const params = {
+        const getAccessGroupParams = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
           showFederated: showFederated,
         };
 
-        const getAccessGroupResult = iamAccessGroupsService.getAccessGroup(params);
+        const getAccessGroupResult = iamAccessGroupsService.getAccessGroup(getAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(getAccessGroupResult);
@@ -349,7 +349,7 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getAccessGroupParams = {
           accessGroupId,
           headers: {
             Accept: userAccept,
@@ -357,7 +357,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.getAccessGroup(params);
+        iamAccessGroupsService.getAccessGroup(getAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -395,7 +395,7 @@ describe('IamAccessGroupsV2', () => {
         const name = 'Awesome Managers';
         const description = 'Group for awesome managers.';
         const transactionId = 'testString';
-        const params = {
+        const updateAccessGroupParams = {
           accessGroupId: accessGroupId,
           ifMatch: ifMatch,
           name: name,
@@ -403,7 +403,7 @@ describe('IamAccessGroupsV2', () => {
           transactionId: transactionId,
         };
 
-        const updateAccessGroupResult = iamAccessGroupsService.updateAccessGroup(params);
+        const updateAccessGroupResult = iamAccessGroupsService.updateAccessGroup(updateAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(updateAccessGroupResult);
@@ -445,7 +445,7 @@ describe('IamAccessGroupsV2', () => {
         const ifMatch = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateAccessGroupParams = {
           accessGroupId,
           ifMatch,
           headers: {
@@ -454,7 +454,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.updateAccessGroup(params);
+        iamAccessGroupsService.updateAccessGroup(updateAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -490,13 +490,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const force = false;
-        const params = {
+        const deleteAccessGroupParams = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
           force: force,
         };
 
-        const deleteAccessGroupResult = iamAccessGroupsService.deleteAccessGroup(params);
+        const deleteAccessGroupResult = iamAccessGroupsService.deleteAccessGroup(deleteAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteAccessGroupResult);
@@ -535,7 +535,7 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteAccessGroupParams = {
           accessGroupId,
           headers: {
             Accept: userAccept,
@@ -543,7 +543,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.deleteAccessGroup(params);
+        iamAccessGroupsService.deleteAccessGroup(deleteAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -579,13 +579,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const iamId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const isMemberOfAccessGroupParams = {
           accessGroupId: accessGroupId,
           iamId: iamId,
           transactionId: transactionId,
         };
 
-        const isMemberOfAccessGroupResult = iamAccessGroupsService.isMemberOfAccessGroup(params);
+        const isMemberOfAccessGroupResult = iamAccessGroupsService.isMemberOfAccessGroup(isMemberOfAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(isMemberOfAccessGroupResult);
@@ -625,7 +625,7 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const isMemberOfAccessGroupParams = {
           accessGroupId,
           iamId,
           headers: {
@@ -634,7 +634,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.isMemberOfAccessGroup(params);
+        iamAccessGroupsService.isMemberOfAccessGroup(isMemberOfAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -678,13 +678,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const members = [addGroupMembersRequestMembersItemModel];
         const transactionId = 'testString';
-        const params = {
+        const addMembersToAccessGroupParams = {
           accessGroupId: accessGroupId,
           members: members,
           transactionId: transactionId,
         };
 
-        const addMembersToAccessGroupResult = iamAccessGroupsService.addMembersToAccessGroup(params);
+        const addMembersToAccessGroupResult = iamAccessGroupsService.addMembersToAccessGroup(addMembersToAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(addMembersToAccessGroupResult);
@@ -723,7 +723,7 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addMembersToAccessGroupParams = {
           accessGroupId,
           headers: {
             Accept: userAccept,
@@ -731,7 +731,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.addMembersToAccessGroup(params);
+        iamAccessGroupsService.addMembersToAccessGroup(addMembersToAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -771,7 +771,7 @@ describe('IamAccessGroupsV2', () => {
         const type = 'testString';
         const verbose = false;
         const sort = 'testString';
-        const params = {
+        const listAccessGroupMembersParams = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
           limit: limit,
@@ -781,7 +781,7 @@ describe('IamAccessGroupsV2', () => {
           sort: sort,
         };
 
-        const listAccessGroupMembersResult = iamAccessGroupsService.listAccessGroupMembers(params);
+        const listAccessGroupMembersResult = iamAccessGroupsService.listAccessGroupMembers(listAccessGroupMembersParams);
 
         // all methods should return a Promise
         expectToBePromise(listAccessGroupMembersResult);
@@ -824,7 +824,7 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listAccessGroupMembersParams = {
           accessGroupId,
           headers: {
             Accept: userAccept,
@@ -832,7 +832,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.listAccessGroupMembers(params);
+        iamAccessGroupsService.listAccessGroupMembers(listAccessGroupMembersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -868,13 +868,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const iamId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const removeMemberFromAccessGroupParams = {
           accessGroupId: accessGroupId,
           iamId: iamId,
           transactionId: transactionId,
         };
 
-        const removeMemberFromAccessGroupResult = iamAccessGroupsService.removeMemberFromAccessGroup(params);
+        const removeMemberFromAccessGroupResult = iamAccessGroupsService.removeMemberFromAccessGroup(removeMemberFromAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(removeMemberFromAccessGroupResult);
@@ -914,7 +914,7 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeMemberFromAccessGroupParams = {
           accessGroupId,
           iamId,
           headers: {
@@ -923,7 +923,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.removeMemberFromAccessGroup(params);
+        iamAccessGroupsService.removeMemberFromAccessGroup(removeMemberFromAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -957,15 +957,15 @@ describe('IamAccessGroupsV2', () => {
       function __removeMembersFromAccessGroupTest() {
         // Construct the params object for operation removeMembersFromAccessGroup
         const accessGroupId = 'testString';
-        const members = ['IBMId-user1', 'iam-ServiceId-123'];
+        const members = ['IBMId-user1', 'iam-ServiceId-123', 'iam-Profile-123'];
         const transactionId = 'testString';
-        const params = {
+        const removeMembersFromAccessGroupParams = {
           accessGroupId: accessGroupId,
           members: members,
           transactionId: transactionId,
         };
 
-        const removeMembersFromAccessGroupResult = iamAccessGroupsService.removeMembersFromAccessGroup(params);
+        const removeMembersFromAccessGroupResult = iamAccessGroupsService.removeMembersFromAccessGroup(removeMembersFromAccessGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(removeMembersFromAccessGroupResult);
@@ -1004,7 +1004,7 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeMembersFromAccessGroupParams = {
           accessGroupId,
           headers: {
             Accept: userAccept,
@@ -1012,7 +1012,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.removeMembersFromAccessGroup(params);
+        iamAccessGroupsService.removeMembersFromAccessGroup(removeMembersFromAccessGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1048,13 +1048,13 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const iamId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const removeMemberFromAllAccessGroupsParams = {
           accountId: accountId,
           iamId: iamId,
           transactionId: transactionId,
         };
 
-        const removeMemberFromAllAccessGroupsResult = iamAccessGroupsService.removeMemberFromAllAccessGroups(params);
+        const removeMemberFromAllAccessGroupsResult = iamAccessGroupsService.removeMemberFromAllAccessGroups(removeMemberFromAllAccessGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(removeMemberFromAllAccessGroupsResult);
@@ -1094,7 +1094,7 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeMemberFromAllAccessGroupsParams = {
           accountId,
           iamId,
           headers: {
@@ -1103,7 +1103,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.removeMemberFromAllAccessGroups(params);
+        iamAccessGroupsService.removeMemberFromAllAccessGroups(removeMemberFromAllAccessGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1141,7 +1141,7 @@ describe('IamAccessGroupsV2', () => {
         const type = 'user';
         const groups = ['access-group-id-1'];
         const transactionId = 'testString';
-        const params = {
+        const addMemberToMultipleAccessGroupsParams = {
           accountId: accountId,
           iamId: iamId,
           type: type,
@@ -1149,7 +1149,7 @@ describe('IamAccessGroupsV2', () => {
           transactionId: transactionId,
         };
 
-        const addMemberToMultipleAccessGroupsResult = iamAccessGroupsService.addMemberToMultipleAccessGroups(params);
+        const addMemberToMultipleAccessGroupsResult = iamAccessGroupsService.addMemberToMultipleAccessGroups(addMemberToMultipleAccessGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(addMemberToMultipleAccessGroupsResult);
@@ -1191,7 +1191,7 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addMemberToMultipleAccessGroupsParams = {
           accountId,
           iamId,
           headers: {
@@ -1200,7 +1200,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.addMemberToMultipleAccessGroups(params);
+        iamAccessGroupsService.addMemberToMultipleAccessGroups(addMemberToMultipleAccessGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1248,7 +1248,7 @@ describe('IamAccessGroupsV2', () => {
         const conditions = [ruleConditionsModel];
         const name = 'Manager group rule';
         const transactionId = 'testString';
-        const params = {
+        const addAccessGroupRuleParams = {
           accessGroupId: accessGroupId,
           expiration: expiration,
           realmName: realmName,
@@ -1257,7 +1257,7 @@ describe('IamAccessGroupsV2', () => {
           transactionId: transactionId,
         };
 
-        const addAccessGroupRuleResult = iamAccessGroupsService.addAccessGroupRule(params);
+        const addAccessGroupRuleResult = iamAccessGroupsService.addAccessGroupRule(addAccessGroupRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(addAccessGroupRuleResult);
@@ -1302,7 +1302,7 @@ describe('IamAccessGroupsV2', () => {
         const conditions = [ruleConditionsModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addAccessGroupRuleParams = {
           accessGroupId,
           expiration,
           realmName,
@@ -1313,7 +1313,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.addAccessGroupRule(params);
+        iamAccessGroupsService.addAccessGroupRule(addAccessGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1348,12 +1348,12 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation listAccessGroupRules
         const accessGroupId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const listAccessGroupRulesParams = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
         };
 
-        const listAccessGroupRulesResult = iamAccessGroupsService.listAccessGroupRules(params);
+        const listAccessGroupRulesResult = iamAccessGroupsService.listAccessGroupRules(listAccessGroupRulesParams);
 
         // all methods should return a Promise
         expectToBePromise(listAccessGroupRulesResult);
@@ -1391,7 +1391,7 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listAccessGroupRulesParams = {
           accessGroupId,
           headers: {
             Accept: userAccept,
@@ -1399,7 +1399,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.listAccessGroupRules(params);
+        iamAccessGroupsService.listAccessGroupRules(listAccessGroupRulesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1435,13 +1435,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const ruleId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const getAccessGroupRuleParams = {
           accessGroupId: accessGroupId,
           ruleId: ruleId,
           transactionId: transactionId,
         };
 
-        const getAccessGroupRuleResult = iamAccessGroupsService.getAccessGroupRule(params);
+        const getAccessGroupRuleResult = iamAccessGroupsService.getAccessGroupRule(getAccessGroupRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(getAccessGroupRuleResult);
@@ -1481,7 +1481,7 @@ describe('IamAccessGroupsV2', () => {
         const ruleId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getAccessGroupRuleParams = {
           accessGroupId,
           ruleId,
           headers: {
@@ -1490,7 +1490,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.getAccessGroupRule(params);
+        iamAccessGroupsService.getAccessGroupRule(getAccessGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1540,7 +1540,7 @@ describe('IamAccessGroupsV2', () => {
         const conditions = [ruleConditionsModel];
         const name = 'Manager group rule';
         const transactionId = 'testString';
-        const params = {
+        const replaceAccessGroupRuleParams = {
           accessGroupId: accessGroupId,
           ruleId: ruleId,
           ifMatch: ifMatch,
@@ -1551,7 +1551,7 @@ describe('IamAccessGroupsV2', () => {
           transactionId: transactionId,
         };
 
-        const replaceAccessGroupRuleResult = iamAccessGroupsService.replaceAccessGroupRule(params);
+        const replaceAccessGroupRuleResult = iamAccessGroupsService.replaceAccessGroupRule(replaceAccessGroupRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceAccessGroupRuleResult);
@@ -1600,7 +1600,7 @@ describe('IamAccessGroupsV2', () => {
         const conditions = [ruleConditionsModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceAccessGroupRuleParams = {
           accessGroupId,
           ruleId,
           ifMatch,
@@ -1613,7 +1613,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.replaceAccessGroupRule(params);
+        iamAccessGroupsService.replaceAccessGroupRule(replaceAccessGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1649,13 +1649,13 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const ruleId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const removeAccessGroupRuleParams = {
           accessGroupId: accessGroupId,
           ruleId: ruleId,
           transactionId: transactionId,
         };
 
-        const removeAccessGroupRuleResult = iamAccessGroupsService.removeAccessGroupRule(params);
+        const removeAccessGroupRuleResult = iamAccessGroupsService.removeAccessGroupRule(removeAccessGroupRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(removeAccessGroupRuleResult);
@@ -1695,7 +1695,7 @@ describe('IamAccessGroupsV2', () => {
         const ruleId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeAccessGroupRuleParams = {
           accessGroupId,
           ruleId,
           headers: {
@@ -1704,7 +1704,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.removeAccessGroupRule(params);
+        iamAccessGroupsService.removeAccessGroupRule(removeAccessGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1739,12 +1739,12 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation getAccountSettings
         const accountId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const getAccountSettingsParams = {
           accountId: accountId,
           transactionId: transactionId,
         };
 
-        const getAccountSettingsResult = iamAccessGroupsService.getAccountSettings(params);
+        const getAccountSettingsResult = iamAccessGroupsService.getAccountSettings(getAccountSettingsParams);
 
         // all methods should return a Promise
         expectToBePromise(getAccountSettingsResult);
@@ -1782,7 +1782,7 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getAccountSettingsParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -1790,7 +1790,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.getAccountSettings(params);
+        iamAccessGroupsService.getAccountSettings(getAccountSettingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1826,13 +1826,13 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const publicAccessEnabled = true;
         const transactionId = 'testString';
-        const params = {
+        const updateAccountSettingsParams = {
           accountId: accountId,
           publicAccessEnabled: publicAccessEnabled,
           transactionId: transactionId,
         };
 
-        const updateAccountSettingsResult = iamAccessGroupsService.updateAccountSettings(params);
+        const updateAccountSettingsResult = iamAccessGroupsService.updateAccountSettings(updateAccountSettingsParams);
 
         // all methods should return a Promise
         expectToBePromise(updateAccountSettingsResult);
@@ -1871,7 +1871,7 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateAccountSettingsParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -1879,7 +1879,7 @@ describe('IamAccessGroupsV2', () => {
           },
         };
 
-        iamAccessGroupsService.updateAccountSettings(params);
+        iamAccessGroupsService.updateAccountSettings(updateAccountSettingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
