@@ -202,7 +202,17 @@ class IamAccessGroupsV2 extends BaseService {
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GroupsList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'transactionId', 'iamId', 'limit', 'offset', 'sort', 'showFederated', 'hidePublicAccess', 'headers'];
+    const _validParams = [
+      'accountId',
+      'transactionId',
+      'iamId',
+      'limit',
+      'offset',
+      'sort',
+      'showFederated',
+      'hidePublicAccess',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -338,7 +348,14 @@ class IamAccessGroupsV2 extends BaseService {
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Group>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId', 'ifMatch'];
-    const _validParams = ['accessGroupId', 'ifMatch', 'name', 'description', 'transactionId', 'headers'];
+    const _validParams = [
+      'accessGroupId',
+      'ifMatch',
+      'name',
+      'description',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -608,7 +625,16 @@ class IamAccessGroupsV2 extends BaseService {
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GroupMembersList>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId'];
-    const _validParams = ['accessGroupId', 'transactionId', 'limit', 'offset', 'type', 'verbose', 'sort', 'headers'];
+    const _validParams = [
+      'accessGroupId',
+      'transactionId',
+      'limit',
+      'offset',
+      'type',
+      'verbose',
+      'sort',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -954,7 +980,15 @@ class IamAccessGroupsV2 extends BaseService {
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Rule>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId', 'expiration', 'realmName', 'conditions'];
-    const _validParams = ['accessGroupId', 'expiration', 'realmName', 'conditions', 'name', 'transactionId', 'headers'];
+    const _validParams = [
+      'accessGroupId',
+      'expiration',
+      'realmName',
+      'conditions',
+      'name',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1145,8 +1179,25 @@ class IamAccessGroupsV2 extends BaseService {
     params: IamAccessGroupsV2.ReplaceAccessGroupRuleParams
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Rule>> {
     const _params = { ...params };
-    const _requiredParams = ['accessGroupId', 'ruleId', 'ifMatch', 'expiration', 'realmName', 'conditions'];
-    const _validParams = ['accessGroupId', 'ruleId', 'ifMatch', 'expiration', 'realmName', 'conditions', 'name', 'transactionId', 'headers'];
+    const _requiredParams = [
+      'accessGroupId',
+      'ruleId',
+      'ifMatch',
+      'expiration',
+      'realmName',
+      'conditions',
+    ];
+    const _validParams = [
+      'accessGroupId',
+      'ruleId',
+      'ifMatch',
+      'expiration',
+      'realmName',
+      'conditions',
+      'name',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
