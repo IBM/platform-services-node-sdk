@@ -1,3 +1,10 @@
+## [0.22.8](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.7...v0.22.8) (2022-02-07)
+
+
+### Bug Fixes
+
+* **IAM Access Groups:** add trusted profile as member ([#153](https://github.com/IBM/platform-services-node-sdk/issues/153)) ([1541da4](https://github.com/IBM/platform-services-node-sdk/commit/1541da4d3d423750625e60ff868741bdcadcb1b1))
+
 ## [0.22.7](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.6...v0.22.7) (2022-01-19)
 
 
