@@ -1,3 +1,10 @@
+## [0.22.10](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.9...v0.22.10) (2022-03-17)
+
+
+### Bug Fixes
+
+* bump node core to 2.17.12 ([#155](https://github.com/IBM/platform-services-node-sdk/issues/155)) ([fbbbd1d](https://github.com/IBM/platform-services-node-sdk/commit/fbbbd1db3d1550d3a8c261211e9203f20bfca0a4))
+
 ## [0.22.9](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.8...v0.22.9) (2022-02-10)
 
 
