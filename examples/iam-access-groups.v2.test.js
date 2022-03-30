@@ -32,12 +32,13 @@ const authHelper = require('../test/resources/auth-helper.js');
 // IAM_ACCESS_GROUPS_APIKEY=<your iam apikey>
 // IAM_ACCESS_GROUPS_AUTH_URL=<IAM token service URL - omit this if using the production environment>
 // IAM_ACCESS_GROUPS_TEST_ACCOUNT_ID=<id of an account used for testing>
+// IAM_ACCESS_GROUPS_TEST_PROFILE_ID=<id of an profile used for testing which exists in the account>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'iam_access_groups.env';
+const configFile = 'iam_access_groups_v2.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -60,7 +61,7 @@ describe('IamAccessGroupsV2', () => {
   const config = readExternalSources(IamAccessGroupsV2.DEFAULT_SERVICE_NAME);
 
   let testAccountId = config.testAccountId;
-
+  let profileId = config.testProfileId
   let testGroupETag;
   let testGroupId;
   let testClaimRuleId;
@@ -202,9 +203,14 @@ describe('IamAccessGroupsV2', () => {
       iam_id: 'iam-ServiceId-123',
       type: 'service',
     };
+    var groupMember3 = {
+      iam_id: profileId,
+      type : 'profile',
+    }
+    
     const params = {
       accessGroupId: testGroupId,
-      members: [groupMember1, groupMember2],
+      members: [groupMember1, groupMember2,groupMember3],
     };
 
     try {
@@ -312,6 +318,34 @@ describe('IamAccessGroupsV2', () => {
     const params = {
       accessGroupId: testGroupId,
       members: ['iam-ServiceId-123']
+    };
+
+    try {
+      const res = await iamAccessGroupsService.removeMembersFromAccessGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-remove_members_from_access_group
+  });
+  test('removeMembersFromAccessGroup request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('removeMembersFromAccessGroup() result:');
+    // begin-remove_members_from_access_group
+
+    const params = {
+      accessGroupId: testGroupId,
+      members: [profileId]
     };
 
     try {

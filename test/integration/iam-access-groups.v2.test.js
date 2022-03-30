@@ -23,7 +23,7 @@ const authHelper = require('../resources/auth-helper.js');
 const timeout = 25000;
 
 // Location of our config file.
-const configFile = 'iam_access_groups.env';
+const configFile = 'iam_access_groups_v2.env';
 
 // Use authHelper to skip tests if our configFile is not available.
 const describe = authHelper.prepareTests(configFile);

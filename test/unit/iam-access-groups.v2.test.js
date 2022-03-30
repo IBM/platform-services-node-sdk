@@ -200,6 +200,7 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const transactionId = 'testString';
         const iamId = 'testString';
+        const membershipType = 'static';
         const limit = 38;
         const offset = 38;
         const sort = 'name';
@@ -209,6 +210,7 @@ describe('IamAccessGroupsV2', () => {
           accountId: accountId,
           transactionId: transactionId,
           iamId: iamId,
+          membershipType: membershipType,
           limit: limit,
           offset: offset,
           sort: sort,
@@ -233,6 +235,7 @@ describe('IamAccessGroupsV2', () => {
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.iam_id).toEqual(iamId);
+        expect(mockRequestOptions.qs.membership_type).toEqual(membershipType);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.offset).toEqual(offset);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
@@ -766,6 +769,7 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation listAccessGroupMembers
         const accessGroupId = 'testString';
         const transactionId = 'testString';
+        const membershipType = 'static';
         const limit = 38;
         const offset = 38;
         const type = 'testString';
@@ -774,6 +778,7 @@ describe('IamAccessGroupsV2', () => {
         const listAccessGroupMembersParams = {
           accessGroupId: accessGroupId,
           transactionId: transactionId,
+          membershipType: membershipType,
           limit: limit,
           offset: offset,
           type: type,
@@ -796,6 +801,7 @@ describe('IamAccessGroupsV2', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.membership_type).toEqual(membershipType);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.offset).toEqual(offset);
         expect(mockRequestOptions.qs.type).toEqual(type);

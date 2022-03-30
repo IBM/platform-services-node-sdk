@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.43.4-432d779b-20220119-173927
+ * IBM OpenAPI SDK Code Generator Version: 3.46.1-a5569134-20220316-164819
  */
 
 import * as extend from 'extend';
@@ -186,7 +186,11 @@ class IamAccessGroupsV2 extends BaseService {
    * useful for tracking calls through multiple services by using one identifier. The header key must be set to
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
-   * @param {string} [params.iamId] - Return groups for member id (IBMid, Service Id or Profile Id).
+   * @param {string} [params.iamId] - Return groups for member ID (IBMid, service ID or trusted profile ID).
+   * @param {string} [params.membershipType] - Membership type need to be specified along with iam_id and must be either
+   * `static`, `dynamic` or `all`. If membership type is `static`, members explicitly added to the group will be shown.
+   * If membership type is `dynamic`, members accessing the access group at the moment via dynamic rules will be shown.
+   * If membership type is `all`, both static and dynamic members will be shown.
    * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
    * @param {number} [params.offset] - The offset of the first result item to be returned.
    * @param {string} [params.sort] - Sort the results by id, name, description, or is_federated flag.
@@ -206,6 +210,7 @@ class IamAccessGroupsV2 extends BaseService {
       'accountId',
       'transactionId',
       'iamId',
+      'membershipType',
       'limit',
       'offset',
       'sort',
@@ -221,6 +226,7 @@ class IamAccessGroupsV2 extends BaseService {
     const query = {
       'account_id': _params.accountId,
       'iam_id': _params.iamId,
+      'membership_type': _params.membershipType,
       'limit': _params.limit,
       'offset': _params.offset,
       'sort': _params.sort,
@@ -471,9 +477,9 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Check membership in an access group.
    *
-   * This HEAD operation determines if a given `iam_id` is present in a group. No response body is returned with this
-   * request. If the membership exists, a `204 - No Content` status code is returned. If the membership or the group
-   * does not exist, a `404 - Not Found` status code is returned.
+   * This HEAD operation determines if a given `iam_id` is present in a group either explicitly or via dynamic rules. No
+   * response body is returned with this request. If the membership exists, a `204 - No Content` status code is
+   * returned. If the membership or the group does not exist, a `404 - Not Found` status code is returned.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accessGroupId - The access group identifier.
@@ -611,10 +617,13 @@ class IamAccessGroupsV2 extends BaseService {
    * useful for tracking calls through multiple services by using one identifier. The header key must be set to
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
+   * @param {string} [params.membershipType] - Filters members by membership type. Membership type can be either
+   * `static`, `dynamic` or `all`. `static` lists those members explicitly added to the access group, `dynamic` lists
+   * those members part of access group via dynamic rules at the moment. `all` lists both static and dynamic members.
    * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
    * @param {number} [params.offset] - The offset of the first result item to be returned.
    * @param {string} [params.type] - Filter the results by member type.
-   * @param {boolean} [params.verbose] - Return user's email and name for each user id or the name for each service id
+   * @param {boolean} [params.verbose] - Return user's email and name for each user ID or the name for each service ID
    * or trusted profile.
    * @param {string} [params.sort] - If verbose is true, sort the results by id, name, or email.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -628,6 +637,7 @@ class IamAccessGroupsV2 extends BaseService {
     const _validParams = [
       'accessGroupId',
       'transactionId',
+      'membershipType',
       'limit',
       'offset',
       'type',
@@ -641,6 +651,7 @@ class IamAccessGroupsV2 extends BaseService {
     }
 
     const query = {
+      'membership_type': _params.membershipType,
       'limit': _params.limit,
       'offset': _params.offset,
       'type': _params.type,
@@ -685,7 +696,8 @@ class IamAccessGroupsV2 extends BaseService {
    * Delete member from an access group.
    *
    * Remove one member from a group using this API. If the operation is successful, only a `204 - No Content` response
-   * with no body is returned. However, if any error occurs, the standard error format will be returned.
+   * with no body is returned. However, if any error occurs, the standard error format will be returned. Dynamic member
+   * cannot be deleted using this API. Dynamic rules needs to be adjusted to delete dynamic members.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accessGroupId - The access group identifier.
@@ -745,7 +757,8 @@ class IamAccessGroupsV2 extends BaseService {
    *
    * Remove multiple members from a group using this API. On a successful call, this API will always return 207. It is
    * the caller's responsibility to iterate across the body to determine successful deletion of each member. This API
-   * request payload can delete up to 50 members per call.
+   * request payload can delete up to 50 members per call. This API doesnt delete dynamic members accessing the access
+   * group via dynamic rules.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accessGroupId - The access group identifier.
@@ -1499,8 +1512,14 @@ namespace IamAccessGroupsV2 {
      *  anything that you choose. If no transaction ID is passed in, then a random ID is generated.
      */
     transactionId?: string;
-    /** Return groups for member id (IBMid, Service Id or Profile Id). */
+    /** Return groups for member ID (IBMid, service ID or trusted profile ID). */
     iamId?: string;
+    /** Membership type need to be specified along with iam_id and must be either `static`, `dynamic` or `all`. If
+     *  membership type is `static`, members explicitly added to the group will be shown. If membership type is
+     *  `dynamic`, members accessing the access group at the moment via dynamic rules will be shown. If membership type
+     *  is `all`, both static and dynamic members will be shown.
+     */
+    membershipType?: string;
     /** Return up to this limit of results where limit is between 0 and 100. */
     limit?: number;
     /** The offset of the first result item to be returned. */
@@ -1605,13 +1624,18 @@ namespace IamAccessGroupsV2 {
      *  anything that you choose. If no transaction ID is passed in, then a random ID is generated.
      */
     transactionId?: string;
+    /** Filters members by membership type. Membership type can be either `static`, `dynamic` or `all`. `static`
+     *  lists those members explicitly added to the access group, `dynamic` lists those members part of access group via
+     *  dynamic rules at the moment. `all` lists both static and dynamic members.
+     */
+    membershipType?: string;
     /** Return up to this limit of results where limit is between 0 and 100. */
     limit?: number;
     /** The offset of the first result item to be returned. */
     offset?: number;
     /** Filter the results by member type. */
     type?: string;
-    /** Return user's email and name for each user id or the name for each service id or trusted profile. */
+    /** Return user's email and name for each user ID or the name for each service ID or trusted profile. */
     verbose?: boolean;
     /** If verbose is true, sort the results by id, name, or email. */
     sort?: string;
@@ -1824,7 +1848,7 @@ namespace IamAccessGroupsV2 {
 
   /** AddGroupMembersRequestMembersItem. */
   export interface AddGroupMembersRequestMembersItem {
-    /** The IBMid, Service Id or Profile Id of the member. */
+    /** The IBMid, service ID or trusted profile ID of the member. */
     iam_id: string;
     /** The type of the member, must be either "user", "service" or "trusted profile". */
     type: string;
@@ -1944,6 +1968,8 @@ namespace IamAccessGroupsV2 {
     href?: string;
     /** This is set to true if rules exist for the group. */
     is_federated?: boolean;
+    /** Type of the membership. `static` or `dynamic`. */
+    membership_type?: string;
   }
 
   /** The members of a group. */
@@ -1996,8 +2022,10 @@ namespace IamAccessGroupsV2 {
   export interface ListGroupMembersResponseMember {
     /** The IBMid or Service Id of the member. */
     iam_id?: string;
-    /** The member type - either `user` or `service`. */
+    /** The member type - either `user`, `service` or `profile`. */
     type?: string;
+    /** The membership type - either `static` or `dynamic`. */
+    membership_type?: string;
     /** The user's or service id's name. */
     name?: string;
     /** If the member type is user, this is the user's email. */
