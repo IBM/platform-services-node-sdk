@@ -1,3 +1,10 @@
+# [0.23.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.10...v0.23.0) (2022-04-04)
+
+
+### Features
+
+* **IAM Access Groups:** add support for dynamic membership ([#157](https://github.com/IBM/platform-services-node-sdk/issues/157)) ([80b711b](https://github.com/IBM/platform-services-node-sdk/commit/80b711b9fea18a71c0fdc1b37af2297667384a09))
+
 ## [0.22.10](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.9...v0.22.10) (2022-03-17)
 
 
