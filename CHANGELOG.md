@@ -1,3 +1,10 @@
+## [0.23.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.23.0...v0.23.1) (2022-04-04)
+
+
+### Bug Fixes
+
+* bump dependencies to avoid vulnerabilities ([#158](https://github.com/IBM/platform-services-node-sdk/issues/158)) ([0d17c3f](https://github.com/IBM/platform-services-node-sdk/commit/0d17c3f56abad590e4cae3c3c3869cea2a137781))
+
 # [0.23.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.22.10...v0.23.0) (2022-04-04)
 
 
