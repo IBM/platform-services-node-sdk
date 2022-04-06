@@ -1,3 +1,10 @@
+# [0.24.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.23.1...v0.24.0) (2022-04-06)
+
+
+### Features
+
+* **IAM Identity:** add support for inactivity reports ([#159](https://github.com/IBM/platform-services-node-sdk/issues/159)) ([ed2efa4](https://github.com/IBM/platform-services-node-sdk/commit/ed2efa43c51bee3bc551a08500faeb7642c7e016))
+
 ## [0.23.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.23.0...v0.23.1) (2022-04-04)
 
 
