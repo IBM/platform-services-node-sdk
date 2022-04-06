@@ -84,6 +84,8 @@ describe('IamIdentityV1', () => {
 
   let accountSettingsEtag = null;
 
+  let reportReference = null;
+
   test('createApiKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
@@ -188,6 +190,7 @@ describe('IamIdentityV1', () => {
 
     const params = {
       id: apikeyId,
+      includeActivity: true,
     };
 
     try {
@@ -361,6 +364,7 @@ describe('IamIdentityV1', () => {
 
     const params = {
       id: svcId,
+      includeActivity: true,
     };
 
     try {
@@ -560,6 +564,7 @@ describe('IamIdentityV1', () => {
 
     const params = {
       profileId,
+      includeActivity: true,
     };
 
     try {
@@ -1015,5 +1020,59 @@ describe('IamIdentityV1', () => {
     }
 
     // end-updateAccountSettings
+  });
+  test('createReport request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createReport() result:');
+    // begin-create_report
+
+    const params = {
+      accountId: accountId,
+      type: 'inactive',
+      duration: '120',
+    };
+
+    try {
+      const res = await iamIdentityService.createReport(params);
+      reportReference = res.reference;
+      console.log(JSON.stringify(reportReference, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_report
+  });
+  test('getReport request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getReport() result:');
+    // begin-get_report
+
+    const params = {
+      accountId: accountId,
+      reference: 'latest',
+    };
+
+    try {
+      const res = await iamIdentityService.getReport(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_report
   });
 });

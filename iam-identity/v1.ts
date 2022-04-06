@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.37.0-a85661cd-20210802-190136
+ * IBM OpenAPI SDK Code Generator Version: 3.47.0-60650593-20220330-200002
  */
 
 import * as extend from 'extend';
@@ -24,13 +24,15 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * The IAM Identity Service API allows for the management of Account Settings and Identities (Service IDs, ApiKeys).
+ *
+ * API Version: 1.0.0
  */
 
 class IamIdentityV1 extends BaseService {
@@ -103,18 +105,18 @@ class IamIdentityV1 extends BaseService {
    * space developer in order to manage  service IDs of the entity.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - Account ID of the API keys(s) to query. If a service IAM ID is specified in
+   * @param {string} [params.accountId] - Account ID of the API keys to query. If a service IAM ID is specified in
    * iam_id then account_id must match the account of the IAM ID. If a user IAM ID is specified in iam_id then then
    * account_id must match the account of the Authorization token.
-   * @param {string} [params.iamId] - IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a
+   * @param {string} [params.iamId] - IAM ID of the API keys to be queried. The IAM ID may be that of a user or a
    * service. For a user IAM ID iam_id must match the Authorization token.
    * @param {number} [params.pagesize] - Optional size of a single page. Default is 20 items per page. Valid range is 1
    * to 100.
    * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
    * Default is start with first page.
-   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API Keys. Can be 'entity'
+   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API keys. Can be 'entity'
    * (default) or 'account'.
-   * @param {string} [params.type] - Optional parameter to filter the type of the queried API Keys. Can be 'user' or
+   * @param {string} [params.type] - Optional parameter to filter the type of the queried API keys. Can be 'user' or
    * 'serviceid'.
    * @param {string} [params.sort] - Optional sort property, valid values are name, description, created_at and
    * created_by. If specified, the items are sorted by the value of this property.
@@ -127,6 +129,23 @@ class IamIdentityV1 extends BaseService {
     params?: IamIdentityV1.ListApiKeysParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKeyList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'iamId',
+      'pagesize',
+      'pagetoken',
+      'scope',
+      'type',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'account_id': _params.accountId,
@@ -192,11 +211,20 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.CreateApiKeyParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
-    const requiredParams = ['name', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['name', 'iamId'];
+    const _validParams = [
+      'name',
+      'iamId',
+      'description',
+      'accountId',
+      'apikey',
+      'storeValue',
+      'entityLock',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -249,6 +277,12 @@ class IamIdentityV1 extends BaseService {
     params?: IamIdentityV1.GetApiKeysDetailsParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['iamApiKey', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'include_history': _params.includeHistory,
@@ -289,6 +323,8 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the API key.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {boolean} [params.includeActivity] - Defines if the entity's activity is included in the response.
+   * Retrieving activity data is an expensive operation, so please only request this when needed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>>}
    */
@@ -296,15 +332,16 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.GetApiKeyParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'includeHistory', 'includeActivity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
       'include_history': _params.includeHistory,
+      'include_activity': _params.includeActivity,
     };
 
     const path = {
@@ -359,11 +396,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UpdateApiKeyParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'ifMatch'];
+    const _validParams = ['id', 'ifMatch', 'name', 'description', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -416,11 +453,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.DeleteApiKeyParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -459,11 +496,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.LockApiKeyParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -502,11 +539,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UnlockApiKeyParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -537,7 +574,7 @@ class IamIdentityV1 extends BaseService {
    *
    * Returns a list of service IDs. Users can manage user API keys for themself, or service ID API keys for service IDs
    * that are bound to an entity they have access to. Note: apikey details are only included in the response when
-   * creating a Service ID with an apikey.
+   * creating a Service ID with an api key.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - Account ID of the service ID(s) to query. This parameter is required (unless
@@ -559,6 +596,21 @@ class IamIdentityV1 extends BaseService {
     params?: IamIdentityV1.ListServiceIdsParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ServiceIdList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'name',
+      'pagesize',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'account_id': _params.accountId,
@@ -618,11 +670,19 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.CreateServiceIdParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'name'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'name'];
+    const _validParams = [
+      'accountId',
+      'name',
+      'description',
+      'uniqueInstanceCrns',
+      'apikey',
+      'entityLock',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -668,6 +728,8 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {boolean} [params.includeActivity] - Defines if the entity's activity is included in the response.
+   * Retrieving activity data is an expensive operation, so please only request this when needed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>>}
    */
@@ -675,15 +737,16 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.GetServiceIdParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'includeHistory', 'includeActivity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
       'include_history': _params.includeHistory,
+      'include_activity': _params.includeActivity,
     };
 
     const path = {
@@ -742,11 +805,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UpdateServiceIdParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'ifMatch'];
+    const _validParams = ['id', 'ifMatch', 'name', 'description', 'uniqueInstanceCrns', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -802,11 +865,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.DeleteServiceIdParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -845,11 +908,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.LockServiceIdParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -889,11 +952,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UnlockServiceIdParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -937,11 +1000,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.CreateProfileParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>> {
     const _params = { ...params };
-    const requiredParams = ['name', 'accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['name', 'accountId'];
+    const _validParams = ['name', 'accountId', 'description', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -998,11 +1061,20 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.ListProfilesParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfilesList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'name',
+      'pagesize',
+      'sort',
+      'order',
+      'includeHistory',
+      'pagetoken',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -1046,6 +1118,8 @@ class IamIdentityV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile to get.
+   * @param {boolean} [params.includeActivity] - Defines if the entity's activity is included in the response.
+   * Retrieving activity data is an expensive operation, so please only request this when needed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>>}
    */
@@ -1053,12 +1127,16 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.GetProfileParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>> {
     const _params = { ...params };
-    const requiredParams = ['profileId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId'];
+    const _validParams = ['profileId', 'includeActivity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'include_activity': _params.includeActivity,
+    };
 
     const path = {
       'profile-id': _params.profileId,
@@ -1070,6 +1148,7 @@ class IamIdentityV1 extends BaseService {
       options: {
         url: '/v1/profiles/{profile-id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -1109,11 +1188,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UpdateProfileParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'ifMatch'];
+    const _validParams = ['profileId', 'ifMatch', 'name', 'description', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1166,11 +1245,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.DeleteProfileParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['profileId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId'];
+    const _validParams = ['profileId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1216,11 +1295,21 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.CreateClaimRuleParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRule>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'type', 'conditions'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'type', 'conditions'];
+    const _validParams = [
+      'profileId',
+      'type',
+      'conditions',
+      'context',
+      'name',
+      'realmName',
+      'crType',
+      'expiration',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1277,11 +1366,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.ListClaimRulesParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRuleList>> {
     const _params = { ...params };
-    const requiredParams = ['profileId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId'];
+    const _validParams = ['profileId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1326,11 +1415,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.GetClaimRuleParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRule>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'ruleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'ruleId'];
+    const _validParams = ['profileId', 'ruleId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1388,11 +1477,23 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UpdateClaimRuleParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRule>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'ruleId', 'ifMatch', 'type', 'conditions'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'ruleId', 'ifMatch', 'type', 'conditions'];
+    const _validParams = [
+      'profileId',
+      'ruleId',
+      'ifMatch',
+      'type',
+      'conditions',
+      'context',
+      'name',
+      'realmName',
+      'crType',
+      'expiration',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1452,11 +1553,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.DeleteClaimRuleParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'ruleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'ruleId'];
+    const _validParams = ['profileId', 'ruleId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1498,11 +1599,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.CreateLinkParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLink>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'crType', 'link'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'crType', 'link'];
+    const _validParams = ['profileId', 'crType', 'link', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1554,11 +1655,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.ListLinksParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLinkList>> {
     const _params = { ...params };
-    const requiredParams = ['profileId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId'];
+    const _validParams = ['profileId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1603,11 +1704,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.GetLinkParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLink>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'linkId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'linkId'];
+    const _validParams = ['profileId', 'linkId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1653,11 +1754,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.DeleteLinkParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['profileId', 'linkId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['profileId', 'linkId'];
+    const _validParams = ['profileId', 'linkId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1699,11 +1800,11 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.GetAccountSettingsParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -1791,11 +1892,22 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UpdateAccountSettingsParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>> {
     const _params = { ...params };
-    const requiredParams = ['ifMatch', 'accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['ifMatch', 'accountId'];
+    const _validParams = [
+      'ifMatch',
+      'accountId',
+      'restrictCreateServiceId',
+      'restrictCreatePlatformApikey',
+      'allowedIpAddresses',
+      'mfa',
+      'sessionExpirationInSeconds',
+      'sessionInvalidationInSeconds',
+      'maxSessionsPerIdentity',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1841,6 +1953,117 @@ class IamIdentityV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * activityOperations
+   ************************/
+
+  /**
+   * Trigger activity report across on account scope.
+   *
+   * Trigger activity report across on account scope for a given accountid.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - ID of the account.
+   * @param {string} [params.type] - Optional report type, supported value is 'inactive' - List all identities that have
+   * not authenticated within the time indicated by duration.
+   * @param {string} [params.duration] - Optional duration of the report, supported unit of duration is hours.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>>}
+   */
+  public createReport(
+    params: IamIdentityV1.CreateReportParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'type', 'duration', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'type': _params.type,
+      'duration': _params.duration,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'createReport');
+
+    const parameters = {
+      options: {
+        url: '/v1/activity/accounts/{account_id}/report',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get activity report across on account scope.
+   *
+   * Get activity report across on account scope for a given accountid.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - ID of the account.
+   * @param {string} params.reference - Reference for the report to be generated, You can use 'latest' to get the latest
+   * report for the given account.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Report>>}
+   */
+  public getReport(
+    params: IamIdentityV1.GetReportParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.Report>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'reference'];
+    const _validParams = ['accountId', 'reference', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+      'reference': _params.reference,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getReport');
+
+    const parameters = {
+      options: {
+        url: '/v1/activity/accounts/{account_id}/report/{reference}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -1873,12 +2096,12 @@ namespace IamIdentityV1 {
 
   /** Parameters for the `listApiKeys` operation. */
   export interface ListApiKeysParams {
-    /** Account ID of the API keys(s) to query. If a service IAM ID is specified in iam_id then account_id must
-     *  match the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the
-     *  account of the Authorization token.
+    /** Account ID of the API keys to query. If a service IAM ID is specified in iam_id then account_id must match
+     *  the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the account
+     *  of the Authorization token.
      */
     accountId?: string;
-    /** IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
+    /** IAM ID of the API keys to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
      *  iam_id must match the Authorization token.
      */
     iamId?: string;
@@ -1886,9 +2109,9 @@ namespace IamIdentityV1 {
     pagesize?: number;
     /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
     pagetoken?: string;
-    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
     scope?: ListApiKeysConstants.Scope | string;
-    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
     type?: ListApiKeysConstants.Type | string;
     /** Optional sort property, valid values are name, description, created_at and created_by. If specified, the
      *  items are sorted by the value of this property.
@@ -1903,12 +2126,12 @@ namespace IamIdentityV1 {
 
   /** Constants for the `listApiKeys` operation. */
   export namespace ListApiKeysConstants {
-    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
     export enum Scope {
       ENTITY = 'entity',
       ACCOUNT = 'account',
     }
-    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
     export enum Type {
       USER = 'user',
       SERVICEID = 'serviceid',
@@ -1965,6 +2188,10 @@ namespace IamIdentityV1 {
     id: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
+    /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
+     *  operation, so please only request this when needed.
+     */
+    includeActivity?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2066,6 +2293,10 @@ namespace IamIdentityV1 {
     id: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
+    /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
+     *  operation, so please only request this when needed.
+     */
+    includeActivity?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2163,6 +2394,10 @@ namespace IamIdentityV1 {
   export interface GetProfileParams {
     /** ID of the trusted profile to get. */
     profileId: string;
+    /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
+     *  operation, so please only request this when needed.
+     */
+    includeActivity?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2400,6 +2635,30 @@ namespace IamIdentityV1 {
     }
   }
 
+  /** Parameters for the `createReport` operation. */
+  export interface CreateReportParams {
+    /** ID of the account. */
+    accountId: string;
+    /** Optional report type, supported value is 'inactive' - List all identities that have not authenticated within
+     *  the time indicated by duration.
+     */
+    type?: string;
+    /** Optional duration of the report, supported unit of duration is hours. */
+    duration?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getReport` operation. */
+  export interface GetReportParams {
+    /** ID of the account. */
+    accountId: string;
+    /** Reference for the report to be generated, You can use 'latest' to get the latest report for the given
+     *  account.
+     */
+    reference: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
@@ -2455,6 +2714,14 @@ namespace IamIdentityV1 {
     max_sessions_per_identity: string;
   }
 
+  /** Activity. */
+  export interface Activity {
+    /** Time when the entity was last authenticated. */
+    last_authn?: string;
+    /** Authentication count, number of times the entity was authenticated. */
+    authn_count: number;
+  }
+
   /** Response body format for API key V1 REST requests. */
   export interface ApiKey {
     /** Context with key properties for problem determination. */
@@ -2497,6 +2764,7 @@ namespace IamIdentityV1 {
     apikey: string;
     /** History of the API key. */
     history?: EnityHistoryRecord[];
+    activity?: Activity;
   }
 
   /** Parameters for the API key in the Create service Id V1 REST request. */
@@ -2568,6 +2836,16 @@ namespace IamIdentityV1 {
     params: string[];
     /** Message which summarizes the executed action. */
     message: string;
+  }
+
+  /** EntityActivity. */
+  export interface EntityActivity {
+    /** Unique id of the entity. */
+    id: string;
+    /** Name provided during creation of the entity. */
+    name?: string;
+    /** Time when the entity was last authenticated. */
+    last_authn?: string;
   }
 
   /** ProfileClaimRule. */
@@ -2647,6 +2925,34 @@ namespace IamIdentityV1 {
     links: ProfileLink[];
   }
 
+  /** Report. */
+  export interface Report {
+    /** IAMid of the user who triggered the report. */
+    created_by: string;
+    /** Unique reference used to generate the report. */
+    reference: string;
+    /** Duration in hours for which the report is generated. */
+    report_duration: string;
+    /** Start time of the report. */
+    report_start_time: string;
+    /** End time of the report. */
+    report_end_time: string;
+    /** List of users. */
+    users?: UserActivity[];
+    /** List of apikeys. */
+    apikeys?: EntityActivity[];
+    /** List of serviceids. */
+    serviceids?: EntityActivity[];
+    /** List of profiles. */
+    profiles?: EntityActivity[];
+  }
+
+  /** ReportReference. */
+  export interface ReportReference {
+    /** Reference for the report to be generated. */
+    reference: string;
+  }
+
   /** Context with key properties for problem determination. */
   export interface ResponseContext {
     /** The transaction ID of the inbound REST request. */
@@ -2711,6 +3017,7 @@ namespace IamIdentityV1 {
     history?: EnityHistoryRecord[];
     /** Response body format for API key V1 REST requests. */
     apikey?: ApiKey;
+    activity?: Activity;
   }
 
   /** Response body format for the list service ID V1 REST request. */
@@ -2771,6 +3078,7 @@ namespace IamIdentityV1 {
     ims_user_id?: number;
     /** History of the trusted profile. */
     history?: EnityHistoryRecord[];
+    activity?: Activity;
   }
 
   /** Response body format for the List trusted profiles V1 REST request. */
@@ -2791,6 +3099,16 @@ namespace IamIdentityV1 {
     next?: string;
     /** List of trusted profiles. */
     profiles: TrustedProfile[];
+  }
+
+  /** UserActivity. */
+  export interface UserActivity {
+    /** IAMid of the user. */
+    iam_id: string;
+    /** Username of the user. */
+    username: string;
+    /** Time when the user was last authenticated. */
+    last_authn?: string;
   }
 }
 

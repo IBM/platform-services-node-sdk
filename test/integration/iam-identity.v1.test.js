@@ -61,6 +61,8 @@ let linkId;
 
 let accountSettingsEtag;
 
+let reportReference;
+
 describe('IamIdentityV1_integration', () => {
   jest.setTimeout(timeout);
 
@@ -152,6 +154,7 @@ describe('IamIdentityV1_integration', () => {
     const params = {
       id: apikeyId1,
       includeHistory: true,
+      includeActivity: true,
     };
 
     iamIdentityService
@@ -202,7 +205,7 @@ describe('IamIdentityV1_integration', () => {
         expect(result.account_id).toEqual(accountId);
         expect(result.created_by).toEqual(iamId);
         expect(result.created_at).not.toBeNull();
-        expect(result.locked).toEqual(false);
+        expect(result.locked).toEqual(true);
 
         done();
       })
@@ -412,6 +415,7 @@ describe('IamIdentityV1_integration', () => {
     const params = {
       id: serviceId1,
       includeHistory: true,
+      includeActivity: true,
     };
 
     iamIdentityService
@@ -624,7 +628,7 @@ describe('IamIdentityV1_integration', () => {
     expect(profileId1).not.toBeNull();
     const params = {
       profileId: profileId1,
-      includeHistory: true,
+      includeActivity: true,
     };
 
     iamIdentityService
@@ -932,7 +936,7 @@ describe('IamIdentityV1_integration', () => {
 
   test('createLink()', (done) => {
     const CreateProfileLinkRequestLink = {
-      crn: 'crn:v1:staging:public:iam-identity::a/18e3020749ce4744b0b472466d61fdb4::computeresource:Fake-Compute-Resource',
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
       namespace: 'default',
       name: 'nice name',
     };
@@ -1201,7 +1205,7 @@ describe('IamIdentityV1_integration', () => {
 
   test('createLinkNotFound()', async () => {
     const CreateProfileLinkRequestLink = {
-      crn: 'crn:v1:staging:public:iam-identity::a/18e3020749ce4744b0b472466d61fdb4::computeresource:Fake-Compute-Resource',
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
       namespace: 'default',
       name: 'nice name',
     };
@@ -1281,13 +1285,13 @@ describe('IamIdentityV1_integration', () => {
     const params = {
       ifMatch: accountSettingsEtag,
       accountId,
-      restrict_create_service_id: 'NOT_RESTRICTED',
-      restrict_create_platform_apikey: 'NOT_RESTRICTED',
+      restrictCreateServiceId: 'NOT_RESTRICTED',
+      restrictCreatePlatformApikey: 'NOT_RESTRICTED',
       // allowedIpAddresses: 'testString',
       mfa: 'NONE',
-      session_expiration_in_seconds: '86400',
-      session_invalidation_in_seconds: '7200',
-      maxSessionPerIdentity: '10',
+      sessionExpirationInSeconds: '86400',
+      sessionInvalidationInSeconds: '7200',
+      maxSessionsPerIdentity: '10',
     };
 
     iamIdentityService
@@ -1303,15 +1307,11 @@ describe('IamIdentityV1_integration', () => {
         // console.log('updateAccountSettings() result: ', result);
         expect(result.account_id).toEqual(accountId);
         expect(result.entity_tag).toEqual(res.headers.etag);
-        expect(result.restrict_create_service_id).toEqual(params.restrict_create_service_id);
-        expect(result.restrict_create_platform_apikey).toEqual(
-          params.restrict_create_platform_apikey
-        );
+        expect(result.restrict_create_service_id).toEqual(params.restrictCreateServiceId);
+        expect(result.restrict_create_platform_apikey).toEqual(params.restrictCreatePlatformApikey);
         expect(result.mfa).toEqual(params.mfa);
-        expect(result.session_expiration_in_seconds).toEqual(params.session_expiration_in_seconds);
-        expect(result.session_invalidation_in_seconds).toEqual(
-          params.session_invalidation_in_seconds
-        );
+        expect(result.session_expiration_in_seconds).toEqual(params.sessionExpirationInSeconds);
+        expect(result.session_invalidation_in_seconds).toEqual(params.sessionInvalidationInSeconds);
         done();
       })
       .catch((err) => {
@@ -1319,7 +1319,77 @@ describe('IamIdentityV1_integration', () => {
         done(err);
       });
   });
+  test('createReport()', (done) => {
+    const params = {
+      accountId,
+      type: 'inactive',
+      duration: '120',
+    };
 
+    iamIdentityService
+      .createReport(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(202);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+        reportReference = result.reference;
+        expect(reportReference).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getReportIncomplete()', (done) => {
+    const params = {
+      accountId,
+      reference: reportReference,
+    };
+
+    iamIdentityService
+      .getReport(params)
+      .then((res) => {
+        expect(res.status).toEqual(204);
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getReportComplete()', async () => {
+    const params = {
+      accountId,
+      reference: reportReference,
+    };
+
+    for (let i = 0; i < 30; i++) {
+      const response = await iamIdentityService.getReport(params);
+      if (response.status !== 204) {
+        expect(response).not.toBeNull();
+        expect(response.created_by).not.toBeNull();
+        expect(response.reference).not.toBeNull();
+        expect(response.report_duration).not.toBeNull();
+        expect(response.report_start_time).not.toBeNull();
+        expect(response.report_end_time).not.toBeNull();
+        break;
+      }
+      await sleep(1);
+    }
+  });
+  test('getReportNotFound()', async () => {
+    const params = {
+      accountId,
+      reference: 'test123',
+    };
+
+    await expect(iamIdentityService.getReport(params)).rejects.toMatchObject({
+      status: 404,
+    });
+  });
   function getPageTokenFromURL(urlstring) {
     let pageToken = null;
     if (urlstring) {
@@ -1417,7 +1487,6 @@ describe('IamIdentityV1_integration', () => {
       return result;
     }
   }
-
   async function cleanupResources() {
     console.log('Cleaning resources...');
 
@@ -1489,5 +1558,10 @@ describe('IamIdentityV1_integration', () => {
       console.log(err);
       throw err;
     }
+  }
+  function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
   }
 });
