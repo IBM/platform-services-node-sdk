@@ -2990,7 +2990,7 @@ describe('IamIdentityV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.type).toEqual(type);
         expect(mockRequestOptions.qs.duration).toEqual(duration);
-        expect(mockRequestOptions.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -3075,7 +3075,7 @@ describe('IamIdentityV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
         expect(mockRequestOptions.path.reference).toEqual(reference);
       }
 
