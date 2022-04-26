@@ -2812,6 +2812,42 @@ namespace IamIdentityV1 {
     apikeys: ApiKey[];
   }
 
+  /** Apikeys activity details. */
+  export interface ApikeyActivity {
+    /** Unique id of the apikey. */
+    id: string;
+    /** Name provided during creation of the apikey. */
+    name?: string;
+    /** Type of the apikey. Supported values are `serviceid` and `user`. */
+    type: string;
+    /** serviceid details will be present if type is `serviceid`. */
+    serviceid?: ApikeyActivityServiceid;
+    /** user details will be present if type is `user`. */
+    user?: ApikeyActivityUser;
+    /** Time when the apikey was last authenticated. */
+    last_authn?: string;
+  }
+
+  /** serviceid details will be present if type is `serviceid`. */
+  export interface ApikeyActivityServiceid {
+    /** Unique identifier of this Service Id. */
+    id?: string;
+    /** Name provided during creation of the serviceid. */
+    name?: string;
+  }
+
+  /** user details will be present if type is `user`. */
+  export interface ApikeyActivityUser {
+    /** IAMid of the user. */
+    iam_id?: string;
+    /** Name of the user. */
+    name?: string;
+    /** Username of the user. */
+    username?: string;
+    /** Email of the user. */
+    email?: string;
+  }
+
   /** Link details. */
   export interface CreateProfileLinkRequestLink {
     /** The CRN of the compute resource. */
@@ -2940,7 +2976,7 @@ namespace IamIdentityV1 {
     /** List of users. */
     users?: UserActivity[];
     /** List of apikeys. */
-    apikeys?: EntityActivity[];
+    apikeys?: ApikeyActivity[];
     /** List of serviceids. */
     serviceids?: EntityActivity[];
     /** List of profiles. */
@@ -3105,8 +3141,12 @@ namespace IamIdentityV1 {
   export interface UserActivity {
     /** IAMid of the user. */
     iam_id: string;
+    /** Name of the user. */
+    name?: string;
     /** Username of the user. */
     username: string;
+    /** Email of the user. */
+    email?: string;
     /** Time when the user was last authenticated. */
     last_authn?: string;
   }

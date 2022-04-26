@@ -205,7 +205,7 @@ describe('IamIdentityV1_integration', () => {
         expect(result.account_id).toEqual(accountId);
         expect(result.created_by).toEqual(iamId);
         expect(result.created_at).not.toBeNull();
-        expect(result.locked).toEqual(true);
+        expect(result.locked).toEqual(false);
 
         done();
       })
