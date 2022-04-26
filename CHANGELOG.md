@@ -1,3 +1,10 @@
+## [0.24.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.24.0...v0.24.1) (2022-04-26)
+
+
+### Bug Fixes
+
+* **IAM Identity:** update report schema and fix ITs ([#160](https://github.com/IBM/platform-services-node-sdk/issues/160)) ([262660b](https://github.com/IBM/platform-services-node-sdk/commit/262660b3fe68959f9e074b2e0f022cf3d6bd737a))
+
 # [0.24.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.23.1...v0.24.0) (2022-04-06)
 
 
