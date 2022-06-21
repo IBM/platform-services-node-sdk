@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const excluded = [addressModel];
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const createZoneParams = {
           name: name,
           accountId: accountId,
           addresses: addresses,
@@ -129,7 +129,7 @@ describe('ContextBasedRestrictionsV1', () => {
           transactionId: transactionId,
         };
 
-        const createZoneResult = contextBasedRestrictionsService.createZone(params);
+        const createZoneResult = contextBasedRestrictionsService.createZone(createZoneParams);
 
         // all methods should return a Promise
         expectToBePromise(createZoneResult);
@@ -171,14 +171,14 @@ describe('ContextBasedRestrictionsV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createZoneParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        contextBasedRestrictionsService.createZone(params);
+        contextBasedRestrictionsService.createZone(createZoneParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -198,7 +198,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const transactionId = 'testString';
         const name = 'testString';
         const sort = 'testString';
-        const params = {
+        const listZonesParams = {
           accountId: accountId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
@@ -206,7 +206,7 @@ describe('ContextBasedRestrictionsV1', () => {
           sort: sort,
         };
 
-        const listZonesResult = contextBasedRestrictionsService.listZones(params);
+        const listZonesResult = contextBasedRestrictionsService.listZones(listZonesParams);
 
         // all methods should return a Promise
         expectToBePromise(listZonesResult);
@@ -247,7 +247,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listZonesParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -255,7 +255,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.listZones(params);
+        contextBasedRestrictionsService.listZones(listZonesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -272,14 +272,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const listZonesPromise = contextBasedRestrictionsService.listZones();
-        expectToBePromise(listZonesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.listZones();
+        } catch (e) {
+          err = e;
+        }
 
-        listZonesPromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -290,13 +291,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const zoneId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const getZoneParams = {
           zoneId: zoneId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const getZoneResult = contextBasedRestrictionsService.getZone(params);
+        const getZoneResult = contextBasedRestrictionsService.getZone(getZoneParams);
 
         // all methods should return a Promise
         expectToBePromise(getZoneResult);
@@ -335,7 +336,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const zoneId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getZoneParams = {
           zoneId,
           headers: {
             Accept: userAccept,
@@ -343,7 +344,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.getZone(params);
+        contextBasedRestrictionsService.getZone(getZoneParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -360,14 +361,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const getZonePromise = contextBasedRestrictionsService.getZone();
-        expectToBePromise(getZonePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.getZone();
+        } catch (e) {
+          err = e;
+        }
 
-        getZonePromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -392,7 +394,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const excluded = [addressModel];
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const replaceZoneParams = {
           zoneId: zoneId,
           ifMatch: ifMatch,
           name: name,
@@ -404,7 +406,7 @@ describe('ContextBasedRestrictionsV1', () => {
           transactionId: transactionId,
         };
 
-        const replaceZoneResult = contextBasedRestrictionsService.replaceZone(params);
+        const replaceZoneResult = contextBasedRestrictionsService.replaceZone(replaceZoneParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceZoneResult);
@@ -450,7 +452,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const ifMatch = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceZoneParams = {
           zoneId,
           ifMatch,
           headers: {
@@ -459,7 +461,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.replaceZone(params);
+        contextBasedRestrictionsService.replaceZone(replaceZoneParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -476,14 +478,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const replaceZonePromise = contextBasedRestrictionsService.replaceZone();
-        expectToBePromise(replaceZonePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.replaceZone();
+        } catch (e) {
+          err = e;
+        }
 
-        replaceZonePromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -494,13 +497,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const zoneId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const deleteZoneParams = {
           zoneId: zoneId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const deleteZoneResult = contextBasedRestrictionsService.deleteZone(params);
+        const deleteZoneResult = contextBasedRestrictionsService.deleteZone(deleteZoneParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteZoneResult);
@@ -539,7 +542,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const zoneId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteZoneParams = {
           zoneId,
           headers: {
             Accept: userAccept,
@@ -547,7 +550,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.deleteZone(params);
+        contextBasedRestrictionsService.deleteZone(deleteZoneParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -564,14 +567,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const deleteZonePromise = contextBasedRestrictionsService.deleteZone();
-        expectToBePromise(deleteZonePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.deleteZone();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteZonePromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -582,13 +586,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const type = 'all';
-        const params = {
+        const listAvailableServicerefTargetsParams = {
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
           type: type,
         };
 
-        const listAvailableServicerefTargetsResult = contextBasedRestrictionsService.listAvailableServicerefTargets(params);
+        const listAvailableServicerefTargetsResult = contextBasedRestrictionsService.listAvailableServicerefTargets(listAvailableServicerefTargetsParams);
 
         // all methods should return a Promise
         expectToBePromise(listAvailableServicerefTargetsResult);
@@ -626,14 +630,14 @@ describe('ContextBasedRestrictionsV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listAvailableServicerefTargetsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        contextBasedRestrictionsService.listAvailableServicerefTargets(params);
+        contextBasedRestrictionsService.listAvailableServicerefTargets(listAvailableServicerefTargetsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -684,17 +688,19 @@ describe('ContextBasedRestrictionsV1', () => {
         const contexts = [ruleContextModel];
         const resources = [resourceModel];
         const description = 'this is an example of rule';
+        const enforcementMode = 'enabled';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const createRuleParams = {
           contexts: contexts,
           resources: resources,
           description: description,
+          enforcementMode: enforcementMode,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const createRuleResult = contextBasedRestrictionsService.createRule(params);
+        const createRuleResult = contextBasedRestrictionsService.createRule(createRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(createRuleResult);
@@ -713,6 +719,7 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(mockRequestOptions.body.contexts).toEqual(contexts);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.enforcement_mode).toEqual(enforcementMode);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -734,14 +741,14 @@ describe('ContextBasedRestrictionsV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createRuleParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        contextBasedRestrictionsService.createRule(params);
+        contextBasedRestrictionsService.createRule(createRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -767,7 +774,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const serviceType = 'testString';
         const zoneId = 'testString';
         const sort = 'testString';
-        const params = {
+        const listRulesParams = {
           accountId: accountId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
@@ -781,7 +788,7 @@ describe('ContextBasedRestrictionsV1', () => {
           sort: sort,
         };
 
-        const listRulesResult = contextBasedRestrictionsService.listRules(params);
+        const listRulesResult = contextBasedRestrictionsService.listRules(listRulesParams);
 
         // all methods should return a Promise
         expectToBePromise(listRulesResult);
@@ -828,7 +835,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listRulesParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -836,7 +843,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.listRules(params);
+        contextBasedRestrictionsService.listRules(listRulesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -853,14 +860,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const listRulesPromise = contextBasedRestrictionsService.listRules();
-        expectToBePromise(listRulesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.listRules();
+        } catch (e) {
+          err = e;
+        }
 
-        listRulesPromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -871,13 +879,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const ruleId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const getRuleParams = {
           ruleId: ruleId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const getRuleResult = contextBasedRestrictionsService.getRule(params);
+        const getRuleResult = contextBasedRestrictionsService.getRule(getRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(getRuleResult);
@@ -916,7 +924,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const ruleId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getRuleParams = {
           ruleId,
           headers: {
             Accept: userAccept,
@@ -924,7 +932,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.getRule(params);
+        contextBasedRestrictionsService.getRule(getRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -941,14 +949,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const getRulePromise = contextBasedRestrictionsService.getRule();
-        expectToBePromise(getRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.getRule();
+        } catch (e) {
+          err = e;
+        }
 
-        getRulePromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -994,19 +1003,21 @@ describe('ContextBasedRestrictionsV1', () => {
         const contexts = [ruleContextModel];
         const resources = [resourceModel];
         const description = 'this is an example of rule';
+        const enforcementMode = 'disabled';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const replaceRuleParams = {
           ruleId: ruleId,
           ifMatch: ifMatch,
           contexts: contexts,
           resources: resources,
           description: description,
+          enforcementMode: enforcementMode,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const replaceRuleResult = contextBasedRestrictionsService.replaceRule(params);
+        const replaceRuleResult = contextBasedRestrictionsService.replaceRule(replaceRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceRuleResult);
@@ -1026,6 +1037,7 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(mockRequestOptions.body.contexts).toEqual(contexts);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.enforcement_mode).toEqual(enforcementMode);
         expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
       }
 
@@ -1050,7 +1062,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const ifMatch = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceRuleParams = {
           ruleId,
           ifMatch,
           headers: {
@@ -1059,7 +1071,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.replaceRule(params);
+        contextBasedRestrictionsService.replaceRule(replaceRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1076,14 +1088,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const replaceRulePromise = contextBasedRestrictionsService.replaceRule();
-        expectToBePromise(replaceRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.replaceRule();
+        } catch (e) {
+          err = e;
+        }
 
-        replaceRulePromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1094,13 +1107,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const ruleId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const deleteRuleParams = {
           ruleId: ruleId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const deleteRuleResult = contextBasedRestrictionsService.deleteRule(params);
+        const deleteRuleResult = contextBasedRestrictionsService.deleteRule(deleteRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteRuleResult);
@@ -1139,7 +1152,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const ruleId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteRuleParams = {
           ruleId,
           headers: {
             Accept: userAccept,
@@ -1147,7 +1160,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.deleteRule(params);
+        contextBasedRestrictionsService.deleteRule(deleteRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1164,14 +1177,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const deleteRulePromise = contextBasedRestrictionsService.deleteRule();
-        expectToBePromise(deleteRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.deleteRule();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteRulePromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1182,13 +1196,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const accountId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const params = {
+        const getAccountSettingsParams = {
           accountId: accountId,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
         };
 
-        const getAccountSettingsResult = contextBasedRestrictionsService.getAccountSettings(params);
+        const getAccountSettingsResult = contextBasedRestrictionsService.getAccountSettings(getAccountSettingsParams);
 
         // all methods should return a Promise
         expectToBePromise(getAccountSettingsResult);
@@ -1227,7 +1241,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getAccountSettingsParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -1235,7 +1249,7 @@ describe('ContextBasedRestrictionsV1', () => {
           },
         };
 
-        contextBasedRestrictionsService.getAccountSettings(params);
+        contextBasedRestrictionsService.getAccountSettings(getAccountSettingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1252,14 +1266,15 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', (done) => {
-        const getAccountSettingsPromise = contextBasedRestrictionsService.getAccountSettings();
-        expectToBePromise(getAccountSettingsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.getAccountSettings();
+        } catch (e) {
+          err = e;
+        }
 
-        getAccountSettingsPromise.catch((err) => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
