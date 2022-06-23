@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.38.1-1037b405-20210908-184149
+ * IBM OpenAPI SDK Code Generator Version: 3.50.0-af9e48c4-20220523-163800
  */
 
 import * as extend from 'extend';
@@ -24,7 +24,7 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
@@ -126,6 +126,21 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params?: ContextBasedRestrictionsV1.CreateZoneParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'name',
+      'accountId',
+      'addresses',
+      'description',
+      'excluded',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const body = {
       'name': _params.name,
@@ -190,11 +205,18 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.ListZonesParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ZoneList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'xCorrelationId',
+      'transactionId',
+      'name',
+      'sort',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -254,11 +276,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.GetZoneParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
-    const requiredParams = ['zoneId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['zoneId'];
+    const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -325,11 +347,22 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.ReplaceZoneParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
-    const requiredParams = ['zoneId', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['zoneId', 'ifMatch'];
+    const _validParams = [
+      'zoneId',
+      'ifMatch',
+      'name',
+      'accountId',
+      'addresses',
+      'description',
+      'excluded',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -398,11 +431,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.DeleteZoneParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['zoneId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['zoneId'];
+    const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -459,6 +492,12 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params?: ContextBasedRestrictionsV1.ListAvailableServicerefTargetsParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['xCorrelationId', 'transactionId', 'type', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'type': _params.type,
@@ -505,6 +544,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {RuleContext[]} [params.contexts] - The contexts this rule applies to.
    * @param {Resource[]} [params.resources] - The resources this rule apply to.
    * @param {string} [params.description] - The description of the rule.
+   * @param {string} [params.enforcementMode] - The rule enforcement mode:
+   *  * `enabled` - The restrictions are enforced and reported. This is the default.
+   *  * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
+   *  * `report` - The restrictions are evaluated and reported, but not enforced.
    * @param {string} [params.xCorrelationId] - The supplied or generated value of this header is logged for a request
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
@@ -520,11 +563,26 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params?: ContextBasedRestrictionsV1.CreateRuleParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'contexts',
+      'resources',
+      'description',
+      'enforcementMode',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const body = {
       'contexts': _params.contexts,
       'resources': _params.resources,
       'description': _params.description,
+      'enforcement_mode': _params.enforcementMode,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -588,11 +646,24 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.ListRulesParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.RuleList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'xCorrelationId',
+      'transactionId',
+      'region',
+      'resource',
+      'resourceType',
+      'serviceInstance',
+      'serviceName',
+      'serviceType',
+      'zoneId',
+      'sort',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -658,11 +729,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.GetRuleParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
-    const requiredParams = ['ruleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['ruleId'];
+    const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -711,6 +782,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {RuleContext[]} [params.contexts] - The contexts this rule applies to.
    * @param {Resource[]} [params.resources] - The resources this rule apply to.
    * @param {string} [params.description] - The description of the rule.
+   * @param {string} [params.enforcementMode] - The rule enforcement mode:
+   *  * `enabled` - The restrictions are enforced and reported. This is the default.
+   *  * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
+   *  * `report` - The restrictions are evaluated and reported, but not enforced.
    * @param {string} [params.xCorrelationId] - The supplied or generated value of this header is logged for a request
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
@@ -726,17 +801,28 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.ReplaceRuleParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
-    const requiredParams = ['ruleId', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['ruleId', 'ifMatch'];
+    const _validParams = [
+      'ruleId',
+      'ifMatch',
+      'contexts',
+      'resources',
+      'description',
+      'enforcementMode',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
       'contexts': _params.contexts,
       'resources': _params.resources,
       'description': _params.description,
+      'enforcement_mode': _params.enforcementMode,
     };
 
     const path = {
@@ -797,11 +883,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.DeleteRuleParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Empty>> {
     const _params = { ...params };
-    const requiredParams = ['ruleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['ruleId'];
+    const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -861,11 +947,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
     params: ContextBasedRestrictionsV1.GetAccountSettingsParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.AccountSettings>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1087,6 +1173,12 @@ namespace ContextBasedRestrictionsV1 {
     resources?: Resource[];
     /** The description of the rule. */
     description?: string;
+    /** The rule enforcement mode:
+     *   * `enabled` - The restrictions are enforced and reported. This is the default.
+     *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
+     *   * `report` - The restrictions are evaluated and reported, but not enforced.
+     */
+    enforcementMode?: CreateRuleConstants.EnforcementMode | string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
      *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
@@ -1099,6 +1191,16 @@ namespace ContextBasedRestrictionsV1 {
      */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createRule` operation. */
+  export namespace CreateRuleConstants {
+    /** The rule enforcement mode: * `enabled` - The restrictions are enforced and reported. This is the default. * `disabled` - The restrictions are disabled. Nothing is enforced or reported. * `report` - The restrictions are evaluated and reported, but not enforced. */
+    export enum EnforcementMode {
+      ENABLED = 'enabled',
+      DISABLED = 'disabled',
+      REPORT = 'report',
+    }
   }
 
   /** Parameters for the `listRules` operation. */
@@ -1169,6 +1271,12 @@ namespace ContextBasedRestrictionsV1 {
     resources?: Resource[];
     /** The description of the rule. */
     description?: string;
+    /** The rule enforcement mode:
+     *   * `enabled` - The restrictions are enforced and reported. This is the default.
+     *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
+     *   * `report` - The restrictions are evaluated and reported, but not enforced.
+     */
+    enforcementMode?: ReplaceRuleConstants.EnforcementMode | string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
      *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
@@ -1181,6 +1289,16 @@ namespace ContextBasedRestrictionsV1 {
      */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `replaceRule` operation. */
+  export namespace ReplaceRuleConstants {
+    /** The rule enforcement mode: * `enabled` - The restrictions are enforced and reported. This is the default. * `disabled` - The restrictions are disabled. Nothing is enforced or reported. * `report` - The restrictions are evaluated and reported, but not enforced. */
+    export enum EnforcementMode {
+      ENABLED = 'enabled',
+      DISABLED = 'disabled',
+      REPORT = 'report',
+    }
   }
 
   /** Parameters for the `deleteRule` operation. */
@@ -1295,6 +1413,12 @@ namespace ContextBasedRestrictionsV1 {
     contexts: RuleContext[];
     /** The resources this rule apply to. */
     resources: Resource[];
+    /** The rule enforcement mode:
+     *   * `enabled` - The restrictions are enforced and reported. This is the default.
+     *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
+     *   * `report` - The restrictions are evaluated and reported, but not enforced.
+     */
+    enforcement_mode?: string;
     /** The href link to the resource. */
     href: string;
     /** The time the resource was created. */

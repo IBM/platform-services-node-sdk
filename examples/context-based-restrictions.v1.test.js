@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,19 +92,21 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     originalLog('createZone() result:');
-
     // begin-create_zone
 
+    // Request models needed by this operation.
+
+    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
     };
 
     const params = {
-      name: 'SDK TEST - an example of zone',
+      name: 'an example of zone',
       accountId,
       addresses: [addressModel],
-      description: 'SDK TEST - this is an example of zone',
+      description: 'this is an example of zone',
     };
 
     try {
@@ -124,13 +126,12 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('listZones() result:');
-
     // begin-list_zones
 
     const params = {
@@ -158,7 +159,6 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     originalLog('getZone() result:');
-
     // begin-get_zone
 
     const params = {
@@ -180,15 +180,17 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('replaceZone() result:');
-
     // begin-replace_zone
 
+    // Request models needed by this operation.
+
+    // AddressIPAddress
     const addressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
@@ -197,10 +199,10 @@ describe('ContextBasedRestrictionsV1', () => {
     const params = {
       zoneId,
       ifMatch: zoneRev,
-      name: 'SDK TEST - an example of updated zone',
+      name: 'an example of updated zone',
       accountId,
       addresses: [addressModel],
-      description: 'SDK TEST - this is an example of updated zone',
+      description: 'this is an example of updated zone',
     };
 
     try {
@@ -221,13 +223,12 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('listAvailableServicerefTargets() result:');
-
     // begin-list_available_serviceref_targets
 
     try {
@@ -245,24 +246,28 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('createRule() result:');
-
     // begin-create_rule
 
+    // Request models needed by this operation.
+
+    // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
     };
 
+    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
 
+    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
@@ -274,6 +279,7 @@ describe('ContextBasedRestrictionsV1', () => {
       operator: 'stringEquals',
     };
 
+    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
     };
@@ -281,7 +287,8 @@ describe('ContextBasedRestrictionsV1', () => {
     const params = {
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'SDK TEST - this is an example of rule',
+      description: 'this is an example of rule',
+      enforcementMode: 'enabled',
     };
 
     try {
@@ -301,13 +308,12 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('listRules() result:');
-
     // begin-list_rules
 
     const params = {
@@ -329,13 +335,12 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('getRule() result:');
-
     // begin-get_rule
 
     const params = {
@@ -357,20 +362,23 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('replaceRule() result:');
-
     // begin-replace_rule
 
+    // Request models needed by this operation.
+
+    // RuleContextAttribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
       value: zoneId,
     };
 
+    // RuleContext
     const ruleContextModel = {
       attributes: [ruleContextAttributeModel],
     };
@@ -400,7 +408,8 @@ describe('ContextBasedRestrictionsV1', () => {
       ifMatch: ruleRev,
       contexts: [ruleContextModel],
       resources: [resourceModel],
-      description: 'SDK TEST - this is an example of updated rule',
+      description: 'this is an example of updated rule',
+      enforcementMode: 'disabled',
     };
 
     try {
@@ -420,13 +429,12 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('getAccountSettings() result:');
-
     // begin-get_account_settings
 
     const params = {
@@ -448,8 +456,8 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -473,8 +481,8 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+       // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
