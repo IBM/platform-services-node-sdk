@@ -1,3 +1,10 @@
+# [0.25.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.24.1...v0.25.0) (2022-06-23)
+
+
+### Features
+
+* add support for Enforcement Mode ([#164](https://github.com/IBM/platform-services-node-sdk/issues/164)) ([9e01fef](https://github.com/IBM/platform-services-node-sdk/commit/9e01fef89b591190e0a84fa126c913feecf8660b))
+
 ## [0.24.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.24.0...v0.24.1) (2022-04-26)
 
 
