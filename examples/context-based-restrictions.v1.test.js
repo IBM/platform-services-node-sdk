@@ -86,8 +86,8 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -153,8 +153,8 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -455,6 +455,34 @@ describe('ContextBasedRestrictionsV1', () => {
     // end-get_account_settings
   });
 
+  test('listAvailableServiceOperations request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listAvailableServiceOperations() result:');
+    // begin-list_available_service_operations
+
+    const params = {
+      serviceName: 'containers-kubernetes',
+    };
+
+    let res;
+    try {
+      res = await contextBasedRestrictionsService.listAvailableServiceOperations(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_available_service_operations
+  });
+
   test('deleteRule request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -485,7 +513,7 @@ describe('ContextBasedRestrictionsV1', () => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
-       // if an error occurs, display the message and then fail the test
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
       expect(true).toBeFalsy();
     });

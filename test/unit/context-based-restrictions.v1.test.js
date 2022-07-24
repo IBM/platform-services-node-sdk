@@ -691,11 +691,22 @@ describe('ContextBasedRestrictionsV1', () => {
         tags: [resourceTagAttributeModel],
       };
 
+      // NewRuleOperationsApiTypesItem
+      const newRuleOperationsApiTypesItemModel = {
+        api_type_id: 'testString',
+      };
+
+      // NewRuleOperations
+      const newRuleOperationsModel = {
+        api_types: [newRuleOperationsApiTypesItemModel],
+      };
+
       function __createRuleTest() {
         // Construct the params object for operation createRule
         const contexts = [ruleContextModel];
         const resources = [resourceModel];
         const description = 'this is an example of rule';
+        const operations = newRuleOperationsModel;
         const enforcementMode = 'enabled';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
@@ -703,6 +714,7 @@ describe('ContextBasedRestrictionsV1', () => {
           contexts: contexts,
           resources: resources,
           description: description,
+          operations: operations,
           enforcementMode: enforcementMode,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
@@ -727,6 +739,7 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(mockRequestOptions.body.contexts).toEqual(contexts);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.operations).toEqual(operations);
         expect(mockRequestOptions.body.enforcement_mode).toEqual(enforcementMode);
       }
 
@@ -1010,6 +1023,16 @@ describe('ContextBasedRestrictionsV1', () => {
         tags: [resourceTagAttributeModel],
       };
 
+      // NewRuleOperationsApiTypesItem
+      const newRuleOperationsApiTypesItemModel = {
+        api_type_id: 'testString',
+      };
+
+      // NewRuleOperations
+      const newRuleOperationsModel = {
+        api_types: [newRuleOperationsApiTypesItemModel],
+      };
+
       function __replaceRuleTest() {
         // Construct the params object for operation replaceRule
         const ruleId = 'testString';
@@ -1017,6 +1040,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const contexts = [ruleContextModel];
         const resources = [resourceModel];
         const description = 'this is an example of rule';
+        const operations = newRuleOperationsModel;
         const enforcementMode = 'disabled';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
@@ -1026,6 +1050,7 @@ describe('ContextBasedRestrictionsV1', () => {
           contexts: contexts,
           resources: resources,
           description: description,
+          operations: operations,
           enforcementMode: enforcementMode,
           xCorrelationId: xCorrelationId,
           transactionId: transactionId,
@@ -1051,6 +1076,7 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(mockRequestOptions.body.contexts).toEqual(contexts);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.operations).toEqual(operations);
         expect(mockRequestOptions.body.enforcement_mode).toEqual(enforcementMode);
         expect(mockRequestOptions.path.rule_id).toEqual(ruleId);
       }
@@ -1286,6 +1312,96 @@ describe('ContextBasedRestrictionsV1', () => {
         let err;
         try {
           await contextBasedRestrictionsService.getAccountSettings();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listAvailableServiceOperations', () => {
+    describe('positive tests', () => {
+      function __listAvailableServiceOperationsTest() {
+        // Construct the params object for operation listAvailableServiceOperations
+        const serviceName = 'testString';
+        const xCorrelationId = 'testString';
+        const transactionId = 'testString';
+        const listAvailableServiceOperationsParams = {
+          serviceName: serviceName,
+          xCorrelationId: xCorrelationId,
+          transactionId: transactionId,
+        };
+
+        const listAvailableServiceOperationsResult = contextBasedRestrictionsService.listAvailableServiceOperations(listAvailableServiceOperationsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listAvailableServiceOperationsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/operations', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.service_name).toEqual(serviceName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAvailableServiceOperationsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        contextBasedRestrictionsService.enableRetries();
+        __listAvailableServiceOperationsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        contextBasedRestrictionsService.disableRetries();
+        __listAvailableServiceOperationsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const serviceName = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listAvailableServiceOperationsParams = {
+          serviceName,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        contextBasedRestrictionsService.listAvailableServiceOperations(listAvailableServiceOperationsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.listAvailableServiceOperations({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.listAvailableServiceOperations();
         } catch (e) {
           err = e;
         }

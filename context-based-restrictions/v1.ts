@@ -544,6 +544,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {RuleContext[]} [params.contexts] - The contexts this rule applies to.
    * @param {Resource[]} [params.resources] - The resources this rule apply to.
    * @param {string} [params.description] - The description of the rule.
+   * @param {NewRuleOperations} [params.operations] - The operations this rule applies to.
    * @param {string} [params.enforcementMode] - The rule enforcement mode:
    *  * `enabled` - The restrictions are enforced and reported. This is the default.
    *  * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
@@ -568,6 +569,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'contexts',
       'resources',
       'description',
+      'operations',
       'enforcementMode',
       'xCorrelationId',
       'transactionId',
@@ -582,6 +584,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'contexts': _params.contexts,
       'resources': _params.resources,
       'description': _params.description,
+      'operations': _params.operations,
       'enforcement_mode': _params.enforcementMode,
     };
 
@@ -785,6 +788,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {RuleContext[]} [params.contexts] - The contexts this rule applies to.
    * @param {Resource[]} [params.resources] - The resources this rule apply to.
    * @param {string} [params.description] - The description of the rule.
+   * @param {NewRuleOperations} [params.operations] - The operations this rule applies to.
    * @param {string} [params.enforcementMode] - The rule enforcement mode:
    *  * `enabled` - The restrictions are enforced and reported. This is the default.
    *  * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
@@ -811,6 +815,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'contexts',
       'resources',
       'description',
+      'operations',
       'enforcementMode',
       'xCorrelationId',
       'transactionId',
@@ -825,6 +830,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'contexts': _params.contexts,
       'resources': _params.resources,
       'description': _params.description,
+      'operations': _params.operations,
       'enforcement_mode': _params.enforcementMode,
     };
 
@@ -972,6 +978,71 @@ class ContextBasedRestrictionsV1 extends BaseService {
         url: '/v1/account_settings/{account_id}',
         method: 'GET',
         path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Correlation-Id': _params.xCorrelationId,
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * operations
+   ************************/
+
+  /**
+   * List available service operations.
+   *
+   * This operation lists all available service operations.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.serviceName - The name of the service.
+   * @param {string} [params.xCorrelationId] - The supplied or generated value of this header is logged for a request
+   * and repeated in a response header for the corresponding response. The same value is used for downstream requests
+   * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
+   * random (version 4) UUID.
+   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
+   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
+   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
+   * `Transaction-Id`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OperationsList>>}
+   */
+  public listAvailableServiceOperations(
+    params: ContextBasedRestrictionsV1.ListAvailableServiceOperationsParams
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OperationsList>> {
+    const _params = { ...params };
+    const _requiredParams = ['serviceName'];
+    const _validParams = ['serviceName', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'service_name': _params.serviceName,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAvailableServiceOperations'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/operations',
+        method: 'GET',
+        qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(
@@ -1176,6 +1247,8 @@ namespace ContextBasedRestrictionsV1 {
     resources?: Resource[];
     /** The description of the rule. */
     description?: string;
+    /** The operations this rule applies to. */
+    operations?: NewRuleOperations;
     /** The rule enforcement mode:
      *   * `enabled` - The restrictions are enforced and reported. This is the default.
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
@@ -1286,6 +1359,8 @@ namespace ContextBasedRestrictionsV1 {
     resources?: Resource[];
     /** The description of the rule. */
     description?: string;
+    /** The operations this rule applies to. */
+    operations?: NewRuleOperations;
     /** The rule enforcement mode:
      *   * `enabled` - The restrictions are enforced and reported. This is the default.
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
@@ -1352,9 +1427,39 @@ namespace ContextBasedRestrictionsV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listAvailableServiceOperations` operation. */
+  export interface ListAvailableServiceOperationsParams {
+    /** The name of the service. */
+    serviceName: string;
+    /** The supplied or generated value of this header is logged for a request and repeated in a response header for
+     *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
+     *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
+     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+     *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
+     *  `Transaction-Id`.
+     */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
+
+  /** Service API Type details. */
+  export interface APIType {
+    /** The id of the API type. */
+    api_type_id: string;
+    /** The displayed name of the API type. */
+    display_name: string;
+    /** The description of the API type. */
+    description: string;
+    /** The actions available for the API type. */
+    actions: Action[];
+  }
 
   /** An output account settings. */
   export interface AccountSettings {
@@ -1382,10 +1487,35 @@ namespace ContextBasedRestrictionsV1 {
     last_modified_by_id: string;
   }
 
+  /** Service API Type actions. */
+  export interface Action {
+    /** The id of the action. */
+    action_id: string;
+    /** The description of the action. */
+    description: string;
+  }
+
   /** A zone address. */
   export interface Address {
     /** The type of address. */
     type?: string;
+  }
+
+  /** The operations this rule applies to. */
+  export interface NewRuleOperations {
+    /** The API types this rule applies to. */
+    api_types: NewRuleOperationsApiTypesItem[];
+  }
+
+  /** NewRuleOperationsApiTypesItem. */
+  export interface NewRuleOperationsApiTypesItem {
+    api_type_id: string;
+  }
+
+  /** The response object of the `list_available_service_operations` operation. */
+  export interface OperationsList {
+    /** The returned API types. */
+    api_types: APIType[];
   }
 
   /** An rule resource. */
@@ -1428,6 +1558,8 @@ namespace ContextBasedRestrictionsV1 {
     contexts: RuleContext[];
     /** The resources this rule apply to. */
     resources: Resource[];
+    /** The operations this rule applies to. */
+    operations?: NewRuleOperations;
     /** The rule enforcement mode:
      *   * `enabled` - The restrictions are enforced and reported. This is the default.
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
