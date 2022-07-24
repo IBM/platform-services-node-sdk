@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.50.0-af9e48c4-20220523-163800
+ * IBM OpenAPI SDK Code Generator Version: 3.53.0-9710cac3-20220713-193508
  */
 
 import * as extend from 'extend';
@@ -639,6 +639,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {string} [params.zoneId] - The globally unique ID of the zone.
    * @param {string} [params.sort] - Sorts results by using a valid sort field. To learn more, see
    * [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
+   * @param {string} [params.enforcementMode] - The rule's `enforcement_mode` attribute.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.RuleList>>}
    */
@@ -659,6 +660,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'serviceType',
       'zoneId',
       'sort',
+      'enforcementMode',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -676,6 +678,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'service_type': _params.serviceType,
       'zone_id': _params.zoneId,
       'sort': _params.sort,
+      'enforcement_mode': _params.enforcementMode,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1236,7 +1239,19 @@ namespace ContextBasedRestrictionsV1 {
      *  [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
      */
     sort?: string;
+    /** The rule's `enforcement_mode` attribute. */
+    enforcementMode?: ListRulesConstants.EnforcementMode | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listRules` operation. */
+  export namespace ListRulesConstants {
+    /** The rule's `enforcement_mode` attribute. */
+    export enum EnforcementMode {
+      ENABLED = 'enabled',
+      DISABLED = 'disabled',
+      REPORT = 'report',
+    }
   }
 
   /** Parameters for the `getRule` operation. */

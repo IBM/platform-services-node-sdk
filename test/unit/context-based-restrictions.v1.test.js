@@ -78,6 +78,7 @@ describe('ContextBasedRestrictionsV1', () => {
       expect(testInstance).toBeInstanceOf(ContextBasedRestrictionsV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -100,6 +101,7 @@ describe('ContextBasedRestrictionsV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(ContextBasedRestrictionsV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('createZone', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -189,6 +191,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('listZones', () => {
     describe('positive tests', () => {
       function __listZonesTest() {
@@ -284,6 +287,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('getZone', () => {
     describe('positive tests', () => {
       function __getZoneTest() {
@@ -373,6 +377,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('replaceZone', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -490,6 +495,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('deleteZone', () => {
     describe('positive tests', () => {
       function __deleteZoneTest() {
@@ -579,6 +585,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('listAvailableServicerefTargets', () => {
     describe('positive tests', () => {
       function __listAvailableServicerefTargetsTest() {
@@ -648,6 +655,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('createRule', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -759,6 +767,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('listRules', () => {
     describe('positive tests', () => {
       function __listRulesTest() {
@@ -774,6 +783,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const serviceType = 'testString';
         const zoneId = 'testString';
         const sort = 'testString';
+        const enforcementMode = 'enabled';
         const listRulesParams = {
           accountId: accountId,
           xCorrelationId: xCorrelationId,
@@ -786,6 +796,7 @@ describe('ContextBasedRestrictionsV1', () => {
           serviceType: serviceType,
           zoneId: zoneId,
           sort: sort,
+          enforcementMode: enforcementMode,
         };
 
         const listRulesResult = contextBasedRestrictionsService.listRules(listRulesParams);
@@ -813,6 +824,7 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(mockRequestOptions.qs.service_type).toEqual(serviceType);
         expect(mockRequestOptions.qs.zone_id).toEqual(zoneId);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs.enforcement_mode).toEqual(enforcementMode);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -872,6 +884,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('getRule', () => {
     describe('positive tests', () => {
       function __getRuleTest() {
@@ -961,6 +974,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('replaceRule', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1100,6 +1114,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('deleteRule', () => {
     describe('positive tests', () => {
       function __deleteRuleTest() {
@@ -1189,6 +1204,7 @@ describe('ContextBasedRestrictionsV1', () => {
       });
     });
   });
+
   describe('getAccountSettings', () => {
     describe('positive tests', () => {
       function __getAccountSettingsTest() {

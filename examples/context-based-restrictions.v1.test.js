@@ -273,6 +273,7 @@ describe('ContextBasedRestrictionsV1', () => {
       value: accountId,
     };
 
+    // Resource Attribute
     const resourceAttributeServiceNameModel = {
       name: 'serviceName',
       value: serviceName,
@@ -383,11 +384,13 @@ describe('ContextBasedRestrictionsV1', () => {
       attributes: [ruleContextAttributeModel],
     };
 
+    // ResourceAttribute
     const resourceAttributeAccountIdModel = {
       name: 'accountId',
       value: accountId,
     };
 
+    // ResourceAttribute
     const resourceAttributeServiceNameModel = {
       name: 'serviceName',
       value: serviceName,
@@ -398,6 +401,7 @@ describe('ContextBasedRestrictionsV1', () => {
       value: 'aTagValue',
     };
 
+    // Resource
     const resourceModel = {
       attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
       tags: [resourceTagAttributeModel],
