@@ -1494,6 +1494,8 @@ namespace ContextBasedRestrictionsV1 {
     service_name?: string;
     /** The service instance. */
     service_instance?: string;
+    /** The location. */
+    location?: string;
   }
 
   /** An output zone. */
