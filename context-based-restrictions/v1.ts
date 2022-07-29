@@ -1606,6 +1606,8 @@ namespace ContextBasedRestrictionsV1 {
     service_name: string;
     /** The type of the service. */
     service_type?: string;
+    /** The locations the service is available. */
+    locations?: ServiceRefTargetLocationsItem[];
   }
 
   /** A list of service reference targets. */
@@ -1614,6 +1616,12 @@ namespace ContextBasedRestrictionsV1 {
     count: number;
     /** The list of service reference targets. */
     targets: ServiceRefTarget[];
+  }
+
+  /** ServiceRefTargetLocationsItem. */
+  export interface ServiceRefTargetLocationsItem {
+    /** The location name. */
+    name: string;
   }
 
   /** A service reference value. */

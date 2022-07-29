@@ -45,11 +45,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   let apiKey;
   let url;
   let authUrl;
-  let authType;
   let accountId;
   let serviceName;
 
-  test('Initialise service', async () => {
+  test('Initialize service', async () => {
     contextBasedRestrictionsService = ContextBasedRestrictionsV1.newInstance({});
 
     expect(contextBasedRestrictionsService).not.toBeNull();
@@ -69,10 +68,6 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(authUrl).not.toBeNull();
     expect(authUrl).toBeDefined();
 
-    authType = config.authType;
-    expect(authType).not.toBeNull();
-    expect(authType).toBeDefined();
-
     accountId = config.testAccountId;
     expect(accountId).not.toBeNull();
     expect(accountId).toBeDefined();
@@ -87,15 +82,24 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('createZone() - Create a zone', async () => {
-    const addressModel = {
+    const ipAddressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
+    };
+
+    const serviceRefAddressModel = {
+      type: 'serviceRef',
+      ref: {
+        account_id: accountId,
+        service_name: 'containers-kubernetes',
+        location: 'us-south',
+      },
     };
 
     const params = {
       name: 'an example of zone',
       accountId,
-      addresses: [addressModel],
+      addresses: [ipAddressModel, serviceRefAddressModel],
       description: 'this is an example of zone',
       transactionId: uuidv4(),
     };
@@ -419,6 +423,79 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
     ruleId = res.result.id;
     ruleEtag = res.headers.etag;
+  });
+
+  test('createRule() - Create a rule with API types', async () => {
+    const ruleContextAttributeModel = {
+      name: 'networkZoneId',
+      value: zoneId,
+    };
+
+    const ruleContextModel = {
+      attributes: [ruleContextAttributeModel],
+    };
+
+    const resourceAttributeAccountIdModel = {
+      name: 'accountId',
+      value: accountId,
+      operator: 'stringEquals',
+    };
+
+    const resourceAttributeServiceNameModel = {
+      name: 'serviceName',
+      value: 'containers-kubernetes',
+      operator: 'stringEquals',
+    };
+
+    const resourceTagAttributeModel = {
+      name: 'aTagName',
+      value: 'aTagValue',
+      operator: 'stringEquals',
+    };
+
+    const resourceModel = {
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceNameModel],
+      tags: [resourceTagAttributeModel],
+    };
+
+    const apiTypeModel = {
+      api_type_id: 'crn:v1:bluemix:public:containers-kubernetes::::api-type:management',
+    };
+
+    const operationsModel = {
+      api_types: [apiTypeModel],
+    };
+
+    const params = {
+      contexts: [ruleContextModel],
+      resources: [resourceModel],
+      operations: operationsModel,
+      description: 'this is an example of rule',
+      enforcementMode: ContextBasedRestrictionsV1.CreateRuleConstants.EnforcementMode.ENABLED,
+      transactionId: uuidv4(),
+    };
+
+    let res;
+    try {
+      res = await contextBasedRestrictionsService.createRule(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+
+    // cleanup
+    const deleteParams = {
+      ruleId: res.result.id,
+      transactionId: uuidv4(),
+    };
+
+    const deleteRes = await contextBasedRestrictionsService.deleteRule(deleteParams);
+    expect(deleteRes).toBeDefined();
+    expect(deleteRes.status).toBe(204);
+    expect(deleteRes.result).toBeDefined();
   });
 
   test('createRule() - Create a rule with "service not cbr enabled" error', async () => {
@@ -769,6 +846,18 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     await expect(contextBasedRestrictionsService.getAccountSettings(params)).rejects.toMatchObject({
       'message': 'The parameter "account_id" in path has an error.',
     });
+  });
+
+  test('listAvailableServiceOperations()', async () => {
+    const params = {
+      serviceName: 'containers-kubernetes',
+      transactionId: uuidv4(),
+    };
+
+    const res = await contextBasedRestrictionsService.listAvailableServiceOperations(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
   test('deleteRule() - Delete rule with "Missing required parameters: ruleId" error', async () => {
