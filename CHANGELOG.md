@@ -1,3 +1,10 @@
+# [0.26.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.25.0...v0.26.0) (2022-08-01)
+
+
+### Features
+
+* **Context-based Restrictions:** update service after recent API changes ([#165](https://github.com/IBM/platform-services-node-sdk/issues/165)) ([a8cedde](https://github.com/IBM/platform-services-node-sdk/commit/a8cedde154356be1f7f0f9fb4de674207af082a6))
+
 # [0.25.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.24.1...v0.25.0) (2022-06-23)
 
 
