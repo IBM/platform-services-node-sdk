@@ -35,6 +35,7 @@ const { readExternalSources } = require('ibm-cloud-sdk-core');
 // CONTEXT_BASED_RESTRICTIONS_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
 // CONTEXT_BASED_RESTRICTIONS_TEST_ACCOUNT_ID=<the id of the account under which test CBR zones and rules are created>
 // CONTEXT_BASED_RESTRICTIONS_TEST_SERVICE_NAME=<the name of the service to be associated with the test CBR rules>
+// CONTEXT_BASED_RESTRICTIONS_TEST_VPC_CRN=<the CRN of the vpc instance to be associated with the test CBR rules>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -57,9 +58,9 @@ describe('ContextBasedRestrictionsV1', () => {
     apikey: apiKey,
     url: URL,
     authUrl,
-    authType,
     testAccountId: accountId,
     testServiceName: serviceName,
+    testVpcCrn: vpcCRN
   } = config;
 
   expect(config).not.toBeNull();
@@ -71,10 +72,10 @@ describe('ContextBasedRestrictionsV1', () => {
   expect(URL).toBeDefined();
   expect(authUrl).not.toBeNull();
   expect(authUrl).toBeDefined();
-  expect(authType).not.toBeNull();
-  expect(authType).toBeDefined();
   expect(serviceName).not.toBeNull();
   expect(serviceName).toBeDefined();
+  expect(vpcCRN).not.toBeNull();
+  expect(vpcCRN).toBeDefined();
 
   let zoneId;
   let zoneRev;
@@ -97,15 +98,44 @@ describe('ContextBasedRestrictionsV1', () => {
     // Request models needed by this operation.
 
     // AddressIPAddress
-    const addressModel = {
+    const ipAddressModel = {
       type: 'ipAddress',
       value: '169.23.56.234',
+    };
+    // AddressIPAddressRange
+    const ipRangeAddressModel = {
+      type: 'ipRange',
+      value: '169.23.22.0-169.23.22.255',
+    };
+    // AddressSubnet
+    const subnetAddressModel = {
+      type: 'subnet',
+      value: '192.0.2.0/24',
+    };
+    // AddressVPC
+    const vpcAddressModel = {
+      type: 'vpc',
+      value: vpcCRN,
+    };
+    // AddressServiceRef
+    const serviceRefAddressModel = {
+      type: 'serviceRef',
+      ref: {
+        account_id: accountId,
+        service_name: 'cloud-object-storage',
+      },
+    };
+    // AddressIPAddress
+    const excludedIPAddressModel = {
+      type: 'ipAddress',
+      value: '169.23.22.127',
     };
 
     const params = {
       name: 'an example of zone',
       accountId,
-      addresses: [addressModel],
+      addresses: [ipAddressModel, ipRangeAddressModel, subnetAddressModel, vpcAddressModel, serviceRefAddressModel],
+      excluded: [excludedIPAddressModel],
       description: 'this is an example of zone',
     };
 
