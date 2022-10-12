@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.53.0-9710cac3-20220713-193508
+ * IBM OpenAPI SDK Code Generator Version: 3.57.1-4c556507-20220928-143422
  */
 
 import * as extend from 'extend';
@@ -639,6 +639,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {string} [params.serviceInstance] - The `serviceInstance` resource attribute.
    * @param {string} [params.serviceName] - The `serviceName` resource attribute.
    * @param {string} [params.serviceType] - The rule's `serviceType` resource attribute.
+   * @param {string} [params.serviceGroupId] - The rule's `service_group_id` resource attribute.
    * @param {string} [params.zoneId] - The globally unique ID of the zone.
    * @param {string} [params.sort] - Sorts results by using a valid sort field. To learn more, see
    * [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
@@ -661,6 +662,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'serviceInstance',
       'serviceName',
       'serviceType',
+      'serviceGroupId',
       'zoneId',
       'sort',
       'enforcementMode',
@@ -679,6 +681,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'service_instance': _params.serviceInstance,
       'service_name': _params.serviceName,
       'service_type': _params.serviceType,
+      'service_group_id': _params.serviceGroupId,
       'zone_id': _params.zoneId,
       'sort': _params.sort,
       'enforcement_mode': _params.enforcementMode,
@@ -1306,6 +1309,8 @@ namespace ContextBasedRestrictionsV1 {
     serviceName?: string;
     /** The rule's `serviceType` resource attribute. */
     serviceType?: string;
+    /** The rule's `service_group_id` resource attribute. */
+    serviceGroupId?: string;
     /** The globally unique ID of the zone. */
     zoneId?: string;
     /** Sorts results by using a valid sort field. To learn more, see

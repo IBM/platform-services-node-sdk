@@ -18,7 +18,8 @@
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const { v4: uuidv4 } = require('uuid');
-const ContextBasedRestrictionsV1 = require('../../dist/context-based-restrictions/v1');
+// const ContextBasedRestrictionsV1 = require('../../dist/context-based-restrictions/v1');
+const ContextBasedRestrictionsV1 = require('@ibm-cloud/platform-services/context-based-restrictions/v1');
 
 const authHelper = require('../resources/auth-helper.js');
 // const { doesNotReject } = require('assert');
@@ -578,6 +579,77 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     await expect(contextBasedRestrictionsService.listRules(params)).rejects.toMatchObject({
       'message': 'Parameter validation errors:\n  Missing required parameters: accountId',
     });
+  });
+
+  test('listRules() - List rule with valid service_group_id attribute', async () => {
+    //create new rule with service_group_id attribute
+    const ruleContextAttributeModel = {
+      name: 'networkZoneId',
+      value: 'af03b24cbaed353f53d2290a9123a54a',
+    };
+
+    const ruleContextModel = {
+      attributes: [ruleContextAttributeModel],
+    };
+
+    const resourceAttributeAccountIdModel = {
+      name: 'accountId',
+      value: accountId,
+      operator: 'stringEquals',
+    };
+
+    const resourceAttributeServiceGroupIDModel = {
+      name: 'service_group_id',
+      value: 'IAM',
+    };
+
+    const resourceModel = {
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceGroupIDModel],
+    };
+
+    const params = {
+      contexts: [ruleContextModel],
+      resources: [resourceModel],
+      description: 'this is an example of rule with a service_group_id',
+      enforcementMode: ContextBasedRestrictionsV1.CreateRuleConstants.EnforcementMode.ENABLED,
+      transactionId: uuidv4(),
+    };
+
+    let res;
+    try {
+      res = await contextBasedRestrictionsService.createRule(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+
+    ruleId = res.result.id;
+    ruleEtag = res.headers.etag;
+
+    //list rule with service_group_id attribute
+    const listParams = {
+      accountId,
+      transactionId: uuidv4(),
+    };
+
+    const listRes = await contextBasedRestrictionsService.listRules(listParams);
+    expect(listRes).toBeDefined();
+    expect(listRes.status).toBe(200);
+    expect(listRes.result).toBeDefined();
+
+    // cleanup
+    const deleteParams = {
+      ruleId: res.result.id,
+      transactionId: uuidv4(),
+    };
+
+    const deleteRes = await contextBasedRestrictionsService.deleteRule(deleteParams);
+    expect(deleteRes).toBeDefined();
+    expect(deleteRes.status).toBe(204);
+    expect(deleteRes.result).toBeDefined();
   });
 
   test('getRule() - Get the specified rule', async () => {

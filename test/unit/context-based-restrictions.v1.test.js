@@ -794,6 +794,7 @@ describe('ContextBasedRestrictionsV1', () => {
         const serviceInstance = 'testString';
         const serviceName = 'testString';
         const serviceType = 'testString';
+        const serviceGroupId = 'testString';
         const zoneId = 'testString';
         const sort = 'testString';
         const enforcementMode = 'enabled';
@@ -807,6 +808,7 @@ describe('ContextBasedRestrictionsV1', () => {
           serviceInstance: serviceInstance,
           serviceName: serviceName,
           serviceType: serviceType,
+          serviceGroupId: serviceGroupId,
           zoneId: zoneId,
           sort: sort,
           enforcementMode: enforcementMode,
@@ -835,6 +837,7 @@ describe('ContextBasedRestrictionsV1', () => {
         expect(mockRequestOptions.qs.service_instance).toEqual(serviceInstance);
         expect(mockRequestOptions.qs.service_name).toEqual(serviceName);
         expect(mockRequestOptions.qs.service_type).toEqual(serviceType);
+        expect(mockRequestOptions.qs.service_group_id).toEqual(serviceGroupId);
         expect(mockRequestOptions.qs.zone_id).toEqual(zoneId);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.enforcement_mode).toEqual(enforcementMode);
