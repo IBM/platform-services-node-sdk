@@ -18,8 +18,7 @@
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const { v4: uuidv4 } = require('uuid');
-// const ContextBasedRestrictionsV1 = require('../../dist/context-based-restrictions/v1');
-const ContextBasedRestrictionsV1 = require('@ibm-cloud/platform-services/context-based-restrictions/v1');
+const ContextBasedRestrictionsV1 = require('../../dist/context-based-restrictions/v1');
 
 const authHelper = require('../resources/auth-helper.js');
 // const { doesNotReject } = require('assert');
@@ -582,10 +581,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   });
 
   test('listRules() - List rule with valid service_group_id attribute', async () => {
-    //create new rule with service_group_id attribute
+    // create new rule with service_group_id attribute
     const ruleContextAttributeModel = {
       name: 'networkZoneId',
-      value: 'af03b24cbaed353f53d2290a9123a54a',
+      value: zoneId,
     };
 
     const ruleContextModel = {
@@ -626,12 +625,10 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
 
-    ruleId = res.result.id;
-    ruleEtag = res.headers.etag;
-
-    //list rule with service_group_id attribute
+    // list rule with service_group_id attribute
     const listParams = {
       accountId,
+      serviceGroupId: 'IAM',
       transactionId: uuidv4(),
     };
 
@@ -639,6 +636,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(listRes).toBeDefined();
     expect(listRes.status).toBe(200);
     expect(listRes.result).toBeDefined();
+    expect(listRes.result.count).toBe(1);
 
     // cleanup
     const deleteParams = {
