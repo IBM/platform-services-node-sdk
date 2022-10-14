@@ -637,7 +637,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(listRes.status).toBe(200);
     expect(listRes.result).toBeDefined();
     expect(listRes.result.count).toBe(1);
-    expect(listRes.result.rules[0].id).toBe(res.result.id)
+    expect(listRes.result.rules[0].id).toBe(res.result.id);
 
     // cleanup
     const deleteParams = {
