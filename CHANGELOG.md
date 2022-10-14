@@ -1,3 +1,10 @@
+## [0.26.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.26.0...v0.26.1) (2022-10-14)
+
+
+### Bug Fixes
+
+* **Context Based Restrictions:** add list rule with service_group_id test ([#168](https://github.com/IBM/platform-services-node-sdk/issues/168)) ([8dbfe4b](https://github.com/IBM/platform-services-node-sdk/commit/8dbfe4b60a7ed7559af5d8133c2582503f4b903d))
+
 # [0.26.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.25.0...v0.26.0) (2022-08-01)
 
 
