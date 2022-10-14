@@ -580,6 +580,77 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
+  test('listRules() - List rule with valid service_group_id attribute', async () => {
+    // create new rule with service_group_id attribute
+    const ruleContextAttributeModel = {
+      name: 'networkZoneId',
+      value: zoneId,
+    };
+
+    const ruleContextModel = {
+      attributes: [ruleContextAttributeModel],
+    };
+
+    const resourceAttributeAccountIdModel = {
+      name: 'accountId',
+      value: accountId,
+      operator: 'stringEquals',
+    };
+
+    const resourceAttributeServiceGroupIDModel = {
+      name: 'service_group_id',
+      value: 'IAM',
+    };
+
+    const resourceModel = {
+      attributes: [resourceAttributeAccountIdModel, resourceAttributeServiceGroupIDModel],
+    };
+
+    const params = {
+      contexts: [ruleContextModel],
+      resources: [resourceModel],
+      description: 'this is an example of rule with a service_group_id',
+      enforcementMode: ContextBasedRestrictionsV1.CreateRuleConstants.EnforcementMode.ENABLED,
+      transactionId: uuidv4(),
+    };
+
+    let res;
+    try {
+      res = await contextBasedRestrictionsService.createRule(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+
+    // list rule with service_group_id attribute
+    const listParams = {
+      accountId,
+      serviceGroupId: 'IAM',
+      transactionId: uuidv4(),
+    };
+
+    const listRes = await contextBasedRestrictionsService.listRules(listParams);
+    expect(listRes).toBeDefined();
+    expect(listRes.status).toBe(200);
+    expect(listRes.result).toBeDefined();
+    expect(listRes.result.count).toBe(1);
+    expect(listRes.result.rules[0].id).toBe(res.result.id);
+
+    // cleanup
+    const deleteParams = {
+      ruleId: res.result.id,
+      transactionId: uuidv4(),
+    };
+
+    const deleteRes = await contextBasedRestrictionsService.deleteRule(deleteParams);
+    expect(deleteRes).toBeDefined();
+    expect(deleteRes.status).toBe(204);
+    expect(deleteRes.result).toBeDefined();
+  });
+
   test('getRule() - Get the specified rule', async () => {
     const params = {
       ruleId,
