@@ -1,3 +1,10 @@
+## [0.26.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.26.1...v0.26.2) (2022-10-24)
+
+
+### Bug Fixes
+
+* **Case Management:** regen service to add Pager ([2572f5d](https://github.com/IBM/platform-services-node-sdk/commit/2572f5d88f189aeccdc3c36a60ee31c1d2929860))
+
 ## [0.26.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.26.0...v0.26.1) (2022-10-14)
 
 
