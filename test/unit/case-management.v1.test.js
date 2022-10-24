@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const CaseManagementV1 = require('../../dist/case-management/v1');
+const nock = require('nock');
+
+/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -29,27 +32,44 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const caseManagementServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://support-center.cloud.ibm.com/case-management/v1',
 };
 
-const caseManagementService = new CaseManagementV1(service);
+const caseManagementService = new CaseManagementV1(caseManagementServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(caseManagementService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(caseManagementService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('CaseManagementV1', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = CaseManagementV1.newInstance();
@@ -77,6 +97,7 @@ describe('CaseManagementV1', () => {
       expect(testInstance).toBeInstanceOf(CaseManagementV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -99,9 +120,10 @@ describe('CaseManagementV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(CaseManagementV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('getCases', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getCasesTest() {
         // Construct the params object for operation getCases
         const offset = 38;
         const limit = 38;
@@ -109,16 +131,16 @@ describe('CaseManagementV1', () => {
         const sort = 'number';
         const status = ['new'];
         const fields = ['number'];
-        const params = {
-          offset: offset,
-          limit: limit,
-          search: search,
-          sort: sort,
-          status: status,
-          fields: fields,
+        const getCasesParams = {
+          offset,
+          limit,
+          search,
+          sort,
+          status,
+          fields,
         };
 
-        const getCasesResult = caseManagementService.getCases(params);
+        const getCasesResult = caseManagementService.getCases(getCasesParams);
 
         // all methods should return a Promise
         expectToBePromise(getCasesResult);
@@ -126,32 +148,47 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/cases', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['offset']).toEqual(offset);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['search']).toEqual(search);
-        expect(options.qs['sort']).toEqual(sort);
-        expect(options.qs['status']).toEqual(status);
-        expect(options.qs['fields']).toEqual(fields);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.search).toEqual(search);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs.status).toEqual(status);
+        expect(mockRequestOptions.qs.fields).toEqual(fields);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getCasesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __getCasesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __getCasesTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCasesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        caseManagementService.getCases(params);
+        caseManagementService.getCases(getCasesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -161,7 +198,64 @@ describe('CaseManagementV1', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('GetCasesPager tests', () => {
+      const serviceUrl = caseManagementServiceOptions.url;
+      const path = '/cases';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"cases":[{"number":"number","short_description":"short_description","description":"description","created_at":"created_at","created_by":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"},"updated_at":"updated_at","updated_by":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"},"contact_type":"Cloud Support Center","contact":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"},"status":"status","severity":8,"support_tier":"Free","resolution":"resolution","close_notes":"close_notes","eu":{"support":false,"data_center":"data_center"},"watchlist":[{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"}],"attachments":[{"id":"id","filename":"filename","size_in_bytes":13,"created_at":"created_at","url":"url"}],"offering":{"name":"name","type":{"group":"crn_service_name","key":"key","kind":"kind","id":"id"}},"resources":[{"crn":"crn","name":"name","type":"type","url":"url","note":"note"}],"comments":[{"value":"value","added_at":"added_at","added_by":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"}}]}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"cases":[{"number":"number","short_description":"short_description","description":"description","created_at":"created_at","created_by":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"},"updated_at":"updated_at","updated_by":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"},"contact_type":"Cloud Support Center","contact":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"},"status":"status","severity":8,"support_tier":"Free","resolution":"resolution","close_notes":"close_notes","eu":{"support":false,"data_center":"data_center"},"watchlist":[{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"}],"attachments":[{"id":"id","filename":"filename","size_in_bytes":13,"created_at":"created_at","url":"url"}],"offering":{"name":"name","type":{"group":"crn_service_name","key":"key","kind":"kind","id":"id"}},"resources":[{"crn":"crn","name":"name","type":"type","url":"url","note":"note"}],"comments":[{"value":"value","added_at":"added_at","added_by":{"name":"name","realm":"IBMid","user_id":"abc@ibm.com"}}]}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          limit: 10,
+          search: 'testString',
+          sort: 'number',
+          status: ['new'],
+          fields: ['number'],
+        };
+        const allResults = [];
+        const pager = new CaseManagementV1.GetCasesPager(caseManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          limit: 10,
+          search: 'testString',
+          sort: 'number',
+          status: ['new'],
+          fields: ['number'],
+        };
+        const pager = new CaseManagementV1.GetCasesPager(caseManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createCase', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -200,7 +294,7 @@ describe('CaseManagementV1', () => {
         user_id: 'abc@ibm.com',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createCaseTest() {
         // Construct the params object for operation createCase
         const type = 'technical';
         const subject = 'testString';
@@ -211,21 +305,21 @@ describe('CaseManagementV1', () => {
         const resources = [resourcePayloadModel];
         const watchlist = [userModel];
         const invoiceNumber = 'testString';
-        const slaCreditRequest = true;
-        const params = {
-          type: type,
-          subject: subject,
-          description: description,
-          severity: severity,
-          eu: eu,
-          offering: offering,
-          resources: resources,
-          watchlist: watchlist,
-          invoiceNumber: invoiceNumber,
-          slaCreditRequest: slaCreditRequest,
+        const slaCreditRequest = false;
+        const createCaseParams = {
+          type,
+          subject,
+          description,
+          severity,
+          eu,
+          offering,
+          resources,
+          watchlist,
+          invoiceNumber,
+          slaCreditRequest,
         };
 
-        const createCaseResult = caseManagementService.createCase(params);
+        const createCaseResult = caseManagementService.createCase(createCaseParams);
 
         // all methods should return a Promise
         expectToBePromise(createCaseResult);
@@ -233,22 +327,37 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/cases', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['subject']).toEqual(subject);
-        expect(options.body['description']).toEqual(description);
-        expect(options.body['severity']).toEqual(severity);
-        expect(options.body['eu']).toEqual(eu);
-        expect(options.body['offering']).toEqual(offering);
-        expect(options.body['resources']).toEqual(resources);
-        expect(options.body['watchlist']).toEqual(watchlist);
-        expect(options.body['invoice_number']).toEqual(invoiceNumber);
-        expect(options.body['sla_credit_request']).toEqual(slaCreditRequest);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.subject).toEqual(subject);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.severity).toEqual(severity);
+        expect(mockRequestOptions.body.eu).toEqual(eu);
+        expect(mockRequestOptions.body.offering).toEqual(offering);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.watchlist).toEqual(watchlist);
+        expect(mockRequestOptions.body.invoice_number).toEqual(invoiceNumber);
+        expect(mockRequestOptions.body.sla_credit_request).toEqual(slaCreditRequest);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createCaseTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __createCaseTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __createCaseTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -258,7 +367,7 @@ describe('CaseManagementV1', () => {
         const description = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createCaseParams = {
           type,
           subject,
           description,
@@ -268,7 +377,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.createCase(params);
+        caseManagementService.createCase(createCaseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -285,29 +394,31 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createCasePromise = caseManagementService.createCase();
-        expectToBePromise(createCasePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.createCase();
+        } catch (e) {
+          err = e;
+        }
 
-        createCasePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getCase', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getCaseTest() {
         // Construct the params object for operation getCase
         const caseNumber = 'testString';
         const fields = ['number'];
-        const params = {
-          caseNumber: caseNumber,
-          fields: fields,
+        const getCaseParams = {
+          caseNumber,
+          fields,
         };
 
-        const getCaseResult = caseManagementService.getCase(params);
+        const getCaseResult = caseManagementService.getCase(getCaseParams);
 
         // all methods should return a Promise
         expectToBePromise(getCaseResult);
@@ -315,14 +426,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['fields']).toEqual(fields);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.qs.fields).toEqual(fields);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getCaseTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __getCaseTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __getCaseTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -330,7 +456,7 @@ describe('CaseManagementV1', () => {
         const caseNumber = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCaseParams = {
           caseNumber,
           headers: {
             Accept: userAccept,
@@ -338,7 +464,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.getCase(params);
+        caseManagementService.getCase(getCaseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -355,17 +481,19 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getCasePromise = caseManagementService.getCase();
-        expectToBePromise(getCasePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.getCase();
+        } catch (e) {
+          err = e;
+        }
 
-        getCasePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateCaseStatus', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -377,16 +505,16 @@ describe('CaseManagementV1', () => {
         resolution_code: 1,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateCaseStatusTest() {
         // Construct the params object for operation updateCaseStatus
         const caseNumber = 'testString';
         const statusPayload = statusPayloadModel;
-        const params = {
-          caseNumber: caseNumber,
-          statusPayload: statusPayload,
+        const updateCaseStatusParams = {
+          caseNumber,
+          statusPayload,
         };
 
-        const updateCaseStatusResult = caseManagementService.updateCaseStatus(params);
+        const updateCaseStatusResult = caseManagementService.updateCaseStatus(updateCaseStatusParams);
 
         // all methods should return a Promise
         expectToBePromise(updateCaseStatusResult);
@@ -394,14 +522,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/status', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/status', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(statusPayload);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.body).toEqual(statusPayload);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateCaseStatusTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __updateCaseStatusTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __updateCaseStatusTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -410,7 +553,7 @@ describe('CaseManagementV1', () => {
         const statusPayload = statusPayloadModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateCaseStatusParams = {
           caseNumber,
           statusPayload,
           headers: {
@@ -419,7 +562,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.updateCaseStatus(params);
+        caseManagementService.updateCaseStatus(updateCaseStatusParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -436,29 +579,31 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateCaseStatusPromise = caseManagementService.updateCaseStatus();
-        expectToBePromise(updateCaseStatusPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.updateCaseStatus();
+        } catch (e) {
+          err = e;
+        }
 
-        updateCaseStatusPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('addComment', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addCommentTest() {
         // Construct the params object for operation addComment
         const caseNumber = 'testString';
         const comment = 'This is a test comment';
-        const params = {
-          caseNumber: caseNumber,
-          comment: comment,
+        const addCommentParams = {
+          caseNumber,
+          comment,
         };
 
-        const addCommentResult = caseManagementService.addComment(params);
+        const addCommentResult = caseManagementService.addComment(addCommentParams);
 
         // all methods should return a Promise
         expectToBePromise(addCommentResult);
@@ -466,14 +611,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/comments', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/comments', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['comment']).toEqual(comment);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.body.comment).toEqual(comment);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addCommentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __addCommentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __addCommentTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -482,7 +642,7 @@ describe('CaseManagementV1', () => {
         const comment = 'This is a test comment';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addCommentParams = {
           caseNumber,
           comment,
           headers: {
@@ -491,7 +651,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.addComment(params);
+        caseManagementService.addComment(addCommentParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -508,17 +668,19 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addCommentPromise = caseManagementService.addComment();
-        expectToBePromise(addCommentPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.addComment();
+        } catch (e) {
+          err = e;
+        }
 
-        addCommentPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('addWatchlist', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -529,16 +691,16 @@ describe('CaseManagementV1', () => {
         user_id: 'abc@ibm.com',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __addWatchlistTest() {
         // Construct the params object for operation addWatchlist
         const caseNumber = 'testString';
         const watchlist = [userModel];
-        const params = {
-          caseNumber: caseNumber,
-          watchlist: watchlist,
+        const addWatchlistParams = {
+          caseNumber,
+          watchlist,
         };
 
-        const addWatchlistResult = caseManagementService.addWatchlist(params);
+        const addWatchlistResult = caseManagementService.addWatchlist(addWatchlistParams);
 
         // all methods should return a Promise
         expectToBePromise(addWatchlistResult);
@@ -546,14 +708,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/watchlist', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/watchlist', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['watchlist']).toEqual(watchlist);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.body.watchlist).toEqual(watchlist);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addWatchlistTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __addWatchlistTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __addWatchlistTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -561,7 +738,7 @@ describe('CaseManagementV1', () => {
         const caseNumber = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addWatchlistParams = {
           caseNumber,
           headers: {
             Accept: userAccept,
@@ -569,7 +746,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.addWatchlist(params);
+        caseManagementService.addWatchlist(addWatchlistParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -586,17 +763,19 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addWatchlistPromise = caseManagementService.addWatchlist();
-        expectToBePromise(addWatchlistPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.addWatchlist();
+        } catch (e) {
+          err = e;
+        }
 
-        addWatchlistPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('removeWatchlist', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -607,16 +786,16 @@ describe('CaseManagementV1', () => {
         user_id: 'abc@ibm.com',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __removeWatchlistTest() {
         // Construct the params object for operation removeWatchlist
         const caseNumber = 'testString';
         const watchlist = [userModel];
-        const params = {
-          caseNumber: caseNumber,
-          watchlist: watchlist,
+        const removeWatchlistParams = {
+          caseNumber,
+          watchlist,
         };
 
-        const removeWatchlistResult = caseManagementService.removeWatchlist(params);
+        const removeWatchlistResult = caseManagementService.removeWatchlist(removeWatchlistParams);
 
         // all methods should return a Promise
         expectToBePromise(removeWatchlistResult);
@@ -624,14 +803,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/watchlist', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/watchlist', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['watchlist']).toEqual(watchlist);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.body.watchlist).toEqual(watchlist);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeWatchlistTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __removeWatchlistTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __removeWatchlistTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -639,7 +833,7 @@ describe('CaseManagementV1', () => {
         const caseNumber = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeWatchlistParams = {
           caseNumber,
           headers: {
             Accept: userAccept,
@@ -647,7 +841,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.removeWatchlist(params);
+        caseManagementService.removeWatchlist(removeWatchlistParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -664,35 +858,37 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeWatchlistPromise = caseManagementService.removeWatchlist();
-        expectToBePromise(removeWatchlistPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.removeWatchlist();
+        } catch (e) {
+          err = e;
+        }
 
-        removeWatchlistPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('addResource', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addResourceTest() {
         // Construct the params object for operation addResource
         const caseNumber = 'testString';
         const crn = 'testString';
         const type = 'testString';
         const id = 72.5;
         const note = 'testString';
-        const params = {
-          caseNumber: caseNumber,
-          crn: crn,
-          type: type,
-          id: id,
-          note: note,
+        const addResourceParams = {
+          caseNumber,
+          crn,
+          type,
+          id,
+          note,
         };
 
-        const addResourceResult = caseManagementService.addResource(params);
+        const addResourceResult = caseManagementService.addResource(addResourceParams);
 
         // all methods should return a Promise
         expectToBePromise(addResourceResult);
@@ -700,17 +896,32 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/resources', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/resources', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['crn']).toEqual(crn);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['id']).toEqual(id);
-        expect(options.body['note']).toEqual(note);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.body.crn).toEqual(crn);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body.note).toEqual(note);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addResourceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __addResourceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __addResourceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -718,7 +929,7 @@ describe('CaseManagementV1', () => {
         const caseNumber = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addResourceParams = {
           caseNumber,
           headers: {
             Accept: userAccept,
@@ -726,7 +937,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.addResource(params);
+        caseManagementService.addResource(addResourceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -743,29 +954,31 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addResourcePromise = caseManagementService.addResource();
-        expectToBePromise(addResourcePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.addResource();
+        } catch (e) {
+          err = e;
+        }
 
-        addResourcePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('uploadFile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __uploadFileTest() {
         // Construct the params object for operation uploadFile
         const caseNumber = 'testString';
         const file = [Buffer.from('This is a mock file.')];
-        const params = {
-          caseNumber: caseNumber,
-          file: file,
+        const uploadFileParams = {
+          caseNumber,
+          file,
         };
 
-        const uploadFileResult = caseManagementService.uploadFile(params);
+        const uploadFileResult = caseManagementService.uploadFile(uploadFileParams);
 
         // all methods should return a Promise
         expectToBePromise(uploadFileResult);
@@ -773,14 +986,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/attachments', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/attachments', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'multipart/form-data';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.formData['file']).toEqual(file);
-        expect(options.path['case_number']).toEqual(caseNumber);
+        expect(mockRequestOptions.formData.file).toEqual(file);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __uploadFileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __uploadFileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __uploadFileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -789,7 +1017,7 @@ describe('CaseManagementV1', () => {
         const file = [Buffer.from('This is a mock file.')];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const uploadFileParams = {
           caseNumber,
           file,
           headers: {
@@ -798,7 +1026,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.uploadFile(params);
+        caseManagementService.uploadFile(uploadFileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -815,29 +1043,31 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const uploadFilePromise = caseManagementService.uploadFile();
-        expectToBePromise(uploadFilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.uploadFile();
+        } catch (e) {
+          err = e;
+        }
 
-        uploadFilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('downloadFile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __downloadFileTest() {
         // Construct the params object for operation downloadFile
         const caseNumber = 'testString';
         const fileId = 'testString';
-        const params = {
-          caseNumber: caseNumber,
-          fileId: fileId,
+        const downloadFileParams = {
+          caseNumber,
+          fileId,
         };
 
-        const downloadFileResult = caseManagementService.downloadFile(params);
+        const downloadFileResult = caseManagementService.downloadFile(downloadFileParams);
 
         // all methods should return a Promise
         expectToBePromise(downloadFileResult);
@@ -845,15 +1075,30 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/attachments/{file_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/attachments/{file_id}', 'GET');
         const expectedAccept = 'application/octet-stream';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['case_number']).toEqual(caseNumber);
-        expect(options.path['file_id']).toEqual(fileId);
-        expect(options.responseType).toBe('stream');
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+        expect(mockRequestOptions.path.file_id).toEqual(fileId);
+        expect(mockRequestOptions.responseType).toBe('stream');
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __downloadFileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __downloadFileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __downloadFileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -862,7 +1107,7 @@ describe('CaseManagementV1', () => {
         const fileId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const downloadFileParams = {
           caseNumber,
           fileId,
           headers: {
@@ -871,7 +1116,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.downloadFile(params);
+        caseManagementService.downloadFile(downloadFileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -888,29 +1133,31 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const downloadFilePromise = caseManagementService.downloadFile();
-        expectToBePromise(downloadFilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.downloadFile();
+        } catch (e) {
+          err = e;
+        }
 
-        downloadFilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteFile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteFileTest() {
         // Construct the params object for operation deleteFile
         const caseNumber = 'testString';
         const fileId = 'testString';
-        const params = {
-          caseNumber: caseNumber,
-          fileId: fileId,
+        const deleteFileParams = {
+          caseNumber,
+          fileId,
         };
 
-        const deleteFileResult = caseManagementService.deleteFile(params);
+        const deleteFileResult = caseManagementService.deleteFile(deleteFileParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteFileResult);
@@ -918,14 +1165,29 @@ describe('CaseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/cases/{case_number}/attachments/{file_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/cases/{case_number}/attachments/{file_id}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['case_number']).toEqual(caseNumber);
-        expect(options.path['file_id']).toEqual(fileId);
+        expect(mockRequestOptions.path.case_number).toEqual(caseNumber);
+        expect(mockRequestOptions.path.file_id).toEqual(fileId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteFileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.enableRetries();
+        __deleteFileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        caseManagementService.disableRetries();
+        __deleteFileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -934,7 +1196,7 @@ describe('CaseManagementV1', () => {
         const fileId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteFileParams = {
           caseNumber,
           fileId,
           headers: {
@@ -943,7 +1205,7 @@ describe('CaseManagementV1', () => {
           },
         };
 
-        caseManagementService.deleteFile(params);
+        caseManagementService.deleteFile(deleteFileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -960,14 +1222,15 @@ describe('CaseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteFilePromise = caseManagementService.deleteFile();
-        expectToBePromise(deleteFilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await caseManagementService.deleteFile();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteFilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });

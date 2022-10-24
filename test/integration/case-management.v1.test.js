@@ -74,8 +74,8 @@ describe('CaseManagementV1_integration', () => {
     beforeEach(() => {
       params = {
         type: 'technical',
-        subject: 'Test case for NodeJS SDK',
-        description: 'Test case for NodeJS SDK',
+        subject: 'Test case for Node SDK',
+        description: 'Test case for Node SDK',
         severity: 4,
         offering: offeringPayload,
       };
@@ -119,8 +119,12 @@ describe('CaseManagementV1_integration', () => {
       params = {};
     });
 
-    test('Successfully got cases with default params', async () => {
-      response = await service.getCases();
+    test('Successfully got cases', async () => {
+      params = {
+        search: 'Node SDK',
+      };
+
+      response = await service.getCases(params);
       expect(response).toBeDefined();
       expect(response.status).toEqual(200);
       const { result } = response || {};
@@ -158,6 +162,29 @@ describe('CaseManagementV1_integration', () => {
       expect(testCase.short_description).toBeDefined();
       expect(testCase.severity).toBeDefined();
       expect(testCase.comments).not.toBeDefined();
+    });
+
+    test('getCases() via GetCasesPager', async () => {
+      const params = {
+        search: 'Node SDK',
+      };
+
+      const allResults = [];
+
+      // Test getNext().
+      let pager = new CaseManagementV1.GetCasesPager(service, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+
+      // Test getAll().
+      pager = new CaseManagementV1.GetCasesPager(service, params);
+      const allItems = await pager.getAll();
+      expect(allItems).not.toBeNull();
+      expect(allItems).toHaveLength(allResults.length);
+      console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
     });
 
     test('Failed to get cases with bad params', async () => {
@@ -314,20 +341,13 @@ describe('CaseManagementV1_integration', () => {
   });
 
   describe('Working with attachments', () => {
-    let params;
-    let response;
-
-    beforeEach(() => {
-      response = undefined;
-    });
-
     test('Successfully uploaded file', async () => {
-      params = {
+      const params = {
         caseNumber,
         file: attachmentPayload,
       };
 
-      response = await service.uploadFile(params);
+      const response = await service.uploadFile(params);
       expect(response).toBeDefined();
       expect(response.status).toEqual(200);
 
@@ -339,12 +359,12 @@ describe('CaseManagementV1_integration', () => {
     });
 
     test('Successfully downloaded a file', async () => {
-      params = {
+      const params = {
         caseNumber,
         fileId: attachmentId,
       };
 
-      response = await service.downloadFile(params);
+      const response = await service.downloadFile(params);
       expect(response).toBeDefined();
       expect(response.status).toEqual(200);
 
@@ -353,12 +373,12 @@ describe('CaseManagementV1_integration', () => {
     });
 
     test('Successfully deleted file', async () => {
-      params = {
+      const params = {
         caseNumber,
         fileId: attachmentId,
       };
 
-      response = await service.deleteFile(params);
+      const response = await service.deleteFile(params);
       expect(response).toBeDefined();
       expect(response.status).toEqual(200);
     });

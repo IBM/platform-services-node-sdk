@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-7b3ab37f-20210215-130941
+ * IBM OpenAPI SDK Code Generator Version: 3.60.0-13f6e1ba-20221019-164457
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,16 +27,18 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
   FileWithMetadata,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
-
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * Case management API for creating cases, getting case statuses, adding comments to a case, adding and removing users
  * from a case watchlist, downloading and adding attachments, and more.
+ *
+ * API Version: 1.0.0
  */
 
 class CaseManagementV1 extends BaseService {
@@ -100,16 +105,16 @@ class CaseManagementV1 extends BaseService {
   /**
    * Get cases in account.
    *
-   * Get cases in the account which is specified by the content of the IAM token.
+   * Get cases in the account that are specified by the content of the IAM token.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {number} [params.offset] - Number of cases should be skipped.
-   * @param {number} [params.limit] - Number of cases should be returned.
+   * @param {number} [params.offset] - Number of cases that are skipped.
+   * @param {number} [params.limit] - Number of cases that are returned.
    * @param {string} [params.search] - String that a case might contain.
    * @param {string} [params.sort] - Sort field and direction. If omitted, default to descending of updated date. Prefix
    * "~" signifies sort in descending.
    * @param {string[]} [params.status] - Case status filter.
-   * @param {string[]} [params.fields] - Seleted fields of interest instead of the entire case information.
+   * @param {string[]} [params.fields] - Selected fields of interest instead of all of the case information.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.CaseList>>}
    */
@@ -117,6 +122,12 @@ class CaseManagementV1 extends BaseService {
     params?: CaseManagementV1.GetCasesParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.CaseList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['offset', 'limit', 'search', 'sort', 'status', 'fields', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'offset': _params.offset,
@@ -153,20 +164,20 @@ class CaseManagementV1 extends BaseService {
   /**
    * Create a case.
    *
-   * Create a case in the account.
+   * Create a support case to resolve issues in your account.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.type - Case type.
-   * @param {string} params.subject - Subject of the case.
+   * @param {string} params.subject - Short description used to identify the case.
    * @param {string} params.description - Detailed description of the issue.
    * @param {number} [params.severity] - Severity of the case. Smaller values mean higher severity.
    * @param {CasePayloadEu} [params.eu] - Specify if the case should be treated as EU regulated. Only one of the
    * following properties is required. Call EU support utility endpoint to determine which property must be specified
    * for your account.
    * @param {Offering} [params.offering] - Offering details.
-   * @param {ResourcePayload[]} [params.resources] - List of resources to attach to case. If attaching Classic IaaS
-   * devices use type and id fields if Cloud Resource Name (CRN) is unavialable. Otherwise pass the resource CRN. The
-   * resource list must be consistent with the value selected for the resource offering.
+   * @param {ResourcePayload[]} [params.resources] - List of resources to attach to case. If you attach Classic IaaS
+   * devices, use the type and id fields if the Cloud Resource Name (CRN) is unavailable. Otherwise, pass the resource
+   * CRN. The resource list must be consistent with the value that is selected for the resource offering.
    * @param {User[]} [params.watchlist] - Array of user IDs to add to the watchlist.
    * @param {string} [params.invoiceNumber] - Invoice number of "Billing and Invoice" case type.
    * @param {boolean} [params.slaCreditRequest] - Flag to indicate if case is for an Service Level Agreement (SLA)
@@ -178,11 +189,23 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.CreateCaseParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Case>> {
     const _params = { ...params };
-    const requiredParams = ['type', 'subject', 'description'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['type', 'subject', 'description'];
+    const _validParams = [
+      'type',
+      'subject',
+      'description',
+      'severity',
+      'eu',
+      'offering',
+      'resources',
+      'watchlist',
+      'invoiceNumber',
+      'slaCreditRequest',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -225,11 +248,11 @@ class CaseManagementV1 extends BaseService {
   /**
    * Get a case in account.
    *
-   * Get a case in the account that is specified by the case number.
+   * View a case in the account that is specified by the case number.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
-   * @param {string[]} [params.fields] - Seleted fields of interest instead of the entire case information.
+   * @param {string[]} [params.fields] - Selected fields of interest instead of all of the case information.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.Case>>}
    */
@@ -237,11 +260,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.GetCaseParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Case>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber'];
+    const _validParams = ['caseNumber', 'fields', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -291,11 +314,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.UpdateCaseStatusParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Case>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber', 'statusPayload'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber', 'statusPayload'];
+    const _validParams = ['caseNumber', 'statusPayload', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = _params.statusPayload;
@@ -335,7 +358,7 @@ class CaseManagementV1 extends BaseService {
   /**
    * Add comment to case.
    *
-   * Add a comment to a case.
+   * Add a comment to a case to be viewed by a support engineer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
@@ -347,11 +370,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.AddCommentParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Comment>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber', 'comment'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber', 'comment'];
+    const _validParams = ['caseNumber', 'comment', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -404,11 +427,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.AddWatchlistParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.WatchlistAddResponse>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber'];
+    const _validParams = ['caseNumber', 'watchlist', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -447,7 +470,8 @@ class CaseManagementV1 extends BaseService {
   /**
    * Remove users from watchlist of case.
    *
-   * Remove users from the watchlist of a case.
+   * Remove users from the watchlist of a case if you don't want them to view the case, receive updates, or make updates
+   * to the case.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
@@ -459,11 +483,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.RemoveWatchlistParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Watchlist>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber'];
+    const _validParams = ['caseNumber', 'watchlist', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -512,9 +536,9 @@ class CaseManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.caseNumber - Unique identifier of a case.
    * @param {string} [params.crn] - Cloud Resource Name of the resource.
-   * @param {string} [params.type] - Only used to attach Classic IaaS devices which have no CRN.
-   * @param {number} [params.id] - Only used to attach Classic IaaS devices which have no CRN. Id of Classic IaaS
-   * device. This is deprecated in favor of the crn field.
+   * @param {string} [params.type] - Only used to attach Classic IaaS devices that have no CRN.
+   * @param {number} [params.id] - Deprecated: Only used to attach Classic IaaS devices that have no CRN. Id of Classic
+   * IaaS device. This is deprecated in favor of the crn field.
    * @param {string} [params.note] - A note about this resource.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CaseManagementV1.Response<CaseManagementV1.Resource>>}
@@ -523,11 +547,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.AddResourceParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Resource>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber'];
+    const _validParams = ['caseNumber', 'crn', 'type', 'id', 'note', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -567,7 +591,7 @@ class CaseManagementV1 extends BaseService {
   }
 
   /**
-   * Add attachment(s) to case.
+   * Add attachments to a support case.
    *
    * You can add attachments to a case to provide more information for the support team about the issue that you're
    * experiencing.
@@ -582,11 +606,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.UploadFileParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.Attachment>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber', 'file'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber', 'file'];
+    const _validParams = ['caseNumber', 'file', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const formData = {
@@ -631,17 +655,17 @@ class CaseManagementV1 extends BaseService {
    * @param {string} params.caseNumber - Unique identifier of a case.
    * @param {string} params.fileId - Unique identifier of a file.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<CaseManagementV1.Response<NodeJS.ReadableStream|Buffer>>}
+   * @returns {Promise<CaseManagementV1.Response<NodeJS.ReadableStream>>}
    */
   public downloadFile(
     params: CaseManagementV1.DownloadFileParams
-  ): Promise<CaseManagementV1.Response<NodeJS.ReadableStream | Buffer>> {
+  ): Promise<CaseManagementV1.Response<NodeJS.ReadableStream>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber', 'fileId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber', 'fileId'];
+    const _validParams = ['caseNumber', 'fileId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -688,11 +712,11 @@ class CaseManagementV1 extends BaseService {
     params: CaseManagementV1.DeleteFileParams
   ): Promise<CaseManagementV1.Response<CaseManagementV1.AttachmentList>> {
     const _params = { ...params };
-    const requiredParams = ['caseNumber', 'fileId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['caseNumber', 'fileId'];
+    const _validParams = ['caseNumber', 'fileId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -741,7 +765,7 @@ namespace CaseManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -754,9 +778,9 @@ namespace CaseManagementV1 {
 
   /** Parameters for the `getCases` operation. */
   export interface GetCasesParams {
-    /** Number of cases should be skipped. */
+    /** Number of cases that are skipped. */
     offset?: number;
-    /** Number of cases should be returned. */
+    /** Number of cases that are returned. */
     limit?: number;
     /** String that a case might contain. */
     search?: string;
@@ -766,7 +790,7 @@ namespace CaseManagementV1 {
     sort?: string;
     /** Case status filter. */
     status?: GetCasesConstants.Status[] | string[];
-    /** Seleted fields of interest instead of the entire case information. */
+    /** Selected fields of interest instead of all of the case information. */
     fields?: GetCasesConstants.Fields[] | string[];
     headers?: OutgoingHttpHeaders;
   }
@@ -782,7 +806,7 @@ namespace CaseManagementV1 {
       RESOLVED = 'resolved',
       CLOSED = 'closed',
     }
-    /** Seleted fields of interest instead of the entire case information. */
+    /** Selected fields of interest instead of all of the case information. */
     export enum Fields {
       NUMBER = 'number',
       SHORT_DESCRIPTION = 'short_description',
@@ -813,7 +837,7 @@ namespace CaseManagementV1 {
   export interface CreateCaseParams {
     /** Case type. */
     type: CreateCaseConstants.Type | string;
-    /** Subject of the case. */
+    /** Short description used to identify the case. */
     subject: string;
     /** Detailed description of the issue. */
     description: string;
@@ -825,9 +849,9 @@ namespace CaseManagementV1 {
     eu?: CasePayloadEu;
     /** Offering details. */
     offering?: Offering;
-    /** List of resources to attach to case. If attaching Classic IaaS devices use type and id fields if Cloud
-     *  Resource Name (CRN) is unavialable. Otherwise pass the resource CRN. The resource list must be consistent with
-     *  the value selected for the resource offering.
+    /** List of resources to attach to case. If you attach Classic IaaS devices, use the type and id fields if the
+     *  Cloud Resource Name (CRN) is unavailable. Otherwise, pass the resource CRN. The resource list must be consistent
+     *  with the value that is selected for the resource offering.
      */
     resources?: ResourcePayload[];
     /** Array of user IDs to add to the watchlist. */
@@ -854,14 +878,14 @@ namespace CaseManagementV1 {
   export interface GetCaseParams {
     /** Unique identifier of a case. */
     caseNumber: string;
-    /** Seleted fields of interest instead of the entire case information. */
+    /** Selected fields of interest instead of all of the case information. */
     fields?: GetCaseConstants.Fields[] | string[];
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getCase` operation. */
   export namespace GetCaseConstants {
-    /** Seleted fields of interest instead of the entire case information. */
+    /** Selected fields of interest instead of all of the case information. */
     export enum Fields {
       NUMBER = 'number',
       SHORT_DESCRIPTION = 'short_description',
@@ -929,10 +953,10 @@ namespace CaseManagementV1 {
     caseNumber: string;
     /** Cloud Resource Name of the resource. */
     crn?: string;
-    /** Only used to attach Classic IaaS devices which have no CRN. */
+    /** Only used to attach Classic IaaS devices that have no CRN. */
     type?: string;
-    /** Only used to attach Classic IaaS devices which have no CRN. Id of Classic IaaS device. This is deprecated in
-     *  favor of the crn field.
+    /** Deprecated: Only used to attach Classic IaaS devices that have no CRN. Id of Classic IaaS device. This is
+     *  deprecated in favor of the crn field.
      */
     id?: number;
     /** A note about this resource. */
@@ -993,17 +1017,17 @@ namespace CaseManagementV1 {
 
   /** The support case. */
   export interface Case {
-    /** Number/ID of the case. */
+    /** Identifying number of a created case. */
     number?: string;
-    /** A short description of what the case is about. */
+    /** Short description of what the case is about. */
     short_description?: string;
-    /** A full description of what the case is about. */
+    /** Full description of what the case is about. */
     description?: string;
-    /** Date time of case creation in UTC. */
+    /** Date and time of case creation in UTC. */
     created_at?: string;
     /** User info in a case. */
     created_by?: User;
-    /** Date time of the last update on the case in UTC. */
+    /** Date and time of the last update on the case in UTC. */
     updated_at?: string;
     /** User info in a case. */
     updated_by?: User;
@@ -1011,9 +1035,9 @@ namespace CaseManagementV1 {
     contact_type?: string;
     /** User info in a case. */
     contact?: User;
-    /** Status of the case. */
+    /** Status type of the case. */
     status?: string;
-    /** The severity of the case. */
+    /** Severity level of the case. */
     severity?: number;
     /** Support tier of the account. */
     support_tier?: string;
@@ -1025,13 +1049,13 @@ namespace CaseManagementV1 {
     eu?: CaseEu;
     /** List of users in the case watchlist. */
     watchlist?: User[];
-    /** List of attachments/files of the case. */
+    /** List of files that are attached to the case. */
     attachments?: Attachment[];
     /** Offering details. */
     offering?: Offering;
     /** List of attached resources. */
     resources?: Resource[];
-    /** List of comments/updates sorted in chronological order. */
+    /** List of comments and updates that are sorted in chronological order. */
     comments?: Comment[];
   }
 
@@ -1045,7 +1069,7 @@ namespace CaseManagementV1 {
 
   /** Response of a GET /cases request. */
   export interface CaseList {
-    /** Total number of cases satisfying the query. */
+    /** Total number of cases that satisfy the query. */
     total_count?: number;
     /** Container for URL pointer to related pages of cases. */
     first?: PaginationLink;
@@ -1063,7 +1087,7 @@ namespace CaseManagementV1 {
   export interface CasePayloadEu {
     /** indicating whether the case is EU supported. */
     supported?: boolean;
-    /** If EU supported utility endpoint specifies datacenter then pass the datacenter id to mark a case as EU
+    /** If EU supported utility endpoint specifies data center, then pass the data center id to mark a case as EU
      *  supported.
      */
     data_center?: number;
@@ -1089,8 +1113,8 @@ namespace CaseManagementV1 {
 
   /** Offering type. */
   export interface OfferingType {
-    /** Offering type group. "crn_service_name" is strongly prefered over "category" as the latter is legacy and
-     *  will be deprecated in the future.
+    /** Offering type group. "crn_service_name" is preferred over "category" as the latter is legacy and will be
+     *  deprecated in the future.
      */
     group: string;
     /** CRN service name of the offering. */
@@ -1125,10 +1149,10 @@ namespace CaseManagementV1 {
   export interface ResourcePayload {
     /** Cloud Resource Name of the resource. */
     crn?: string;
-    /** Only used to attach Classic IaaS devices which have no CRN. */
+    /** Only used to attach Classic IaaS devices that have no CRN. */
     type?: string;
-    /** Only used to attach Classic IaaS devices which have no CRN. Id of Classic IaaS device. This is deprecated in
-     *  favor of the crn field.
+    /** Deprecated: Only used to attach Classic IaaS devices that have no CRN. Id of Classic IaaS device. This is
+     *  deprecated in favor of the crn field.
      */
     id?: number;
     /** A note about this resource. */
@@ -1157,7 +1181,7 @@ namespace CaseManagementV1 {
     watchlist?: User[];
   }
 
-  /** Response of a request adding to watchlist. */
+  /** Response of a request when adding to watchlist. */
   export interface WatchlistAddResponse {
     /** List of added user. */
     added?: User[];
@@ -1178,7 +1202,7 @@ namespace CaseManagementV1 {
     /** * 1: Client error
      *  * 2: Defect found with Component/Service
      *  * 3: Documentation Error
-     *  * 4: Sollution found in forums
+     *  * 4: Solution found in forums
      *  * 5: Solution found in public Documentation
      *  * 6: Solution no longer required
      *  * 7: Solution provided by IBM outside of support case
@@ -1191,6 +1215,91 @@ namespace CaseManagementV1 {
   export interface UnresolvePayload extends StatusPayload {
     /** Comment why the case should be unresolved. */
     comment: string;
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * GetCasesPager can be used to simplify the use of getCases().
+   */
+  export class GetCasesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: CaseManagementV1;
+
+    protected params: CaseManagementV1.GetCasesParams;
+
+    /**
+     * Construct a GetCasesPager object.
+     *
+     * @param {CaseManagementV1}  client - The service client instance used to invoke getCases()
+     * @param {Object} [params] - The parameters to be passed to getCases()
+     * @constructor
+     * @returns {GetCasesPager}
+     */
+    constructor(client: CaseManagementV1, params?: CaseManagementV1.GetCasesParams) {
+      if (params && params.offset) {
+        throw new Error(`the params.offset field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getCases().
+     * @returns {Promise<CaseManagementV1.Case[]>}
+     */
+    public async getNext(): Promise<CaseManagementV1.Case[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.offset = this.pageContext.next;
+      }
+      const response = await this.client.getCases(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'offset');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.cases;
+    }
+
+    /**
+     * Returns all results by invoking getCases() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<CaseManagementV1.Case[]>}
+     */
+    public async getAll(): Promise<CaseManagementV1.Case[]> {
+      const results: Case[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
