@@ -146,13 +146,12 @@ describe('CaseManagementV1', () => {
     // end-getCase
   });
   test('getCases request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -160,17 +159,19 @@ describe('CaseManagementV1', () => {
     // begin-getCases
 
     const params = {
-      offset: 0,
-      limit: 100,
-      search: 'blocker',
-      sort: CaseManagementV1.GetCasesConstants.Fields.UPDATED_AT,
+      search: 'Example',
     };
 
+    const allResults = [];
     try {
-      const res = await caseManagementService.getCases({})
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch
-      (err) {
+      const pager = new CaseManagementV1.GetCasesPager(caseManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
       console.warn(err);
     }
 
