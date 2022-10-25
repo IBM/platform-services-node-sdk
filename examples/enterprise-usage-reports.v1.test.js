@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ describe('EnterpriseUsageReportsV1', () => {
 
   // begin-common
 
-  const enterpriseUsageReportsService = EnterpriseUsageReportsV1.newInstance({});
+  const enterpriseUsageReportsService = EnterpriseUsageReportsV1.newInstance();
 
   // end-common
 
@@ -65,13 +65,12 @@ describe('EnterpriseUsageReportsV1', () => {
   let billingMonth = config.billingMonth;
 
   test('getResourceUsageReport request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -81,12 +80,17 @@ describe('EnterpriseUsageReportsV1', () => {
     const params = {
       enterpriseId: enterpriseId,
       month: billingMonth,
-      limit: 10,
     };
 
+    const allResults = [];
     try {
-      const res = await enterpriseUsageReportsService.getResourceUsageReport(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new EnterpriseUsageReportsV1.GetResourceUsageReportPager(enterpriseUsageReportsService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }

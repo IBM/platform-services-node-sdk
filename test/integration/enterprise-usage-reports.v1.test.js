@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources, getQueryParam } = require('ibm-cloud-sdk-core');
 const EnterpriseUsageReportsV1 = require('../../dist/enterprise-usage-reports/v1');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -27,19 +27,19 @@ const configFile = 'enterprise_usage_reports.env';
 
 const describe = authHelper.prepareTests(configFile);
 
-let service;
-let accountId;
-let accountGroupId;
-let enterpriseId;
-let billingMonth;
-
 describe('EnterpriseUsageReportsV1_integration', () => {
+  let enterpriseUsageReportsService;
+  let accountId;
+  let accountGroupId;
+  let enterpriseId;
+  let billingMonth;
+
   test('Init', async () => {
-    service = EnterpriseUsageReportsV1.newInstance({});
+    enterpriseUsageReportsService = EnterpriseUsageReportsV1.newInstance();
 
     const config = readExternalSources(EnterpriseUsageReportsV1.DEFAULT_SERVICE_NAME);
 
-    expect(service).not.toBeNull();
+    expect(enterpriseUsageReportsService).not.toBeNull();
     expect(config).not.toBeNull();
 
     accountId = config.accountId;
@@ -67,7 +67,7 @@ describe('EnterpriseUsageReportsV1_integration', () => {
           offset,
         };
 
-        const res = await service.getResourceUsageReport(params);
+        const res = await enterpriseUsageReportsService.getResourceUsageReport(params);
         expect(res.status).toEqual(200);
 
         const { result } = res;
@@ -79,7 +79,7 @@ describe('EnterpriseUsageReportsV1_integration', () => {
 
         // Determine the offset to use to get the next page.
         if (result.next) {
-          offset = getOffsetFromURL(result.next.href);
+          offset = getQueryParam(result.next.href, 'offset');
         } else {
           offset = null;
         }
@@ -108,7 +108,7 @@ describe('EnterpriseUsageReportsV1_integration', () => {
           offset,
         };
 
-        const res = await service.getResourceUsageReport(params);
+        const res = await enterpriseUsageReportsService.getResourceUsageReport(params);
         expect(res.status).toEqual(200);
 
         const { result } = res;
@@ -120,7 +120,7 @@ describe('EnterpriseUsageReportsV1_integration', () => {
 
         // Determine the offset to use to get the next page.
         if (result.next) {
-          offset = getOffsetFromURL(result.next.href);
+          offset = getQueryParam(result.next.href, 'offset');
         } else {
           offset = null;
         }
@@ -149,7 +149,7 @@ describe('EnterpriseUsageReportsV1_integration', () => {
           offset,
         };
 
-        const res = await service.getResourceUsageReport(params);
+        const res = await enterpriseUsageReportsService.getResourceUsageReport(params);
         expect(res.status).toEqual(200);
 
         const { result } = res;
@@ -161,7 +161,7 @@ describe('EnterpriseUsageReportsV1_integration', () => {
 
         // Determine the offset to use to get the next page.
         if (result.next) {
-          offset = getOffsetFromURL(result.next.href);
+          offset = getQueryParam(result.next.href, 'offset');
         } else {
           offset = null;
         }
@@ -176,15 +176,34 @@ describe('EnterpriseUsageReportsV1_integration', () => {
     // console.log(`getResourceUsageReport() response contained ${numReports} total reports`);
     expect(numReports).toBeGreaterThan(0);
   });
-});
 
-function getOffsetFromURL(urlstring) {
-  let offset = null;
-  if (urlstring) {
-    // We use a bogus "baseurl" in case "urlstring" is a relative url.
-    // This is fine since we're only trying to retrieve the "offset" query parameter.
-    const url = new URL(urlstring, 'https://fakehost.com');
-    offset = url.searchParams.get('offset');
-  }
-  return offset;
-}
+  test('getResourceUsageReport() via GetResourceUsageReportPager', async () => {
+    const params = {
+      accountGroupId,
+      month: billingMonth,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseUsageReportsV1.GetResourceUsageReportPager(
+      enterpriseUsageReportsService,
+      params
+    );
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseUsageReportsV1.GetResourceUsageReportPager(
+      enterpriseUsageReportsService,
+      params
+    );
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+});
