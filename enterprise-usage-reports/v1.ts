@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-629bbb97-20201207-171303
+ * IBM OpenAPI SDK Code Generator Version: 3.60.0-13f6e1ba-20221019-164457
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,13 +27,16 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * Usage reports for IBM Cloud enterprise entities
+ *
+ * API Version: 1.0.0-beta.1
  */
 
 class EnterpriseUsageReportsV1 extends BaseService {
@@ -124,6 +130,22 @@ class EnterpriseUsageReportsV1 extends BaseService {
     params?: EnterpriseUsageReportsV1.GetResourceUsageReportParams
   ): Promise<EnterpriseUsageReportsV1.Response<EnterpriseUsageReportsV1.Reports>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'enterpriseId',
+      'accountGroupId',
+      'accountId',
+      'children',
+      'month',
+      'billingUnitId',
+      'limit',
+      'offset',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'enterprise_id': _params.enterpriseId,
@@ -181,7 +203,7 @@ namespace EnterpriseUsageReportsV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -332,6 +354,94 @@ namespace EnterpriseUsageReportsV1 {
     non_billable_rated_cost: number;
     /** Details about all the resources that are included in the aggregated charges. */
     resources: ResourceUsage[];
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * GetResourceUsageReportPager can be used to simplify the use of getResourceUsageReport().
+   */
+  export class GetResourceUsageReportPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: EnterpriseUsageReportsV1;
+
+    protected params: EnterpriseUsageReportsV1.GetResourceUsageReportParams;
+
+    /**
+     * Construct a GetResourceUsageReportPager object.
+     *
+     * @param {EnterpriseUsageReportsV1}  client - The service client instance used to invoke getResourceUsageReport()
+     * @param {Object} [params] - The parameters to be passed to getResourceUsageReport()
+     * @constructor
+     * @returns {GetResourceUsageReportPager}
+     */
+    constructor(
+      client: EnterpriseUsageReportsV1,
+      params?: EnterpriseUsageReportsV1.GetResourceUsageReportParams
+    ) {
+      if (params && params.offset) {
+        throw new Error(`the params.offset field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getResourceUsageReport().
+     * @returns {Promise<EnterpriseUsageReportsV1.ResourceUsageReport[]>}
+     */
+    public async getNext(): Promise<EnterpriseUsageReportsV1.ResourceUsageReport[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.offset = this.pageContext.next;
+      }
+      const response = await this.client.getResourceUsageReport(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'offset');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.reports;
+    }
+
+    /**
+     * Returns all results by invoking getResourceUsageReport() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<EnterpriseUsageReportsV1.ResourceUsageReport[]>}
+     */
+    public async getAll(): Promise<EnterpriseUsageReportsV1.ResourceUsageReport[]> {
+      const results: ResourceUsageReport[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 

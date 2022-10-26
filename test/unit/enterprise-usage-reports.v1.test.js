@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const EnterpriseUsageReportsV1 = require('../../dist/enterprise-usage-reports/v1');
+const nock = require('nock');
+
+/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -29,27 +32,44 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const enterpriseUsageReportsServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://enterprise.cloud.ibm.com',
 };
 
-const enterpriseUsageReportsService = new EnterpriseUsageReportsV1(service);
+const enterpriseUsageReportsService = new EnterpriseUsageReportsV1(enterpriseUsageReportsServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(enterpriseUsageReportsService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(enterpriseUsageReportsService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('EnterpriseUsageReportsV1', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = EnterpriseUsageReportsV1.newInstance();
@@ -77,6 +97,7 @@ describe('EnterpriseUsageReportsV1', () => {
       expect(testInstance).toBeInstanceOf(EnterpriseUsageReportsV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -99,9 +120,10 @@ describe('EnterpriseUsageReportsV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(EnterpriseUsageReportsV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('getResourceUsageReport', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getResourceUsageReportTest() {
         // Construct the params object for operation getResourceUsageReport
         const enterpriseId = 'abc12340d4bf4e36b0423d209b286f24';
         const accountGroupId = 'def456a237b94b9a9238ef024e204c9f';
@@ -111,18 +133,18 @@ describe('EnterpriseUsageReportsV1', () => {
         const billingUnitId = 'testString';
         const limit = 10;
         const offset = 'testString';
-        const params = {
-          enterpriseId: enterpriseId,
-          accountGroupId: accountGroupId,
-          accountId: accountId,
-          children: children,
-          month: month,
-          billingUnitId: billingUnitId,
-          limit: limit,
-          offset: offset,
+        const getResourceUsageReportParams = {
+          enterpriseId,
+          accountGroupId,
+          accountId,
+          children,
+          month,
+          billingUnitId,
+          limit,
+          offset,
         };
 
-        const getResourceUsageReportResult = enterpriseUsageReportsService.getResourceUsageReport(params);
+        const getResourceUsageReportResult = enterpriseUsageReportsService.getResourceUsageReport(getResourceUsageReportParams);
 
         // all methods should return a Promise
         expectToBePromise(getResourceUsageReportResult);
@@ -130,34 +152,49 @@ describe('EnterpriseUsageReportsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/resource-usage-reports', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/resource-usage-reports', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['enterprise_id']).toEqual(enterpriseId);
-        expect(options.qs['account_group_id']).toEqual(accountGroupId);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['children']).toEqual(children);
-        expect(options.qs['month']).toEqual(month);
-        expect(options.qs['billing_unit_id']).toEqual(billingUnitId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['offset']).toEqual(offset);
+        expect(mockRequestOptions.qs.enterprise_id).toEqual(enterpriseId);
+        expect(mockRequestOptions.qs.account_group_id).toEqual(accountGroupId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.children).toEqual(children);
+        expect(mockRequestOptions.qs.month).toEqual(month);
+        expect(mockRequestOptions.qs.billing_unit_id).toEqual(billingUnitId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getResourceUsageReportTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseUsageReportsService.enableRetries();
+        __getResourceUsageReportTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseUsageReportsService.disableRetries();
+        __getResourceUsageReportTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getResourceUsageReportParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        enterpriseUsageReportsService.getResourceUsageReport(params);
+        enterpriseUsageReportsService.getResourceUsageReport(getResourceUsageReportParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -165,6 +202,66 @@ describe('EnterpriseUsageReportsV1', () => {
         // invoke the method with no parameters
         enterpriseUsageReportsService.getResourceUsageReport({});
         checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+
+    describe('GetResourceUsageReportPager tests', () => {
+      const serviceUrl = enterpriseUsageReportsServiceOptions.url;
+      const path = '/v1/resource-usage-reports';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"reports":[{"entity_id":"de129b787b86403db7d3a14be2ae5f76","entity_type":"enterprise","entity_crn":"crn:v1:bluemix:public:enterprise::a/e9a57260546c4b4aa9ebfa316a82e56e::enterprise:de129b787b86403db7d3a14be2ae5f76","entity_name":"Platform-Services","billing_unit_id":"65719a07280a4022a9efa2f6ff4c3369","billing_unit_crn":"crn:v1:bluemix:public:billing::a/3f99f8accbc848ea96f3c61a0ae22c44::billing-unit:65719a07280a4022a9efa2f6ff4c3369","billing_unit_name":"Operations","country_code":"USA","currency_code":"USD","month":"2017-08","billable_cost":13,"non_billable_cost":17,"billable_rated_cost":19,"non_billable_rated_cost":23,"resources":[{"resource_id":"resource_id","billable_cost":13,"billable_rated_cost":19,"non_billable_cost":17,"non_billable_rated_cost":23,"plans":[{"plan_id":"plan_id","pricing_region":"pricing_region","pricing_plan_id":"pricing_plan_id","billable":true,"cost":4,"rated_cost":10,"usage":[{"metric":"UP-TIME","unit":"HOURS","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130,"price":[{"anyKey":"anyValue"}]}]}]}]}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"reports":[{"entity_id":"de129b787b86403db7d3a14be2ae5f76","entity_type":"enterprise","entity_crn":"crn:v1:bluemix:public:enterprise::a/e9a57260546c4b4aa9ebfa316a82e56e::enterprise:de129b787b86403db7d3a14be2ae5f76","entity_name":"Platform-Services","billing_unit_id":"65719a07280a4022a9efa2f6ff4c3369","billing_unit_crn":"crn:v1:bluemix:public:billing::a/3f99f8accbc848ea96f3c61a0ae22c44::billing-unit:65719a07280a4022a9efa2f6ff4c3369","billing_unit_name":"Operations","country_code":"USA","currency_code":"USD","month":"2017-08","billable_cost":13,"non_billable_cost":17,"billable_rated_cost":19,"non_billable_rated_cost":23,"resources":[{"resource_id":"resource_id","billable_cost":13,"billable_rated_cost":19,"non_billable_cost":17,"non_billable_rated_cost":23,"plans":[{"plan_id":"plan_id","pricing_region":"pricing_region","pricing_plan_id":"pricing_plan_id","billable":true,"cost":4,"rated_cost":10,"usage":[{"metric":"UP-TIME","unit":"HOURS","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130,"price":[{"anyKey":"anyValue"}]}]}]}]}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          enterpriseId: 'abc12340d4bf4e36b0423d209b286f24',
+          accountGroupId: 'def456a237b94b9a9238ef024e204c9f',
+          accountId: '987abcba31834216b8c726a7dd9eb8d6',
+          children: true,
+          month: '2019-06',
+          billingUnitId: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new EnterpriseUsageReportsV1.GetResourceUsageReportPager(enterpriseUsageReportsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          enterpriseId: 'abc12340d4bf4e36b0423d209b286f24',
+          accountGroupId: 'def456a237b94b9a9238ef024e204c9f',
+          accountId: '987abcba31834216b8c726a7dd9eb8d6',
+          children: true,
+          month: '2019-06',
+          billingUnitId: 'testString',
+          limit: 10,
+        };
+        const pager = new EnterpriseUsageReportsV1.GetResourceUsageReportPager(enterpriseUsageReportsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
