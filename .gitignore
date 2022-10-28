@@ -8,7 +8,6 @@ lib/*.js
 # service-name/*.js // UNCOMMENT AND ADD YOUR OWN SERVICE FILES
 case-management/*.js
 catalog-management/*.js
-configuration-governance/*.js
 context-based-restrictions/*.js
 enterprise-billing-units/*.js
 enterprise-management/*.js
