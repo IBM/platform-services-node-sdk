@@ -1,3 +1,10 @@
+# [0.27.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.26.3...v0.27.0) (2022-10-28)
+
+
+### Features
+
+* remove scc-related services from project ([#172](https://github.com/IBM/platform-services-node-sdk/issues/172)) ([cb766dd](https://github.com/IBM/platform-services-node-sdk/commit/cb766dd644828c46756c54aad6fe5ec9b22e9209))
+
 ## [0.26.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.26.2...v0.26.3) (2022-10-26)
 
 
