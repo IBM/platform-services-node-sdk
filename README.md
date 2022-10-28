@@ -72,7 +72,6 @@ Service Name | Import Path
 --- | --- 
 [Case Management](https://cloud.ibm.com/apidocs/case-management?code=node) | @ibm-cloud/platform-services/case-management/v1
 [Catalog Management](https://cloud.ibm.com/apidocs/resource-catalog/private-catalog?code=node) | @ibm-cloud/platform-services/catalog-management/v1
-[Configuration Governance](https://cloud.ibm.com/apidocs/security-compliance/config?code=node) | @ibm-cloud/platform-services/configuration-governance/v1
 [Context Based Restrictions](https://cloud.ibm.com/apidocs/context-based-restrictions?code=node) | @ibm-cloud/platform-services/context-based-restrictions/v1
 [Enterprise Billing Units](https://cloud.ibm.com/apidocs/enterprise-apis/billing-unit?code=node) | @ibm-cloud/platform-services/enterprise-billing-units/v1
 [Enterprise Management](https://cloud.ibm.com/apidocs/enterprise-apis/enterprise?code=node) | @ibm-cloud/platform-services/enterprise-management/v1
@@ -85,12 +84,19 @@ Service Name | Import Path
 [IAM Policy Management](https://cloud.ibm.com/apidocs/iam-policy-management?code=node) | @ibm-cloud/platform-services/iam-policy-management/v1
 [IBM Cloud Shell](https://cloud.ibm.com/apidocs/cloudshell?code=node) | @ibm-cloud/platform-services/ibm-cloud-shell/v1
 [Open Service Broker](https://cloud.ibm.com/apidocs/resource-controller/ibm-cloud-osb-api?code=node) | @ibm-cloud/platform-services/open-service-broker/v1
-[Posture Management](https://cloud.ibm.com/apidocs/security-compliance/posture?code=node) | @ibm-cloud/platform-services/posture-management/v1
 [Resource Controller](https://cloud.ibm.com/apidocs/resource-controller/resource-controller?code=node) | @ibm-cloud/platform-services/resource-controller/v2
 [Resource Manager](https://cloud.ibm.com/apidocs/resource-controller/resource-manager?code=node) | @ibm-cloud/platform-services/resource-manager/v2
 [Usage Metering](https://cloud.ibm.com/apidocs/usage-metering?code=node) | @ibm-cloud/platform-services/usage-metering/v4
 [Usage Reports](https://cloud.ibm.com/apidocs/metering-reporting?code=node) | @ibm-cloud/platform-services/usage-reports/v4
 [User Management](https://cloud.ibm.com/apidocs/user-management?code=node) | @ibm-cloud/platform-services/user-management/v1
+
+The following services have been relocated to a different SDK project.
+Please consult the documentation for each service to determine the new location:
+
+Service Name | Import Path
+--- | --- 
+[Configuration Governance](https://cloud.ibm.com/apidocs/security-compliance/config?code=node) | @ibm-cloud/platform-services/configuration-governance/v1
+[Posture Management](https://cloud.ibm.com/apidocs/security-compliance/posture?code=node) | @ibm-cloud/platform-services/posture-management/v1
 
 ## Prerequisites
 * You need an [IBM Cloud][ibm-cloud-onboarding] account.
