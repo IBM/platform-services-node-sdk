@@ -20,6 +20,9 @@ const core = require('ibm-cloud-sdk-core');
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const IamAccessGroupsV2 = require('../../dist/iam-access-groups/v2');
+const nock = require('nock');
+
+/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -36,20 +39,37 @@ const iamAccessGroupsServiceOptions = {
 
 const iamAccessGroupsService = new IamAccessGroupsV2(iamAccessGroupsServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(iamAccessGroupsService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(iamAccessGroupsService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('IamAccessGroupsV2', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = IamAccessGroupsV2.newInstance();
@@ -77,6 +97,7 @@ describe('IamAccessGroupsV2', () => {
       expect(testInstance).toBeInstanceOf(IamAccessGroupsV2);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -99,6 +120,7 @@ describe('IamAccessGroupsV2', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(IamAccessGroupsV2.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('createAccessGroup', () => {
     describe('positive tests', () => {
       function __createAccessGroupTest() {
@@ -108,10 +130,10 @@ describe('IamAccessGroupsV2', () => {
         const description = 'Group for managers';
         const transactionId = 'testString';
         const createAccessGroupParams = {
-          accountId: accountId,
-          name: name,
-          description: description,
-          transactionId: transactionId,
+          accountId,
+          name,
+          description,
+          transactionId,
         };
 
         const createAccessGroupResult = iamAccessGroupsService.createAccessGroup(createAccessGroupParams);
@@ -193,6 +215,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('listAccessGroups', () => {
     describe('positive tests', () => {
       function __listAccessGroupsTest() {
@@ -201,21 +224,21 @@ describe('IamAccessGroupsV2', () => {
         const transactionId = 'testString';
         const iamId = 'testString';
         const membershipType = 'static';
-        const limit = 38;
+        const limit = 100;
         const offset = 38;
         const sort = 'name';
         const showFederated = false;
         const hidePublicAccess = false;
         const listAccessGroupsParams = {
-          accountId: accountId,
-          transactionId: transactionId,
-          iamId: iamId,
-          membershipType: membershipType,
-          limit: limit,
-          offset: offset,
-          sort: sort,
-          showFederated: showFederated,
-          hidePublicAccess: hidePublicAccess,
+          accountId,
+          transactionId,
+          iamId,
+          membershipType,
+          limit,
+          offset,
+          sort,
+          showFederated,
+          hidePublicAccess,
         };
 
         const listAccessGroupsResult = iamAccessGroupsService.listAccessGroups(listAccessGroupsParams);
@@ -299,7 +322,70 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('AccessGroupsPager tests', () => {
+      const serviceUrl = iamAccessGroupsServiceOptions.url;
+      const path = '/v2/groups';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"limit":1,"groups":[{"id":"id","name":"name","description":"description","account_id":"account_id","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","href":"href","is_federated":true}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"groups":[{"id":"id","name":"name","description":"description","account_id":"account_id","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","href":"href","is_federated":true}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          transactionId: 'testString',
+          iamId: 'testString',
+          membershipType: 'static',
+          limit: 10,
+          sort: 'name',
+          showFederated: false,
+          hidePublicAccess: false,
+        };
+        const allResults = [];
+        const pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          transactionId: 'testString',
+          iamId: 'testString',
+          membershipType: 'static',
+          limit: 10,
+          sort: 'name',
+          showFederated: false,
+          hidePublicAccess: false,
+        };
+        const pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('getAccessGroup', () => {
     describe('positive tests', () => {
       function __getAccessGroupTest() {
@@ -308,9 +394,9 @@ describe('IamAccessGroupsV2', () => {
         const transactionId = 'testString';
         const showFederated = false;
         const getAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          transactionId: transactionId,
-          showFederated: showFederated,
+          accessGroupId,
+          transactionId,
+          showFederated,
         };
 
         const getAccessGroupResult = iamAccessGroupsService.getAccessGroup(getAccessGroupParams);
@@ -389,6 +475,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('updateAccessGroup', () => {
     describe('positive tests', () => {
       function __updateAccessGroupTest() {
@@ -399,11 +486,11 @@ describe('IamAccessGroupsV2', () => {
         const description = 'Group for awesome managers.';
         const transactionId = 'testString';
         const updateAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          ifMatch: ifMatch,
-          name: name,
-          description: description,
-          transactionId: transactionId,
+          accessGroupId,
+          ifMatch,
+          name,
+          description,
+          transactionId,
         };
 
         const updateAccessGroupResult = iamAccessGroupsService.updateAccessGroup(updateAccessGroupParams);
@@ -486,6 +573,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('deleteAccessGroup', () => {
     describe('positive tests', () => {
       function __deleteAccessGroupTest() {
@@ -494,9 +582,9 @@ describe('IamAccessGroupsV2', () => {
         const transactionId = 'testString';
         const force = false;
         const deleteAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          transactionId: transactionId,
-          force: force,
+          accessGroupId,
+          transactionId,
+          force,
         };
 
         const deleteAccessGroupResult = iamAccessGroupsService.deleteAccessGroup(deleteAccessGroupParams);
@@ -575,6 +663,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('isMemberOfAccessGroup', () => {
     describe('positive tests', () => {
       function __isMemberOfAccessGroupTest() {
@@ -583,9 +672,9 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const transactionId = 'testString';
         const isMemberOfAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          iamId: iamId,
-          transactionId: transactionId,
+          accessGroupId,
+          iamId,
+          transactionId,
         };
 
         const isMemberOfAccessGroupResult = iamAccessGroupsService.isMemberOfAccessGroup(isMemberOfAccessGroupParams);
@@ -666,6 +755,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('addMembersToAccessGroup', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -682,9 +772,9 @@ describe('IamAccessGroupsV2', () => {
         const members = [addGroupMembersRequestMembersItemModel];
         const transactionId = 'testString';
         const addMembersToAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          members: members,
-          transactionId: transactionId,
+          accessGroupId,
+          members,
+          transactionId,
         };
 
         const addMembersToAccessGroupResult = iamAccessGroupsService.addMembersToAccessGroup(addMembersToAccessGroupParams);
@@ -763,6 +853,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('listAccessGroupMembers', () => {
     describe('positive tests', () => {
       function __listAccessGroupMembersTest() {
@@ -770,20 +861,20 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const membershipType = 'static';
-        const limit = 38;
+        const limit = 100;
         const offset = 38;
         const type = 'testString';
         const verbose = false;
         const sort = 'testString';
         const listAccessGroupMembersParams = {
-          accessGroupId: accessGroupId,
-          transactionId: transactionId,
-          membershipType: membershipType,
-          limit: limit,
-          offset: offset,
-          type: type,
-          verbose: verbose,
-          sort: sort,
+          accessGroupId,
+          transactionId,
+          membershipType,
+          limit,
+          offset,
+          type,
+          verbose,
+          sort,
         };
 
         const listAccessGroupMembersResult = iamAccessGroupsService.listAccessGroupMembers(listAccessGroupMembersParams);
@@ -866,7 +957,68 @@ describe('IamAccessGroupsV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('AccessGroupMembersPager tests', () => {
+      const serviceUrl = iamAccessGroupsServiceOptions.url;
+      const path = '/v2/groups/testString/members';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"members":[{"iam_id":"iam_id","type":"type","membership_type":"membership_type","name":"name","email":"email","description":"description","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id"}],"limit":1}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"members":[{"iam_id":"iam_id","type":"type","membership_type":"membership_type","name":"name","email":"email","description":"description","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id"}],"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accessGroupId: 'testString',
+          transactionId: 'testString',
+          membershipType: 'static',
+          limit: 10,
+          type: 'testString',
+          verbose: false,
+          sort: 'testString',
+        };
+        const allResults = [];
+        const pager = new IamAccessGroupsV2.AccessGroupMembersPager(iamAccessGroupsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accessGroupId: 'testString',
+          transactionId: 'testString',
+          membershipType: 'static',
+          limit: 10,
+          type: 'testString',
+          verbose: false,
+          sort: 'testString',
+        };
+        const pager = new IamAccessGroupsV2.AccessGroupMembersPager(iamAccessGroupsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('removeMemberFromAccessGroup', () => {
     describe('positive tests', () => {
       function __removeMemberFromAccessGroupTest() {
@@ -875,9 +1027,9 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const transactionId = 'testString';
         const removeMemberFromAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          iamId: iamId,
-          transactionId: transactionId,
+          accessGroupId,
+          iamId,
+          transactionId,
         };
 
         const removeMemberFromAccessGroupResult = iamAccessGroupsService.removeMemberFromAccessGroup(removeMemberFromAccessGroupParams);
@@ -958,6 +1110,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('removeMembersFromAccessGroup', () => {
     describe('positive tests', () => {
       function __removeMembersFromAccessGroupTest() {
@@ -966,9 +1119,9 @@ describe('IamAccessGroupsV2', () => {
         const members = ['IBMId-user1', 'iam-ServiceId-123', 'iam-Profile-123'];
         const transactionId = 'testString';
         const removeMembersFromAccessGroupParams = {
-          accessGroupId: accessGroupId,
-          members: members,
-          transactionId: transactionId,
+          accessGroupId,
+          members,
+          transactionId,
         };
 
         const removeMembersFromAccessGroupResult = iamAccessGroupsService.removeMembersFromAccessGroup(removeMembersFromAccessGroupParams);
@@ -1047,6 +1200,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('removeMemberFromAllAccessGroups', () => {
     describe('positive tests', () => {
       function __removeMemberFromAllAccessGroupsTest() {
@@ -1055,9 +1209,9 @@ describe('IamAccessGroupsV2', () => {
         const iamId = 'testString';
         const transactionId = 'testString';
         const removeMemberFromAllAccessGroupsParams = {
-          accountId: accountId,
-          iamId: iamId,
-          transactionId: transactionId,
+          accountId,
+          iamId,
+          transactionId,
         };
 
         const removeMemberFromAllAccessGroupsResult = iamAccessGroupsService.removeMemberFromAllAccessGroups(removeMemberFromAllAccessGroupsParams);
@@ -1138,6 +1292,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('addMemberToMultipleAccessGroups', () => {
     describe('positive tests', () => {
       function __addMemberToMultipleAccessGroupsTest() {
@@ -1148,11 +1303,11 @@ describe('IamAccessGroupsV2', () => {
         const groups = ['access-group-id-1'];
         const transactionId = 'testString';
         const addMemberToMultipleAccessGroupsParams = {
-          accountId: accountId,
-          iamId: iamId,
-          type: type,
-          groups: groups,
-          transactionId: transactionId,
+          accountId,
+          iamId,
+          type,
+          groups,
+          transactionId,
         };
 
         const addMemberToMultipleAccessGroupsResult = iamAccessGroupsService.addMemberToMultipleAccessGroups(addMemberToMultipleAccessGroupsParams);
@@ -1235,6 +1390,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('addAccessGroupRule', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1255,12 +1411,12 @@ describe('IamAccessGroupsV2', () => {
         const name = 'Manager group rule';
         const transactionId = 'testString';
         const addAccessGroupRuleParams = {
-          accessGroupId: accessGroupId,
-          expiration: expiration,
-          realmName: realmName,
-          conditions: conditions,
-          name: name,
-          transactionId: transactionId,
+          accessGroupId,
+          expiration,
+          realmName,
+          conditions,
+          name,
+          transactionId,
         };
 
         const addAccessGroupRuleResult = iamAccessGroupsService.addAccessGroupRule(addAccessGroupRuleParams);
@@ -1348,6 +1504,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('listAccessGroupRules', () => {
     describe('positive tests', () => {
       function __listAccessGroupRulesTest() {
@@ -1355,8 +1512,8 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const listAccessGroupRulesParams = {
-          accessGroupId: accessGroupId,
-          transactionId: transactionId,
+          accessGroupId,
+          transactionId,
         };
 
         const listAccessGroupRulesResult = iamAccessGroupsService.listAccessGroupRules(listAccessGroupRulesParams);
@@ -1434,6 +1591,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('getAccessGroupRule', () => {
     describe('positive tests', () => {
       function __getAccessGroupRuleTest() {
@@ -1442,9 +1600,9 @@ describe('IamAccessGroupsV2', () => {
         const ruleId = 'testString';
         const transactionId = 'testString';
         const getAccessGroupRuleParams = {
-          accessGroupId: accessGroupId,
-          ruleId: ruleId,
-          transactionId: transactionId,
+          accessGroupId,
+          ruleId,
+          transactionId,
         };
 
         const getAccessGroupRuleResult = iamAccessGroupsService.getAccessGroupRule(getAccessGroupRuleParams);
@@ -1525,6 +1683,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('replaceAccessGroupRule', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1547,14 +1706,14 @@ describe('IamAccessGroupsV2', () => {
         const name = 'Manager group rule';
         const transactionId = 'testString';
         const replaceAccessGroupRuleParams = {
-          accessGroupId: accessGroupId,
-          ruleId: ruleId,
-          ifMatch: ifMatch,
-          expiration: expiration,
-          realmName: realmName,
-          conditions: conditions,
-          name: name,
-          transactionId: transactionId,
+          accessGroupId,
+          ruleId,
+          ifMatch,
+          expiration,
+          realmName,
+          conditions,
+          name,
+          transactionId,
         };
 
         const replaceAccessGroupRuleResult = iamAccessGroupsService.replaceAccessGroupRule(replaceAccessGroupRuleParams);
@@ -1648,6 +1807,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('removeAccessGroupRule', () => {
     describe('positive tests', () => {
       function __removeAccessGroupRuleTest() {
@@ -1656,9 +1816,9 @@ describe('IamAccessGroupsV2', () => {
         const ruleId = 'testString';
         const transactionId = 'testString';
         const removeAccessGroupRuleParams = {
-          accessGroupId: accessGroupId,
-          ruleId: ruleId,
-          transactionId: transactionId,
+          accessGroupId,
+          ruleId,
+          transactionId,
         };
 
         const removeAccessGroupRuleResult = iamAccessGroupsService.removeAccessGroupRule(removeAccessGroupRuleParams);
@@ -1739,6 +1899,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('getAccountSettings', () => {
     describe('positive tests', () => {
       function __getAccountSettingsTest() {
@@ -1746,8 +1907,8 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const transactionId = 'testString';
         const getAccountSettingsParams = {
-          accountId: accountId,
-          transactionId: transactionId,
+          accountId,
+          transactionId,
         };
 
         const getAccountSettingsResult = iamAccessGroupsService.getAccountSettings(getAccountSettingsParams);
@@ -1825,6 +1986,7 @@ describe('IamAccessGroupsV2', () => {
       });
     });
   });
+
   describe('updateAccountSettings', () => {
     describe('positive tests', () => {
       function __updateAccountSettingsTest() {
@@ -1833,9 +1995,9 @@ describe('IamAccessGroupsV2', () => {
         const publicAccessEnabled = true;
         const transactionId = 'testString';
         const updateAccountSettingsParams = {
-          accountId: accountId,
-          publicAccessEnabled: publicAccessEnabled,
-          transactionId: transactionId,
+          accountId,
+          publicAccessEnabled,
+          transactionId,
         };
 
         const updateAccountSettingsResult = iamAccessGroupsService.updateAccountSettings(updateAccountSettingsParams);

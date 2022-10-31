@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,13 +155,12 @@ describe('IamAccessGroupsV2', () => {
     // end-update_access_group
   });
   test('listAccessGroups request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -172,9 +171,15 @@ describe('IamAccessGroupsV2', () => {
       accountId: testAccountId,
     };
 
+    const allResults = [];
     try {
-      const res = await iamAccessGroupsService.listAccessGroups(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -205,12 +210,12 @@ describe('IamAccessGroupsV2', () => {
     };
     var groupMember3 = {
       iam_id: profileId,
-      type : 'profile',
+      type: 'profile',
     }
-    
+
     const params = {
       accessGroupId: testGroupId,
-      members: [groupMember1, groupMember2,groupMember3],
+      members: [groupMember1, groupMember2, groupMember3],
     };
 
     try {
@@ -249,13 +254,12 @@ describe('IamAccessGroupsV2', () => {
     // end-is_member_of_access_group
   });
   test('listAccessGroupMembers request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -266,9 +270,15 @@ describe('IamAccessGroupsV2', () => {
       accessGroupId: testGroupId,
     };
 
+    const allResults = [];
     try {
-      const res = await iamAccessGroupsService.listAccessGroupMembers(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new IamAccessGroupsV2.AccessGroupMembersPager(iamAccessGroupsService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -433,7 +443,7 @@ describe('IamAccessGroupsV2', () => {
       accessGroupId: testGroupId,
       name: 'Manager group rule',
       expiration: 12,
-      realmName: 'https://idp.example.org/SAML2',
+      realmName: 'https://idp.example.org/SAML2a',
       conditions: [
         {
           claim: 'isManager',

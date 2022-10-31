@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,6 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
+/* eslint-disable no-console */
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const IamAccessGroupsV2 = require('../../dist/iam-access-groups/v2');
@@ -31,7 +32,7 @@ const describe = authHelper.prepareTests(configFile);
 describe('IamAccessGroupsV2_integration', () => {
   jest.setTimeout(timeout);
 
-  let service;
+  let iamAccessGroupsService;
   let config;
   let testAccountId;
   const testGroupName = 'SDK Test Group - Node';
@@ -47,12 +48,12 @@ describe('IamAccessGroupsV2_integration', () => {
 
   test('should successfully complete initialization', (done) => {
     // Initialize the service client.
-    service = IamAccessGroupsV2.newInstance();
+    iamAccessGroupsService = IamAccessGroupsV2.newInstance();
 
     // Grab our test-specific config properties.
     config = readExternalSources(IamAccessGroupsV2.DEFAULT_SERVICE_NAME);
 
-    expect(service).not.toBeNull();
+    expect(iamAccessGroupsService).not.toBeNull();
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
 
@@ -71,7 +72,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.createAccessGroup(params);
+      response = await iamAccessGroupsService.createAccessGroup(params);
     } catch (err) {
       console.warn(err);
     }
@@ -95,7 +96,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.getAccessGroup(params);
+      response = await iamAccessGroupsService.getAccessGroup(params);
     } catch (err) {
       console.warn(err);
     }
@@ -124,7 +125,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.updateAccessGroup(params);
+      response = await iamAccessGroupsService.updateAccessGroup(params);
     } catch (err) {
       console.warn(err);
     }
@@ -149,7 +150,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.listAccessGroups(params);
+      response = await iamAccessGroupsService.listAccessGroups(params);
     } catch (err) {
       console.warn(err);
     }
@@ -171,6 +172,30 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(foundTestGroup).toBeTruthy();
   });
 
+  test('listAccessGroups() via AccessGroupsPager', async () => {
+    const params = {
+      accountId: testAccountId,
+      hidePublicAccess: true,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
   test('Add members to an access group', async () => {
     expect(testGroupId).toBeDefined();
 
@@ -186,7 +211,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.addMembersToAccessGroup(params);
+      response = await iamAccessGroupsService.addMembersToAccessGroup(params);
     } catch (err) {
       console.warn(err);
     }
@@ -222,7 +247,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.addMemberToMultipleAccessGroups(params);
+      response = await iamAccessGroupsService.addMemberToMultipleAccessGroups(params);
     } catch (err) {
       console.warn(err);
     }
@@ -255,7 +280,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.isMemberOfAccessGroup(params);
+      response = await iamAccessGroupsService.isMemberOfAccessGroup(params);
     } catch (err) {
       console.warn(err);
     }
@@ -273,7 +298,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.listAccessGroupMembers(params);
+      response = await iamAccessGroupsService.listAccessGroupMembers(params);
     } catch (err) {
       console.warn(err);
     }
@@ -305,7 +330,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.removeMemberFromAccessGroup(params);
+      response = await iamAccessGroupsService.removeMemberFromAccessGroup(params);
     } catch (err) {
       console.warn(err);
     }
@@ -323,7 +348,7 @@ describe('IamAccessGroupsV2_integration', () => {
     };
 
     try {
-      await service.removeMemberFromAllAccessGroups(params);
+      await iamAccessGroupsService.removeMemberFromAllAccessGroups(params);
     } catch (err) {
       expect(err.status).toEqual(404);
       expect(err.message).toContain(testUserId);
@@ -339,7 +364,7 @@ describe('IamAccessGroupsV2_integration', () => {
     };
 
     try {
-      await service.removeMembersFromAccessGroup(params);
+      await iamAccessGroupsService.removeMembersFromAccessGroup(params);
     } catch (err) {
       expect(err.status).toEqual(404);
       expect(err.message).toContain(testGroupId);
@@ -366,7 +391,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.addAccessGroupRule(params);
+      response = await iamAccessGroupsService.addAccessGroupRule(params);
     } catch (err) {
       console.warn(err);
     }
@@ -393,7 +418,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.getAccessGroupRule(params);
+      response = await iamAccessGroupsService.getAccessGroupRule(params);
     } catch (err) {
       console.warn(err);
     }
@@ -418,7 +443,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.listAccessGroupRules(params);
+      response = await iamAccessGroupsService.listAccessGroupRules(params);
     } catch (err) {
       console.warn(err);
     }
@@ -463,7 +488,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.replaceAccessGroupRule(params);
+      response = await iamAccessGroupsService.replaceAccessGroupRule(params);
     } catch (err) {
       console.warn(err);
     }
@@ -488,7 +513,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.removeAccessGroupRule(params);
+      response = await iamAccessGroupsService.removeAccessGroupRule(params);
     } catch (err) {
       console.warn(err);
     }
@@ -504,7 +529,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.getAccountSettings(params);
+      response = await iamAccessGroupsService.getAccountSettings(params);
     } catch (err) {
       console.warn(err);
     }
@@ -526,7 +551,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.updateAccountSettings(params);
+      response = await iamAccessGroupsService.updateAccountSettings(params);
     } catch (err) {
       console.warn(err);
     }
@@ -548,7 +573,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
     let response;
     try {
-      response = await service.listAccessGroups(params);
+      response = await iamAccessGroupsService.listAccessGroups(params);
     } catch (err) {
       console.warn(err);
     }
@@ -575,7 +600,7 @@ describe('IamAccessGroupsV2_integration', () => {
 
           let response;
           try {
-            response = await service.deleteAccessGroup(params);
+            response = await iamAccessGroupsService.deleteAccessGroup(params);
           } catch (err) {
             console.warn(err);
           }

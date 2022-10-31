@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.46.1-a5569134-20220316-164819
+ * IBM OpenAPI SDK Code Generator Version: 3.60.0-13f6e1ba-20221019-164457
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -26,6 +29,7 @@ import {
   getAuthenticatorFromEnvironment,
   validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -422,11 +426,11 @@ class IamAccessGroupsV2 extends BaseService {
    * generated.
    * @param {boolean} [params.force] - If force is true, delete the group as well as its associated members and rules.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
    */
   public deleteAccessGroup(
     params: IamAccessGroupsV2.DeleteAccessGroupParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId'];
     const _validParams = ['accessGroupId', 'transactionId', 'force', 'headers'];
@@ -489,11 +493,11 @@ class IamAccessGroupsV2 extends BaseService {
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
    */
   public isMemberOfAccessGroup(
     params: IamAccessGroupsV2.IsMemberOfAccessGroupParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId', 'iamId'];
     const _validParams = ['accessGroupId', 'iamId', 'transactionId', 'headers'];
@@ -707,11 +711,11 @@ class IamAccessGroupsV2 extends BaseService {
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
    */
   public removeMemberFromAccessGroup(
     params: IamAccessGroupsV2.RemoveMemberFromAccessGroupParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId', 'iamId'];
     const _validParams = ['accessGroupId', 'iamId', 'transactionId', 'headers'];
@@ -899,7 +903,7 @@ class IamAccessGroupsV2 extends BaseService {
    * iam_id then account_id must match the account of the IAM ID. If a user IAM ID is specified in iam_id then then
    * account_id must match the account of the Authorization token.
    * @param {string} params.iamId - The IAM identifier.
-   * @param {string} [params.type] - The type of the member, must be either "user", "service" or "trusted profile".
+   * @param {string} [params.type] - The type of the member, must be either "user", "service" or "profile".
    * @param {string[]} [params.groups] - The ids of the access groups a given member is to be added to.
    * @param {string} [params.transactionId] - An optional transaction ID can be passed to your request, which can be
    * useful for tracking calls through multiple services by using one identifier. The header key must be set to
@@ -973,7 +977,7 @@ class IamAccessGroupsV2 extends BaseService {
    * conditions during login, the user will be dynamically added to the group. The duration of the user's access to the
    * group is determined by the `expiration` field. After access expires, the user will need to log in again to regain
    * access. Note that the condition's value field must be a stringified JSON value. [Consult this documentation for
-   * further explanation of dynamic rules.](/docs/iam/accessgroup_rules.html#rules).
+   * further explanation of dynamic rules.](/docs/account?topic=account-rules).
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accessGroupId - The access group identifier.
@@ -1273,11 +1277,11 @@ class IamAccessGroupsV2 extends BaseService {
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
    */
   public removeAccessGroupRule(
     params: IamAccessGroupsV2.RemoveAccessGroupRuleParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Empty>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId', 'ruleId'];
     const _validParams = ['accessGroupId', 'ruleId', 'transactionId', 'headers'];
@@ -1468,7 +1472,7 @@ namespace IamAccessGroupsV2 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1696,7 +1700,7 @@ namespace IamAccessGroupsV2 {
     accountId: string;
     /** The IAM identifier. */
     iamId: string;
-    /** The type of the member, must be either "user", "service" or "trusted profile". */
+    /** The type of the member, must be either "user", "service" or "profile". */
     type?: string;
     /** The ids of the access groups a given member is to be added to. */
     groups?: string[];
@@ -1850,7 +1854,7 @@ namespace IamAccessGroupsV2 {
   export interface AddGroupMembersRequestMembersItem {
     /** The IBMid, service ID or trusted profile ID of the member. */
     iam_id: string;
-    /** The type of the member, must be either "user", "service" or "trusted profile". */
+    /** The type of the member, must be either "user", "service" or "profile". */
     type: string;
   }
 
@@ -1864,7 +1868,7 @@ namespace IamAccessGroupsV2 {
   export interface AddGroupMembersResponseMembersItem {
     /** The IBMid or Service Id of the member. */
     iam_id?: string;
-    /** The member type - either `user` or `service`. */
+    /** The member type - either `user`, `service` or `profile`. */
     type?: string;
     /** The timestamp the membership was created at. */
     created_at?: string;
@@ -1968,18 +1972,16 @@ namespace IamAccessGroupsV2 {
     href?: string;
     /** This is set to true if rules exist for the group. */
     is_federated?: boolean;
-    /** Type of the membership. `static` or `dynamic`. */
-    membership_type?: string;
   }
 
   /** The members of a group. */
   export interface GroupMembersList {
     /** Limit on how many items can be returned. */
-    limit?: number;
+    limit: number;
     /** The offset of the first item returned in the result set. */
-    offset?: number;
+    offset: number;
     /** The total number of items that match the query. */
-    total_count?: number;
+    total_count: number;
     /** A link object. */
     first?: HrefStruct;
     /** A link object. */
@@ -1995,11 +1997,11 @@ namespace IamAccessGroupsV2 {
   /** The list of access groups returned as part of a response. */
   export interface GroupsList {
     /** Limit on how many items can be returned. */
-    limit?: number;
+    limit: number;
     /** The offset of the first item returned in the result set. */
-    offset?: number;
+    offset: number;
     /** The total number of items that match the query. */
-    total_count?: number;
+    total_count: number;
     /** A link object. */
     first?: HrefStruct;
     /** A link object. */
@@ -2080,6 +2082,172 @@ namespace IamAccessGroupsV2 {
   export interface RulesList {
     /** A list of rules. */
     rules?: Rule[];
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * AccessGroupsPager can be used to simplify the use of listAccessGroups().
+   */
+  export class AccessGroupsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamAccessGroupsV2;
+
+    protected params: IamAccessGroupsV2.ListAccessGroupsParams;
+
+    /**
+     * Construct a AccessGroupsPager object.
+     *
+     * @param {IamAccessGroupsV2}  client - The service client instance used to invoke listAccessGroups()
+     * @param {Object} params - The parameters to be passed to listAccessGroups()
+     * @constructor
+     * @returns {AccessGroupsPager}
+     */
+    constructor(client: IamAccessGroupsV2, params: IamAccessGroupsV2.ListAccessGroupsParams) {
+      if (params && params.offset) {
+        throw new Error(`the params.offset field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listAccessGroups().
+     * @returns {Promise<IamAccessGroupsV2.Group[]>}
+     */
+    public async getNext(): Promise<IamAccessGroupsV2.Group[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.offset = this.pageContext.next;
+      }
+      const response = await this.client.listAccessGroups(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'offset');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.groups;
+    }
+
+    /**
+     * Returns all results by invoking listAccessGroups() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamAccessGroupsV2.Group[]>}
+     */
+    public async getAll(): Promise<IamAccessGroupsV2.Group[]> {
+      const results: Group[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * AccessGroupMembersPager can be used to simplify the use of listAccessGroupMembers().
+   */
+  export class AccessGroupMembersPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamAccessGroupsV2;
+
+    protected params: IamAccessGroupsV2.ListAccessGroupMembersParams;
+
+    /**
+     * Construct a AccessGroupMembersPager object.
+     *
+     * @param {IamAccessGroupsV2}  client - The service client instance used to invoke listAccessGroupMembers()
+     * @param {Object} params - The parameters to be passed to listAccessGroupMembers()
+     * @constructor
+     * @returns {AccessGroupMembersPager}
+     */
+    constructor(client: IamAccessGroupsV2, params: IamAccessGroupsV2.ListAccessGroupMembersParams) {
+      if (params && params.offset) {
+        throw new Error(`the params.offset field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listAccessGroupMembers().
+     * @returns {Promise<IamAccessGroupsV2.ListGroupMembersResponseMember[]>}
+     */
+    public async getNext(): Promise<IamAccessGroupsV2.ListGroupMembersResponseMember[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.offset = this.pageContext.next;
+      }
+      const response = await this.client.listAccessGroupMembers(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'offset');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.members;
+    }
+
+    /**
+     * Returns all results by invoking listAccessGroupMembers() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamAccessGroupsV2.ListGroupMembersResponseMember[]>}
+     */
+    public async getAll(): Promise<IamAccessGroupsV2.ListGroupMembersResponseMember[]> {
+      const results: ListGroupMembersResponseMember[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
