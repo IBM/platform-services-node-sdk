@@ -1,3 +1,10 @@
+## [0.27.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.27.0...v0.27.1) (2022-10-31)
+
+
+### Bug Fixes
+
+* **IAM Access Groups:** regen service to get Pagers ([#171](https://github.com/IBM/platform-services-node-sdk/issues/171)) ([3530603](https://github.com/IBM/platform-services-node-sdk/commit/3530603669202797b0ead77c42304883bc96740f))
+
 # [0.27.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.26.3...v0.27.0) (2022-10-28)
 
 
