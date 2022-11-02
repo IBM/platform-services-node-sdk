@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,14 +75,14 @@ describe('ResourceControllerV2', () => {
   let accountId = config.accountId;
   let aliasTargetCRN = config.aliasTargetCrn;
   let bindingTargetCRN = config.bindingTargetCrn;
-  let resourceInstanceName = 'RcSdkInstance1Node';
-  let resourceInstanceUpdateName = 'RcSdkInstanceUpdate1Node';
-  let aliasName = 'RcSdkAlias1Node';
-  let aliasUpdateName = 'RcSdkAliasUpdate1Node';
-  let bindingName = 'RcSdkBinding1Node';
-  let bindingUpdateName = 'RcSdkBindingUpdate1Node';
-  let keyName = 'RcSdkKey1Node';
-  let keyUpdateName = 'RcSdkKeyUpdate1Node';
+  let resourceInstanceName = 'RcSdkInstance1NodeJS';
+  let resourceInstanceUpdateName = 'RcSdkInstanceUpdate1NodeJS';
+  let aliasName = 'RcSdkAlias1NodeJS';
+  let aliasUpdateName = 'RcSdkAliasUpdate1NodeJS';
+  let bindingName = 'RcSdkBinding1NodeJS';
+  let bindingUpdateName = 'RcSdkBindingUpdate1NodeJS';
+  let keyName = 'RcSdkKey1NodeJS';
+  let keyUpdateName = 'RcSdkKeyUpdate1NodeJS';
   let targetRegion = 'global';
 
   test('createResourceInstance request example', async () => {
@@ -127,6 +127,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(instanceGuid).toBeTruthy();
+
     originalLog('getResourceInstance() result:');
     // begin-get_resource_instance
 
@@ -144,15 +146,16 @@ describe('ResourceControllerV2', () => {
     // end-get_resource_instance
   });
   test('listResourceInstances request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(resourceInstanceName).toBeTruthy();
 
     originalLog('listResourceInstances() result:');
     // begin-list_resource_instances
@@ -161,9 +164,16 @@ describe('ResourceControllerV2', () => {
       name: resourceInstanceName,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceInstances(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceInstancesPager(
+        resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -180,6 +190,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(instanceGuid).toBeTruthy();
 
     originalLog('updateResourceInstance() result:');
     // begin-update_resource_instance
@@ -214,6 +226,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(instanceGuid).toBeTruthy();
+
     originalLog('createResourceAlias() result:');
     // begin-create_resource_alias
 
@@ -244,6 +258,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(aliasGuid).toBeTruthy();
+
     originalLog('getResourceAlias() result:');
     // begin-get_resource_alias
 
@@ -261,13 +277,12 @@ describe('ResourceControllerV2', () => {
     // end-get_resource_alias
   });
   test('listResourceAliases request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -278,9 +293,16 @@ describe('ResourceControllerV2', () => {
       name: aliasName,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceAliases(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceAliasesPager(
+        resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -297,6 +319,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(aliasGuid).toBeTruthy();
 
     originalLog('updateResourceAlias() result:');
     // begin-update_resource_alias
@@ -316,13 +340,12 @@ describe('ResourceControllerV2', () => {
     // end-update_resource_alias
   });
   test('listResourceAliasesForInstance request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -335,9 +358,16 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceAliasesForInstance(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceAliasesForInstancePager(
+        resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -354,6 +384,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(aliasGuid).toBeTruthy();
 
     originalLog('createResourceBinding() result:');
     // begin-create_resource_binding
@@ -390,6 +422,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(bindingGuid).toBeTruthy();
+
     originalLog('getResourceBinding() result:');
     // begin-get_resource_binding
 
@@ -407,13 +441,12 @@ describe('ResourceControllerV2', () => {
     // end-get_resource_binding
   });
   test('listResourceBindings request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -424,9 +457,16 @@ describe('ResourceControllerV2', () => {
       name: bindingName,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceBindings(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceBindingsPager(
+        resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -443,6 +483,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(bindingGuid).toBeTruthy();
 
     originalLog('updateResourceBinding() result:');
     // begin-update_resource_binding
@@ -462,13 +504,12 @@ describe('ResourceControllerV2', () => {
     // end-update_resource_binding
   });
   test('listResourceBindingsForAlias request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -481,9 +522,15 @@ describe('ResourceControllerV2', () => {
       id: aliasGuid,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceBindingsForAlias(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceBindingsForAliasPager(resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -500,6 +547,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(instanceGuid).toBeTruthy();
 
     originalLog('createResourceKey() result:');
     // begin-create_resource_key
@@ -535,6 +584,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(instanceKeyGuid).toBeTruthy();
+
     originalLog('getResourceKey() result:');
     // begin-get_resource_key
 
@@ -552,13 +603,12 @@ describe('ResourceControllerV2', () => {
     // end-get_resource_key
   });
   test('listResourceKeys request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -569,9 +619,15 @@ describe('ResourceControllerV2', () => {
       name: keyName,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceKeys(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceKeysPager(resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -588,6 +644,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(instanceKeyGuid).toBeTruthy();
 
     originalLog('updateResourceKey() result:');
     // begin-update_resource_key
@@ -607,13 +665,12 @@ describe('ResourceControllerV2', () => {
     // end-update_resource_key
   });
   test('listResourceKeysForInstance request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -626,9 +683,16 @@ describe('ResourceControllerV2', () => {
       id: instanceGuid,
     };
 
+    const allResults = [];
     try {
-      const res = await resourceControllerService.listResourceKeysForInstance(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new ResourceControllerV2.ResourceKeysForInstancePager(
+        resourceControllerService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -645,6 +709,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(bindingGuid).toBeTruthy();
 
     // begin-delete_resource_binding
 
@@ -671,6 +737,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(instanceKeyGuid).toBeTruthy();
+
     // begin-delete_resource_key
 
     const params = {
@@ -696,6 +764,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(aliasGuid).toBeTruthy();
+
     // begin-delete_resource_alias
 
     const params = {
@@ -720,6 +790,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(instanceGuid).toBeTruthy();
 
     originalLog('lockResourceInstance() result:');
     // begin-lock_resource_instance
@@ -748,6 +820,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(instanceGuid).toBeTruthy();
+
     originalLog('unlockResourceInstance() result:');
     // begin-unlock_resource_instance
 
@@ -775,6 +849,8 @@ describe('ResourceControllerV2', () => {
       expect(true).toBeFalsy();
     });
 
+    expect(instanceGuid).toBeTruthy();
+
     // begin-delete_resource_instance
 
     const params = {
@@ -789,7 +865,6 @@ describe('ResourceControllerV2', () => {
     }
 
     // end-delete_resource_instance
-    await new Promise(resolve => setTimeout(resolve, 20000));
   });
   test('listReclamations request example', async () => {
 
@@ -835,6 +910,8 @@ describe('ResourceControllerV2', () => {
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
+
+    expect(reclamationId).toBeTruthy();
 
     originalLog('runReclamationAction() result:');
     // begin-run_reclamation_action

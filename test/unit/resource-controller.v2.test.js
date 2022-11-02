@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const ResourceControllerV2 = require('../../dist/resource-controller/v2');
+const nock = require('nock');
+
+/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -30,27 +33,44 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const resourceControllerServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://resource-controller.cloud.ibm.com',
 };
 
-const resourceControllerService = new ResourceControllerV2(service);
+const resourceControllerService = new ResourceControllerV2(resourceControllerServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(resourceControllerService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(resourceControllerService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('ResourceControllerV2', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = ResourceControllerV2.newInstance();
@@ -78,6 +98,7 @@ describe('ResourceControllerV2', () => {
       expect(testInstance).toBeInstanceOf(ResourceControllerV2);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -100,9 +121,10 @@ describe('ResourceControllerV2', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(ResourceControllerV2.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('listResourceInstances', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceInstancesTest() {
         // Construct the params object for operation listResourceInstances
         const guid = 'testString';
         const name = 'testString';
@@ -114,24 +136,24 @@ describe('ResourceControllerV2', () => {
         const limit = 100;
         const start = 'testString';
         const state = 'active';
-        const updatedFrom = '2019-01-08T00:00:00.000Z';
-        const updatedTo = '2019-01-08T00:00:00.000Z';
-        const params = {
-          guid: guid,
-          name: name,
-          resourceGroupId: resourceGroupId,
-          resourceId: resourceId,
-          resourcePlanId: resourcePlanId,
-          type: type,
-          subType: subType,
-          limit: limit,
-          start: start,
-          state: state,
-          updatedFrom: updatedFrom,
-          updatedTo: updatedTo,
+        const updatedFrom = '2021-01-01';
+        const updatedTo = '2021-01-01';
+        const listResourceInstancesParams = {
+          guid,
+          name,
+          resourceGroupId,
+          resourceId,
+          resourcePlanId,
+          type,
+          subType,
+          limit,
+          start,
+          state,
+          updatedFrom,
+          updatedTo,
         };
 
-        const listResourceInstancesResult = resourceControllerService.listResourceInstances(params);
+        const listResourceInstancesResult = resourceControllerService.listResourceInstances(listResourceInstancesParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceInstancesResult);
@@ -139,38 +161,53 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['guid']).toEqual(guid);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['resource_group_id']).toEqual(resourceGroupId);
-        expect(options.qs['resource_id']).toEqual(resourceId);
-        expect(options.qs['resource_plan_id']).toEqual(resourcePlanId);
-        expect(options.qs['type']).toEqual(type);
-        expect(options.qs['sub_type']).toEqual(subType);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['state']).toEqual(state);
-        expect(options.qs['updated_from']).toEqual(updatedFrom);
-        expect(options.qs['updated_to']).toEqual(updatedTo);
+        expect(mockRequestOptions.qs.guid).toEqual(guid);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.resource_group_id).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.resource_id).toEqual(resourceId);
+        expect(mockRequestOptions.qs.resource_plan_id).toEqual(resourcePlanId);
+        expect(mockRequestOptions.qs.type).toEqual(type);
+        expect(mockRequestOptions.qs.sub_type).toEqual(subType);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.qs.updated_from).toEqual(updatedFrom);
+        expect(mockRequestOptions.qs.updated_to).toEqual(updatedTo);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceInstancesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceInstancesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceInstancesTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceInstancesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        resourceControllerService.listResourceInstances(params);
+        resourceControllerService.listResourceInstances(listResourceInstancesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -180,31 +217,100 @@ describe('ResourceControllerV2', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('ResourceInstancesPager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_instances';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","scheduled_reclaim_at":"2019-01-01T12:00:00.000Z","restored_at":"2019-01-01T12:00:00.000Z","restored_by":"restored_by","scheduled_reclaim_by":"scheduled_reclaim_by","name":"name","region_id":"region_id","account_id":"account_id","reseller_channel_id":"reseller_channel_id","resource_plan_id":"resource_plan_id","resource_group_id":"resource_group_id","resource_group_crn":"resource_group_crn","target_crn":"target_crn","parameters":{"anyKey":"anyValue"},"allow_cleanup":false,"crn":"crn","state":"active","type":"type","sub_type":"sub_type","resource_id":"resource_id","dashboard_url":"dashboard_url","last_operation":{"type":"type","state":"in progress","sub_type":"sub_type","async":false,"description":"description","reason_code":"reason_code","poll_after":10,"cancelable":true,"poll":true},"resource_aliases_url":"resource_aliases_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url","plan_history":[{"resource_plan_id":"resource_plan_id","start_date":"2019-01-01T12:00:00.000Z","requestor_id":"requestor_id"}],"migrated":true,"extensions":{"anyKey":"anyValue"},"controlled_by":"controlled_by","locked":true}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","scheduled_reclaim_at":"2019-01-01T12:00:00.000Z","restored_at":"2019-01-01T12:00:00.000Z","restored_by":"restored_by","scheduled_reclaim_by":"scheduled_reclaim_by","name":"name","region_id":"region_id","account_id":"account_id","reseller_channel_id":"reseller_channel_id","resource_plan_id":"resource_plan_id","resource_group_id":"resource_group_id","resource_group_crn":"resource_group_crn","target_crn":"target_crn","parameters":{"anyKey":"anyValue"},"allow_cleanup":false,"crn":"crn","state":"active","type":"type","sub_type":"sub_type","resource_id":"resource_id","dashboard_url":"dashboard_url","last_operation":{"type":"type","state":"in progress","sub_type":"sub_type","async":false,"description":"description","reason_code":"reason_code","poll_after":10,"cancelable":true,"poll":true},"resource_aliases_url":"resource_aliases_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url","plan_history":[{"resource_plan_id":"resource_plan_id","start_date":"2019-01-01T12:00:00.000Z","requestor_id":"requestor_id"}],"migrated":true,"extensions":{"anyKey":"anyValue"},"controlled_by":"controlled_by","locked":true}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceGroupId: 'testString',
+          resourceId: 'testString',
+          resourcePlanId: 'testString',
+          type: 'testString',
+          subType: 'testString',
+          limit: 10,
+          state: 'active',
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceInstancesPager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceGroupId: 'testString',
+          resourceId: 'testString',
+          resourcePlanId: 'testString',
+          type: 'testString',
+          subType: 'testString',
+          limit: 10,
+          state: 'active',
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const pager = new ResourceControllerV2.ResourceInstancesPager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createResourceInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createResourceInstanceTest() {
         // Construct the params object for operation createResourceInstance
-        const name = 'my-instance';
-        const target = 'bluemix-us-south';
-        const resourceGroup = '5c49eabc-f5e8-5881-a37e-2d100a33b3df';
-        const resourcePlanId = 'cloudant-standard';
+        const name = 'ExampleResourceInstance';
+        const target = 'global';
+        const resourceGroup = '13aa3ee48c3b44ddb64c05c79f7ab8ef';
+        const resourcePlanId = 'a10e4960-3685-11e9-b210-d663bd873d93';
         const tags = ['testString'];
-        const allowCleanup = true;
-        const parameters = { 'key1': 'testString' };
-        const entityLock = true;
-        const params = {
-          name: name,
-          target: target,
-          resourceGroup: resourceGroup,
-          resourcePlanId: resourcePlanId,
-          tags: tags,
-          allowCleanup: allowCleanup,
-          parameters: parameters,
-          entityLock: entityLock,
+        const allowCleanup = false;
+        const parameters = { foo: 'bar' };
+        const entityLock = false;
+        const createResourceInstanceParams = {
+          name,
+          target,
+          resourceGroup,
+          resourcePlanId,
+          tags,
+          allowCleanup,
+          parameters,
+          entityLock,
         };
 
-        const createResourceInstanceResult = resourceControllerService.createResourceInstance(params);
+        const createResourceInstanceResult = resourceControllerService.createResourceInstance(createResourceInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(createResourceInstanceResult);
@@ -212,31 +318,46 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Entity-Lock', entityLock);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.body['resource_plan_id']).toEqual(resourcePlanId);
-        expect(options.body['tags']).toEqual(tags);
-        expect(options.body['allow_cleanup']).toEqual(allowCleanup);
-        expect(options.body['parameters']).toEqual(parameters);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.resource_plan_id).toEqual(resourcePlanId);
+        expect(mockRequestOptions.body.tags).toEqual(tags);
+        expect(mockRequestOptions.body.allow_cleanup).toEqual(allowCleanup);
+        expect(mockRequestOptions.body.parameters).toEqual(parameters);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __createResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __createResourceInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const name = 'my-instance';
-        const target = 'bluemix-us-south';
-        const resourceGroup = '5c49eabc-f5e8-5881-a37e-2d100a33b3df';
-        const resourcePlanId = 'cloudant-standard';
+        const name = 'ExampleResourceInstance';
+        const target = 'global';
+        const resourceGroup = '13aa3ee48c3b44ddb64c05c79f7ab8ef';
+        const resourcePlanId = 'a10e4960-3685-11e9-b210-d663bd873d93';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createResourceInstanceParams = {
           name,
           target,
           resourceGroup,
@@ -247,7 +368,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.createResourceInstance(params);
+        resourceControllerService.createResourceInstance(createResourceInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -264,27 +385,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createResourceInstancePromise = resourceControllerService.createResourceInstance();
-        expectToBePromise(createResourceInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.createResourceInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        createResourceInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getResourceInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getResourceInstanceTest() {
         // Construct the params object for operation getResourceInstance
         const id = 'testString';
-        const params = {
-          id: id,
+        const getResourceInstanceParams = {
+          id,
         };
 
-        const getResourceInstanceResult = resourceControllerService.getResourceInstance(params);
+        const getResourceInstanceResult = resourceControllerService.getResourceInstance(getResourceInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(getResourceInstanceResult);
@@ -292,13 +415,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __getResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __getResourceInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -306,7 +444,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getResourceInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -314,7 +452,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.getResourceInstance(params);
+        resourceControllerService.getResourceInstance(getResourceInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -331,29 +469,31 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getResourceInstancePromise = resourceControllerService.getResourceInstance();
-        expectToBePromise(getResourceInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.getResourceInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        getResourceInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteResourceInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteResourceInstanceTest() {
         // Construct the params object for operation deleteResourceInstance
         const id = 'testString';
-        const recursive = true;
-        const params = {
-          id: id,
-          recursive: recursive,
+        const recursive = false;
+        const deleteResourceInstanceParams = {
+          id,
+          recursive,
         };
 
-        const deleteResourceInstanceResult = resourceControllerService.deleteResourceInstance(params);
+        const deleteResourceInstanceResult = resourceControllerService.deleteResourceInstance(deleteResourceInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteResourceInstanceResult);
@@ -361,14 +501,29 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['recursive']).toEqual(recursive);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.recursive).toEqual(recursive);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __deleteResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __deleteResourceInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -376,7 +531,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteResourceInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -384,7 +539,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.deleteResourceInstance(params);
+        resourceControllerService.deleteResourceInstance(deleteResourceInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -401,35 +556,37 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteResourceInstancePromise = resourceControllerService.deleteResourceInstance();
-        expectToBePromise(deleteResourceInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.deleteResourceInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteResourceInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateResourceInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateResourceInstanceTest() {
         // Construct the params object for operation updateResourceInstance
         const id = 'testString';
-        const name = 'my-new-instance-name';
-        const parameters = { 'key1': 'testString' };
-        const resourcePlanId = 'a8dff6d3-d287-4668-a81d-c87c55c2656d';
+        const name = 'UpdatedExampleResourceInstance';
+        const parameters = { foo: 'bar' };
+        const resourcePlanId = 'testString';
         const allowCleanup = true;
-        const params = {
-          id: id,
-          name: name,
-          parameters: parameters,
-          resourcePlanId: resourcePlanId,
-          allowCleanup: allowCleanup,
+        const updateResourceInstanceParams = {
+          id,
+          name,
+          parameters,
+          resourcePlanId,
+          allowCleanup,
         };
 
-        const updateResourceInstanceResult = resourceControllerService.updateResourceInstance(params);
+        const updateResourceInstanceResult = resourceControllerService.updateResourceInstance(updateResourceInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(updateResourceInstanceResult);
@@ -437,17 +594,32 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['parameters']).toEqual(parameters);
-        expect(options.body['resource_plan_id']).toEqual(resourcePlanId);
-        expect(options.body['allow_cleanup']).toEqual(allowCleanup);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.parameters).toEqual(parameters);
+        expect(mockRequestOptions.body.resource_plan_id).toEqual(resourcePlanId);
+        expect(mockRequestOptions.body.allow_cleanup).toEqual(allowCleanup);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __updateResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __updateResourceInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -455,7 +627,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateResourceInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -463,7 +635,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.updateResourceInstance(params);
+        resourceControllerService.updateResourceInstance(updateResourceInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -480,31 +652,33 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateResourceInstancePromise = resourceControllerService.updateResourceInstance();
-        expectToBePromise(updateResourceInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.updateResourceInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        updateResourceInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listResourceAliasesForInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceAliasesForInstanceTest() {
         // Construct the params object for operation listResourceAliasesForInstance
         const id = 'testString';
         const limit = 100;
         const start = 'testString';
-        const params = {
-          id: id,
-          limit: limit,
-          start: start,
+        const listResourceAliasesForInstanceParams = {
+          id,
+          limit,
+          start,
         };
 
-        const listResourceAliasesForInstanceResult = resourceControllerService.listResourceAliasesForInstance(params);
+        const listResourceAliasesForInstanceResult = resourceControllerService.listResourceAliasesForInstance(listResourceAliasesForInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceAliasesForInstanceResult);
@@ -512,15 +686,30 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}/resource_aliases', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}/resource_aliases', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceAliasesForInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceAliasesForInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceAliasesForInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -528,7 +717,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceAliasesForInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -536,7 +725,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.listResourceAliasesForInstance(params);
+        resourceControllerService.listResourceAliasesForInstance(listResourceAliasesForInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -553,31 +742,83 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listResourceAliasesForInstancePromise = resourceControllerService.listResourceAliasesForInstance();
-        expectToBePromise(listResourceAliasesForInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.listResourceAliasesForInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        listResourceAliasesForInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('ResourceAliasesForInstancePager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_instances/testString/resource_aliases';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","name":"name","resource_instance_id":"resource_instance_id","target_crn":"target_crn","account_id":"account_id","resource_id":"resource_id","resource_group_id":"resource_group_id","crn":"crn","region_instance_id":"region_instance_id","region_instance_crn":"region_instance_crn","state":"state","migrated":true,"resource_instance_url":"resource_instance_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","name":"name","resource_instance_id":"resource_instance_id","target_crn":"target_crn","account_id":"account_id","resource_id":"resource_id","resource_group_id":"resource_group_id","crn":"crn","region_instance_id":"region_instance_id","region_instance_crn":"region_instance_crn","state":"state","migrated":true,"resource_instance_url":"resource_instance_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          id: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceAliasesForInstancePager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          id: 'testString',
+          limit: 10,
+        };
+        const pager = new ResourceControllerV2.ResourceAliasesForInstancePager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
+
   describe('listResourceKeysForInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceKeysForInstanceTest() {
         // Construct the params object for operation listResourceKeysForInstance
         const id = 'testString';
         const limit = 100;
         const start = 'testString';
-        const params = {
-          id: id,
-          limit: limit,
-          start: start,
+        const listResourceKeysForInstanceParams = {
+          id,
+          limit,
+          start,
         };
 
-        const listResourceKeysForInstanceResult = resourceControllerService.listResourceKeysForInstance(params);
+        const listResourceKeysForInstanceResult = resourceControllerService.listResourceKeysForInstance(listResourceKeysForInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceKeysForInstanceResult);
@@ -585,15 +826,30 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}/resource_keys', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}/resource_keys', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceKeysForInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceKeysForInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceKeysForInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -601,7 +857,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceKeysForInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -609,7 +865,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.listResourceKeysForInstance(params);
+        resourceControllerService.listResourceKeysForInstance(listResourceKeysForInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -626,27 +882,79 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listResourceKeysForInstancePromise = resourceControllerService.listResourceKeysForInstance();
-        expectToBePromise(listResourceKeysForInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.listResourceKeysForInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        listResourceKeysForInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('ResourceKeysForInstancePager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_instances/testString/resource_keys';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          id: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceKeysForInstancePager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          id: 'testString',
+          limit: 10,
+        };
+        const pager = new ResourceControllerV2.ResourceKeysForInstancePager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
+
   describe('lockResourceInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __lockResourceInstanceTest() {
         // Construct the params object for operation lockResourceInstance
         const id = 'testString';
-        const params = {
-          id: id,
+        const lockResourceInstanceParams = {
+          id,
         };
 
-        const lockResourceInstanceResult = resourceControllerService.lockResourceInstance(params);
+        const lockResourceInstanceResult = resourceControllerService.lockResourceInstance(lockResourceInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(lockResourceInstanceResult);
@@ -654,13 +962,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}/lock', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}/lock', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __lockResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __lockResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __lockResourceInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -668,7 +991,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const lockResourceInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -676,7 +999,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.lockResourceInstance(params);
+        resourceControllerService.lockResourceInstance(lockResourceInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -693,27 +1016,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const lockResourceInstancePromise = resourceControllerService.lockResourceInstance();
-        expectToBePromise(lockResourceInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.lockResourceInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        lockResourceInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('unlockResourceInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __unlockResourceInstanceTest() {
         // Construct the params object for operation unlockResourceInstance
         const id = 'testString';
-        const params = {
-          id: id,
+        const unlockResourceInstanceParams = {
+          id,
         };
 
-        const unlockResourceInstanceResult = resourceControllerService.unlockResourceInstance(params);
+        const unlockResourceInstanceResult = resourceControllerService.unlockResourceInstance(unlockResourceInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(unlockResourceInstanceResult);
@@ -721,13 +1046,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_instances/{id}/lock', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}/lock', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __unlockResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __unlockResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __unlockResourceInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -735,7 +1075,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const unlockResourceInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -743,7 +1083,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.unlockResourceInstance(params);
+        resourceControllerService.unlockResourceInstance(unlockResourceInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -760,20 +1100,106 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const unlockResourceInstancePromise = resourceControllerService.unlockResourceInstance();
-        expectToBePromise(unlockResourceInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.unlockResourceInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        unlockResourceInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
+  describe('cancelLastopResourceInstance', () => {
+    describe('positive tests', () => {
+      function __cancelLastopResourceInstanceTest() {
+        // Construct the params object for operation cancelLastopResourceInstance
+        const id = 'testString';
+        const cancelLastopResourceInstanceParams = {
+          id,
+        };
+
+        const cancelLastopResourceInstanceResult = resourceControllerService.cancelLastopResourceInstance(cancelLastopResourceInstanceParams);
+
+        // all methods should return a Promise
+        expectToBePromise(cancelLastopResourceInstanceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_instances/{id}/last_operation', 'DELETE');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __cancelLastopResourceInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __cancelLastopResourceInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __cancelLastopResourceInstanceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const cancelLastopResourceInstanceParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        resourceControllerService.cancelLastopResourceInstance(cancelLastopResourceInstanceParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await resourceControllerService.cancelLastopResourceInstance({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.cancelLastopResourceInstance();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('listResourceKeys', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceKeysTest() {
         // Construct the params object for operation listResourceKeys
         const guid = 'testString';
         const name = 'testString';
@@ -781,20 +1207,20 @@ describe('ResourceControllerV2', () => {
         const resourceId = 'testString';
         const limit = 100;
         const start = 'testString';
-        const updatedFrom = '2019-01-08T00:00:00.000Z';
-        const updatedTo = '2019-01-08T00:00:00.000Z';
-        const params = {
-          guid: guid,
-          name: name,
-          resourceGroupId: resourceGroupId,
-          resourceId: resourceId,
-          limit: limit,
-          start: start,
-          updatedFrom: updatedFrom,
-          updatedTo: updatedTo,
+        const updatedFrom = '2021-01-01';
+        const updatedTo = '2021-01-01';
+        const listResourceKeysParams = {
+          guid,
+          name,
+          resourceGroupId,
+          resourceId,
+          limit,
+          start,
+          updatedFrom,
+          updatedTo,
         };
 
-        const listResourceKeysResult = resourceControllerService.listResourceKeys(params);
+        const listResourceKeysResult = resourceControllerService.listResourceKeys(listResourceKeysParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceKeysResult);
@@ -802,34 +1228,49 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_keys', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_keys', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['guid']).toEqual(guid);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['resource_group_id']).toEqual(resourceGroupId);
-        expect(options.qs['resource_id']).toEqual(resourceId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['updated_from']).toEqual(updatedFrom);
-        expect(options.qs['updated_to']).toEqual(updatedTo);
+        expect(mockRequestOptions.qs.guid).toEqual(guid);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.resource_group_id).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.resource_id).toEqual(resourceId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.updated_from).toEqual(updatedFrom);
+        expect(mockRequestOptions.qs.updated_to).toEqual(updatedTo);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceKeysTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceKeysTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceKeysTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceKeysParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        resourceControllerService.listResourceKeys(params);
+        resourceControllerService.listResourceKeys(listResourceKeysParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -839,7 +1280,68 @@ describe('ResourceControllerV2', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('ResourceKeysPager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_keys';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceGroupId: 'testString',
+          resourceId: 'testString',
+          limit: 10,
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceKeysPager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceGroupId: 'testString',
+          resourceId: 'testString',
+          limit: 10,
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const pager = new ResourceControllerV2.ResourceKeysPager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createResourceKey', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -847,23 +1349,23 @@ describe('ResourceControllerV2', () => {
       // ResourceKeyPostParameters
       const resourceKeyPostParametersModel = {
         serviceid_crn: 'crn:v1:bluemix:public:iam-identity::a/9fceaa56d1ab84893af6b9eec5ab81bb::serviceid:ServiceId-fe4c29b5-db13-410a-bacc-b5779a03d393',
-        foo: 'testString',
+        exampleParameter: 'exampleValue',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createResourceKeyTest() {
         // Construct the params object for operation createResourceKey
-        const name = 'my-key';
-        const source = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
+        const name = 'ExampleResourceKey';
+        const source = '381fd51a-f251-4f95-aff4-2b03fa8caa63';
         const parameters = resourceKeyPostParametersModel;
         const role = 'Writer';
-        const params = {
-          name: name,
-          source: source,
-          parameters: parameters,
-          role: role,
+        const createResourceKeyParams = {
+          name,
+          source,
+          parameters,
+          role,
         };
 
-        const createResourceKeyResult = resourceControllerService.createResourceKey(params);
+        const createResourceKeyResult = resourceControllerService.createResourceKey(createResourceKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(createResourceKeyResult);
@@ -871,25 +1373,40 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_keys', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_keys', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['source']).toEqual(source);
-        expect(options.body['parameters']).toEqual(parameters);
-        expect(options.body['role']).toEqual(role);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.source).toEqual(source);
+        expect(mockRequestOptions.body.parameters).toEqual(parameters);
+        expect(mockRequestOptions.body.role).toEqual(role);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createResourceKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __createResourceKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __createResourceKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const name = 'my-key';
-        const source = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
+        const name = 'ExampleResourceKey';
+        const source = '381fd51a-f251-4f95-aff4-2b03fa8caa63';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createResourceKeyParams = {
           name,
           source,
           headers: {
@@ -898,7 +1415,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.createResourceKey(params);
+        resourceControllerService.createResourceKey(createResourceKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -915,27 +1432,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createResourceKeyPromise = resourceControllerService.createResourceKey();
-        expectToBePromise(createResourceKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.createResourceKey();
+        } catch (e) {
+          err = e;
+        }
 
-        createResourceKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getResourceKey', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getResourceKeyTest() {
         // Construct the params object for operation getResourceKey
         const id = 'testString';
-        const params = {
-          id: id,
+        const getResourceKeyParams = {
+          id,
         };
 
-        const getResourceKeyResult = resourceControllerService.getResourceKey(params);
+        const getResourceKeyResult = resourceControllerService.getResourceKey(getResourceKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(getResourceKeyResult);
@@ -943,13 +1462,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_keys/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_keys/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getResourceKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __getResourceKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __getResourceKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -957,7 +1491,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getResourceKeyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -965,7 +1499,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.getResourceKey(params);
+        resourceControllerService.getResourceKey(getResourceKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -982,27 +1516,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getResourceKeyPromise = resourceControllerService.getResourceKey();
-        expectToBePromise(getResourceKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.getResourceKey();
+        } catch (e) {
+          err = e;
+        }
 
-        getResourceKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteResourceKey', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteResourceKeyTest() {
         // Construct the params object for operation deleteResourceKey
         const id = 'testString';
-        const params = {
-          id: id,
+        const deleteResourceKeyParams = {
+          id,
         };
 
-        const deleteResourceKeyResult = resourceControllerService.deleteResourceKey(params);
+        const deleteResourceKeyResult = resourceControllerService.deleteResourceKey(deleteResourceKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteResourceKeyResult);
@@ -1010,13 +1546,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_keys/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_keys/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteResourceKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __deleteResourceKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __deleteResourceKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1024,7 +1575,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteResourceKeyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1032,7 +1583,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.deleteResourceKey(params);
+        resourceControllerService.deleteResourceKey(deleteResourceKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1049,29 +1600,31 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteResourceKeyPromise = resourceControllerService.deleteResourceKey();
-        expectToBePromise(deleteResourceKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.deleteResourceKey();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteResourceKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateResourceKey', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateResourceKeyTest() {
         // Construct the params object for operation updateResourceKey
         const id = 'testString';
-        const name = 'my-new-key-name';
-        const params = {
-          id: id,
-          name: name,
+        const name = 'UpdatedExampleResourceKey';
+        const updateResourceKeyParams = {
+          id,
+          name,
         };
 
-        const updateResourceKeyResult = resourceControllerService.updateResourceKey(params);
+        const updateResourceKeyResult = resourceControllerService.updateResourceKey(updateResourceKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(updateResourceKeyResult);
@@ -1079,23 +1632,38 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_keys/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_keys/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateResourceKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __updateResourceKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __updateResourceKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const id = 'testString';
-        const name = 'my-new-key-name';
+        const name = 'UpdatedExampleResourceKey';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateResourceKeyParams = {
           id,
           name,
           headers: {
@@ -1104,7 +1672,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.updateResourceKey(params);
+        resourceControllerService.updateResourceKey(updateResourceKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1121,20 +1689,22 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateResourceKeyPromise = resourceControllerService.updateResourceKey();
-        expectToBePromise(updateResourceKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.updateResourceKey();
+        } catch (e) {
+          err = e;
+        }
 
-        updateResourceKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listResourceBindings', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceBindingsTest() {
         // Construct the params object for operation listResourceBindings
         const guid = 'testString';
         const name = 'testString';
@@ -1143,21 +1713,21 @@ describe('ResourceControllerV2', () => {
         const regionBindingId = 'testString';
         const limit = 100;
         const start = 'testString';
-        const updatedFrom = '2019-01-08T00:00:00.000Z';
-        const updatedTo = '2019-01-08T00:00:00.000Z';
-        const params = {
-          guid: guid,
-          name: name,
-          resourceGroupId: resourceGroupId,
-          resourceId: resourceId,
-          regionBindingId: regionBindingId,
-          limit: limit,
-          start: start,
-          updatedFrom: updatedFrom,
-          updatedTo: updatedTo,
+        const updatedFrom = '2021-01-01';
+        const updatedTo = '2021-01-01';
+        const listResourceBindingsParams = {
+          guid,
+          name,
+          resourceGroupId,
+          resourceId,
+          regionBindingId,
+          limit,
+          start,
+          updatedFrom,
+          updatedTo,
         };
 
-        const listResourceBindingsResult = resourceControllerService.listResourceBindings(params);
+        const listResourceBindingsResult = resourceControllerService.listResourceBindings(listResourceBindingsParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceBindingsResult);
@@ -1165,35 +1735,50 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_bindings', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_bindings', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['guid']).toEqual(guid);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['resource_group_id']).toEqual(resourceGroupId);
-        expect(options.qs['resource_id']).toEqual(resourceId);
-        expect(options.qs['region_binding_id']).toEqual(regionBindingId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['updated_from']).toEqual(updatedFrom);
-        expect(options.qs['updated_to']).toEqual(updatedTo);
+        expect(mockRequestOptions.qs.guid).toEqual(guid);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.resource_group_id).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.resource_id).toEqual(resourceId);
+        expect(mockRequestOptions.qs.region_binding_id).toEqual(regionBindingId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.updated_from).toEqual(updatedFrom);
+        expect(mockRequestOptions.qs.updated_to).toEqual(updatedTo);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceBindingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceBindingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceBindingsTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceBindingsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        resourceControllerService.listResourceBindings(params);
+        resourceControllerService.listResourceBindings(listResourceBindingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -1203,7 +1788,70 @@ describe('ResourceControllerV2', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('ResourceBindingsPager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_bindings';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","target_crn":"target_crn","crn":"crn","region_binding_id":"region_binding_id","region_binding_crn":"region_binding_crn","name":"name","account_id":"account_id","resource_group_id":"resource_group_id","state":"state","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"resource_id":"resource_id","migrated":true,"resource_alias_url":"resource_alias_url"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","target_crn":"target_crn","crn":"crn","region_binding_id":"region_binding_id","region_binding_crn":"region_binding_crn","name":"name","account_id":"account_id","resource_group_id":"resource_group_id","state":"state","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"resource_id":"resource_id","migrated":true,"resource_alias_url":"resource_alias_url"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceGroupId: 'testString',
+          resourceId: 'testString',
+          regionBindingId: 'testString',
+          limit: 10,
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceBindingsPager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceGroupId: 'testString',
+          resourceId: 'testString',
+          regionBindingId: 'testString',
+          limit: 10,
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const pager = new ResourceControllerV2.ResourceBindingsPager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createResourceBinding', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1211,25 +1859,25 @@ describe('ResourceControllerV2', () => {
       // ResourceBindingPostParameters
       const resourceBindingPostParametersModel = {
         serviceid_crn: 'crn:v1:bluemix:public:iam-identity::a/9fceaa56d1ab84893af6b9eec5ab81bb::serviceid:ServiceId-fe4c29b5-db13-410a-bacc-b5779a03d393',
-        foo: 'testString',
+        exampleParameter: 'exampleValue',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createResourceBindingTest() {
         // Construct the params object for operation createResourceBinding
-        const source = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
-        const target = 'crn:v1:bluemix:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c';
-        const name = 'my-binding';
+        const source = 'faaec9d8-ec64-44d8-ab83-868632fac6a2';
+        const target = 'crn:v1:staging:public:bluemix:us-south:s/e1773b6e-17b4-40c8-b5ed-d2a1c4b620d7::cf-application:8d9457e0-1303-4f32-b4b3-5525575f6205';
+        const name = 'ExampleResourceBinding';
         const parameters = resourceBindingPostParametersModel;
         const role = 'Writer';
-        const params = {
-          source: source,
-          target: target,
-          name: name,
-          parameters: parameters,
-          role: role,
+        const createResourceBindingParams = {
+          source,
+          target,
+          name,
+          parameters,
+          role,
         };
 
-        const createResourceBindingResult = resourceControllerService.createResourceBinding(params);
+        const createResourceBindingResult = resourceControllerService.createResourceBinding(createResourceBindingParams);
 
         // all methods should return a Promise
         expectToBePromise(createResourceBindingResult);
@@ -1237,26 +1885,41 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_bindings', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_bindings', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['source']).toEqual(source);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['parameters']).toEqual(parameters);
-        expect(options.body['role']).toEqual(role);
+        expect(mockRequestOptions.body.source).toEqual(source);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.parameters).toEqual(parameters);
+        expect(mockRequestOptions.body.role).toEqual(role);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createResourceBindingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __createResourceBindingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __createResourceBindingTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const source = '25eba2a9-beef-450b-82cf-f5ad5e36c6dd';
-        const target = 'crn:v1:bluemix:public:cf:us-south:s/0ba4dba0-a120-4a1e-a124-5a249a904b76::cf-application:a1caa40b-2c24-4da8-8267-ac2c1a42ad0c';
+        const source = 'faaec9d8-ec64-44d8-ab83-868632fac6a2';
+        const target = 'crn:v1:staging:public:bluemix:us-south:s/e1773b6e-17b4-40c8-b5ed-d2a1c4b620d7::cf-application:8d9457e0-1303-4f32-b4b3-5525575f6205';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createResourceBindingParams = {
           source,
           target,
           headers: {
@@ -1265,7 +1928,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.createResourceBinding(params);
+        resourceControllerService.createResourceBinding(createResourceBindingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1282,27 +1945,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createResourceBindingPromise = resourceControllerService.createResourceBinding();
-        expectToBePromise(createResourceBindingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.createResourceBinding();
+        } catch (e) {
+          err = e;
+        }
 
-        createResourceBindingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getResourceBinding', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getResourceBindingTest() {
         // Construct the params object for operation getResourceBinding
         const id = 'testString';
-        const params = {
-          id: id,
+        const getResourceBindingParams = {
+          id,
         };
 
-        const getResourceBindingResult = resourceControllerService.getResourceBinding(params);
+        const getResourceBindingResult = resourceControllerService.getResourceBinding(getResourceBindingParams);
 
         // all methods should return a Promise
         expectToBePromise(getResourceBindingResult);
@@ -1310,13 +1975,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_bindings/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_bindings/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getResourceBindingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __getResourceBindingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __getResourceBindingTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1324,7 +2004,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getResourceBindingParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1332,7 +2012,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.getResourceBinding(params);
+        resourceControllerService.getResourceBinding(getResourceBindingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1349,27 +2029,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getResourceBindingPromise = resourceControllerService.getResourceBinding();
-        expectToBePromise(getResourceBindingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.getResourceBinding();
+        } catch (e) {
+          err = e;
+        }
 
-        getResourceBindingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteResourceBinding', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteResourceBindingTest() {
         // Construct the params object for operation deleteResourceBinding
         const id = 'testString';
-        const params = {
-          id: id,
+        const deleteResourceBindingParams = {
+          id,
         };
 
-        const deleteResourceBindingResult = resourceControllerService.deleteResourceBinding(params);
+        const deleteResourceBindingResult = resourceControllerService.deleteResourceBinding(deleteResourceBindingParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteResourceBindingResult);
@@ -1377,13 +2059,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_bindings/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_bindings/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteResourceBindingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __deleteResourceBindingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __deleteResourceBindingTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1391,7 +2088,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteResourceBindingParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1399,7 +2096,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.deleteResourceBinding(params);
+        resourceControllerService.deleteResourceBinding(deleteResourceBindingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1416,29 +2113,31 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteResourceBindingPromise = resourceControllerService.deleteResourceBinding();
-        expectToBePromise(deleteResourceBindingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.deleteResourceBinding();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteResourceBindingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateResourceBinding', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateResourceBindingTest() {
         // Construct the params object for operation updateResourceBinding
         const id = 'testString';
-        const name = 'my-new-binding-name';
-        const params = {
-          id: id,
-          name: name,
+        const name = 'UpdatedExampleResourceBinding';
+        const updateResourceBindingParams = {
+          id,
+          name,
         };
 
-        const updateResourceBindingResult = resourceControllerService.updateResourceBinding(params);
+        const updateResourceBindingResult = resourceControllerService.updateResourceBinding(updateResourceBindingParams);
 
         // all methods should return a Promise
         expectToBePromise(updateResourceBindingResult);
@@ -1446,23 +2145,38 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_bindings/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_bindings/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateResourceBindingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __updateResourceBindingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __updateResourceBindingTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const id = 'testString';
-        const name = 'my-new-binding-name';
+        const name = 'UpdatedExampleResourceBinding';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateResourceBindingParams = {
           id,
           name,
           headers: {
@@ -1471,7 +2185,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.updateResourceBinding(params);
+        resourceControllerService.updateResourceBinding(updateResourceBindingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1488,20 +2202,22 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateResourceBindingPromise = resourceControllerService.updateResourceBinding();
-        expectToBePromise(updateResourceBindingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.updateResourceBinding();
+        } catch (e) {
+          err = e;
+        }
 
-        updateResourceBindingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listResourceAliases', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceAliasesTest() {
         // Construct the params object for operation listResourceAliases
         const guid = 'testString';
         const name = 'testString';
@@ -1511,22 +2227,22 @@ describe('ResourceControllerV2', () => {
         const resourceGroupId = 'testString';
         const limit = 100;
         const start = 'testString';
-        const updatedFrom = '2019-01-08T00:00:00.000Z';
-        const updatedTo = '2019-01-08T00:00:00.000Z';
-        const params = {
-          guid: guid,
-          name: name,
-          resourceInstanceId: resourceInstanceId,
-          regionInstanceId: regionInstanceId,
-          resourceId: resourceId,
-          resourceGroupId: resourceGroupId,
-          limit: limit,
-          start: start,
-          updatedFrom: updatedFrom,
-          updatedTo: updatedTo,
+        const updatedFrom = '2021-01-01';
+        const updatedTo = '2021-01-01';
+        const listResourceAliasesParams = {
+          guid,
+          name,
+          resourceInstanceId,
+          regionInstanceId,
+          resourceId,
+          resourceGroupId,
+          limit,
+          start,
+          updatedFrom,
+          updatedTo,
         };
 
-        const listResourceAliasesResult = resourceControllerService.listResourceAliases(params);
+        const listResourceAliasesResult = resourceControllerService.listResourceAliases(listResourceAliasesParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceAliasesResult);
@@ -1534,36 +2250,51 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_aliases', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_aliases', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['guid']).toEqual(guid);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['resource_instance_id']).toEqual(resourceInstanceId);
-        expect(options.qs['region_instance_id']).toEqual(regionInstanceId);
-        expect(options.qs['resource_id']).toEqual(resourceId);
-        expect(options.qs['resource_group_id']).toEqual(resourceGroupId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['updated_from']).toEqual(updatedFrom);
-        expect(options.qs['updated_to']).toEqual(updatedTo);
+        expect(mockRequestOptions.qs.guid).toEqual(guid);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.resource_instance_id).toEqual(resourceInstanceId);
+        expect(mockRequestOptions.qs.region_instance_id).toEqual(regionInstanceId);
+        expect(mockRequestOptions.qs.resource_id).toEqual(resourceId);
+        expect(mockRequestOptions.qs.resource_group_id).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.updated_from).toEqual(updatedFrom);
+        expect(mockRequestOptions.qs.updated_to).toEqual(updatedTo);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceAliasesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceAliasesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceAliasesTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceAliasesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        resourceControllerService.listResourceAliases(params);
+        resourceControllerService.listResourceAliases(listResourceAliasesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -1573,21 +2304,86 @@ describe('ResourceControllerV2', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('ResourceAliasesPager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_aliases';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","name":"name","resource_instance_id":"resource_instance_id","target_crn":"target_crn","account_id":"account_id","resource_id":"resource_id","resource_group_id":"resource_group_id","crn":"crn","region_instance_id":"region_instance_id","region_instance_crn":"region_instance_crn","state":"state","migrated":true,"resource_instance_url":"resource_instance_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","name":"name","resource_instance_id":"resource_instance_id","target_crn":"target_crn","account_id":"account_id","resource_id":"resource_id","resource_group_id":"resource_group_id","crn":"crn","region_instance_id":"region_instance_id","region_instance_crn":"region_instance_crn","state":"state","migrated":true,"resource_instance_url":"resource_instance_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceInstanceId: 'testString',
+          regionInstanceId: 'testString',
+          resourceId: 'testString',
+          resourceGroupId: 'testString',
+          limit: 10,
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceAliasesPager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          guid: 'testString',
+          name: 'testString',
+          resourceInstanceId: 'testString',
+          regionInstanceId: 'testString',
+          resourceId: 'testString',
+          resourceGroupId: 'testString',
+          limit: 10,
+          updatedFrom: '2021-01-01',
+          updatedTo: '2021-01-01',
+        };
+        const pager = new ResourceControllerV2.ResourceAliasesPager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createResourceAlias', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createResourceAliasTest() {
         // Construct the params object for operation createResourceAlias
-        const name = 'my-alias';
-        const source = 'a8dff6d3-d287-4668-a81d-c87c55c2656d';
-        const target = 'crn:v1:bluemix:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5';
-        const params = {
-          name: name,
-          source: source,
-          target: target,
+        const name = 'ExampleResourceAlias';
+        const source = '381fd51a-f251-4f95-aff4-2b03fa8caa63';
+        const target = 'crn:v1:bluemix:public:bluemix:us-south:o/d35d4f0e-5076-4c89-9361-2522894b6548::cf-space:e1773b6e-17b4-40c8-b5ed-d2a1c4b620d7';
+        const createResourceAliasParams = {
+          name,
+          source,
+          target,
         };
 
-        const createResourceAliasResult = resourceControllerService.createResourceAlias(params);
+        const createResourceAliasResult = resourceControllerService.createResourceAlias(createResourceAliasParams);
 
         // all methods should return a Promise
         expectToBePromise(createResourceAliasResult);
@@ -1595,25 +2391,40 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_aliases', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_aliases', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['source']).toEqual(source);
-        expect(options.body['target']).toEqual(target);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.source).toEqual(source);
+        expect(mockRequestOptions.body.target).toEqual(target);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createResourceAliasTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __createResourceAliasTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __createResourceAliasTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const name = 'my-alias';
-        const source = 'a8dff6d3-d287-4668-a81d-c87c55c2656d';
-        const target = 'crn:v1:bluemix:public:cf:us-south:o/5e939cd5-6377-4383-b9e0-9db22cd11753::cf-space:66c8b915-101a-406c-a784-e6636676e4f5';
+        const name = 'ExampleResourceAlias';
+        const source = '381fd51a-f251-4f95-aff4-2b03fa8caa63';
+        const target = 'crn:v1:bluemix:public:bluemix:us-south:o/d35d4f0e-5076-4c89-9361-2522894b6548::cf-space:e1773b6e-17b4-40c8-b5ed-d2a1c4b620d7';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createResourceAliasParams = {
           name,
           source,
           target,
@@ -1623,7 +2434,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.createResourceAlias(params);
+        resourceControllerService.createResourceAlias(createResourceAliasParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1640,27 +2451,29 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createResourceAliasPromise = resourceControllerService.createResourceAlias();
-        expectToBePromise(createResourceAliasPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.createResourceAlias();
+        } catch (e) {
+          err = e;
+        }
 
-        createResourceAliasPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getResourceAlias', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getResourceAliasTest() {
         // Construct the params object for operation getResourceAlias
         const id = 'testString';
-        const params = {
-          id: id,
+        const getResourceAliasParams = {
+          id,
         };
 
-        const getResourceAliasResult = resourceControllerService.getResourceAlias(params);
+        const getResourceAliasResult = resourceControllerService.getResourceAlias(getResourceAliasParams);
 
         // all methods should return a Promise
         expectToBePromise(getResourceAliasResult);
@@ -1668,13 +2481,28 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_aliases/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_aliases/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getResourceAliasTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __getResourceAliasTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __getResourceAliasTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1682,7 +2510,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getResourceAliasParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1690,7 +2518,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.getResourceAlias(params);
+        resourceControllerService.getResourceAlias(getResourceAliasParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1707,27 +2535,31 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getResourceAliasPromise = resourceControllerService.getResourceAlias();
-        expectToBePromise(getResourceAliasPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.getResourceAlias();
+        } catch (e) {
+          err = e;
+        }
 
-        getResourceAliasPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteResourceAlias', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteResourceAliasTest() {
         // Construct the params object for operation deleteResourceAlias
         const id = 'testString';
-        const params = {
-          id: id,
+        const recursive = false;
+        const deleteResourceAliasParams = {
+          id,
+          recursive,
         };
 
-        const deleteResourceAliasResult = resourceControllerService.deleteResourceAlias(params);
+        const deleteResourceAliasResult = resourceControllerService.deleteResourceAlias(deleteResourceAliasParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteResourceAliasResult);
@@ -1735,13 +2567,29 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_aliases/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_aliases/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.recursive).toEqual(recursive);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteResourceAliasTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __deleteResourceAliasTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __deleteResourceAliasTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1749,7 +2597,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteResourceAliasParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1757,7 +2605,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.deleteResourceAlias(params);
+        resourceControllerService.deleteResourceAlias(deleteResourceAliasParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1774,29 +2622,31 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteResourceAliasPromise = resourceControllerService.deleteResourceAlias();
-        expectToBePromise(deleteResourceAliasPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.deleteResourceAlias();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteResourceAliasPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateResourceAlias', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateResourceAliasTest() {
         // Construct the params object for operation updateResourceAlias
         const id = 'testString';
-        const name = 'my-new-alias-name';
-        const params = {
-          id: id,
-          name: name,
+        const name = 'UpdatedExampleResourceAlias';
+        const updateResourceAliasParams = {
+          id,
+          name,
         };
 
-        const updateResourceAliasResult = resourceControllerService.updateResourceAlias(params);
+        const updateResourceAliasResult = resourceControllerService.updateResourceAlias(updateResourceAliasParams);
 
         // all methods should return a Promise
         expectToBePromise(updateResourceAliasResult);
@@ -1804,23 +2654,38 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_aliases/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_aliases/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateResourceAliasTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __updateResourceAliasTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __updateResourceAliasTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const id = 'testString';
-        const name = 'my-new-alias-name';
+        const name = 'UpdatedExampleResourceAlias';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateResourceAliasParams = {
           id,
           name,
           headers: {
@@ -1829,7 +2694,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.updateResourceAlias(params);
+        resourceControllerService.updateResourceAlias(updateResourceAliasParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1846,31 +2711,33 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateResourceAliasPromise = resourceControllerService.updateResourceAlias();
-        expectToBePromise(updateResourceAliasPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.updateResourceAlias();
+        } catch (e) {
+          err = e;
+        }
 
-        updateResourceAliasPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listResourceBindingsForAlias', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listResourceBindingsForAliasTest() {
         // Construct the params object for operation listResourceBindingsForAlias
         const id = 'testString';
         const limit = 100;
         const start = 'testString';
-        const params = {
-          id: id,
-          limit: limit,
-          start: start,
+        const listResourceBindingsForAliasParams = {
+          id,
+          limit,
+          start,
         };
 
-        const listResourceBindingsForAliasResult = resourceControllerService.listResourceBindingsForAlias(params);
+        const listResourceBindingsForAliasResult = resourceControllerService.listResourceBindingsForAlias(listResourceBindingsForAliasParams);
 
         // all methods should return a Promise
         expectToBePromise(listResourceBindingsForAliasResult);
@@ -1878,15 +2745,30 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resource_aliases/{id}/resource_bindings', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resource_aliases/{id}/resource_bindings', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listResourceBindingsForAliasTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listResourceBindingsForAliasTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listResourceBindingsForAliasTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1894,7 +2776,7 @@ describe('ResourceControllerV2', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listResourceBindingsForAliasParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1902,7 +2784,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.listResourceBindingsForAlias(params);
+        resourceControllerService.listResourceBindingsForAlias(listResourceBindingsForAliasParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1919,29 +2801,81 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listResourceBindingsForAliasPromise = resourceControllerService.listResourceBindingsForAlias();
-        expectToBePromise(listResourceBindingsForAliasPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.listResourceBindingsForAlias();
+        } catch (e) {
+          err = e;
+        }
 
-        listResourceBindingsForAliasPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('ResourceBindingsForAliasPager tests', () => {
+      const serviceUrl = resourceControllerServiceOptions.url;
+      const path = '/v2/resource_aliases/testString/resource_bindings';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","target_crn":"target_crn","crn":"crn","region_binding_id":"region_binding_id","region_binding_crn":"region_binding_crn","name":"name","account_id":"account_id","resource_group_id":"resource_group_id","state":"state","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"resource_id":"resource_id","migrated":true,"resource_alias_url":"resource_alias_url"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","target_crn":"target_crn","crn":"crn","region_binding_id":"region_binding_id","region_binding_crn":"region_binding_crn","name":"name","account_id":"account_id","resource_group_id":"resource_group_id","state":"state","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"resource_id":"resource_id","migrated":true,"resource_alias_url":"resource_alias_url"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          id: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new ResourceControllerV2.ResourceBindingsForAliasPager(resourceControllerService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          id: 'testString',
+          limit: 10,
+        };
+        const pager = new ResourceControllerV2.ResourceBindingsForAliasPager(resourceControllerService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
+
   describe('listReclamations', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listReclamationsTest() {
         // Construct the params object for operation listReclamations
         const accountId = 'testString';
         const resourceInstanceId = 'testString';
-        const params = {
-          accountId: accountId,
-          resourceInstanceId: resourceInstanceId,
+        const listReclamationsParams = {
+          accountId,
+          resourceInstanceId,
         };
 
-        const listReclamationsResult = resourceControllerService.listReclamations(params);
+        const listReclamationsResult = resourceControllerService.listReclamations(listReclamationsParams);
 
         // all methods should return a Promise
         expectToBePromise(listReclamationsResult);
@@ -1949,28 +2883,43 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/reclamations', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/reclamations', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['resource_instance_id']).toEqual(resourceInstanceId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.resource_instance_id).toEqual(resourceInstanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listReclamationsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __listReclamationsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __listReclamationsTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listReclamationsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        resourceControllerService.listReclamations(params);
+        resourceControllerService.listReclamations(listReclamationsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -1981,22 +2930,23 @@ describe('ResourceControllerV2', () => {
       });
     });
   });
+
   describe('runReclamationAction', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __runReclamationActionTest() {
         // Construct the params object for operation runReclamationAction
         const id = 'testString';
         const actionName = 'testString';
         const requestBy = 'testString';
         const comment = 'testString';
-        const params = {
-          id: id,
-          actionName: actionName,
-          requestBy: requestBy,
-          comment: comment,
+        const runReclamationActionParams = {
+          id,
+          actionName,
+          requestBy,
+          comment,
         };
 
-        const runReclamationActionResult = resourceControllerService.runReclamationAction(params);
+        const runReclamationActionResult = resourceControllerService.runReclamationAction(runReclamationActionParams);
 
         // all methods should return a Promise
         expectToBePromise(runReclamationActionResult);
@@ -2004,16 +2954,31 @@ describe('ResourceControllerV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/reclamations/{id}/actions/{action_name}', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v1/reclamations/{id}/actions/{action_name}', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['request_by']).toEqual(requestBy);
-        expect(options.body['comment']).toEqual(comment);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['action_name']).toEqual(actionName);
+        expect(mockRequestOptions.body.request_by).toEqual(requestBy);
+        expect(mockRequestOptions.body.comment).toEqual(comment);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.action_name).toEqual(actionName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __runReclamationActionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.enableRetries();
+        __runReclamationActionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        resourceControllerService.disableRetries();
+        __runReclamationActionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2022,7 +2987,7 @@ describe('ResourceControllerV2', () => {
         const actionName = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const runReclamationActionParams = {
           id,
           actionName,
           headers: {
@@ -2031,7 +2996,7 @@ describe('ResourceControllerV2', () => {
           },
         };
 
-        resourceControllerService.runReclamationAction(params);
+        resourceControllerService.runReclamationAction(runReclamationActionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2048,14 +3013,15 @@ describe('ResourceControllerV2', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const runReclamationActionPromise = resourceControllerService.runReclamationAction();
-        expectToBePromise(runReclamationActionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await resourceControllerService.runReclamationAction();
+        } catch (e) {
+          err = e;
+        }
 
-        runReclamationActionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
