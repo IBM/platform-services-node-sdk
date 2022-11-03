@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
+const nock = require('nock');
+
+/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -29,27 +32,44 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const enterpriseManagementServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://enterprise.cloud.ibm.com/v1',
 };
 
-const enterpriseManagementService = new EnterpriseManagementV1(service);
+const enterpriseManagementService = new EnterpriseManagementV1(enterpriseManagementServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(enterpriseManagementService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(enterpriseManagementService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('EnterpriseManagementV1', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = EnterpriseManagementV1.newInstance();
@@ -77,6 +97,7 @@ describe('EnterpriseManagementV1', () => {
       expect(testInstance).toBeInstanceOf(EnterpriseManagementV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -99,22 +120,23 @@ describe('EnterpriseManagementV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(EnterpriseManagementV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('createEnterprise', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createEnterpriseTest() {
         // Construct the params object for operation createEnterprise
         const sourceAccountId = 'testString';
         const name = 'testString';
         const primaryContactIamId = 'testString';
         const domain = 'testString';
-        const params = {
-          sourceAccountId: sourceAccountId,
-          name: name,
-          primaryContactIamId: primaryContactIamId,
-          domain: domain,
+        const createEnterpriseParams = {
+          sourceAccountId,
+          name,
+          primaryContactIamId,
+          domain,
         };
 
-        const createEnterpriseResult = enterpriseManagementService.createEnterprise(params);
+        const createEnterpriseResult = enterpriseManagementService.createEnterprise(createEnterpriseParams);
 
         // all methods should return a Promise
         expectToBePromise(createEnterpriseResult);
@@ -122,16 +144,31 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/enterprises', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/enterprises', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['source_account_id']).toEqual(sourceAccountId);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['primary_contact_iam_id']).toEqual(primaryContactIamId);
-        expect(options.body['domain']).toEqual(domain);
+        expect(mockRequestOptions.body.source_account_id).toEqual(sourceAccountId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.primary_contact_iam_id).toEqual(primaryContactIamId);
+        expect(mockRequestOptions.body.domain).toEqual(domain);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createEnterpriseTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __createEnterpriseTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __createEnterpriseTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -141,7 +178,7 @@ describe('EnterpriseManagementV1', () => {
         const primaryContactIamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createEnterpriseParams = {
           sourceAccountId,
           name,
           primaryContactIamId,
@@ -151,7 +188,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.createEnterprise(params);
+        enterpriseManagementService.createEnterprise(createEnterpriseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -168,35 +205,37 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createEnterprisePromise = enterpriseManagementService.createEnterprise();
-        expectToBePromise(createEnterprisePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.createEnterprise();
+        } catch (e) {
+          err = e;
+        }
 
-        createEnterprisePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listEnterprises', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listEnterprisesTest() {
         // Construct the params object for operation listEnterprises
         const enterpriseAccountId = 'testString';
         const accountGroupId = 'testString';
         const accountId = 'testString';
         const nextDocid = 'testString';
         const limit = 100;
-        const params = {
-          enterpriseAccountId: enterpriseAccountId,
-          accountGroupId: accountGroupId,
-          accountId: accountId,
-          nextDocid: nextDocid,
-          limit: limit,
+        const listEnterprisesParams = {
+          enterpriseAccountId,
+          accountGroupId,
+          accountId,
+          nextDocid,
+          limit,
         };
 
-        const listEnterprisesResult = enterpriseManagementService.listEnterprises(params);
+        const listEnterprisesResult = enterpriseManagementService.listEnterprises(listEnterprisesParams);
 
         // all methods should return a Promise
         expectToBePromise(listEnterprisesResult);
@@ -204,31 +243,46 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/enterprises', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/enterprises', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['enterprise_account_id']).toEqual(enterpriseAccountId);
-        expect(options.qs['account_group_id']).toEqual(accountGroupId);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['next_docid']).toEqual(nextDocid);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.enterprise_account_id).toEqual(enterpriseAccountId);
+        expect(mockRequestOptions.qs.account_group_id).toEqual(accountGroupId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.next_docid).toEqual(nextDocid);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listEnterprisesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __listEnterprisesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __listEnterprisesTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listEnterprisesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        enterpriseManagementService.listEnterprises(params);
+        enterpriseManagementService.listEnterprises(listEnterprisesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -238,17 +292,72 @@ describe('EnterpriseManagementV1', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('EnterprisesPager tests', () => {
+      const serviceUrl = enterpriseManagementServiceOptions.url;
+      const path = '/enterprises';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?next_docid=1","resources":[{"url":"url","id":"id","enterprise_account_id":"enterprise_account_id","crn":"crn","name":"name","domain":"domain","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"url":"url","id":"id","enterprise_account_id":"enterprise_account_id","crn":"crn","name":"name","domain":"domain","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          enterpriseAccountId: 'testString',
+          accountGroupId: 'testString',
+          accountId: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new EnterpriseManagementV1.EnterprisesPager(enterpriseManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          enterpriseAccountId: 'testString',
+          accountGroupId: 'testString',
+          accountId: 'testString',
+          limit: 10,
+        };
+        const pager = new EnterpriseManagementV1.EnterprisesPager(enterpriseManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('getEnterprise', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getEnterpriseTest() {
         // Construct the params object for operation getEnterprise
         const enterpriseId = 'testString';
-        const params = {
-          enterpriseId: enterpriseId,
+        const getEnterpriseParams = {
+          enterpriseId,
         };
 
-        const getEnterpriseResult = enterpriseManagementService.getEnterprise(params);
+        const getEnterpriseResult = enterpriseManagementService.getEnterprise(getEnterpriseParams);
 
         // all methods should return a Promise
         expectToBePromise(getEnterpriseResult);
@@ -256,13 +365,28 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/enterprises/{enterprise_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/enterprises/{enterprise_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['enterprise_id']).toEqual(enterpriseId);
+        expect(mockRequestOptions.path.enterprise_id).toEqual(enterpriseId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getEnterpriseTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __getEnterpriseTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __getEnterpriseTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -270,7 +394,7 @@ describe('EnterpriseManagementV1', () => {
         const enterpriseId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getEnterpriseParams = {
           enterpriseId,
           headers: {
             Accept: userAccept,
@@ -278,7 +402,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.getEnterprise(params);
+        enterpriseManagementService.getEnterprise(getEnterpriseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -295,33 +419,35 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getEnterprisePromise = enterpriseManagementService.getEnterprise();
-        expectToBePromise(getEnterprisePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.getEnterprise();
+        } catch (e) {
+          err = e;
+        }
 
-        getEnterprisePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateEnterprise', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateEnterpriseTest() {
         // Construct the params object for operation updateEnterprise
         const enterpriseId = 'testString';
         const name = 'testString';
         const domain = 'testString';
         const primaryContactIamId = 'testString';
-        const params = {
-          enterpriseId: enterpriseId,
-          name: name,
-          domain: domain,
-          primaryContactIamId: primaryContactIamId,
+        const updateEnterpriseParams = {
+          enterpriseId,
+          name,
+          domain,
+          primaryContactIamId,
         };
 
-        const updateEnterpriseResult = enterpriseManagementService.updateEnterprise(params);
+        const updateEnterpriseResult = enterpriseManagementService.updateEnterprise(updateEnterpriseParams);
 
         // all methods should return a Promise
         expectToBePromise(updateEnterpriseResult);
@@ -329,16 +455,31 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/enterprises/{enterprise_id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/enterprises/{enterprise_id}', 'PATCH');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['domain']).toEqual(domain);
-        expect(options.body['primary_contact_iam_id']).toEqual(primaryContactIamId);
-        expect(options.path['enterprise_id']).toEqual(enterpriseId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.domain).toEqual(domain);
+        expect(mockRequestOptions.body.primary_contact_iam_id).toEqual(primaryContactIamId);
+        expect(mockRequestOptions.path.enterprise_id).toEqual(enterpriseId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateEnterpriseTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __updateEnterpriseTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __updateEnterpriseTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -346,7 +487,7 @@ describe('EnterpriseManagementV1', () => {
         const enterpriseId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateEnterpriseParams = {
           enterpriseId,
           headers: {
             Accept: userAccept,
@@ -354,7 +495,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.updateEnterprise(params);
+        enterpriseManagementService.updateEnterprise(updateEnterpriseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -371,33 +512,35 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateEnterprisePromise = enterpriseManagementService.updateEnterprise();
-        expectToBePromise(updateEnterprisePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.updateEnterprise();
+        } catch (e) {
+          err = e;
+        }
 
-        updateEnterprisePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('importAccountToEnterprise', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __importAccountToEnterpriseTest() {
         // Construct the params object for operation importAccountToEnterprise
         const enterpriseId = 'testString';
         const accountId = 'testString';
         const parent = 'testString';
         const billingUnitId = 'testString';
-        const params = {
-          enterpriseId: enterpriseId,
-          accountId: accountId,
-          parent: parent,
-          billingUnitId: billingUnitId,
+        const importAccountToEnterpriseParams = {
+          enterpriseId,
+          accountId,
+          parent,
+          billingUnitId,
         };
 
-        const importAccountToEnterpriseResult = enterpriseManagementService.importAccountToEnterprise(params);
+        const importAccountToEnterpriseResult = enterpriseManagementService.importAccountToEnterprise(importAccountToEnterpriseParams);
 
         // all methods should return a Promise
         expectToBePromise(importAccountToEnterpriseResult);
@@ -405,16 +548,31 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/enterprises/{enterprise_id}/import/accounts/{account_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/enterprises/{enterprise_id}/import/accounts/{account_id}', 'PUT');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['parent']).toEqual(parent);
-        expect(options.body['billing_unit_id']).toEqual(billingUnitId);
-        expect(options.path['enterprise_id']).toEqual(enterpriseId);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.body.parent).toEqual(parent);
+        expect(mockRequestOptions.body.billing_unit_id).toEqual(billingUnitId);
+        expect(mockRequestOptions.path.enterprise_id).toEqual(enterpriseId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __importAccountToEnterpriseTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __importAccountToEnterpriseTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __importAccountToEnterpriseTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -423,7 +581,7 @@ describe('EnterpriseManagementV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const importAccountToEnterpriseParams = {
           enterpriseId,
           accountId,
           headers: {
@@ -432,7 +590,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.importAccountToEnterprise(params);
+        enterpriseManagementService.importAccountToEnterprise(importAccountToEnterpriseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -449,31 +607,33 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const importAccountToEnterprisePromise = enterpriseManagementService.importAccountToEnterprise();
-        expectToBePromise(importAccountToEnterprisePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.importAccountToEnterprise();
+        } catch (e) {
+          err = e;
+        }
 
-        importAccountToEnterprisePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('createAccount', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createAccountTest() {
         // Construct the params object for operation createAccount
         const parent = 'testString';
         const name = 'testString';
         const ownerIamId = 'testString';
-        const params = {
-          parent: parent,
-          name: name,
-          ownerIamId: ownerIamId,
+        const createAccountParams = {
+          parent,
+          name,
+          ownerIamId,
         };
 
-        const createAccountResult = enterpriseManagementService.createAccount(params);
+        const createAccountResult = enterpriseManagementService.createAccount(createAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(createAccountResult);
@@ -481,15 +641,30 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/accounts', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/accounts', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['parent']).toEqual(parent);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['owner_iam_id']).toEqual(ownerIamId);
+        expect(mockRequestOptions.body.parent).toEqual(parent);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.owner_iam_id).toEqual(ownerIamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createAccountTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __createAccountTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __createAccountTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -499,7 +674,7 @@ describe('EnterpriseManagementV1', () => {
         const ownerIamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createAccountParams = {
           parent,
           name,
           ownerIamId,
@@ -509,7 +684,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.createAccount(params);
+        enterpriseManagementService.createAccount(createAccountParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -526,35 +701,37 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createAccountPromise = enterpriseManagementService.createAccount();
-        expectToBePromise(createAccountPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.createAccount();
+        } catch (e) {
+          err = e;
+        }
 
-        createAccountPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listAccounts', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listAccountsTest() {
         // Construct the params object for operation listAccounts
         const enterpriseId = 'testString';
         const accountGroupId = 'testString';
         const nextDocid = 'testString';
         const parent = 'testString';
         const limit = 100;
-        const params = {
-          enterpriseId: enterpriseId,
-          accountGroupId: accountGroupId,
-          nextDocid: nextDocid,
-          parent: parent,
-          limit: limit,
+        const listAccountsParams = {
+          enterpriseId,
+          accountGroupId,
+          nextDocid,
+          parent,
+          limit,
         };
 
-        const listAccountsResult = enterpriseManagementService.listAccounts(params);
+        const listAccountsResult = enterpriseManagementService.listAccounts(listAccountsParams);
 
         // all methods should return a Promise
         expectToBePromise(listAccountsResult);
@@ -562,31 +739,46 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/accounts', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/accounts', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['enterprise_id']).toEqual(enterpriseId);
-        expect(options.qs['account_group_id']).toEqual(accountGroupId);
-        expect(options.qs['next_docid']).toEqual(nextDocid);
-        expect(options.qs['parent']).toEqual(parent);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.enterprise_id).toEqual(enterpriseId);
+        expect(mockRequestOptions.qs.account_group_id).toEqual(accountGroupId);
+        expect(mockRequestOptions.qs.next_docid).toEqual(nextDocid);
+        expect(mockRequestOptions.qs.parent).toEqual(parent);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAccountsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __listAccountsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __listAccountsTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listAccountsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        enterpriseManagementService.listAccounts(params);
+        enterpriseManagementService.listAccounts(listAccountsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -596,17 +788,72 @@ describe('EnterpriseManagementV1', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('AccountsPager tests', () => {
+      const serviceUrl = enterpriseManagementServiceOptions.url;
+      const path = '/accounts';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?next_docid=1","resources":[{"url":"url","id":"id","crn":"crn","parent":"parent","enterprise_account_id":"enterprise_account_id","enterprise_id":"enterprise_id","enterprise_path":"enterprise_path","name":"name","state":"state","owner_iam_id":"owner_iam_id","paid":true,"owner_email":"owner_email","is_enterprise_account":false,"created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"url":"url","id":"id","crn":"crn","parent":"parent","enterprise_account_id":"enterprise_account_id","enterprise_id":"enterprise_id","enterprise_path":"enterprise_path","name":"name","state":"state","owner_iam_id":"owner_iam_id","paid":true,"owner_email":"owner_email","is_enterprise_account":false,"created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          enterpriseId: 'testString',
+          accountGroupId: 'testString',
+          parent: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          enterpriseId: 'testString',
+          accountGroupId: 'testString',
+          parent: 'testString',
+          limit: 10,
+        };
+        const pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('getAccount', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getAccountTest() {
         // Construct the params object for operation getAccount
         const accountId = 'testString';
-        const params = {
-          accountId: accountId,
+        const getAccountParams = {
+          accountId,
         };
 
-        const getAccountResult = enterpriseManagementService.getAccount(params);
+        const getAccountResult = enterpriseManagementService.getAccount(getAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(getAccountResult);
@@ -614,13 +861,28 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/accounts/{account_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/accounts/{account_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAccountTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __getAccountTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __getAccountTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -628,7 +890,7 @@ describe('EnterpriseManagementV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getAccountParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -636,7 +898,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.getAccount(params);
+        enterpriseManagementService.getAccount(getAccountParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -653,29 +915,31 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getAccountPromise = enterpriseManagementService.getAccount();
-        expectToBePromise(getAccountPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.getAccount();
+        } catch (e) {
+          err = e;
+        }
 
-        getAccountPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateAccount', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateAccountTest() {
         // Construct the params object for operation updateAccount
         const accountId = 'testString';
         const parent = 'testString';
-        const params = {
-          accountId: accountId,
-          parent: parent,
+        const updateAccountParams = {
+          accountId,
+          parent,
         };
 
-        const updateAccountResult = enterpriseManagementService.updateAccount(params);
+        const updateAccountResult = enterpriseManagementService.updateAccount(updateAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(updateAccountResult);
@@ -683,14 +947,29 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/accounts/{account_id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/accounts/{account_id}', 'PATCH');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['parent']).toEqual(parent);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.body.parent).toEqual(parent);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateAccountTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __updateAccountTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __updateAccountTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -699,7 +978,7 @@ describe('EnterpriseManagementV1', () => {
         const parent = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateAccountParams = {
           accountId,
           parent,
           headers: {
@@ -708,7 +987,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.updateAccount(params);
+        enterpriseManagementService.updateAccount(updateAccountParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -725,31 +1004,33 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateAccountPromise = enterpriseManagementService.updateAccount();
-        expectToBePromise(updateAccountPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.updateAccount();
+        } catch (e) {
+          err = e;
+        }
 
-        updateAccountPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('createAccountGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createAccountGroupTest() {
         // Construct the params object for operation createAccountGroup
         const parent = 'testString';
         const name = 'testString';
         const primaryContactIamId = 'testString';
-        const params = {
-          parent: parent,
-          name: name,
-          primaryContactIamId: primaryContactIamId,
+        const createAccountGroupParams = {
+          parent,
+          name,
+          primaryContactIamId,
         };
 
-        const createAccountGroupResult = enterpriseManagementService.createAccountGroup(params);
+        const createAccountGroupResult = enterpriseManagementService.createAccountGroup(createAccountGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(createAccountGroupResult);
@@ -757,15 +1038,30 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/account-groups', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/account-groups', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['parent']).toEqual(parent);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['primary_contact_iam_id']).toEqual(primaryContactIamId);
+        expect(mockRequestOptions.body.parent).toEqual(parent);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.primary_contact_iam_id).toEqual(primaryContactIamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createAccountGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __createAccountGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __createAccountGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -775,7 +1071,7 @@ describe('EnterpriseManagementV1', () => {
         const primaryContactIamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createAccountGroupParams = {
           parent,
           name,
           primaryContactIamId,
@@ -785,7 +1081,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.createAccountGroup(params);
+        enterpriseManagementService.createAccountGroup(createAccountGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -802,35 +1098,37 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createAccountGroupPromise = enterpriseManagementService.createAccountGroup();
-        expectToBePromise(createAccountGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.createAccountGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        createAccountGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listAccountGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listAccountGroupsTest() {
         // Construct the params object for operation listAccountGroups
         const enterpriseId = 'testString';
         const parentAccountGroupId = 'testString';
         const nextDocid = 'testString';
         const parent = 'testString';
         const limit = 100;
-        const params = {
-          enterpriseId: enterpriseId,
-          parentAccountGroupId: parentAccountGroupId,
-          nextDocid: nextDocid,
-          parent: parent,
-          limit: limit,
+        const listAccountGroupsParams = {
+          enterpriseId,
+          parentAccountGroupId,
+          nextDocid,
+          parent,
+          limit,
         };
 
-        const listAccountGroupsResult = enterpriseManagementService.listAccountGroups(params);
+        const listAccountGroupsResult = enterpriseManagementService.listAccountGroups(listAccountGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(listAccountGroupsResult);
@@ -838,31 +1136,46 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/account-groups', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/account-groups', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['enterprise_id']).toEqual(enterpriseId);
-        expect(options.qs['parent_account_group_id']).toEqual(parentAccountGroupId);
-        expect(options.qs['next_docid']).toEqual(nextDocid);
-        expect(options.qs['parent']).toEqual(parent);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.enterprise_id).toEqual(enterpriseId);
+        expect(mockRequestOptions.qs.parent_account_group_id).toEqual(parentAccountGroupId);
+        expect(mockRequestOptions.qs.next_docid).toEqual(nextDocid);
+        expect(mockRequestOptions.qs.parent).toEqual(parent);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAccountGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __listAccountGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __listAccountGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listAccountGroupsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        enterpriseManagementService.listAccountGroups(params);
+        enterpriseManagementService.listAccountGroups(listAccountGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -872,17 +1185,72 @@ describe('EnterpriseManagementV1', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('AccountGroupsPager tests', () => {
+      const serviceUrl = enterpriseManagementServiceOptions.url;
+      const path = '/account-groups';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?next_docid=1","resources":[{"url":"url","id":"id","crn":"crn","parent":"parent","enterprise_account_id":"enterprise_account_id","enterprise_id":"enterprise_id","enterprise_path":"enterprise_path","name":"name","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"url":"url","id":"id","crn":"crn","parent":"parent","enterprise_account_id":"enterprise_account_id","enterprise_id":"enterprise_id","enterprise_path":"enterprise_path","name":"name","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          enterpriseId: 'testString',
+          parentAccountGroupId: 'testString',
+          parent: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          enterpriseId: 'testString',
+          parentAccountGroupId: 'testString',
+          parent: 'testString',
+          limit: 10,
+        };
+        const pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('getAccountGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getAccountGroupTest() {
         // Construct the params object for operation getAccountGroup
         const accountGroupId = 'testString';
-        const params = {
-          accountGroupId: accountGroupId,
+        const getAccountGroupParams = {
+          accountGroupId,
         };
 
-        const getAccountGroupResult = enterpriseManagementService.getAccountGroup(params);
+        const getAccountGroupResult = enterpriseManagementService.getAccountGroup(getAccountGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(getAccountGroupResult);
@@ -890,13 +1258,28 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/account-groups/{account_group_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/account-groups/{account_group_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['account_group_id']).toEqual(accountGroupId);
+        expect(mockRequestOptions.path.account_group_id).toEqual(accountGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAccountGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __getAccountGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __getAccountGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -904,7 +1287,7 @@ describe('EnterpriseManagementV1', () => {
         const accountGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getAccountGroupParams = {
           accountGroupId,
           headers: {
             Accept: userAccept,
@@ -912,7 +1295,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.getAccountGroup(params);
+        enterpriseManagementService.getAccountGroup(getAccountGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -929,31 +1312,33 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getAccountGroupPromise = enterpriseManagementService.getAccountGroup();
-        expectToBePromise(getAccountGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.getAccountGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getAccountGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateAccountGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateAccountGroupTest() {
         // Construct the params object for operation updateAccountGroup
         const accountGroupId = 'testString';
         const name = 'testString';
         const primaryContactIamId = 'testString';
-        const params = {
-          accountGroupId: accountGroupId,
-          name: name,
-          primaryContactIamId: primaryContactIamId,
+        const updateAccountGroupParams = {
+          accountGroupId,
+          name,
+          primaryContactIamId,
         };
 
-        const updateAccountGroupResult = enterpriseManagementService.updateAccountGroup(params);
+        const updateAccountGroupResult = enterpriseManagementService.updateAccountGroup(updateAccountGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(updateAccountGroupResult);
@@ -961,15 +1346,30 @@ describe('EnterpriseManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/account-groups/{account_group_id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/account-groups/{account_group_id}', 'PATCH');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['primary_contact_iam_id']).toEqual(primaryContactIamId);
-        expect(options.path['account_group_id']).toEqual(accountGroupId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.primary_contact_iam_id).toEqual(primaryContactIamId);
+        expect(mockRequestOptions.path.account_group_id).toEqual(accountGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateAccountGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __updateAccountGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __updateAccountGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -977,7 +1377,7 @@ describe('EnterpriseManagementV1', () => {
         const accountGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateAccountGroupParams = {
           accountGroupId,
           headers: {
             Accept: userAccept,
@@ -985,7 +1385,7 @@ describe('EnterpriseManagementV1', () => {
           },
         };
 
-        enterpriseManagementService.updateAccountGroup(params);
+        enterpriseManagementService.updateAccountGroup(updateAccountGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1002,14 +1402,15 @@ describe('EnterpriseManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateAccountGroupPromise = enterpriseManagementService.updateAccountGroup();
-        expectToBePromise(updateAccountGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.updateAccountGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updateAccountGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });

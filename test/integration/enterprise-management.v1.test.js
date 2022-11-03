@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2021, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,6 +116,28 @@ describe('EnterpriseManagementV1_integration', () => {
 
     console.log(`Received a total of ${results.length} account groups.`);
   });
+  test('listAccountGroups() via AccountGroupsPager', async () => {
+    const params = {
+      enterpriseId,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
   test('getAccountGroup()', async () => {
     const params = {
       accountGroupId,
@@ -180,6 +202,28 @@ describe('EnterpriseManagementV1_integration', () => {
 
     console.log(`Received a total of ${results.length} accounts.`);
   });
+  test('listAccounts() via AccountsPager', async () => {
+    const params = {
+      accountGroupId,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
   test('getAccount()', async () => {
     const params = {
       accountId,
@@ -228,6 +272,28 @@ describe('EnterpriseManagementV1_integration', () => {
     expect(results.some((result) => result.id === enterpriseId)).toBe(true);
 
     console.log(`Received a total of ${results.length} enterprises.`);
+  });
+  test('listEnterprises() via EnterprisesPager', async () => {
+    const params = {
+      accountId: enterpriseAccountId,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseManagementV1.EnterprisesPager(enterpriseManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseManagementV1.EnterprisesPager(enterpriseManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
   test('getEnterprise()', async () => {
     const params = {
