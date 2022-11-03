@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.32.0-4c6a3129-20210514-210323
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-f381b8c9-20221101-115055
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,8 +27,9 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -33,6 +37,8 @@ import { getSdkHeaders } from '../lib/common';
  * Manage lifecycle of your Cloud resources using Resource Controller APIs. Resources are provisioned globally in an
  * account scope. Supports asynchronous provisioning of resources. Enables consumption of a global resource through a
  * Cloud Foundry space in any region.
+ *
+ * API Version: 2.0
  */
 
 class ResourceControllerV2 extends BaseService {
@@ -103,21 +109,20 @@ class ResourceControllerV2 extends BaseService {
    * instance to a virtual machine associated with the customer account.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.guid] - When you provision a new resource in the specified location for the selected plan,
-   * a GUID (globally unique identifier) is created. This is a unique internal GUID managed by Resource controller that
-   * corresponds to the instance.
+   * @param {string} [params.guid] - The GUID of the instance.
    * @param {string} [params.name] - The human-readable name of the instance.
-   * @param {string} [params.resourceGroupId] - Short ID of a resource group.
+   * @param {string} [params.resourceGroupId] - The ID of the resource group.
    * @param {string} [params.resourceId] - The unique ID of the offering. This value is provided by and stored in the
    * global catalog.
    * @param {string} [params.resourcePlanId] - The unique ID of the plan associated with the offering. This value is
    * provided by and stored in the global catalog.
    * @param {string} [params.type] - The type of the instance, for example, `service_instance`.
-   * @param {string} [params.subType] - The sub-type of instance, for example, `cfaas`.
+   * @param {string} [params.subType] - The sub-type of instance, for example, `kms`.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {string} [params.state] - The state of the instance. If not specified, instances in state `active` and
    * `provisioning` are returned.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
@@ -129,6 +134,26 @@ class ResourceControllerV2 extends BaseService {
     params?: ResourceControllerV2.ListResourceInstancesParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstancesList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'guid',
+      'name',
+      'resourceGroupId',
+      'resourceId',
+      'resourcePlanId',
+      'type',
+      'subType',
+      'limit',
+      'start',
+      'state',
+      'updatedFrom',
+      'updatedTo',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'guid': _params.guid,
@@ -182,7 +207,7 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} params.name - The name of the instance. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
    * @param {string} params.target - The deployment location where the instance should be hosted.
-   * @param {string} params.resourceGroup - Short or long ID of resource group.
+   * @param {string} params.resourceGroup - The ID of the resource group.
    * @param {string} params.resourcePlanId - The unique ID of the plan associated with the offering. This value is
    * provided by and stored in the global catalog.
    * @param {string[]} [params.tags] - Tags that are attached to the instance after provisioning. These tags can be
@@ -201,11 +226,21 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.CreateResourceInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
     const _params = { ...params };
-    const requiredParams = ['name', 'target', 'resourceGroup', 'resourcePlanId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['name', 'target', 'resourceGroup', 'resourcePlanId'];
+    const _validParams = [
+      'name',
+      'target',
+      'resourceGroup',
+      'resourcePlanId',
+      'tags',
+      'allowCleanup',
+      'parameters',
+      'entityLock',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -250,11 +285,11 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Get a resource instance.
    *
-   * Retrieve a resource instance by ID. Find more details on a particular instance, like when it was provisioned and
-   * who provisioned it.
+   * Retrieve a resource instance by URL-encoded CRN or GUID. Find more details on a particular instance, like when it
+   * was provisioned and who provisioned it.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
@@ -262,11 +297,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.GetResourceInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -303,24 +338,24 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Delete a resource instance.
    *
-   * Delete a resource instance by ID. If the resource instance has any resource keys or aliases associated with it, use
-   * the `recursive=true parameter` to delete it.
+   * Delete a resource instance by URL-encoded CRN or GUID. If the resource instance has any resource keys or aliases
+   * associated with it, use the `recursive=true` parameter to delete it.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {boolean} [params.recursive] - Will delete resource bindings, keys and aliases associated with the instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>>}
    */
   public deleteResourceInstance(
     params: ResourceControllerV2.DeleteResourceInstanceParams
-  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'recursive', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -355,10 +390,11 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource instance.
    *
-   * You can use the ID to make updates to the resource instance, like changing the name or plan.
+   * Use the resource instance URL-encoded CRN or GUID to make updates to the resource instance, like changing the name
+   * or plan.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {string} [params.name] - The new name of the instance. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
    * @param {JsonObject} [params.parameters] - The new configuration options for the instance.
@@ -373,11 +409,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.UpdateResourceInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'name', 'parameters', 'resourcePlanId', 'allowCleanup', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -426,11 +462,12 @@ class ResourceControllerV2 extends BaseService {
    * Retrieving a list of all resource aliases can help you find out who's using the resource instance.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>>}
    */
@@ -438,11 +475,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.ListResourceAliasesForInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'limit', 'start', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -489,11 +526,12 @@ class ResourceControllerV2 extends BaseService {
    * each user or each role.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>>}
    */
@@ -501,11 +539,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.ListResourceKeysForInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'limit', 'start', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -548,11 +586,11 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Lock a resource instance.
    *
-   * Locks a resource instance by ID. A locked instance can not be updated or deleted. It does not affect actions
-   * performed on child resources like aliases, bindings or keys.
+   * Locks a resource instance. A locked instance can not be updated or deleted. It does not affect actions performed on
+   * child resources like aliases, bindings, or keys.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
@@ -560,11 +598,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.LockResourceInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -605,7 +643,7 @@ class ResourceControllerV2 extends BaseService {
    * like aliases, bindings or keys.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the instance.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
    */
@@ -613,11 +651,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.UnlockResourceInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -651,6 +689,58 @@ class ResourceControllerV2 extends BaseService {
     return this.createRequest(parameters);
   }
 
+  /**
+   * Cancel the in progress last operation of the resource instance.
+   *
+   * Cancel the in progress last operation of the resource instance. After successful cancellation, the resource
+   * instance is removed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>>}
+   */
+  public cancelLastopResourceInstance(
+    params: ResourceControllerV2.CancelLastopResourceInstanceParams
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceInstance>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      ResourceControllerV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'cancelLastopResourceInstance'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/resource_instances/{id}/last_operation',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * resourceKeys
    ************************/
@@ -661,16 +751,16 @@ class ResourceControllerV2 extends BaseService {
    * View all of the resource keys that exist for all of your resource instances.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.guid] - When you create a new key, a GUID (globally unique identifier) is assigned. This is
-   * a unique internal GUID managed by Resource controller that corresponds to the key.
+   * @param {string} [params.guid] - The GUID of the key.
    * @param {string} [params.name] - The human-readable name of the key.
-   * @param {string} [params.resourceGroupId] - The short ID of the resource group.
+   * @param {string} [params.resourceGroupId] - The ID of the resource group.
    * @param {string} [params.resourceId] - The unique ID of the offering. This value is provided by and stored in the
    * global catalog.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -680,6 +770,22 @@ class ResourceControllerV2 extends BaseService {
     params?: ResourceControllerV2.ListResourceKeysParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKeysList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'guid',
+      'name',
+      'resourceGroupId',
+      'resourceId',
+      'limit',
+      'start',
+      'updatedFrom',
+      'updatedTo',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'guid': _params.guid,
@@ -726,11 +832,12 @@ class ResourceControllerV2 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - The name of the key.
-   * @param {string} params.source - The short or long ID of resource instance or alias.
+   * @param {string} params.source - The ID of resource instance or alias.
    * @param {ResourceKeyPostParameters} [params.parameters] - Configuration options represented as key-value pairs.
    * Service defined options are passed through to the target resource brokers, whereas platform defined options are
    * not.
-   * @param {string} [params.role] - The role name or it's CRN.
+   * @param {string} [params.role] - The base IAM service role name (Reader, Writer, or Manager), or the service or
+   * custom role CRN. Refer to service’s documentation for supported roles.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>>}
    */
@@ -738,11 +845,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.CreateResourceKeyParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
     const _params = { ...params };
-    const requiredParams = ['name', 'source'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['name', 'source'];
+    const _validParams = ['name', 'source', 'parameters', 'role', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -781,12 +888,12 @@ class ResourceControllerV2 extends BaseService {
   }
 
   /**
-   * Get resource key by ID.
+   * Get resource key.
    *
-   * View a resource key and all of its details, like the credentials for the key and who created it.
+   * View the details of a resource key by URL-encoded CRN or GUID, like the credentials for the key and who created it.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the key.
+   * @param {string} params.id - The resource key URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>>}
    */
@@ -794,11 +901,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.GetResourceKeyParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -833,24 +940,24 @@ class ResourceControllerV2 extends BaseService {
   }
 
   /**
-   * Delete a resource key by ID.
+   * Delete a resource key.
    *
    * Deleting a resource key does not affect any resource instance or resource alias associated with the key.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the key.
+   * @param {string} params.id - The resource key URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>>}
    */
   public deleteResourceKey(
     params: ResourceControllerV2.DeleteResourceKeyParams
-  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -880,10 +987,10 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource key.
    *
-   * Use the resource key ID to update the name of the resource key.
+   * Use the resource key URL-encoded CRN or GUID to update the resource key.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the key.
+   * @param {string} params.id - The resource key URL-encoded CRN or GUID.
    * @param {string} params.name - The new name of the key. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -893,11 +1000,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.UpdateResourceKeyParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceKey>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'name'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'name'];
+    const _validParams = ['id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -936,7 +1043,6 @@ class ResourceControllerV2 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * resourceBindings
    ************************/
@@ -947,17 +1053,18 @@ class ResourceControllerV2 extends BaseService {
    * View all of the resource bindings that exist for all of your resource aliases.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.guid] - The short ID of the binding.
+   * @param {string} [params.guid] - The GUID of the binding.
    * @param {string} [params.name] - The human-readable name of the binding.
-   * @param {string} [params.resourceGroupId] - Short ID of the resource group.
+   * @param {string} [params.resourceGroupId] - The ID of the resource group.
    * @param {string} [params.resourceId] - The unique ID of the offering (service name). This value is provided by and
    * stored in the global catalog.
-   * @param {string} [params.regionBindingId] - Short ID of the binding in the specific targeted environment, for
-   * example, service_binding_id in a given IBM Cloud environment.
+   * @param {string} [params.regionBindingId] - The ID of the binding in the target environment. For example,
+   * `service_binding_id` in a given IBM Cloud environment.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -967,6 +1074,23 @@ class ResourceControllerV2 extends BaseService {
     params?: ResourceControllerV2.ListResourceBindingsParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'guid',
+      'name',
+      'resourceGroupId',
+      'resourceId',
+      'regionBindingId',
+      'limit',
+      'start',
+      'updatedFrom',
+      'updatedTo',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'guid': _params.guid,
@@ -1013,7 +1137,7 @@ class ResourceControllerV2 extends BaseService {
    * A resource binding connects credentials to a resource alias. The credentials are in the form of a resource key.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.source - The short or long ID of resource alias.
+   * @param {string} params.source - The ID of resource alias.
    * @param {string} params.target - The CRN of application to bind to in a specific environment, for example, Dallas
    * YP, CFEE instance.
    * @param {string} [params.name] - The name of the binding. Must be 180 characters or less and cannot include any
@@ -1021,7 +1145,8 @@ class ResourceControllerV2 extends BaseService {
    * @param {ResourceBindingPostParameters} [params.parameters] - Configuration options represented as key-value pairs.
    * Service defined options are passed through to the target resource brokers, whereas platform defined options are
    * not.
-   * @param {string} [params.role] - The role name or it's CRN.
+   * @param {string} [params.role] - The base IAM service role name (Reader, Writer, or Manager), or the service or
+   * custom role CRN. Refer to service’s documentation for supported roles.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
    */
@@ -1029,11 +1154,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.CreateResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
     const _params = { ...params };
-    const requiredParams = ['source', 'target'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['source', 'target'];
+    const _validParams = ['source', 'target', 'name', 'parameters', 'role', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1079,7 +1204,7 @@ class ResourceControllerV2 extends BaseService {
    * the binding is associated with.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the binding.
+   * @param {string} params.id - The resource binding URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
    */
@@ -1087,11 +1212,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.GetResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1131,19 +1256,19 @@ class ResourceControllerV2 extends BaseService {
    * Deleting a resource binding does not affect the resource alias that the binding is associated with.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the binding.
+   * @param {string} params.id - The resource binding URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>>}
    */
   public deleteResourceBinding(
     params: ResourceControllerV2.DeleteResourceBindingParams
-  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1173,10 +1298,10 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource binding.
    *
-   * Use the resource binding ID to update the name of the resource binding.
+   * Use the resource binding URL-encoded CRN or GUID to update the resource binding.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the binding.
+   * @param {string} params.id - The resource binding URL-encoded CRN or GUID.
    * @param {string} params.name - The new name of the binding. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1186,11 +1311,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.UpdateResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'name'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'name'];
+    const _validParams = ['id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1229,7 +1354,6 @@ class ResourceControllerV2 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * resourceAliases
    ************************/
@@ -1240,18 +1364,19 @@ class ResourceControllerV2 extends BaseService {
    * View all of the resource aliases that exist for every resource instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.guid] - Short ID of the alias.
+   * @param {string} [params.guid] - The GUID of the alias.
    * @param {string} [params.name] - The human-readable name of the alias.
-   * @param {string} [params.resourceInstanceId] - Resource instance short ID.
-   * @param {string} [params.regionInstanceId] - Short ID of the instance in a specific targeted environment. For
-   * example, `service_instance_id` in a given IBM Cloud environment.
+   * @param {string} [params.resourceInstanceId] - The ID of the resource instance.
+   * @param {string} [params.regionInstanceId] - The ID of the instance in the target environment. For example,
+   * `service_instance_id` in a given IBM Cloud environment.
    * @param {string} [params.resourceId] - The unique ID of the offering (service name). This value is provided by and
    * stored in the global catalog.
-   * @param {string} [params.resourceGroupId] - Short ID of Resource group.
+   * @param {string} [params.resourceGroupId] - The ID of the resource group.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {string} [params.updatedFrom] - Start date inclusive filter.
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1261,6 +1386,24 @@ class ResourceControllerV2 extends BaseService {
     params?: ResourceControllerV2.ListResourceAliasesParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'guid',
+      'name',
+      'resourceInstanceId',
+      'regionInstanceId',
+      'resourceId',
+      'resourceGroupId',
+      'limit',
+      'start',
+      'updatedFrom',
+      'updatedTo',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'guid': _params.guid,
@@ -1310,7 +1453,7 @@ class ResourceControllerV2 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - The name of the alias. Must be 180 characters or less and cannot include any special
    * characters other than `(space) - . _ :`.
-   * @param {string} params.source - The short or long ID of resource instance.
+   * @param {string} params.source - The ID of resource instance.
    * @param {string} params.target - The CRN of target name(space) in a specific environment, for example, space in
    * Dallas YP, CFEE instance etc.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1320,11 +1463,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.CreateResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
     const _params = { ...params };
-    const requiredParams = ['name', 'source', 'target'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['name', 'source', 'target'];
+    const _validParams = ['name', 'source', 'target', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1368,7 +1511,7 @@ class ResourceControllerV2 extends BaseService {
    * with.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the alias.
+   * @param {string} params.id - The resource alias URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
    */
@@ -1376,11 +1519,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.GetResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -1417,24 +1560,29 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Delete a resource alias.
    *
-   * If the resource alias has any resource keys or bindings associated with it, you must delete those child resources
-   * before deleting the resource alias.
+   * Delete a resource alias by URL-encoded CRN or GUID. If the resource alias has any resource keys or bindings
+   * associated with it, use the `recursive=true` parameter to delete it.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the alias.
+   * @param {string} params.id - The resource alias URL-encoded CRN or GUID.
+   * @param {boolean} [params.recursive] - Deletes the resource bindings and keys associated with the alias.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>>}
+   * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>>}
    */
   public deleteResourceAlias(
     params: ResourceControllerV2.DeleteResourceAliasParams
-  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Empty>> {
+  ): Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'recursive', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'recursive': _params.recursive,
+    };
 
     const path = {
       'id': _params.id,
@@ -1450,6 +1598,7 @@ class ResourceControllerV2 extends BaseService {
       options: {
         url: '/v2/resource_aliases/{id}',
         method: 'DELETE',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -1463,10 +1612,10 @@ class ResourceControllerV2 extends BaseService {
   /**
    * Update a resource alias.
    *
-   * Use the resource alias ID to update the name of the resource alias.
+   * Use the resource alias URL-encoded CRN or GUID to update the resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the alias.
+   * @param {string} params.id - The resource alias URL-encoded CRN or GUID.
    * @param {string} params.name - The new name of the alias. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1476,11 +1625,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.UpdateResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'name'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'name'];
+    const _validParams = ['id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1526,11 +1675,12 @@ class ResourceControllerV2 extends BaseService {
    * View all of the resource bindings associated with a specific resource alias.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The short or long ID of the alias.
+   * @param {string} params.id - The resource alias URL-encoded CRN or GUID.
    * @param {number} [params.limit] - Limit on how many items should be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. Any additional query parameters are ignored if a page token is present. If omitted, the first page of
-   * results is returned. This value is obtained from the 'next_url' field of the operation response.
+   * results is returned. This value is obtained from the 'start' query parameter in the 'next_url' field of the
+   * operation response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>>}
    */
@@ -1538,11 +1688,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.ListResourceBindingsForAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'limit', 'start', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -1581,7 +1731,6 @@ class ResourceControllerV2 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * resourceReclamations
    ************************/
@@ -1593,7 +1742,7 @@ class ResourceControllerV2 extends BaseService {
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - An alpha-numeric value identifying the account ID.
-   * @param {string} [params.resourceInstanceId] - The short ID of the resource instance.
+   * @param {string} [params.resourceInstanceId] - The GUID of the resource instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>>}
    */
@@ -1601,6 +1750,12 @@ class ResourceControllerV2 extends BaseService {
     params?: ResourceControllerV2.ListReclamationsParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'resourceInstanceId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'account_id': _params.accountId,
@@ -1653,11 +1808,11 @@ class ResourceControllerV2 extends BaseService {
     params: ResourceControllerV2.RunReclamationActionParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.Reclamation>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'actionName'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'actionName'];
+    const _validParams = ['id', 'actionName', 'requestBy', 'comment', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -1717,7 +1872,7 @@ namespace ResourceControllerV2 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1730,14 +1885,11 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `listResourceInstances` operation. */
   export interface ListResourceInstancesParams {
-    /** When you provision a new resource in the specified location for the selected plan, a GUID (globally unique
-     *  identifier) is created. This is a unique internal GUID managed by Resource controller that corresponds to the
-     *  instance.
-     */
+    /** The GUID of the instance. */
     guid?: string;
     /** The human-readable name of the instance. */
     name?: string;
-    /** Short ID of a resource group. */
+    /** The ID of the resource group. */
     resourceGroupId?: string;
     /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
     resourceId?: string;
@@ -1747,13 +1899,13 @@ namespace ResourceControllerV2 {
     resourcePlanId?: string;
     /** The type of the instance, for example, `service_instance`. */
     type?: string;
-    /** The sub-type of instance, for example, `cfaas`. */
+    /** The sub-type of instance, for example, `kms`. */
     subType?: string;
     /** Limit on how many items should be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     /** The state of the instance. If not specified, instances in state `active` and `provisioning` are returned. */
@@ -1770,7 +1922,11 @@ namespace ResourceControllerV2 {
     /** The state of the instance. If not specified, instances in state `active` and `provisioning` are returned. */
     export enum State {
       ACTIVE = 'active',
+      INACTIVE = 'inactive',
+      FAILED = 'failed',
+      PENDING_RECLAMATION = 'pending_reclamation',
       PROVISIONING = 'provisioning',
+      PRE_PROVISIONING = 'pre_provisioning',
       REMOVED = 'removed',
     }
   }
@@ -1783,7 +1939,7 @@ namespace ResourceControllerV2 {
     name: string;
     /** The deployment location where the instance should be hosted. */
     target: string;
-    /** Short or long ID of resource group. */
+    /** The ID of the resource group. */
     resourceGroup: string;
     /** The unique ID of the plan associated with the offering. This value is provided by and stored in the global
      *  catalog.
@@ -1808,14 +1964,14 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `getResourceInstance` operation. */
   export interface GetResourceInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteResourceInstance` operation. */
   export interface DeleteResourceInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     /** Will delete resource bindings, keys and aliases associated with the instance. */
     recursive?: boolean;
@@ -1824,7 +1980,7 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `updateResourceInstance` operation. */
   export interface UpdateResourceInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     /** The new name of the instance. Must be 180 characters or less and cannot include any special characters other
      *  than `(space) - . _ :`.
@@ -1845,13 +2001,13 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `listResourceAliasesForInstance` operation. */
   export interface ListResourceAliasesForInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     /** Limit on how many items should be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     headers?: OutgoingHttpHeaders;
@@ -1859,13 +2015,13 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `listResourceKeysForInstance` operation. */
   export interface ListResourceKeysForInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     /** Limit on how many items should be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     headers?: OutgoingHttpHeaders;
@@ -1873,27 +2029,32 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `lockResourceInstance` operation. */
   export interface LockResourceInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `unlockResourceInstance` operation. */
   export interface UnlockResourceInstanceParams {
-    /** The short or long ID of the instance. */
+    /** The resource instance URL-encoded CRN or GUID. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `cancelLastopResourceInstance` operation. */
+  export interface CancelLastopResourceInstanceParams {
+    /** The resource instance URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listResourceKeys` operation. */
   export interface ListResourceKeysParams {
-    /** When you create a new key, a GUID (globally unique identifier) is assigned. This is a unique internal GUID
-     *  managed by Resource controller that corresponds to the key.
-     */
+    /** The GUID of the key. */
     guid?: string;
     /** The human-readable name of the key. */
     name?: string;
-    /** The short ID of the resource group. */
+    /** The ID of the resource group. */
     resourceGroupId?: string;
     /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
     resourceId?: string;
@@ -1901,7 +2062,7 @@ namespace ResourceControllerV2 {
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     /** Start date inclusive filter. */
@@ -1915,34 +2076,36 @@ namespace ResourceControllerV2 {
   export interface CreateResourceKeyParams {
     /** The name of the key. */
     name: string;
-    /** The short or long ID of resource instance or alias. */
+    /** The ID of resource instance or alias. */
     source: string;
     /** Configuration options represented as key-value pairs. Service defined options are passed through to the
      *  target resource brokers, whereas platform defined options are not.
      */
     parameters?: ResourceKeyPostParameters;
-    /** The role name or it's CRN. */
+    /** The base IAM service role name (Reader, Writer, or Manager), or the service or custom role CRN. Refer to
+     *  service’s documentation for supported roles.
+     */
     role?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getResourceKey` operation. */
   export interface GetResourceKeyParams {
-    /** The short or long ID of the key. */
+    /** The resource key URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteResourceKey` operation. */
   export interface DeleteResourceKeyParams {
-    /** The short or long ID of the key. */
+    /** The resource key URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateResourceKey` operation. */
   export interface UpdateResourceKeyParams {
-    /** The short or long ID of the key. */
+    /** The resource key URL-encoded CRN or GUID. */
     id: string;
     /** The new name of the key. Must be 180 characters or less and cannot include any special characters other than
      *  `(space) - . _ :`.
@@ -1953,23 +2116,23 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `listResourceBindings` operation. */
   export interface ListResourceBindingsParams {
-    /** The short ID of the binding. */
+    /** The GUID of the binding. */
     guid?: string;
     /** The human-readable name of the binding. */
     name?: string;
-    /** Short ID of the resource group. */
+    /** The ID of the resource group. */
     resourceGroupId?: string;
     /** The unique ID of the offering (service name). This value is provided by and stored in the global catalog. */
     resourceId?: string;
-    /** Short ID of the binding in the specific targeted environment, for example, service_binding_id in a given IBM
-     *  Cloud environment.
+    /** The ID of the binding in the target environment. For example, `service_binding_id` in a given IBM Cloud
+     *  environment.
      */
     regionBindingId?: string;
     /** Limit on how many items should be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     /** Start date inclusive filter. */
@@ -1981,7 +2144,7 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `createResourceBinding` operation. */
   export interface CreateResourceBindingParams {
-    /** The short or long ID of resource alias. */
+    /** The ID of resource alias. */
     source: string;
     /** The CRN of application to bind to in a specific environment, for example, Dallas YP, CFEE instance. */
     target: string;
@@ -1993,28 +2156,30 @@ namespace ResourceControllerV2 {
      *  target resource brokers, whereas platform defined options are not.
      */
     parameters?: ResourceBindingPostParameters;
-    /** The role name or it's CRN. */
+    /** The base IAM service role name (Reader, Writer, or Manager), or the service or custom role CRN. Refer to
+     *  service’s documentation for supported roles.
+     */
     role?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getResourceBinding` operation. */
   export interface GetResourceBindingParams {
-    /** The short or long ID of the binding. */
+    /** The resource binding URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteResourceBinding` operation. */
   export interface DeleteResourceBindingParams {
-    /** The short or long ID of the binding. */
+    /** The resource binding URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateResourceBinding` operation. */
   export interface UpdateResourceBindingParams {
-    /** The short or long ID of the binding. */
+    /** The resource binding URL-encoded CRN or GUID. */
     id: string;
     /** The new name of the binding. Must be 180 characters or less and cannot include any special characters other
      *  than `(space) - . _ :`.
@@ -2025,25 +2190,25 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `listResourceAliases` operation. */
   export interface ListResourceAliasesParams {
-    /** Short ID of the alias. */
+    /** The GUID of the alias. */
     guid?: string;
     /** The human-readable name of the alias. */
     name?: string;
-    /** Resource instance short ID. */
+    /** The ID of the resource instance. */
     resourceInstanceId?: string;
-    /** Short ID of the instance in a specific targeted environment. For example, `service_instance_id` in a given
-     *  IBM Cloud environment.
+    /** The ID of the instance in the target environment. For example, `service_instance_id` in a given IBM Cloud
+     *  environment.
      */
     regionInstanceId?: string;
     /** The unique ID of the offering (service name). This value is provided by and stored in the global catalog. */
     resourceId?: string;
-    /** Short ID of Resource group. */
+    /** The ID of the resource group. */
     resourceGroupId?: string;
     /** Limit on how many items should be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     /** Start date inclusive filter. */
@@ -2059,7 +2224,7 @@ namespace ResourceControllerV2 {
      *  `(space) - . _ :`.
      */
     name: string;
-    /** The short or long ID of resource instance. */
+    /** The ID of resource instance. */
     source: string;
     /** The CRN of target name(space) in a specific environment, for example, space in Dallas YP, CFEE instance etc. */
     target: string;
@@ -2068,21 +2233,23 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `getResourceAlias` operation. */
   export interface GetResourceAliasParams {
-    /** The short or long ID of the alias. */
+    /** The resource alias URL-encoded CRN or GUID. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteResourceAlias` operation. */
   export interface DeleteResourceAliasParams {
-    /** The short or long ID of the alias. */
+    /** The resource alias URL-encoded CRN or GUID. */
     id: string;
+    /** Deletes the resource bindings and keys associated with the alias. */
+    recursive?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateResourceAlias` operation. */
   export interface UpdateResourceAliasParams {
-    /** The short or long ID of the alias. */
+    /** The resource alias URL-encoded CRN or GUID. */
     id: string;
     /** The new name of the alias. Must be 180 characters or less and cannot include any special characters other
      *  than `(space) - . _ :`.
@@ -2093,13 +2260,13 @@ namespace ResourceControllerV2 {
 
   /** Parameters for the `listResourceBindingsForAlias` operation. */
   export interface ListResourceBindingsForAliasParams {
-    /** The short or long ID of the alias. */
+    /** The resource alias URL-encoded CRN or GUID. */
     id: string;
     /** Limit on how many items should be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. Any additional query
      *  parameters are ignored if a page token is present. If omitted, the first page of results is returned. This value
-     *  is obtained from the 'next_url' field of the operation response.
+     *  is obtained from the 'start' query parameter in the 'next_url' field of the operation response.
      */
     start?: string;
     headers?: OutgoingHttpHeaders;
@@ -2109,7 +2276,7 @@ namespace ResourceControllerV2 {
   export interface ListReclamationsParams {
     /** An alpha-numeric value identifying the account ID. */
     accountId?: string;
-    /** The short ID of the resource instance. */
+    /** The GUID of the resource instance. */
     resourceInstanceId?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -2133,6 +2300,12 @@ namespace ResourceControllerV2 {
 
   /** The credentials for a resource. */
   export interface Credentials {
+    /** If present, the user doesn't have the correct access to view the credentials and the details are redacted.
+     *  The string value identifies the level of access that's required to view the credential. For additional
+     *  information, see [viewing a
+     *  credential](https://cloud.ibm.com/docs/account?topic=account-service_credentials&interface=ui#viewing-credentials-ui).
+     */
+    REDACTED?: string;
     /** The API key for the credentials. */
     apikey?: string;
     /** The optional description of the API key. */
@@ -2163,21 +2336,21 @@ namespace ResourceControllerV2 {
   export interface Reclamation {
     /** The ID associated with the reclamation. */
     id?: string;
-    /** The short ID of the entity for the reclamation. */
+    /** The ID of the entity for the reclamation. */
     entity_id?: string;
-    /** The short ID of the entity type for the reclamation. */
+    /** The ID of the entity type for the reclamation. */
     entity_type_id?: string;
     /** The full Cloud Resource Name (CRN) associated with the binding. For more information about this format, see
      *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
      */
     entity_crn?: string;
-    /** The short ID of the resource instance. */
+    /** The ID of the resource instance. */
     resource_instance_id?: string;
-    /** The short ID of the resource group. */
+    /** The ID of the resource group. */
     resource_group_id?: string;
     /** An alpha-numeric value identifying the account ID. */
     account_id?: string;
-    /** The short ID of policy for the reclamation. */
+    /** The ID of policy for the reclamation. */
     policy_id?: string;
     /** The state of the reclamation. */
     state?: string;
@@ -2205,9 +2378,7 @@ namespace ResourceControllerV2 {
   export interface ResourceAlias {
     /** The ID associated with the alias. */
     id?: string;
-    /** When you create a new alias, a globally unique identifier (GUID) is assigned. This GUID is a unique internal
-     *  indentifier managed by the resource controller that corresponds to the alias.
-     */
+    /** The GUID of the alias. */
     guid?: string;
     /** When you created a new alias, a relative URL path is created identifying the location of the alias. */
     url?: string;
@@ -2239,11 +2410,11 @@ namespace ResourceControllerV2 {
      *  Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
      */
     crn?: string;
-    /** The ID of the instance in the specific target environment, for example, `service_instance_id` in a given IBM
-     *  Cloud environment.
+    /** The ID of the instance in the target environment. For example, `service_instance_id` in a given IBM Cloud
+     *  environment.
      */
     region_instance_id?: string;
-    /** The CRN of the instance in the specific target environment. */
+    /** The CRN of the instance in the target environment. */
     region_instance_crn?: string;
     /** The state of the alias. */
     state?: string;
@@ -2271,9 +2442,7 @@ namespace ResourceControllerV2 {
   export interface ResourceBinding {
     /** The ID associated with the binding. */
     id?: string;
-    /** When you create a new binding, a globally unique identifier (GUID) is assigned. This GUID is a unique
-     *  internal identifier managed by the resource controller that corresponds to the binding.
-     */
+    /** The GUID of the binding. */
     guid?: string;
     /** When you provision a new binding, a relative URL path is created identifying the location of the binding. */
     url?: string;
@@ -2297,11 +2466,11 @@ namespace ResourceControllerV2 {
      *  [Cloud Resource Names](https://cloud.ibm.com/docs/overview?topic=overview-crn).
      */
     crn?: string;
-    /** The ID of the binding in the specific target environment, for example, `service_binding_id` in a given IBM
-     *  Cloud environment.
+    /** The ID of the binding in the target environment. For example, `service_binding_id` in a given IBM Cloud
+     *  environment.
      */
     region_binding_id?: string;
-    /** The CRN of the binding in the specific target environment. */
+    /** The CRN of the binding in the target environment. */
     region_binding_crn?: string;
     /** The human-readable name of the binding. */
     name?: string;
@@ -2312,7 +2481,11 @@ namespace ResourceControllerV2 {
     /** The state of the binding. */
     state?: string;
     /** The credentials for the binding. Additional key-value pairs are passed through from the resource brokers.
-     *  For additional details, see the service’s documentation.
+     *  After a credential is created for a service, it can be viewed at any time for users that need the API key value.
+     *  However, all users must have the correct level of access to see the details of a credential that includes the
+     *  API key value. For additional details, see [viewing a
+     *  credential](https://cloud.ibm.com/docs/account?topic=account-service_credentials&interface=ui#viewing-credentials-ui)
+     *  or the service’s documentation.
      */
     credentials?: Credentials;
     /** Specifies whether the binding’s credentials support IAM. */
@@ -2347,9 +2520,7 @@ namespace ResourceControllerV2 {
   export interface ResourceInstance {
     /** The ID associated with the instance. */
     id?: string;
-    /** When you create a new resource, a globally unique identifier (GUID) is assigned. This GUID is a unique
-     *  internal identifier managed by the resource controller that corresponds to the instance.
-     */
+    /** The GUID of the instance. */
     guid?: string;
     /** When you provision a new resource, a relative URL path is created identifying the location of the instance. */
     url?: string;
@@ -2414,7 +2585,7 @@ namespace ResourceControllerV2 {
     /** The resource-broker-provided URL to access administrative features of the instance. */
     dashboard_url?: string;
     /** The status of the last operation requested on the instance. */
-    last_operation?: JsonObject;
+    last_operation?: ResourceInstanceLastOperation;
     /** The relative path to the resource aliases for the instance. */
     resource_aliases_url?: string;
     /** The relative path to the resource bindings for the instance. */
@@ -2435,6 +2606,32 @@ namespace ResourceControllerV2 {
     locked?: boolean;
   }
 
+  /** The status of the last operation requested on the instance. */
+  export interface ResourceInstanceLastOperation {
+    /** The last operation type of the resource instance. */
+    type: string;
+    /** The last operation state of the resoure instance. This indicates if the resource's last operation is in
+     *  progress, succeeded or failed.
+     */
+    state: string;
+    /** The last operation sub type of the resoure instance. */
+    sub_type?: string;
+    /** A boolean that indicates if the resource is provisioned asynchronously or not. */
+    async: boolean;
+    /** The description of the status of last operation. */
+    description: string;
+    /** Optional string that states the reason code for the last operation state change. */
+    reason_code?: string;
+    /** A field which indicates the time after which the instance's last operation is to be polled. */
+    poll_after?: number;
+    /** A boolean that indicates if the resource's last operation is cancelable or not. */
+    cancelable: boolean;
+    /** A boolean that indicates if the resource broker's last operation can be polled or not. */
+    poll: boolean;
+    /** ResourceInstanceLastOperation accepts additional properties. */
+    [propName: string]: any;
+  }
+
   /** A list of resource instances. */
   export interface ResourceInstancesList {
     /** The number of resource instances in `resources`. */
@@ -2449,9 +2646,7 @@ namespace ResourceControllerV2 {
   export interface ResourceKey {
     /** The ID associated with the key. */
     id?: string;
-    /** When you create a new key, a globally unique identifier (GUID) is assigned. This GUID is a unique internal
-     *  identifier managed by the resource controller that corresponds to the key.
-     */
+    /** The GUID of the key. */
     guid?: string;
     /** When you created a new key, a relative URL path is created identifying the location of the key. */
     url?: string;
@@ -2483,8 +2678,12 @@ namespace ResourceControllerV2 {
     resource_group_id?: string;
     /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
     resource_id?: string;
-    /** The credentials for the key. Additional key-value pairs are passed through from the resource brokers.  Refer
-     *  to service’s documentation for additional details.
+    /** The credentials for the key. Additional key-value pairs are passed through from the resource brokers. After
+     *  a credential is created for a service, it can be viewed at any time for users that need the API key value.
+     *  However, all users must have the correct level of access to see the details of a credential that includes the
+     *  API key value. For additional details, see [viewing a
+     *  credential](https://cloud.ibm.com/docs/account?topic=account-service_credentials&interface=ui#viewing-credentials-ui)
+     *  or the service’s documentation.
      */
     credentials?: Credentials;
     /** Specifies whether the key’s credentials support IAM. */
@@ -2513,6 +2712,584 @@ namespace ResourceControllerV2 {
     next_url: string;
     /** A list of resource keys. */
     resources: ResourceKey[];
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * ResourceInstancesPager can be used to simplify the use of listResourceInstances().
+   */
+  export class ResourceInstancesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceInstancesParams;
+
+    /**
+     * Construct a ResourceInstancesPager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceInstances()
+     * @param {Object} [params] - The parameters to be passed to listResourceInstances()
+     * @constructor
+     * @returns {ResourceInstancesPager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params?: ResourceControllerV2.ListResourceInstancesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceInstances().
+     * @returns {Promise<ResourceControllerV2.ResourceInstance[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceInstance[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceInstances(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceInstances() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceInstance[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceInstance[]> {
+      const results: ResourceInstance[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ResourceAliasesForInstancePager can be used to simplify the use of listResourceAliasesForInstance().
+   */
+  export class ResourceAliasesForInstancePager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceAliasesForInstanceParams;
+
+    /**
+     * Construct a ResourceAliasesForInstancePager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceAliasesForInstance()
+     * @param {Object} params - The parameters to be passed to listResourceAliasesForInstance()
+     * @constructor
+     * @returns {ResourceAliasesForInstancePager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params: ResourceControllerV2.ListResourceAliasesForInstanceParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceAliasesForInstance().
+     * @returns {Promise<ResourceControllerV2.ResourceAlias[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceAlias[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceAliasesForInstance(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceAliasesForInstance() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceAlias[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceAlias[]> {
+      const results: ResourceAlias[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ResourceKeysForInstancePager can be used to simplify the use of listResourceKeysForInstance().
+   */
+  export class ResourceKeysForInstancePager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceKeysForInstanceParams;
+
+    /**
+     * Construct a ResourceKeysForInstancePager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceKeysForInstance()
+     * @param {Object} params - The parameters to be passed to listResourceKeysForInstance()
+     * @constructor
+     * @returns {ResourceKeysForInstancePager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params: ResourceControllerV2.ListResourceKeysForInstanceParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceKeysForInstance().
+     * @returns {Promise<ResourceControllerV2.ResourceKey[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceKey[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceKeysForInstance(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceKeysForInstance() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceKey[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceKey[]> {
+      const results: ResourceKey[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ResourceKeysPager can be used to simplify the use of listResourceKeys().
+   */
+  export class ResourceKeysPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceKeysParams;
+
+    /**
+     * Construct a ResourceKeysPager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceKeys()
+     * @param {Object} [params] - The parameters to be passed to listResourceKeys()
+     * @constructor
+     * @returns {ResourceKeysPager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params?: ResourceControllerV2.ListResourceKeysParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceKeys().
+     * @returns {Promise<ResourceControllerV2.ResourceKey[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceKey[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceKeys(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceKeys() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceKey[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceKey[]> {
+      const results: ResourceKey[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ResourceBindingsPager can be used to simplify the use of listResourceBindings().
+   */
+  export class ResourceBindingsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceBindingsParams;
+
+    /**
+     * Construct a ResourceBindingsPager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceBindings()
+     * @param {Object} [params] - The parameters to be passed to listResourceBindings()
+     * @constructor
+     * @returns {ResourceBindingsPager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params?: ResourceControllerV2.ListResourceBindingsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceBindings().
+     * @returns {Promise<ResourceControllerV2.ResourceBinding[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceBinding[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceBindings(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceBindings() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceBinding[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceBinding[]> {
+      const results: ResourceBinding[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ResourceAliasesPager can be used to simplify the use of listResourceAliases().
+   */
+  export class ResourceAliasesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceAliasesParams;
+
+    /**
+     * Construct a ResourceAliasesPager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceAliases()
+     * @param {Object} [params] - The parameters to be passed to listResourceAliases()
+     * @constructor
+     * @returns {ResourceAliasesPager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params?: ResourceControllerV2.ListResourceAliasesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceAliases().
+     * @returns {Promise<ResourceControllerV2.ResourceAlias[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceAlias[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceAliases(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceAliases() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceAlias[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceAlias[]> {
+      const results: ResourceAlias[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ResourceBindingsForAliasPager can be used to simplify the use of listResourceBindingsForAlias().
+   */
+  export class ResourceBindingsForAliasPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: ResourceControllerV2;
+
+    protected params: ResourceControllerV2.ListResourceBindingsForAliasParams;
+
+    /**
+     * Construct a ResourceBindingsForAliasPager object.
+     *
+     * @param {ResourceControllerV2}  client - The service client instance used to invoke listResourceBindingsForAlias()
+     * @param {Object} params - The parameters to be passed to listResourceBindingsForAlias()
+     * @constructor
+     * @returns {ResourceBindingsForAliasPager}
+     */
+    constructor(
+      client: ResourceControllerV2,
+      params: ResourceControllerV2.ListResourceBindingsForAliasParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listResourceBindingsForAlias().
+     * @returns {Promise<ResourceControllerV2.ResourceBinding[]>}
+     */
+    public async getNext(): Promise<ResourceControllerV2.ResourceBinding[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listResourceBindingsForAlias(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listResourceBindingsForAlias() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<ResourceControllerV2.ResourceBinding[]>}
+     */
+    public async getAll(): Promise<ResourceControllerV2.ResourceBinding[]> {
+      const results: ResourceBinding[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
