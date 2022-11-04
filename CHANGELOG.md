@@ -1,3 +1,10 @@
+## [0.27.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.27.2...v0.27.3) (2022-11-04)
+
+
+### Bug Fixes
+
+* **Enterprise Management:** re-gen service to get new Pagers ([#174](https://github.com/IBM/platform-services-node-sdk/issues/174)) ([1eac8b4](https://github.com/IBM/platform-services-node-sdk/commit/1eac8b4cc6d31d738d817b0cbb727ce16d296faf))
+
 ## [0.27.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.27.1...v0.27.2) (2022-11-03)
 
 
