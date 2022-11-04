@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2021, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,13 +110,12 @@ describe('EnterpriseManagementV1', () => {
     accountGroupId = res.accountGroupId;
   });
   test('listAccountGroups request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -127,9 +126,15 @@ describe('EnterpriseManagementV1', () => {
       enterpriseId: enterpriseId,
     };
 
+    const allResults = [];
     try {
-      const res = await enterpriseManagementService.listAccountGroups(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -258,13 +263,12 @@ describe('EnterpriseManagementV1', () => {
     // end-import_account_to_enterprise
   });
   test('listAccounts request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -275,9 +279,15 @@ describe('EnterpriseManagementV1', () => {
       enterpriseId: enterpriseId,
     };
 
+    const allResults = [];
     try {
-      const res = await enterpriseManagementService.listAccounts(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -378,13 +388,12 @@ describe('EnterpriseManagementV1', () => {
     // end-create_enterprise
   });
   test('listEnterprises request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -395,9 +404,15 @@ describe('EnterpriseManagementV1', () => {
       accountId: enterpriseAccountId,
     };
 
+    const allResults = [];
     try {
-      const res = await enterpriseManagementService.listEnterprises(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new EnterpriseManagementV1.EnterprisesPager(enterpriseManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }

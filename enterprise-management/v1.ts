@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.30.0-bd714324-20210406-200538
+ * IBM OpenAPI SDK Code Generator Version: 3.60.2-95dc7721-20221102-203229
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,14 +27,17 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * The Enterprise Management API enables you to create and manage an enterprise, account groups, and accounts within the
  * enterprise.
+ *
+ * API Version: 1.0
  */
 
 class EnterpriseManagementV1 extends BaseService {
@@ -119,11 +125,11 @@ class EnterpriseManagementV1 extends BaseService {
     params: EnterpriseManagementV1.CreateEnterpriseParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateEnterpriseResponse>> {
     const _params = { ...params };
-    const requiredParams = ['sourceAccountId', 'name', 'primaryContactIamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['sourceAccountId', 'name', 'primaryContactIamId'];
+    const _validParams = ['sourceAccountId', 'name', 'primaryContactIamId', 'domain', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -189,6 +195,19 @@ class EnterpriseManagementV1 extends BaseService {
     params?: EnterpriseManagementV1.ListEnterprisesParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListEnterprisesResponse>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'enterpriseAccountId',
+      'accountGroupId',
+      'accountId',
+      'nextDocid',
+      'limit',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'enterprise_account_id': _params.enterpriseAccountId,
@@ -240,11 +259,11 @@ class EnterpriseManagementV1 extends BaseService {
     params: EnterpriseManagementV1.GetEnterpriseParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Enterprise>> {
     const _params = { ...params };
-    const requiredParams = ['enterpriseId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['enterpriseId'];
+    const _validParams = ['enterpriseId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -291,17 +310,17 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} [params.primaryContactIamId] - The IAM ID of the user to be the new primary contact for the
    * enterprise.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
    */
   public updateEnterprise(
     params: EnterpriseManagementV1.UpdateEnterpriseParams
-  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['enterpriseId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['enterpriseId'];
+    const _validParams = ['enterpriseId', 'name', 'domain', 'primaryContactIamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -341,7 +360,6 @@ class EnterpriseManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * accountOperations
    ************************/
@@ -365,17 +383,17 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} [params.billingUnitId] - The ID of the [billing unit](/apidocs/enterprise-apis/billing-unit) to use
    * for billing this account in the enterprise.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
    */
   public importAccountToEnterprise(
     params: EnterpriseManagementV1.ImportAccountToEnterpriseParams
-  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['enterpriseId', 'accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['enterpriseId', 'accountId'];
+    const _validParams = ['enterpriseId', 'accountId', 'parent', 'billingUnitId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -437,11 +455,11 @@ class EnterpriseManagementV1 extends BaseService {
     params: EnterpriseManagementV1.CreateAccountParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>> {
     const _params = { ...params };
-    const requiredParams = ['parent', 'name', 'ownerIamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['parent', 'name', 'ownerIamId'];
+    const _validParams = ['parent', 'name', 'ownerIamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -509,6 +527,19 @@ class EnterpriseManagementV1 extends BaseService {
     params?: EnterpriseManagementV1.ListAccountsParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountsResponse>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'enterpriseId',
+      'accountGroupId',
+      'nextDocid',
+      'parent',
+      'limit',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'enterprise_id': _params.enterpriseId,
@@ -560,11 +591,11 @@ class EnterpriseManagementV1 extends BaseService {
     params: EnterpriseManagementV1.GetAccountParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -607,17 +638,17 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} params.accountId - The ID of the account to retrieve.
    * @param {string} params.parent - The CRN of the new parent within the enterprise.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
    */
   public updateAccount(
     params: EnterpriseManagementV1.UpdateAccountParams
-  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'parent'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'parent'];
+    const _validParams = ['accountId', 'parent', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -655,7 +686,6 @@ class EnterpriseManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * accountGroupOperations
    ************************/
@@ -680,11 +710,11 @@ class EnterpriseManagementV1 extends BaseService {
     params: EnterpriseManagementV1.CreateAccountGroupParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountGroupResponse>> {
     const _params = { ...params };
-    const requiredParams = ['parent', 'name', 'primaryContactIamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['parent', 'name', 'primaryContactIamId'];
+    const _validParams = ['parent', 'name', 'primaryContactIamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -753,6 +783,19 @@ class EnterpriseManagementV1 extends BaseService {
     params?: EnterpriseManagementV1.ListAccountGroupsParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountGroupsResponse>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'enterpriseId',
+      'parentAccountGroupId',
+      'nextDocid',
+      'parent',
+      'limit',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'enterprise_id': _params.enterpriseId,
@@ -804,11 +847,11 @@ class EnterpriseManagementV1 extends BaseService {
     params: EnterpriseManagementV1.GetAccountGroupParams
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.AccountGroup>> {
     const _params = { ...params };
-    const requiredParams = ['accountGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountGroupId'];
+    const _validParams = ['accountGroupId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -854,17 +897,17 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} [params.primaryContactIamId] - The IAM ID of the user to be the new primary contact for the account
    * group.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>>}
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
    */
   public updateAccountGroup(
     params: EnterpriseManagementV1.UpdateAccountGroupParams
-  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Empty>> {
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['accountGroupId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountGroupId'];
+    const _validParams = ['accountGroupId', 'name', 'primaryContactIamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -922,7 +965,7 @@ namespace EnterpriseManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1256,6 +1299,256 @@ namespace EnterpriseManagementV1 {
     next_url?: string;
     /** A list of enterprise objects. */
     resources?: Enterprise[];
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * EnterprisesPager can be used to simplify the use of listEnterprises().
+   */
+  export class EnterprisesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: EnterpriseManagementV1;
+
+    protected params: EnterpriseManagementV1.ListEnterprisesParams;
+
+    /**
+     * Construct a EnterprisesPager object.
+     *
+     * @param {EnterpriseManagementV1}  client - The service client instance used to invoke listEnterprises()
+     * @param {Object} [params] - The parameters to be passed to listEnterprises()
+     * @constructor
+     * @returns {EnterprisesPager}
+     */
+    constructor(
+      client: EnterpriseManagementV1,
+      params?: EnterpriseManagementV1.ListEnterprisesParams
+    ) {
+      if (params && params.nextDocid) {
+        throw new Error(`the params.nextDocid field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listEnterprises().
+     * @returns {Promise<EnterpriseManagementV1.Enterprise[]>}
+     */
+    public async getNext(): Promise<EnterpriseManagementV1.Enterprise[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.nextDocid = this.pageContext.next;
+      }
+      const response = await this.client.listEnterprises(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'next_docid');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listEnterprises() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<EnterpriseManagementV1.Enterprise[]>}
+     */
+    public async getAll(): Promise<EnterpriseManagementV1.Enterprise[]> {
+      const results: Enterprise[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * AccountsPager can be used to simplify the use of listAccounts().
+   */
+  export class AccountsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: EnterpriseManagementV1;
+
+    protected params: EnterpriseManagementV1.ListAccountsParams;
+
+    /**
+     * Construct a AccountsPager object.
+     *
+     * @param {EnterpriseManagementV1}  client - The service client instance used to invoke listAccounts()
+     * @param {Object} [params] - The parameters to be passed to listAccounts()
+     * @constructor
+     * @returns {AccountsPager}
+     */
+    constructor(
+      client: EnterpriseManagementV1,
+      params?: EnterpriseManagementV1.ListAccountsParams
+    ) {
+      if (params && params.nextDocid) {
+        throw new Error(`the params.nextDocid field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listAccounts().
+     * @returns {Promise<EnterpriseManagementV1.Account[]>}
+     */
+    public async getNext(): Promise<EnterpriseManagementV1.Account[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.nextDocid = this.pageContext.next;
+      }
+      const response = await this.client.listAccounts(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'next_docid');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listAccounts() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<EnterpriseManagementV1.Account[]>}
+     */
+    public async getAll(): Promise<EnterpriseManagementV1.Account[]> {
+      const results: Account[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * AccountGroupsPager can be used to simplify the use of listAccountGroups().
+   */
+  export class AccountGroupsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: EnterpriseManagementV1;
+
+    protected params: EnterpriseManagementV1.ListAccountGroupsParams;
+
+    /**
+     * Construct a AccountGroupsPager object.
+     *
+     * @param {EnterpriseManagementV1}  client - The service client instance used to invoke listAccountGroups()
+     * @param {Object} [params] - The parameters to be passed to listAccountGroups()
+     * @constructor
+     * @returns {AccountGroupsPager}
+     */
+    constructor(
+      client: EnterpriseManagementV1,
+      params?: EnterpriseManagementV1.ListAccountGroupsParams
+    ) {
+      if (params && params.nextDocid) {
+        throw new Error(`the params.nextDocid field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listAccountGroups().
+     * @returns {Promise<EnterpriseManagementV1.AccountGroup[]>}
+     */
+    public async getNext(): Promise<EnterpriseManagementV1.AccountGroup[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.nextDocid = this.pageContext.next;
+      }
+      const response = await this.client.listAccountGroups(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'next_docid');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listAccountGroups() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<EnterpriseManagementV1.AccountGroup[]>}
+     */
+    public async getAll(): Promise<EnterpriseManagementV1.AccountGroup[]> {
+      const results: AccountGroup[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
