@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { getQueryParam, readExternalSources } = require('ibm-cloud-sdk-core');
 const UserManagementV1 = require('../../dist/user-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -43,7 +43,7 @@ describe('UserManagementV1_integration', () => {
   let viewerRoleId;
   let accessGroupId;
 
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     log('Starting setup...');
 
     userManagementService = UserManagementV1.newInstance({
@@ -70,31 +70,20 @@ describe('UserManagementV1_integration', () => {
     expect(accessGroupId).not.toBeNull();
 
     log('Finished setup.');
-
-    done();
   });
 
-  test('getUserSettings()', (done) => {
+  test('getUserSettings()', async () => {
     const params = {
       accountId,
       iamId: iamUserId,
     };
 
-    userManagementService
-      .getUserSettings(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        expect(res.result).toBeDefined();
-        console.log('getUserSettings() result: ', res.result);
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    const res = await userManagementService.getUserSettings(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
-  test('updateUserSettings()', (done) => {
+  test('updateUserSettings()', async () => {
     const params = {
       accountId,
       iamId: iamUserId,
@@ -104,59 +93,70 @@ describe('UserManagementV1_integration', () => {
       selfManage: true,
     };
 
-    userManagementService
-      .updateUserSettings(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(204);
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    const res = await userManagementService.updateUserSettings(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
   });
   test('listUsers()', async () => {
     const results = [];
     let start = null;
 
-    try {
-      do {
-        // Retrieve the users, 10 per page to test out pagination.
-        const params = {
-          accountId,
-          limit: 10,
-          start,
-        };
+    do {
+      // Retrieve the users, 10 per page to test out pagination.
+      const params = {
+        accountId,
+        limit: 10,
+        start,
+      };
 
-        const res = await userManagementService.listUsers(params);
-        expect(res).toBeDefined();
-        expect(res.status).toEqual(200);
+      const res = await userManagementService.listUsers(params);
+      expect(res).toBeDefined();
+      expect(res.status).toEqual(200);
 
-        const { result } = res;
-        expect(result).toBeDefined();
+      const { result } = res;
+      expect(result).toBeDefined();
 
-        // Add the just-retrieved page to "results".
-        expect(result.resources).toBeDefined();
-        results.push(...result.resources);
+      // Add the just-retrieved page to "results".
+      expect(result.resources).toBeDefined();
+      results.push(...result.resources);
 
-        // Determine the offset to use to get the next page.
-        if (result.next_url) {
-          start = getStartTokenFromURL(result.next_url);
-        } else {
-          start = null;
-        }
-      } while (start != null);
-    } catch (err) {
-      console.log(err);
-    }
+      // Determine the offset to use to get the next page.
+      if (result.next_url) {
+        start = getQueryParam(result.next_url, '_start');
+      } else {
+        start = null;
+      }
+    } while (start != null);
 
     // Make sure we found some users.
     const numUsers = results.length;
     console.log(`listUsers() response contained ${numUsers} total users`);
     expect(numUsers).toBeGreaterThan(0);
   });
-  test('inviteUsers()', (done) => {
+  test('listUsers() via UsersPager', async () => {
+    const params = {
+      accountId,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new UserManagementV1.UsersPager(userManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new UserManagementV1.UsersPager(userManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+  test('inviteUsers()', async () => {
     // Request models needed by this operation.
 
     // InviteUser
@@ -201,45 +201,25 @@ describe('UserManagementV1_integration', () => {
       accessGroups: [accessGroupId],
     };
 
-    userManagementAdminService
-      .inviteUsers(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(202);
-        expect(res.result).toBeDefined();
-        console.log('inviteUsers() result: ', res.result);
+    const res = await userManagementAdminService.inviteUsers(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
 
-        expect(res.result.resources).toBeDefined();
-        userId = res.result.resources[0].id;
-        expect(userId).toBeDefined();
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    userId = res.result.resources[0].id;
   });
-  test('getUserProfile()', (done) => {
+  test('getUserProfile()', async () => {
     const params = {
       accountId,
       iamId: iamUserId,
     };
 
-    userManagementService
-      .getUserProfile(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-        expect(res.result).toBeDefined();
-        console.log('getUserProfile() result: ', res.result);
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    const res = await userManagementService.getUserProfile(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
-  test('updateUserProfile()', (done) => {
+  test('updateUserProfile()', async () => {
     const params = {
       accountId,
       iamId: iamUserId,
@@ -249,48 +229,23 @@ describe('UserManagementV1_integration', () => {
       email: 'do_not_delete_user_without_iam_policy_stage@mail.test.ibm.com',
     };
 
-    userManagementService
-      .updateUserProfile(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(204);
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    const res = await userManagementService.updateUserProfile(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
   });
-  test('removeUser()', (done) => {
+  test('removeUser()', async () => {
     const params = {
       accountId,
       iamId: userId,
     };
 
-    userManagementService
-      .removeUser(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(204);
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    const res = await userManagementService.removeUser(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
   });
 });
-
-function getStartTokenFromURL(urlstring) {
-  let offset = null;
-  if (urlstring) {
-    // We use a bogus "baseurl" in case "urlstring" is a relative url.
-    // This is fine since we're only trying to retrieve the "offset" query parameter.
-    const url = new URL(urlstring, 'https://fakehost.com');
-    offset = url.searchParams.get('_start');
-  }
-  return offset;
-}
 
 function log(msg) {
   if (verbose) {

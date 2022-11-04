@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,42 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const UserManagementV1 = require('../../dist/user-management/v1');
+const nock = require('nock');
+
+/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
   checkUrlAndMethod,
   checkMediaHeaders,
   expectToBePromise,
+  checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const userManagementServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://user-management.cloud.ibm.com',
 };
 
-const userManagementService = new UserManagementV1(service);
+const userManagementService = new UserManagementV1(userManagementServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(userManagementService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(userManagementService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('UserManagementV1', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = UserManagementV1.newInstance();
@@ -76,6 +97,7 @@ describe('UserManagementV1', () => {
       expect(testInstance).toBeInstanceOf(UserManagementV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -98,22 +120,23 @@ describe('UserManagementV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(UserManagementV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('listUsers', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listUsersTest() {
         // Construct the params object for operation listUsers
         const accountId = 'testString';
-        const state = 'testString';
         const limit = 100;
         const start = 'testString';
-        const params = {
-          accountId: accountId,
-          state: state,
-          limit: limit,
-          start: start,
+        const userId = 'testString';
+        const listUsersParams = {
+          accountId,
+          limit,
+          start,
+          userId,
         };
 
-        const listUsersResult = userManagementService.listUsers(params);
+        const listUsersResult = userManagementService.listUsers(listUsersParams);
 
         // all methods should return a Promise
         expectToBePromise(listUsersResult);
@@ -121,16 +144,31 @@ describe('UserManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['state']).toEqual(state);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['_start']).toEqual(start);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs._start).toEqual(start);
+        expect(mockRequestOptions.qs.user_id).toEqual(userId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listUsersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __listUsersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __listUsersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -138,7 +176,7 @@ describe('UserManagementV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listUsersParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -146,7 +184,7 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.listUsers(params);
+        userManagementService.listUsers(listUsersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -163,17 +201,71 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listUsersPromise = userManagementService.listUsers();
-        expectToBePromise(listUsersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.listUsers();
+        } catch (e) {
+          err = e;
+        }
 
-        listUsersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('UsersPager tests', () => {
+      const serviceUrl = userManagementServiceOptions.url;
+      const path = '/v2/accounts/testString/users';
+      const mockPagerResponse1 =
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?_start=1","resources":[{"id":"id","iam_id":"iam_id","realm":"realm","user_id":"user_id","firstname":"firstname","lastname":"lastname","state":"state","email":"email","phonenumber":"phonenumber","altphonenumber":"altphonenumber","photo":"photo","account_id":"account_id","added_on":"added_on"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","iam_id":"iam_id","realm":"realm","user_id":"user_id","firstname":"firstname","lastname":"lastname","state":"state","email":"email","phonenumber":"phonenumber","altphonenumber":"altphonenumber","photo":"photo","account_id":"account_id","added_on":"added_on"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          limit: 10,
+          userId: 'testString',
+        };
+        const allResults = [];
+        const pager = new UserManagementV1.UsersPager(userManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          limit: 10,
+          userId: 'testString',
+        };
+        const pager = new UserManagementV1.UsersPager(userManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
+
   describe('inviteUsers', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -207,20 +299,20 @@ describe('UserManagementV1', () => {
         resources: [resourceModel],
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __inviteUsersTest() {
         // Construct the params object for operation inviteUsers
         const accountId = 'testString';
         const users = [inviteUserModel];
         const iamPolicy = [inviteUserIamPolicyModel];
         const accessGroups = ['testString'];
-        const params = {
-          accountId: accountId,
-          users: users,
-          iamPolicy: iamPolicy,
-          accessGroups: accessGroups,
+        const inviteUsersParams = {
+          accountId,
+          users,
+          iamPolicy,
+          accessGroups,
         };
 
-        const inviteUsersResult = userManagementService.inviteUsers(params);
+        const inviteUsersResult = userManagementService.inviteUsers(inviteUsersParams);
 
         // all methods should return a Promise
         expectToBePromise(inviteUsersResult);
@@ -228,16 +320,31 @@ describe('UserManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['users']).toEqual(users);
-        expect(options.body['iam_policy']).toEqual(iamPolicy);
-        expect(options.body['access_groups']).toEqual(accessGroups);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.body.users).toEqual(users);
+        expect(mockRequestOptions.body.iam_policy).toEqual(iamPolicy);
+        expect(mockRequestOptions.body.access_groups).toEqual(accessGroups);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __inviteUsersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __inviteUsersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __inviteUsersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -245,7 +352,7 @@ describe('UserManagementV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const inviteUsersParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -253,7 +360,7 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.inviteUsers(params);
+        userManagementService.inviteUsers(inviteUsersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -270,29 +377,33 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const inviteUsersPromise = userManagementService.inviteUsers();
-        expectToBePromise(inviteUsersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.inviteUsers();
+        } catch (e) {
+          err = e;
+        }
 
-        inviteUsersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getUserProfile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getUserProfileTest() {
         // Construct the params object for operation getUserProfile
         const accountId = 'testString';
         const iamId = 'testString';
-        const params = {
-          accountId: accountId,
-          iamId: iamId,
+        const includeActivity = 'testString';
+        const getUserProfileParams = {
+          accountId,
+          iamId,
+          includeActivity,
         };
 
-        const getUserProfileResult = userManagementService.getUserProfile(params);
+        const getUserProfileResult = userManagementService.getUserProfile(getUserProfileParams);
 
         // all methods should return a Promise
         expectToBePromise(getUserProfileResult);
@@ -300,14 +411,30 @@ describe('UserManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users/{iam_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users/{iam_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.qs.include_activity).toEqual(includeActivity);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getUserProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __getUserProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __getUserProfileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -316,7 +443,7 @@ describe('UserManagementV1', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getUserProfileParams = {
           accountId,
           iamId,
           headers: {
@@ -325,7 +452,7 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.getUserProfile(params);
+        userManagementService.getUserProfile(getUserProfileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -342,20 +469,22 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getUserProfilePromise = userManagementService.getUserProfile();
-        expectToBePromise(getUserProfilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.getUserProfile();
+        } catch (e) {
+          err = e;
+        }
 
-        getUserProfilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateUserProfile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateUserProfileTest() {
         // Construct the params object for operation updateUserProfile
         const accountId = 'testString';
         const iamId = 'testString';
@@ -366,19 +495,21 @@ describe('UserManagementV1', () => {
         const phonenumber = 'testString';
         const altphonenumber = 'testString';
         const photo = 'testString';
-        const params = {
-          accountId: accountId,
-          iamId: iamId,
-          firstname: firstname,
-          lastname: lastname,
-          state: state,
-          email: email,
-          phonenumber: phonenumber,
-          altphonenumber: altphonenumber,
-          photo: photo,
+        const includeActivity = 'testString';
+        const updateUserProfileParams = {
+          accountId,
+          iamId,
+          firstname,
+          lastname,
+          state,
+          email,
+          phonenumber,
+          altphonenumber,
+          photo,
+          includeActivity,
         };
 
-        const updateUserProfileResult = userManagementService.updateUserProfile(params);
+        const updateUserProfileResult = userManagementService.updateUserProfile(updateUserProfileParams);
 
         // all methods should return a Promise
         expectToBePromise(updateUserProfileResult);
@@ -386,21 +517,37 @@ describe('UserManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users/{iam_id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users/{iam_id}', 'PATCH');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['firstname']).toEqual(firstname);
-        expect(options.body['lastname']).toEqual(lastname);
-        expect(options.body['state']).toEqual(state);
-        expect(options.body['email']).toEqual(email);
-        expect(options.body['phonenumber']).toEqual(phonenumber);
-        expect(options.body['altphonenumber']).toEqual(altphonenumber);
-        expect(options.body['photo']).toEqual(photo);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.body.firstname).toEqual(firstname);
+        expect(mockRequestOptions.body.lastname).toEqual(lastname);
+        expect(mockRequestOptions.body.state).toEqual(state);
+        expect(mockRequestOptions.body.email).toEqual(email);
+        expect(mockRequestOptions.body.phonenumber).toEqual(phonenumber);
+        expect(mockRequestOptions.body.altphonenumber).toEqual(altphonenumber);
+        expect(mockRequestOptions.body.photo).toEqual(photo);
+        expect(mockRequestOptions.qs.include_activity).toEqual(includeActivity);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateUserProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __updateUserProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __updateUserProfileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -409,7 +556,7 @@ describe('UserManagementV1', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateUserProfileParams = {
           accountId,
           iamId,
           headers: {
@@ -418,7 +565,7 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.updateUserProfile(params);
+        userManagementService.updateUserProfile(updateUserProfileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -435,29 +582,33 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateUserProfilePromise = userManagementService.updateUserProfile();
-        expectToBePromise(updateUserProfilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.updateUserProfile();
+        } catch (e) {
+          err = e;
+        }
 
-        updateUserProfilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('removeUser', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeUserTest() {
         // Construct the params object for operation removeUser
         const accountId = 'testString';
         const iamId = 'testString';
-        const params = {
-          accountId: accountId,
-          iamId: iamId,
+        const includeActivity = 'testString';
+        const removeUserParams = {
+          accountId,
+          iamId,
+          includeActivity,
         };
 
-        const removeUserResult = userManagementService.removeUser(params);
+        const removeUserResult = userManagementService.removeUser(removeUserParams);
 
         // all methods should return a Promise
         expectToBePromise(removeUserResult);
@@ -465,14 +616,30 @@ describe('UserManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users/{iam_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users/{iam_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.qs.include_activity).toEqual(includeActivity);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeUserTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __removeUserTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __removeUserTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -481,7 +648,7 @@ describe('UserManagementV1', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeUserParams = {
           accountId,
           iamId,
           headers: {
@@ -490,7 +657,7 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.removeUser(params);
+        userManagementService.removeUser(removeUserParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -507,44 +674,125 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeUserPromise = userManagementService.removeUser();
-        expectToBePromise(removeUserPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.removeUser();
+        } catch (e) {
+          err = e;
+        }
 
-        removeUserPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
-  describe('getUserSettings', () => {
+
+  describe('accept', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getUserSettings
+      function __acceptTest() {
+        // Construct the params object for operation accept
         const accountId = 'testString';
-        const iamId = 'testString';
-        const params = {
-          accountId: accountId,
-          iamId: iamId,
+        const acceptParams = {
+          accountId,
         };
 
-        const getUserSettingsResult = userManagementService.getUserSettings(params);
+        const acceptResult = userManagementService.accept(acceptParams);
 
         // all methods should return a Promise
-        expectToBePromise(getUserSettingsResult);
+        expectToBePromise(acceptResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users/{iam_id}/settings', 'GET');
-        const expectedAccept = 'application/json';
+        checkUrlAndMethod(mockRequestOptions, '/v2/users/accept', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __acceptTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __acceptTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __acceptTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const acceptParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        userManagementService.accept(acceptParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        userManagementService.accept({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+
+  describe('v3RemoveUser', () => {
+    describe('positive tests', () => {
+      function __v3RemoveUserTest() {
+        // Construct the params object for operation v3RemoveUser
+        const accountId = 'testString';
+        const iamId = 'testString';
+        const v3RemoveUserParams = {
+          accountId,
+          iamId,
+        };
+
+        const v3RemoveUserResult = userManagementService.v3RemoveUser(v3RemoveUserParams);
+
+        // all methods should return a Promise
+        expectToBePromise(v3RemoveUserResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v3/accounts/{account_id}/users/{iam_id}', 'DELETE');
+        const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __v3RemoveUserTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __v3RemoveUserTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __v3RemoveUserTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -553,7 +801,7 @@ describe('UserManagementV1', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const v3RemoveUserParams = {
           accountId,
           iamId,
           headers: {
@@ -562,7 +810,96 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.getUserSettings(params);
+        userManagementService.v3RemoveUser(v3RemoveUserParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await userManagementService.v3RemoveUser({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.v3RemoveUser();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getUserSettings', () => {
+    describe('positive tests', () => {
+      function __getUserSettingsTest() {
+        // Construct the params object for operation getUserSettings
+        const accountId = 'testString';
+        const iamId = 'testString';
+        const getUserSettingsParams = {
+          accountId,
+          iamId,
+        };
+
+        const getUserSettingsResult = userManagementService.getUserSettings(getUserSettingsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getUserSettingsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users/{iam_id}/settings', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getUserSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __getUserSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __getUserSettingsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const iamId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getUserSettingsParams = {
+          accountId,
+          iamId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        userManagementService.getUserSettings(getUserSettingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -579,20 +916,22 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getUserSettingsPromise = userManagementService.getUserSettings();
-        expectToBePromise(getUserSettingsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.getUserSettings();
+        } catch (e) {
+          err = e;
+        }
 
-        getUserSettingsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateUserSettings', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateUserSettingsTest() {
         // Construct the params object for operation updateUserSettings
         const accountId = 'testString';
         const iamId = 'testString';
@@ -600,16 +939,16 @@ describe('UserManagementV1', () => {
         const notificationLanguage = 'testString';
         const allowedIpAddresses = '32.96.110.50,172.16.254.1';
         const selfManage = true;
-        const params = {
-          accountId: accountId,
-          iamId: iamId,
-          language: language,
-          notificationLanguage: notificationLanguage,
-          allowedIpAddresses: allowedIpAddresses,
-          selfManage: selfManage,
+        const updateUserSettingsParams = {
+          accountId,
+          iamId,
+          language,
+          notificationLanguage,
+          allowedIpAddresses,
+          selfManage,
         };
 
-        const updateUserSettingsResult = userManagementService.updateUserSettings(params);
+        const updateUserSettingsResult = userManagementService.updateUserSettings(updateUserSettingsParams);
 
         // all methods should return a Promise
         expectToBePromise(updateUserSettingsResult);
@@ -617,18 +956,33 @@ describe('UserManagementV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/accounts/{account_id}/users/{iam_id}/settings', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/v2/accounts/{account_id}/users/{iam_id}/settings', 'PATCH');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['language']).toEqual(language);
-        expect(options.body['notification_language']).toEqual(notificationLanguage);
-        expect(options.body['allowed_ip_addresses']).toEqual(allowedIpAddresses);
-        expect(options.body['self_manage']).toEqual(selfManage);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['iam_id']).toEqual(iamId);
+        expect(mockRequestOptions.body.language).toEqual(language);
+        expect(mockRequestOptions.body.notification_language).toEqual(notificationLanguage);
+        expect(mockRequestOptions.body.allowed_ip_addresses).toEqual(allowedIpAddresses);
+        expect(mockRequestOptions.body.self_manage).toEqual(selfManage);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.iam_id).toEqual(iamId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateUserSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.enableRetries();
+        __updateUserSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        userManagementService.disableRetries();
+        __updateUserSettingsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -637,7 +991,7 @@ describe('UserManagementV1', () => {
         const iamId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateUserSettingsParams = {
           accountId,
           iamId,
           headers: {
@@ -646,7 +1000,7 @@ describe('UserManagementV1', () => {
           },
         };
 
-        userManagementService.updateUserSettings(params);
+        userManagementService.updateUserSettings(updateUserSettingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -663,14 +1017,15 @@ describe('UserManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateUserSettingsPromise = userManagementService.updateUserSettings();
-        expectToBePromise(updateUserSettingsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await userManagementService.updateUserSettings();
+        } catch (e) {
+          err = e;
+        }
 
-        updateUserSettingsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });

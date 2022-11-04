@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-d753183b-20201209-163011
+ * IBM OpenAPI SDK Code Generator Version: 3.60.2-95dc7721-20221102-203229
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,13 +27,16 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * Manage the lifecycle of your users using User Management APIs.
+ *
+ * API Version: 1.0
  */
 
 class UserManagementV1 extends BaseService {
@@ -106,12 +112,12 @@ class UserManagementV1 extends BaseService {
    * users. You can iterate through all users by following the `next_url` field.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
-   * @param {string} [params.state] - The state of the user.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {number} [params.limit] - The number of results to be returned.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. If omitted, the first page of results is returned. This value is obtained from the 'next_url' field of
    * the operation response.
+   * @param {string} [params.userId] - Filter users based on their user ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<UserManagementV1.Response<UserManagementV1.UserList>>}
    */
@@ -119,17 +125,17 @@ class UserManagementV1 extends BaseService {
     params: UserManagementV1.ListUsersParams
   ): Promise<UserManagementV1.Response<UserManagementV1.UserList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'limit', 'start', 'userId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
-      'state': _params.state,
       'limit': _params.limit,
       '_start': _params.start,
+      'user_id': _params.userId,
     };
 
     const path = {
@@ -174,7 +180,7 @@ class UserManagementV1 extends BaseService {
    * account, the user is transitioned to `ACTIVE` state. If the user email is already verified, no email is generated.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {InviteUser[]} [params.users] - A list of users to be invited.
    * @param {InviteUserIamPolicy[]} [params.iamPolicy] - A list of IAM policies.
    * @param {string[]} [params.accessGroups] - A list of access groups.
@@ -185,11 +191,11 @@ class UserManagementV1 extends BaseService {
     params: UserManagementV1.InviteUsersParams
   ): Promise<UserManagementV1.Response<UserManagementV1.InvitedUserList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'users', 'iamPolicy', 'accessGroups', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -235,8 +241,10 @@ class UserManagementV1 extends BaseService {
    * administrator role on the User Management service.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {string} params.iamId - The user's IAM ID.
+   * @param {string} [params.includeActivity] - Include activity information of the user, such as the last
+   * authentication timestamp.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<UserManagementV1.Response<UserManagementV1.UserProfile>>}
    */
@@ -244,12 +252,16 @@ class UserManagementV1 extends BaseService {
     params: UserManagementV1.GetUserProfileParams
   ): Promise<UserManagementV1.Response<UserManagementV1.UserProfile>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'includeActivity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'include_activity': _params.includeActivity,
+    };
 
     const path = {
       'account_id': _params.accountId,
@@ -262,6 +274,7 @@ class UserManagementV1 extends BaseService {
       options: {
         url: '/v2/accounts/{account_id}/users/{iam_id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -290,7 +303,7 @@ class UserManagementV1 extends BaseService {
    * without having User Management service permissions.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {string} params.iamId - The user's IAM ID.
    * @param {string} [params.firstname] - The first name of the user.
    * @param {string} [params.lastname] - The last name of the user.
@@ -300,18 +313,32 @@ class UserManagementV1 extends BaseService {
    * @param {string} [params.phonenumber] - The phone number of the user.
    * @param {string} [params.altphonenumber] - The alternative phone number of the user.
    * @param {string} [params.photo] - A link to a photo of the user.
+   * @param {string} [params.includeActivity] - Include activity information of the user, such as the last
+   * authentication timestamp.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<UserManagementV1.Response<UserManagementV1.Empty>>}
+   * @returns {Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>>}
    */
   public updateUserProfile(
     params: UserManagementV1.UpdateUserProfileParams
-  ): Promise<UserManagementV1.Response<UserManagementV1.Empty>> {
+  ): Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = [
+      'accountId',
+      'iamId',
+      'firstname',
+      'lastname',
+      'state',
+      'email',
+      'phonenumber',
+      'altphonenumber',
+      'photo',
+      'includeActivity',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -322,6 +349,10 @@ class UserManagementV1 extends BaseService {
       'phonenumber': _params.phonenumber,
       'altphonenumber': _params.altphonenumber,
       'photo': _params.photo,
+    };
+
+    const query = {
+      'include_activity': _params.includeActivity,
     };
 
     const path = {
@@ -340,6 +371,7 @@ class UserManagementV1 extends BaseService {
         url: '/v2/accounts/{account_id}/users/{iam_id}',
         method: 'PATCH',
         body,
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -366,21 +398,27 @@ class UserManagementV1 extends BaseService {
    * users](https://cloud.ibm.com/docs/account?topic=account-remove) documentation.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {string} params.iamId - The user's IAM ID.
+   * @param {string} [params.includeActivity] - Include activity information of the user, such as the last
+   * authentication timestamp.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<UserManagementV1.Response<UserManagementV1.Empty>>}
+   * @returns {Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>>}
    */
   public removeUser(
     params: UserManagementV1.RemoveUserParams
-  ): Promise<UserManagementV1.Response<UserManagementV1.Empty>> {
+  ): Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'includeActivity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'include_activity': _params.includeActivity,
+    };
 
     const path = {
       'account_id': _params.accountId,
@@ -393,6 +431,7 @@ class UserManagementV1 extends BaseService {
       options: {
         url: '/v2/accounts/{account_id}/users/{iam_id}',
         method: 'DELETE',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -403,6 +442,102 @@ class UserManagementV1 extends BaseService {
     return this.createRequest(parameters);
   }
 
+  /**
+   * Accept an invitation.
+   *
+   * Accept a user invitation to an account. You can use the user's token for authorization. To use this method, the
+   * requesting user must provide the account ID for the account that they are accepting an invitation for. If the user
+   * already accepted the invitation request, it returns 204 with no response body.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - The account ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>>}
+   */
+  public accept(
+    params?: UserManagementV1.AcceptParams
+  ): Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(UserManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'accept');
+
+    const parameters = {
+      options: {
+        url: '/v2/users/accept',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove user from account (Asynchronous).
+   *
+   * Remove users from an account by using the user's IAM ID. You must use a user token for authorization. Service IDs
+   * can't remove users from an account. If removing the user fails it will set the user's state to
+   * ERROR_WHILE_DELETING. To use this method, the requesting user must have the editor or administrator role on the
+   * User Management service. For more information, see the [Removing
+   * users](https://cloud.ibm.com/docs/account?topic=account-remove) documentation.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account ID of the specified user.
+   * @param {string} params.iamId - The user's IAM ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>>}
+   */
+  public v3RemoveUser(
+    params: UserManagementV1.V3RemoveUserParams
+  ): Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+      'iam_id': _params.iamId,
+    };
+
+    const sdkHeaders = getSdkHeaders(UserManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'v3RemoveUser');
+
+    const parameters = {
+      options: {
+        url: '/v3/accounts/{account_id}/users/{iam_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * userSettings
    ************************/
@@ -420,7 +555,7 @@ class UserManagementV1 extends BaseService {
    * information about the [user-managed login setting](https://cloud.ibm.com/docs/account?topic=account-types).
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {string} params.iamId - The user's IAM ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<UserManagementV1.Response<UserManagementV1.UserSettings>>}
@@ -429,11 +564,11 @@ class UserManagementV1 extends BaseService {
     params: UserManagementV1.GetUserSettingsParams
   ): Promise<UserManagementV1.Response<UserManagementV1.UserSettings>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -477,7 +612,7 @@ class UserManagementV1 extends BaseService {
    * `self_manage` is `true`, the user can also update the `allowed_ip_addresses` field.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account ID.
+   * @param {string} params.accountId - The account ID of the specified user.
    * @param {string} params.iamId - The user's IAM ID.
    * @param {string} [params.language] - The console UI language. By default, this field is empty.
    * @param {string} [params.notificationLanguage] - The language for email and phone notifications. By default, this
@@ -485,17 +620,25 @@ class UserManagementV1 extends BaseService {
    * @param {string} [params.allowedIpAddresses] - A comma-separated list of IP addresses.
    * @param {boolean} [params.selfManage] - Whether user managed login is enabled. The default value is `false`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<UserManagementV1.Response<UserManagementV1.Empty>>}
+   * @returns {Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>>}
    */
   public updateUserSettings(
     params: UserManagementV1.UpdateUserSettingsParams
-  ): Promise<UserManagementV1.Response<UserManagementV1.Empty>> {
+  ): Promise<UserManagementV1.Response<UserManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'iamId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = [
+      'accountId',
+      'iamId',
+      'language',
+      'notificationLanguage',
+      'allowedIpAddresses',
+      'selfManage',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -556,7 +699,7 @@ namespace UserManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -569,22 +712,22 @@ namespace UserManagementV1 {
 
   /** Parameters for the `listUsers` operation. */
   export interface ListUsersParams {
-    /** The account ID. */
+    /** The account ID of the specified user. */
     accountId: string;
-    /** The state of the user. */
-    state?: string;
     /** The number of results to be returned. */
     limit?: number;
     /** An optional token that indicates the beginning of the page of results to be returned. If omitted, the first
      *  page of results is returned. This value is obtained from the 'next_url' field of the operation response.
      */
     start?: string;
+    /** Filter users based on their user ID. */
+    userId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `inviteUsers` operation. */
   export interface InviteUsersParams {
-    /** The account ID. */
+    /** The account ID of the specified user. */
     accountId: string;
     /** A list of users to be invited. */
     users?: InviteUser[];
@@ -597,16 +740,18 @@ namespace UserManagementV1 {
 
   /** Parameters for the `getUserProfile` operation. */
   export interface GetUserProfileParams {
-    /** The account ID. */
+    /** The account ID of the specified user. */
     accountId: string;
     /** The user's IAM ID. */
     iamId: string;
+    /** Include activity information of the user, such as the last authentication timestamp. */
+    includeActivity?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateUserProfile` operation. */
   export interface UpdateUserProfileParams {
-    /** The account ID. */
+    /** The account ID of the specified user. */
     accountId: string;
     /** The user's IAM ID. */
     iamId: string;
@@ -626,12 +771,32 @@ namespace UserManagementV1 {
     altphonenumber?: string;
     /** A link to a photo of the user. */
     photo?: string;
+    /** Include activity information of the user, such as the last authentication timestamp. */
+    includeActivity?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `removeUser` operation. */
   export interface RemoveUserParams {
+    /** The account ID of the specified user. */
+    accountId: string;
+    /** The user's IAM ID. */
+    iamId: string;
+    /** Include activity information of the user, such as the last authentication timestamp. */
+    includeActivity?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `accept` operation. */
+  export interface AcceptParams {
     /** The account ID. */
+    accountId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `v3RemoveUser` operation. */
+  export interface V3RemoveUserParams {
+    /** The account ID of the specified user. */
     accountId: string;
     /** The user's IAM ID. */
     iamId: string;
@@ -640,7 +805,7 @@ namespace UserManagementV1 {
 
   /** Parameters for the `getUserSettings` operation. */
   export interface GetUserSettingsParams {
-    /** The account ID. */
+    /** The account ID of the specified user. */
     accountId: string;
     /** The user's IAM ID. */
     iamId: string;
@@ -649,7 +814,7 @@ namespace UserManagementV1 {
 
   /** Parameters for the `updateUserSettings` operation. */
   export interface UpdateUserSettingsParams {
-    /** The account ID. */
+    /** The account ID of the specified user. */
     accountId: string;
     /** The user's IAM ID. */
     iamId: string;
@@ -726,6 +891,8 @@ namespace UserManagementV1 {
     photo?: string;
     /** An alphanumeric value identifying the account ID. */
     account_id?: string;
+    /** The timestamp for when the user was added to the account. */
+    added_on?: string;
   }
 
   /** The user settings returned. */
@@ -776,6 +943,89 @@ namespace UserManagementV1 {
   export interface Role {
     /** An alphanumeric value identifying the origin. */
     role_id?: string;
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * UsersPager can be used to simplify the use of listUsers().
+   */
+  export class UsersPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: UserManagementV1;
+
+    protected params: UserManagementV1.ListUsersParams;
+
+    /**
+     * Construct a UsersPager object.
+     *
+     * @param {UserManagementV1}  client - The service client instance used to invoke listUsers()
+     * @param {Object} params - The parameters to be passed to listUsers()
+     * @constructor
+     * @returns {UsersPager}
+     */
+    constructor(client: UserManagementV1, params: UserManagementV1.ListUsersParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listUsers().
+     * @returns {Promise<UserManagementV1.UserProfile[]>}
+     */
+    public async getNext(): Promise<UserManagementV1.UserProfile[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listUsers(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, '_start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listUsers() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<UserManagementV1.UserProfile[]>}
+     */
+    public async getAll(): Promise<UserManagementV1.UserProfile[]> {
+      const results: UserProfile[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
