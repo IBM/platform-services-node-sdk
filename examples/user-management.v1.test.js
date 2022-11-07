@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2021, 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,30 +149,31 @@ describe('UserManagementV1', () => {
     // end-invite_users
   });
   test('listUsers request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
-
-    expect(accountId).not.toBeNull();
 
     originalLog('listUsers() result:');
     // begin-list_users
 
     const params = {
       accountId: accountId,
-      state: 'ACTIVE',
-      limit: 100,
     };
 
+    const allResults = [];
     try {
-      const res = await userManagementService.listUsers(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new UserManagementV1.UsersPager(userManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
