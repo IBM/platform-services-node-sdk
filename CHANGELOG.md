@@ -1,3 +1,10 @@
+# [0.28.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.27.4...v0.28.0) (2022-11-23)
+
+
+### Features
+
+* **IAM Identity:** adding userExpm list and token lifetime ([#176](https://github.com/IBM/platform-services-node-sdk/issues/176)) ([268ecf7](https://github.com/IBM/platform-services-node-sdk/commit/268ecf78e9383b56c17a9afd462f91113a8a4d6d))
+
 ## [0.27.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.27.3...v0.27.4) (2022-11-07)
 
 
