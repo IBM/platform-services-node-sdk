@@ -37,20 +37,31 @@ const iamIdentityServiceOptions = {
 
 const iamIdentityService = new IamIdentityV1(iamIdentityServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(iamIdentityService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(iamIdentityService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('IamIdentityV1', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = IamIdentityV1.newInstance();
@@ -78,6 +89,7 @@ describe('IamIdentityV1', () => {
       expect(testInstance).toBeInstanceOf(IamIdentityV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -100,6 +112,7 @@ describe('IamIdentityV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(IamIdentityV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('listApiKeys', () => {
     describe('positive tests', () => {
       function __listApiKeysTest() {
@@ -114,15 +127,15 @@ describe('IamIdentityV1', () => {
         const order = 'asc';
         const includeHistory = false;
         const listApiKeysParams = {
-          accountId: accountId,
-          iamId: iamId,
-          pagesize: pagesize,
-          pagetoken: pagetoken,
-          scope: scope,
-          type: type,
-          sort: sort,
-          order: order,
-          includeHistory: includeHistory,
+          accountId,
+          iamId,
+          pagesize,
+          pagetoken,
+          scope,
+          type,
+          sort,
+          order,
+          includeHistory,
         };
 
         const listApiKeysResult = iamIdentityService.listApiKeys(listApiKeysParams);
@@ -187,6 +200,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('createApiKey', () => {
     describe('positive tests', () => {
       function __createApiKeyTest() {
@@ -199,13 +213,13 @@ describe('IamIdentityV1', () => {
         const storeValue = true;
         const entityLock = 'false';
         const createApiKeyParams = {
-          name: name,
-          iamId: iamId,
-          description: description,
-          accountId: accountId,
-          apikey: apikey,
-          storeValue: storeValue,
-          entityLock: entityLock,
+          name,
+          iamId,
+          description,
+          accountId,
+          apikey,
+          storeValue,
+          entityLock,
         };
 
         const createApiKeyResult = iamIdentityService.createApiKey(createApiKeyParams);
@@ -290,6 +304,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getApiKeysDetails', () => {
     describe('positive tests', () => {
       function __getApiKeysDetailsTest() {
@@ -297,8 +312,8 @@ describe('IamIdentityV1', () => {
         const iamApiKey = 'testString';
         const includeHistory = false;
         const getApiKeysDetailsParams = {
-          iamApiKey: iamApiKey,
-          includeHistory: includeHistory,
+          iamApiKey,
+          includeHistory,
         };
 
         const getApiKeysDetailsResult = iamIdentityService.getApiKeysDetails(getApiKeysDetailsParams);
@@ -356,6 +371,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getApiKey', () => {
     describe('positive tests', () => {
       function __getApiKeyTest() {
@@ -364,9 +380,9 @@ describe('IamIdentityV1', () => {
         const includeHistory = false;
         const includeActivity = false;
         const getApiKeyParams = {
-          id: id,
-          includeHistory: includeHistory,
-          includeActivity: includeActivity,
+          id,
+          includeHistory,
+          includeActivity,
         };
 
         const getApiKeyResult = iamIdentityService.getApiKey(getApiKeyParams);
@@ -445,6 +461,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('updateApiKey', () => {
     describe('positive tests', () => {
       function __updateApiKeyTest() {
@@ -454,10 +471,10 @@ describe('IamIdentityV1', () => {
         const name = 'testString';
         const description = 'testString';
         const updateApiKeyParams = {
-          id: id,
-          ifMatch: ifMatch,
-          name: name,
-          description: description,
+          id,
+          ifMatch,
+          name,
+          description,
         };
 
         const updateApiKeyResult = iamIdentityService.updateApiKey(updateApiKeyParams);
@@ -539,13 +556,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('deleteApiKey', () => {
     describe('positive tests', () => {
       function __deleteApiKeyTest() {
         // Construct the params object for operation deleteApiKey
         const id = 'testString';
         const deleteApiKeyParams = {
-          id: id,
+          id,
         };
 
         const deleteApiKeyResult = iamIdentityService.deleteApiKey(deleteApiKeyParams);
@@ -622,13 +640,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('lockApiKey', () => {
     describe('positive tests', () => {
       function __lockApiKeyTest() {
         // Construct the params object for operation lockApiKey
         const id = 'testString';
         const lockApiKeyParams = {
-          id: id,
+          id,
         };
 
         const lockApiKeyResult = iamIdentityService.lockApiKey(lockApiKeyParams);
@@ -705,13 +724,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('unlockApiKey', () => {
     describe('positive tests', () => {
       function __unlockApiKeyTest() {
         // Construct the params object for operation unlockApiKey
         const id = 'testString';
         const unlockApiKeyParams = {
-          id: id,
+          id,
         };
 
         const unlockApiKeyResult = iamIdentityService.unlockApiKey(unlockApiKeyParams);
@@ -788,6 +808,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('listServiceIds', () => {
     describe('positive tests', () => {
       function __listServiceIdsTest() {
@@ -800,13 +821,13 @@ describe('IamIdentityV1', () => {
         const order = 'asc';
         const includeHistory = false;
         const listServiceIdsParams = {
-          accountId: accountId,
-          name: name,
-          pagesize: pagesize,
-          pagetoken: pagetoken,
-          sort: sort,
-          order: order,
-          includeHistory: includeHistory,
+          accountId,
+          name,
+          pagesize,
+          pagetoken,
+          sort,
+          order,
+          includeHistory,
         };
 
         const listServiceIdsResult = iamIdentityService.listServiceIds(listServiceIdsParams);
@@ -869,6 +890,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('createServiceId', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -890,12 +912,12 @@ describe('IamIdentityV1', () => {
         const apikey = apiKeyInsideCreateServiceIdRequestModel;
         const entityLock = 'false';
         const createServiceIdParams = {
-          accountId: accountId,
-          name: name,
-          description: description,
-          uniqueInstanceCrns: uniqueInstanceCrns,
-          apikey: apikey,
-          entityLock: entityLock,
+          accountId,
+          name,
+          description,
+          uniqueInstanceCrns,
+          apikey,
+          entityLock,
         };
 
         const createServiceIdResult = iamIdentityService.createServiceId(createServiceIdParams);
@@ -979,6 +1001,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getServiceId', () => {
     describe('positive tests', () => {
       function __getServiceIdTest() {
@@ -987,9 +1010,9 @@ describe('IamIdentityV1', () => {
         const includeHistory = false;
         const includeActivity = false;
         const getServiceIdParams = {
-          id: id,
-          includeHistory: includeHistory,
-          includeActivity: includeActivity,
+          id,
+          includeHistory,
+          includeActivity,
         };
 
         const getServiceIdResult = iamIdentityService.getServiceId(getServiceIdParams);
@@ -1068,6 +1091,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('updateServiceId', () => {
     describe('positive tests', () => {
       function __updateServiceIdTest() {
@@ -1078,11 +1102,11 @@ describe('IamIdentityV1', () => {
         const description = 'testString';
         const uniqueInstanceCrns = ['testString'];
         const updateServiceIdParams = {
-          id: id,
-          ifMatch: ifMatch,
-          name: name,
-          description: description,
-          uniqueInstanceCrns: uniqueInstanceCrns,
+          id,
+          ifMatch,
+          name,
+          description,
+          uniqueInstanceCrns,
         };
 
         const updateServiceIdResult = iamIdentityService.updateServiceId(updateServiceIdParams);
@@ -1165,13 +1189,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('deleteServiceId', () => {
     describe('positive tests', () => {
       function __deleteServiceIdTest() {
         // Construct the params object for operation deleteServiceId
         const id = 'testString';
         const deleteServiceIdParams = {
-          id: id,
+          id,
         };
 
         const deleteServiceIdResult = iamIdentityService.deleteServiceId(deleteServiceIdParams);
@@ -1248,13 +1273,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('lockServiceId', () => {
     describe('positive tests', () => {
       function __lockServiceIdTest() {
         // Construct the params object for operation lockServiceId
         const id = 'testString';
         const lockServiceIdParams = {
-          id: id,
+          id,
         };
 
         const lockServiceIdResult = iamIdentityService.lockServiceId(lockServiceIdParams);
@@ -1331,13 +1357,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('unlockServiceId', () => {
     describe('positive tests', () => {
       function __unlockServiceIdTest() {
         // Construct the params object for operation unlockServiceId
         const id = 'testString';
         const unlockServiceIdParams = {
-          id: id,
+          id,
         };
 
         const unlockServiceIdResult = iamIdentityService.unlockServiceId(unlockServiceIdParams);
@@ -1414,6 +1441,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('createProfile', () => {
     describe('positive tests', () => {
       function __createProfileTest() {
@@ -1422,9 +1450,9 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const description = 'testString';
         const createProfileParams = {
-          name: name,
-          accountId: accountId,
-          description: description,
+          name,
+          accountId,
+          description,
         };
 
         const createProfileResult = iamIdentityService.createProfile(createProfileParams);
@@ -1505,6 +1533,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('listProfiles', () => {
     describe('positive tests', () => {
       function __listProfilesTest() {
@@ -1517,13 +1546,13 @@ describe('IamIdentityV1', () => {
         const includeHistory = false;
         const pagetoken = 'testString';
         const listProfilesParams = {
-          accountId: accountId,
-          name: name,
-          pagesize: pagesize,
-          sort: sort,
-          order: order,
-          includeHistory: includeHistory,
-          pagetoken: pagetoken,
+          accountId,
+          name,
+          pagesize,
+          sort,
+          order,
+          includeHistory,
+          pagetoken,
         };
 
         const listProfilesResult = iamIdentityService.listProfiles(listProfilesParams);
@@ -1606,6 +1635,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getProfile', () => {
     describe('positive tests', () => {
       function __getProfileTest() {
@@ -1613,8 +1643,8 @@ describe('IamIdentityV1', () => {
         const profileId = 'testString';
         const includeActivity = false;
         const getProfileParams = {
-          profileId: profileId,
-          includeActivity: includeActivity,
+          profileId,
+          includeActivity,
         };
 
         const getProfileResult = iamIdentityService.getProfile(getProfileParams);
@@ -1692,6 +1722,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('updateProfile', () => {
     describe('positive tests', () => {
       function __updateProfileTest() {
@@ -1701,10 +1732,10 @@ describe('IamIdentityV1', () => {
         const name = 'testString';
         const description = 'testString';
         const updateProfileParams = {
-          profileId: profileId,
-          ifMatch: ifMatch,
-          name: name,
-          description: description,
+          profileId,
+          ifMatch,
+          name,
+          description,
         };
 
         const updateProfileResult = iamIdentityService.updateProfile(updateProfileParams);
@@ -1786,13 +1817,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('deleteProfile', () => {
     describe('positive tests', () => {
       function __deleteProfileTest() {
         // Construct the params object for operation deleteProfile
         const profileId = 'testString';
         const deleteProfileParams = {
-          profileId: profileId,
+          profileId,
         };
 
         const deleteProfileResult = iamIdentityService.deleteProfile(deleteProfileParams);
@@ -1869,6 +1901,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('createClaimRule', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1906,14 +1939,14 @@ describe('IamIdentityV1', () => {
         const crType = 'testString';
         const expiration = 38;
         const createClaimRuleParams = {
-          profileId: profileId,
-          type: type,
-          conditions: conditions,
-          context: context,
-          name: name,
-          realmName: realmName,
-          crType: crType,
-          expiration: expiration,
+          profileId,
+          type,
+          conditions,
+          context,
+          name,
+          realmName,
+          crType,
+          expiration,
         };
 
         const createClaimRuleResult = iamIdentityService.createClaimRule(createClaimRuleParams);
@@ -2001,13 +2034,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('listClaimRules', () => {
     describe('positive tests', () => {
       function __listClaimRulesTest() {
         // Construct the params object for operation listClaimRules
         const profileId = 'testString';
         const listClaimRulesParams = {
-          profileId: profileId,
+          profileId,
         };
 
         const listClaimRulesResult = iamIdentityService.listClaimRules(listClaimRulesParams);
@@ -2084,6 +2118,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getClaimRule', () => {
     describe('positive tests', () => {
       function __getClaimRuleTest() {
@@ -2091,8 +2126,8 @@ describe('IamIdentityV1', () => {
         const profileId = 'testString';
         const ruleId = 'testString';
         const getClaimRuleParams = {
-          profileId: profileId,
-          ruleId: ruleId,
+          profileId,
+          ruleId,
         };
 
         const getClaimRuleResult = iamIdentityService.getClaimRule(getClaimRuleParams);
@@ -2172,6 +2207,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('updateClaimRule', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -2211,16 +2247,16 @@ describe('IamIdentityV1', () => {
         const crType = 'testString';
         const expiration = 38;
         const updateClaimRuleParams = {
-          profileId: profileId,
-          ruleId: ruleId,
-          ifMatch: ifMatch,
-          type: type,
-          conditions: conditions,
-          context: context,
-          name: name,
-          realmName: realmName,
-          crType: crType,
-          expiration: expiration,
+          profileId,
+          ruleId,
+          ifMatch,
+          type,
+          conditions,
+          context,
+          name,
+          realmName,
+          crType,
+          expiration,
         };
 
         const updateClaimRuleResult = iamIdentityService.updateClaimRule(updateClaimRuleParams);
@@ -2314,6 +2350,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('deleteClaimRule', () => {
     describe('positive tests', () => {
       function __deleteClaimRuleTest() {
@@ -2321,8 +2358,8 @@ describe('IamIdentityV1', () => {
         const profileId = 'testString';
         const ruleId = 'testString';
         const deleteClaimRuleParams = {
-          profileId: profileId,
-          ruleId: ruleId,
+          profileId,
+          ruleId,
         };
 
         const deleteClaimRuleResult = iamIdentityService.deleteClaimRule(deleteClaimRuleParams);
@@ -2402,6 +2439,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('createLink', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -2420,10 +2458,10 @@ describe('IamIdentityV1', () => {
         const link = createProfileLinkRequestLinkModel;
         const name = 'testString';
         const createLinkParams = {
-          profileId: profileId,
-          crType: crType,
-          link: link,
-          name: name,
+          profileId,
+          crType,
+          link,
+          name,
         };
 
         const createLinkResult = iamIdentityService.createLink(createLinkParams);
@@ -2507,13 +2545,14 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('listLinks', () => {
     describe('positive tests', () => {
       function __listLinksTest() {
         // Construct the params object for operation listLinks
         const profileId = 'testString';
         const listLinksParams = {
-          profileId: profileId,
+          profileId,
         };
 
         const listLinksResult = iamIdentityService.listLinks(listLinksParams);
@@ -2590,6 +2629,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getLink', () => {
     describe('positive tests', () => {
       function __getLinkTest() {
@@ -2597,8 +2637,8 @@ describe('IamIdentityV1', () => {
         const profileId = 'testString';
         const linkId = 'testString';
         const getLinkParams = {
-          profileId: profileId,
-          linkId: linkId,
+          profileId,
+          linkId,
         };
 
         const getLinkResult = iamIdentityService.getLink(getLinkParams);
@@ -2678,6 +2718,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('deleteLink', () => {
     describe('positive tests', () => {
       function __deleteLinkTest() {
@@ -2685,8 +2726,8 @@ describe('IamIdentityV1', () => {
         const profileId = 'testString';
         const linkId = 'testString';
         const deleteLinkParams = {
-          profileId: profileId,
-          linkId: linkId,
+          profileId,
+          linkId,
         };
 
         const deleteLinkResult = iamIdentityService.deleteLink(deleteLinkParams);
@@ -2766,6 +2807,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getAccountSettings', () => {
     describe('positive tests', () => {
       function __getAccountSettingsTest() {
@@ -2773,8 +2815,8 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const includeHistory = false;
         const getAccountSettingsParams = {
-          accountId: accountId,
-          includeHistory: includeHistory,
+          accountId,
+          includeHistory,
         };
 
         const getAccountSettingsResult = iamIdentityService.getAccountSettings(getAccountSettingsParams);
@@ -2852,8 +2894,17 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('updateAccountSettings', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // AccountSettingsUserMFA
+      const accountSettingsUserMfaModel = {
+        iam_id: 'testString',
+        mfa: 'NONE',
+      };
+
       function __updateAccountSettingsTest() {
         // Construct the params object for operation updateAccountSettings
         const ifMatch = 'testString';
@@ -2862,19 +2913,25 @@ describe('IamIdentityV1', () => {
         const restrictCreatePlatformApikey = 'RESTRICTED';
         const allowedIpAddresses = 'testString';
         const mfa = 'NONE';
+        const userMfa = [accountSettingsUserMfaModel];
         const sessionExpirationInSeconds = '86400';
         const sessionInvalidationInSeconds = '7200';
         const maxSessionsPerIdentity = 'testString';
+        const systemAccessTokenExpirationInSeconds = '3600';
+        const systemRefreshTokenExpirationInSeconds = '2592000';
         const updateAccountSettingsParams = {
-          ifMatch: ifMatch,
-          accountId: accountId,
-          restrictCreateServiceId: restrictCreateServiceId,
-          restrictCreatePlatformApikey: restrictCreatePlatformApikey,
-          allowedIpAddresses: allowedIpAddresses,
-          mfa: mfa,
-          sessionExpirationInSeconds: sessionExpirationInSeconds,
-          sessionInvalidationInSeconds: sessionInvalidationInSeconds,
-          maxSessionsPerIdentity: maxSessionsPerIdentity,
+          ifMatch,
+          accountId,
+          restrictCreateServiceId,
+          restrictCreatePlatformApikey,
+          allowedIpAddresses,
+          mfa,
+          userMfa,
+          sessionExpirationInSeconds,
+          sessionInvalidationInSeconds,
+          maxSessionsPerIdentity,
+          systemAccessTokenExpirationInSeconds,
+          systemRefreshTokenExpirationInSeconds,
         };
 
         const updateAccountSettingsResult = iamIdentityService.updateAccountSettings(updateAccountSettingsParams);
@@ -2896,9 +2953,12 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.restrict_create_platform_apikey).toEqual(restrictCreatePlatformApikey);
         expect(mockRequestOptions.body.allowed_ip_addresses).toEqual(allowedIpAddresses);
         expect(mockRequestOptions.body.mfa).toEqual(mfa);
+        expect(mockRequestOptions.body.user_mfa).toEqual(userMfa);
         expect(mockRequestOptions.body.session_expiration_in_seconds).toEqual(sessionExpirationInSeconds);
         expect(mockRequestOptions.body.session_invalidation_in_seconds).toEqual(sessionInvalidationInSeconds);
         expect(mockRequestOptions.body.max_sessions_per_identity).toEqual(maxSessionsPerIdentity);
+        expect(mockRequestOptions.body.system_access_token_expiration_in_seconds).toEqual(systemAccessTokenExpirationInSeconds);
+        expect(mockRequestOptions.body.system_refresh_token_expiration_in_seconds).toEqual(systemRefreshTokenExpirationInSeconds);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
 
@@ -2961,6 +3021,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('createReport', () => {
     describe('positive tests', () => {
       function __createReportTest() {
@@ -2969,9 +3030,9 @@ describe('IamIdentityV1', () => {
         const type = 'inactive';
         const duration = '720';
         const createReportParams = {
-          accountId: accountId,
-          type: type,
-          duration: duration,
+          accountId,
+          type,
+          duration,
         };
 
         const createReportResult = iamIdentityService.createReport(createReportParams);
@@ -2990,7 +3051,7 @@ describe('IamIdentityV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.type).toEqual(type);
         expect(mockRequestOptions.qs.duration).toEqual(duration);
-        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path['account_id']).toEqual(accountId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -3050,6 +3111,7 @@ describe('IamIdentityV1', () => {
       });
     });
   });
+
   describe('getReport', () => {
     describe('positive tests', () => {
       function __getReportTest() {
@@ -3057,8 +3119,8 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const reference = 'testString';
         const getReportParams = {
-          accountId: accountId,
-          reference: reference,
+          accountId,
+          reference,
         };
 
         const getReportResult = iamIdentityService.getReport(getReportParams);
@@ -3075,7 +3137,7 @@ describe('IamIdentityV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path['account_id']).toEqual(accountId);
         expect(mockRequestOptions.path.reference).toEqual(reference);
       }
 

@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.47.0-60650593-20220330-200002
+ * IBM OpenAPI SDK Code Generator Version: 3.62.0-a2a22f95-20221115-162524
  */
 
 import * as extend from 'extend';
@@ -100,23 +100,23 @@ class IamIdentityV1 extends BaseService {
    * Get API keys for a given service or user IAM ID and account ID.
    *
    * Returns the list of API key details for a given service or user IAM ID and account ID. Users can manage user API
-   * keys for themself, or service ID API keys for  service IDs that are bound to an entity they have access to. In case
-   * of  service IDs and their API keys, a user must be either an account owner,  a IBM Cloud org manager or IBM Cloud
-   * space developer in order to manage  service IDs of the entity.
+   * keys for themself, or service ID API keys for service IDs that are bound to an entity they have access to. In case
+   * of service IDs and their API keys, a user must be either an account owner, a IBM Cloud org manager or IBM Cloud
+   * space developer in order to manage service IDs of the entity.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - Account ID of the API keys to query. If a service IAM ID is specified in
+   * @param {string} [params.accountId] - Account ID of the API keys(s) to query. If a service IAM ID is specified in
    * iam_id then account_id must match the account of the IAM ID. If a user IAM ID is specified in iam_id then then
    * account_id must match the account of the Authorization token.
-   * @param {string} [params.iamId] - IAM ID of the API keys to be queried. The IAM ID may be that of a user or a
+   * @param {string} [params.iamId] - IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a
    * service. For a user IAM ID iam_id must match the Authorization token.
    * @param {number} [params.pagesize] - Optional size of a single page. Default is 20 items per page. Valid range is 1
    * to 100.
    * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
    * Default is start with first page.
-   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API keys. Can be 'entity'
+   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API Keys. Can be 'entity'
    * (default) or 'account'.
-   * @param {string} [params.type] - Optional parameter to filter the type of the queried API keys. Can be 'user' or
+   * @param {string} [params.type] - Optional parameter to filter the type of the queried API Keys. Can be 'user' or
    * 'serviceid'.
    * @param {string} [params.sort] - Optional sort property, valid values are name, description, created_at and
    * created_by. If specified, the items are sorted by the value of this property.
@@ -186,7 +186,7 @@ class IamIdentityV1 extends BaseService {
    * Create an API key.
    *
    * Creates an API key for a UserID or service ID. Users can manage user API keys for themself, or service ID API keys
-   * for  service IDs that are bound to an entity they have access to.
+   * for service IDs that are bound to an entity they have access to.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - Name of the API key. The name is not checked for uniqueness. Therefore multiple names
@@ -265,7 +265,7 @@ class IamIdentityV1 extends BaseService {
    * Get details of an API key by its value.
    *
    * Returns the details of an API key by its value. Users can manage user API keys for themself, or service ID API keys
-   *  for service IDs that are bound to an entity they have access to.
+   * for service IDs that are bound to an entity they have access to.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.iamApiKey] - API key value.
@@ -315,10 +315,10 @@ class IamIdentityV1 extends BaseService {
   /**
    * Get details of an API key.
    *
-   * Returns the details of an API key. Users can manage user API keys for themself, or service ID API keys for  service
-   * IDs that are bound to an entity they have access to. In case of  service IDs and their API keys, a user must be
-   * either an account owner,  a IBM Cloud org manager or IBM Cloud space developer in order to manage  service IDs of
-   * the entity.
+   * Returns the details of an API key. Users can manage user API keys for themself, or service ID API keys for service
+   * IDs that are bound to an entity they have access to. In case of service IDs and their API keys, a user must be
+   * either an account owner, a IBM Cloud org manager or IBM Cloud space developer in order to manage service IDs of the
+   * entity.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the API key.
@@ -383,7 +383,7 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the API key to be updated.
    * @param {string} params.ifMatch - Version of the API key to be updated. Specify the version that you retrieved when
-   * reading the API key. This value  helps identifying parallel usage of this API. Pass * to indicate to update any
+   * reading the API key. This value helps identifying parallel usage of this API. Pass * to indicate to update any
    * version available. This might result in stale updates.
    * @param {string} [params.name] - The name of the API key to update. If specified in the request the parameter must
    * not be empty. The name is not checked for uniqueness. Failure to this will result in an Error condition.
@@ -442,16 +442,16 @@ class IamIdentityV1 extends BaseService {
    * Deletes an API key.
    *
    * Deletes an API key. Existing tokens will remain valid until expired. Users can manage user API keys for themself,
-   * or service ID API  keys for service IDs that are bound to an entity they have access  to.
+   * or service ID API keys for service IDs that are bound to an entity they have access to.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the API key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public deleteApiKey(
     params: IamIdentityV1.DeleteApiKeyParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -490,11 +490,11 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the API key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public lockApiKey(
     params: IamIdentityV1.LockApiKeyParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -533,11 +533,11 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the API key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public unlockApiKey(
     params: IamIdentityV1.UnlockApiKeyParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -723,7 +723,7 @@ class IamIdentityV1 extends BaseService {
    *
    * Returns the details of a service ID. Users can manage user API keys for themself, or service ID API keys for
    * service IDs that are bound to an entity they have access to. Note: apikey details are only included in the response
-   * when  creating a Service ID with an apikey.
+   * when creating a Service ID with an apikey.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
@@ -783,8 +783,8 @@ class IamIdentityV1 extends BaseService {
    * Updates properties of a service ID. This does NOT affect existing access tokens. Their token content will stay
    * unchanged until the access token is refreshed. To update a service ID, pass the property to be modified. To delete
    * one property's value, pass the property with an empty value "".Users can manage user API keys for themself, or
-   * service ID API keys for service IDs that are bound to an entity they have access to.   Note: apikey details are
-   * only included in the response when creating a  Service ID with an apikey.
+   * service ID API keys for service IDs that are bound to an entity they have access to. Note: apikey details are only
+   * included in the response when creating a Service ID with an apikey.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID to be updated.
@@ -859,11 +859,11 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public deleteServiceId(
     params: IamIdentityV1.DeleteServiceIdParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -902,11 +902,11 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public lockServiceId(
     params: IamIdentityV1.LockServiceIdParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -946,11 +946,11 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public unlockServiceId(
     params: IamIdentityV1.UnlockServiceIdParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -1173,7 +1173,7 @@ class IamIdentityV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile to be updated.
-   * @param {string} params.ifMatch - Version of the trusted profile to be updated.  Specify the version that you
+   * @param {string} params.ifMatch - Version of the trusted profile to be updated. Specify the version that you
    * retrived when reading list of trusted profiles. This value helps to identify any parallel usage of trusted profile.
    * Pass * to indicate to update any version available. This might result in stale updates.
    * @param {string} [params.name] - The name of the trusted profile to update. If specified in the request the
@@ -1239,11 +1239,11 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public deleteProfile(
     params: IamIdentityV1.DeleteProfileParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId'];
     const _validParams = ['profileId', 'headers'];
@@ -1279,7 +1279,7 @@ class IamIdentityV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile to create a claim rule.
-   * @param {string} params.type - Type of the calim rule, either 'Profile-SAML' or 'Profile-CR'.
+   * @param {string} params.type - Type of the claim rule, either 'Profile-SAML' or 'Profile-CR'.
    * @param {ProfileClaimRuleConditions[]} params.conditions - Conditions of this claim rule.
    * @param {ResponseContext} [params.context] - Context with key properties for problem determination.
    * @param {string} [params.name] - Name of the claim rule to be created or updated.
@@ -1458,10 +1458,10 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile.
    * @param {string} params.ruleId - ID of the claim rule to update.
-   * @param {string} params.ifMatch - Version of the claim rule to be updated.  Specify the version that you retrived
+   * @param {string} params.ifMatch - Version of the claim rule to be updated. Specify the version that you retrived
    * when reading list of claim rules. This value helps to identify any parallel usage of claim rule. Pass * to indicate
    * to update any version available. This might result in stale updates.
-   * @param {string} params.type - Type of the calim rule, either 'Profile-SAML' or 'Profile-CR'.
+   * @param {string} params.type - Type of the claim rule, either 'Profile-SAML' or 'Profile-CR'.
    * @param {ProfileClaimRuleConditions[]} params.conditions - Conditions of this claim rule.
    * @param {ResponseContext} [params.context] - Context with key properties for problem determination.
    * @param {string} [params.name] - Name of the claim rule to be created or updated.
@@ -1547,11 +1547,11 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.profileId - ID of the trusted profile.
    * @param {string} params.ruleId - ID of the claim rule to delete.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public deleteClaimRule(
     params: IamIdentityV1.DeleteClaimRuleParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'ruleId'];
     const _validParams = ['profileId', 'ruleId', 'headers'];
@@ -1748,11 +1748,11 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.profileId - ID of the trusted profile.
    * @param {string} params.linkId - ID of the link.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Empty>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
    */
   public deleteLink(
     params: IamIdentityV1.DeleteLinkParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.Empty>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'linkId'];
     const _validParams = ['profileId', 'linkId', 'headers'];
@@ -1846,13 +1846,13 @@ class IamIdentityV1 extends BaseService {
   /**
    * Update account configurations.
    *
-   * Allows a user to configure settings on their account with regards to MFA, session lifetimes,  access control for
-   * creating new identities, and enforcing IP restrictions on  token creation.
+   * Allows a user to configure settings on their account with regards to MFA, session lifetimes, access control for
+   * creating new identities, and enforcing IP restrictions on token creation.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.ifMatch - Version of the account settings to be updated. Specify the version that you
-   * retrieved as entity_tag (ETag header) when reading the account. This value helps  identifying parallel usage of
-   * this API. Pass * to indicate to update any version  available. This might result in stale updates.
+   * retrieved as entity_tag (ETag header) when reading the account. This value helps identifying parallel usage of this
+   * API. Pass * to indicate to update any version available. This might result in stale updates.
    * @param {string} params.accountId - The id of the account to update the settings for.
    * @param {string} [params.restrictCreateServiceId] - Defines whether or not creating a Service Id is access
    * controlled. Valid values:
@@ -1873,17 +1873,27 @@ class IamIdentityV1 extends BaseService {
    *   * LEVEL1 - Email-based MFA for all users
    *   * LEVEL2 - TOTP-based MFA for all users
    *   * LEVEL3 - U2F MFA for all users.
+   * @param {AccountSettingsUserMFA[]} [params.userMfa] - List of users that are exempted from the MFA requirement of
+   * the account.
    * @param {string} [params.sessionExpirationInSeconds] - Defines the session expiration in seconds for the account.
    * Valid values:
    *   * Any whole number between between '900' and '86400'
    *   * NOT_SET - To unset account setting and use service default.
    * @param {string} [params.sessionInvalidationInSeconds] - Defines the period of time in seconds in which a session
-   * will be invalidated due  to inactivity. Valid values:
+   * will be invalidated due to inactivity. Valid values:
    *   * Any whole number between '900' and '7200'
    *   * NOT_SET - To unset account setting and use service default.
    * @param {string} [params.maxSessionsPerIdentity] - Defines the max allowed sessions per identity required by the
    * account. Value values:
    *   * Any whole number greater than 0
+   *   * NOT_SET - To unset account setting and use service default.
+   * @param {string} [params.systemAccessTokenExpirationInSeconds] - Defines the access token expiration in seconds.
+   * Valid values:
+   *   * Any whole number between '900' and '3600'
+   *   * NOT_SET - To unset account setting and use service default.
+   * @param {string} [params.systemRefreshTokenExpirationInSeconds] - Defines the refresh token expiration in seconds.
+   * Valid values:
+   *   * Any whole number between '900' and '2592000'
    *   * NOT_SET - To unset account setting and use service default.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>>}
@@ -1900,9 +1910,12 @@ class IamIdentityV1 extends BaseService {
       'restrictCreatePlatformApikey',
       'allowedIpAddresses',
       'mfa',
+      'userMfa',
       'sessionExpirationInSeconds',
       'sessionInvalidationInSeconds',
       'maxSessionsPerIdentity',
+      'systemAccessTokenExpirationInSeconds',
+      'systemRefreshTokenExpirationInSeconds',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1915,9 +1928,12 @@ class IamIdentityV1 extends BaseService {
       'restrict_create_platform_apikey': _params.restrictCreatePlatformApikey,
       'allowed_ip_addresses': _params.allowedIpAddresses,
       'mfa': _params.mfa,
+      'user_mfa': _params.userMfa,
       'session_expiration_in_seconds': _params.sessionExpirationInSeconds,
       'session_invalidation_in_seconds': _params.sessionInvalidationInSeconds,
       'max_sessions_per_identity': _params.maxSessionsPerIdentity,
+      'system_access_token_expiration_in_seconds': _params.systemAccessTokenExpirationInSeconds,
+      'system_refresh_token_expiration_in_seconds': _params.systemRefreshTokenExpirationInSeconds,
     };
 
     const path = {
@@ -1958,15 +1974,16 @@ class IamIdentityV1 extends BaseService {
    ************************/
 
   /**
-   * Trigger activity report across on account scope.
+   * Trigger activity report for the account.
    *
-   * Trigger activity report across on account scope for a given accountid.
+   * Trigger activity report for the account by specifying the account ID. It can take a few minutes to generate the
+   * report for retrieval.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - ID of the account.
-   * @param {string} [params.type] - Optional report type, supported value is 'inactive' - List all identities that have
-   * not authenticated within the time indicated by duration.
-   * @param {string} [params.duration] - Optional duration of the report, supported unit of duration is hours.
+   * @param {string} [params.type] - Optional report type. The supported value is 'inactive'. List all identities that
+   * have not authenticated within the time indicated by duration.
+   * @param {string} [params.duration] - Optional duration of the report. The supported unit of duration is hours.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>>}
    */
@@ -2015,9 +2032,10 @@ class IamIdentityV1 extends BaseService {
   }
 
   /**
-   * Get activity report across on account scope.
+   * Get activity report for the account.
    *
-   * Get activity report across on account scope for a given accountid.
+   * Get activity report for the account by specifying the account ID and the reference that is generated by triggering
+   * the report. Reports older than a day are deleted when generating a new report.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - ID of the account.
@@ -2083,7 +2101,7 @@ namespace IamIdentityV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -2096,12 +2114,12 @@ namespace IamIdentityV1 {
 
   /** Parameters for the `listApiKeys` operation. */
   export interface ListApiKeysParams {
-    /** Account ID of the API keys to query. If a service IAM ID is specified in iam_id then account_id must match
-     *  the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the account
-     *  of the Authorization token.
+    /** Account ID of the API keys(s) to query. If a service IAM ID is specified in iam_id then account_id must
+     *  match the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the
+     *  account of the Authorization token.
      */
     accountId?: string;
-    /** IAM ID of the API keys to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
+    /** IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
      *  iam_id must match the Authorization token.
      */
     iamId?: string;
@@ -2109,9 +2127,9 @@ namespace IamIdentityV1 {
     pagesize?: number;
     /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
     pagetoken?: string;
-    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
     scope?: ListApiKeysConstants.Scope | string;
-    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
     type?: ListApiKeysConstants.Type | string;
     /** Optional sort property, valid values are name, description, created_at and created_by. If specified, the
      *  items are sorted by the value of this property.
@@ -2126,12 +2144,12 @@ namespace IamIdentityV1 {
 
   /** Constants for the `listApiKeys` operation. */
   export namespace ListApiKeysConstants {
-    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
     export enum Scope {
       ENTITY = 'entity',
       ACCOUNT = 'account',
     }
-    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
     export enum Type {
       USER = 'user',
       SERVICEID = 'serviceid',
@@ -2200,7 +2218,7 @@ namespace IamIdentityV1 {
     /** Unique ID of the API key to be updated. */
     id: string;
     /** Version of the API key to be updated. Specify the version that you retrieved when reading the API key. This
-     *  value  helps identifying parallel usage of this API. Pass * to indicate to update any version available. This
+     *  value helps identifying parallel usage of this API. Pass * to indicate to update any version available. This
      *  might result in stale updates.
      */
     ifMatch: string;
@@ -2405,7 +2423,7 @@ namespace IamIdentityV1 {
   export interface UpdateProfileParams {
     /** ID of the trusted profile to be updated. */
     profileId: string;
-    /** Version of the trusted profile to be updated.  Specify the version that you retrived when reading list of
+    /** Version of the trusted profile to be updated. Specify the version that you retrived when reading list of
      *  trusted profiles. This value helps to identify any parallel usage of trusted profile. Pass * to indicate to
      *  update any version available. This might result in stale updates.
      */
@@ -2432,7 +2450,7 @@ namespace IamIdentityV1 {
   export interface CreateClaimRuleParams {
     /** ID of the trusted profile to create a claim rule. */
     profileId: string;
-    /** Type of the calim rule, either 'Profile-SAML' or 'Profile-CR'. */
+    /** Type of the claim rule, either 'Profile-SAML' or 'Profile-CR'. */
     type: string;
     /** Conditions of this claim rule. */
     conditions: ProfileClaimRuleConditions[];
@@ -2475,12 +2493,12 @@ namespace IamIdentityV1 {
     profileId: string;
     /** ID of the claim rule to update. */
     ruleId: string;
-    /** Version of the claim rule to be updated.  Specify the version that you retrived when reading list of claim
+    /** Version of the claim rule to be updated. Specify the version that you retrived when reading list of claim
      *  rules. This value helps to identify any parallel usage of claim rule. Pass * to indicate to update any version
      *  available. This might result in stale updates.
      */
     ifMatch: string;
-    /** Type of the calim rule, either 'Profile-SAML' or 'Profile-CR'. */
+    /** Type of the claim rule, either 'Profile-SAML' or 'Profile-CR'. */
     type: string;
     /** Conditions of this claim rule. */
     conditions: ProfileClaimRuleConditions[];
@@ -2559,9 +2577,9 @@ namespace IamIdentityV1 {
 
   /** Parameters for the `updateAccountSettings` operation. */
   export interface UpdateAccountSettingsParams {
-    /** Version of the account settings to be updated. Specify the version that you  retrieved as entity_tag (ETag
-     *  header) when reading the account. This value helps  identifying parallel usage of this API. Pass * to indicate
-     *  to update any version  available. This might result in stale updates.
+    /** Version of the account settings to be updated. Specify the version that you retrieved as entity_tag (ETag
+     *  header) when reading the account. This value helps identifying parallel usage of this API. Pass * to indicate to
+     *  update any version available. This might result in stale updates.
      */
     ifMatch: string;
     /** The id of the account to update the settings for. */
@@ -2591,12 +2609,14 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     mfa?: UpdateAccountSettingsConstants.Mfa | string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    userMfa?: AccountSettingsUserMFA[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
      */
     sessionExpirationInSeconds?: string;
-    /** Defines the period of time in seconds in which a session will be invalidated due  to inactivity. Valid
+    /** Defines the period of time in seconds in which a session will be invalidated due to inactivity. Valid
      *  values:
      *    * Any whole number between '900' and '7200'
      *    * NOT_SET - To unset account setting and use service default.
@@ -2607,6 +2627,16 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     maxSessionsPerIdentity?: string;
+    /** Defines the access token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '3600'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    systemAccessTokenExpirationInSeconds?: string;
+    /** Defines the refresh token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '2592000'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    systemRefreshTokenExpirationInSeconds?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2639,11 +2669,11 @@ namespace IamIdentityV1 {
   export interface CreateReportParams {
     /** ID of the account. */
     accountId: string;
-    /** Optional report type, supported value is 'inactive' - List all identities that have not authenticated within
-     *  the time indicated by duration.
+    /** Optional report type. The supported value is 'inactive'. List all identities that have not authenticated
+     *  within the time indicated by duration.
      */
     type?: string;
-    /** Optional duration of the report, supported unit of duration is hours. */
+    /** Optional duration of the report. The supported unit of duration is hours. */
     duration?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -2694,6 +2724,8 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     mfa: string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    user_mfa: AccountSettingsUserMFA[];
     /** History of the Account Settings. */
     history?: EnityHistoryRecord[];
     /** Defines the session expiration in seconds for the account. Valid values:
@@ -2701,7 +2733,7 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     session_expiration_in_seconds: string;
-    /** Defines the period of time in seconds in which a session will be invalidated due  to inactivity. Valid
+    /** Defines the period of time in seconds in which a session will be invalidated due to inactivity. Valid
      *  values:
      *    * Any whole number between '900' and '7200'
      *    * NOT_SET - To unset account setting and use service default.
@@ -2712,6 +2744,31 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     max_sessions_per_identity: string;
+    /** Defines the access token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '3600'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    system_access_token_expiration_in_seconds: string;
+    /** Defines the refresh token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '2592000'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    system_refresh_token_expiration_in_seconds: string;
+  }
+
+  /** AccountSettingsUserMFA. */
+  export interface AccountSettingsUserMFA {
+    /** The iam_id of the user. */
+    iam_id: string;
+    /** Defines the MFA requirement for the user. Valid values:
+     *    * NONE - No MFA trait set
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    mfa: string;
   }
 
   /** Activity. */
@@ -2896,7 +2953,7 @@ namespace IamIdentityV1 {
     modified_at?: string;
     /** The optional claim rule name. */
     name?: string;
-    /** Type of the Calim rule, either 'Profile-SAML' or 'Profile-CR'. */
+    /** Type of the claim rule, either 'Profile-SAML' or 'Profile-CR'. */
     type: string;
     /** The realm name of the Idp this claim rule applies to. */
     realm_name?: string;
@@ -2910,7 +2967,9 @@ namespace IamIdentityV1 {
 
   /** ProfileClaimRuleConditions. */
   export interface ProfileClaimRuleConditions {
-    /** The claim to evaluate against. */
+    /** The claim to evaluate against. [Learn
+     *  more](/docs/account?topic=account-iam-condition-properties&interface=ui#cr-attribute-names).
+     */
     claim: string;
     /** The operation to perform on the claim. valid values are EQUALS, NOT_EQUALS, EQUALS_IGNORE_CASE,
      *  NOT_EQUALS_IGNORE_CASE, CONTAINS, IN.

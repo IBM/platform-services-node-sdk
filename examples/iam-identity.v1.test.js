@@ -66,6 +66,7 @@ describe('IamIdentityV1', () => {
 
   let accountId = config.accountId;
   let iamId = config.iamId;
+  let iamIdMember = config.iamIdMember;
   let iamApikey = config.apikey;
 
   let apikeyId = null;
@@ -1001,6 +1002,13 @@ describe('IamIdentityV1', () => {
 
     originalLog('updateAccountSettings() result:');
     // begin-updateAccountSettings
+    
+    const accountSettingsUserMFA = {
+      iam_id: iamIdMember,
+      mfa: 'NONE',
+    };
+
+    const userMfa = [accountSettingsUserMFA];
 
     const params = {
       ifMatch: accountSettingsEtag,
@@ -1008,8 +1016,11 @@ describe('IamIdentityV1', () => {
       restrict_create_service_id: "NOT_RESTRICTED",
       restrict_create_platform_apikey: "NOT_RESTRICTED",
       mfa: "NONE",
+      userMfa,
       session_expiration_in_seconds: "86400",
       session_invalidation_in_seconds: "7200",
+      system_access_token_expiration_in_seconds: '3600',
+      system_refresh_token_expiration_in_seconds: '2592000',
     };
 
     try {
