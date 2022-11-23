@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.36.0-6f5b0381-20210716-180747
+ * IBM OpenAPI SDK Code Generator Version: 3.62.0-a2a22f95-20221115-162524
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,13 +27,16 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
+import { getQueryParam } from 'ibm-cloud-sdk-core';
 
 /**
  * Usage reports for IBM Cloud accounts
+ *
+ * API Version: 4.0.6
  */
 
 class UsageReportsV4 extends BaseService {
@@ -111,11 +117,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetAccountSummaryParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.AccountSummary>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'billingmonth'];
+    const _validParams = ['accountId', 'billingmonth', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -171,11 +177,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetAccountUsageParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.AccountUsage>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'billingmonth'];
+    const _validParams = ['accountId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -187,7 +193,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getAccountUsage');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getAccountUsage'
+    );
 
     const parameters = {
       options: {
@@ -211,7 +221,6 @@ class UsageReportsV4 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * resourceOperations
    ************************/
@@ -238,11 +247,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetResourceGroupUsageParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.ResourceGroupUsage>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
+    const _validParams = ['accountId', 'resourceGroupId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -298,7 +307,7 @@ class UsageReportsV4 extends BaseService {
    * resource group.
    * @param {string} [params.acceptLanguage] - Prioritize the names returned in the order of the specified languages.
    * Language will default to English.
-   * @param {number} [params.limit] - Number of usage records returned. The default value is 10. Maximum value is 20.
+   * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
    * @param {string} [params.start] - The offset from which the records must be fetched. Offset information is included
    * in the response.
    * @param {string} [params.resourceGroupId] - Filter by resource group.
@@ -314,11 +323,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetResourceUsageAccountParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'billingmonth'];
+    const _validParams = ['accountId', 'billingmonth', 'names', 'acceptLanguage', 'limit', 'start', 'resourceGroupId', 'organizationId', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -382,7 +391,7 @@ class UsageReportsV4 extends BaseService {
    * resource group.
    * @param {string} [params.acceptLanguage] - Prioritize the names returned in the order of the specified languages.
    * Language will default to English.
-   * @param {number} [params.limit] - Number of usage records returned. The default value is 10. Maximum value is 20.
+   * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
    * @param {string} [params.start] - The offset from which the records must be fetched. Offset information is included
    * in the response.
    * @param {string} [params.resourceInstanceId] - Filter by resource instance id.
@@ -396,11 +405,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetResourceUsageResourceGroupParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
+    const _validParams = ['accountId', 'resourceGroupId', 'billingmonth', 'names', 'acceptLanguage', 'limit', 'start', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -463,7 +472,7 @@ class UsageReportsV4 extends BaseService {
    * resource group.
    * @param {string} [params.acceptLanguage] - Prioritize the names returned in the order of the specified languages.
    * Language will default to English.
-   * @param {number} [params.limit] - Number of usage records returned. The default value is 10. Maximum value is 20.
+   * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
    * @param {string} [params.start] - The offset from which the records must be fetched. Offset information is included
    * in the response.
    * @param {string} [params.resourceInstanceId] - Filter by resource instance id.
@@ -477,11 +486,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetResourceUsageOrgParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'organizationId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'organizationId', 'billingmonth'];
+    const _validParams = ['accountId', 'organizationId', 'billingmonth', 'names', 'acceptLanguage', 'limit', 'start', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -528,7 +537,6 @@ class UsageReportsV4 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * organizationOperations
    ************************/
@@ -555,11 +563,11 @@ class UsageReportsV4 extends BaseService {
     params: UsageReportsV4.GetOrgUsageParams
   ): Promise<UsageReportsV4.Response<UsageReportsV4.OrgUsage>> {
     const _params = { ...params };
-    const requiredParams = ['accountId', 'organizationId', 'billingmonth'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId', 'organizationId', 'billingmonth'];
+    const _validParams = ['accountId', 'organizationId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -572,7 +580,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getOrgUsage');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getOrgUsage'
+    );
 
     const parameters = {
       options: {
@@ -615,7 +627,7 @@ namespace UsageReportsV4 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -673,7 +685,7 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
-    /** Number of usage records returned. The default value is 10. Maximum value is 20. */
+    /** Number of usage records returned. The default value is 30. Maximum value is 200. */
     limit?: number;
     /** The offset from which the records must be fetched. Offset information is included in the response. */
     start?: string;
@@ -704,7 +716,7 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
-    /** Number of usage records returned. The default value is 10. Maximum value is 20. */
+    /** Number of usage records returned. The default value is 30. Maximum value is 200. */
     limit?: number;
     /** The offset from which the records must be fetched. Offset information is included in the response. */
     start?: string;
@@ -731,7 +743,7 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
-    /** Number of usage records returned. The default value is 10. Maximum value is 20. */
+    /** Number of usage records returned. The default value is 30. Maximum value is 200. */
     limit?: number;
     /** The offset from which the records must be fetched. Offset information is included in the response. */
     start?: string;
@@ -770,7 +782,7 @@ namespace UsageReportsV4 {
     /** The ID of the account. */
     account_id: string;
     /** The month in which usages were incurred. Represented in yyyy-mm format. */
-    billing_month: string;
+    month: string;
     /** Country. */
     billing_country_code: string;
     /** The currency in which the account is billed. */
@@ -1081,6 +1093,259 @@ namespace UsageReportsV4 {
     type: string;
     /** Additional support cost for the month. */
     overage: number;
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * GetResourceUsageAccountPager can be used to simplify the use of getResourceUsageAccount().
+   */
+  export class GetResourceUsageAccountPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: UsageReportsV4;
+
+    protected params: UsageReportsV4.GetResourceUsageAccountParams;
+
+    /**
+     * Construct a GetResourceUsageAccountPager object.
+     *
+     * @param {UsageReportsV4}  client - The service client instance used to invoke getResourceUsageAccount()
+     * @param {Object} params - The parameters to be passed to getResourceUsageAccount()
+     * @constructor
+     * @returns {GetResourceUsageAccountPager}
+     */
+    constructor(
+      client: UsageReportsV4,
+      params: UsageReportsV4.GetResourceUsageAccountParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getResourceUsageAccount().
+     * @returns {Promise<UsageReportsV4.InstanceUsage[]>}
+     */
+    public async getNext(): Promise<UsageReportsV4.InstanceUsage[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.getResourceUsageAccount(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, '_start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking getResourceUsageAccount() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<UsageReportsV4.InstanceUsage[]>}
+     */
+    public async getAll(): Promise<UsageReportsV4.InstanceUsage[]> {
+      const results: InstanceUsage[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * GetResourceUsageResourceGroupPager can be used to simplify the use of getResourceUsageResourceGroup().
+   */
+  export class GetResourceUsageResourceGroupPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: UsageReportsV4;
+
+    protected params: UsageReportsV4.GetResourceUsageResourceGroupParams;
+
+    /**
+     * Construct a GetResourceUsageResourceGroupPager object.
+     *
+     * @param {UsageReportsV4}  client - The service client instance used to invoke getResourceUsageResourceGroup()
+     * @param {Object} params - The parameters to be passed to getResourceUsageResourceGroup()
+     * @constructor
+     * @returns {GetResourceUsageResourceGroupPager}
+     */
+    constructor(
+      client: UsageReportsV4,
+      params: UsageReportsV4.GetResourceUsageResourceGroupParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getResourceUsageResourceGroup().
+     * @returns {Promise<UsageReportsV4.InstanceUsage[]>}
+     */
+    public async getNext(): Promise<UsageReportsV4.InstanceUsage[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.getResourceUsageResourceGroup(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, '_start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking getResourceUsageResourceGroup() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<UsageReportsV4.InstanceUsage[]>}
+     */
+    public async getAll(): Promise<UsageReportsV4.InstanceUsage[]> {
+      const results: InstanceUsage[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * GetResourceUsageOrgPager can be used to simplify the use of getResourceUsageOrg().
+   */
+  export class GetResourceUsageOrgPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: UsageReportsV4;
+
+    protected params: UsageReportsV4.GetResourceUsageOrgParams;
+
+    /**
+     * Construct a GetResourceUsageOrgPager object.
+     *
+     * @param {UsageReportsV4}  client - The service client instance used to invoke getResourceUsageOrg()
+     * @param {Object} params - The parameters to be passed to getResourceUsageOrg()
+     * @constructor
+     * @returns {GetResourceUsageOrgPager}
+     */
+    constructor(
+      client: UsageReportsV4,
+      params: UsageReportsV4.GetResourceUsageOrgParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getResourceUsageOrg().
+     * @returns {Promise<UsageReportsV4.InstanceUsage[]>}
+     */
+    public async getNext(): Promise<UsageReportsV4.InstanceUsage[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.getResourceUsageOrg(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, '_start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking getResourceUsageOrg() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<UsageReportsV4.InstanceUsage[]>}
+     */
+    public async getAll(): Promise<UsageReportsV4.InstanceUsage[]> {
+      const results: InstanceUsage[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
