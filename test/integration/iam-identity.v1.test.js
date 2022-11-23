@@ -39,6 +39,7 @@ const invalidAccountId = 'invalid';
 let iamIdentityService;
 let accountId;
 let iamId;
+let iamIdMember;
 let iamApikey;
 
 let apikeyId1;
@@ -76,11 +77,14 @@ describe('IamIdentityV1_integration', () => {
 
     accountId = config.accountId;
     iamId = config.iamId;
+    iamIdMember = config.iamIdMember;
     iamApikey = config.apikey;
     expect(accountId).not.toBeNull();
     expect(accountId).toBeDefined();
     expect(iamId).not.toBeNull();
     expect(iamId).toBeDefined();
+    expect(iamIdMember).not.toBeNull();
+    expect(iamIdMember).toBeDefined();
     expect(iamApikey).not.toBeNull();
     expect(iamApikey).toBeDefined();
 
@@ -1267,9 +1271,12 @@ describe('IamIdentityV1_integration', () => {
         expect(result.restrict_create_platform_apikey).toBeDefined();
         expect(result.entity_tag).toBeDefined();
         expect(result.mfa).toBeDefined();
+        expect(result.user_mfa).toBeDefined();
         expect(result.history).toBeDefined();
         expect(result.session_expiration_in_seconds).toBeDefined();
         expect(result.session_invalidation_in_seconds).toBeDefined();
+        expect(result.system_access_token_expiration_in_seconds).toBeDefined();
+        expect(result.system_refresh_token_expiration_in_seconds).toBeDefined();
 
         accountSettingsEtag = result.entity_tag;
         expect(accountSettingsEtag).not.toBeNull();
@@ -1282,6 +1289,14 @@ describe('IamIdentityV1_integration', () => {
   });
   test('updateAccountSettings()', (done) => {
     expect(accountSettingsEtag).toBeDefined();
+
+    const accountSettingsUserMFA = {
+      iam_id: iamIdMember,
+      mfa: 'NONE',
+    };
+
+    const userMfa = [accountSettingsUserMFA];
+
     const params = {
       ifMatch: accountSettingsEtag,
       accountId,
@@ -1289,9 +1304,12 @@ describe('IamIdentityV1_integration', () => {
       restrictCreatePlatformApikey: 'NOT_RESTRICTED',
       // allowedIpAddresses: 'testString',
       mfa: 'NONE',
+      userMfa,
       sessionExpirationInSeconds: '86400',
       sessionInvalidationInSeconds: '7200',
       maxSessionsPerIdentity: '10',
+      systemAccessTokenExpirationInSeconds: '3600',
+      systemRefreshTokenExpirationInSeconds: '2592000',
     };
 
     iamIdentityService
