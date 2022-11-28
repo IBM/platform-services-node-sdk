@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.39.0-748eb4ca-20210917-165907
+ * IBM OpenAPI SDK Code Generator Version: 3.62.0-a2a22f95-20221115-162524
  */
 
 import * as extend from 'extend';
@@ -24,7 +24,7 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
@@ -141,11 +141,24 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.ListPoliciesParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>> {
     const _params = { ...params };
-    const requiredParams = ['accountId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'iamId',
+      'accessGroupId',
+      'type',
+      'serviceType',
+      'tagName',
+      'tagValue',
+      'sort',
+      'format',
+      'state',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -204,7 +217,9 @@ class IamPolicyManagementV1 extends BaseService {
    * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
    * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
    * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
-   * **`serviceName`**,  or **`resourceGroupId`** attribute and the **`accountId`** attribute.` If the subject is a
+   * **`serviceName`**, **`resourceGroupId`** or **`service_group_id`** attribute and the **`accountId`** attribute.`
+   * The IAM Services group (`IAM`) is a subset of account management services that includes the IAM platform services
+   * IAM Identity, IAM Access Management, IAM Users Management, IAM Groups, and future IAM services. If the subject is a
    * locked service-id, the request will fail.
    *
    * ### Authorization
@@ -222,7 +237,7 @@ class IamPolicyManagementV1 extends BaseService {
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals` and the `stringMatch` operators are available. Resource attributes may support
-   * one or both operators.  For more information, see [how to assign access by using wildcards
+   * one or both operators. For more information, see [how to assign access by using wildcards
    * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
    *
    * ### Attribute Validations
@@ -256,11 +271,19 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.CreatePolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
-    const requiredParams = ['type', 'subjects', 'roles', 'resources'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['type', 'subjects', 'roles', 'resources'];
+    const _validParams = [
+      'type',
+      'subjects',
+      'roles',
+      'resources',
+      'description',
+      'acceptLanguage',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -330,7 +353,7 @@ class IamPolicyManagementV1 extends BaseService {
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals` and the `stringMatch` operators are available. Resource attributes might support
-   * one or both operators.  For more information, see [how to assign access by using wildcards
+   * one or both operators. For more information, see [how to assign access by using wildcards
    * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
    *
    * ### Attribute Validations
@@ -356,11 +379,20 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.UpdatePolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
-    const requiredParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources'];
+    const _validParams = [
+      'policyId',
+      'ifMatch',
+      'type',
+      'subjects',
+      'roles',
+      'resources',
+      'description',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -419,11 +451,11 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.GetPolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
-    const requiredParams = ['policyId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['policyId'];
+    const _validParams = ['policyId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -462,17 +494,17 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyId - The policy ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
    */
   public deletePolicy(
     params: IamPolicyManagementV1.DeletePolicyParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['policyId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['policyId'];
+    const _validParams = ['policyId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -518,11 +550,11 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.PatchPolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
-    const requiredParams = ['policyId', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['policyId', 'ifMatch'];
+    const _validParams = ['policyId', 'ifMatch', 'state', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -598,6 +630,19 @@ class IamPolicyManagementV1 extends BaseService {
     params?: IamPolicyManagementV1.ListRolesParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'acceptLanguage',
+      'accountId',
+      'serviceName',
+      'sourceServiceName',
+      'policyType',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'account_id': _params.accountId,
@@ -666,11 +711,20 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.CreateRoleParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
-    const requiredParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName'];
+    const _validParams = [
+      'displayName',
+      'actions',
+      'name',
+      'accountId',
+      'serviceName',
+      'description',
+      'acceptLanguage',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -733,11 +787,11 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.UpdateRoleParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
-    const requiredParams = ['roleId', 'ifMatch'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['roleId', 'ifMatch'];
+    const _validParams = ['roleId', 'ifMatch', 'displayName', 'description', 'actions', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -794,11 +848,11 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.GetRoleParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
-    const requiredParams = ['roleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['roleId'];
+    const _validParams = ['roleId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -836,17 +890,17 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.roleId - The role ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
    */
   public deleteRole(
     params: IamPolicyManagementV1.DeleteRoleParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Empty>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['roleId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['roleId'];
+    const _validParams = ['roleId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -862,6 +916,496 @@ class IamPolicyManagementV1 extends BaseService {
     const parameters = {
       options: {
         url: '/v2/roles/{role_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * v2Policies
+   ************************/
+
+  /**
+   * Get policies by attributes.
+   *
+   * Get policies and filter by attributes. While managing policies, you may want to retrieve policies in the account
+   * and filter by attribute values. This can be done through query parameters. Currently, only the following attributes
+   * are supported: account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a
+   * required query parameter. Only policies that have the specified attributes and that the caller has read access to
+   * are returned. If the caller does not have read access to any policies an empty array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID in which the policies belong to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.iamId] - Optional IAM ID used to identify the subject.
+   * @param {string} [params.accessGroupId] - Optional access group id.
+   * @param {string} [params.type] - Optional type of policy.
+   * @param {string} [params.serviceType] - Optional type of service.
+   * @param {string} [params.serviceName] - Optional name of service.
+   * @param {string} [params.serviceGroupId] - Optional ID of service group.
+   * @param {string} [params.format] - Include additional data per policy returned
+   * * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times
+   * it has done so
+   * * `display` - returns the list of all actions included in each of the policy roles and translations for all
+   * relevant fields.
+   * @param {string} [params.state] - The state of the policy.
+   * * `active` - returns active policies
+   * * `deleted` - returns non-active policies.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyList>>}
+   */
+  public v2ListPolicies(
+    params: IamPolicyManagementV1.V2ListPoliciesParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyList>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'iamId',
+      'accessGroupId',
+      'type',
+      'serviceType',
+      'serviceName',
+      'serviceGroupId',
+      'format',
+      'state',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'iam_id': _params.iamId,
+      'access_group_id': _params.accessGroupId,
+      'type': _params.type,
+      'service_type': _params.serviceType,
+      'service_name': _params.serviceName,
+      'service_group_id': _params.serviceGroupId,
+      'format': _params.format,
+      'state': _params.state,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'v2ListPolicies'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/policies',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a policy.
+   *
+   * Creates a policy to grant access between a subject and a resource. Currently, there is one type of a v2/policy:
+   * **access**. A policy administrator might want to create an access policy which grants access to a user, service-id,
+   * or an access group.
+   *
+   * ### Access
+   *
+   * To create an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
+   * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
+   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
+   * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
+   * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
+   * **`serviceName`**, **`resourceGroupId`** or **`service_group_id`** attribute and the **`accountId`** attribute.`
+   * The rule field can either specify single **`key`**, **`value`**, and **`operator`** or be set of **`conditions`**
+   * with a combination **`operator`**.  The possible combination operator are **`and`** and **`or`**. The rule field
+   * has a maximum of 2 levels of nested **`conditions`**. The operator for a rule can be used to specify a time based
+   * restriction (e.g., access only during business hours, during the Monday-Friday work week). For example, a policy
+   * can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
+   * ```json
+   *   "rule": {
+   *     "operator": "and",
+   *     "conditions": [{
+   *       "key": "{{environment.attributes.day_of_week}}",
+   *       "operator": "dayOfWeekAnyOf",
+   *       "value": [1, 2, 3, 4, 5]
+   *     },
+   *       "key": "{{environment.attributes.current_time}}",
+   *       "operator": "timeGreaterThanOrEquals",
+   *       "value": "09:00:00+00:00"
+   *     },
+   *       "key": "{{environment.attributes.current_time}}",
+   *       "operator": "timeLessThanOrEquals",
+   *       "value": "17:00:00+00:00"
+   *     }]
+   *   }
+   * ``` Rules and conditions allow the following operators with **`key`**, **`value`** :
+   * ```
+   *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
+   *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
+   *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
+   *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
+   *   'monthEquals', 'monthAnyOf',
+   *   'dayOfMonthEquals', 'dayOfMonthAnyOf'
+   * ``` The pattern field can be coupled with a rule that matches the pattern. For the business hour rule example
+   * above, the **`pattern`** is **`"time-based-restrictions:weekly"`**. The IAM Services group (`IAM`) is a subset of
+   * account management services that includes the IAM platform services IAM Identity, IAM Access Management, IAM Users
+   * Management, IAM Groups, and future IAM services. If the subject is a locked service-id, the request will fail.
+   *
+   * ### Attribute Operators
+   *
+   * Currently, only the `stringEquals`, `stringMatch`, and `stringEquals` operators are available. For more
+   * information, see [how to assign access by using wildcards
+   * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
+   *
+   * ### Attribute Validations
+   *
+   * Policy attribute values must be between 1 and 1,000 characters in length. If location related attributes like
+   * geography, country, metro, region, satellite, and locationvalues are supported by the service, they are validated
+   * against Global Catalog locations.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.type - The policy type; either 'access' or 'authorization'.
+   * @param {V2PolicyBaseControl} params.control - Specifies the type of access granted by the policy.
+   * @param {string} [params.description] - Customer-defined description.
+   * @param {V2PolicyBaseSubject} [params.subject] - The subject attributes associated with a policy.
+   * @param {V2PolicyBaseResource} [params.resource] - The resource attributes associated with a policy.
+   * @param {string} [params.pattern] - Indicates pattern of rule.
+   * @param {V2PolicyBaseRule} [params.rule] - Additional access conditions associated with a policy.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
+   */
+  public v2CreatePolicy(
+    params: IamPolicyManagementV1.V2CreatePolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
+    const _params = { ...params };
+    const _requiredParams = ['type', 'control'];
+    const _validParams = [
+      'type',
+      'control',
+      'description',
+      'subject',
+      'resource',
+      'pattern',
+      'rule',
+      'acceptLanguage',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'type': _params.type,
+      'control': _params.control,
+      'description': _params.description,
+      'subject': _params.subject,
+      'resource': _params.resource,
+      'pattern': _params.pattern,
+      'rule': _params.rule,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'v2CreatePolicy'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/policies',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a policy.
+   *
+   * Update a policy to grant access between a subject and a resource. A policy administrator might want to update an
+   * existing policy.
+   *
+   * ### Access
+   *
+   * To update an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
+   * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
+   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
+   * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
+   * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
+   * **`serviceName`**,  or **`resourceGroupId`** attribute and the **`accountId`** attribute.` The rule field can
+   * either specify single **`key`**, **`value`**, and **`operator`** or be set of **`conditions`** with a combination
+   * **`operator`**.  The possible combination operator are **`and`** and **`or`**. The rule field has a maximum of 2
+   * levels of nested **`conditions`**. The operator for a rule can be used to specify a time based restriction (e.g.,
+   * access only during business hours, during the Monday-Friday work week). For example, a policy can grant access
+   * Monday-Friday, 9:00am-5:00pm using the following rule:
+   * ```json
+   *   "rule": {
+   *     "operator": "and",
+   *     "conditions": [{
+   *       "key": "{{environment.attributes.day_of_week}}",
+   *       "operator": "dayOfWeekAnyOf",
+   *       "value": [1, 2, 3, 4, 5]
+   *     },
+   *       "key": "{{environment.attributes.current_time}}",
+   *       "operator": "timeGreaterThanOrEquals",
+   *       "value": "09:00:00+00:00"
+   *     },
+   *       "key": "{{environment.attributes.current_time}}",
+   *       "operator": "timeLessThanOrEquals",
+   *       "value": "17:00:00+00:00"
+   *     }]
+   *   }
+   * ``` Rules and conditions allow the following operators with **`key`**, **`value`** :
+   * ```
+   *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
+   *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
+   *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
+   *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
+   *   'monthEquals', 'monthAnyOf',
+   *   'dayOfMonthEquals', 'dayOfMonthAnyOf'
+   * ``` The pattern field can be coupled with a rule that matches the pattern. For the business hour rule example
+   * above, the **`pattern`** is **`"time-based-restrictions:weekly"`**. If the subject is a locked service-id, the
+   * request will fail.
+   *
+   * ### Attribute Operators
+   *
+   * Currently, only the `stringEquals`, `stringMatch`, and `stringEquals` operators are available. For more
+   * information, see [how to assign access by using wildcards
+   * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
+   *
+   * ### Attribute Validations
+   *
+   * Policy attribute values must be between 1 and 1,000 characters in length. If location related attributes like
+   * geography, country, metro, region, satellite, and locationvalues are supported by the service, they are validated
+   * against Global Catalog locations.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyId - The policy ID.
+   * @param {string} params.ifMatch - The revision number for updating a policy and must match the ETag value of the
+   * existing policy. The Etag can be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag
+   * response header.
+   * @param {string} params.type - The policy type; either 'access' or 'authorization'.
+   * @param {V2PolicyBaseControl} params.control - Specifies the type of access granted by the policy.
+   * @param {string} [params.description] - Customer-defined description.
+   * @param {V2PolicyBaseSubject} [params.subject] - The subject attributes associated with a policy.
+   * @param {V2PolicyBaseResource} [params.resource] - The resource attributes associated with a policy.
+   * @param {string} [params.pattern] - Indicates pattern of rule.
+   * @param {V2PolicyBaseRule} [params.rule] - Additional access conditions associated with a policy.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
+   */
+  public v2UpdatePolicy(
+    params: IamPolicyManagementV1.V2UpdatePolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyId', 'ifMatch', 'type', 'control'];
+    const _validParams = [
+      'policyId',
+      'ifMatch',
+      'type',
+      'control',
+      'description',
+      'subject',
+      'resource',
+      'pattern',
+      'rule',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'type': _params.type,
+      'control': _params.control,
+      'description': _params.description,
+      'subject': _params.subject,
+      'resource': _params.resource,
+      'pattern': _params.pattern,
+      'rule': _params.rule,
+    };
+
+    const path = {
+      'policy_id': _params.policyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'v2UpdatePolicy'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/policies/{policy_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a policy by ID.
+   *
+   * Retrieve a policy by providing a policy ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyId - The policy ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
+   */
+  public v2GetPolicy(
+    params: IamPolicyManagementV1.V2GetPolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyId'];
+    const _validParams = ['policyId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_id': _params.policyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'v2GetPolicy'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/policies/{policy_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a policy by ID.
+   *
+   * Delete a policy by providing a policy ID. A policy cannot be deleted if the subject ID contains a locked service
+   * ID. If the subject of the policy is a locked service-id, the request will fail.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyId - The policy ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public v2DeletePolicy(
+    params: IamPolicyManagementV1.V2DeletePolicyParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyId'];
+    const _validParams = ['policyId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_id': _params.policyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'v2DeletePolicy'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/policies/{policy_id}',
         method: 'DELETE',
         path,
       },
@@ -891,7 +1435,7 @@ namespace IamPolicyManagementV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1161,9 +1705,174 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `v2ListPolicies` operation. */
+  export interface V2ListPoliciesParams {
+    /** The account GUID in which the policies belong to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    /** Optional IAM ID used to identify the subject. */
+    iamId?: string;
+    /** Optional access group id. */
+    accessGroupId?: string;
+    /** Optional type of policy. */
+    type?: V2ListPoliciesConstants.Type | string;
+    /** Optional type of service. */
+    serviceType?: V2ListPoliciesConstants.ServiceType | string;
+    /** Optional name of service. */
+    serviceName?: string;
+    /** Optional ID of service group. */
+    serviceGroupId?: string;
+    /** Include additional data per policy returned
+     *  * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of
+     *  times it has done so
+     *  * `display` - returns the list of all actions included in each of the policy roles and translations for all
+     *  relevant fields.
+     */
+    format?: V2ListPoliciesConstants.Format | string;
+    /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
+    state?: V2ListPoliciesConstants.State | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `v2ListPolicies` operation. */
+  export namespace V2ListPoliciesConstants {
+    /** Optional type of policy. */
+    export enum Type {
+      ACCESS = 'access',
+      AUTHORIZATION = 'authorization',
+    }
+    /** Optional type of service. */
+    export enum ServiceType {
+      SERVICE = 'service',
+      PLATFORM_SERVICE = 'platform_service',
+    }
+    /** Include additional data per policy returned * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times it has done so * `display` - returns the list of all actions included in each of the policy roles and translations for all relevant fields. */
+    export enum Format {
+      INCLUDE_LAST_PERMIT = 'include_last_permit',
+      DISPLAY = 'display',
+    }
+    /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
+  }
+
+  /** Parameters for the `v2CreatePolicy` operation. */
+  export interface V2CreatePolicyParams {
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Specifies the type of access granted by the policy. */
+    control: V2PolicyBaseControl;
+    /** Customer-defined description. */
+    description?: string;
+    /** The subject attributes associated with a policy. */
+    subject?: V2PolicyBaseSubject;
+    /** The resource attributes associated with a policy. */
+    resource?: V2PolicyBaseResource;
+    /** Indicates pattern of rule. */
+    pattern?: string;
+    /** Additional access conditions associated with a policy. */
+    rule?: V2PolicyBaseRule;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `v2UpdatePolicy` operation. */
+  export interface V2UpdatePolicyParams {
+    /** The policy ID. */
+    policyId: string;
+    /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
+     *  be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag response header.
+     */
+    ifMatch: string;
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Specifies the type of access granted by the policy. */
+    control: V2PolicyBaseControl;
+    /** Customer-defined description. */
+    description?: string;
+    /** The subject attributes associated with a policy. */
+    subject?: V2PolicyBaseSubject;
+    /** The resource attributes associated with a policy. */
+    resource?: V2PolicyBaseResource;
+    /** Indicates pattern of rule. */
+    pattern?: string;
+    /** Additional access conditions associated with a policy. */
+    rule?: V2PolicyBaseRule;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `v2GetPolicy` operation. */
+  export interface V2GetPolicyParams {
+    /** The policy ID. */
+    policyId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `v2DeletePolicy` operation. */
+  export interface V2DeletePolicyParams {
+    /** The policy ID. */
+    policyId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
+
+  /** Specifies the type of access granted by the policy. */
+  export interface V2PolicyBaseControl {
+    /** Permission granted by the policy. */
+    grant: V2PolicyBaseControlGrant;
+  }
+
+  /** Permission granted by the policy. */
+  export interface V2PolicyBaseControlGrant {
+    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    roles: PolicyRole[];
+  }
+
+  /** The resource attributes associated with a policy. */
+  export interface V2PolicyBaseResource {
+    /** List of resource attributes associated with policy/. */
+    attributes?: V2PolicyAttribute[];
+  }
+
+  /** Additional access conditions associated with a policy. */
+  export interface V2PolicyBaseRule {}
+
+  /** The subject attributes associated with a policy. */
+  export interface V2PolicyBaseSubject {
+    /** List of subject attributes associated with policy/. */
+    attributes?: V2PolicyAttribute[];
+  }
 
   /** An additional set of properties associated with a role. */
   export interface CustomRole {
@@ -1311,6 +2020,72 @@ namespace IamPolicyManagementV1 {
     name: string;
     /** The value of an attribute. */
     value: string;
+  }
+
+  /** The core set of properties associated with a policy. */
+  export interface V2Policy {
+    /** The policy ID. */
+    id?: string;
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Customer-defined description. */
+    description?: string;
+    /** The subject attributes associated with a policy. */
+    subject?: V2PolicyBaseSubject;
+    /** Specifies the type of access granted by the policy. */
+    control: V2PolicyBaseControl;
+    /** The resource attributes associated with a policy. */
+    resource?: V2PolicyBaseResource;
+    /** Indicates pattern of rule. */
+    pattern?: string;
+    /** Additional access conditions associated with a policy. */
+    rule?: V2PolicyBaseRule;
+    /** The href link back to the policy. */
+    href?: string;
+    /** The UTC timestamp when the policy was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy. */
+    last_modified_by_id?: string;
+    /** The policy state. */
+    state?: string;
+  }
+
+  /** Resource/subject attribute associated with policy attributes. */
+  export interface V2PolicyAttribute {
+    /** The name of an attribute. */
+    key: string;
+    /** The operator of an attribute. */
+    operator: string;
+    /** The value of an attribute; can be array, boolean, string, or integer. */
+    value: any;
+  }
+
+  /** A collection of policies. */
+  export interface V2PolicyList {
+    /** List of policies. */
+    policies?: V2Policy[];
+  }
+
+  /** Resource/subject attribute associated with policy attributes. */
+  export interface V2PolicyBaseRuleV2PolicyAttribute extends V2PolicyBaseRule {
+    /** The name of an attribute. */
+    key: string;
+    /** The operator of an attribute. */
+    operator: string;
+    /** The value of an attribute; can be array, boolean, string, or integer. */
+    value: any;
+  }
+
+  /** Policy rule that has 2 to 10 conditions. */
+  export interface V2PolicyBaseRuleV2RuleWithConditions extends V2PolicyBaseRule {
+    /** Operator to evalute conditions. */
+    operator: string;
+    /** List of conditions to associated with a policy. Note that conditions can be nested up to 2 levels. */
+    conditions: V2PolicyAttribute[];
   }
 }
 
