@@ -101,34 +101,34 @@ describe('IamPolicyManagementV1_integration', () => {
     value: 'service',
   };
   const v2PolicyResource = {
-    attributes: [v2PolicyResourceAccountAttribute, v2PolicyResourceServiceAttribute]
+    attributes: [v2PolicyResourceAccountAttribute, v2PolicyResourceServiceAttribute],
   };
   const v2PolicyControl = {
     grant: {
-      roles: policyRoles
-    }
+      roles: policyRoles,
+    },
   };
   const v2PolicyRule = {
     operator: 'and',
     conditions: [
-        {
-            key: '{{environment.attributes.day_of_week}}',
-            operator: 'dayOfWeekAnyOf',
-            value: [1, 2, 3, 4, 5],
-        },
-        {
-            key: '{{environment.attributes.current_time}}',
-            operator: 'timeGreaterThanOrEquals',
-            value: '09:00:00+00:00',
-        },
-        {
-            key: '{{environment.attributes.current_time}}',
-            operator: 'timeLessThanOrEquals',
-            value: '17:00:00+00:00',
-        },
+      {
+        key: '{{environment.attributes.day_of_week}}',
+        operator: 'dayOfWeekAnyOf',
+        value: [1, 2, 3, 4, 5],
+      },
+      {
+        key: '{{environment.attributes.current_time}}',
+        operator: 'timeGreaterThanOrEquals',
+        value: '09:00:00+00:00',
+      },
+      {
+        key: '{{environment.attributes.current_time}}',
+        operator: 'timeLessThanOrEquals',
+        value: '17:00:00+00:00',
+      },
     ],
-  }
-  const v2PolicyPattern = 'time-based-restrictions:weekly'
+  };
+  const v2PolicyPattern = 'time-based-restrictions:weekly';
 
   let testCustomRoleId;
   let testCustomRoleEtag;
@@ -182,7 +182,6 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.resources).toEqual(policyResources);
 
       testPolicyId = result.id;
-
     });
 
     test('Get an access policy', async () => {
@@ -388,7 +387,6 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.resource).toEqual(v2PolicyResource);
 
       testV2PolicyId = result.id;
-
     });
 
     test('Get a v2 access policy', async () => {
@@ -428,9 +426,9 @@ describe('IamPolicyManagementV1_integration', () => {
             {
               role_id: testEditorRoleCrn,
             },
-          ]
-        }
-      }
+          ],
+        },
+      };
 
       const params = {
         policyId: testV2PolicyId,
