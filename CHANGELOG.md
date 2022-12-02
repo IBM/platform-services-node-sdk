@@ -1,3 +1,10 @@
+# [0.29.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.28.0...v0.29.0) (2022-12-02)
+
+
+### Features
+
+* **IAM Policy Management:** add support for v2/policies ([#178](https://github.com/IBM/platform-services-node-sdk/issues/178)) ([d613f69](https://github.com/IBM/platform-services-node-sdk/commit/d613f69a4ed1972846494e84164edef6990881fb))
+
 # [0.28.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.27.4...v0.28.0) (2022-11-23)
 
 
