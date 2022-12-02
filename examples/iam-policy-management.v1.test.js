@@ -327,6 +327,260 @@ describe('IamPolicyManagementV1', () => {
 
     // end-delete_policy
   });
+  test('v2CreatePolicy request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('v2CreatePolicy() result:');
+    // begin-v2_create_policy
+
+    const policySubject = {
+      attributes: [
+        {
+          key: 'iam_id',
+          operator: 'stringEquals',
+          value: exampleUserId,
+        },
+      ],
+    };
+    const policyResourceAccountAttribute = {
+      key: 'accountId',
+      value: exampleAccountId,
+      operator: 'stringEquals',
+    };
+    const policyResourceServiceAttribute = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+    const policyResource = {
+      attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute]
+    };
+    const policyControl = {
+      grant: {
+        roles: [{
+          role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+        }],
+      }
+    };
+    const policyRule = {
+      operator: 'and',
+      conditions: [
+          {
+              key: '{{environment.attributes.day_of_week}}',
+              operator: 'dayOfWeekAnyOf',
+              value: [1, 2, 3, 4, 5],
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeGreaterThanOrEquals',
+              value: '09:00:00+00:00',
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeLessThanOrEquals',
+              value: '17:00:00+00:00',
+          },
+      ],
+    }
+    const policyPattern = 'time-based-restrictions:weekly'
+    const params = {
+      type: 'access',
+      subject: policySubject,
+      control: policyControl,
+      resource: policyResource,
+      rule: policyRule,
+      pattern: policyPattern,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.v2CreatePolicy(params);
+      examplePolicyId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-v2_create_policy
+  });
+  test('v2GetPolicy request example', async () => {
+    expect(examplePolicyId).toBeDefined();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('v2GetPolicy() result:');
+    // begin-v2_get_policy
+
+    const params = {
+      policyId: examplePolicyId,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.v2GetPolicy(params);
+      examplePolicyETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-v2_get_policy
+  });
+  test('v2UpdatePolicy request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    expect(examplePolicyId).toBeDefined();
+    expect(examplePolicyETag).toBeDefined();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('v2UpdatePolicy() result:');
+    // begin-v2_update_policy
+
+    const policySubject = {
+      attributes: [
+        {
+          key: 'iam_id',
+          operator: 'stringEquals',
+          value: exampleUserId,
+        },
+      ],
+    };
+    const policyResourceAccountAttribute = {
+      key: 'accountId',
+      value: exampleAccountId,
+      operator: 'stringEquals',
+    };
+    const policyResourceServiceAttribute = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+    const policyResource = {
+      attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute]
+    };
+    const updatedPolicyControl = {
+      grant: {
+        roles: [{
+          role_id: 'crn:v1:bluemix:public:iam::::role:Editor',
+        }],
+      }
+    };
+    const policyRule = {
+      operator: 'and',
+      conditions: [
+          {
+              key: '{{environment.attributes.day_of_week}}',
+              operator: 'dayOfWeekAnyOf',
+              value: [1, 2, 3, 4, 5],
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeGreaterThanOrEquals',
+              value: '09:00:00+00:00',
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeLessThanOrEquals',
+              value: '17:00:00+00:00',
+          },
+      ],
+    }
+    const policyPattern = 'time-based-restrictions:weekly'
+    const params = {
+      type: 'access',
+      policyId: examplePolicyId,
+      ifMatch: examplePolicyETag,
+      subject: policySubject,
+      control: updatedPolicyControl,
+      resource: policyResource,
+      rule: policyRule,
+      pattern: policyPattern,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.v2UpdatePolicy(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-v2_update_policy
+  });
+  test('v2ListPolicies request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('v2ListPolicies() result:');
+    // begin-v2_list_policies
+
+    const params = {
+      accountId: exampleAccountId,
+      iamId: exampleUserId,
+      format: 'include_last_permit',
+    };
+
+    try {
+      const res = await iamPolicyManagementService.v2ListPolicies(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-v2_list_policies
+  });
+  test('v2DeletePolicy request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    // begin-v2_delete_policy
+
+    const params = {
+      policyId: examplePolicyId,
+    };
+
+    try {
+      await iamPolicyManagementService.v2DeletePolicy(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-v2_delete_policy
+  });
   test('createRole request example', async () => {
     expect(exampleAccountId).not.toBeNull();
 

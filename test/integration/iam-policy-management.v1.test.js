@@ -36,6 +36,8 @@ describe('IamPolicyManagementV1_integration', () => {
   let testAccountId;
   let testPolicyETag;
   let testPolicyId;
+  let testV2PolicyETag;
+  let testV2PolicyId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -79,6 +81,55 @@ describe('IamPolicyManagementV1_integration', () => {
     },
   ];
 
+  const v2PolicySubject = {
+    attributes: [
+      {
+        key: 'iam_id',
+        operator: 'stringEquals',
+        value: testUserId,
+      },
+    ],
+  };
+  const v2PolicyResourceAccountAttribute = {
+    key: 'accountId',
+    value: testAccountId,
+    operator: 'stringEquals',
+  };
+  const v2PolicyResourceServiceAttribute = {
+    key: 'serviceType',
+    operator: 'stringEquals',
+    value: 'service',
+  };
+  const v2PolicyResource = {
+    attributes: [v2PolicyResourceAccountAttribute, v2PolicyResourceServiceAttribute],
+  };
+  const v2PolicyControl = {
+    grant: {
+      roles: policyRoles,
+    },
+  };
+  const v2PolicyRule = {
+    operator: 'and',
+    conditions: [
+      {
+        key: '{{environment.attributes.day_of_week}}',
+        operator: 'dayOfWeekAnyOf',
+        value: [1, 2, 3, 4, 5],
+      },
+      {
+        key: '{{environment.attributes.current_time}}',
+        operator: 'timeGreaterThanOrEquals',
+        value: '09:00:00+00:00',
+      },
+      {
+        key: '{{environment.attributes.current_time}}',
+        operator: 'timeLessThanOrEquals',
+        value: '17:00:00+00:00',
+      },
+    ],
+  };
+  const v2PolicyPattern = 'time-based-restrictions:weekly';
+
   let testCustomRoleId;
   let testCustomRoleEtag;
   const testCustomRoleName = `TestNodeRole${testUniqueId}`;
@@ -106,7 +157,7 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Access policy tests', () => {
-    test('Create an access policy', async (done) => {
+    test('Create an access policy', async () => {
       const params = {
         type: 'access',
         subjects: policySubjects,
@@ -118,7 +169,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.createPolicy(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -131,11 +182,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.resources).toEqual(policyResources);
 
       testPolicyId = result.id;
-
-      done();
     });
 
-    test('Get an access policy', async (done) => {
+    test('Get an access policy', async () => {
       expect(testPolicyId).toBeDefined();
 
       const params = {
@@ -146,7 +195,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.getPolicy(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -160,11 +209,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.resources).toEqual(policyResources);
 
       testPolicyETag = response.headers.etag;
-
-      done();
     });
 
-    test('Update an access policy', async (done) => {
+    test('Update an access policy', async () => {
       expect(testPolicyId).toBeDefined();
       expect(testPolicyETag).toBeDefined();
 
@@ -187,7 +234,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.updatePolicy(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -201,11 +248,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.resources).toEqual(policyResources);
 
       testPolicyETag = response.headers.etag;
-
-      done();
     });
 
-    test('Patch an access policy', async (done) => {
+    test('Patch an access policy', async () => {
       expect(testPolicyId).toBeDefined();
       expect(testPolicyETag).toBeDefined();
 
@@ -219,7 +264,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.patchPolicy(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -231,11 +276,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.subjects).toEqual(policySubjects);
       expect(result.state).toEqual('active');
       expect(result.resources).toEqual(policyResources);
-
-      done();
     });
 
-    test('List access policies', async (done) => {
+    test('List access policies', async () => {
       expect(testPolicyId).toBeDefined();
 
       const params = {
@@ -247,7 +290,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.listPolicies(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -265,11 +308,9 @@ describe('IamPolicyManagementV1_integration', () => {
         }
       }
       expect(foundTestPolicy).toBeTruthy();
-
-      done();
     });
 
-    test('Clean up all test policies', async (done) => {
+    test('Clean up all test policies', async () => {
       // List all policies for the test user in the account
       const params = {
         accountId: testAccountId,
@@ -280,7 +321,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.listPolicies(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -305,20 +346,199 @@ describe('IamPolicyManagementV1_integration', () => {
           try {
             response = await service.deletePolicy(params);
           } catch (err) {
-            done(err);
+            console.warn(err);
           }
 
           expect(response).toBeDefined();
           expect(response.status).toEqual(204);
         }
       }
+    });
+  });
 
-      done();
+  describe('V2 Access policy tests', () => {
+    test('Create a v2 access policy', async () => {
+      const params = {
+        type: 'access',
+        subject: v2PolicySubject,
+        control: v2PolicyControl,
+        resource: v2PolicyResource,
+        rule: v2PolicyRule,
+        pattern: v2PolicyPattern,
+      };
+
+      // ensure resource account value is defined
+      v2PolicyResource.attributes[0].value = testAccountId;
+
+      let response;
+      try {
+        response = await service.v2CreatePolicy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.type).toEqual(policyType);
+      expect(result.subject).toEqual(v2PolicySubject);
+      expect(result.control).toEqual(v2PolicyControl);
+      expect(result.resource).toEqual(v2PolicyResource);
+
+      testV2PolicyId = result.id;
+    });
+
+    test('Get a v2 access policy', async () => {
+      expect(testPolicyId).toBeDefined();
+
+      const params = {
+        policyId: testV2PolicyId,
+      };
+
+      let response;
+      try {
+        response = await service.v2GetPolicy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.id).toEqual(testV2PolicyId);
+      expect(result.type).toEqual(policyType);
+      expect(result.subject).toEqual(v2PolicySubject);
+      expect(result.control).toEqual(v2PolicyControl);
+      expect(result.resource).toEqual(v2PolicyResource);
+
+      testV2PolicyETag = response.headers.etag;
+    });
+
+    test('Update a v2 access policy', async () => {
+      expect(testV2PolicyId).toBeDefined();
+      expect(testV2PolicyETag).toBeDefined();
+
+      const updatedControl = {
+        grant: {
+          roles: [
+            {
+              role_id: testEditorRoleCrn,
+            },
+          ],
+        },
+      };
+
+      const params = {
+        policyId: testV2PolicyId,
+        ifMatch: testV2PolicyETag,
+        type: 'access',
+        subject: v2PolicySubject,
+        control: updatedControl,
+        resource: v2PolicyResource,
+        rule: v2PolicyRule,
+        pattern: v2PolicyPattern,
+      };
+
+      let response;
+      try {
+        response = await service.v2UpdatePolicy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.id).toEqual(testV2PolicyId);
+      expect(result.type).toEqual(policyType);
+      expect(result.subject).toEqual(v2PolicySubject);
+      expect(result.control).toEqual(updatedControl);
+      expect(result.resource).toEqual(v2PolicyResource);
+    });
+
+    test('List v2 access policies', async () => {
+      expect(testPolicyId).toBeDefined();
+
+      const params = {
+        accountId: testAccountId,
+        iamId: testUserId,
+      };
+
+      let response;
+      try {
+        response = await service.v2ListPolicies(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Confirm the test policy is present
+      let foundTestPolicy = false;
+      let policy;
+      for (policy of result.policies) {
+        if (policy.id === testV2PolicyId) {
+          foundTestPolicy = true;
+          break;
+        }
+      }
+      expect(foundTestPolicy).toBeTruthy();
+    });
+
+    test('Clean up all v2 test policies', async () => {
+      // List all policies for the test user in the account
+      const params = {
+        accountId: testAccountId,
+        iamId: testUserId,
+      };
+
+      let response;
+      try {
+        response = await service.v2ListPolicies(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Iterate across the policies
+      let policy;
+      for (policy of result.policies) {
+        // Delete the test policy (or any test policies older than 5 minutes)
+        const createdAt = Date.parse(policy.created_at);
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        const fiveMinutesAgo = Date.now() - FIVE_MINUTES;
+
+        if (policy.id === testV2PolicyId || createdAt < fiveMinutesAgo) {
+          const params = {
+            policyId: policy.id,
+          };
+
+          let response;
+          try {
+            response = await service.v2DeletePolicy(params);
+          } catch (err) {
+            console.warn(err);
+          }
+
+          expect(response).toBeDefined();
+          expect(response.status).toEqual(204);
+        }
+      }
     });
   });
 
   describe('Custom roles tests', () => {
-    test('Create a custom role', async (done) => {
+    test('Create a custom role', async () => {
       const params = {
         displayName: testCustomRoleDisplayName,
         description: testCustomRoleDescription,
@@ -332,7 +552,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.createRole(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -347,11 +567,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.actions).toEqual(testCustomRoleActions);
 
       testCustomRoleId = result.id;
-
-      done();
     });
 
-    test('Get a custom role', async (done) => {
+    test('Get a custom role', async () => {
       expect(testCustomRoleId).toBeDefined();
 
       const params = {
@@ -362,7 +580,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.getRole(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -378,11 +596,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.actions).toEqual(testCustomRoleActions);
 
       testCustomRoleEtag = response.headers.etag;
-
-      done();
     });
 
-    test('Update a custom role', async (done) => {
+    test('Update a custom role', async () => {
       expect(testCustomRoleId).toBeDefined();
       expect(testCustomRoleEtag).toBeDefined();
 
@@ -399,7 +615,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.updateRole(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -413,11 +629,9 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.account_id).toEqual(testAccountId);
       expect(result.service_name).toEqual(testServiceName);
       expect(result.actions).toEqual(testCustomRoleActions);
-
-      done();
     });
 
-    test('List custom roles', async (done) => {
+    test('List custom roles', async () => {
       expect(testCustomRoleId).toBeDefined();
 
       const params = {
@@ -429,7 +643,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.listRoles(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -447,11 +661,9 @@ describe('IamPolicyManagementV1_integration', () => {
         }
       }
       expect(foundCustomRole).toBeTruthy();
-
-      done();
     });
 
-    test('Clean up all test custom roles', async (done) => {
+    test('Clean up all test custom roles', async () => {
       // List all custom roles in the account
       const params = {
         accountId: testAccountId,
@@ -462,7 +674,7 @@ describe('IamPolicyManagementV1_integration', () => {
       try {
         response = await service.listRoles(params);
       } catch (err) {
-        done(err);
+        console.warn(err);
       }
 
       expect(response).toBeDefined();
@@ -487,15 +699,13 @@ describe('IamPolicyManagementV1_integration', () => {
           try {
             response = await service.deleteRole(params);
           } catch (err) {
-            done(err);
+            console.warn(err);
           }
 
           expect(response).toBeDefined();
           expect(response.status).toEqual(204);
         }
       }
-
-      done();
     });
   });
 });
