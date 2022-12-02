@@ -29,9 +29,9 @@ import {
   getAuthenticatorFromEnvironment,
   validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
-import { getQueryParam } from 'ibm-cloud-sdk-core';
 
 /**
  * Usage reports for IBM Cloud accounts
@@ -193,11 +193,7 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      UsageReportsV4.DEFAULT_SERVICE_NAME,
-      'v4',
-      'getAccountUsage'
-    );
+    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getAccountUsage');
 
     const parameters = {
       options: {
@@ -248,7 +244,14 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.ResourceGroupUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
-    const _validParams = ['accountId', 'resourceGroupId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'accountId',
+      'resourceGroupId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -324,7 +327,21 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'billingmonth'];
-    const _validParams = ['accountId', 'billingmonth', 'names', 'acceptLanguage', 'limit', 'start', 'resourceGroupId', 'organizationId', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validParams = [
+      'accountId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'limit',
+      'start',
+      'resourceGroupId',
+      'organizationId',
+      'resourceInstanceId',
+      'resourceId',
+      'planId',
+      'region',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -406,7 +423,20 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
-    const _validParams = ['accountId', 'resourceGroupId', 'billingmonth', 'names', 'acceptLanguage', 'limit', 'start', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validParams = [
+      'accountId',
+      'resourceGroupId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'limit',
+      'start',
+      'resourceInstanceId',
+      'resourceId',
+      'planId',
+      'region',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -487,7 +517,20 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'organizationId', 'billingmonth'];
-    const _validParams = ['accountId', 'organizationId', 'billingmonth', 'names', 'acceptLanguage', 'limit', 'start', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validParams = [
+      'accountId',
+      'organizationId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'limit',
+      'start',
+      'resourceInstanceId',
+      'resourceId',
+      'planId',
+      'region',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -564,7 +607,14 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.OrgUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'organizationId', 'billingmonth'];
-    const _validParams = ['accountId', 'organizationId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'accountId',
+      'organizationId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -580,11 +630,7 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      UsageReportsV4.DEFAULT_SERVICE_NAME,
-      'v4',
-      'getOrgUsage'
-    );
+    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getOrgUsage');
 
     const parameters = {
       options: {
@@ -1104,6 +1150,7 @@ namespace UsageReportsV4 {
    */
   export class GetResourceUsageAccountPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: UsageReportsV4;
@@ -1118,10 +1165,7 @@ namespace UsageReportsV4 {
      * @constructor
      * @returns {GetResourceUsageAccountPager}
      */
-    constructor(
-      client: UsageReportsV4,
-      params: UsageReportsV4.GetResourceUsageAccountParams
-    ) {
+    constructor(client: UsageReportsV4, params: UsageReportsV4.GetResourceUsageAccountParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -1187,6 +1231,7 @@ namespace UsageReportsV4 {
    */
   export class GetResourceUsageResourceGroupPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: UsageReportsV4;
@@ -1270,6 +1315,7 @@ namespace UsageReportsV4 {
    */
   export class GetResourceUsageOrgPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: UsageReportsV4;
@@ -1284,10 +1330,7 @@ namespace UsageReportsV4 {
      * @constructor
      * @returns {GetResourceUsageOrgPager}
      */
-    constructor(
-      client: UsageReportsV4,
-      params: UsageReportsV4.GetResourceUsageOrgParams
-    ) {
+    constructor(client: UsageReportsV4, params: UsageReportsV4.GetResourceUsageOrgParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
