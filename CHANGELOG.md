@@ -1,3 +1,10 @@
+## [0.29.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.29.0...v0.29.1) (2022-12-05)
+
+
+### Bug Fixes
+
+* **Usage Reports:** rename Account_Summary billing_month property ([#177](https://github.com/IBM/platform-services-node-sdk/issues/177)) ([871e644](https://github.com/IBM/platform-services-node-sdk/commit/871e644d85b477baf27a09184dce9fee5212d7f5))
+
 # [0.29.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.28.0...v0.29.0) (2022-12-02)
 
 
