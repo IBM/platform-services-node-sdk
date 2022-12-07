@@ -1,3 +1,10 @@
+## [0.29.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.29.1...v0.29.2) (2022-12-07)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** remove support for v2/polices until GA ([#179](https://github.com/IBM/platform-services-node-sdk/issues/179)) ([a4034cd](https://github.com/IBM/platform-services-node-sdk/commit/a4034cd0d4205088902332f554e795999a7e063e))
+
 ## [0.29.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.29.0...v0.29.1) (2022-12-05)
 
 
