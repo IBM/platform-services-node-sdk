@@ -1,3 +1,10 @@
+# [0.30.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.29.2...v0.30.0) (2022-12-15)
+
+
+### Features
+
+* bump min node version to 14 ([#181](https://github.com/IBM/platform-services-node-sdk/issues/181)) ([a5808d6](https://github.com/IBM/platform-services-node-sdk/commit/a5808d614abe9bddc663d86ddb60593c6c0ea675))
+
 ## [0.29.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.29.1...v0.29.2) (2022-12-07)
 
 
