@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const GlobalSearchV2 = require('../../dist/global-search/v2');
@@ -32,25 +32,36 @@ const {
 
 const globalSearchServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://api.global-search-tagging.cloud.ibm.com',
+  url: 'ibm.com/123456',
 };
 
 const globalSearchService = new GlobalSearchV2(globalSearchServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(globalSearchService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(globalSearchService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('GlobalSearchV2', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = GlobalSearchV2.newInstance();
@@ -78,6 +89,7 @@ describe('GlobalSearchV2', () => {
       expect(testInstance).toBeInstanceOf(GlobalSearchV2);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -100,30 +112,45 @@ describe('GlobalSearchV2', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(GlobalSearchV2.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('search', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __searchTest() {
         // Construct the params object for operation search
         const query = 'testString';
         const fields = ['testString'];
         const searchCursor = 'testString';
         const transactionId = 'testString';
         const accountId = 'testString';
+        const boundary = 'global';
         const limit = 1;
         const timeout = 0;
         const sort = ['testString'];
-        const params = {
-          query: query,
-          fields: fields,
-          searchCursor: searchCursor,
-          transactionId: transactionId,
-          accountId: accountId,
-          limit: limit,
-          timeout: timeout,
-          sort: sort,
+        const isDeleted = 'false';
+        const isReclaimed = 'false';
+        const isPublic = 'false';
+        const impersonateUser = 'testString';
+        const canTag = 'false';
+        const isHidden = 'false';
+        const searchParams = {
+          query,
+          fields,
+          searchCursor,
+          transactionId,
+          accountId,
+          boundary,
+          limit,
+          timeout,
+          sort,
+          isDeleted,
+          isReclaimed,
+          isPublic,
+          impersonateUser,
+          canTag,
+          isHidden,
         };
 
-        const searchResult = globalSearchService.search(params);
+        const searchResult = globalSearchService.search(searchParams);
 
         // all methods should return a Promise
         expectToBePromise(searchResult);
@@ -131,34 +158,56 @@ describe('GlobalSearchV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/resources/search', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v3/resources/search', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
-        expect(options.body['query']).toEqual(query);
-        expect(options.body['fields']).toEqual(fields);
-        expect(options.body['search_cursor']).toEqual(searchCursor);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['timeout']).toEqual(timeout);
-        expect(options.qs['sort']).toEqual(sort);
+        expect(mockRequestOptions.body.query).toEqual(query);
+        expect(mockRequestOptions.body.fields).toEqual(fields);
+        expect(mockRequestOptions.body.search_cursor).toEqual(searchCursor);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.boundary).toEqual(boundary);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.timeout).toEqual(timeout);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs.is_deleted).toEqual(isDeleted);
+        expect(mockRequestOptions.qs.is_reclaimed).toEqual(isReclaimed);
+        expect(mockRequestOptions.qs.is_public).toEqual(isPublic);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.can_tag).toEqual(canTag);
+        expect(mockRequestOptions.qs.is_hidden).toEqual(isHidden);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __searchTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalSearchService.enableRetries();
+        __searchTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalSearchService.disableRetries();
+        __searchTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const searchParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        globalSearchService.search(params);
+        globalSearchService.search(searchParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -169,13 +218,14 @@ describe('GlobalSearchV2', () => {
       });
     });
   });
+
   describe('getSupportedTypes', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSupportedTypesTest() {
         // Construct the params object for operation getSupportedTypes
-        const params = {};
+        const getSupportedTypesParams = {};
 
-        const getSupportedTypesResult = globalSearchService.getSupportedTypes(params);
+        const getSupportedTypesResult = globalSearchService.getSupportedTypes(getSupportedTypesParams);
 
         // all methods should return a Promise
         expectToBePromise(getSupportedTypesResult);
@@ -183,26 +233,41 @@ describe('GlobalSearchV2', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v2/resources/supported_types', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/resources/supported_types', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSupportedTypesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalSearchService.enableRetries();
+        __getSupportedTypesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalSearchService.disableRetries();
+        __getSupportedTypesTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSupportedTypesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        globalSearchService.getSupportedTypes(params);
+        globalSearchService.getSupportedTypes(getSupportedTypesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
