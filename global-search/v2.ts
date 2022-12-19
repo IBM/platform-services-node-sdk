@@ -26,9 +26,10 @@ import {
   getAuthenticatorFromEnvironment,
   validateParams,
   UserOptions,
+  getNewLogger,
+  SDKLogger,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
-import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 
 /**
  * Search for resources with the global and shared resource properties repository that is integrated in the IBM Cloud
@@ -163,7 +164,24 @@ class GlobalSearchV2 extends BaseService {
   ): Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['query', 'fields', 'searchCursor', 'transactionId', 'accountId', 'boundary', 'limit', 'timeout', 'sort', 'isDeleted', 'isReclaimed', 'isPublic', 'impersonateUser', 'canTag', 'isHidden', 'headers'];
+    const _validParams = [
+      'query',
+      'fields',
+      'searchCursor',
+      'transactionId',
+      'accountId',
+      'boundary',
+      'limit',
+      'timeout',
+      'sort',
+      'isDeleted',
+      'isReclaimed',
+      'isPublic',
+      'impersonateUser',
+      'canTag',
+      'isHidden',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -189,11 +207,7 @@ class GlobalSearchV2 extends BaseService {
       'is_hidden': _params.isHidden,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      GlobalSearchV2.DEFAULT_SERVICE_NAME,
-      'v2',
-      'search'
-    );
+    const sdkHeaders = getSdkHeaders(GlobalSearchV2.DEFAULT_SERVICE_NAME, 'v2', 'search');
 
     const parameters = {
       options: {
