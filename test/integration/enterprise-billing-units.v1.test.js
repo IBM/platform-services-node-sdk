@@ -38,7 +38,7 @@ describe('EnterpriseBillingUnitsV1_integration', () => {
   jest.setTimeout(timeout);
   let enterpriseBillingUnitsService;
 
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     enterpriseBillingUnitsService = EnterpriseBillingUnitsV1.newInstance({});
 
     const config = readExternalSources(EnterpriseBillingUnitsV1.DEFAULT_SERVICE_NAME);
@@ -58,8 +58,6 @@ describe('EnterpriseBillingUnitsV1_integration', () => {
 
     log(`Service URL: ${enterpriseBillingUnitsService.baseOptions.serviceUrl}`);
     log('Finished setup.');
-
-    done();
   });
 
   test('getBillingUnit()', async () => {
