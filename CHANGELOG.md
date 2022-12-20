@@ -1,3 +1,10 @@
+## [0.30.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.30.0...v0.30.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* update core to new major version ([#189](https://github.com/IBM/platform-services-node-sdk/issues/189)) ([cc6fefc](https://github.com/IBM/platform-services-node-sdk/commit/cc6fefc7cf944c11f14574b884536df64ca659a5))
+
 # [0.30.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.29.2...v0.30.0) (2022-12-15)
 
 
