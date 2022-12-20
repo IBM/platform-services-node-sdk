@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
 
