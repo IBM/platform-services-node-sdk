@@ -18,6 +18,8 @@
  * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-4c92c221-20210211-060810
  */
 
+
+
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
