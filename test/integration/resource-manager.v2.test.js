@@ -40,7 +40,7 @@ describe('ResourceManagerV2_integration', () => {
   let quotaId = null;
   let userAccountId = null;
 
-  beforeAll((done) => {
+  beforeAll(async () => {
     resourceManagerService = ResourceManagerV2.newInstance({
       serviceName: ResourceManagerV2.DEFAULT_SERVICE_NAME,
     });
@@ -65,8 +65,6 @@ describe('ResourceManagerV2_integration', () => {
     expect(authUrl).not.toBeNull();
     expect(quotaId).not.toBeNull();
     expect(userAccountId).not.toBeNull();
-
-    done();
   });
 
   it('should create a new resource group in an account', (done) => {
