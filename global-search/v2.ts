@@ -29,6 +29,7 @@ import {
 } from 'ibm-cloud-sdk-core';
 import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
+import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 
 /**
  * Search for resources with the global and shared resource properties repository that is integrated in the IBM Cloud
