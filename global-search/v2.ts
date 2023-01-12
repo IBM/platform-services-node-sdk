@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.62.2-e5d4c32b-20221214-193750
+ * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
  */
 
 import * as extend from 'extend';
@@ -26,10 +26,9 @@ import {
   getAuthenticatorFromEnvironment,
   validateParams,
   UserOptions,
-  getNewLogger,
-  SDKLogger,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
+import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 
 /**
  * Search for resources with the global and shared resource properties repository that is integrated in the IBM Cloud
@@ -45,6 +44,8 @@ import { getSdkHeaders } from '../lib/common';
 
 class GlobalSearchV2 extends BaseService {
   static _logger: SDKLogger = getNewLogger('GlobalSearchV2');
+
+  static DEFAULT_SERVICE_URL: string = 'https://api.global-search-tagging.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'global_search';
 
@@ -95,6 +96,8 @@ class GlobalSearchV2 extends BaseService {
     super(options);
     if (options.serviceUrl) {
       this.setServiceUrl(options.serviceUrl);
+    } else {
+      this.setServiceUrl(GlobalSearchV2.DEFAULT_SERVICE_URL);
     }
   }
 
@@ -164,24 +167,7 @@ class GlobalSearchV2 extends BaseService {
   ): Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'query',
-      'fields',
-      'searchCursor',
-      'transactionId',
-      'accountId',
-      'boundary',
-      'limit',
-      'timeout',
-      'sort',
-      'isDeleted',
-      'isReclaimed',
-      'isPublic',
-      'impersonateUser',
-      'canTag',
-      'isHidden',
-      'headers',
-    ];
+    const _validParams = ['query', 'fields', 'searchCursor', 'transactionId', 'accountId', 'boundary', 'limit', 'timeout', 'sort', 'isDeleted', 'isReclaimed', 'isPublic', 'impersonateUser', 'canTag', 'isHidden', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -207,7 +193,11 @@ class GlobalSearchV2 extends BaseService {
       'is_hidden': _params.isHidden,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalSearchV2.DEFAULT_SERVICE_NAME, 'v2', 'search');
+    const sdkHeaders = getSdkHeaders(
+      GlobalSearchV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'search'
+    );
 
     const parameters = {
       options: {
