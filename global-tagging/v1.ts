@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.62.2-e5d4c32b-20221214-193750
+ * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
  */
 
 import * as extend from 'extend';
@@ -142,21 +142,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'transactionId',
-      'impersonateUser',
-      'accountId',
-      'tagType',
-      'fullData',
-      'providers',
-      'attachedTo',
-      'offset',
-      'limit',
-      'timeout',
-      'orderByName',
-      'attachedOnly',
-      'headers',
-    ];
+    const _validParams = ['transactionId', 'impersonateUser', 'accountId', 'tagType', 'fullData', 'providers', 'attachedTo', 'offset', 'limit', 'timeout', 'orderByName', 'attachedOnly', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -176,7 +162,11 @@ class GlobalTaggingV1 extends BaseService {
       'attached_only': _params.attachedOnly,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'listTags');
+    const sdkHeaders = getSdkHeaders(
+      GlobalTaggingV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listTags'
+    );
 
     const parameters = {
       options: {
@@ -224,14 +214,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagNames'];
-    const _validParams = [
-      'tagNames',
-      'impersonateUser',
-      'transactionId',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['tagNames', 'impersonateUser', 'transactionId', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -247,7 +230,11 @@ class GlobalTaggingV1 extends BaseService {
       'tag_type': _params.tagType,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'createTag');
+    const sdkHeaders = getSdkHeaders(
+      GlobalTaggingV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createTag'
+    );
 
     const parameters = {
       options: {
@@ -296,14 +283,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagsResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'transactionId',
-      'providers',
-      'impersonateUser',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['transactionId', 'providers', 'impersonateUser', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -316,7 +296,11 @@ class GlobalTaggingV1 extends BaseService {
       'tag_type': _params.tagType,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteTagAll');
+    const sdkHeaders = getSdkHeaders(
+      GlobalTaggingV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteTagAll'
+    );
 
     const parameters = {
       options: {
@@ -365,15 +349,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagName'];
-    const _validParams = [
-      'tagName',
-      'transactionId',
-      'providers',
-      'impersonateUser',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['tagName', 'transactionId', 'providers', 'impersonateUser', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -390,7 +366,11 @@ class GlobalTaggingV1 extends BaseService {
       'tag_name': _params.tagName,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteTag');
+    const sdkHeaders = getSdkHeaders(
+      GlobalTaggingV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteTag'
+    );
 
     const parameters = {
       options: {
@@ -441,16 +421,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = ['resources'];
-    const _validParams = [
-      'resources',
-      'tagName',
-      'tagNames',
-      'transactionId',
-      'impersonateUser',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['resources', 'tagName', 'tagNames', 'transactionId', 'impersonateUser', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -468,7 +439,11 @@ class GlobalTaggingV1 extends BaseService {
       'tag_type': _params.tagType,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'attachTag');
+    const sdkHeaders = getSdkHeaders(
+      GlobalTaggingV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'attachTag'
+    );
 
     const parameters = {
       options: {
@@ -519,16 +494,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = ['resources'];
-    const _validParams = [
-      'resources',
-      'tagName',
-      'tagNames',
-      'transactionId',
-      'impersonateUser',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['resources', 'tagName', 'tagNames', 'transactionId', 'impersonateUser', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -546,7 +512,11 @@ class GlobalTaggingV1 extends BaseService {
       'tag_type': _params.tagType,
     };
 
-    const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'detachTag');
+    const sdkHeaders = getSdkHeaders(
+      GlobalTaggingV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'detachTag'
+    );
 
     const parameters = {
       options: {

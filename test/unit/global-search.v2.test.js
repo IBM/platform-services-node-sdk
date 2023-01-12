@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ const {
 
 const globalSearchServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'ibm.com/123456',
+  url: 'https://api.global-search-tagging.cloud.ibm.com',
 };
 
 const globalSearchService = new GlobalSearchV2(globalSearchServiceOptions);
