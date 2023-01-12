@@ -27,7 +27,7 @@ import {
   validateParams,
   UserOptions,
 } from 'ibm-cloud-sdk-core';
-import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
+// import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
