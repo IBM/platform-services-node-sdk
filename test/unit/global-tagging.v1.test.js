@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
@@ -26,6 +26,7 @@ const {
   checkUrlAndMethod,
   checkMediaHeaders,
   expectToBePromise,
+  checkUserHeader,
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
@@ -36,20 +37,31 @@ const globalTaggingServiceOptions = {
 
 const globalTaggingService = new GlobalTaggingV1(globalTaggingServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(globalTaggingService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(globalTaggingService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
 
 // dont actually construct an authenticator
 const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('GlobalTaggingV1', () => {
+
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+  
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = GlobalTaggingV1.newInstance();
@@ -77,6 +89,7 @@ describe('GlobalTaggingV1', () => {
       expect(testInstance).toBeInstanceOf(GlobalTaggingV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -99,36 +112,39 @@ describe('GlobalTaggingV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(GlobalTaggingV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('listTags', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listTagsTest() {
         // Construct the params object for operation listTags
+        const transactionId = 'testString';
         const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
-        const fullData = true;
+        const fullData = false;
         const providers = ['ghost'];
         const attachedTo = 'testString';
         const offset = 0;
         const limit = 1;
         const timeout = 0;
         const orderByName = 'asc';
-        const attachedOnly = true;
-        const params = {
-          impersonateUser: impersonateUser,
-          accountId: accountId,
-          tagType: tagType,
-          fullData: fullData,
-          providers: providers,
-          attachedTo: attachedTo,
-          offset: offset,
-          limit: limit,
-          timeout: timeout,
-          orderByName: orderByName,
-          attachedOnly: attachedOnly,
+        const attachedOnly = false;
+        const listTagsParams = {
+          transactionId,
+          impersonateUser,
+          accountId,
+          tagType,
+          fullData,
+          providers,
+          attachedTo,
+          offset,
+          limit,
+          timeout,
+          orderByName,
+          attachedOnly,
         };
 
-        const listTagsResult = globalTaggingService.listTags(params);
+        const listTagsResult = globalTaggingService.listTags(listTagsParams);
 
         // all methods should return a Promise
         expectToBePromise(listTagsResult);
@@ -136,37 +152,53 @@ describe('GlobalTaggingV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/tags', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v3/tags', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['impersonate_user']).toEqual(impersonateUser);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['tag_type']).toEqual(tagType);
-        expect(options.qs['full_data']).toEqual(fullData);
-        expect(options.qs['providers']).toEqual(providers);
-        expect(options.qs['attached_to']).toEqual(attachedTo);
-        expect(options.qs['offset']).toEqual(offset);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['timeout']).toEqual(timeout);
-        expect(options.qs['order_by_name']).toEqual(orderByName);
-        expect(options.qs['attached_only']).toEqual(attachedOnly);
+        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+        expect(mockRequestOptions.qs.full_data).toEqual(fullData);
+        expect(mockRequestOptions.qs.providers).toEqual(providers);
+        expect(mockRequestOptions.qs.attached_to).toEqual(attachedTo);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.timeout).toEqual(timeout);
+        expect(mockRequestOptions.qs.order_by_name).toEqual(orderByName);
+        expect(mockRequestOptions.qs.attached_only).toEqual(attachedOnly);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listTagsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.enableRetries();
+        __listTagsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.disableRetries();
+        __listTagsTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listTagsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        globalTaggingService.listTags(params);
+        globalTaggingService.listTags(listTagsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -177,22 +209,25 @@ describe('GlobalTaggingV1', () => {
       });
     });
   });
+
   describe('createTag', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createTagTest() {
         // Construct the params object for operation createTag
         const tagNames = ['testString'];
         const impersonateUser = 'testString';
+        const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'access';
-        const params = {
-          tagNames: tagNames,
-          impersonateUser: impersonateUser,
-          accountId: accountId,
-          tagType: tagType,
+        const createTagParams = {
+          tagNames,
+          impersonateUser,
+          transactionId,
+          accountId,
+          tagType,
         };
 
-        const createTagResult = globalTaggingService.createTag(params);
+        const createTagResult = globalTaggingService.createTag(createTagParams);
 
         // all methods should return a Promise
         expectToBePromise(createTagResult);
@@ -200,16 +235,32 @@ describe('GlobalTaggingV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/tags', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v3/tags', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['tag_names']).toEqual(tagNames);
-        expect(options.qs['impersonate_user']).toEqual(impersonateUser);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['tag_type']).toEqual(tagType);
+        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
+        expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createTagTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.enableRetries();
+        __createTagTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.disableRetries();
+        __createTagTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -217,7 +268,7 @@ describe('GlobalTaggingV1', () => {
         const tagNames = ['testString'];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createTagParams = {
           tagNames,
           headers: {
             Accept: userAccept,
@@ -225,7 +276,7 @@ describe('GlobalTaggingV1', () => {
           },
         };
 
-        globalTaggingService.createTag(params);
+        globalTaggingService.createTag(createTagParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -242,33 +293,37 @@ describe('GlobalTaggingV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createTagPromise = globalTaggingService.createTag();
-        expectToBePromise(createTagPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalTaggingService.createTag();
+        } catch (e) {
+          err = e;
+        }
 
-        createTagPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteTagAll', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteTagAllTest() {
         // Construct the params object for operation deleteTagAll
+        const transactionId = 'testString';
         const providers = 'ghost';
         const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
-        const params = {
-          providers: providers,
-          impersonateUser: impersonateUser,
-          accountId: accountId,
-          tagType: tagType,
+        const deleteTagAllParams = {
+          transactionId,
+          providers,
+          impersonateUser,
+          accountId,
+          tagType,
         };
 
-        const deleteTagAllResult = globalTaggingService.deleteTagAll(params);
+        const deleteTagAllResult = globalTaggingService.deleteTagAll(deleteTagAllParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteTagAllResult);
@@ -276,30 +331,46 @@ describe('GlobalTaggingV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/tags', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v3/tags', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['providers']).toEqual(providers);
-        expect(options.qs['impersonate_user']).toEqual(impersonateUser);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['tag_type']).toEqual(tagType);
+        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
+        expect(mockRequestOptions.qs.providers).toEqual(providers);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteTagAllTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.enableRetries();
+        __deleteTagAllTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.disableRetries();
+        __deleteTagAllTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteTagAllParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        globalTaggingService.deleteTagAll(params);
+        globalTaggingService.deleteTagAll(deleteTagAllParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -310,24 +381,27 @@ describe('GlobalTaggingV1', () => {
       });
     });
   });
+
   describe('deleteTag', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteTagTest() {
         // Construct the params object for operation deleteTag
         const tagName = 'testString';
+        const transactionId = 'testString';
         const providers = ['ghost'];
         const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
-        const params = {
-          tagName: tagName,
-          providers: providers,
-          impersonateUser: impersonateUser,
-          accountId: accountId,
-          tagType: tagType,
+        const deleteTagParams = {
+          tagName,
+          transactionId,
+          providers,
+          impersonateUser,
+          accountId,
+          tagType,
         };
 
-        const deleteTagResult = globalTaggingService.deleteTag(params);
+        const deleteTagResult = globalTaggingService.deleteTag(deleteTagParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteTagResult);
@@ -335,17 +409,33 @@ describe('GlobalTaggingV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/tags/{tag_name}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v3/tags/{tag_name}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['providers']).toEqual(providers);
-        expect(options.qs['impersonate_user']).toEqual(impersonateUser);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['tag_type']).toEqual(tagType);
-        expect(options.path['tag_name']).toEqual(tagName);
+        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
+        expect(mockRequestOptions.qs.providers).toEqual(providers);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+        expect(mockRequestOptions.path.tag_name).toEqual(tagName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteTagTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.enableRetries();
+        __deleteTagTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.disableRetries();
+        __deleteTagTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -353,7 +443,7 @@ describe('GlobalTaggingV1', () => {
         const tagName = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteTagParams = {
           tagName,
           headers: {
             Accept: userAccept,
@@ -361,7 +451,7 @@ describe('GlobalTaggingV1', () => {
           },
         };
 
-        globalTaggingService.deleteTag(params);
+        globalTaggingService.deleteTag(deleteTagParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -378,17 +468,19 @@ describe('GlobalTaggingV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteTagPromise = globalTaggingService.deleteTag();
-        expectToBePromise(deleteTagPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalTaggingService.deleteTag();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteTagPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('attachTag', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -399,24 +491,26 @@ describe('GlobalTaggingV1', () => {
         resource_type: 'testString',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __attachTagTest() {
         // Construct the params object for operation attachTag
         const resources = [resourceModel];
         const tagName = 'testString';
         const tagNames = ['testString'];
+        const transactionId = 'testString';
         const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
-        const params = {
-          resources: resources,
-          tagName: tagName,
-          tagNames: tagNames,
-          impersonateUser: impersonateUser,
-          accountId: accountId,
-          tagType: tagType,
+        const attachTagParams = {
+          resources,
+          tagName,
+          tagNames,
+          transactionId,
+          impersonateUser,
+          accountId,
+          tagType,
         };
 
-        const attachTagResult = globalTaggingService.attachTag(params);
+        const attachTagResult = globalTaggingService.attachTag(attachTagParams);
 
         // all methods should return a Promise
         expectToBePromise(attachTagResult);
@@ -424,18 +518,34 @@ describe('GlobalTaggingV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/tags/attach', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v3/tags/attach', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['resources']).toEqual(resources);
-        expect(options.body['tag_name']).toEqual(tagName);
-        expect(options.body['tag_names']).toEqual(tagNames);
-        expect(options.qs['impersonate_user']).toEqual(impersonateUser);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['tag_type']).toEqual(tagType);
+        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.tag_name).toEqual(tagName);
+        expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __attachTagTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.enableRetries();
+        __attachTagTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.disableRetries();
+        __attachTagTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -443,7 +553,7 @@ describe('GlobalTaggingV1', () => {
         const resources = [resourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const attachTagParams = {
           resources,
           headers: {
             Accept: userAccept,
@@ -451,7 +561,7 @@ describe('GlobalTaggingV1', () => {
           },
         };
 
-        globalTaggingService.attachTag(params);
+        globalTaggingService.attachTag(attachTagParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -468,17 +578,19 @@ describe('GlobalTaggingV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const attachTagPromise = globalTaggingService.attachTag();
-        expectToBePromise(attachTagPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalTaggingService.attachTag();
+        } catch (e) {
+          err = e;
+        }
 
-        attachTagPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('detachTag', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -489,24 +601,26 @@ describe('GlobalTaggingV1', () => {
         resource_type: 'testString',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __detachTagTest() {
         // Construct the params object for operation detachTag
         const resources = [resourceModel];
         const tagName = 'testString';
         const tagNames = ['testString'];
+        const transactionId = 'testString';
         const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
-        const params = {
-          resources: resources,
-          tagName: tagName,
-          tagNames: tagNames,
-          impersonateUser: impersonateUser,
-          accountId: accountId,
-          tagType: tagType,
+        const detachTagParams = {
+          resources,
+          tagName,
+          tagNames,
+          transactionId,
+          impersonateUser,
+          accountId,
+          tagType,
         };
 
-        const detachTagResult = globalTaggingService.detachTag(params);
+        const detachTagResult = globalTaggingService.detachTag(detachTagParams);
 
         // all methods should return a Promise
         expectToBePromise(detachTagResult);
@@ -514,18 +628,34 @@ describe('GlobalTaggingV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v3/tags/detach', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v3/tags/detach', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['resources']).toEqual(resources);
-        expect(options.body['tag_name']).toEqual(tagName);
-        expect(options.body['tag_names']).toEqual(tagNames);
-        expect(options.qs['impersonate_user']).toEqual(impersonateUser);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['tag_type']).toEqual(tagType);
+        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.tag_name).toEqual(tagName);
+        expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
+        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __detachTagTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.enableRetries();
+        __detachTagTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalTaggingService.disableRetries();
+        __detachTagTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -533,7 +663,7 @@ describe('GlobalTaggingV1', () => {
         const resources = [resourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const detachTagParams = {
           resources,
           headers: {
             Accept: userAccept,
@@ -541,7 +671,7 @@ describe('GlobalTaggingV1', () => {
           },
         };
 
-        globalTaggingService.detachTag(params);
+        globalTaggingService.detachTag(detachTagParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -558,14 +688,15 @@ describe('GlobalTaggingV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const detachTagPromise = globalTaggingService.detachTag();
-        expectToBePromise(detachTagPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalTaggingService.detachTag();
+        } catch (e) {
+          err = e;
+        }
 
-        detachTagPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
