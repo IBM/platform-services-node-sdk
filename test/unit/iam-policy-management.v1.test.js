@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -370,7 +370,7 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('updatePolicy', () => {
+  describe('replacePolicy', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
@@ -410,8 +410,8 @@ describe('IamPolicyManagementV1', () => {
         tags: [resourceTagModel],
       };
 
-      function __updatePolicyTest() {
-        // Construct the params object for operation updatePolicy
+      function __replacePolicyTest() {
+        // Construct the params object for operation replacePolicy
         const policyId = 'testString';
         const ifMatch = 'testString';
         const type = 'testString';
@@ -419,7 +419,7 @@ describe('IamPolicyManagementV1', () => {
         const roles = [policyRoleModel];
         const resources = [policyResourceModel];
         const description = 'testString';
-        const updatePolicyParams = {
+        const replacePolicyParams = {
           policyId,
           ifMatch,
           type,
@@ -429,10 +429,10 @@ describe('IamPolicyManagementV1', () => {
           description,
         };
 
-        const updatePolicyResult = iamPolicyManagementService.updatePolicy(updatePolicyParams);
+        const replacePolicyResult = iamPolicyManagementService.replacePolicy(replacePolicyParams);
 
         // all methods should return a Promise
-        expectToBePromise(updatePolicyResult);
+        expectToBePromise(replacePolicyResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -454,17 +454,17 @@ describe('IamPolicyManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __updatePolicyTest();
+        __replacePolicyTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __updatePolicyTest();
+        __replacePolicyTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __updatePolicyTest();
+        __replacePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -477,7 +477,7 @@ describe('IamPolicyManagementV1', () => {
         const resources = [policyResourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const updatePolicyParams = {
+        const replacePolicyParams = {
           policyId,
           ifMatch,
           type,
@@ -490,7 +490,7 @@ describe('IamPolicyManagementV1', () => {
           },
         };
 
-        iamPolicyManagementService.updatePolicy(updatePolicyParams);
+        iamPolicyManagementService.replacePolicy(replacePolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -499,7 +499,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.updatePolicy({});
+          await iamPolicyManagementService.replacePolicy({});
         } catch (e) {
           err = e;
         }
@@ -510,7 +510,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.updatePolicy();
+          await iamPolicyManagementService.replacePolicy();
         } catch (e) {
           err = e;
         }
@@ -688,23 +688,23 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('patchPolicy', () => {
+  describe('updatePolicyState', () => {
     describe('positive tests', () => {
-      function __patchPolicyTest() {
-        // Construct the params object for operation patchPolicy
+      function __updatePolicyStateTest() {
+        // Construct the params object for operation updatePolicyState
         const policyId = 'testString';
         const ifMatch = 'testString';
         const state = 'active';
-        const patchPolicyParams = {
+        const updatePolicyStateParams = {
           policyId,
           ifMatch,
           state,
         };
 
-        const patchPolicyResult = iamPolicyManagementService.patchPolicy(patchPolicyParams);
+        const updatePolicyStateResult = iamPolicyManagementService.updatePolicyState(updatePolicyStateParams);
 
         // all methods should return a Promise
-        expectToBePromise(patchPolicyResult);
+        expectToBePromise(updatePolicyStateResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -722,17 +722,17 @@ describe('IamPolicyManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __patchPolicyTest();
+        __updatePolicyStateTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __patchPolicyTest();
+        __updatePolicyStateTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __patchPolicyTest();
+        __updatePolicyStateTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -741,7 +741,7 @@ describe('IamPolicyManagementV1', () => {
         const ifMatch = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const patchPolicyParams = {
+        const updatePolicyStateParams = {
           policyId,
           ifMatch,
           headers: {
@@ -750,7 +750,7 @@ describe('IamPolicyManagementV1', () => {
           },
         };
 
-        iamPolicyManagementService.patchPolicy(patchPolicyParams);
+        iamPolicyManagementService.updatePolicyState(updatePolicyStateParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -759,7 +759,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.patchPolicy({});
+          await iamPolicyManagementService.updatePolicyState({});
         } catch (e) {
           err = e;
         }
@@ -770,7 +770,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.patchPolicy();
+          await iamPolicyManagementService.updatePolicyState();
         } catch (e) {
           err = e;
         }
@@ -966,27 +966,27 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('updateRole', () => {
+  describe('replaceRole', () => {
     describe('positive tests', () => {
-      function __updateRoleTest() {
-        // Construct the params object for operation updateRole
+      function __replaceRoleTest() {
+        // Construct the params object for operation replaceRole
         const roleId = 'testString';
         const ifMatch = 'testString';
         const displayName = 'testString';
-        const description = 'testString';
         const actions = ['testString'];
-        const updateRoleParams = {
+        const description = 'testString';
+        const replaceRoleParams = {
           roleId,
           ifMatch,
           displayName,
-          description,
           actions,
+          description,
         };
 
-        const updateRoleResult = iamPolicyManagementService.updateRole(updateRoleParams);
+        const replaceRoleResult = iamPolicyManagementService.replaceRole(replaceRoleParams);
 
         // all methods should return a Promise
-        expectToBePromise(updateRoleResult);
+        expectToBePromise(replaceRoleResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -999,42 +999,46 @@ describe('IamPolicyManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.display_name).toEqual(displayName);
-        expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.actions).toEqual(actions);
+        expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.path.role_id).toEqual(roleId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __updateRoleTest();
+        __replaceRoleTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __updateRoleTest();
+        __replaceRoleTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __updateRoleTest();
+        __replaceRoleTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const roleId = 'testString';
         const ifMatch = 'testString';
+        const displayName = 'testString';
+        const actions = ['testString'];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const updateRoleParams = {
+        const replaceRoleParams = {
           roleId,
           ifMatch,
+          displayName,
+          actions,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        iamPolicyManagementService.updateRole(updateRoleParams);
+        iamPolicyManagementService.replaceRole(replaceRoleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1043,7 +1047,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.updateRole({});
+          await iamPolicyManagementService.replaceRole({});
         } catch (e) {
           err = e;
         }
@@ -1054,7 +1058,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.updateRole();
+          await iamPolicyManagementService.replaceRole();
         } catch (e) {
           err = e;
         }
@@ -1232,10 +1236,10 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('v2ListPolicies', () => {
+  describe('listV2Policies', () => {
     describe('positive tests', () => {
-      function __v2ListPoliciesTest() {
-        // Construct the params object for operation v2ListPolicies
+      function __listV2PoliciesTest() {
+        // Construct the params object for operation listV2Policies
         const accountId = 'testString';
         const acceptLanguage = 'default';
         const iamId = 'testString';
@@ -1246,7 +1250,7 @@ describe('IamPolicyManagementV1', () => {
         const serviceGroupId = 'testString';
         const format = 'include_last_permit';
         const state = 'active';
-        const v2ListPoliciesParams = {
+        const listV2PoliciesParams = {
           accountId,
           acceptLanguage,
           iamId,
@@ -1259,10 +1263,10 @@ describe('IamPolicyManagementV1', () => {
           state,
         };
 
-        const v2ListPoliciesResult = iamPolicyManagementService.v2ListPolicies(v2ListPoliciesParams);
+        const listV2PoliciesResult = iamPolicyManagementService.listV2Policies(listV2PoliciesParams);
 
         // all methods should return a Promise
-        expectToBePromise(v2ListPoliciesResult);
+        expectToBePromise(listV2PoliciesResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -1287,17 +1291,17 @@ describe('IamPolicyManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __v2ListPoliciesTest();
+        __listV2PoliciesTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __v2ListPoliciesTest();
+        __listV2PoliciesTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __v2ListPoliciesTest();
+        __listV2PoliciesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1305,7 +1309,7 @@ describe('IamPolicyManagementV1', () => {
         const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const v2ListPoliciesParams = {
+        const listV2PoliciesParams = {
           accountId,
           headers: {
             Accept: userAccept,
@@ -1313,7 +1317,7 @@ describe('IamPolicyManagementV1', () => {
           },
         };
 
-        iamPolicyManagementService.v2ListPolicies(v2ListPoliciesParams);
+        iamPolicyManagementService.listV2Policies(listV2PoliciesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1322,7 +1326,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2ListPolicies({});
+          await iamPolicyManagementService.listV2Policies({});
         } catch (e) {
           err = e;
         }
@@ -1333,7 +1337,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2ListPolicies();
+          await iamPolicyManagementService.listV2Policies();
         } catch (e) {
           err = e;
         }
@@ -1343,7 +1347,7 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('v2CreatePolicy', () => {
+  describe('createV2Policy', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
@@ -1352,53 +1356,68 @@ describe('IamPolicyManagementV1', () => {
         role_id: 'testString',
       };
 
-      // V2PolicyBaseControlGrant
-      const v2PolicyBaseControlGrantModel = {
+      // V2PolicyGrant
+      const v2PolicyGrantModel = {
         roles: [policyRoleModel],
       };
 
-      // V2PolicyBaseControl
-      const v2PolicyBaseControlModel = {
-        grant: v2PolicyBaseControlGrantModel,
+      // Control
+      const controlModel = {
+        grant: v2PolicyGrantModel,
       };
 
-      // V2PolicyAttribute
-      const v2PolicyAttributeModel = {
+      // V2PolicySubjectAttribute
+      const v2PolicySubjectAttributeModel = {
         key: 'testString',
-        operator: 'testString',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
-      // V2PolicyBaseSubject
-      const v2PolicyBaseSubjectModel = {
-        attributes: [v2PolicyAttributeModel],
+      // V2PolicySubject
+      const v2PolicySubjectModel = {
+        attributes: [v2PolicySubjectAttributeModel],
       };
 
-      // V2PolicyBaseResource
-      const v2PolicyBaseResourceModel = {
-        attributes: [v2PolicyAttributeModel],
-      };
-
-      // V2PolicyBaseRuleV2PolicyAttribute
-      const v2PolicyBaseRuleModel = {
+      // V2PolicyResourceAttribute
+      const v2PolicyResourceAttributeModel = {
         key: 'testString',
-        operator: 'testString',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
-      function __v2CreatePolicyTest() {
-        // Construct the params object for operation v2CreatePolicy
-        const type = 'testString';
-        const control = v2PolicyBaseControlModel;
+      // V2PolicyResourceTag
+      const v2PolicyResourceTagModel = {
+        key: 'testString',
+        value: 'testString',
+        operator: 'stringEquals',
+      };
+
+      // V2PolicyResource
+      const v2PolicyResourceModel = {
+        attributes: [v2PolicyResourceAttributeModel],
+        tags: [v2PolicyResourceTagModel],
+      };
+
+      // V2PolicyRuleRuleAttribute
+      const v2PolicyRuleModel = {
+        key: 'testString',
+        operator: 'timeLessThan',
+        value: 'testString',
+      };
+
+      function __createV2PolicyTest() {
+        // Construct the params object for operation createV2Policy
+        const control = controlModel;
+        const type = 'access';
         const description = 'testString';
-        const subject = v2PolicyBaseSubjectModel;
-        const resource = v2PolicyBaseResourceModel;
+        const subject = v2PolicySubjectModel;
+        const resource = v2PolicyResourceModel;
         const pattern = 'testString';
-        const rule = v2PolicyBaseRuleModel;
+        const rule = v2PolicyRuleModel;
         const acceptLanguage = 'default';
-        const v2CreatePolicyParams = {
-          type,
+        const createV2PolicyParams = {
           control,
+          type,
           description,
           subject,
           resource,
@@ -1407,10 +1426,10 @@ describe('IamPolicyManagementV1', () => {
           acceptLanguage,
         };
 
-        const v2CreatePolicyResult = iamPolicyManagementService.v2CreatePolicy(v2CreatePolicyParams);
+        const createV2PolicyResult = iamPolicyManagementService.createV2Policy(createV2PolicyParams);
 
         // all methods should return a Promise
-        expectToBePromise(v2CreatePolicyResult);
+        expectToBePromise(createV2PolicyResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -1422,8 +1441,8 @@ describe('IamPolicyManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
-        expect(mockRequestOptions.body.type).toEqual(type);
         expect(mockRequestOptions.body.control).toEqual(control);
+        expect(mockRequestOptions.body.type).toEqual(type);
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.subject).toEqual(subject);
         expect(mockRequestOptions.body.resource).toEqual(resource);
@@ -1433,35 +1452,35 @@ describe('IamPolicyManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __v2CreatePolicyTest();
+        __createV2PolicyTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __v2CreatePolicyTest();
+        __createV2PolicyTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __v2CreatePolicyTest();
+        __createV2PolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const type = 'testString';
-        const control = v2PolicyBaseControlModel;
+        const control = controlModel;
+        const type = 'access';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const v2CreatePolicyParams = {
-          type,
+        const createV2PolicyParams = {
           control,
+          type,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        iamPolicyManagementService.v2CreatePolicy(v2CreatePolicyParams);
+        iamPolicyManagementService.createV2Policy(createV2PolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1470,7 +1489,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2CreatePolicy({});
+          await iamPolicyManagementService.createV2Policy({});
         } catch (e) {
           err = e;
         }
@@ -1481,7 +1500,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2CreatePolicy();
+          await iamPolicyManagementService.createV2Policy();
         } catch (e) {
           err = e;
         }
@@ -1491,7 +1510,7 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('v2UpdatePolicy', () => {
+  describe('replaceV2Policy', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
@@ -1500,56 +1519,71 @@ describe('IamPolicyManagementV1', () => {
         role_id: 'testString',
       };
 
-      // V2PolicyBaseControlGrant
-      const v2PolicyBaseControlGrantModel = {
+      // V2PolicyGrant
+      const v2PolicyGrantModel = {
         roles: [policyRoleModel],
       };
 
-      // V2PolicyBaseControl
-      const v2PolicyBaseControlModel = {
-        grant: v2PolicyBaseControlGrantModel,
+      // Control
+      const controlModel = {
+        grant: v2PolicyGrantModel,
       };
 
-      // V2PolicyAttribute
-      const v2PolicyAttributeModel = {
+      // V2PolicySubjectAttribute
+      const v2PolicySubjectAttributeModel = {
         key: 'testString',
-        operator: 'testString',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
-      // V2PolicyBaseSubject
-      const v2PolicyBaseSubjectModel = {
-        attributes: [v2PolicyAttributeModel],
+      // V2PolicySubject
+      const v2PolicySubjectModel = {
+        attributes: [v2PolicySubjectAttributeModel],
       };
 
-      // V2PolicyBaseResource
-      const v2PolicyBaseResourceModel = {
-        attributes: [v2PolicyAttributeModel],
-      };
-
-      // V2PolicyBaseRuleV2PolicyAttribute
-      const v2PolicyBaseRuleModel = {
+      // V2PolicyResourceAttribute
+      const v2PolicyResourceAttributeModel = {
         key: 'testString',
-        operator: 'testString',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
-      function __v2UpdatePolicyTest() {
-        // Construct the params object for operation v2UpdatePolicy
-        const policyId = 'testString';
+      // V2PolicyResourceTag
+      const v2PolicyResourceTagModel = {
+        key: 'testString',
+        value: 'testString',
+        operator: 'stringEquals',
+      };
+
+      // V2PolicyResource
+      const v2PolicyResourceModel = {
+        attributes: [v2PolicyResourceAttributeModel],
+        tags: [v2PolicyResourceTagModel],
+      };
+
+      // V2PolicyRuleRuleAttribute
+      const v2PolicyRuleModel = {
+        key: 'testString',
+        operator: 'timeLessThan',
+        value: 'testString',
+      };
+
+      function __replaceV2PolicyTest() {
+        // Construct the params object for operation replaceV2Policy
+        const id = 'testString';
         const ifMatch = 'testString';
-        const type = 'testString';
-        const control = v2PolicyBaseControlModel;
+        const control = controlModel;
+        const type = 'access';
         const description = 'testString';
-        const subject = v2PolicyBaseSubjectModel;
-        const resource = v2PolicyBaseResourceModel;
+        const subject = v2PolicySubjectModel;
+        const resource = v2PolicyResourceModel;
         const pattern = 'testString';
-        const rule = v2PolicyBaseRuleModel;
-        const v2UpdatePolicyParams = {
-          policyId,
+        const rule = v2PolicyRuleModel;
+        const replaceV2PolicyParams = {
+          id,
           ifMatch,
-          type,
           control,
+          type,
           description,
           subject,
           resource,
@@ -1557,66 +1591,66 @@ describe('IamPolicyManagementV1', () => {
           rule,
         };
 
-        const v2UpdatePolicyResult = iamPolicyManagementService.v2UpdatePolicy(v2UpdatePolicyParams);
+        const replaceV2PolicyResult = iamPolicyManagementService.replaceV2Policy(replaceV2PolicyParams);
 
         // all methods should return a Promise
-        expectToBePromise(v2UpdatePolicyResult);
+        expectToBePromise(replaceV2PolicyResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/v2/policies/{policy_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v2/policies/{id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
-        expect(mockRequestOptions.body.type).toEqual(type);
         expect(mockRequestOptions.body.control).toEqual(control);
+        expect(mockRequestOptions.body.type).toEqual(type);
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.subject).toEqual(subject);
         expect(mockRequestOptions.body.resource).toEqual(resource);
         expect(mockRequestOptions.body.pattern).toEqual(pattern);
         expect(mockRequestOptions.body.rule).toEqual(rule);
-        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __v2UpdatePolicyTest();
+        __replaceV2PolicyTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __v2UpdatePolicyTest();
+        __replaceV2PolicyTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __v2UpdatePolicyTest();
+        __replaceV2PolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const policyId = 'testString';
+        const id = 'testString';
         const ifMatch = 'testString';
-        const type = 'testString';
-        const control = v2PolicyBaseControlModel;
+        const control = controlModel;
+        const type = 'access';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const v2UpdatePolicyParams = {
-          policyId,
+        const replaceV2PolicyParams = {
+          id,
           ifMatch,
-          type,
           control,
+          type,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        iamPolicyManagementService.v2UpdatePolicy(v2UpdatePolicyParams);
+        iamPolicyManagementService.replaceV2Policy(replaceV2PolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1625,7 +1659,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2UpdatePolicy({});
+          await iamPolicyManagementService.replaceV2Policy({});
         } catch (e) {
           err = e;
         }
@@ -1636,7 +1670,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2UpdatePolicy();
+          await iamPolicyManagementService.replaceV2Policy();
         } catch (e) {
           err = e;
         }
@@ -1646,61 +1680,61 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('v2GetPolicy', () => {
+  describe('getV2Policy', () => {
     describe('positive tests', () => {
-      function __v2GetPolicyTest() {
-        // Construct the params object for operation v2GetPolicy
-        const policyId = 'testString';
-        const v2GetPolicyParams = {
-          policyId,
+      function __getV2PolicyTest() {
+        // Construct the params object for operation getV2Policy
+        const id = 'testString';
+        const getV2PolicyParams = {
+          id,
         };
 
-        const v2GetPolicyResult = iamPolicyManagementService.v2GetPolicy(v2GetPolicyParams);
+        const getV2PolicyResult = iamPolicyManagementService.getV2Policy(getV2PolicyParams);
 
         // all methods should return a Promise
-        expectToBePromise(v2GetPolicyResult);
+        expectToBePromise(getV2PolicyResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/v2/policies/{policy_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v2/policies/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __v2GetPolicyTest();
+        __getV2PolicyTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __v2GetPolicyTest();
+        __getV2PolicyTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __v2GetPolicyTest();
+        __getV2PolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const policyId = 'testString';
+        const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const v2GetPolicyParams = {
-          policyId,
+        const getV2PolicyParams = {
+          id,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        iamPolicyManagementService.v2GetPolicy(v2GetPolicyParams);
+        iamPolicyManagementService.getV2Policy(getV2PolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1709,7 +1743,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2GetPolicy({});
+          await iamPolicyManagementService.getV2Policy({});
         } catch (e) {
           err = e;
         }
@@ -1720,7 +1754,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2GetPolicy();
+          await iamPolicyManagementService.getV2Policy();
         } catch (e) {
           err = e;
         }
@@ -1730,61 +1764,61 @@ describe('IamPolicyManagementV1', () => {
     });
   });
 
-  describe('v2DeletePolicy', () => {
+  describe('deleteV2Policy', () => {
     describe('positive tests', () => {
-      function __v2DeletePolicyTest() {
-        // Construct the params object for operation v2DeletePolicy
-        const policyId = 'testString';
-        const v2DeletePolicyParams = {
-          policyId,
+      function __deleteV2PolicyTest() {
+        // Construct the params object for operation deleteV2Policy
+        const id = 'testString';
+        const deleteV2PolicyParams = {
+          id,
         };
 
-        const v2DeletePolicyResult = iamPolicyManagementService.v2DeletePolicy(v2DeletePolicyParams);
+        const deleteV2PolicyResult = iamPolicyManagementService.deleteV2Policy(deleteV2PolicyParams);
 
         // all methods should return a Promise
-        expectToBePromise(v2DeletePolicyResult);
+        expectToBePromise(deleteV2PolicyResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/v2/policies/{policy_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v2/policies/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __v2DeletePolicyTest();
+        __deleteV2PolicyTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.enableRetries();
-        __v2DeletePolicyTest();
+        __deleteV2PolicyTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         iamPolicyManagementService.disableRetries();
-        __v2DeletePolicyTest();
+        __deleteV2PolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const policyId = 'testString';
+        const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const v2DeletePolicyParams = {
-          policyId,
+        const deleteV2PolicyParams = {
+          id,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        iamPolicyManagementService.v2DeletePolicy(v2DeletePolicyParams);
+        iamPolicyManagementService.deleteV2Policy(deleteV2PolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1793,7 +1827,7 @@ describe('IamPolicyManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2DeletePolicy({});
+          await iamPolicyManagementService.deleteV2Policy({});
         } catch (e) {
           err = e;
         }
@@ -1804,7 +1838,7 @@ describe('IamPolicyManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await iamPolicyManagementService.v2DeletePolicy();
+          await iamPolicyManagementService.deleteV2Policy();
         } catch (e) {
           err = e;
         }

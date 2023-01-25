@@ -103,18 +103,18 @@ describe('IamPolicyManagementV1_integration', () => {
   const v2PolicyResource = {
     attributes: [v2PolicyResourceAccountAttribute, v2PolicyResourceServiceAttribute],
   };
-  const v2PolicyControl = {
+  const control = {
     grant: {
       roles: policyRoles,
     },
   };
-  const v2PolicyRule = {
+  const rule = {
     operator: 'and',
     conditions: [
       {
         key: '{{environment.attributes.day_of_week}}',
         operator: 'dayOfWeekAnyOf',
-        value: [1, 2, 3, 4, 5],
+        value: ['1+00:00', '2+00:00', '3+00:00', '4+00:00', '5+00:00'],
       },
       {
         key: '{{environment.attributes.current_time}}',
@@ -128,7 +128,7 @@ describe('IamPolicyManagementV1_integration', () => {
       },
     ],
   };
-  const v2PolicyPattern = 'time-based-restrictions:weekly';
+  const pattern = 'time-based-conditions:weekly:custom-hours';
 
   let testCustomRoleId;
   let testCustomRoleEtag;
@@ -232,7 +232,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.updatePolicy(params);
+        response = await service.replacePolicy(params);
       } catch (err) {
         console.warn(err);
       }
@@ -262,7 +262,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.patchPolicy(params);
+        response = await service.updatePolicyState(params);
       } catch (err) {
         console.warn(err);
       }
@@ -361,10 +361,10 @@ describe('IamPolicyManagementV1_integration', () => {
       const params = {
         type: 'access',
         subject: v2PolicySubject,
-        control: v2PolicyControl,
+        control,
         resource: v2PolicyResource,
-        rule: v2PolicyRule,
-        pattern: v2PolicyPattern,
+        rule,
+        pattern,
       };
 
       // ensure resource account value is defined
@@ -372,7 +372,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.v2CreatePolicy(params);
+        response = await service.createV2Policy(params);
       } catch (err) {
         console.warn(err);
       }
@@ -383,7 +383,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result).toBeDefined();
       expect(result.type).toEqual(policyType);
       expect(result.subject).toEqual(v2PolicySubject);
-      expect(result.control).toEqual(v2PolicyControl);
+      expect(result.control).toEqual(control);
       expect(result.resource).toEqual(v2PolicyResource);
 
       testV2PolicyId = result.id;
@@ -393,12 +393,12 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(testPolicyId).toBeDefined();
 
       const params = {
-        policyId: testV2PolicyId,
+        id: testV2PolicyId,
       };
 
       let response;
       try {
-        response = await service.v2GetPolicy(params);
+        response = await service.getV2Policy(params);
       } catch (err) {
         console.warn(err);
       }
@@ -410,7 +410,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.id).toEqual(testV2PolicyId);
       expect(result.type).toEqual(policyType);
       expect(result.subject).toEqual(v2PolicySubject);
-      expect(result.control).toEqual(v2PolicyControl);
+      expect(result.control).toEqual(control);
       expect(result.resource).toEqual(v2PolicyResource);
 
       testV2PolicyETag = response.headers.etag;
@@ -431,19 +431,19 @@ describe('IamPolicyManagementV1_integration', () => {
       };
 
       const params = {
-        policyId: testV2PolicyId,
+        id: testV2PolicyId,
         ifMatch: testV2PolicyETag,
         type: 'access',
         subject: v2PolicySubject,
         control: updatedControl,
         resource: v2PolicyResource,
-        rule: v2PolicyRule,
-        pattern: v2PolicyPattern,
+        rule,
+        pattern,
       };
 
       let response;
       try {
-        response = await service.v2UpdatePolicy(params);
+        response = await service.replaceV2Policy(params);
       } catch (err) {
         console.warn(err);
       }
@@ -469,7 +469,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.v2ListPolicies(params);
+        response = await service.listV2Policies(params);
       } catch (err) {
         console.warn(err);
       }
@@ -500,7 +500,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.v2ListPolicies(params);
+        response = await service.listV2Policies(params);
       } catch (err) {
         console.warn(err);
       }
@@ -520,12 +520,12 @@ describe('IamPolicyManagementV1_integration', () => {
 
         if (policy.id === testV2PolicyId || createdAt < fiveMinutesAgo) {
           const params = {
-            policyId: policy.id,
+            id: policy.id,
           };
 
           let response;
           try {
-            response = await service.v2DeletePolicy(params);
+            response = await service.deleteV2Policy(params);
           } catch (err) {
             console.warn(err);
           }
@@ -608,12 +608,14 @@ describe('IamPolicyManagementV1_integration', () => {
         roleId: testCustomRoleId,
         ifMatch: testCustomRoleEtag,
         description: updCustomRoleDescription,
+        displayName: testCustomRoleDisplayName,
+        actions: testCustomRoleActions,
         headers: { 'transaction-Id': `SDKNode-${testUniqueId}` },
       };
 
       let response;
       try {
-        response = await service.updateRole(params);
+        response = await service.replaceRole(params);
       } catch (err) {
         console.warn(err);
       }

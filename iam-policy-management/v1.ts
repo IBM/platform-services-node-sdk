@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.62.0-a2a22f95-20221115-162524
+ * IBM OpenAPI SDK Code Generator Version: 3.64.0-959a5845-20230112-195144
  */
 
 import * as extend from 'extend';
@@ -103,7 +103,9 @@ class IamPolicyManagementV1 extends BaseService {
    * and filter by attribute values. This can be done through query parameters. Currently, only the following attributes
    * are supported: account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a
    * required query parameter. Only policies that have the specified attributes and that the caller has read access to
-   * are returned. If the caller does not have read access to any policies an empty array is returned.
+   * are returned. If the caller does not have read access to any policies an empty array is returned. If a policy was
+   * created using the new beta v2/policies API, then the caller will see placeholder information, e.g., "unsupported
+   * version" for iam_id, and a valid v2/policies href. The caller should use this href to view the policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID in which the policies belong to.
@@ -375,8 +377,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
-  public updatePolicy(
-    params: IamPolicyManagementV1.UpdatePolicyParams
+  public replacePolicy(
+    params: IamPolicyManagementV1.ReplacePolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources'];
@@ -410,7 +412,7 @@ class IamPolicyManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'updatePolicy'
+      'replacePolicy'
     );
 
     const parameters = {
@@ -546,8 +548,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
    */
-  public patchPolicy(
-    params: IamPolicyManagementV1.PatchPolicyParams
+  public updatePolicyState(
+    params: IamPolicyManagementV1.UpdatePolicyStateParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['policyId', 'ifMatch'];
@@ -568,7 +570,7 @@ class IamPolicyManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'patchPolicy'
+      'updatePolicyState'
     );
 
     const parameters = {
@@ -776,19 +778,19 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.ifMatch - The revision number for updating a role and must match the ETag value of the
    * existing role. The Etag can be retrieved using the GET /v2/roles/{role_id} API and looking at the ETag response
    * header.
-   * @param {string} [params.displayName] - The display name of the role that is shown in the console.
-   * @param {string} [params.description] - The description of the role.
-   * @param {string[]} [params.actions] - The actions of the role. Please refer to [IAM roles and
+   * @param {string} params.displayName - The display name of the role that is shown in the console.
+   * @param {string[]} params.actions - The actions of the role. Please refer to [IAM roles and
    * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+   * @param {string} [params.description] - The description of the role.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>>}
    */
-  public updateRole(
-    params: IamPolicyManagementV1.UpdateRoleParams
+  public replaceRole(
+    params: IamPolicyManagementV1.ReplaceRoleParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
-    const _requiredParams = ['roleId', 'ifMatch'];
-    const _validParams = ['roleId', 'ifMatch', 'displayName', 'description', 'actions', 'headers'];
+    const _requiredParams = ['roleId', 'ifMatch', 'displayName', 'actions'];
+    const _validParams = ['roleId', 'ifMatch', 'displayName', 'actions', 'description', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -796,8 +798,8 @@ class IamPolicyManagementV1 extends BaseService {
 
     const body = {
       'display_name': _params.displayName,
-      'description': _params.description,
       'actions': _params.actions,
+      'description': _params.description,
     };
 
     const path = {
@@ -807,7 +809,7 @@ class IamPolicyManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'updateRole'
+      'replaceRole'
     );
 
     const parameters = {
@@ -968,11 +970,11 @@ class IamPolicyManagementV1 extends BaseService {
    * * `active` - returns active policies
    * * `deleted` - returns non-active policies.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyList>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyCollection>>}
    */
-  public v2ListPolicies(
-    params: IamPolicyManagementV1.V2ListPoliciesParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyList>> {
+  public listV2Policies(
+    params: IamPolicyManagementV1.ListV2PoliciesParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
     const _validParams = [
@@ -1008,7 +1010,7 @@ class IamPolicyManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'v2ListPolicies'
+      'listV2Policies'
     );
 
     const parameters = {
@@ -1045,21 +1047,23 @@ class IamPolicyManagementV1 extends BaseService {
    * To create an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
    * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
-   * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
-   * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
-   * **`serviceName`**, **`resourceGroupId`** or **`service_group_id`** attribute and the **`accountId`** attribute.`
-   * The rule field can either specify single **`key`**, **`value`**, and **`operator`** or be set of **`conditions`**
-   * with a combination **`operator`**.  The possible combination operator are **`and`** and **`or`**. The rule field
-   * has a maximum of 2 levels of nested **`conditions`**. The operator for a rule can be used to specify a time based
-   * restriction (e.g., access only during business hours, during the Monday-Friday work week). For example, a policy
-   * can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
+   * must be a subset of a service's or the platform's supported roles. For more information, see [IAM roles and
+   * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions). The resource attributes must
+   * be a subset of a service's or the platform's supported attributes. Caller should check with service, e.g.,
+   * [VPC](https://cloud.ibm.com/docs/vpc?topic=vpc-resource-attributes), to view supported attributes. The policy
+   * resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
+   * **`service_group_id`** attribute and the **`accountId`** attribute.` The rule field can either specify single
+   * **`key`**, **`value`**, and **`operator`** or be set of **`conditions`** with a combination **`operator`**.  The
+   * possible combination operator are **`and`** and **`or`**. The operator for a rule can be used to specify a
+   * time-based condition (e.g., access only during business hours, during the Monday-Friday work week). For example, a
+   * policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
    * ```json
    *   "rule": {
    *     "operator": "and",
    *     "conditions": [{
    *       "key": "{{environment.attributes.day_of_week}}",
    *       "operator": "dayOfWeekAnyOf",
-   *       "value": [1, 2, 3, 4, 5]
+   *       "value": ["1+00:00", "2+00:00", "3+00:00", "4+00:00", "5+00:00"]
    *     },
    *       "key": "{{environment.attributes.current_time}}",
    *       "operator": "timeGreaterThanOrEquals",
@@ -1073,15 +1077,19 @@ class IamPolicyManagementV1 extends BaseService {
    * ``` Rules and conditions allow the following operators with **`key`**, **`value`** :
    * ```
    *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
-   *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
    *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
-   *   'monthEquals', 'monthAnyOf',
-   *   'dayOfMonthEquals', 'dayOfMonthAnyOf'
-   * ``` The pattern field can be coupled with a rule that matches the pattern. For the business hour rule example
-   * above, the **`pattern`** is **`"time-based-restrictions:weekly"`**. The IAM Services group (`IAM`) is a subset of
-   * account management services that includes the IAM platform services IAM Identity, IAM Access Management, IAM Users
-   * Management, IAM Groups, and future IAM services. If the subject is a locked service-id, the request will fail.
+   * ```
+   *
+   * The pattern field that matches the rule is required when rule is provided. For the business hour rule example
+   * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
+   * operators](https://cloud.ibm.com/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties)
+   * and
+   * [Limiting access with time-based
+   * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui). The IAM Services group
+   * (`IAM`) is a subset of account management services that includes the IAM platform services IAM Identity, IAM Access
+   * Management, IAM Users Management, IAM Groups, and future IAM services. If the subject is a locked service-id, the
+   * request will fail.
    *
    * ### Attribute Operators
    *
@@ -1096,13 +1104,15 @@ class IamPolicyManagementV1 extends BaseService {
    * against Global Catalog locations.
    *
    * @param {Object} params - The parameters to send to the service.
+   * @param {Control} params.control - Specifies the type of access granted by the policy.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
-   * @param {V2PolicyBaseControl} params.control - Specifies the type of access granted by the policy.
-   * @param {string} [params.description] - Customer-defined description.
-   * @param {V2PolicyBaseSubject} [params.subject] - The subject attributes associated with a policy.
-   * @param {V2PolicyBaseResource} [params.resource] - The resource attributes associated with a policy.
-   * @param {string} [params.pattern] - Indicates pattern of rule.
-   * @param {V2PolicyBaseRule} [params.rule] - Additional access conditions associated with a policy.
+   * @param {string} [params.description] - Allows the customer to use their own words to record the purpose/context
+   * related to a policy.
+   * @param {V2PolicySubject} [params.subject] - The subject attributes for whom the policy grants access.
+   * @param {V2PolicyResource} [params.resource] - The resource attributes to which the policy grants access.
+   * @param {string} [params.pattern] - Indicates pattern of rule, either 'time-based-conditions:once',
+   * 'time-based-conditions:weekly:all-day', or 'time-based-conditions:weekly:custom-hours'.
+   * @param {V2PolicyRule} [params.rule] - Additional access conditions associated with the policy.
    * @param {string} [params.acceptLanguage] - Language code for translations
    * * `default` - English
    * * `de` -  German (Standard)
@@ -1118,14 +1128,14 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
    */
-  public v2CreatePolicy(
-    params: IamPolicyManagementV1.V2CreatePolicyParams
+  public createV2Policy(
+    params: IamPolicyManagementV1.CreateV2PolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
-    const _requiredParams = ['type', 'control'];
+    const _requiredParams = ['control', 'type'];
     const _validParams = [
-      'type',
       'control',
+      'type',
       'description',
       'subject',
       'resource',
@@ -1140,8 +1150,8 @@ class IamPolicyManagementV1 extends BaseService {
     }
 
     const body = {
-      'type': _params.type,
       'control': _params.control,
+      'type': _params.type,
       'description': _params.description,
       'subject': _params.subject,
       'resource': _params.resource,
@@ -1152,7 +1162,7 @@ class IamPolicyManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'v2CreatePolicy'
+      'createV2Policy'
     );
 
     const parameters = {
@@ -1189,21 +1199,23 @@ class IamPolicyManagementV1 extends BaseService {
    * To update an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
    * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
-   * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
-   * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
-   * **`serviceName`**,  or **`resourceGroupId`** attribute and the **`accountId`** attribute.` The rule field can
-   * either specify single **`key`**, **`value`**, and **`operator`** or be set of **`conditions`** with a combination
-   * **`operator`**.  The possible combination operator are **`and`** and **`or`**. The rule field has a maximum of 2
-   * levels of nested **`conditions`**. The operator for a rule can be used to specify a time based restriction (e.g.,
-   * access only during business hours, during the Monday-Friday work week). For example, a policy can grant access
-   * Monday-Friday, 9:00am-5:00pm using the following rule:
+   * must be a subset of a service's or the platform's supported roles. For more information, see [IAM roles and
+   * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions). The resource attributes must
+   * be a subset of a service's or the platform's supported attributes. Caller should check with service, e.g.,
+   * [VPC](https://cloud.ibm.com/docs/vpc?topic=vpc-resource-attributes), to view supported attributes. The policy
+   * resource must include either the **`serviceType`**, **`serviceName`**,  or **`resourceGroupId`** attribute and the
+   * **`accountId`** attribute.` The rule field can either specify single **`key`**, **`value`**, and **`operator`** or
+   * be set of **`conditions`** with a combination **`operator`**.  The possible combination operator are **`and`** and
+   * **`or`**. The operator for a rule can be used to specify a time-based condition (e.g., access only during business
+   * hours, during the Monday-Friday work week). For example, a policy can grant access Monday-Friday, 9:00am-5:00pm
+   * using the following rule:
    * ```json
    *   "rule": {
    *     "operator": "and",
    *     "conditions": [{
    *       "key": "{{environment.attributes.day_of_week}}",
    *       "operator": "dayOfWeekAnyOf",
-   *       "value": [1, 2, 3, 4, 5]
+   *       "value": ["1+00:00", "2+00:00", "3+00:00", "4+00:00", "5+00:00"]
    *     },
    *       "key": "{{environment.attributes.current_time}}",
    *       "operator": "timeGreaterThanOrEquals",
@@ -1217,14 +1229,14 @@ class IamPolicyManagementV1 extends BaseService {
    * ``` Rules and conditions allow the following operators with **`key`**, **`value`** :
    * ```
    *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
-   *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
    *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
-   *   'monthEquals', 'monthAnyOf',
-   *   'dayOfMonthEquals', 'dayOfMonthAnyOf'
-   * ``` The pattern field can be coupled with a rule that matches the pattern. For the business hour rule example
-   * above, the **`pattern`** is **`"time-based-restrictions:weekly"`**. If the subject is a locked service-id, the
-   * request will fail.
+   * ``` The pattern field that matches the rule is required when rule is provided. For the business hour rule example
+   * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
+   * operators](https://cloud.ibm.com/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties)
+   * and
+   * [Limiting access with time-based
+   * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui).
    *
    * ### Attribute Operators
    *
@@ -1239,30 +1251,32 @@ class IamPolicyManagementV1 extends BaseService {
    * against Global Catalog locations.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.policyId - The policy ID.
+   * @param {string} params.id - The policy ID.
    * @param {string} params.ifMatch - The revision number for updating a policy and must match the ETag value of the
-   * existing policy. The Etag can be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag
-   * response header.
+   * existing policy. The Etag can be retrieved using the GET /v2/policies/{id} API and looking at the ETag response
+   * header.
+   * @param {Control} params.control - Specifies the type of access granted by the policy.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
-   * @param {V2PolicyBaseControl} params.control - Specifies the type of access granted by the policy.
-   * @param {string} [params.description] - Customer-defined description.
-   * @param {V2PolicyBaseSubject} [params.subject] - The subject attributes associated with a policy.
-   * @param {V2PolicyBaseResource} [params.resource] - The resource attributes associated with a policy.
-   * @param {string} [params.pattern] - Indicates pattern of rule.
-   * @param {V2PolicyBaseRule} [params.rule] - Additional access conditions associated with a policy.
+   * @param {string} [params.description] - Allows the customer to use their own words to record the purpose/context
+   * related to a policy.
+   * @param {V2PolicySubject} [params.subject] - The subject attributes for whom the policy grants access.
+   * @param {V2PolicyResource} [params.resource] - The resource attributes to which the policy grants access.
+   * @param {string} [params.pattern] - Indicates pattern of rule, either 'time-based-conditions:once',
+   * 'time-based-conditions:weekly:all-day', or 'time-based-conditions:weekly:custom-hours'.
+   * @param {V2PolicyRule} [params.rule] - Additional access conditions associated with the policy.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
    */
-  public v2UpdatePolicy(
-    params: IamPolicyManagementV1.V2UpdatePolicyParams
+  public replaceV2Policy(
+    params: IamPolicyManagementV1.ReplaceV2PolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
-    const _requiredParams = ['policyId', 'ifMatch', 'type', 'control'];
+    const _requiredParams = ['id', 'ifMatch', 'control', 'type'];
     const _validParams = [
-      'policyId',
+      'id',
       'ifMatch',
-      'type',
       'control',
+      'type',
       'description',
       'subject',
       'resource',
@@ -1276,8 +1290,8 @@ class IamPolicyManagementV1 extends BaseService {
     }
 
     const body = {
-      'type': _params.type,
       'control': _params.control,
+      'type': _params.type,
       'description': _params.description,
       'subject': _params.subject,
       'resource': _params.resource,
@@ -1286,18 +1300,18 @@ class IamPolicyManagementV1 extends BaseService {
     };
 
     const path = {
-      'policy_id': _params.policyId,
+      'id': _params.id,
     };
 
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'v2UpdatePolicy'
+      'replaceV2Policy'
     );
 
     const parameters = {
       options: {
-        url: '/v2/policies/{policy_id}',
+        url: '/v2/policies/{id}',
         method: 'PUT',
         body,
         path,
@@ -1325,34 +1339,34 @@ class IamPolicyManagementV1 extends BaseService {
    * Retrieve a policy by providing a policy ID.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.policyId - The policy ID.
+   * @param {string} params.id - The policy ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
    */
-  public v2GetPolicy(
-    params: IamPolicyManagementV1.V2GetPolicyParams
+  public getV2Policy(
+    params: IamPolicyManagementV1.GetV2PolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
-    const _requiredParams = ['policyId'];
-    const _validParams = ['policyId', 'headers'];
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const path = {
-      'policy_id': _params.policyId,
+      'id': _params.id,
     };
 
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'v2GetPolicy'
+      'getV2Policy'
     );
 
     const parameters = {
       options: {
-        url: '/v2/policies/{policy_id}',
+        url: '/v2/policies/{id}',
         method: 'GET',
         path,
       },
@@ -1378,34 +1392,34 @@ class IamPolicyManagementV1 extends BaseService {
    * ID. If the subject of the policy is a locked service-id, the request will fail.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.policyId - The policy ID.
+   * @param {string} params.id - The policy ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
    */
-  public v2DeletePolicy(
-    params: IamPolicyManagementV1.V2DeletePolicyParams
+  public deleteV2Policy(
+    params: IamPolicyManagementV1.DeleteV2PolicyParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['policyId'];
-    const _validParams = ['policyId', 'headers'];
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const path = {
-      'policy_id': _params.policyId,
+      'id': _params.id,
     };
 
     const sdkHeaders = getSdkHeaders(
       IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'v2DeletePolicy'
+      'deleteV2Policy'
     );
 
     const parameters = {
       options: {
-        url: '/v2/policies/{policy_id}',
+        url: '/v2/policies/{id}',
         method: 'DELETE',
         path,
       },
@@ -1555,8 +1569,8 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `updatePolicy` operation. */
-  export interface UpdatePolicyParams {
+  /** Parameters for the `replacePolicy` operation. */
+  export interface ReplacePolicyParams {
     /** The policy ID. */
     policyId: string;
     /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
@@ -1590,8 +1604,8 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `patchPolicy` operation. */
-  export interface PatchPolicyParams {
+  /** Parameters for the `updatePolicyState` operation. */
+  export interface UpdatePolicyStateParams {
     /** The policy ID. */
     policyId: string;
     /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
@@ -1599,12 +1613,12 @@ namespace IamPolicyManagementV1 {
      */
     ifMatch: string;
     /** The policy state. */
-    state?: PatchPolicyConstants.State | string;
+    state?: UpdatePolicyStateConstants.State | string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Constants for the `patchPolicy` operation. */
-  export namespace PatchPolicyConstants {
+  /** Constants for the `updatePolicyState` operation. */
+  export namespace UpdatePolicyStateConstants {
     /** The policy state. */
     export enum State {
       ACTIVE = 'active',
@@ -1672,8 +1686,8 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `updateRole` operation. */
-  export interface UpdateRoleParams {
+  /** Parameters for the `replaceRole` operation. */
+  export interface ReplaceRoleParams {
     /** The role ID. */
     roleId: string;
     /** The revision number for updating a role and must match the ETag value of the existing role. The Etag can be
@@ -1681,13 +1695,13 @@ namespace IamPolicyManagementV1 {
      */
     ifMatch: string;
     /** The display name of the role that is shown in the console. */
-    displayName?: string;
-    /** The description of the role. */
-    description?: string;
+    displayName: string;
     /** The actions of the role. Please refer to [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
-    actions?: string[];
+    actions: string[];
+    /** The description of the role. */
+    description?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1705,8 +1719,8 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `v2ListPolicies` operation. */
-  export interface V2ListPoliciesParams {
+  /** Parameters for the `listV2Policies` operation. */
+  export interface ListV2PoliciesParams {
     /** The account GUID in which the policies belong to. */
     accountId: string;
     /** Language code for translations
@@ -1728,9 +1742,9 @@ namespace IamPolicyManagementV1 {
     /** Optional access group id. */
     accessGroupId?: string;
     /** Optional type of policy. */
-    type?: V2ListPoliciesConstants.Type | string;
+    type?: ListV2PoliciesConstants.Type | string;
     /** Optional type of service. */
-    serviceType?: V2ListPoliciesConstants.ServiceType | string;
+    serviceType?: ListV2PoliciesConstants.ServiceType | string;
     /** Optional name of service. */
     serviceName?: string;
     /** Optional ID of service group. */
@@ -1741,14 +1755,14 @@ namespace IamPolicyManagementV1 {
      *  * `display` - returns the list of all actions included in each of the policy roles and translations for all
      *  relevant fields.
      */
-    format?: V2ListPoliciesConstants.Format | string;
+    format?: ListV2PoliciesConstants.Format | string;
     /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
-    state?: V2ListPoliciesConstants.State | string;
+    state?: ListV2PoliciesConstants.State | string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Constants for the `v2ListPolicies` operation. */
-  export namespace V2ListPoliciesConstants {
+  /** Constants for the `listV2Policies` operation. */
+  export namespace ListV2PoliciesConstants {
     /** Optional type of policy. */
     export enum Type {
       ACCESS = 'access',
@@ -1771,22 +1785,24 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Parameters for the `v2CreatePolicy` operation. */
-  export interface V2CreatePolicyParams {
-    /** The policy type; either 'access' or 'authorization'. */
-    type: string;
+  /** Parameters for the `createV2Policy` operation. */
+  export interface CreateV2PolicyParams {
     /** Specifies the type of access granted by the policy. */
-    control: V2PolicyBaseControl;
-    /** Customer-defined description. */
+    control: Control;
+    /** The policy type; either 'access' or 'authorization'. */
+    type: CreateV2PolicyConstants.Type | string;
+    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
     description?: string;
-    /** The subject attributes associated with a policy. */
-    subject?: V2PolicyBaseSubject;
-    /** The resource attributes associated with a policy. */
-    resource?: V2PolicyBaseResource;
-    /** Indicates pattern of rule. */
+    /** The subject attributes for whom the policy grants access. */
+    subject?: V2PolicySubject;
+    /** The resource attributes to which the policy grants access. */
+    resource?: V2PolicyResource;
+    /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
+     *  'time-based-conditions:weekly:custom-hours'.
+     */
     pattern?: string;
-    /** Additional access conditions associated with a policy. */
-    rule?: V2PolicyBaseRule;
+    /** Additional access conditions associated with the policy. */
+    rule?: V2PolicyRule;
     /** Language code for translations
      *  * `default` - English
      *  * `de` -  German (Standard)
@@ -1804,42 +1820,62 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `v2UpdatePolicy` operation. */
-  export interface V2UpdatePolicyParams {
+  /** Constants for the `createV2Policy` operation. */
+  export namespace CreateV2PolicyConstants {
+    /** The policy type; either 'access' or 'authorization'. */
+    export enum Type {
+      ACCESS = 'access',
+      AUTHORIZATION = 'authorization',
+    }
+  }
+
+  /** Parameters for the `replaceV2Policy` operation. */
+  export interface ReplaceV2PolicyParams {
     /** The policy ID. */
-    policyId: string;
+    id: string;
     /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
-     *  be retrieved using the GET /v1/policies/{policy_id} API and looking at the ETag response header.
+     *  be retrieved using the GET /v2/policies/{id} API and looking at the ETag response header.
      */
     ifMatch: string;
-    /** The policy type; either 'access' or 'authorization'. */
-    type: string;
     /** Specifies the type of access granted by the policy. */
-    control: V2PolicyBaseControl;
-    /** Customer-defined description. */
+    control: Control;
+    /** The policy type; either 'access' or 'authorization'. */
+    type: ReplaceV2PolicyConstants.Type | string;
+    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
     description?: string;
-    /** The subject attributes associated with a policy. */
-    subject?: V2PolicyBaseSubject;
-    /** The resource attributes associated with a policy. */
-    resource?: V2PolicyBaseResource;
-    /** Indicates pattern of rule. */
+    /** The subject attributes for whom the policy grants access. */
+    subject?: V2PolicySubject;
+    /** The resource attributes to which the policy grants access. */
+    resource?: V2PolicyResource;
+    /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
+     *  'time-based-conditions:weekly:custom-hours'.
+     */
     pattern?: string;
-    /** Additional access conditions associated with a policy. */
-    rule?: V2PolicyBaseRule;
+    /** Additional access conditions associated with the policy. */
+    rule?: V2PolicyRule;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `v2GetPolicy` operation. */
-  export interface V2GetPolicyParams {
+  /** Constants for the `replaceV2Policy` operation. */
+  export namespace ReplaceV2PolicyConstants {
+    /** The policy type; either 'access' or 'authorization'. */
+    export enum Type {
+      ACCESS = 'access',
+      AUTHORIZATION = 'authorization',
+    }
+  }
+
+  /** Parameters for the `getV2Policy` operation. */
+  export interface GetV2PolicyParams {
     /** The policy ID. */
-    policyId: string;
+    id: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `v2DeletePolicy` operation. */
-  export interface V2DeletePolicyParams {
+  /** Parameters for the `deleteV2Policy` operation. */
+  export interface DeleteV2PolicyParams {
     /** The policy ID. */
-    policyId: string;
+    id: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1848,30 +1884,168 @@ namespace IamPolicyManagementV1 {
    ************************/
 
   /** Specifies the type of access granted by the policy. */
-  export interface V2PolicyBaseControl {
+  export interface Control {
     /** Permission granted by the policy. */
-    grant: V2PolicyBaseControlGrant;
+    grant: V2PolicyGrant;
+  }
+
+  /** ControlResponse. */
+  export interface ControlResponse {}
+
+  /** Permission granted by the policy with translated roles and additional role information. */
+  export interface GrantWithTranslatedRoles {
+    /** A set of roles granted by the policy. */
+    roles: RoleInDisplayFormat[];
+  }
+
+  /** A role associated with a policy. */
+  export interface PolicyRole {
+    /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
+     *  'crn:v1:bluemix:public:iam::::role:Editor'.
+     */
+    role_id: string;
+    /** The display name of the role. */
+    display_name?: string;
+    /** The description of the role. */
+    description?: string;
+  }
+
+  /** An action that can be performed by the policy subject when assigned role. */
+  export interface RoleAction {
+    /** Unique identifier for action with structure service.resource.action e.g., cbr.rule.read. */
+    id: string;
+    /** Service defined display name for action. */
+    display_name: string;
+    /** Service defined description for action. */
+    description: string;
+  }
+
+  /** A role associated with a policy with additional information (display_name, description, actions) when `format=display`. */
+  export interface RoleInDisplayFormat {
+    /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
+     *  'crn:v1:bluemix:public:iam::::role:Editor'.
+     */
+    role_id: string;
+    /** The service defined (or user defined if a custom role) display name of the role. */
+    display_name?: string;
+    /** The service defined (or user defined if a custom role) description of the role. */
+    description?: string;
+    /** The actions of the role. Please refer to [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
+    actions: RoleAction[];
+  }
+
+  /** Rule that specifies additional access granted (e.g., time-based condition). */
+  export interface RuleAttribute {
+    /** The name of an attribute. */
+    key: string;
+    /** The operator of an attribute. */
+    operator: string;
+    /** The value of an rule or resource attribute; can be boolean or string for resource attribute. Can be a string
+     *  or an array of strings (e.g., array of days to permit access) for rule attribute.
+     */
+    value: any;
+  }
+
+  /** The core set of properties associated with the policy. */
+  export interface V2Policy {
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
+    description?: string;
+    /** The subject attributes for whom the policy grants access. */
+    subject?: V2PolicySubject;
+    /** The resource attributes to which the policy grants access. */
+    resource?: V2PolicyResource;
+    /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
+     *  'time-based-conditions:weekly:custom-hours'.
+     */
+    pattern?: string;
+    /** Additional access conditions associated with the policy. */
+    rule?: V2PolicyRule;
+    /** The policy ID. */
+    id?: string;
+    /** The href URL that links to the policies API by policy ID. */
+    href?: string;
+    control: ControlResponse;
+    /** The UTC timestamp when the policy was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy. */
+    last_modified_by_id?: string;
+    /** The policy state, either 'deleted' or 'active'. */
+    state: string;
+    /** The optional last permit time of policy, when passing query parameter format=include_last_permit. */
+    last_permit_at?: string;
+    /** The optional count of times that policy has provided a permit, when passing query parameter
+     *  format=include_last_permit.
+     */
+    last_permit_frequency?: number;
+  }
+
+  /** A collection of policies. */
+  export interface V2PolicyCollection {
+    /** List of policies. */
+    policies?: V2Policy[];
   }
 
   /** Permission granted by the policy. */
-  export interface V2PolicyBaseControlGrant {
+  export interface V2PolicyGrant {
     /** A set of role cloud resource names (CRNs) granted by the policy. */
     roles: PolicyRole[];
   }
 
-  /** The resource attributes associated with a policy. */
-  export interface V2PolicyBaseResource {
-    /** List of resource attributes associated with policy/. */
-    attributes?: V2PolicyAttribute[];
+  /** The resource attributes to which the policy grants access. */
+  export interface V2PolicyResource {
+    /** List of resource attributes to which the policy grants access. */
+    attributes: V2PolicyResourceAttribute[];
+    /** Optional list of resource tags to which the policy grants access. */
+    tags?: V2PolicyResourceTag[];
   }
 
-  /** Additional access conditions associated with a policy. */
-  export interface V2PolicyBaseRule {}
+  /** Resource attribute to which the policy grants access. */
+  export interface V2PolicyResourceAttribute {
+    /** The name of a resource attribute. */
+    key: string;
+    /** The operator of an attribute. */
+    operator: string;
+    /** The value of an rule or resource attribute; can be boolean or string for resource attribute. Can be a string
+     *  or an array of strings (e.g., array of days to permit access) for rule attribute.
+     */
+    value: any;
+  }
 
-  /** The subject attributes associated with a policy. */
-  export interface V2PolicyBaseSubject {
+  /** A tag associated with a resource. */
+  export interface V2PolicyResourceTag {
+    /** The name of an access management tag. */
+    key: string;
+    /** The value of an access management tag. */
+    value: string;
+    /** The operator of an access management tag. */
+    operator: string;
+  }
+
+  /** Additional access conditions associated with the policy. */
+  export interface V2PolicyRule {}
+
+  /** The subject attributes for whom the policy grants access. */
+  export interface V2PolicySubject {
     /** List of subject attributes associated with policy/. */
-    attributes?: V2PolicyAttribute[];
+    attributes: V2PolicySubjectAttribute[];
+  }
+
+  /** Subject attribute for whom the policy grants access. */
+  export interface V2PolicySubjectAttribute {
+    /** The name of a subject attribute, e.g., iam_id, access_group_id. */
+    key: string;
+    /** The operator of an attribute. */
+    operator: string;
+    /** The value of the ID of the subject, e.g., service ID, access group ID, IAM ID. */
+    value: string;
   }
 
   /** An additional set of properties associated with a role. */
@@ -1879,23 +2053,23 @@ namespace IamPolicyManagementV1 {
     /** The role ID. Composed of hexadecimal characters. */
     id?: string;
     /** The display name of the role that is shown in the console. */
-    display_name?: string;
+    display_name: string;
     /** The description of the role. */
     description?: string;
     /** The actions of the role. Please refer to [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
-    actions?: string[];
+    actions: string[];
     /** The role Cloud Resource Name (CRN). Example CRN:
      *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
      */
     crn?: string;
     /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
-    name?: string;
+    name: string;
     /** The account GUID. */
-    account_id?: string;
+    account_id: string;
     /** The service name. */
-    service_name?: string;
+    service_name: string;
     /** The UTC timestamp when the role was created. */
     created_at?: string;
     /** The iam ID of the entity that created the role. */
@@ -1913,15 +2087,15 @@ namespace IamPolicyManagementV1 {
     /** The policy ID. */
     id?: string;
     /** The policy type; either 'access' or 'authorization'. */
-    type?: string;
+    type: string;
     /** Customer-defined description. */
     description?: string;
     /** The subjects associated with a policy. */
-    subjects?: PolicySubject[];
+    subjects: PolicySubject[];
     /** A set of role cloud resource names (CRNs) granted by the policy. */
-    roles?: PolicyRole[];
+    roles: PolicyRole[];
     /** The resources associated with a policy. */
-    resources?: PolicyResource[];
+    resources: PolicyResource[];
     /** The href link back to the policy. */
     href?: string;
     /** The UTC timestamp when the policy was created. */
@@ -1948,18 +2122,6 @@ namespace IamPolicyManagementV1 {
     attributes?: ResourceAttribute[];
     /** List of access management tags. */
     tags?: ResourceTag[];
-  }
-
-  /** A role associated with a policy. */
-  export interface PolicyRole {
-    /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
-     *  'crn:v1:bluemix:public:iam::::role:Editor'.
-     */
-    role_id: string;
-    /** The display name of the role. */
-    display_name?: string;
-    /** The description of the role. */
-    description?: string;
   }
 
   /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
@@ -1991,13 +2153,13 @@ namespace IamPolicyManagementV1 {
   /** A role resource. */
   export interface Role {
     /** The display name of the role that is shown in the console. */
-    display_name?: string;
+    display_name: string;
     /** The description of the role. */
     description?: string;
     /** The actions of the role. Please refer to [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
-    actions?: string[];
+    actions: string[];
     /** The role Cloud Resource Name (CRN). Example CRN:
      *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
      */
@@ -2022,70 +2184,38 @@ namespace IamPolicyManagementV1 {
     value: string;
   }
 
-  /** The core set of properties associated with a policy. */
-  export interface V2Policy {
-    /** The policy ID. */
-    id?: string;
-    /** The policy type; either 'access' or 'authorization'. */
-    type: string;
-    /** Customer-defined description. */
-    description?: string;
-    /** The subject attributes associated with a policy. */
-    subject?: V2PolicyBaseSubject;
-    /** Specifies the type of access granted by the policy. */
-    control: V2PolicyBaseControl;
-    /** The resource attributes associated with a policy. */
-    resource?: V2PolicyBaseResource;
-    /** Indicates pattern of rule. */
-    pattern?: string;
-    /** Additional access conditions associated with a policy. */
-    rule?: V2PolicyBaseRule;
-    /** The href link back to the policy. */
-    href?: string;
-    /** The UTC timestamp when the policy was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the policy. */
-    created_by_id?: string;
-    /** The UTC timestamp when the policy was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
-    last_modified_by_id?: string;
-    /** The policy state. */
-    state?: string;
+  /** Specifies the type of access granted by the policy. */
+  export interface ControlResponseControl extends ControlResponse {
+    /** Permission granted by the policy. */
+    grant: V2PolicyGrant;
   }
 
-  /** Resource/subject attribute associated with policy attributes. */
-  export interface V2PolicyAttribute {
+  /** Specifies the type of access granted by the policy with additional role information. */
+  export interface ControlResponseControlWithTranslatedRoles extends ControlResponse {
+    /** Permission granted by the policy with translated roles and additional role information. */
+    grant: GrantWithTranslatedRoles;
+  }
+
+  /** Rule that specifies additional access granted (e.g., time-based condition). */
+  export interface V2PolicyRuleRuleAttribute extends V2PolicyRule {
     /** The name of an attribute. */
     key: string;
     /** The operator of an attribute. */
     operator: string;
-    /** The value of an attribute; can be array, boolean, string, or integer. */
+    /** The value of an rule or resource attribute; can be boolean or string for resource attribute. Can be a string
+     *  or an array of strings (e.g., array of days to permit access) for rule attribute.
+     */
     value: any;
   }
 
-  /** A collection of policies. */
-  export interface V2PolicyList {
-    /** List of policies. */
-    policies?: V2Policy[];
-  }
-
-  /** Resource/subject attribute associated with policy attributes. */
-  export interface V2PolicyBaseRuleV2PolicyAttribute extends V2PolicyBaseRule {
-    /** The name of an attribute. */
-    key: string;
-    /** The operator of an attribute. */
-    operator: string;
-    /** The value of an attribute; can be array, boolean, string, or integer. */
-    value: any;
-  }
-
-  /** Policy rule that has 2 to 10 conditions. */
-  export interface V2PolicyBaseRuleV2RuleWithConditions extends V2PolicyBaseRule {
+  /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
+  export interface V2PolicyRuleRuleWithConditions extends V2PolicyRule {
     /** Operator to evalute conditions. */
     operator: string;
-    /** List of conditions to associated with a policy. Note that conditions can be nested up to 2 levels. */
-    conditions: V2PolicyAttribute[];
+    /** List of conditions associated with a policy, e.g., time-based-conditions that grant access over a certain
+     *  time period.
+     */
+    conditions: RuleAttribute[];
   }
 }
 
