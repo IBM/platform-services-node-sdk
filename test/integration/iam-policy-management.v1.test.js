@@ -36,6 +36,8 @@ describe('IamPolicyManagementV1_integration', () => {
   let testAccountId;
   let testPolicyETag;
   let testPolicyId;
+  let testV2PolicyETag;
+  let testV2PolicyId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -78,6 +80,55 @@ describe('IamPolicyManagementV1_integration', () => {
       tags: [policyResourceTag],
     },
   ];
+
+  const v2PolicySubject = {
+    attributes: [
+      {
+        key: 'iam_id',
+        operator: 'stringEquals',
+        value: testUserId,
+      },
+    ],
+  };
+  const v2PolicyResourceAccountAttribute = {
+    key: 'accountId',
+    value: testAccountId,
+    operator: 'stringEquals',
+  };
+  const v2PolicyResourceServiceAttribute = {
+    key: 'serviceType',
+    operator: 'stringEquals',
+    value: 'service',
+  };
+  const v2PolicyResource = {
+    attributes: [v2PolicyResourceAccountAttribute, v2PolicyResourceServiceAttribute],
+  };
+  const control = {
+    grant: {
+      roles: policyRoles,
+    },
+  };
+  const rule = {
+    operator: 'and',
+    conditions: [
+      {
+        key: '{{environment.attributes.day_of_week}}',
+        operator: 'dayOfWeekAnyOf',
+        value: ['1+00:00', '2+00:00', '3+00:00', '4+00:00', '5+00:00'],
+      },
+      {
+        key: '{{environment.attributes.current_time}}',
+        operator: 'timeGreaterThanOrEquals',
+        value: '09:00:00+00:00',
+      },
+      {
+        key: '{{environment.attributes.current_time}}',
+        operator: 'timeLessThanOrEquals',
+        value: '17:00:00+00:00',
+      },
+    ],
+  };
+  const pattern = 'time-based-conditions:weekly:custom-hours';
 
   let testCustomRoleId;
   let testCustomRoleEtag;
@@ -181,7 +232,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.updatePolicy(params);
+        response = await service.replacePolicy(params);
       } catch (err) {
         console.warn(err);
       }
@@ -211,7 +262,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       let response;
       try {
-        response = await service.patchPolicy(params);
+        response = await service.updatePolicyState(params);
       } catch (err) {
         console.warn(err);
       }
@@ -305,6 +356,187 @@ describe('IamPolicyManagementV1_integration', () => {
     });
   });
 
+  describe('V2 Access policy tests', () => {
+    test('Create a v2 access policy', async () => {
+      const params = {
+        type: 'access',
+        subject: v2PolicySubject,
+        control,
+        resource: v2PolicyResource,
+        rule,
+        pattern,
+      };
+
+      // ensure resource account value is defined
+      v2PolicyResource.attributes[0].value = testAccountId;
+
+      let response;
+      try {
+        response = await service.createV2Policy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.type).toEqual(policyType);
+      expect(result.subject).toEqual(v2PolicySubject);
+      expect(result.control).toEqual(control);
+      expect(result.resource).toEqual(v2PolicyResource);
+
+      testV2PolicyId = result.id;
+    });
+
+    test('Get a v2 access policy', async () => {
+      expect(testPolicyId).toBeDefined();
+
+      const params = {
+        id: testV2PolicyId,
+      };
+
+      let response;
+      try {
+        response = await service.getV2Policy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.id).toEqual(testV2PolicyId);
+      expect(result.type).toEqual(policyType);
+      expect(result.subject).toEqual(v2PolicySubject);
+      expect(result.control).toEqual(control);
+      expect(result.resource).toEqual(v2PolicyResource);
+
+      testV2PolicyETag = response.headers.etag;
+    });
+
+    test('Update a v2 access policy', async () => {
+      expect(testV2PolicyId).toBeDefined();
+      expect(testV2PolicyETag).toBeDefined();
+
+      const updatedControl = {
+        grant: {
+          roles: [
+            {
+              role_id: testEditorRoleCrn,
+            },
+          ],
+        },
+      };
+
+      const params = {
+        id: testV2PolicyId,
+        ifMatch: testV2PolicyETag,
+        type: 'access',
+        subject: v2PolicySubject,
+        control: updatedControl,
+        resource: v2PolicyResource,
+        rule,
+        pattern,
+      };
+
+      let response;
+      try {
+        response = await service.replaceV2Policy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.id).toEqual(testV2PolicyId);
+      expect(result.type).toEqual(policyType);
+      expect(result.subject).toEqual(v2PolicySubject);
+      expect(result.control).toEqual(updatedControl);
+      expect(result.resource).toEqual(v2PolicyResource);
+    });
+
+    test('List v2 access policies', async () => {
+      expect(testPolicyId).toBeDefined();
+
+      const params = {
+        accountId: testAccountId,
+        iamId: testUserId,
+      };
+
+      let response;
+      try {
+        response = await service.listV2Policies(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Confirm the test policy is present
+      let foundTestPolicy = false;
+      let policy;
+      for (policy of result.policies) {
+        if (policy.id === testV2PolicyId) {
+          foundTestPolicy = true;
+          break;
+        }
+      }
+      expect(foundTestPolicy).toBeTruthy();
+    });
+
+    test('Clean up all v2 test policies', async () => {
+      // List all policies for the test user in the account
+      const params = {
+        accountId: testAccountId,
+        iamId: testUserId,
+      };
+
+      let response;
+      try {
+        response = await service.listV2Policies(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Iterate across the policies
+      let policy;
+      for (policy of result.policies) {
+        // Delete the test policy (or any test policies older than 5 minutes)
+        const createdAt = Date.parse(policy.created_at);
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        const fiveMinutesAgo = Date.now() - FIVE_MINUTES;
+
+        if (policy.id === testV2PolicyId || createdAt < fiveMinutesAgo) {
+          const params = {
+            id: policy.id,
+          };
+
+          let response;
+          try {
+            response = await service.deleteV2Policy(params);
+          } catch (err) {
+            console.warn(err);
+          }
+
+          expect(response).toBeDefined();
+          expect(response.status).toEqual(204);
+        }
+      }
+    });
+  });
+
   describe('Custom roles tests', () => {
     test('Create a custom role', async () => {
       const params = {
@@ -376,12 +608,14 @@ describe('IamPolicyManagementV1_integration', () => {
         roleId: testCustomRoleId,
         ifMatch: testCustomRoleEtag,
         description: updCustomRoleDescription,
+        displayName: testCustomRoleDisplayName,
+        actions: testCustomRoleActions,
         headers: { 'transaction-Id': `SDKNode-${testUniqueId}` },
       };
 
       let response;
       try {
-        response = await service.updateRole(params);
+        response = await service.replaceRole(params);
       } catch (err) {
         console.warn(err);
       }

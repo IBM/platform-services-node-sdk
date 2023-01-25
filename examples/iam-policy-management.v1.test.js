@@ -57,6 +57,7 @@ describe('IamPolicyManagementV1', () => {
   let examplePolicyETag;
   let exampleCustomRoleId;
   let exampleCustomRoleEtag;
+  const exampleCustomRoleDipslayName = 'IAM Groups read access';
   const exampleUserId = 'IBMid-user1';
   const exampleServiceName = 'iam-groups';
 
@@ -169,7 +170,7 @@ describe('IamPolicyManagementV1', () => {
 
     // end-get_policy
   });
-  test('updatePolicy request example', async () => {
+  test('replacePolicy request example', async () => {
     expect(exampleAccountId).not.toBeNull();
     expect(examplePolicyId).toBeDefined();
     expect(examplePolicyETag).toBeDefined();
@@ -183,7 +184,7 @@ describe('IamPolicyManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('updatePolicy() result:');
+    originalLog('replacePolicy() result:');
     // begin-update_policy
 
     const policySubjects = [
@@ -232,7 +233,7 @@ describe('IamPolicyManagementV1', () => {
     };
 
     try {
-      const res = await iamPolicyManagementService.updatePolicy(params);
+      const res = await iamPolicyManagementService.replacePolicy(params);
       examplePolicyETag = res.headers.etag;
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
@@ -241,7 +242,7 @@ describe('IamPolicyManagementV1', () => {
 
     // end-update_policy
   });
-  test('patchPolicy request example', async () => {
+  test('updatePolicyState request example', async () => {
     expect(examplePolicyId).toBeDefined();
     expect(examplePolicyETag).toBeDefined();
 
@@ -254,7 +255,7 @@ describe('IamPolicyManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('patchPolicy() result:');
+    originalLog('updatePolicyState() result:');
     // begin-patch_policy
 
     const params = {
@@ -264,7 +265,7 @@ describe('IamPolicyManagementV1', () => {
     };
 
     try {
-      const res = await iamPolicyManagementService.patchPolicy(params);
+      const res = await iamPolicyManagementService.updatePolicyState(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err)
@@ -327,6 +328,260 @@ describe('IamPolicyManagementV1', () => {
 
     // end-delete_policy
   });
+  test('createV2Policy request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createV2Policy() result:');
+    // begin-create_v2_policy
+
+    const policySubject = {
+      attributes: [
+        {
+          key: 'iam_id',
+          operator: 'stringEquals',
+          value: exampleUserId,
+        },
+      ],
+    };
+    const policyResourceAccountAttribute = {
+      key: 'accountId',
+      value: exampleAccountId,
+      operator: 'stringEquals',
+    };
+    const policyResourceServiceAttribute = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+    const policyResource = {
+      attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute]
+    };
+    const policyControl = {
+      grant: {
+        roles: [{
+          role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+        }],
+      }
+    };
+    const policyRule = {
+      operator: 'and',
+      conditions: [
+          {
+              key: '{{environment.attributes.day_of_week}}',
+              operator: 'dayOfWeekAnyOf',
+              value: ['1+00:00', '2+00:00', '3+00:00', '4+00:00', '5+00:00'],
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeGreaterThanOrEquals',
+              value: '09:00:00+00:00',
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeLessThanOrEquals',
+              value: '17:00:00+00:00',
+          },
+      ],
+    }
+    const policyPattern = 'time-based-conditions:weekly:custom-hours'
+    const params = {
+      type: 'access',
+      subject: policySubject,
+      control: policyControl,
+      resource: policyResource,
+      rule: policyRule,
+      pattern: policyPattern,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.createV2Policy(params);
+      examplePolicyId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-create_v2_policy
+  });
+  test('getV2Policy request example', async () => {
+    expect(examplePolicyId).toBeDefined();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getV2Policy() result:');
+    // begin-get_v2_policy
+
+    const params = {
+      id: examplePolicyId,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.getV2Policy(params);
+      examplePolicyETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-get_v2_policy
+  });
+  test('replaceV2Policy request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    expect(examplePolicyId).toBeDefined();
+    expect(examplePolicyETag).toBeDefined();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('replaceV2Policy() result:');
+    // begin-replace_v2_policy
+
+    const policySubject = {
+      attributes: [
+        {
+          key: 'iam_id',
+          operator: 'stringEquals',
+          value: exampleUserId,
+        },
+      ],
+    };
+    const policyResourceAccountAttribute = {
+      key: 'accountId',
+      value: exampleAccountId,
+      operator: 'stringEquals',
+    };
+    const policyResourceServiceAttribute = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+    const policyResource = {
+      attributes: [policyResourceAccountAttribute, policyResourceServiceAttribute]
+    };
+    const updatedPolicyControl = {
+      grant: {
+        roles: [{
+          role_id: 'crn:v1:bluemix:public:iam::::role:Editor',
+        }],
+      }
+    };
+    const policyRule = {
+      operator: 'and',
+      conditions: [
+          {
+              key: '{{environment.attributes.day_of_week}}',
+              operator: 'dayOfWeekAnyOf',
+              value: ['1+00:00', '2+00:00', '3+00:00', '4+00:00', '5+00:00'],
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeGreaterThanOrEquals',
+              value: '09:00:00+00:00',
+          },
+          {
+              key: '{{environment.attributes.current_time}}',
+              operator: 'timeLessThanOrEquals',
+              value: '17:00:00+00:00',
+          },
+      ],
+    }
+    const policyPattern = 'time-based-conditions:weekly:custom-hours'
+    const params = {
+      type: 'access',
+      id: examplePolicyId,
+      ifMatch: examplePolicyETag,
+      subject: policySubject,
+      control: updatedPolicyControl,
+      resource: policyResource,
+      rule: policyRule,
+      pattern: policyPattern,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.replaceV2Policy(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-replace_v2_policy
+  });
+  test('listV2Policies request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listV2Policies() result:');
+    // begin-list_v2_policy
+
+    const params = {
+      accountId: exampleAccountId,
+      iamId: exampleUserId,
+      format: 'include_last_permit',
+    };
+
+    try {
+      const res = await iamPolicyManagementService.listV2Policies(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_v2_policy
+  });
+  test('deleteV2Policy request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_v2_policy
+
+    const params = {
+      id: examplePolicyId,
+    };
+
+    try {
+      await iamPolicyManagementService.deleteV2Policy(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_v2_policy
+  });
   test('createRole request example', async () => {
     expect(exampleAccountId).not.toBeNull();
 
@@ -343,7 +598,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-create_role
 
     const params = {
-      displayName: 'IAM Groups read access',
+      displayName: exampleCustomRoleDipslayName,
       actions: ['iam-groups.groups.read'],
       name: 'ExampleRoleIAMGroups',
       accountId: exampleAccountId,
@@ -389,7 +644,7 @@ describe('IamPolicyManagementV1', () => {
 
     // end-get_role
   });
-  test('updateRole request example', async () => {
+  test('replaceRole request example', async () => {
     expect(exampleCustomRoleId).toBeDefined();
     expect(exampleCustomRoleEtag).toBeDefined();
 
@@ -402,18 +657,19 @@ describe('IamPolicyManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('updateRole() result:');
+    originalLog('replaceRole() result:');
     // begin-update_role
 
     const updatedRoleActions = ['iam-groups.groups.read', 'iam-groups.groups.list'];
     const params = {
       roleId: exampleCustomRoleId,
       ifMatch: exampleCustomRoleEtag,
+      displayName: exampleCustomRoleDipslayName,
       actions: updatedRoleActions,
     };
 
     try {
-      const res = await iamPolicyManagementService.updateRole(params);
+      const res = await iamPolicyManagementService.replaceRole(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
