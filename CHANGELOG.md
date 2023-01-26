@@ -1,3 +1,10 @@
+## [0.31.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.0...v0.31.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** update incorrect example operation id comments to match API definition ([eefdc34](https://github.com/IBM/platform-services-node-sdk/commit/eefdc34760ff2367eaf3fbd9ac2401998d93cd5b))
+
 # [0.31.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.30.2...v0.31.0) (2023-01-25)
 
 
