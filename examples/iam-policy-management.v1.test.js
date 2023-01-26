@@ -185,7 +185,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     originalLog('replacePolicy() result:');
-    // begin-update_policy
+    // begin-replace_policy
 
     const policySubjects = [
       {
@@ -240,7 +240,7 @@ describe('IamPolicyManagementV1', () => {
       console.warn(err)
     }
 
-    // end-update_policy
+    // end-replace_policy
   });
   test('updatePolicyState request example', async () => {
     expect(examplePolicyId).toBeDefined();
@@ -256,7 +256,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     originalLog('updatePolicyState() result:');
-    // begin-patch_policy
+    // begin-update_policy_state
 
     const params = {
       policyId: examplePolicyId,
@@ -271,7 +271,7 @@ describe('IamPolicyManagementV1', () => {
       console.warn(err)
     }
 
-    // end-patch_policy
+    // end-update_policy_state
   });
   test('listPolicies request example', async () => {
     expect(exampleAccountId).not.toBeNull();
@@ -540,7 +540,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     originalLog('listV2Policies() result:');
-    // begin-list_v2_policy
+    // begin-list_v2_policies
 
     const params = {
       accountId: exampleAccountId,
@@ -555,7 +555,7 @@ describe('IamPolicyManagementV1', () => {
       console.warn(err);
     }
 
-    // end-list_v2_policy
+    // end-list_v2_policies
   });
   test('deleteV2Policy request example', async () => {
 
@@ -658,7 +658,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     originalLog('replaceRole() result:');
-    // begin-update_role
+    // begin-replace_role
 
     const updatedRoleActions = ['iam-groups.groups.read', 'iam-groups.groups.list'];
     const params = {
@@ -675,7 +675,7 @@ describe('IamPolicyManagementV1', () => {
       console.warn(err);
     }
 
-    // end-update_role
+    // end-replace_role
   });
   test('listRoles request example', async () => {
 
