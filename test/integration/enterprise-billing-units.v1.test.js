@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,121 +14,165 @@
  * limitations under the License.
  */
 
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+/* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
+
 const EnterpriseBillingUnitsV1 = require('../../dist/enterprise-billing-units/v1');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../resources/auth-helper.js');
 
-// testcase timeout value (25s).
-const timeout = 25000;
+// testcase timeout value (200s).
+const timeout = 200000;
 
 // Location of our config file.
-const configFile = 'enterprise_billing_units.env';
-
-const verbose = false;
+const configFile = 'enterprise_billing_units_v1.env';
 
 const describe = authHelper.prepareTests(configFile);
 
-let ENTERPRISE_ID;
-let ACCOUNT_ID;
-let ACCOUNT_GROUP_ID;
-let BILLING_UNIT_ID;
-
 describe('EnterpriseBillingUnitsV1_integration', () => {
   jest.setTimeout(timeout);
+
+  // Service instance
   let enterpriseBillingUnitsService;
 
-  beforeAll(async () => {
-    enterpriseBillingUnitsService = EnterpriseBillingUnitsV1.newInstance({});
-
-    const config = readExternalSources(EnterpriseBillingUnitsV1.DEFAULT_SERVICE_NAME);
+  test('Initialize service', async () => {
+    enterpriseBillingUnitsService = EnterpriseBillingUnitsV1.newInstance();
 
     expect(enterpriseBillingUnitsService).not.toBeNull();
+
+    const config = readExternalSources(EnterpriseBillingUnitsV1.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
-
-    // Retrieve and verify some additional test-related config properties.
-    ENTERPRISE_ID = config.enterpriseId;
-    ACCOUNT_ID = config.accountId;
-    ACCOUNT_GROUP_ID = config.accountGroupId;
-    BILLING_UNIT_ID = config.billingUnitId;
-    expect(ENTERPRISE_ID).not.toBeNull();
-    expect(ACCOUNT_ID).not.toBeNull();
-    expect(ACCOUNT_GROUP_ID).not.toBeNull();
-    expect(BILLING_UNIT_ID).not.toBeNull();
-
-    log(`Service URL: ${enterpriseBillingUnitsService.baseOptions.serviceUrl}`);
-    log('Finished setup.');
+  
+    enterpriseBillingUnitsService.enableRetries();
   });
 
   test('getBillingUnit()', async () => {
     const params = {
-      billingUnitId: BILLING_UNIT_ID,
+      billingUnitId: 'testString',
     };
 
     const res = await enterpriseBillingUnitsService.getBillingUnit(params);
     expect(res).toBeDefined();
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    log(`getBillingUnit() result: ${JSON.stringify(res.result, null, 2)}`);
   });
 
-  test('listBillingUnits(enterprise id)', async () => {
+  test('listBillingUnits()', async () => {
     const params = {
-      enterpriseId: ENTERPRISE_ID,
+      accountId: 'testString',
+      enterpriseId: 'testString',
+      accountGroupId: 'testString',
+      limit: 1,
+      start: 38,
     };
 
     const res = await enterpriseBillingUnitsService.listBillingUnits(params);
     expect(res).toBeDefined();
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    log(`listBillingUnits(enterprise id) result: ${JSON.stringify(res.result, null, 2)}`);
   });
 
-  test('listBillingUnits(account id)', async () => {
+  test('listBillingUnits() via BillingUnitsPager', async () => {
     const params = {
-      accountId: ACCOUNT_ID,
+      accountId: 'testString',
+      enterpriseId: 'testString',
+      accountGroupId: 'testString',
+      limit: 10,
     };
 
-    const res = await enterpriseBillingUnitsService.listBillingUnits(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-    log(`listBillingUnits(account id) result: ${JSON.stringify(res.result, null, 2)}`);
-  });
+    const allResults = [];
 
-  test('listBillingUnits(account group id)', async () => {
-    const params = {
-      accountGroupId: ACCOUNT_GROUP_ID,
-    };
+    // Test getNext().
+    let pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(enterpriseBillingUnitsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
 
-    const res = await enterpriseBillingUnitsService.listBillingUnits(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-    log(`listBillingUnits(account group id) result: ${JSON.stringify(res.result, null, 2)}`);
+    // Test getAll().
+    pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(enterpriseBillingUnitsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
   test('listBillingOptions()', async () => {
     const params = {
-      billingUnitId: BILLING_UNIT_ID,
+      billingUnitId: 'testString',
+      limit: 1,
+      start: 38,
     };
 
     const res = await enterpriseBillingUnitsService.listBillingOptions(params);
     expect(res).toBeDefined();
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    log(`listBillingOptions() result: ${JSON.stringify(res.result, null, 2)}`);
+  });
+
+  test('listBillingOptions() via BillingOptionsPager', async () => {
+    const params = {
+      billingUnitId: 'testString',
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(enterpriseBillingUnitsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(enterpriseBillingUnitsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
   test('getCreditPools()', async () => {
     const params = {
-      billingUnitId: BILLING_UNIT_ID,
-      type: 'PLATFORM',
+      billingUnitId: 'testString',
+      date: 'testString',
+      type: 'testString',
+      limit: 1,
+      start: 38,
     };
 
     const res = await enterpriseBillingUnitsService.getCreditPools(params);
     expect(res).toBeDefined();
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    log(`getCreditPools() result: ${JSON.stringify(res.result, null, 2)}`);
+  });
+
+  test('getCreditPools() via GetCreditPoolsPager', async () => {
+    const params = {
+      billingUnitId: 'testString',
+      date: 'testString',
+      type: 'testString',
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(enterpriseBillingUnitsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(enterpriseBillingUnitsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 });
-
-function log(msg) {
-  if (verbose) {
-    console.log(msg);
-  }
-}
