@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2020.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,30 +20,31 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const EnterpriseBillingUnitsV1 = require('../dist/enterprise-billing-units/v1');
-// eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
-// You can use the readExternalSources method to access additional configuration values
-// const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
 // This file provides an example of how to use the Enterprise Billing Units service.
 //
 // The following configuration properties are assumed to be defined:
-// ENTERPRISE_BILLING_UNITS_URL=<service base url>
-// ENTERPRISE_BILLING_UNITS_AUTH_TYPE=iam
-// ENTERPRISE_BILLING_UNITS_APIKEY=<IAM apikey>
-// ENTERPRISE_BILLING_UNITS_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+//
+// ENTERPRISE_BILLING_UNITS_URL=<service url>
+// ENTERPRISE_BILLING_UNITS_AUTHTYPE=iam
+// ENTERPRISE_BILLING_UNITS_APIKEY=<your iam apikey>
+// ENTERPRISE_BILLING_UNITS_AUTH_URL=<IAM token service URL - omit this if using the production environment>
+// ENTERPRISE_BILLING_UNITS_ENTERPRISE_ID=<id of enterprise to use for examples>
+// ENTERPRISE_BILLING_UNITS_BILLING_UNIT_ID=<id of billing unit to use for examples>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'enterprise_billing_units_v1.env';
+const configFile = 'enterprise_billing_units.env';
 
 const describe = authHelper.prepareTests(configFile);
 
-// Save original console.log
+// Save original console.log and console.warn
 const originalLog = console.log;
 const originalWarn = console.warn;
 
@@ -52,40 +53,37 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('EnterpriseBillingUnitsV1', () => {
-  // Service instance
-  let enterpriseBillingUnitsService;
+  jest.setTimeout(10000);
 
-  // To access additional configuration values, uncomment this line and extract the values from config
-  // const config = readExternalSources(EnterpriseBillingUnitsV1.DEFAULT_SERVICE_NAME);
+  // begin-common
 
-  test('Initialize service', async () => {
-    // begin-common
+  const enterpriseBillingUnitsService = EnterpriseBillingUnitsV1.newInstance({});
 
-    enterpriseBillingUnitsService = EnterpriseBillingUnitsV1.newInstance();
+  // end-common
 
-    // end-common
-  });
+  const config = readExternalSources(EnterpriseBillingUnitsV1.DEFAULT_SERVICE_NAME);
+
+  const { enterpriseId } = config;
+  const { billingUnitId } = config;
 
   test('getBillingUnit request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('getBillingUnit() result:');
     // begin-get_billing_unit
-
     const params = {
-      billingUnitId: 'testString',
+      billingUnitId,
     };
 
-    let res;
     try {
-      res = await enterpriseBillingUnitsService.getBillingUnit(params);
+      const res = await enterpriseBillingUnitsService.getBillingUnit(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -93,14 +91,13 @@ describe('EnterpriseBillingUnitsV1', () => {
 
     // end-get_billing_unit
   });
-
   test('listBillingUnits request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -108,15 +105,14 @@ describe('EnterpriseBillingUnitsV1', () => {
     // begin-list_billing_units
 
     const params = {
-      accountId: 'testString',
-      enterpriseId: 'testString',
-      accountGroupId: 'testString',
-      limit: 10,
+      enterpriseId,
     };
-
     const allResults = [];
     try {
-      const pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(enterpriseBillingUnitsService, params);
+      const pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(
+        enterpriseBillingUnitsService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
@@ -129,14 +125,13 @@ describe('EnterpriseBillingUnitsV1', () => {
 
     // end-list_billing_units
   });
-
   test('listBillingOptions request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -144,13 +139,15 @@ describe('EnterpriseBillingUnitsV1', () => {
     // begin-list_billing_options
 
     const params = {
-      billingUnitId: 'testString',
-      limit: 10,
+      billingUnitId,
     };
 
     const allResults = [];
     try {
-      const pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(enterpriseBillingUnitsService, params);
+      const pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(
+        enterpriseBillingUnitsService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
@@ -163,14 +160,13 @@ describe('EnterpriseBillingUnitsV1', () => {
 
     // end-list_billing_options
   });
-
   test('getCreditPools request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
     consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
       originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -178,15 +174,15 @@ describe('EnterpriseBillingUnitsV1', () => {
     // begin-get_credit_pools
 
     const params = {
-      billingUnitId: 'testString',
-      date: 'testString',
-      type: 'testString',
-      limit: 10,
+      billingUnitId,
     };
 
     const allResults = [];
     try {
-      const pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(enterpriseBillingUnitsService, params);
+      const pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(
+        enterpriseBillingUnitsService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
