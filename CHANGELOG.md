@@ -1,3 +1,17 @@
+## [0.31.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.0...v0.31.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** update incorrect example operation id comments to match API definition ([eefdc34](https://github.com/IBM/platform-services-node-sdk/commit/eefdc34760ff2367eaf3fbd9ac2401998d93cd5b))
+
+# [0.31.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.30.2...v0.31.0) (2023-01-25)
+
+
+### Features
+
+* **IAM Policy Management:** add support for v2/policies ([#180](https://github.com/IBM/platform-services-node-sdk/issues/180)) ([05dbcb6](https://github.com/IBM/platform-services-node-sdk/commit/05dbcb67c7ef51f895cfa83814f82d7615bdb87c))
+
 ## [0.30.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.30.1...v0.30.2) (2023-01-17)
 
 
