@@ -29,9 +29,9 @@ import {
   getAuthenticatorFromEnvironment,
   validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
-import { getQueryParam } from 'ibm-cloud-sdk-core';
 
 /**
  * Billing units for IBM Cloud enterprises
@@ -172,7 +172,14 @@ class EnterpriseBillingUnitsV1 extends BaseService {
   ): Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingUnitsList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['accountId', 'enterpriseId', 'accountGroupId', 'limit', 'start', 'headers'];
+    const _validParams = [
+      'accountId',
+      'enterpriseId',
+      'accountGroupId',
+      'limit',
+      'start',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -564,6 +571,7 @@ namespace EnterpriseBillingUnitsV1 {
    */
   export class BillingUnitsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: EnterpriseBillingUnitsV1;
@@ -645,6 +653,7 @@ namespace EnterpriseBillingUnitsV1 {
    */
   export class BillingOptionsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: EnterpriseBillingUnitsV1;
@@ -726,6 +735,7 @@ namespace EnterpriseBillingUnitsV1 {
    */
   export class GetCreditPoolsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: EnterpriseBillingUnitsV1;
