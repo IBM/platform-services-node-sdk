@@ -1,3 +1,10 @@
+## [0.31.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.1...v0.31.2) (2023-02-15)
+
+
+### Bug Fixes
+
+* **IAM Identity:** re-gen with latest API definition ([#195](https://github.com/IBM/platform-services-node-sdk/issues/195)) ([beb4067](https://github.com/IBM/platform-services-node-sdk/commit/beb40672b685f5f4be5e465ab0d5d86cbac514cd))
+
 ## [0.31.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.0...v0.31.1) (2023-01-26)
 
 
