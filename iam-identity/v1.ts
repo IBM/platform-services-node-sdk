@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.62.0-a2a22f95-20221115-162524
+ * IBM OpenAPI SDK Code Generator Version: 3.64.0-959a5845-20230112-195144
  */
 
 import * as extend from 'extend';
@@ -93,7 +93,7 @@ class IamIdentityV1 extends BaseService {
   }
 
   /*************************
-   * APIKeyOperations
+   * aPIKeyOperations
    ************************/
 
   /**
@@ -105,18 +105,18 @@ class IamIdentityV1 extends BaseService {
    * space developer in order to manage service IDs of the entity.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - Account ID of the API keys(s) to query. If a service IAM ID is specified in
+   * @param {string} [params.accountId] - Account ID of the API keys to query. If a service IAM ID is specified in
    * iam_id then account_id must match the account of the IAM ID. If a user IAM ID is specified in iam_id then then
    * account_id must match the account of the Authorization token.
-   * @param {string} [params.iamId] - IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a
+   * @param {string} [params.iamId] - IAM ID of the API keys to be queried. The IAM ID may be that of a user or a
    * service. For a user IAM ID iam_id must match the Authorization token.
    * @param {number} [params.pagesize] - Optional size of a single page. Default is 20 items per page. Valid range is 1
    * to 100.
    * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
    * Default is start with first page.
-   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API Keys. Can be 'entity'
+   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API keys. Can be 'entity'
    * (default) or 'account'.
-   * @param {string} [params.type] - Optional parameter to filter the type of the queried API Keys. Can be 'user' or
+   * @param {string} [params.type] - Optional parameter to filter the type of the queried API keys. Can be 'user' or
    * 'serviceid'.
    * @param {string} [params.sort] - Optional sort property, valid values are name, description, created_at and
    * created_by. If specified, the items are sorted by the value of this property.
@@ -723,7 +723,7 @@ class IamIdentityV1 extends BaseService {
    *
    * Returns the details of a service ID. Users can manage user API keys for themself, or service ID API keys for
    * service IDs that are bound to an entity they have access to. Note: apikey details are only included in the response
-   * when creating a Service ID with an apikey.
+   * when creating a Service ID with an api key.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
@@ -1846,8 +1846,8 @@ class IamIdentityV1 extends BaseService {
   /**
    * Update account configurations.
    *
-   * Allows a user to configure settings on their account with regards to MFA, session lifetimes, access control for
-   * creating new identities, and enforcing IP restrictions on token creation.
+   * Allows a user to configure settings on their account with regards to MFA, MFA excemption list,  session lifetimes,
+   * access control for creating new identities, and enforcing IP restrictions on token creation.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.ifMatch - Version of the account settings to be updated. Specify the version that you
@@ -1893,7 +1893,7 @@ class IamIdentityV1 extends BaseService {
    *   * NOT_SET - To unset account setting and use service default.
    * @param {string} [params.systemRefreshTokenExpirationInSeconds] - Defines the refresh token expiration in seconds.
    * Valid values:
-   *   * Any whole number between '900' and '2592000'
+   *   * Any whole number between '900' and '259200'
    *   * NOT_SET - To unset account setting and use service default.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>>}
@@ -1961,6 +1961,171 @@ class IamIdentityV1 extends BaseService {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * mFAEnrollmentStatus
+   ************************/
+
+  /**
+   * Get MFA enrollment status for a single user in the account.
+   *
+   * Get MFA enrollment status for a single user in the account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - ID of the account.
+   * @param {string} params.iamId - iam_id of the user. This user must be the member of the account.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.UserMfaEnrollments>>}
+   */
+  public getMfaStatus(
+    params: IamIdentityV1.GetMfaStatusParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.UserMfaEnrollments>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'iamId'];
+    const _validParams = ['accountId', 'iamId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'iam_id': _params.iamId,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getMfaStatus');
+
+    const parameters = {
+      options: {
+        url: '/v1/mfa/accounts/{account_id}/status',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Trigger MFA enrollment status report for the account.
+   *
+   * Trigger MFA enrollment status report for the account by specifying the account ID. It can take a few minutes to
+   * generate the report for retrieval.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - ID of the account.
+   * @param {string} [params.type] - Optional report type. The supported value is 'mfa_status'. List MFA enrollment
+   * status for all the identities.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>>}
+   */
+  public createMfaReport(
+    params: IamIdentityV1.CreateMfaReportParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'type', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'type': _params.type,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'createMfaReport');
+
+    const parameters = {
+      options: {
+        url: '/v1/mfa/accounts/{account_id}/report',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get MFA enrollment status report for the account.
+   *
+   * Get MFA enrollment status report for the account by specifying the account ID and the reference that is generated
+   * by triggering the report. Reports older than a day are deleted when generating a new report.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - ID of the account.
+   * @param {string} params.reference - Reference for the report to be generated, You can use 'latest' to get the latest
+   * report for the given account.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ReportMfaEnrollmentStatus>>}
+   */
+  public getMfaReport(
+    params: IamIdentityV1.GetMfaReportParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ReportMfaEnrollmentStatus>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'reference'];
+    const _validParams = ['accountId', 'reference', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+      'reference': _params.reference,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getMfaReport');
+
+    const parameters = {
+      options: {
+        url: '/v1/mfa/accounts/{account_id}/report/{reference}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -2114,12 +2279,12 @@ namespace IamIdentityV1 {
 
   /** Parameters for the `listApiKeys` operation. */
   export interface ListApiKeysParams {
-    /** Account ID of the API keys(s) to query. If a service IAM ID is specified in iam_id then account_id must
-     *  match the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the
-     *  account of the Authorization token.
+    /** Account ID of the API keys to query. If a service IAM ID is specified in iam_id then account_id must match
+     *  the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the account
+     *  of the Authorization token.
      */
     accountId?: string;
-    /** IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
+    /** IAM ID of the API keys to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
      *  iam_id must match the Authorization token.
      */
     iamId?: string;
@@ -2127,9 +2292,9 @@ namespace IamIdentityV1 {
     pagesize?: number;
     /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
     pagetoken?: string;
-    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
     scope?: ListApiKeysConstants.Scope | string;
-    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
     type?: ListApiKeysConstants.Type | string;
     /** Optional sort property, valid values are name, description, created_at and created_by. If specified, the
      *  items are sorted by the value of this property.
@@ -2144,12 +2309,12 @@ namespace IamIdentityV1 {
 
   /** Constants for the `listApiKeys` operation. */
   export namespace ListApiKeysConstants {
-    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
     export enum Scope {
       ENTITY = 'entity',
       ACCOUNT = 'account',
     }
-    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
     export enum Type {
       USER = 'user',
       SERVICEID = 'serviceid',
@@ -2633,7 +2798,7 @@ namespace IamIdentityV1 {
      */
     systemAccessTokenExpirationInSeconds?: string;
     /** Defines the refresh token expiration in seconds. Valid values:
-     *    * Any whole number between '900' and '2592000'
+     *    * Any whole number between '900' and '259200'
      *    * NOT_SET - To unset account setting and use service default.
      */
     systemRefreshTokenExpirationInSeconds?: string;
@@ -2665,6 +2830,37 @@ namespace IamIdentityV1 {
     }
   }
 
+  /** Parameters for the `getMfaStatus` operation. */
+  export interface GetMfaStatusParams {
+    /** ID of the account. */
+    accountId: string;
+    /** iam_id of the user. This user must be the member of the account. */
+    iamId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createMfaReport` operation. */
+  export interface CreateMfaReportParams {
+    /** ID of the account. */
+    accountId: string;
+    /** Optional report type. The supported value is 'mfa_status'. List MFA enrollment status for all the
+     *  identities.
+     */
+    type?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getMfaReport` operation. */
+  export interface GetMfaReportParams {
+    /** ID of the account. */
+    accountId: string;
+    /** Reference for the report to be generated, You can use 'latest' to get the latest report for the given
+     *  account.
+     */
+    reference: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `createReport` operation. */
   export interface CreateReportParams {
     /** ID of the account. */
@@ -2692,6 +2888,15 @@ namespace IamIdentityV1 {
   /*************************
    * model interfaces
    ************************/
+
+  /** AccountBasedMfaEnrollment. */
+  export interface AccountBasedMfaEnrollment {
+    security_questions: MfaEnrollmentTypeStatus;
+    totp: MfaEnrollmentTypeStatus;
+    verisign: MfaEnrollmentTypeStatus;
+    /** The enrollment complies to the effective requirement. */
+    complies: boolean;
+  }
 
   /** Response body format for Account Settings REST requests. */
   export interface AccountSettingsResponse {
@@ -2750,7 +2955,7 @@ namespace IamIdentityV1 {
      */
     system_access_token_expiration_in_seconds: string;
     /** Defines the refresh token expiration in seconds. Valid values:
-     *    * Any whole number between '900' and '2592000'
+     *    * Any whole number between '900' and '259200'
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds: string;
@@ -2941,6 +3146,55 @@ namespace IamIdentityV1 {
     last_authn?: string;
   }
 
+  /** IdBasedMfaEnrollment. */
+  export interface IdBasedMfaEnrollment {
+    /** Defines the MFA trait for the account. Valid values:
+     *    * NONE - No MFA trait set
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    trait_account_default: string;
+    /** Defines the MFA trait for the account. Valid values:
+     *    * NONE - No MFA trait set
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    trait_user_specific?: string;
+    /** Defines the MFA trait for the account. Valid values:
+     *    * NONE - No MFA trait set
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    trait_effective: string;
+    /** The enrollment complies to the effective requirement. */
+    complies: boolean;
+  }
+
+  /** MfaEnrollmentTypeStatus. */
+  export interface MfaEnrollmentTypeStatus {
+    /** Describes whether the enrollment type is required. */
+    required: boolean;
+    /** Describes whether the enrollment type is enrolled. */
+    enrolled: boolean;
+  }
+
+  /** MfaEnrollments. */
+  export interface MfaEnrollments {
+    /** currently effective mfa type i.e. id_based_mfa or account_based_mfa. */
+    effective_mfa_type: string;
+    id_based_mfa?: IdBasedMfaEnrollment;
+    account_based_mfa?: AccountBasedMfaEnrollment;
+  }
+
   /** ProfileClaimRule. */
   export interface ProfileClaimRule {
     /** the unique identifier of the claim rule. */
@@ -3040,6 +3294,22 @@ namespace IamIdentityV1 {
     serviceids?: EntityActivity[];
     /** List of profiles. */
     profiles?: EntityActivity[];
+  }
+
+  /** ReportMfaEnrollmentStatus. */
+  export interface ReportMfaEnrollmentStatus {
+    /** IAMid of the user who triggered the report. */
+    created_by: string;
+    /** Unique reference used to generate the report. */
+    reference: string;
+    /** Date time at which report is generated. Date is in ISO format. */
+    report_time: string;
+    /** BSS account id of the user who triggered the report. */
+    account_id: string;
+    /** IMS account id of the user who triggered the report. */
+    ims_account_id?: string;
+    /** List of users. */
+    users?: UserReportMfaEnrollmentStatus[];
   }
 
   /** ReportReference. */
@@ -3208,6 +3478,29 @@ namespace IamIdentityV1 {
     email?: string;
     /** Time when the user was last authenticated. */
     last_authn?: string;
+  }
+
+  /** UserMfaEnrollments. */
+  export interface UserMfaEnrollments {
+    /** IAMid of the user. */
+    iam_id: string;
+    /** currently effective mfa type i.e. id_based_mfa or account_based_mfa. */
+    effective_mfa_type?: string;
+    id_based_mfa?: IdBasedMfaEnrollment;
+    account_based_mfa?: AccountBasedMfaEnrollment;
+  }
+
+  /** UserReportMfaEnrollmentStatus. */
+  export interface UserReportMfaEnrollmentStatus {
+    /** IAMid of the user. */
+    iam_id: string;
+    /** Name of the user. */
+    name?: string;
+    /** Username of the user. */
+    username: string;
+    /** Email of the user. */
+    email?: string;
+    enrollments: MfaEnrollments;
   }
 }
 

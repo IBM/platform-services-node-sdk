@@ -86,6 +86,7 @@ describe('IamIdentityV1', () => {
   let accountSettingsEtag = null;
 
   let reportReference = null;
+  let reportReferenceMfa=null;
 
   test('createApiKey request example', async () => {
 
@@ -1013,14 +1014,14 @@ describe('IamIdentityV1', () => {
     const params = {
       ifMatch: accountSettingsEtag,
       accountId: accountId,
-      restrict_create_service_id: "NOT_RESTRICTED",
-      restrict_create_platform_apikey: "NOT_RESTRICTED",
+      restrictCreateServiceId: "NOT_RESTRICTED",
+      restrictCreatePlatformApikey: "NOT_RESTRICTED",
       mfa: "NONE",
       userMfa,
-      session_expiration_in_seconds: "86400",
-      session_invalidation_in_seconds: "7200",
-      system_access_token_expiration_in_seconds: '3600',
-      system_refresh_token_expiration_in_seconds: '2592000',
+      sessionExpirationInSeconds: "86400",
+      sessionInvalidationInSeconds: "7200",
+      systemAccessTokenExpirationInSeconds: '3600',
+      systemRefreshTokenExpirationInSeconds: '259200',
     };
 
     try {
@@ -1054,7 +1055,7 @@ describe('IamIdentityV1', () => {
     try {
       const res = await iamIdentityService.createReport(params);
       reportReference = res.reference;
-      console.log(JSON.stringify(reportReference, null, 2));
+      console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -1085,5 +1086,84 @@ describe('IamIdentityV1', () => {
       console.warn(err);
     }
     // end-get_report
+  });
+  test('createMfaReport request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createMfaReport() result:');
+    // begin-create_mfa_report
+
+    const params = {
+      accountId: accountId,
+      type: 'mfa_status',
+    };
+
+    try {
+      const res = await iamIdentityService.createMfaReport(params);
+      reportReferenceMfa = res.result.reference;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_mfa_report
+  });
+  test('getMfaReport request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getMfaReport() result:');
+    // begin-get_mfa_report
+
+    const params = {
+      accountId: accountId,
+      reference: 'latest',
+    };
+
+    try {
+      const res = await iamIdentityService.getMfaReport(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_mfa_report
+  });
+  test('getMfaStatus request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getMfaStatus() result:');
+    // begin-get_mfa_status
+
+    const params = {
+      accountId: accountId,
+      iamId: iamId,
+    };
+
+    try {
+      const res = await iamIdentityService.getMfaStatus(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_mfa_status
   });
 });
