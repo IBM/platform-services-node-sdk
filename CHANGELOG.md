@@ -1,7 +1,3 @@
-## [0.31.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.2...v0.31.3) (2023-03-02)
-### Features
-removed internal search parameter: is_hidden
-
 ## [0.31.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.1...v0.31.2) (2023-02-15)
 
 
