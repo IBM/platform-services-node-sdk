@@ -15,9 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 
 const GlobalSearchV2 = require('../../dist/global-search/v2');
 
@@ -46,7 +46,7 @@ function mock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('GlobalSearchV2', () => {
@@ -131,7 +131,6 @@ describe('GlobalSearchV2', () => {
         const isPublic = 'false';
         const impersonateUser = 'testString';
         const canTag = 'false';
-        const isHidden = 'false';
         const searchParams = {
           query,
           fields,
@@ -147,7 +146,6 @@ describe('GlobalSearchV2', () => {
           isPublic,
           impersonateUser,
           canTag,
-          isHidden,
         };
 
         const searchResult = globalSearchService.search(searchParams);
@@ -178,7 +176,6 @@ describe('GlobalSearchV2', () => {
         expect(mockRequestOptions.qs.is_public).toEqual(isPublic);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.can_tag).toEqual(canTag);
-        expect(mockRequestOptions.qs.is_hidden).toEqual(isHidden);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
