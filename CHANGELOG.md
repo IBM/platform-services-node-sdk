@@ -1,3 +1,10 @@
+## [0.31.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.2...v0.31.3) (2023-03-07)
+
+
+### Bug Fixes
+
+* **Global Search:** remove is_hidden param from search operation ([#198](https://github.com/IBM/platform-services-node-sdk/issues/198)) ([51eb297](https://github.com/IBM/platform-services-node-sdk/commit/51eb2974f21e9b813bf322b0782a800d14ef02a4))
+
 ## [0.31.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.1...v0.31.2) (2023-02-15)
 
 
