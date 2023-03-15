@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
+ * IBM OpenAPI SDK Code Generator Version: 3.67.0-df2073a1-20230222-221157
  */
 
 import * as extend from 'extend';
@@ -157,9 +157,6 @@ class GlobalSearchV2 extends BaseService {
    * the resources that the user can view (only a GhoST admin can use this parameter). If false (default), only
    * resources user can view are returned; if true, only resources that user has permissions for tagging are returned
    * (_for administrators only_).
-   * @param {string} [params.isHidden] - Determines if the result set must return only the visible resources or not. If
-   * false (default), only visible resources are returned; if true, only hidden resources are returned; if any, all
-   * resources are returned.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>>}
    */
@@ -183,7 +180,6 @@ class GlobalSearchV2 extends BaseService {
       'isPublic',
       'impersonateUser',
       'canTag',
-      'isHidden',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -208,7 +204,6 @@ class GlobalSearchV2 extends BaseService {
       'is_public': _params.isPublic,
       'impersonate_user': _params.impersonateUser,
       'can_tag': _params.canTag,
-      'is_hidden': _params.isHidden,
     };
 
     const sdkHeaders = getSdkHeaders(GlobalSearchV2.DEFAULT_SERVICE_NAME, 'v2', 'search');
@@ -371,10 +366,6 @@ namespace GlobalSearchV2 {
      *  only_).
      */
     canTag?: SearchConstants.CanTag | string;
-    /** Determines if the result set must return only the visible resources or not. If false (default), only visible
-     *  resources are returned; if true, only hidden resources are returned; if any, all resources are returned.
-     */
-    isHidden?: SearchConstants.IsHidden | string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -407,12 +398,6 @@ namespace GlobalSearchV2 {
     export enum CanTag {
       TRUE = 'true',
       FALSE = 'false',
-    }
-    /** Determines if the result set must return only the visible resources or not. If false (default), only visible resources are returned; if true, only hidden resources are returned; if any, all resources are returned. */
-    export enum IsHidden {
-      TRUE = 'true',
-      FALSE = 'false',
-      ANY = 'any',
     }
   }
 

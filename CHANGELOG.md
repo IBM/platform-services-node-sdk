@@ -1,3 +1,17 @@
+## [0.31.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.2...v0.31.3) (2023-03-07)
+
+
+### Bug Fixes
+
+* **Global Search:** remove is_hidden param from search operation ([#198](https://github.com/IBM/platform-services-node-sdk/issues/198)) ([51eb297](https://github.com/IBM/platform-services-node-sdk/commit/51eb2974f21e9b813bf322b0782a800d14ef02a4))
+
+## [0.31.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.1...v0.31.2) (2023-02-15)
+
+
+### Bug Fixes
+
+* **IAM Identity:** re-gen with latest API definition ([#195](https://github.com/IBM/platform-services-node-sdk/issues/195)) ([beb4067](https://github.com/IBM/platform-services-node-sdk/commit/beb40672b685f5f4be5e465ab0d5d86cbac514cd))
+
 ## [0.31.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.0...v0.31.1) (2023-01-26)
 
 

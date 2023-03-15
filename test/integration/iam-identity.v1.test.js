@@ -63,6 +63,7 @@ let linkId;
 let accountSettingsEtag;
 
 let reportReference;
+let reportReferenceMfa;
 
 describe('IamIdentityV1_integration', () => {
   jest.setTimeout(timeout);
@@ -1309,7 +1310,7 @@ describe('IamIdentityV1_integration', () => {
       sessionInvalidationInSeconds: '7200',
       maxSessionsPerIdentity: '10',
       systemAccessTokenExpirationInSeconds: '3600',
-      systemRefreshTokenExpirationInSeconds: '2592000',
+      systemRefreshTokenExpirationInSeconds: '259200',
     };
 
     iamIdentityService
@@ -1407,6 +1408,66 @@ describe('IamIdentityV1_integration', () => {
     await expect(iamIdentityService.getReport(params)).rejects.toMatchObject({
       status: 404,
     });
+  });
+  test('createMfaReport()', (done) => {
+    const params = {
+      accountId,
+      type: 'mfa_status',
+    };
+
+    iamIdentityService
+      .createMfaReport(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(202);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+        reportReferenceMfa = result.reference;
+        expect(reportReferenceMfa).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getMfaReportComplete()', async () => {
+    const params = {
+      accountId,
+      reference: reportReferenceMfa,
+    };
+
+    for (let i = 0; i < 30; i++) {
+      const response = await iamIdentityService.getMfaReport(params);
+      if (response.status !== 204) {
+        expect(response).not.toBeNull();
+        expect(response.created_by).not.toBeNull();
+        expect(response.reference).not.toBeNull();
+        expect(response.report_duration).not.toBeNull();
+        break;
+      }
+      await sleep(1);
+    }
+  });
+  test('getMfaReportNotFound()', async () => {
+    const params = {
+      accountId,
+      reference: 'test123',
+    };
+
+    await expect(iamIdentityService.getMfaReport(params)).rejects.toMatchObject({
+      status: 404,
+    });
+  });
+  test('getMfaStatus()', async () => {
+    const params = {
+      accountId,
+      iamId,
+    };
+    const response = await iamIdentityService.getMfaReport(params);
+    expect(response).not.toBeNull();
+    expect(response.iam_id).not.toBeNull();
   });
   function getPageTokenFromURL(urlstring) {
     let pageToken = null;
