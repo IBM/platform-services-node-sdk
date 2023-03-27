@@ -44,6 +44,7 @@ describe('IamPolicyManagementV1_integration', () => {
   const testEditorRoleCrn = 'crn:v1:bluemix:public:iam::::role:Editor';
   const testServiceName = 'iam-groups';
   const policyType = 'access';
+  const testServiceRoleCrn = 'crn:v1:bluemix:public:iam-identity::::serviceRole:ServiceIdCreator';
   const policySubjects = [
     {
       attributes: [
@@ -708,6 +709,46 @@ describe('IamPolicyManagementV1_integration', () => {
           expect(response.status).toEqual(204);
         }
       }
+    });
+  });
+
+  describe('List V2 roles tests', () => {
+    test('List V2 roles with accountId and serviceGroupId', async () => {
+      const params = {
+        accountId: testAccountId,
+        serviceGroupId: 'IAM',
+      };
+
+      let response;
+      try {
+        response = await service.listRoles(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Confirm the test role is present
+      let foundServiceRole = false;
+      let foundSystemRole = false;
+      let role;
+      for (role of result.service_roles) {
+        if (role.crn === testServiceRoleCrn) {
+          foundServiceRole = true;
+          break;
+        }
+      }
+      for (role of result.system_roles) {
+        if (role.crn === testViewerRoleCrn) {
+          foundSystemRole = true;
+          break;
+        }
+      }
+      expect(foundServiceRole).toBeTruthy();
+      expect(foundSystemRole).toBeTruthy();
     });
   });
 });

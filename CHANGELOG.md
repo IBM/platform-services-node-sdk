@@ -1,3 +1,10 @@
+# [0.32.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.3...v0.32.0) (2023-03-27)
+
+
+### Features
+
+* **IAM Policy Management:** support of new query param source_group_id for v2/roles ([#199](https://github.com/IBM/platform-services-node-sdk/issues/199)) ([59c355e](https://github.com/IBM/platform-services-node-sdk/commit/59c355eabe0d7b82bfa0fc129cfec49944fdd1bc))
+
 ## [0.31.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.2...v0.31.3) (2023-03-07)
 
 

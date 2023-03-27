@@ -15,9 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 
 const IamPolicyManagementV1 = require('../../dist/iam-policy-management/v1');
 
@@ -46,7 +46,7 @@ function mock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('IamPolicyManagementV1', () => {
@@ -789,12 +789,14 @@ describe('IamPolicyManagementV1', () => {
         const serviceName = 'iam-groups';
         const sourceServiceName = 'iam-groups';
         const policyType = 'authorization';
+        const serviceGroupId = 'IAM';
         const listRolesParams = {
           acceptLanguage,
           accountId,
           serviceName,
           sourceServiceName,
           policyType,
+          serviceGroupId,
         };
 
         const listRolesResult = iamPolicyManagementService.listRoles(listRolesParams);
@@ -816,6 +818,7 @@ describe('IamPolicyManagementV1', () => {
         expect(mockRequestOptions.qs.service_name).toEqual(serviceName);
         expect(mockRequestOptions.qs.source_service_name).toEqual(sourceServiceName);
         expect(mockRequestOptions.qs.policy_type).toEqual(policyType);
+        expect(mockRequestOptions.qs.service_group_id).toEqual(serviceGroupId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1248,6 +1251,7 @@ describe('IamPolicyManagementV1', () => {
         const serviceType = 'service';
         const serviceName = 'testString';
         const serviceGroupId = 'testString';
+        const sort = 'testString';
         const format = 'include_last_permit';
         const state = 'active';
         const listV2PoliciesParams = {
@@ -1259,6 +1263,7 @@ describe('IamPolicyManagementV1', () => {
           serviceType,
           serviceName,
           serviceGroupId,
+          sort,
           format,
           state,
         };
@@ -1285,6 +1290,7 @@ describe('IamPolicyManagementV1', () => {
         expect(mockRequestOptions.qs.service_type).toEqual(serviceType);
         expect(mockRequestOptions.qs.service_name).toEqual(serviceName);
         expect(mockRequestOptions.qs.service_group_id).toEqual(serviceGroupId);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.format).toEqual(format);
         expect(mockRequestOptions.qs.state).toEqual(state);
       }
@@ -1351,19 +1357,19 @@ describe('IamPolicyManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // PolicyRole
-      const policyRoleModel = {
+      // Roles
+      const rolesModel = {
         role_id: 'testString',
       };
 
-      // V2PolicyGrant
-      const v2PolicyGrantModel = {
-        roles: [policyRoleModel],
+      // Grant
+      const grantModel = {
+        roles: [rolesModel],
       };
 
       // Control
       const controlModel = {
-        grant: v2PolicyGrantModel,
+        grant: grantModel,
       };
 
       // V2PolicySubjectAttribute
@@ -1514,19 +1520,19 @@ describe('IamPolicyManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // PolicyRole
-      const policyRoleModel = {
+      // Roles
+      const rolesModel = {
         role_id: 'testString',
       };
 
-      // V2PolicyGrant
-      const v2PolicyGrantModel = {
-        roles: [policyRoleModel],
+      // Grant
+      const grantModel = {
+        roles: [rolesModel],
       };
 
       // Control
       const controlModel = {
-        grant: v2PolicyGrantModel,
+        grant: grantModel,
       };
 
       // V2PolicySubjectAttribute
@@ -1685,8 +1691,10 @@ describe('IamPolicyManagementV1', () => {
       function __getV2PolicyTest() {
         // Construct the params object for operation getV2Policy
         const id = 'testString';
+        const format = 'include_last_permit';
         const getV2PolicyParams = {
           id,
+          format,
         };
 
         const getV2PolicyResult = iamPolicyManagementService.getV2Policy(getV2PolicyParams);
@@ -1703,6 +1711,7 @@ describe('IamPolicyManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.format).toEqual(format);
         expect(mockRequestOptions.path.id).toEqual(id);
       }
 
