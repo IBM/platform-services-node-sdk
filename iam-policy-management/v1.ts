@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.64.0-959a5845-20230112-195144
+ * IBM OpenAPI SDK Code Generator Version: 3.68.2-ac7def68-20230310-195410
  */
 
 import * as extend from 'extend';
@@ -99,16 +99,14 @@ class IamPolicyManagementV1 extends BaseService {
   /**
    * Get policies by attributes.
    *
-   * Get policies and filter by attributes. While managing policies, you may want to retrieve policies in the account
-   * and filter by attribute values. This can be done through query parameters. Currently, only the following attributes
-   * are supported: account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a
-   * required query parameter. Only policies that have the specified attributes and that the caller has read access to
-   * are returned. If the caller does not have read access to any policies an empty array is returned. If a policy was
-   * created using the new beta v2/policies API, then the caller will see placeholder information, e.g., "unsupported
-   * version" for iam_id, and a valid v2/policies href. The caller should use this href to view the policy.
+   * Get policies and filter by attributes. While managing policies, you might want to retrieve policies in the account
+   * and filter by attribute values. This can be done through query parameters. The following attributes are supported:
+   * account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a required query
+   * parameter. Only policies that have the specified attributes and that the caller has read access to are returned. If
+   * the caller does not have read access to any policies an empty array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The account GUID in which the policies belong to.
+   * @param {string} params.accountId - The account GUID that the policies belong to.
    * @param {string} [params.acceptLanguage] - Language code for translations
    * * `default` - English
    * * `de` -  German (Standard)
@@ -125,8 +123,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.accessGroupId] - Optional access group id.
    * @param {string} [params.type] - Optional type of policy.
    * @param {string} [params.serviceType] - Optional type of service.
-   * @param {string} [params.tagName] - Optional name of the access management tag in the policy.
-   * @param {string} [params.tagValue] - Optional value of the access management tag in the policy.
+   * @param {string} [params.tagName] - Optional name of the access tag in the policy.
+   * @param {string} [params.tagValue] - Optional value of the access tag in the policy.
    * @param {string} [params.sort] - Optional top level policy field to sort results. Ascending sort is default.
    * Descending sort available by prepending '-' to field. Example '-last_modified_at'.
    * @param {string} [params.format] - Include additional data per policy returned
@@ -216,13 +214,14 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * To create an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
-   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
-   * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
-   * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
-   * **`serviceName`**, **`resourceGroupId`** or **`service_group_id`** attribute and the **`accountId`** attribute.`
-   * The IAM Services group (`IAM`) is a subset of account management services that includes the IAM platform services
-   * IAM Identity, IAM Access Management, IAM Users Management, IAM Groups, and future IAM services. If the subject is a
-   * locked service-id, the request will fail.
+   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. Assign roles
+   * that are supported by the service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
+   * **`service_group_id`** attribute and the **`accountId`** attribute. The IAM Services group (`IAM`) is a subset of
+   * account management services that includes the IAM platform services IAM Identity, IAM Access Management, IAM Users
+   * Management, IAM Groups, and future IAM services. If the subject is a locked service-id, the request will fail.
    *
    * ### Authorization
    *
@@ -230,16 +229,17 @@ class IamPolicyManagementV1 extends BaseService {
    * their support of authorization policies. To create an authorization policy, use **`"type": "authorization"`** in
    * the body. The subject attributes must match the supported authorization subjects of the resource. Multiple subject
    * attributes might be provided. The following attributes are supported:
-   *   serviceName, serviceInstance, region, resourceType, resource, accountId The policy roles must be a subset of the
-   * supported authorization roles supported by the target service. The user must also have the same level of access or
-   * greater to the target resource in order to grant the role. The resource attributes must be a subset of a service's
-   * or the platform's supported attributes. Both the policy subject and the policy resource must include the
-   * **`serviceName`** and **`accountId`** attributes.
+   *   serviceName, serviceInstance, region, resourceType, resource, accountId Assign roles that are supported by the
+   * service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). The user must also have the same level of access
+   * or greater to the target resource in order to grant the role. Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * Both the policy subject and the policy resource must include the **`serviceName`** and **`accountId`** attributes.
    *
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals` and the `stringMatch` operators are available. Resource attributes may support
-   * one or both operators. For more information, see [how to assign access by using wildcards
+   * one or both operators. For more information, see [Assigning access by using wildcard
    * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
    *
    * ### Attribute Validations
@@ -335,27 +335,29 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * To update an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
-   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
-   * must be a subset of a service's or the platform's supported roles. The resource attributes must be a subset of a
-   * service's or the platform's supported attributes. The policy resource must include either the **`serviceType`**,
-   * **`serviceName`**,  or **`resourceGroupId`** attribute and the **`accountId`** attribute.` If the subject is a
-   * locked service-id, the request will fail.
+   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. Assign roles
+   * that are supported by the service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * The policy resource must include either the **`serviceType`**, **`serviceName`**,  or **`resourceGroupId`**
+   * attribute and the **`accountId`** attribute.` If the subject is a locked service-id, the request will fail.
    *
    * ### Authorization
    *
    * To update an authorization policy, use **`"type": "authorization"`** in the body. The subject attributes must match
    * the supported authorization subjects of the resource. Multiple subject attributes might be provided. The following
    * attributes are supported:
-   *   serviceName, serviceInstance, region, resourceType, resource, accountId The policy roles must be a subset of the
-   * supported authorization roles supported by the target service. The user must also have the same level of access or
-   * greater to the target resource in order to grant the role. The resource attributes must be a subset of a service's
-   * or the platform's supported attributes. Both the policy subject and the policy resource must include the
-   * **`serviceName`** and **`accountId`** attributes.
+   *   serviceName, serviceInstance, region, resourceType, resource, accountId Assign roles that are supported by the
+   * service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). The user must also have the same level of access
+   * or greater to the target resource in order to grant the role. Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * Both the policy subject and the policy resource must include the **`serviceName`** and **`accountId`** attributes.
    *
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals` and the `stringMatch` operators are available. Resource attributes might support
-   * one or both operators. For more information, see [how to assign access by using wildcards
+   * one or both operators. For more information, see [Assigning access by using wildcard
    * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
    *
    * ### Attribute Validations
@@ -605,8 +607,9 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * Get roles based on the filters. While managing roles, you may want to retrieve roles and filter by usages. This can
    * be done through query parameters. Currently, we only support the following attributes: account_id, service_name,
-   * source_service_name and policy_type. Only roles that match the filter and that the caller has read access to are
-   * returned. If the caller does not have read access to any roles an empty array is returned.
+   * service_group_id, source_service_name and policy_type. Both service_name and service_group_id attributes are
+   * mutually exclusive. Only roles that match the filter and that the caller has read access to are returned. If the
+   * caller does not have read access to any roles an empty array is returned.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.acceptLanguage] - Language code for translations
@@ -625,6 +628,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.serviceName] - Optional name of IAM enabled service.
    * @param {string} [params.sourceServiceName] - Optional name of source IAM enabled service.
    * @param {string} [params.policyType] - Optional Policy Type.
+   * @param {string} [params.serviceGroupId] - Optional id of service group.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>>}
    */
@@ -639,6 +643,7 @@ class IamPolicyManagementV1 extends BaseService {
       'serviceName',
       'sourceServiceName',
       'policyType',
+      'serviceGroupId',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -651,6 +656,7 @@ class IamPolicyManagementV1 extends BaseService {
       'service_name': _params.serviceName,
       'source_service_name': _params.sourceServiceName,
       'policy_type': _params.policyType,
+      'service_group_id': _params.serviceGroupId,
     };
 
     const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listRoles');
@@ -687,7 +693,7 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.displayName - The display name of the role that is shown in the console.
-   * @param {string[]} params.actions - The actions of the role. Please refer to [IAM roles and
+   * @param {string[]} params.actions - The actions of the role. For more information, see [IAM roles and
    * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
    * @param {string} params.name - The name of the role that is used in the CRN. Can only be alphanumeric and has to be
    * capitalized.
@@ -779,7 +785,7 @@ class IamPolicyManagementV1 extends BaseService {
    * existing role. The Etag can be retrieved using the GET /v2/roles/{role_id} API and looking at the ETag response
    * header.
    * @param {string} params.displayName - The display name of the role that is shown in the console.
-   * @param {string[]} params.actions - The actions of the role. Please refer to [IAM roles and
+   * @param {string[]} params.actions - The actions of the role. For more information, see [IAM roles and
    * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
    * @param {string} [params.description] - The description of the role.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -935,11 +941,11 @@ class IamPolicyManagementV1 extends BaseService {
   /**
    * Get policies by attributes.
    *
-   * Get policies and filter by attributes. While managing policies, you may want to retrieve policies in the account
-   * and filter by attribute values. This can be done through query parameters. Currently, only the following attributes
-   * are supported: account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a
-   * required query parameter. Only policies that have the specified attributes and that the caller has read access to
-   * are returned. If the caller does not have read access to any policies an empty array is returned.
+   * Get policies and filter by attributes. While managing policies, you might want to retrieve policies in the account
+   * and filter by attribute values. This can be done through query parameters. The following attributes are supported:
+   * account_id, iam_id, access_group_id, type, service_type, sort, format and state. account_id is a required query
+   * parameter. Only policies that have the specified attributes and that the caller has read access to are returned. If
+   * the caller does not have read access to any policies an empty array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID in which the policies belong to.
@@ -961,6 +967,20 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.serviceType] - Optional type of service.
    * @param {string} [params.serviceName] - Optional name of service.
    * @param {string} [params.serviceGroupId] - Optional ID of service group.
+   * @param {string} [params.sort] - Optional top level policy field to sort results. Ascending sort is default.
+   * Descending sort available by prepending '-' to field, for example, '-last_modified_at'. Note that last permit
+   * information is only included when 'format=include_last_permit', for example,
+   * "format=include_last_permit&sort=last_permit_at" Example fields that can be sorted on:
+   *   - 'id'
+   *   - 'type'
+   *   - 'href'
+   *   - 'created_at'
+   *   - 'created_by_id'
+   *   - 'last_modified_at'
+   *   - 'last_modified_by_id'
+   *   - 'state'
+   *   - 'last_permit_at'
+   *   - 'last_permit_frequency'.
    * @param {string} [params.format] - Include additional data per policy returned
    * * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times
    * it has done so
@@ -986,6 +1006,7 @@ class IamPolicyManagementV1 extends BaseService {
       'serviceType',
       'serviceName',
       'serviceGroupId',
+      'sort',
       'format',
       'state',
       'headers',
@@ -1003,6 +1024,7 @@ class IamPolicyManagementV1 extends BaseService {
       'service_type': _params.serviceType,
       'service_name': _params.serviceName,
       'service_group_id': _params.serviceGroupId,
+      'sort': _params.sort,
       'format': _params.format,
       'state': _params.state,
     };
@@ -1039,24 +1061,23 @@ class IamPolicyManagementV1 extends BaseService {
    * Create a policy.
    *
    * Creates a policy to grant access between a subject and a resource. Currently, there is one type of a v2/policy:
-   * **access**. A policy administrator might want to create an access policy which grants access to a user, service-id,
+   * **access**. A policy administrator might want to create an access policy that grants access to a user, service-id,
    * or an access group.
    *
    * ### Access
    *
-   * To create an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
-   * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
-   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
-   * must be a subset of a service's or the platform's supported roles. For more information, see [IAM roles and
-   * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions). The resource attributes must
-   * be a subset of a service's or the platform's supported attributes. Caller should check with service, e.g.,
-   * [VPC](https://cloud.ibm.com/docs/vpc?topic=vpc-resource-attributes), to view supported attributes. The policy
-   * resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
-   * **`service_group_id`** attribute and the **`accountId`** attribute.` The rule field can either specify single
-   * **`key`**, **`value`**, and **`operator`** or be set of **`conditions`** with a combination **`operator`**.  The
-   * possible combination operator are **`and`** and **`or`**. The operator for a rule can be used to specify a
-   * time-based condition (e.g., access only during business hours, during the Monday-Friday work week). For example, a
-   * policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
+   * To create an access policy, use **`"type": "access"`** in the body. The supported subject attributes are
+   * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute to assign access to a user or
+   * service-id. Use the **`access_group_id`** subject attribute to assign access to an access group. Assign roles that
+   * are supported by the service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
+   * **`service_group_id`** attribute and the **`accountId`** attribute. In the rule field, you can specify a single
+   * condition by using **`key`**, **`value`**, and condition **`operator`**, or a set of **`conditions`** with a
+   * combination **`operator`**.  The possible combination operators are **`and`** and **`or`**. Combine conditions to
+   * specify a time-based restriction (e.g., access only during business hours, during the Monday-Friday work week). For
+   * example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
    * ```json
    *   "rule": {
    *     "operator": "and",
@@ -1074,7 +1095,7 @@ class IamPolicyManagementV1 extends BaseService {
    *       "value": "17:00:00+00:00"
    *     }]
    *   }
-   * ``` Rules and conditions allow the following operators with **`key`**, **`value`** :
+   * ``` You can use the following operators in the **`key`** and **`value`** pair:
    * ```
    *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
@@ -1086,15 +1107,13 @@ class IamPolicyManagementV1 extends BaseService {
    * operators](https://cloud.ibm.com/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties)
    * and
    * [Limiting access with time-based
-   * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui). The IAM Services group
-   * (`IAM`) is a subset of account management services that includes the IAM platform services IAM Identity, IAM Access
-   * Management, IAM Users Management, IAM Groups, and future IAM services. If the subject is a locked service-id, the
-   * request will fail.
+   * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui). If the subject is a
+   * locked service-id, the request will fail.
    *
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals`, `stringMatch`, and `stringEquals` operators are available. For more
-   * information, see [how to assign access by using wildcards
+   * information, see [Assigning access by using wildcard
    * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
    *
    * ### Attribute Validations
@@ -1196,19 +1215,18 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * ### Access
    *
-   * To update an access policy, use **`"type": "access"`** in the body. The possible subject attributes are
-   * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute for assigning access for a user or
-   * service-id. Use the **`access_group_id`** subject attribute for assigning access for an access group. The roles
-   * must be a subset of a service's or the platform's supported roles. For more information, see [IAM roles and
-   * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions). The resource attributes must
-   * be a subset of a service's or the platform's supported attributes. Caller should check with service, e.g.,
-   * [VPC](https://cloud.ibm.com/docs/vpc?topic=vpc-resource-attributes), to view supported attributes. The policy
-   * resource must include either the **`serviceType`**, **`serviceName`**,  or **`resourceGroupId`** attribute and the
-   * **`accountId`** attribute.` The rule field can either specify single **`key`**, **`value`**, and **`operator`** or
-   * be set of **`conditions`** with a combination **`operator`**.  The possible combination operator are **`and`** and
-   * **`or`**. The operator for a rule can be used to specify a time-based condition (e.g., access only during business
-   * hours, during the Monday-Friday work week). For example, a policy can grant access Monday-Friday, 9:00am-5:00pm
-   * using the following rule:
+   * To create an access policy, use **`"type": "access"`** in the body. The supported subject attributes are
+   * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute to assign access to a user or
+   * service-id. Use the **`access_group_id`** subject attribute to assign access to an access group. Assign roles that
+   * are supported by the service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
+   * **`service_group_id`** attribute and the **`accountId`** attribute. In the rule field, you can specify a single
+   * condition by using **`key`**, **`value`**, and condition **`operator`**, or a set of **`conditions`** with a
+   * combination **`operator`**.  The possible combination operators are **`and`** and **`or`**. Combine conditions to
+   * specify a time-based restriction (e.g., access only during business hours, during the Monday-Friday work week). For
+   * example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
    * ```json
    *   "rule": {
    *     "operator": "and",
@@ -1226,7 +1244,7 @@ class IamPolicyManagementV1 extends BaseService {
    *       "value": "17:00:00+00:00"
    *     }]
    *   }
-   * ``` Rules and conditions allow the following operators with **`key`**, **`value`** :
+   * ``` You can use the following operators in the **`key`**, **`value`** pair:
    * ```
    *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
@@ -1237,11 +1255,10 @@ class IamPolicyManagementV1 extends BaseService {
    * and
    * [Limiting access with time-based
    * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui).
-   *
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals`, `stringMatch`, and `stringEquals` operators are available. For more
-   * information, see [how to assign access by using wildcards
+   * information, see [Assigning access by using wildcard
    * policies](https://cloud.ibm.com/docs/account?topic=account-wildcard).
    *
    * ### Attribute Validations
@@ -1340,6 +1357,11 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The policy ID.
+   * @param {string} [params.format] - Include additional data for policy returned
+   * * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times
+   * it has done so
+   * * `display` - returns the list of all actions included in each of the policy roles and translations for all
+   * relevant fields.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
    */
@@ -1348,11 +1370,15 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'format', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'format': _params.format,
+    };
 
     const path = {
       'id': _params.id,
@@ -1368,6 +1394,7 @@ class IamPolicyManagementV1 extends BaseService {
       options: {
         url: '/v2/policies/{id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -1462,7 +1489,7 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `listPolicies` operation. */
   export interface ListPoliciesParams {
-    /** The account GUID in which the policies belong to. */
+    /** The account GUID that the policies belong to. */
     accountId: string;
     /** Language code for translations
      *  * `default` - English
@@ -1486,9 +1513,9 @@ namespace IamPolicyManagementV1 {
     type?: ListPoliciesConstants.Type | string;
     /** Optional type of service. */
     serviceType?: ListPoliciesConstants.ServiceType | string;
-    /** Optional name of the access management tag in the policy. */
+    /** Optional name of the access tag in the policy. */
     tagName?: string;
-    /** Optional value of the access management tag in the policy. */
+    /** Optional value of the access tag in the policy. */
     tagValue?: string;
     /** Optional top level policy field to sort results. Ascending sort is default. Descending sort available by
      *  prepending '-' to field. Example '-last_modified_at'.
@@ -1650,6 +1677,8 @@ namespace IamPolicyManagementV1 {
     sourceServiceName?: string;
     /** Optional Policy Type. */
     policyType?: string;
+    /** Optional id of service group. */
+    serviceGroupId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1657,7 +1686,7 @@ namespace IamPolicyManagementV1 {
   export interface CreateRoleParams {
     /** The display name of the role that is shown in the console. */
     displayName: string;
-    /** The actions of the role. Please refer to [IAM roles and
+    /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
     actions: string[];
@@ -1696,7 +1725,7 @@ namespace IamPolicyManagementV1 {
     ifMatch: string;
     /** The display name of the role that is shown in the console. */
     displayName: string;
-    /** The actions of the role. Please refer to [IAM roles and
+    /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
     actions: string[];
@@ -1749,6 +1778,22 @@ namespace IamPolicyManagementV1 {
     serviceName?: string;
     /** Optional ID of service group. */
     serviceGroupId?: string;
+    /** Optional top level policy field to sort results. Ascending sort is default. Descending sort available by
+     *  prepending '-' to field, for example, '-last_modified_at'. Note that last permit information is only included
+     *  when 'format=include_last_permit', for example, "format=include_last_permit&sort=last_permit_at" Example fields
+     *  that can be sorted on:
+     *    - 'id'
+     *    - 'type'
+     *    - 'href'
+     *    - 'created_at'
+     *    - 'created_by_id'
+     *    - 'last_modified_at'
+     *    - 'last_modified_by_id'
+     *    - 'state'
+     *    - 'last_permit_at'
+     *    - 'last_permit_frequency'.
+     */
+    sort?: string;
     /** Include additional data per policy returned
      *  * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of
      *  times it has done so
@@ -1869,7 +1914,23 @@ namespace IamPolicyManagementV1 {
   export interface GetV2PolicyParams {
     /** The policy ID. */
     id: string;
+    /** Include additional data for policy returned
+     *  * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of
+     *  times it has done so
+     *  * `display` - returns the list of all actions included in each of the policy roles and translations for all
+     *  relevant fields.
+     */
+    format?: GetV2PolicyConstants.Format | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `getV2Policy` operation. */
+  export namespace GetV2PolicyConstants {
+    /** Include additional data for policy returned * `include_last_permit` - returns details of when the policy last granted a permit decision and the number of times it has done so * `display` - returns the list of all actions included in each of the policy roles and translations for all relevant fields. */
+    export enum Format {
+      INCLUDE_LAST_PERMIT = 'include_last_permit',
+      DISPLAY = 'display',
+    }
   }
 
   /** Parameters for the `deleteV2Policy` operation. */
@@ -1886,16 +1947,38 @@ namespace IamPolicyManagementV1 {
   /** Specifies the type of access granted by the policy. */
   export interface Control {
     /** Permission granted by the policy. */
-    grant: V2PolicyGrant;
+    grant: Grant;
   }
 
   /** ControlResponse. */
   export interface ControlResponse {}
 
+  /** A role associated with a policy with additional information (display_name, description, actions) when `format=display`. */
+  export interface EnrichedRoles {
+    /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
+     *  'crn:v1:bluemix:public:iam::::role:Editor'.
+     */
+    role_id: string;
+    /** The service defined (or user defined if a custom role) display name of the role. */
+    display_name?: string;
+    /** The service defined (or user defined if a custom role) description of the role. */
+    description?: string;
+    /** The actions of the role. For more information, see [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
+    actions: RoleAction[];
+  }
+
+  /** Permission granted by the policy. */
+  export interface Grant {
+    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    roles: Roles[];
+  }
+
   /** Permission granted by the policy with translated roles and additional role information. */
-  export interface GrantWithTranslatedRoles {
+  export interface GrantWithEnrichedRoles {
     /** A set of roles granted by the policy. */
-    roles: RoleInDisplayFormat[];
+    roles: EnrichedRoles[];
   }
 
   /** A role associated with a policy. */
@@ -1920,20 +2003,12 @@ namespace IamPolicyManagementV1 {
     description: string;
   }
 
-  /** A role associated with a policy with additional information (display_name, description, actions) when `format=display`. */
-  export interface RoleInDisplayFormat {
+  /** A role associated with a policy. */
+  export interface Roles {
     /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
      *  'crn:v1:bluemix:public:iam::::role:Editor'.
      */
     role_id: string;
-    /** The service defined (or user defined if a custom role) display name of the role. */
-    display_name?: string;
-    /** The service defined (or user defined if a custom role) description of the role. */
-    description?: string;
-    /** The actions of the role. Please refer to [IAM roles and
-     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
-     */
-    actions: RoleAction[];
   }
 
   /** Rule that specifies additional access granted (e.g., time-based condition). */
@@ -1942,8 +2017,8 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: string;
-    /** The value of an rule or resource attribute; can be boolean or string for resource attribute. Can be a string
-     *  or an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
+     *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
@@ -1993,12 +2068,6 @@ namespace IamPolicyManagementV1 {
     policies?: V2Policy[];
   }
 
-  /** Permission granted by the policy. */
-  export interface V2PolicyGrant {
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
-    roles: PolicyRole[];
-  }
-
   /** The resource attributes to which the policy grants access. */
   export interface V2PolicyResource {
     /** List of resource attributes to which the policy grants access. */
@@ -2013,8 +2082,8 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: string;
-    /** The value of an rule or resource attribute; can be boolean or string for resource attribute. Can be a string
-     *  or an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
+     *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
@@ -2056,7 +2125,7 @@ namespace IamPolicyManagementV1 {
     display_name: string;
     /** The description of the role. */
     description?: string;
-    /** The actions of the role. Please refer to [IAM roles and
+    /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
     actions: string[];
@@ -2156,7 +2225,7 @@ namespace IamPolicyManagementV1 {
     display_name: string;
     /** The description of the role. */
     description?: string;
-    /** The actions of the role. Please refer to [IAM roles and
+    /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
     actions: string[];
@@ -2187,13 +2256,13 @@ namespace IamPolicyManagementV1 {
   /** Specifies the type of access granted by the policy. */
   export interface ControlResponseControl extends ControlResponse {
     /** Permission granted by the policy. */
-    grant: V2PolicyGrant;
+    grant: Grant;
   }
 
   /** Specifies the type of access granted by the policy with additional role information. */
-  export interface ControlResponseControlWithTranslatedRoles extends ControlResponse {
+  export interface ControlResponseControlWithEnrichedRoles extends ControlResponse {
     /** Permission granted by the policy with translated roles and additional role information. */
-    grant: GrantWithTranslatedRoles;
+    grant: GrantWithEnrichedRoles;
   }
 
   /** Rule that specifies additional access granted (e.g., time-based condition). */
@@ -2202,17 +2271,17 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: string;
-    /** The value of an rule or resource attribute; can be boolean or string for resource attribute. Can be a string
-     *  or an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
+     *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
 
   /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
   export interface V2PolicyRuleRuleWithConditions extends V2PolicyRule {
-    /** Operator to evalute conditions. */
+    /** Operator to evaluate conditions. */
     operator: string;
-    /** List of conditions associated with a policy, e.g., time-based-conditions that grant access over a certain
+    /** List of conditions associated with a policy, e.g., time-based conditions that grant access over a certain
      *  time period.
      */
     conditions: RuleAttribute[];
