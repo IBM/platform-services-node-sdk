@@ -133,7 +133,7 @@ class UsageMeteringV4 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/v4/metering/resources/{resource_id}/usage',
+        url: `/v4/metering/resources/${_params.resourceId}/usage`,
         method: 'POST',
         body,
         path,
