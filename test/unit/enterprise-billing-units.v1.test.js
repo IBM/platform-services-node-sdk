@@ -213,7 +213,7 @@ describe('EnterpriseBillingUnitsV1', () => {
         const enterpriseId = 'testString';
         const accountGroupId = 'testString';
         const limit = 1;
-        const start = 38;
+        const start = 'testString';
         const listBillingUnitsParams = {
           accountId,
           enterpriseId,
@@ -341,7 +341,7 @@ describe('EnterpriseBillingUnitsV1', () => {
         // Construct the params object for operation listBillingOptions
         const billingUnitId = 'testString';
         const limit = 1;
-        const start = 38;
+        const start = 'testString';
         const listBillingOptionsParams = {
           billingUnitId,
           limit,
@@ -483,7 +483,7 @@ describe('EnterpriseBillingUnitsV1', () => {
         const date = 'testString';
         const type = 'testString';
         const limit = 1;
-        const start = 38;
+        const start = 'testString';
         const getCreditPoolsParams = {
           billingUnitId,
           date,
@@ -567,60 +567,6 @@ describe('EnterpriseBillingUnitsV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-
-    describe('GetCreditPoolsPager tests', () => {
-      const serviceUrl = enterpriseBillingUnitsServiceOptions.url;
-      const path = '/v1/credit-pools';
-      const mockPagerResponse1 =
-        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"type":"PLATFORM","currency_code":"USD","billing_unit_id":"billing_unit_id","term_credits":[{"billing_option_id":"JWX986YRGFSHACQUEFOI","category":"PLATFORM","start_date":"2019-05-01T00:00:00.000Z","end_date":"2020-04-30T23:59:29.999Z","total_credits":10000,"starting_balance":9000,"used_credits":9500,"current_balance":0,"resources":[{"anyKey":"anyValue"}]}],"overage":{"cost":500,"resources":[{"anyKey":"anyValue"}]}}]}';
-      const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"type":"PLATFORM","currency_code":"USD","billing_unit_id":"billing_unit_id","term_credits":[{"billing_option_id":"JWX986YRGFSHACQUEFOI","category":"PLATFORM","start_date":"2019-05-01T00:00:00.000Z","end_date":"2020-04-30T23:59:29.999Z","total_credits":10000,"starting_balance":9000,"used_credits":9500,"current_balance":0,"resources":[{"anyKey":"anyValue"}]}],"overage":{"cost":500,"resources":[{"anyKey":"anyValue"}]}}]}';
-
-      beforeEach(() => {
-        unmock_createRequest();
-        const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
-          .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
-          .reply(200, mockPagerResponse2);
-      });
-
-      afterEach(() => {
-        nock.cleanAll();
-        mock_createRequest();
-      });
-
-      test('getNext()', async () => {
-        const params = {
-          billingUnitId: 'testString',
-          date: 'testString',
-          type: 'testString',
-          limit: 10,
-        };
-        const allResults = [];
-        const pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(enterpriseBillingUnitsService, params);
-        while (pager.hasNext()) {
-          const nextPage = await pager.getNext();
-          expect(nextPage).not.toBeNull();
-          allResults.push(...nextPage);
-        }
-        expect(allResults).not.toBeNull();
-        expect(allResults).toHaveLength(2);
-      });
-
-      test('getAll()', async () => {
-        const params = {
-          billingUnitId: 'testString',
-          date: 'testString',
-          type: 'testString',
-          limit: 10,
-        };
-        const pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(enterpriseBillingUnitsService, params);
-        const allResults = await pager.getAll();
-        expect(allResults).not.toBeNull();
-        expect(allResults).toHaveLength(2);
       });
     });
   });

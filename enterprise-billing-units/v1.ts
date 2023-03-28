@@ -34,7 +34,7 @@ import {
 import { getSdkHeaders } from '../lib/common';
 
 /**
- * Billing units for IBM Cloud enterprises
+ * Billing units for IBM Cloud Enterprise
  *
  * API Version: 1.0.0
  */
@@ -163,7 +163,7 @@ class EnterpriseBillingUnitsV1 extends BaseService {
    * @param {string} [params.enterpriseId] - The enterprise ID.
    * @param {string} [params.accountGroupId] - The account group ID.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between 0 and 100.
-   * @param {number} [params.start] - The pagination offset. This will be the index of the first returned result.
+   * @param {string} [params.start] - The pagination offset. This represents the index of the first returned result.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingUnitsList>>}
    */
@@ -232,7 +232,7 @@ class EnterpriseBillingUnitsV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.billingUnitId - The billing unit ID.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between 0 and 100.
-   * @param {number} [params.start] - The pagination offset. This will be the index of the first returned result.
+   * @param {string} [params.start] - The pagination offset. This represents the index of the first returned result.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingOptionsList>>}
    */
@@ -295,7 +295,7 @@ class EnterpriseBillingUnitsV1 extends BaseService {
    * @param {string} [params.date] - The date in the format of YYYY-MM.
    * @param {string} [params.type] - Filters the credit pool by type, either `PLATFORM` or `SUPPORT`.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between 0 and 100.
-   * @param {number} [params.start] - The pagination offset. This will be the index of the first returned result.
+   * @param {string} [params.start] - The pagination offset. This represents the index of the first returned result.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.CreditPoolsList>>}
    */
@@ -391,8 +391,8 @@ namespace EnterpriseBillingUnitsV1 {
     accountGroupId?: string;
     /** Return results up to this limit. Valid values are between 0 and 100. */
     limit?: number;
-    /** The pagination offset. This will be the index of the first returned result. */
-    start?: number;
+    /** The pagination offset. This represents the index of the first returned result. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -402,8 +402,8 @@ namespace EnterpriseBillingUnitsV1 {
     billingUnitId: string;
     /** Return results up to this limit. Valid values are between 0 and 100. */
     limit?: number;
-    /** The pagination offset. This will be the index of the first returned result. */
-    start?: number;
+    /** The pagination offset. This represents the index of the first returned result. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -417,8 +417,8 @@ namespace EnterpriseBillingUnitsV1 {
     type?: string;
     /** Return results up to this limit. Valid values are between 0 and 100. */
     limit?: number;
-    /** The pagination offset. This will be the index of the first returned result. */
-    start?: number;
+    /** The pagination offset. This represents the index of the first returned result. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -722,88 +722,6 @@ namespace EnterpriseBillingUnitsV1 {
      */
     public async getAll(): Promise<EnterpriseBillingUnitsV1.BillingOption[]> {
       const results: BillingOption[] = [];
-      while (this.hasNext()) {
-        const nextPage = await this.getNext();
-        results.push(...nextPage);
-      }
-      return results;
-    }
-  }
-
-  /**
-   * GetCreditPoolsPager can be used to simplify the use of getCreditPools().
-   */
-  export class GetCreditPoolsPager {
-    protected _hasNext: boolean;
-
-    protected pageContext: any;
-
-    protected client: EnterpriseBillingUnitsV1;
-
-    protected params: EnterpriseBillingUnitsV1.GetCreditPoolsParams;
-
-    /**
-     * Construct a GetCreditPoolsPager object.
-     *
-     * @param {EnterpriseBillingUnitsV1}  client - The service client instance used to invoke getCreditPools()
-     * @param {Object} params - The parameters to be passed to getCreditPools()
-     * @constructor
-     * @returns {GetCreditPoolsPager}
-     */
-    constructor(
-      client: EnterpriseBillingUnitsV1,
-      params: EnterpriseBillingUnitsV1.GetCreditPoolsParams
-    ) {
-      if (params && params.start) {
-        throw new Error(`the params.start field should not be set`);
-      }
-
-      this._hasNext = true;
-      this.pageContext = { next: undefined };
-      this.client = client;
-      this.params = JSON.parse(JSON.stringify(params || {}));
-    }
-
-    /**
-     * Returns true if there are potentially more results to be retrieved by invoking getNext().
-     * @returns {boolean}
-     */
-    public hasNext(): boolean {
-      return this._hasNext;
-    }
-
-    /**
-     * Returns the next page of results by invoking getCreditPools().
-     * @returns {Promise<EnterpriseBillingUnitsV1.CreditPool[]>}
-     */
-    public async getNext(): Promise<EnterpriseBillingUnitsV1.CreditPool[]> {
-      if (!this.hasNext()) {
-        throw new Error('No more results available');
-      }
-
-      if (this.pageContext.next) {
-        this.params.start = this.pageContext.next;
-      }
-      const response = await this.client.getCreditPools(this.params);
-      const { result } = response;
-
-      let next = null;
-      if (result && result.next_url) {
-        next = getQueryParam(result.next_url, 'start');
-      }
-      this.pageContext.next = next;
-      if (!this.pageContext.next) {
-        this._hasNext = false;
-      }
-      return result.resources;
-    }
-
-    /**
-     * Returns all results by invoking getCreditPools() repeatedly until all pages of results have been retrieved.
-     * @returns {Promise<EnterpriseBillingUnitsV1.CreditPool[]>}
-     */
-    public async getAll(): Promise<EnterpriseBillingUnitsV1.CreditPool[]> {
-      const results: CreditPool[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);

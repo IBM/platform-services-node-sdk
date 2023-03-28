@@ -177,18 +177,9 @@ describe('EnterpriseBillingUnitsV1', () => {
       billingUnitId,
     };
 
-    const allResults = [];
     try {
-      const pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(
-        enterpriseBillingUnitsService,
-        params
-      );
-      while (pager.hasNext()) {
-        const nextPage = await pager.getNext();
-        expect(nextPage).not.toBeNull();
-        allResults.push(...nextPage);
-      }
-      console.log(JSON.stringify(allResults, null, 2));
+      const res = await enterpriseBillingUnitsService.getCreditPools(params);
+      console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }

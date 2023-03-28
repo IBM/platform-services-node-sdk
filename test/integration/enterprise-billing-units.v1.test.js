@@ -182,33 +182,6 @@ describe('EnterpriseBillingUnitsV1_integration', () => {
     expect(res.result).toBeDefined();
     log(`getCreditPools() result: ${JSON.stringify(res.result, null, 2)}`);
   });
-  test('getCreditPools() via GetCreditPoolsPager', async () => {
-    const params = {
-      billingUnitId: BILLING_UNIT_ID,
-      type: 'PLATFORM',
-      limit: 10,
-    };
-
-    const allResults = [];
-
-    // Test getNext().
-    let pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(
-      enterpriseBillingUnitsService,
-      params
-    );
-    while (pager.hasNext()) {
-      const nextPage = await pager.getNext();
-      expect(nextPage).not.toBeNull();
-      allResults.push(...nextPage);
-    }
-
-    // Test getAll().
-    pager = new EnterpriseBillingUnitsV1.GetCreditPoolsPager(enterpriseBillingUnitsService, params);
-    const allItems = await pager.getAll();
-    expect(allItems).not.toBeNull();
-    expect(allItems).toHaveLength(allResults.length);
-    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
-  });
 });
 
 function log(msg) {
