@@ -138,7 +138,7 @@ describe('UsageMeteringV4', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v4/metering/resources/{resource_id}/usage', 'POST');
+        checkUrlAndMethod(options, `/v4/metering/resources/${params.resourceId}/usage`, 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
