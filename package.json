@@ -20,7 +20,7 @@
     "prepublishOnly": "npm run build",
     "postversion": "publisher --no-checks --dry-run",
     "test-single": "jest --verbose=true --silent=false",
-    "jest": "jest test/",
+    "jest": "jest",
     "test": "npm run build && npm run lint && jest test/",
     "test-unit": "npm run build && jest test/unit/",
     "test-integration": "npm run build && jest --expand test/integration/",
@@ -40,7 +40,7 @@
   "dependencies": {
     "@types/node": "^12.0.8",
     "extend": "^3.0.2",
-    "ibm-cloud-sdk-core": "^4.0.2"
+    "ibm-cloud-sdk-core": "^4.0.5"
   },
   "devDependencies": {
     "@masterodin/publisher": "^0.10.0",

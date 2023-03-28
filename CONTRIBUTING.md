@@ -12,3 +12,7 @@ already encountered this issue.
 # General Information
 For general guidance on contributing to this project, please see
 [this link](https://github.com/IBM/ibm-cloud-sdk-common/blob/main/CONTRIBUTING_nodejs.md)
+
+# Updating an existing service within the SDK
+For instructions on updating an existing service within the SDK, please see
+[this link](update_service.md)
