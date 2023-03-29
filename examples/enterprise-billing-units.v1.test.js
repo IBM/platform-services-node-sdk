@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
-const EnterpriseBillingUnitsV1 = require('../dist/enterprise-billing-units/v1');
+/* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
+
 const { readExternalSources } = require('ibm-cloud-sdk-core');
+const EnterpriseBillingUnitsV1 = require('../dist/enterprise-billing-units/v1');
 const authHelper = require('../test/resources/auth-helper.js');
 
 //
@@ -61,15 +63,14 @@ describe('EnterpriseBillingUnitsV1', () => {
 
   const config = readExternalSources(EnterpriseBillingUnitsV1.DEFAULT_SERVICE_NAME);
 
-  let enterpriseId = config.enterpriseId;
-  let billingUnitId = config.billingUnitId;
+  const { enterpriseId } = config;
+  const { billingUnitId } = config;
 
   test('getBillingUnit request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -78,7 +79,7 @@ describe('EnterpriseBillingUnitsV1', () => {
     originalLog('getBillingUnit() result:');
     // begin-get_billing_unit
     const params = {
-      billingUnitId: billingUnitId,
+      billingUnitId,
     };
 
     try {
@@ -91,11 +92,10 @@ describe('EnterpriseBillingUnitsV1', () => {
     // end-get_billing_unit
   });
   test('listBillingUnits request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -105,11 +105,20 @@ describe('EnterpriseBillingUnitsV1', () => {
     // begin-list_billing_units
 
     const params = {
-      enterpriseId: enterpriseId,
+      enterpriseId,
     };
+    const allResults = [];
     try {
-      const res = await enterpriseBillingUnitsService.listBillingUnits(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(
+        enterpriseBillingUnitsService,
+        params
+      );
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -117,11 +126,10 @@ describe('EnterpriseBillingUnitsV1', () => {
     // end-list_billing_units
   });
   test('listBillingOptions request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -131,12 +139,21 @@ describe('EnterpriseBillingUnitsV1', () => {
     // begin-list_billing_options
 
     const params = {
-      billingUnitId: billingUnitId,
+      billingUnitId,
     };
 
+    const allResults = [];
     try {
-      const res = await enterpriseBillingUnitsService.listBillingOptions(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(
+        enterpriseBillingUnitsService,
+        params
+      );
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -144,11 +161,10 @@ describe('EnterpriseBillingUnitsV1', () => {
     // end-list_billing_options
   });
   test('getCreditPools request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -158,7 +174,7 @@ describe('EnterpriseBillingUnitsV1', () => {
     // begin-get_credit_pools
 
     const params = {
-      billingUnitId: billingUnitId,
+      billingUnitId,
     };
 
     try {

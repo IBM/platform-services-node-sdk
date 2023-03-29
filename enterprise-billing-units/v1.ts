@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-629bbb97-20201207-171303
+ * IBM OpenAPI SDK Code Generator Version: 3.64.1-cee95189-20230124-211647
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
@@ -24,13 +27,16 @@ import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  getMissingParams,
+  validateParams,
   UserOptions,
+  getQueryParam,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
- * Billing units for IBM Cloud enterprises
+ * Billing units for IBM Cloud Enterprise
+ *
+ * API Version: 1.0.0
  */
 
 class EnterpriseBillingUnitsV1 extends BaseService {
@@ -108,11 +114,11 @@ class EnterpriseBillingUnitsV1 extends BaseService {
     params: EnterpriseBillingUnitsV1.GetBillingUnitParams
   ): Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingUnit>> {
     const _params = { ...params };
-    const requiredParams = ['billingUnitId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['billingUnitId'];
+    const _validParams = ['billingUnitId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const path = {
@@ -156,6 +162,8 @@ class EnterpriseBillingUnitsV1 extends BaseService {
    * @param {string} [params.accountId] - The enterprise account ID.
    * @param {string} [params.enterpriseId] - The enterprise ID.
    * @param {string} [params.accountGroupId] - The account group ID.
+   * @param {number} [params.limit] - Return results up to this limit. Valid values are between 0 and 100.
+   * @param {string} [params.start] - The pagination offset. This represents the index of the first returned result.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingUnitsList>>}
    */
@@ -163,11 +171,26 @@ class EnterpriseBillingUnitsV1 extends BaseService {
     params?: EnterpriseBillingUnitsV1.ListBillingUnitsParams
   ): Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingUnitsList>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'enterpriseId',
+      'accountGroupId',
+      'limit',
+      'start',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'account_id': _params.accountId,
       'enterprise_id': _params.enterpriseId,
       'account_group_id': _params.accountGroupId,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -196,7 +219,6 @@ class EnterpriseBillingUnitsV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * billingOptions
    ************************/
@@ -209,6 +231,8 @@ class EnterpriseBillingUnitsV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.billingUnitId - The billing unit ID.
+   * @param {number} [params.limit] - Return results up to this limit. Valid values are between 0 and 100.
+   * @param {string} [params.start] - The pagination offset. This represents the index of the first returned result.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingOptionsList>>}
    */
@@ -216,15 +240,17 @@ class EnterpriseBillingUnitsV1 extends BaseService {
     params: EnterpriseBillingUnitsV1.ListBillingOptionsParams
   ): Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.BillingOptionsList>> {
     const _params = { ...params };
-    const requiredParams = ['billingUnitId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['billingUnitId'];
+    const _validParams = ['billingUnitId', 'limit', 'start', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
       'billing_unit_id': _params.billingUnitId,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -253,7 +279,6 @@ class EnterpriseBillingUnitsV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * creditPools
    ************************/
@@ -269,6 +294,8 @@ class EnterpriseBillingUnitsV1 extends BaseService {
    * @param {string} params.billingUnitId - The ID of the billing unit.
    * @param {string} [params.date] - The date in the format of YYYY-MM.
    * @param {string} [params.type] - Filters the credit pool by type, either `PLATFORM` or `SUPPORT`.
+   * @param {number} [params.limit] - Return results up to this limit. Valid values are between 0 and 100.
+   * @param {string} [params.start] - The pagination offset. This represents the index of the first returned result.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.CreditPoolsList>>}
    */
@@ -276,17 +303,19 @@ class EnterpriseBillingUnitsV1 extends BaseService {
     params: EnterpriseBillingUnitsV1.GetCreditPoolsParams
   ): Promise<EnterpriseBillingUnitsV1.Response<EnterpriseBillingUnitsV1.CreditPoolsList>> {
     const _params = { ...params };
-    const requiredParams = ['billingUnitId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['billingUnitId'];
+    const _validParams = ['billingUnitId', 'date', 'type', 'limit', 'start', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
       'billing_unit_id': _params.billingUnitId,
       'date': _params.date,
       'type': _params.type,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -334,7 +363,7 @@ namespace EnterpriseBillingUnitsV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -360,6 +389,10 @@ namespace EnterpriseBillingUnitsV1 {
     enterpriseId?: string;
     /** The account group ID. */
     accountGroupId?: string;
+    /** Return results up to this limit. Valid values are between 0 and 100. */
+    limit?: number;
+    /** The pagination offset. This represents the index of the first returned result. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -367,6 +400,10 @@ namespace EnterpriseBillingUnitsV1 {
   export interface ListBillingOptionsParams {
     /** The billing unit ID. */
     billingUnitId: string;
+    /** Return results up to this limit. Valid values are between 0 and 100. */
+    limit?: number;
+    /** The pagination offset. This represents the index of the first returned result. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -378,6 +415,10 @@ namespace EnterpriseBillingUnitsV1 {
     date?: string;
     /** Filters the credit pool by type, either `PLATFORM` or `SUPPORT`. */
     type?: string;
+    /** Return results up to this limit. Valid values are between 0 and 100. */
+    limit?: number;
+    /** The pagination offset. This represents the index of the first returned result. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -519,6 +560,174 @@ namespace EnterpriseBillingUnitsV1 {
     current_balance?: number;
     /** A list of resources that used credit during the month. */
     resources?: JsonObject[];
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * BillingUnitsPager can be used to simplify the use of listBillingUnits().
+   */
+  export class BillingUnitsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: EnterpriseBillingUnitsV1;
+
+    protected params: EnterpriseBillingUnitsV1.ListBillingUnitsParams;
+
+    /**
+     * Construct a BillingUnitsPager object.
+     *
+     * @param {EnterpriseBillingUnitsV1}  client - The service client instance used to invoke listBillingUnits()
+     * @param {Object} [params] - The parameters to be passed to listBillingUnits()
+     * @constructor
+     * @returns {BillingUnitsPager}
+     */
+    constructor(
+      client: EnterpriseBillingUnitsV1,
+      params?: EnterpriseBillingUnitsV1.ListBillingUnitsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listBillingUnits().
+     * @returns {Promise<EnterpriseBillingUnitsV1.BillingUnit[]>}
+     */
+    public async getNext(): Promise<EnterpriseBillingUnitsV1.BillingUnit[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listBillingUnits(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listBillingUnits() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<EnterpriseBillingUnitsV1.BillingUnit[]>}
+     */
+    public async getAll(): Promise<EnterpriseBillingUnitsV1.BillingUnit[]> {
+      const results: BillingUnit[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * BillingOptionsPager can be used to simplify the use of listBillingOptions().
+   */
+  export class BillingOptionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: EnterpriseBillingUnitsV1;
+
+    protected params: EnterpriseBillingUnitsV1.ListBillingOptionsParams;
+
+    /**
+     * Construct a BillingOptionsPager object.
+     *
+     * @param {EnterpriseBillingUnitsV1}  client - The service client instance used to invoke listBillingOptions()
+     * @param {Object} params - The parameters to be passed to listBillingOptions()
+     * @constructor
+     * @returns {BillingOptionsPager}
+     */
+    constructor(
+      client: EnterpriseBillingUnitsV1,
+      params: EnterpriseBillingUnitsV1.ListBillingOptionsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listBillingOptions().
+     * @returns {Promise<EnterpriseBillingUnitsV1.BillingOption[]>}
+     */
+    public async getNext(): Promise<EnterpriseBillingUnitsV1.BillingOption[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listBillingOptions(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next_url) {
+        next = getQueryParam(result.next_url, 'start');
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resources;
+    }
+
+    /**
+     * Returns all results by invoking listBillingOptions() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<EnterpriseBillingUnitsV1.BillingOption[]>}
+     */
+    public async getAll(): Promise<EnterpriseBillingUnitsV1.BillingOption[]> {
+      const results: BillingOption[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
   }
 }
 
