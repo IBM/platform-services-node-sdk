@@ -1,3 +1,10 @@
+# [0.33.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.32.0...v0.33.0) (2023-03-29)
+
+
+### Features
+
+* **Enterprise Billing Units:** add start and limit parameters to billing unit list APIs ([#194](https://github.com/IBM/platform-services-node-sdk/issues/194)) ([26bb1b8](https://github.com/IBM/platform-services-node-sdk/commit/26bb1b8531c50217958dc5398c4e3bd5c32ba947))
+
 # [0.32.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.3...v0.32.0) (2023-03-27)
 
 
