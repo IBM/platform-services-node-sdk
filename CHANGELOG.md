@@ -1,3 +1,10 @@
+# [0.34.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.33.1...v0.34.0) (2023-04-21)
+
+
+### Features
+
+* **Enterprise Management:** re-gen service after recent API changes ([#204](https://github.com/IBM/platform-services-node-sdk/issues/204)) ([81e29f3](https://github.com/IBM/platform-services-node-sdk/commit/81e29f34112c167e84f43c21ce09b27c6da93b59))
+
 ## [0.33.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.33.0...v0.33.1) (2023-04-05)
 
 
