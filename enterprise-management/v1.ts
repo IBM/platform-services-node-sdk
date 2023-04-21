@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.60.2-95dc7721-20221102-203229
+ * IBM OpenAPI SDK Code Generator Version: 3.64.1-cee95189-20230124-211647
  */
 
 /* eslint-disable max-classes-per-file */
@@ -448,6 +448,8 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} params.name - The name of the account. This field must have 3 - 60 characters.
    * @param {string} params.ownerIamId - The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must
    * already exist.
+   * @param {JsonObject} [params.traits] - The traits object can be used to opt-out of Multi-Factor Authentication
+   * setting when creating a child account in the enterprise. This is an optional field.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>>}
    */
@@ -456,7 +458,7 @@ class EnterpriseManagementV1 extends BaseService {
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>> {
     const _params = { ...params };
     const _requiredParams = ['parent', 'name', 'ownerIamId'];
-    const _validParams = ['parent', 'name', 'ownerIamId', 'headers'];
+    const _validParams = ['parent', 'name', 'ownerIamId', 'traits', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -466,6 +468,7 @@ class EnterpriseManagementV1 extends BaseService {
       'parent': _params.parent,
       'name': _params.name,
       'owner_iam_id': _params.ownerIamId,
+      'traits': _params.traits,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -520,6 +523,8 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} [params.parent] - Get accounts that are either immediate children or are a part of the hierarchy
    * for a given parent CRN.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between `0` and `100`.
+   * @param {boolean} [params.includeDeleted] - Include the deleted accounts from an enterprise when used in conjunction
+   * with enterprise_id.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountsResponse>>}
    */
@@ -534,6 +539,7 @@ class EnterpriseManagementV1 extends BaseService {
       'nextDocid',
       'parent',
       'limit',
+      'includeDeleted',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -547,6 +553,7 @@ class EnterpriseManagementV1 extends BaseService {
       'next_docid': _params.nextDocid,
       'parent': _params.parent,
       'limit': _params.limit,
+      'include_deleted': _params.includeDeleted,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -583,7 +590,7 @@ class EnterpriseManagementV1 extends BaseService {
    * has access to retrieve the account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The ID of the account to retrieve.
+   * @param {string} params.accountId - The ID of the target account.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.Account>>}
    */
@@ -635,7 +642,7 @@ class EnterpriseManagementV1 extends BaseService {
    * Move an account to a different parent within the same enterprise.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - The ID of the account to retrieve.
+   * @param {string} params.accountId - The ID of the target account.
    * @param {string} params.parent - The CRN of the new parent within the enterprise.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
@@ -681,6 +688,52 @@ class EnterpriseManagementV1 extends BaseService {
           },
           _params.headers
         ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove an account from its enterprise.
+   *
+   * Remove an account from the enterprise its currently in. After an account is removed, it will be canceled and cannot
+   * be reactivated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The ID of the target account.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
+   */
+  public deleteAccount(
+    params: EnterpriseManagementV1.DeleteAccountParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteAccount'
+    );
+
+    const parameters = {
+      options: {
+        url: '/accounts/{account_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -776,6 +829,8 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} [params.parent] - Get account groups that are either immediate children or are a part of the
    * hierarchy for a given parent CRN.
    * @param {number} [params.limit] - Return results up to this limit. Valid values are between `0` and `100`.
+   * @param {boolean} [params.includeDeleted] - Include the deleted account groups from an enterprise when used in
+   * conjunction with other query parameters.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.ListAccountGroupsResponse>>}
    */
@@ -790,6 +845,7 @@ class EnterpriseManagementV1 extends BaseService {
       'nextDocid',
       'parent',
       'limit',
+      'includeDeleted',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -803,6 +859,7 @@ class EnterpriseManagementV1 extends BaseService {
       'next_docid': _params.nextDocid,
       'parent': _params.parent,
       'limit': _params.limit,
+      'include_deleted': _params.includeDeleted,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -946,6 +1003,53 @@ class EnterpriseManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+
+  /**
+   * Delete an account group from the enterprise.
+   *
+   * Delete an existing account group from the enterprise. You can't delete an account group that has child account
+   * groups, the delete request will fail. This API doesn't perform a recursive delete on the child account groups, it
+   * only deletes the current account group.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountGroupId - The ID of the account group to retrieve.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>>}
+   */
+  public deleteAccountGroup(
+    params: EnterpriseManagementV1.DeleteAccountGroupParams
+  ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountGroupId'];
+    const _validParams = ['accountGroupId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_group_id': _params.accountGroupId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      EnterpriseManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteAccountGroup'
+    );
+
+    const parameters = {
+      options: {
+        url: '/account-groups/{account_group_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -1053,6 +1157,10 @@ namespace EnterpriseManagementV1 {
     name: string;
     /** The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must already exist. */
     ownerIamId: string;
+    /** The traits object can be used to opt-out of Multi-Factor Authentication setting when creating a child
+     *  account in the enterprise. This is an optional field.
+     */
+    traits?: JsonObject;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1070,22 +1178,31 @@ namespace EnterpriseManagementV1 {
     parent?: string;
     /** Return results up to this limit. Valid values are between `0` and `100`. */
     limit?: number;
+    /** Include the deleted accounts from an enterprise when used in conjunction with enterprise_id. */
+    includeDeleted?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getAccount` operation. */
   export interface GetAccountParams {
-    /** The ID of the account to retrieve. */
+    /** The ID of the target account. */
     accountId: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateAccount` operation. */
   export interface UpdateAccountParams {
-    /** The ID of the account to retrieve. */
+    /** The ID of the target account. */
     accountId: string;
     /** The CRN of the new parent within the enterprise. */
     parent: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAccount` operation. */
+  export interface DeleteAccountParams {
+    /** The ID of the target account. */
+    accountId: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1122,6 +1239,8 @@ namespace EnterpriseManagementV1 {
     parent?: string;
     /** Return results up to this limit. Valid values are between `0` and `100`. */
     limit?: number;
+    /** Include the deleted account groups from an enterprise when used in conjunction with other query parameters. */
+    includeDeleted?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1140,6 +1259,13 @@ namespace EnterpriseManagementV1 {
     name?: string;
     /** The IAM ID of the user to be the new primary contact for the account group. */
     primaryContactIamId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAccountGroup` operation. */
+  export interface DeleteAccountGroupParams {
+    /** The ID of the account group to retrieve. */
+    accountGroupId: string;
     headers?: OutgoingHttpHeaders;
   }
 
