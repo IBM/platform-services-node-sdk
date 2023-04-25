@@ -134,6 +134,80 @@ describe('UserManagementV1_integration', () => {
     console.log(`listUsers() response contained ${numUsers} total users`);
     expect(numUsers).toBeGreaterThan(0);
   });
+  test('listUsers() via IncludeSettings', async () => {
+    const results = [];
+    let start = null;
+
+    do {
+      // Retrieve the users, 10 per page to test out pagination.
+      const params = {
+        accountId,
+        limit: 10,
+        start,
+        includeSettings: true,
+      };
+
+      const res = await userManagementService.listUsers(params);
+      expect(res).toBeDefined();
+      expect(res.status).toEqual(200);
+
+      const { result } = res;
+      expect(result).toBeDefined();
+
+      // Add the just-retrieved page to "results".
+      expect(result.resources).toBeDefined();
+      results.push(...result.resources);
+
+      // Determine the offset to use to get the next page.
+      if (result.next_url) {
+        start = getQueryParam(result.next_url, '_start');
+      } else {
+        start = null;
+      }
+    } while (start != null);
+
+    // Make sure we found some users.
+    const numUsers = results.length;
+    console.log(`listUsers() response contained ${numUsers} total users`);
+    expect(numUsers).toBeGreaterThan(0);
+  });
+  test('listUsers() via Search', async () => {
+    const results = [];
+    let start = null;
+
+    do {
+      // Retrieve the users, 10 per page to test out pagination.
+      const params = {
+        accountId,
+        limit: 10,
+        start,
+        search: 'state:ACTIVE',
+      };
+
+      const res = await userManagementService.listUsers(params);
+      expect(res).toBeDefined();
+      expect(res.status).toEqual(200);
+
+      const { result } = res;
+      expect(result).toBeDefined();
+
+      // Add the just-retrieved page to "results".
+      expect(result.resources).toBeDefined();
+      results.push(...result.resources);
+
+      // Determine the offset to use to get the next page.
+      if (result.next_url) {
+        start = getQueryParam(result.next_url, '_start');
+      } else {
+        start = null;
+      }
+    } while (start != null);
+
+    // Make sure we found some users.
+    const numUsers = results.length;
+    console.log(`listUsers() response contained ${numUsers} total users`);
+    expect(numUsers).toBeGreaterThan(0);
+  });
   test('listUsers() via UsersPager', async () => {
     const params = {
       accountId,
