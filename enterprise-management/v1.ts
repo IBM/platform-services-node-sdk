@@ -448,8 +448,8 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} params.name - The name of the account. This field must have 3 - 60 characters.
    * @param {string} params.ownerIamId - The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must
    * already exist.
-   * @param {JsonObject} [params.traits] - The traits object can be used to opt-out of Multi-Factor Authentication
-   * setting when creating a child account in the enterprise. This is an optional field.
+   * @param {CreateAccountRequestTraits} [params.traits] - The traits object can be used to opt-out of Multi-Factor
+   * Authentication setting when creating a child account in the enterprise. This is an optional field.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>>}
    */
@@ -1160,7 +1160,7 @@ namespace EnterpriseManagementV1 {
     /** The traits object can be used to opt-out of Multi-Factor Authentication setting when creating a child
      *  account in the enterprise. This is an optional field.
      */
-    traits?: JsonObject;
+    traits?: CreateAccountRequestTraits;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1349,6 +1349,14 @@ namespace EnterpriseManagementV1 {
   export interface CreateAccountGroupResponse {
     /** The ID of the account group entity that was created. */
     account_group_id?: string;
+  }
+
+  /** The traits object can be used to opt-out of Multi-Factor Authentication setting when creating a child account in the enterprise. This is an optional field. */
+  export interface CreateAccountRequestTraits {
+    /** By default MFA will be set on the account. To opt out, pass the traits object with the mfa field set to
+     *  empty string.
+     */
+    mfa?: string;
   }
 
   /** A newly-created account. */

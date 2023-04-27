@@ -20,7 +20,7 @@ const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
-const timeout = 200000;
+const timeout = 300000;
 
 // Location of our config file.
 const configFile = 'enterprise_management.env';
