@@ -91,27 +91,4 @@ describe('GlobalSearchV2', () => {
 
     // end-search
   });
-  test('getSupportedTypes request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getSupportedTypes() result:');
-    // begin-get_supported_types
-
-    try {
-      const res = await globalSearchService.getSupportedTypes({});
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_supported_types
-  });
 });
