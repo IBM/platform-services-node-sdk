@@ -1,3 +1,10 @@
+## [0.34.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.0...v0.34.1) (2023-04-27)
+
+
+### Bug Fixes
+
+* **Enterprise management:** re-gen service after traits schema change ([#207](https://github.com/IBM/platform-services-node-sdk/issues/207)) ([7f2fcf8](https://github.com/IBM/platform-services-node-sdk/commit/7f2fcf8d3d2504d05dab49a2ba14d763116691eb))
+
 # [0.34.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.33.1...v0.34.0) (2023-04-21)
 
 
