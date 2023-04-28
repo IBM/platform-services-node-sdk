@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,11 +127,15 @@ describe('UserManagementV1', () => {
         // Construct the params object for operation listUsers
         const accountId = 'testString';
         const limit = 100;
+        const includeSettings = true;
+        const search = 'testString';
         const start = 'testString';
         const userId = 'testString';
         const listUsersParams = {
           accountId,
           limit,
+          includeSettings,
+          search,
           start,
           userId,
         };
@@ -151,6 +155,8 @@ describe('UserManagementV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.include_settings).toEqual(includeSettings);
+        expect(mockRequestOptions.qs.search).toEqual(search);
         expect(mockRequestOptions.qs._start).toEqual(start);
         expect(mockRequestOptions.qs.user_id).toEqual(userId);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);
@@ -239,6 +245,8 @@ describe('UserManagementV1', () => {
         const params = {
           accountId: 'testString',
           limit: 10,
+          includeSettings: true,
+          search: 'testString',
           userId: 'testString',
         };
         const allResults = [];
@@ -256,6 +264,8 @@ describe('UserManagementV1', () => {
         const params = {
           accountId: 'testString',
           limit: 10,
+          includeSettings: true,
+          search: 'testString',
           userId: 'testString',
         };
         const pager = new UserManagementV1.UsersPager(userManagementService, params);
