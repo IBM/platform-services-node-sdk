@@ -622,12 +622,19 @@ describe('EnterpriseManagementV1', () => {
 
   describe('createAccount', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // CreateAccountRequestTraits
+      const createAccountRequestTraitsModel = {
+        mfa: 'testString',
+      };
+
       function __createAccountTest() {
         // Construct the params object for operation createAccount
         const parent = 'testString';
         const name = 'testString';
         const ownerIamId = 'testString';
-        const traits = { foo: 'bar' };
+        const traits = createAccountRequestTraitsModel;
         const createAccountParams = {
           parent,
           name,
