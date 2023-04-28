@@ -122,7 +122,6 @@ describe('GlobalSearchV2', () => {
         const searchCursor = 'testString';
         const transactionId = 'testString';
         const accountId = 'testString';
-        const boundary = 'global';
         const limit = 1;
         const timeout = 0;
         const sort = ['testString'];
@@ -137,7 +136,6 @@ describe('GlobalSearchV2', () => {
           searchCursor,
           transactionId,
           accountId,
-          boundary,
           limit,
           timeout,
           sort,
@@ -167,7 +165,6 @@ describe('GlobalSearchV2', () => {
         expect(mockRequestOptions.body.fields).toEqual(fields);
         expect(mockRequestOptions.body.search_cursor).toEqual(searchCursor);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
-        expect(mockRequestOptions.qs.boundary).toEqual(boundary);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.timeout).toEqual(timeout);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
@@ -211,66 +208,6 @@ describe('GlobalSearchV2', () => {
       test('should not have any problems when no parameters are passed in', () => {
         // invoke the method with no parameters
         globalSearchService.search({});
-        checkForSuccessfulExecution(createRequestMock);
-      });
-    });
-  });
-
-  describe('getSupportedTypes', () => {
-    describe('positive tests', () => {
-      function __getSupportedTypesTest() {
-        // Construct the params object for operation getSupportedTypes
-        const getSupportedTypesParams = {};
-
-        const getSupportedTypesResult = globalSearchService.getSupportedTypes(getSupportedTypesParams);
-
-        // all methods should return a Promise
-        expectToBePromise(getSupportedTypesResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/v2/resources/supported_types', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __getSupportedTypesTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        globalSearchService.enableRetries();
-        __getSupportedTypesTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        globalSearchService.disableRetries();
-        __getSupportedTypesTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const getSupportedTypesParams = {
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        globalSearchService.getSupportedTypes(getSupportedTypesParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        globalSearchService.getSupportedTypes({});
         checkForSuccessfulExecution(createRequestMock);
       });
     });
