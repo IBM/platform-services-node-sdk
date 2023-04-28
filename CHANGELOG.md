@@ -1,3 +1,10 @@
+## [0.34.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.1...v0.34.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* **Global Search:** remove deprecated method getSupportedTypes ([#206](https://github.com/IBM/platform-services-node-sdk/issues/206)) ([4be6c67](https://github.com/IBM/platform-services-node-sdk/commit/4be6c673092a35490c3c80341bc88b847e7c646c))
+
 ## [0.34.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.0...v0.34.1) (2023-04-27)
 
 
