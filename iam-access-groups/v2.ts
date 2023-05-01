@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.60.0-13f6e1ba-20221019-164457
+ * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
 /* eslint-disable max-classes-per-file */
@@ -191,6 +191,10 @@ class IamAccessGroupsV2 extends BaseService {
    * Transaction-Id and the value is anything that you choose. If no transaction ID is passed in, then a random ID is
    * generated.
    * @param {string} [params.iamId] - Return groups for member ID (IBMid, service ID or trusted profile ID).
+   * @param {string} [params.search] - Use search to filter access groups list by id, name or description.
+   * * `search=id:<ACCESS_GROUP_ID>` - To list access groups by id
+   * * `search=name:<ACCESS_GROUP_NAME>` - To list access groups by name
+   * * `search=description:<ACCESS_GROUP_DESC>` - To list access groups by description.
    * @param {string} [params.membershipType] - Membership type need to be specified along with iam_id and must be either
    * `static`, `dynamic` or `all`. If membership type is `static`, members explicitly added to the group will be shown.
    * If membership type is `dynamic`, members accessing the access group at the moment via dynamic rules will be shown.
@@ -214,6 +218,7 @@ class IamAccessGroupsV2 extends BaseService {
       'accountId',
       'transactionId',
       'iamId',
+      'search',
       'membershipType',
       'limit',
       'offset',
@@ -230,6 +235,7 @@ class IamAccessGroupsV2 extends BaseService {
     const query = {
       'account_id': _params.accountId,
       'iam_id': _params.iamId,
+      'search': _params.search,
       'membership_type': _params.membershipType,
       'limit': _params.limit,
       'offset': _params.offset,
@@ -1322,6 +1328,881 @@ class IamAccessGroupsV2 extends BaseService {
     return this.createRequest(parameters);
   }
   /*************************
+   * templateOperations
+   ************************/
+
+  /**
+   * Create Template.
+   *
+   * Endpoint to create an access groups template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - create template input name.
+   * @param {string} params.description - create template input description.
+   * @param {string} params.accountId - create template input account id.
+   * @param {AccessGroupInput} [params.accessGroup] - Access Group Input Component.
+   * @param {PolicyTemplatesInput[]} [params.policyTemplateReferences] - policy template references.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   */
+  public createTemplate(
+    params: IamAccessGroupsV2.CreateTemplateParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['name', 'description', 'accountId'];
+    const _validParams = [
+      'name',
+      'description',
+      'accountId',
+      'accessGroup',
+      'policyTemplateReferences',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'description': _params.description,
+      'account_id': _params.accountId,
+      'access_group': _params.accessGroup,
+      'policy_template_references': _params.policyTemplateReferences,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List Templates.
+   *
+   * Endpoint to list templates within a given account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - query parameter account id.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {number} [params.limit] - limit parameter.
+   * @param {number} [params.offset] - offset parameter.
+   * @param {boolean} [params.verbose] - query parameter verbose.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplatesResponse>>}
+   */
+  public listTemplate(
+    params: IamAccessGroupsV2.ListTemplateParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplatesResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'transactionId', 'limit', 'offset', 'verbose', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'limit': _params.limit,
+      'offset': _params.offset,
+      'verbose': _params.verbose,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamAccessGroupsV2.DEFAULT_SERVICE_NAME, 'v2', 'listTemplate');
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create Template Version.
+   *
+   * Endpoint to create a new template version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - parameter template id.
+   * @param {string} [params.name] - The name of the template version.
+   * @param {string} [params.description] - The description of the template version.
+   * @param {AccessGroupInput} [params.accessGroup] - Access Group Input Component.
+   * @param {PolicyTemplatesInput[]} [params.policyTemplateReferences] - The policy templates associated with the
+   * template version.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   */
+  public createTemplateVersion(
+    params: IamAccessGroupsV2.CreateTemplateVersionParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = [
+      'templateId',
+      'name',
+      'description',
+      'accessGroup',
+      'policyTemplateReferences',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'description': _params.description,
+      'access_group': _params.accessGroup,
+      'policy_template_references': _params.policyTemplateReferences,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}/versions',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List Template Versions.
+   *
+   * Endpoint to list all the tempalate versions of a template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - template id parameter.
+   * @param {number} [params.limit] - limit parameter.
+   * @param {number} [params.offset] - offset parameter.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplateVersionsResponse>>}
+   */
+  public listTemplateVersions(
+    params: IamAccessGroupsV2.ListTemplateVersionsParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplateVersionsResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'limit', 'offset', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'limit': _params.limit,
+      'offset': _params.offset,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listTemplateVersions'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}/versions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get Template - Specific Version.
+   *
+   * Endpoint to get specific template version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - template id parameter.
+   * @param {string} params.versionNum - path parameter verison number.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   */
+  public getTemplateSpecificVersion(
+    params: IamAccessGroupsV2.GetTemplateSpecificVersionParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'versionNum'];
+    const _validParams = ['templateId', 'versionNum', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version_num': _params.versionNum,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getTemplateSpecificVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}/versions/{version_num}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update Template Version.
+   *
+   * Endpoint to update a template version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the template.
+   * @param {string} params.versionNum - Version number of the template.
+   * @param {string} params.ifMatch - ETag value of the template version document.
+   * @param {string} [params.id] - The ID of the access group template.
+   * @param {string} [params.name] - The name of the access group template.
+   * @param {string} [params.description] - The description of the access group template.
+   * @param {string} [params.accountId] - The ID of the account to which the access group template is assigned.
+   * @param {string} [params.version] - The version of the access group template.
+   * @param {boolean} [params.committed] - A boolean indicating whether the access group template is committed.
+   * @param {AccessGroupInput} [params.accessGroup] - Access Group Input Component.
+   * @param {PolicyTemplatesInput[]} [params.policyTemplateReferences] - References to policy templates assigned to the
+   * access group template.
+   * @param {string} [params.href] - The URL of the access group template resource.
+   * @param {string} [params.createdAt] - The date and time when the access group template was created.
+   * @param {string} [params.createdById] - The ID of the user who created the access group template.
+   * @param {string} [params.lastModifiedAt] - The date and time when the access group template was last modified.
+   * @param {string} [params.lastModifiedById] - The ID of the user who last modified the access group template.
+   * @param {string} [params.transactionId] - transaction id in header.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   */
+  public replaceTemplateVersion(
+    params: IamAccessGroupsV2.ReplaceTemplateVersionParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'versionNum', 'ifMatch'];
+    const _validParams = [
+      'templateId',
+      'versionNum',
+      'ifMatch',
+      'id',
+      'name',
+      'description',
+      'accountId',
+      'version',
+      'committed',
+      'accessGroup',
+      'policyTemplateReferences',
+      'href',
+      'createdAt',
+      'createdById',
+      'lastModifiedAt',
+      'lastModifiedById',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'id': _params.id,
+      'name': _params.name,
+      'description': _params.description,
+      'account_id': _params.accountId,
+      'version': _params.version,
+      'committed': _params.committed,
+      'access_group': _params.accessGroup,
+      'policy_template_references': _params.policyTemplateReferences,
+      'href': _params.href,
+      'created_at': _params.createdAt,
+      'created_by_id': _params.createdById,
+      'last_modified_at': _params.lastModifiedAt,
+      'last_modified_by_id': _params.lastModifiedById,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+      'version_num': _params.versionNum,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'replaceTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}/versions/{version_num}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete Template Version.
+   *
+   * Endpoint to delete a template version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - template id parameter.
+   * @param {string} params.versionNum - version number in path.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
+   */
+  public deleteTemplateVersion(
+    params: IamAccessGroupsV2.DeleteTemplateVersionParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'versionNum'];
+    const _validParams = ['templateId', 'versionNum', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version_num': _params.versionNum,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}/versions/{version_num}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Commit Template.
+   *
+   * Endpoint to commit a template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - template id parameter.
+   * @param {string} params.versionNum - version number in path.
+   * @param {string} params.ifMatch - ETag value of the template version document.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   */
+  public commitTemplate(
+    params: IamAccessGroupsV2.CommitTemplateParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'versionNum', 'ifMatch'];
+    const _validParams = ['templateId', 'versionNum', 'ifMatch', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version_num': _params.versionNum,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'commitTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}/versions/{version_num}/commit',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get Template - Latest Version.
+   *
+   * Endpoint to Get the latest Template Version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - template id parameter.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   */
+  public getTemplateLatestVersion(
+    params: IamAccessGroupsV2.GetTemplateLatestVersionParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'getTemplateLatestVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete Template.
+   *
+   * Endpoint to delete a template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - template id parameter.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
+   */
+  public deleteTemplate(
+    params: IamAccessGroupsV2.DeleteTemplateParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_templates/{template_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Assign Template To Account.
+   *
+   * Endpoint to assign a template to an account/account group.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - The unique identifier of the template to be assigned.
+   * @param {string} params.templateVersion - The version number of the template to be assigned.
+   * @param {string} params.targetType - The type of the entity to which the template should be assigned, e.g.
+   * 'account', 'accountGroup', etc.
+   * @param {string} params.target - The unique identifier of the entity to which the template should be assigned.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateCreateAssignmentResponse>>}
+   */
+  public createAssignTemplate(
+    params: IamAccessGroupsV2.CreateAssignTemplateParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateCreateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'templateVersion', 'targetType', 'target'];
+    const _validParams = [
+      'templateId',
+      'templateVersion',
+      'targetType',
+      'target',
+      'transactionId',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'target_type': _params.targetType,
+      'target': _params.target,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'createAssignTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_assignment',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List Assignment.
+   *
+   * Endpoint to list template assignments.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - query parameter account id.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplatesListAssignmentResponse>>}
+   */
+  public listAssignment(
+    params?: IamAccessGroupsV2.ListAssignmentParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplatesListAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'listAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_assignment',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get Assignment.
+   *
+   * endpoint to get a specific template assignment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - assignment id parameter.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GetTemplateAssignmentResponse>>}
+   */
+  public getAssignment(
+    params: IamAccessGroupsV2.GetAssignmentParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GetTemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamAccessGroupsV2.DEFAULT_SERVICE_NAME, 'v2', 'getAssignment');
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_assignment/{assignment_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove Assignment.
+   *
+   * Endpoint to remove template assignment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - assignment id path parameter.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>>}
+   */
+  public deleteAssignment(
+    params: IamAccessGroupsV2.DeleteAssignmentParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamAccessGroupsV2.DEFAULT_SERVICE_NAME,
+      'v2',
+      'deleteAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/groups_assignment/{assignment_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
    * accountSettings
    ************************/
 
@@ -1518,6 +2399,12 @@ namespace IamAccessGroupsV2 {
     transactionId?: string;
     /** Return groups for member ID (IBMid, service ID or trusted profile ID). */
     iamId?: string;
+    /** Use search to filter access groups list by id, name or description.
+     *  * `search=id:<ACCESS_GROUP_ID>` - To list access groups by id
+     *  * `search=name:<ACCESS_GROUP_NAME>` - To list access groups by name
+     *  * `search=description:<ACCESS_GROUP_DESC>` - To list access groups by description.
+     */
+    search?: string;
     /** Membership type need to be specified along with iam_id and must be either `static`, `dynamic` or `all`. If
      *  membership type is `static`, members explicitly added to the group will be shown. If membership type is
      *  `dynamic`, members accessing the access group at the moment via dynamic rules will be shown. If membership type
@@ -1798,6 +2685,198 @@ namespace IamAccessGroupsV2 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `createTemplate` operation. */
+  export interface CreateTemplateParams {
+    /** create template input name. */
+    name: string;
+    /** create template input description. */
+    description: string;
+    /** create template input account id. */
+    accountId: string;
+    /** Access Group Input Component. */
+    accessGroup?: AccessGroupInput;
+    /** policy template references. */
+    policyTemplateReferences?: PolicyTemplatesInput[];
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listTemplate` operation. */
+  export interface ListTemplateParams {
+    /** query parameter account id. */
+    accountId: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    /** limit parameter. */
+    limit?: number;
+    /** offset parameter. */
+    offset?: number;
+    /** query parameter verbose. */
+    verbose?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createTemplateVersion` operation. */
+  export interface CreateTemplateVersionParams {
+    /** parameter template id. */
+    templateId: string;
+    /** The name of the template version. */
+    name?: string;
+    /** The description of the template version. */
+    description?: string;
+    /** Access Group Input Component. */
+    accessGroup?: AccessGroupInput;
+    /** The policy templates associated with the template version. */
+    policyTemplateReferences?: PolicyTemplatesInput[];
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listTemplateVersions` operation. */
+  export interface ListTemplateVersionsParams {
+    /** template id parameter. */
+    templateId: string;
+    /** limit parameter. */
+    limit?: number;
+    /** offset parameter. */
+    offset?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getTemplateSpecificVersion` operation. */
+  export interface GetTemplateSpecificVersionParams {
+    /** template id parameter. */
+    templateId: string;
+    /** path parameter verison number. */
+    versionNum: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `replaceTemplateVersion` operation. */
+  export interface ReplaceTemplateVersionParams {
+    /** ID of the template. */
+    templateId: string;
+    /** Version number of the template. */
+    versionNum: string;
+    /** ETag value of the template version document. */
+    ifMatch: string;
+    /** The ID of the access group template. */
+    id?: string;
+    /** The name of the access group template. */
+    name?: string;
+    /** The description of the access group template. */
+    description?: string;
+    /** The ID of the account to which the access group template is assigned. */
+    accountId?: string;
+    /** The version of the access group template. */
+    version?: string;
+    /** A boolean indicating whether the access group template is committed. */
+    committed?: boolean;
+    /** Access Group Input Component. */
+    accessGroup?: AccessGroupInput;
+    /** References to policy templates assigned to the access group template. */
+    policyTemplateReferences?: PolicyTemplatesInput[];
+    /** The URL of the access group template resource. */
+    href?: string;
+    /** The date and time when the access group template was created. */
+    createdAt?: string;
+    /** The ID of the user who created the access group template. */
+    createdById?: string;
+    /** The date and time when the access group template was last modified. */
+    lastModifiedAt?: string;
+    /** The ID of the user who last modified the access group template. */
+    lastModifiedById?: string;
+    /** transaction id in header. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteTemplateVersion` operation. */
+  export interface DeleteTemplateVersionParams {
+    /** template id parameter. */
+    templateId: string;
+    /** version number in path. */
+    versionNum: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `commitTemplate` operation. */
+  export interface CommitTemplateParams {
+    /** template id parameter. */
+    templateId: string;
+    /** version number in path. */
+    versionNum: string;
+    /** ETag value of the template version document. */
+    ifMatch: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getTemplateLatestVersion` operation. */
+  export interface GetTemplateLatestVersionParams {
+    /** template id parameter. */
+    templateId: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteTemplate` operation. */
+  export interface DeleteTemplateParams {
+    /** template id parameter. */
+    templateId: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createAssignTemplate` operation. */
+  export interface CreateAssignTemplateParams {
+    /** The unique identifier of the template to be assigned. */
+    templateId: string;
+    /** The version number of the template to be assigned. */
+    templateVersion: string;
+    /** The type of the entity to which the template should be assigned, e.g. 'account', 'accountGroup', etc. */
+    targetType: string;
+    /** The unique identifier of the entity to which the template should be assigned. */
+    target: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listAssignment` operation. */
+  export interface ListAssignmentParams {
+    /** query parameter account id. */
+    accountId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getAssignment` operation. */
+  export interface GetAssignmentParams {
+    /** assignment id parameter. */
+    assignmentId: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAssignment` operation. */
+  export interface DeleteAssignmentParams {
+    /** assignment id path parameter. */
+    assignmentId: string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `getAccountSettings` operation. */
   export interface GetAccountSettingsParams {
     /** Account ID of the API keys(s) to query. If a service IAM ID is specified in iam_id then account_id must
@@ -1835,6 +2914,32 @@ namespace IamAccessGroupsV2 {
   /*************************
    * model interfaces
    ************************/
+
+  /** Access Action Controls component. */
+  export interface AccessActionControls {
+    /** access action controls add. */
+    add?: boolean;
+  }
+
+  /** Access Group Action Controls component. */
+  export interface AccessGroupActionControls {
+    /** Access Action Controls component. */
+    access?: AccessActionControls;
+  }
+
+  /** Access Group Input Component. */
+  export interface AccessGroupInput {
+    /** access group input name. */
+    name: string;
+    /** access group input description. */
+    description?: string;
+    /** Members Input component. */
+    members?: MembersInput;
+    /** Assertions Input Component. */
+    assertions?: AssertionsInput;
+    /** Access Group Action Controls component. */
+    action_controls?: AccessGroupActionControls;
+  }
 
   /** The access groups settings for a specific account. */
   export interface AccountSettings {
@@ -1902,6 +3007,92 @@ namespace IamAccessGroupsV2 {
     errors?: Error[];
   }
 
+  /** Assertions Action Controls component. */
+  export interface AssertionsActionControls {
+    /** assertions action controls add. */
+    add?: boolean;
+    /** assertions action controls remove. */
+    remove?: boolean;
+    /** assertions action controls update. */
+    update?: boolean;
+  }
+
+  /** Assertions Input Component. */
+  export interface AssertionsInput {
+    /** assertions input rules. */
+    rules?: RuleInput[];
+    /** Assertions Action Controls component. */
+    action_controls?: AssertionsActionControls;
+  }
+
+  /** Assignment Resource Access Group. */
+  export interface AssignmentResourceAccessGroup {
+    /** Assignment resource entry. */
+    group: AssignmentResourceEntry;
+    /** List of member resources of the group. */
+    members: AssignmentResourceEntry[];
+    /** List of rules associated with the group. */
+    rules: AssignmentResourceEntry[];
+  }
+
+  /** Assignment resource entry. */
+  export interface AssignmentResourceEntry {
+    /** Assignment Resource Entry Id. */
+    id: string;
+    /** Optional name of the resource. */
+    name?: string;
+    /** Optional version of the resource. */
+    version?: string;
+    /** Resource in assignment resource entry. */
+    resource: string;
+    /** Error in assignment resource entry. */
+    error: string;
+    /** Optional operation on the resource. */
+    operation?: string;
+    /** Status of assignment resource entry. */
+    status: string;
+  }
+
+  /** Condition Input component. */
+  export interface ConditionInput {
+    /** condition input claim. */
+    claim?: string;
+    /** condition input operator. */
+    operator?: string;
+    /** condition input value. */
+    value?: string;
+  }
+
+  /** Successful response output for create template. */
+  export interface CreateTemplateResponse {
+    /** The ID of the access group template. */
+    id?: string;
+    /** The name of the access group template. */
+    name?: string;
+    /** The description of the access group template. */
+    description?: string;
+    /** The ID of the account to which the access group template is assigned. */
+    account_id?: string;
+    /** The version of the access group template. */
+    version?: string;
+    /** A boolean indicating whether the access group template is committed. */
+    committed?: boolean;
+    /** Access Group Input Component. */
+    access_group?: AccessGroupInput;
+    /** References to policy templates assigned to the access group template. */
+    policy_template_references?: PolicyTemplatesInput[];
+    /** The URL of the access group template resource. */
+    href?: string;
+    /** The date and time when the access group template was created. */
+    created_at?: string;
+    /** The ID of the user who created the access group template. */
+    created_by_id?: string;
+    /** The date and time when the access group template was last modified. */
+    last_modified_at?: string;
+    /** The ID of the user who last modified the access group template. */
+    last_modified_by_id?: string;
+  }
+
   /** The response from the delete member from access groups request. */
   export interface DeleteFromAllGroupsResponse {
     /** The `iam_id` of the member to removed from groups. */
@@ -1950,6 +3141,38 @@ namespace IamAccessGroupsV2 {
     message?: string;
   }
 
+  /** Response object containing the details of a template assignment. */
+  export interface GetTemplateAssignmentResponse {
+    /** The ID of the assignment. */
+    id: string;
+    /** The ID of the account that the assignment belongs to. */
+    account_id: string;
+    /** The ID of the template that the assignment is based on. */
+    template_id: string;
+    /** The version of the template that the assignment is based on. */
+    template_version: string;
+    /** The type of the entity that the assignment applies to. */
+    target_type: string;
+    /** The ID of the entity that the assignment applies to. */
+    target: string;
+    /** The operation that the assignment applies to (e.g. 'create', 'update', 'delete'). */
+    operation: string;
+    /** The status of the assignment (e.g. 'pending', 'success', 'failure'). */
+    status: string;
+    /** List of resources for the assignment. */
+    resources: ResourceListWithTargetAccountID[];
+    /** The URL of the assignment resource. */
+    href: string;
+    /** The date and time when the assignment was created. */
+    created_at: string;
+    /** The user or system that created the assignment. */
+    created_by: string;
+    /** The date and time when the assignment was last updated. */
+    updated_at: string;
+    /** The user or system that last updated the assignment. */
+    updated_by: string;
+  }
+
   /** An IAM access group. */
   export interface Group {
     /** The group's access group ID. */
@@ -1958,8 +3181,6 @@ namespace IamAccessGroupsV2 {
     name?: string;
     /** The group's description - if defined. */
     description?: string;
-    /** The account id where the group was created. */
-    account_id?: string;
     /** The timestamp the group was created at. */
     created_at?: string;
     /** The `iam_id` of the entity that created the group. */
@@ -2042,6 +3263,110 @@ namespace IamAccessGroupsV2 {
     created_by_id?: string;
   }
 
+  /** Response object for listing template versions. */
+  export interface ListTemplateVersionsResponse {
+    /** The maximum number of resources to return. */
+    limit: number;
+    /** The offset of the first resource in the list. */
+    offset: number;
+    /** The total number of resources in the list. */
+    total_count: number;
+    /** A link object. */
+    first?: HrefStruct;
+    /** A link object. */
+    previous?: HrefStruct;
+    /** A link object. */
+    next?: HrefStruct;
+    /** A link object. */
+    last?: HrefStruct;
+    /** A list of access group template versions. */
+    versions?: ListTemplatesVersionsResponse[];
+  }
+
+  /** Response object for listing templates. */
+  export interface ListTemplatesResponse {
+    /** The maximum number of resources to return. */
+    limit: number;
+    /** The offset of the first resource in the list. */
+    offset: number;
+    /** The total number of resources in the list. */
+    total_count: number;
+    /** A link object. */
+    first?: HrefStruct;
+    /** A link object. */
+    previous?: HrefStruct;
+    /** A link object. */
+    next?: HrefStruct;
+    /** A link object. */
+    last?: HrefStruct;
+    /** A list of templates. */
+    groups_templates?: TemplateItem[];
+  }
+
+  /** Response object for a single access group template version. */
+  export interface ListTemplatesVersionsResponse {
+    /** The name of the template. */
+    name?: string;
+    /** The description of the template. */
+    description?: string;
+    /** The ID of the account associated with the template. */
+    account_id?: string;
+    /** The version number of the template. */
+    version?: string;
+    /** A boolean indicating whether the template is committed or not. */
+    committed?: boolean;
+    /** Access Group Input Component. */
+    access_group?: AccessGroupInput;
+    /** A list of policy templates associated with the template. */
+    policy_template_references?: PolicyTemplatesInput[];
+    /** The URL to the template resource. */
+    href?: string;
+    /** The date and time the template was created. */
+    created_at?: string;
+    /** The ID of the user who created the template. */
+    created_by_id?: string;
+    /** The date and time the template was last modified. */
+    last_modified_at?: string;
+    /** The ID of the user who last modified the template. */
+    last_modified_by_id?: string;
+  }
+
+  /** Member Action Controls component. */
+  export interface MembersActionControls {
+    /** members action controls add. */
+    add?: boolean;
+    /** members action controls remove. */
+    remove?: boolean;
+  }
+
+  /** Members Input component. */
+  export interface MembersInput {
+    /** Users array. */
+    users?: string[];
+    /** Service ids array. */
+    service_ids?: string[];
+    /** Member Action Controls component. */
+    action_controls?: MembersActionControls;
+  }
+
+  /** Policy Templates Input component. */
+  export interface PolicyTemplatesInput {
+    /** policy template input id. */
+    id?: string;
+    /** policy template input version. */
+    version?: string;
+  }
+
+  /** Object containing details of a resource list with target account ID. */
+  export interface ResourceListWithTargetAccountID {
+    /** The ID of the entity that the resource list applies to. */
+    target?: string;
+    /** Assignment Resource Access Group. */
+    access_group?: AssignmentResourceAccessGroup;
+    /** List of policy template references for the resource list. */
+    policy_template_references?: AssignmentResourceEntry[];
+  }
+
   /** A rule of an access group. */
   export interface Rule {
     /** The rule id. */
@@ -2078,10 +3403,96 @@ namespace IamAccessGroupsV2 {
     value: string;
   }
 
+  /** Rule Input component. */
+  export interface RuleInput {
+    /** rule input name. */
+    name?: string;
+    /** rule input expiration. */
+    expiration?: number;
+    /** rule input realm name. */
+    realm_name?: string;
+    /** rule input conditions. */
+    conditions?: ConditionInput[];
+    /** Rules Action Controls component. */
+    action_controls?: RulesActionControls;
+  }
+
+  /** Rules Action Controls component. */
+  export interface RulesActionControls {
+    /** rules action controls remove. */
+    remove?: boolean;
+    /** rules action controls update. */
+    update?: boolean;
+  }
+
   /** A list of rules attached to the access group. */
   export interface RulesList {
     /** A list of rules. */
     rules?: Rule[];
+  }
+
+  /** Response object containing the details of a template assignment. */
+  export interface TemplateCreateAssignmentResponse {
+    /** The ID of the assignment. */
+    id: string;
+    /** The ID of the account that the assignment belongs to. */
+    account_id: string;
+    /** The ID of the template that the assignment is based on. */
+    template_id: string;
+    /** The version of the template that the assignment is based on. */
+    template_version: string;
+    /** The type of the entity that the assignment applies to. */
+    target_type: string;
+    /** The ID of the entity that the assignment applies to. */
+    target: string;
+    /** The operation that the assignment applies to (e.g. 'create', 'update', 'delete'). */
+    operation: string;
+    /** The status of the assignment (e.g. 'pending', 'success', 'failure'). */
+    status: string;
+    /** The URL of the assignment resource. */
+    href: string;
+    /** The date and time when the assignment was created. */
+    created_at: string;
+    /** The user or system that created the assignment. */
+    created_by: string;
+    /** The date and time when the assignment was last updated. */
+    updated_at: string;
+    /** The user or system that last updated the assignment. */
+    updated_by: string;
+  }
+
+  /** TemplateItem. */
+  export interface TemplateItem {
+    /** The ID of the template. */
+    id: string;
+    /** The name of the template. */
+    name: string;
+    /** The description of the template. */
+    description?: string;
+    /** The version of the template. */
+    version: string;
+    /** The timestamp when the template was created. */
+    created_at: string;
+    /** The ID of the user who created the template. */
+    created_by_id: string;
+    /** The timestamp when the template was last modified. */
+    last_modified_at: string;
+    /** The ID of the user who last modified the template. */
+    last_modified_by_id: string;
+    /** The URL to access the template resource. */
+    href: string;
+  }
+
+  /** Response object containing a list of template assignments. */
+  export interface TemplatesListAssignmentResponse {
+    /** Total number of items matching the query. */
+    total?: number;
+    /** Maximum number of items returned in the response. */
+    limit?: number;
+    /** Index of the first item returned in the response. */
+    offset?: number;
+    /** List of template assignments. */
+    groups_assignment?: TemplateCreateAssignmentResponse[];
   }
 
   /*************************
@@ -2242,6 +3653,168 @@ namespace IamAccessGroupsV2 {
      */
     public async getAll(): Promise<IamAccessGroupsV2.ListGroupMembersResponseMember[]> {
       const results: ListGroupMembersResponseMember[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * TemplatePager can be used to simplify the use of listTemplate().
+   */
+  export class TemplatePager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamAccessGroupsV2;
+
+    protected params: IamAccessGroupsV2.ListTemplateParams;
+
+    /**
+     * Construct a TemplatePager object.
+     *
+     * @param {IamAccessGroupsV2}  client - The service client instance used to invoke listTemplate()
+     * @param {Object} params - The parameters to be passed to listTemplate()
+     * @constructor
+     * @returns {TemplatePager}
+     */
+    constructor(client: IamAccessGroupsV2, params: IamAccessGroupsV2.ListTemplateParams) {
+      if (params && params.offset) {
+        throw new Error(`the params.offset field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listTemplate().
+     * @returns {Promise<IamAccessGroupsV2.TemplateItem[]>}
+     */
+    public async getNext(): Promise<IamAccessGroupsV2.TemplateItem[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.offset = this.pageContext.next;
+      }
+      const response = await this.client.listTemplate(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'offset');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.groups_templates;
+    }
+
+    /**
+     * Returns all results by invoking listTemplate() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamAccessGroupsV2.TemplateItem[]>}
+     */
+    public async getAll(): Promise<IamAccessGroupsV2.TemplateItem[]> {
+      const results: TemplateItem[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * TemplateVersionsPager can be used to simplify the use of listTemplateVersions().
+   */
+  export class TemplateVersionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamAccessGroupsV2;
+
+    protected params: IamAccessGroupsV2.ListTemplateVersionsParams;
+
+    /**
+     * Construct a TemplateVersionsPager object.
+     *
+     * @param {IamAccessGroupsV2}  client - The service client instance used to invoke listTemplateVersions()
+     * @param {Object} params - The parameters to be passed to listTemplateVersions()
+     * @constructor
+     * @returns {TemplateVersionsPager}
+     */
+    constructor(client: IamAccessGroupsV2, params: IamAccessGroupsV2.ListTemplateVersionsParams) {
+      if (params && params.offset) {
+        throw new Error(`the params.offset field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listTemplateVersions().
+     * @returns {Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]>}
+     */
+    public async getNext(): Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.offset = this.pageContext.next;
+      }
+      const response = await this.client.listTemplateVersions(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'offset');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.versions;
+    }
+
+    /**
+     * Returns all results by invoking listTemplateVersions() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]>}
+     */
+    public async getAll(): Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]> {
+      const results: ListTemplatesVersionsResponse[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
