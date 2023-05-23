@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2918,7 +2918,7 @@ describe('IamIdentityV1', () => {
         const sessionInvalidationInSeconds = '7200';
         const maxSessionsPerIdentity = 'testString';
         const systemAccessTokenExpirationInSeconds = '3600';
-        const systemRefreshTokenExpirationInSeconds = '2592000';
+        const systemRefreshTokenExpirationInSeconds = '259200';
         const updateAccountSettingsParams = {
           ifMatch,
           accountId,
@@ -3022,6 +3022,271 @@ describe('IamIdentityV1', () => {
     });
   });
 
+  describe('getMfaStatus', () => {
+    describe('positive tests', () => {
+      function __getMfaStatusTest() {
+        // Construct the params object for operation getMfaStatus
+        const accountId = 'testString';
+        const iamId = 'testString';
+        const getMfaStatusParams = {
+          accountId,
+          iamId,
+        };
+
+        const getMfaStatusResult = iamIdentityService.getMfaStatus(getMfaStatusParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getMfaStatusResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/mfa/accounts/{account_id}/status', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.iam_id).toEqual(iamId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getMfaStatusTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __getMfaStatusTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __getMfaStatusTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const iamId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getMfaStatusParams = {
+          accountId,
+          iamId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.getMfaStatus(getMfaStatusParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.getMfaStatus({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.getMfaStatus();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createMfaReport', () => {
+    describe('positive tests', () => {
+      function __createMfaReportTest() {
+        // Construct the params object for operation createMfaReport
+        const accountId = 'testString';
+        const type = 'testString';
+        const createMfaReportParams = {
+          accountId,
+          type,
+        };
+
+        const createMfaReportResult = iamIdentityService.createMfaReport(createMfaReportParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createMfaReportResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/mfa/accounts/{account_id}/report', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.type).toEqual(type);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createMfaReportTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __createMfaReportTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __createMfaReportTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createMfaReportParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.createMfaReport(createMfaReportParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.createMfaReport({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.createMfaReport();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getMfaReport', () => {
+    describe('positive tests', () => {
+      function __getMfaReportTest() {
+        // Construct the params object for operation getMfaReport
+        const accountId = 'testString';
+        const reference = 'testString';
+        const getMfaReportParams = {
+          accountId,
+          reference,
+        };
+
+        const getMfaReportResult = iamIdentityService.getMfaReport(getMfaReportParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getMfaReportResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/mfa/accounts/{account_id}/report/{reference}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+        expect(mockRequestOptions.path.reference).toEqual(reference);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getMfaReportTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __getMfaReportTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __getMfaReportTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const reference = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getMfaReportParams = {
+          accountId,
+          reference,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.getMfaReport(getMfaReportParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.getMfaReport({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.getMfaReport();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('createReport', () => {
     describe('positive tests', () => {
       function __createReportTest() {
@@ -3051,7 +3316,7 @@ describe('IamIdentityV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.type).toEqual(type);
         expect(mockRequestOptions.qs.duration).toEqual(duration);
-        expect(mockRequestOptions.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -3137,7 +3402,7 @@ describe('IamIdentityV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path['account_id']).toEqual(accountId);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
         expect(mockRequestOptions.path.reference).toEqual(reference);
       }
 

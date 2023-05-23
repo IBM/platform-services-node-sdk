@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.60.2-95dc7721-20221102-203229
+ * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
 /* eslint-disable max-classes-per-file */
@@ -109,11 +109,19 @@ class UserManagementV1 extends BaseService {
    * role. If restricted view is enabled and user has the viewer, editor, or administrator role on the user management
    * service, the API returns all users in the account. If unrestricted view is enabled and the user does not have these
    * roles, the API returns only the current user. Users are returned in a paginated list with a default limit of 100
-   * users. You can iterate through all users by following the `next_url` field.
+   * users. You can iterate through all users by following the `next_url` field. Additional substring search fields are
+   * supported to filter the users.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account ID of the specified user.
    * @param {number} [params.limit] - The number of results to be returned.
+   * @param {boolean} [params.includeSettings] - The user settings to be returned. Set to true to view language, allowed
+   * IP address, and authentication settings.
+   * @param {string} [params.search] - The desired search results to be returned. To view the list of users with the
+   * additional search filter, use the following query options: `firstname`, `lastname`, `email`, `state`, `substate`,
+   * `iam_id`, `realm`, and `userId`. HTML URL encoding for the search query and `:` must be used. For example,
+   * search=state%3AINVALID returns a list of invalid users. Multiple search queries can be combined to obtain `OR`
+   * results using `,` operator (not URL encoded). For example, search=state%3AINVALID,email%3Amail.test.ibm.com.
    * @param {string} [params.start] - An optional token that indicates the beginning of the page of results to be
    * returned. If omitted, the first page of results is returned. This value is obtained from the 'next_url' field of
    * the operation response.
@@ -126,7 +134,15 @@ class UserManagementV1 extends BaseService {
   ): Promise<UserManagementV1.Response<UserManagementV1.UserList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'limit', 'start', 'userId', 'headers'];
+    const _validParams = [
+      'accountId',
+      'limit',
+      'includeSettings',
+      'search',
+      'start',
+      'userId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -134,6 +150,8 @@ class UserManagementV1 extends BaseService {
 
     const query = {
       'limit': _params.limit,
+      'include_settings': _params.includeSettings,
+      'search': _params.search,
       '_start': _params.start,
       'user_id': _params.userId,
     };
@@ -716,6 +734,17 @@ namespace UserManagementV1 {
     accountId: string;
     /** The number of results to be returned. */
     limit?: number;
+    /** The user settings to be returned. Set to true to view language, allowed IP address, and authentication
+     *  settings.
+     */
+    includeSettings?: boolean;
+    /** The desired search results to be returned. To view the list of users with the additional search filter, use
+     *  the following query options: `firstname`, `lastname`, `email`, `state`, `substate`, `iam_id`, `realm`, and
+     *  `userId`. HTML URL encoding for the search query and `:` must be used. For example, search=state%3AINVALID
+     *  returns a list of invalid users. Multiple search queries can be combined to obtain `OR` results using `,`
+     *  operator (not URL encoded). For example, search=state%3AINVALID,email%3Amail.test.ibm.com.
+     */
+    search?: string;
     /** An optional token that indicates the beginning of the page of results to be returned. If omitted, the first
      *  page of results is returned. This value is obtained from the 'next_url' field of the operation response.
      */

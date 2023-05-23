@@ -20,7 +20,7 @@ const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
-const timeout = 200000;
+const timeout = 300000;
 
 // Location of our config file.
 const configFile = 'enterprise_management.env';
@@ -158,6 +158,16 @@ describe('EnterpriseManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
+  test('deleteAccountGroup()', async () => {
+    const params = {
+      accountGroupId,
+    };
+
+    const res = await enterpriseManagementService.deleteAccountGroup(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
+  });
   test('createAccount()', async () => {
     const parentCrn = `crn:v1:bluemix:public:enterprise::a/${enterpriseAccountId}::account-group:${accountGroupId}`;
     const params = {
@@ -242,6 +252,16 @@ describe('EnterpriseManagementV1_integration', () => {
 
     const res = await enterpriseManagementService.updateAccount(params);
     expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('deleteAccount()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await enterpriseManagementService.deleteAccount(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
   });
   test('listEnterprises()', async () => {

@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
+ * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
 import * as extend from 'extend';
@@ -26,8 +26,6 @@ import {
   getAuthenticatorFromEnvironment,
   validateParams,
   UserOptions,
-  getNewLogger,
-  SDKLogger,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -44,8 +42,6 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class GlobalSearchV2 extends BaseService {
-  static _logger: SDKLogger = getNewLogger('GlobalSearchV2');
-
   static DEFAULT_SERVICE_URL: string = 'https://api.global-search-tagging.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'global_search';
@@ -133,8 +129,6 @@ class GlobalSearchV2 extends BaseService {
    * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
    * services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.accountId] - The account ID to filter resources.
-   * @param {string} [params.boundary] - The boundary where the search performs. This parameter must be set only for the
-   * cross-account searches.
    * @param {number} [params.limit] - The maximum number of hits to return. Defaults to 10.
    * @param {number} [params.timeout] - A search timeout in milliseconds, bounding the search request to run within the
    * specified time value and bail with the hits accumulated up to that point when expired. Defaults to the system
@@ -157,9 +151,6 @@ class GlobalSearchV2 extends BaseService {
    * the resources that the user can view (only a GhoST admin can use this parameter). If false (default), only
    * resources user can view are returned; if true, only resources that user has permissions for tagging are returned
    * (_for administrators only_).
-   * @param {string} [params.isHidden] - Determines if the result set must return only the visible resources or not. If
-   * false (default), only visible resources are returned; if true, only hidden resources are returned; if any, all
-   * resources are returned.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>>}
    */
@@ -174,7 +165,6 @@ class GlobalSearchV2 extends BaseService {
       'searchCursor',
       'transactionId',
       'accountId',
-      'boundary',
       'limit',
       'timeout',
       'sort',
@@ -183,7 +173,6 @@ class GlobalSearchV2 extends BaseService {
       'isPublic',
       'impersonateUser',
       'canTag',
-      'isHidden',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -199,7 +188,6 @@ class GlobalSearchV2 extends BaseService {
 
     const query = {
       'account_id': _params.accountId,
-      'boundary': _params.boundary,
       'limit': _params.limit,
       'timeout': _params.timeout,
       'sort': _params.sort,
@@ -208,7 +196,6 @@ class GlobalSearchV2 extends BaseService {
       'is_public': _params.isPublic,
       'impersonate_user': _params.impersonateUser,
       'can_tag': _params.canTag,
-      'is_hidden': _params.isHidden,
     };
 
     const sdkHeaders = getSdkHeaders(GlobalSearchV2.DEFAULT_SERVICE_NAME, 'v2', 'search');
@@ -228,57 +215,6 @@ class GlobalSearchV2 extends BaseService {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'transaction-id': _params.transactionId,
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-  /*************************
-   * resourceTypes
-   ************************/
-
-  /**
-   * DEPRECATED. Get all GhoST indexes.
-   *
-   * Retrieves a list of all GhoST indexes.
-   *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.SupportedTypesList>>}
-   * @deprecated this method is deprecated and may be removed in a future release
-   */
-  public getSupportedTypes(
-    params?: GlobalSearchV2.GetSupportedTypesParams
-  ): Promise<GlobalSearchV2.Response<GlobalSearchV2.SupportedTypesList>> {
-    GlobalSearchV2._logger.warn('A deprecated operation has been invoked: getSupportedTypes');
-    const _params = { ...params };
-    const _requiredParams = [];
-    const _validParams = ['headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const sdkHeaders = getSdkHeaders(
-      GlobalSearchV2.DEFAULT_SERVICE_NAME,
-      'v2',
-      'getSupportedTypes'
-    );
-
-    const parameters = {
-      options: {
-        url: '/v2/resources/supported_types',
-        method: 'GET',
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -335,8 +271,6 @@ namespace GlobalSearchV2 {
     transactionId?: string;
     /** The account ID to filter resources. */
     accountId?: string;
-    /** The boundary where the search performs. This parameter must be set only for the cross-account searches. */
-    boundary?: SearchConstants.Boundary | string;
     /** The maximum number of hits to return. Defaults to 10. */
     limit?: number;
     /** A search timeout in milliseconds, bounding the search request to run within the specified time value and
@@ -371,20 +305,11 @@ namespace GlobalSearchV2 {
      *  only_).
      */
     canTag?: SearchConstants.CanTag | string;
-    /** Determines if the result set must return only the visible resources or not. If false (default), only visible
-     *  resources are returned; if true, only hidden resources are returned; if any, all resources are returned.
-     */
-    isHidden?: SearchConstants.IsHidden | string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `search` operation. */
   export namespace SearchConstants {
-    /** The boundary where the search performs. This parameter must be set only for the cross-account searches. */
-    export enum Boundary {
-      GLOBAL = 'global',
-      US_REGULATED = 'us-regulated',
-    }
     /** Determines if deleted documents should be included in result set or not. Possible values are false (default), true or any. If false, only existing documents are returned; if true, only deleted documents are returned; If any, both existing and deleted documents are returned. (_for administrators only_). */
     export enum IsDeleted {
       TRUE = 'true',
@@ -408,17 +333,6 @@ namespace GlobalSearchV2 {
       TRUE = 'true',
       FALSE = 'false',
     }
-    /** Determines if the result set must return only the visible resources or not. If false (default), only visible resources are returned; if true, only hidden resources are returned; if any, all resources are returned. */
-    export enum IsHidden {
-      TRUE = 'true',
-      FALSE = 'false',
-      ANY = 'any',
-    }
-  }
-
-  /** Parameters for the `getSupportedTypes` operation. */
-  export interface GetSupportedTypesParams {
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
@@ -443,12 +357,6 @@ namespace GlobalSearchV2 {
      *  which means there are no more results to fetch.
      */
     items: ResultItem[];
-  }
-
-  /** A list of all GhoST indexes. */
-  export interface SupportedTypesList {
-    /** A list of all GhoST indexes. */
-    supported_types?: string[];
   }
 }
 

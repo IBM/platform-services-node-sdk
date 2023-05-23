@@ -1,3 +1,66 @@
+## [0.34.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.1...v0.34.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* **Global Search:** remove deprecated method getSupportedTypes ([#206](https://github.com/IBM/platform-services-node-sdk/issues/206)) ([4be6c67](https://github.com/IBM/platform-services-node-sdk/commit/4be6c673092a35490c3c80341bc88b847e7c646c))
+
+## [0.34.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.0...v0.34.1) (2023-04-27)
+
+
+### Bug Fixes
+
+* **Enterprise management:** re-gen service after traits schema change ([#207](https://github.com/IBM/platform-services-node-sdk/issues/207)) ([7f2fcf8](https://github.com/IBM/platform-services-node-sdk/commit/7f2fcf8d3d2504d05dab49a2ba14d763116691eb))
+
+# [0.34.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.33.1...v0.34.0) (2023-04-21)
+
+
+### Features
+
+* **Enterprise Management:** re-gen service after recent API changes ([#204](https://github.com/IBM/platform-services-node-sdk/issues/204)) ([81e29f3](https://github.com/IBM/platform-services-node-sdk/commit/81e29f34112c167e84f43c21ce09b27c6da93b59))
+
+## [0.33.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.33.0...v0.33.1) (2023-04-05)
+
+
+### Bug Fixes
+
+* **Usage Reports:** regen usage reports with latest API def ([#203](https://github.com/IBM/platform-services-node-sdk/issues/203)) ([8c04367](https://github.com/IBM/platform-services-node-sdk/commit/8c0436755f43dd5cc256f79e0353bc6990487958))
+
+# [0.33.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.32.0...v0.33.0) (2023-03-29)
+
+
+### Features
+
+* **Enterprise Billing Units:** add start and limit parameters to billing unit list APIs ([#194](https://github.com/IBM/platform-services-node-sdk/issues/194)) ([26bb1b8](https://github.com/IBM/platform-services-node-sdk/commit/26bb1b8531c50217958dc5398c4e3bd5c32ba947))
+
+# [0.32.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.3...v0.32.0) (2023-03-27)
+
+
+### Features
+
+* **IAM Policy Management:** support of new query param source_group_id for v2/roles ([#199](https://github.com/IBM/platform-services-node-sdk/issues/199)) ([59c355e](https://github.com/IBM/platform-services-node-sdk/commit/59c355eabe0d7b82bfa0fc129cfec49944fdd1bc))
+
+## [0.31.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.2...v0.31.3) (2023-03-07)
+
+
+### Bug Fixes
+
+* **Global Search:** remove is_hidden param from search operation ([#198](https://github.com/IBM/platform-services-node-sdk/issues/198)) ([51eb297](https://github.com/IBM/platform-services-node-sdk/commit/51eb2974f21e9b813bf322b0782a800d14ef02a4))
+
+## [0.31.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.1...v0.31.2) (2023-02-15)
+
+
+### Bug Fixes
+
+* **IAM Identity:** re-gen with latest API definition ([#195](https://github.com/IBM/platform-services-node-sdk/issues/195)) ([beb4067](https://github.com/IBM/platform-services-node-sdk/commit/beb40672b685f5f4be5e465ab0d5d86cbac514cd))
+
+## [0.31.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.31.0...v0.31.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** update incorrect example operation id comments to match API definition ([eefdc34](https://github.com/IBM/platform-services-node-sdk/commit/eefdc34760ff2367eaf3fbd9ac2401998d93cd5b))
+
 # [0.31.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.30.2...v0.31.0) (2023-01-25)
 
 

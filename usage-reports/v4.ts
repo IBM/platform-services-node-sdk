@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.62.0-a2a22f95-20221115-162524
+ * IBM OpenAPI SDK Code Generator Version: 3.64.1-cee95189-20230124-211647
  */
 
 /* eslint-disable max-classes-per-file */
@@ -855,6 +855,8 @@ namespace UsageReportsV4 {
     month: string;
     /** All the resource used in the account. */
     resources: Resource[];
+    /** The value of the account's currency in USD. */
+    currency_rate?: number;
   }
 
   /** Information about a discount that is associated with a metric. */
@@ -913,6 +915,10 @@ namespace UsageReportsV4 {
     month: string;
     /** All the resource used in the account. */
     usage: Metric[];
+    /** Pending charge from classic infrastructure. */
+    pending?: boolean;
+    /** The value of the account's currency in USD. */
+    currency_rate?: number;
   }
 
   /** The link to the first page of the search query. */
@@ -1013,6 +1019,8 @@ namespace UsageReportsV4 {
     month: string;
     /** All the resource used in the account. */
     resources: Resource[];
+    /** The value of the account's currency in USD. */
+    currency_rate?: number;
   }
 
   /** The aggregated values for the plan. */
@@ -1033,6 +1041,8 @@ namespace UsageReportsV4 {
     usage: Metric[];
     /** All the discounts applicable to the plan. */
     discounts: Discount[];
+    /** Pending charge from classic infrastructure. */
+    pending?: boolean;
   }
 
   /** The container for all the plans in the resource. */
@@ -1071,6 +1081,8 @@ namespace UsageReportsV4 {
     month: string;
     /** All the resource used in the account. */
     resources: Resource[];
+    /** The value of the account's currency in USD. */
+    currency_rate?: number;
   }
 
   /** Charges related to cloud resources. */

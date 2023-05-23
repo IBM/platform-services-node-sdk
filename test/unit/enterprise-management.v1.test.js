@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -622,15 +622,24 @@ describe('EnterpriseManagementV1', () => {
 
   describe('createAccount', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // CreateAccountRequestTraits
+      const createAccountRequestTraitsModel = {
+        mfa: 'testString',
+      };
+
       function __createAccountTest() {
         // Construct the params object for operation createAccount
         const parent = 'testString';
         const name = 'testString';
         const ownerIamId = 'testString';
+        const traits = createAccountRequestTraitsModel;
         const createAccountParams = {
           parent,
           name,
           ownerIamId,
+          traits,
         };
 
         const createAccountResult = enterpriseManagementService.createAccount(createAccountParams);
@@ -650,6 +659,7 @@ describe('EnterpriseManagementV1', () => {
         expect(mockRequestOptions.body.parent).toEqual(parent);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.owner_iam_id).toEqual(ownerIamId);
+        expect(mockRequestOptions.body.traits).toEqual(traits);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -723,12 +733,14 @@ describe('EnterpriseManagementV1', () => {
         const nextDocid = 'testString';
         const parent = 'testString';
         const limit = 100;
+        const includeDeleted = true;
         const listAccountsParams = {
           enterpriseId,
           accountGroupId,
           nextDocid,
           parent,
           limit,
+          includeDeleted,
         };
 
         const listAccountsResult = enterpriseManagementService.listAccounts(listAccountsParams);
@@ -750,6 +762,7 @@ describe('EnterpriseManagementV1', () => {
         expect(mockRequestOptions.qs.next_docid).toEqual(nextDocid);
         expect(mockRequestOptions.qs.parent).toEqual(parent);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.include_deleted).toEqual(includeDeleted);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -817,6 +830,7 @@ describe('EnterpriseManagementV1', () => {
           accountGroupId: 'testString',
           parent: 'testString',
           limit: 10,
+          includeDeleted: true,
         };
         const allResults = [];
         const pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
@@ -835,6 +849,7 @@ describe('EnterpriseManagementV1', () => {
           accountGroupId: 'testString',
           parent: 'testString',
           limit: 10,
+          includeDeleted: true,
         };
         const pager = new EnterpriseManagementV1.AccountsPager(enterpriseManagementService, params);
         const allResults = await pager.getAll();
@@ -1017,6 +1032,90 @@ describe('EnterpriseManagementV1', () => {
     });
   });
 
+  describe('deleteAccount', () => {
+    describe('positive tests', () => {
+      function __deleteAccountTest() {
+        // Construct the params object for operation deleteAccount
+        const accountId = 'testString';
+        const deleteAccountParams = {
+          accountId,
+        };
+
+        const deleteAccountResult = enterpriseManagementService.deleteAccount(deleteAccountParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteAccountResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/accounts/{account_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteAccountTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __deleteAccountTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __deleteAccountTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteAccountParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        enterpriseManagementService.deleteAccount(deleteAccountParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.deleteAccount({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.deleteAccount();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('createAccountGroup', () => {
     describe('positive tests', () => {
       function __createAccountGroupTest() {
@@ -1120,12 +1219,14 @@ describe('EnterpriseManagementV1', () => {
         const nextDocid = 'testString';
         const parent = 'testString';
         const limit = 100;
+        const includeDeleted = true;
         const listAccountGroupsParams = {
           enterpriseId,
           parentAccountGroupId,
           nextDocid,
           parent,
           limit,
+          includeDeleted,
         };
 
         const listAccountGroupsResult = enterpriseManagementService.listAccountGroups(listAccountGroupsParams);
@@ -1147,6 +1248,7 @@ describe('EnterpriseManagementV1', () => {
         expect(mockRequestOptions.qs.next_docid).toEqual(nextDocid);
         expect(mockRequestOptions.qs.parent).toEqual(parent);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.include_deleted).toEqual(includeDeleted);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1214,6 +1316,7 @@ describe('EnterpriseManagementV1', () => {
           parentAccountGroupId: 'testString',
           parent: 'testString',
           limit: 10,
+          includeDeleted: true,
         };
         const allResults = [];
         const pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
@@ -1232,6 +1335,7 @@ describe('EnterpriseManagementV1', () => {
           parentAccountGroupId: 'testString',
           parent: 'testString',
           limit: 10,
+          includeDeleted: true,
         };
         const pager = new EnterpriseManagementV1.AccountGroupsPager(enterpriseManagementService, params);
         const allResults = await pager.getAll();
@@ -1406,6 +1510,90 @@ describe('EnterpriseManagementV1', () => {
         let err;
         try {
           await enterpriseManagementService.updateAccountGroup();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteAccountGroup', () => {
+    describe('positive tests', () => {
+      function __deleteAccountGroupTest() {
+        // Construct the params object for operation deleteAccountGroup
+        const accountGroupId = 'testString';
+        const deleteAccountGroupParams = {
+          accountGroupId,
+        };
+
+        const deleteAccountGroupResult = enterpriseManagementService.deleteAccountGroup(deleteAccountGroupParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteAccountGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/account-groups/{account_group_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.account_group_id).toEqual(accountGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteAccountGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.enableRetries();
+        __deleteAccountGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        enterpriseManagementService.disableRetries();
+        __deleteAccountGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountGroupId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteAccountGroupParams = {
+          accountGroupId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        enterpriseManagementService.deleteAccountGroup(deleteAccountGroupParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.deleteAccountGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await enterpriseManagementService.deleteAccountGroup();
         } catch (e) {
           err = e;
         }

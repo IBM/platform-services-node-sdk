@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
+
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const EnterpriseBillingUnitsV1 = require('../../dist/enterprise-billing-units/v1');
 const authHelper = require('../resources/auth-helper.js');
@@ -104,6 +107,32 @@ describe('EnterpriseBillingUnitsV1_integration', () => {
     log(`listBillingUnits(account group id) result: ${JSON.stringify(res.result, null, 2)}`);
   });
 
+  test('listBillingUnits() via BillingUnitsPager', async () => {
+    const params = {
+      accountGroupId: ACCOUNT_GROUP_ID,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(
+      enterpriseBillingUnitsService,
+      params
+    );
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseBillingUnitsV1.BillingUnitsPager(enterpriseBillingUnitsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
   test('listBillingOptions()', async () => {
     const params = {
       billingUnitId: BILLING_UNIT_ID,
@@ -113,6 +142,33 @@ describe('EnterpriseBillingUnitsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
     log(`listBillingOptions() result: ${JSON.stringify(res.result, null, 2)}`);
+  });
+
+  test('listBillingOptions() via BillingOptionsPager', async () => {
+    const params = {
+      billingUnitId: BILLING_UNIT_ID,
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(
+      enterpriseBillingUnitsService,
+      params
+    );
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new EnterpriseBillingUnitsV1.BillingOptionsPager(enterpriseBillingUnitsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
   test('getCreditPools()', async () => {

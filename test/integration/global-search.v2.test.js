@@ -74,12 +74,4 @@ describe('GlobalSearchV2_integration', () => {
 
     console.log('Total items returned by search(): ', searchResults.length);
   });
-  test('getSupportedTypes()', async () => {
-    const res = await globalSearchService.getSupportedTypes();
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-    expect(res.status).toEqual(200);
-
-    console.log(`getSupportedTypes() result: \n${JSON.stringify(res.result, null, 2)}`);
-  });
 });

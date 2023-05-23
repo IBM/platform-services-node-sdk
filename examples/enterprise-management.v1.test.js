@@ -50,11 +50,12 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
-const timeout = 20000;
+const timeout = 30000;
 
 let accountId = null;
 let accountGroupId = null;
 let newParentAccountGroupId = null;
+let newAccountId = null;
 
 describe('EnterpriseManagementV1', () => {
 
@@ -106,8 +107,20 @@ describe('EnterpriseManagementV1', () => {
       console.warn(err);
     }
 
+    accountGroupId = res.result.account_group_id;
+
+    params.name = 'New Example Account Group';
+
+    try {
+      res = await enterpriseManagementService.createAccountGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-create_account_group
-    accountGroupId = res.accountGroupId;
+    newParentAccountGroupId = res.result.account_group_id;
+
   });
   test('listAccountGroups request example', async () => {
     consoleLogMock.mockImplementation((output) => {
@@ -199,6 +212,30 @@ describe('EnterpriseManagementV1', () => {
 
     // end-update_account_group
   });
+  test('deleteAccountGroup request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_account_group
+
+    const params = {
+      accountGroupId,
+    };
+
+    try {
+      await enterpriseManagementService.deleteAccountGroup(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_account_group
+  });
   test('createAccount request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
@@ -231,8 +268,19 @@ describe('EnterpriseManagementV1', () => {
       console.warn(err);
     }
 
+    accountId = res.result.account_id;
+
+    params.name = 'New Example Account';
+
+    try {
+      res = await enterpriseManagementService.createAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
     // end-create_account
-    accountId = res.result.accountId;
+    newAccountId = res.result.account_id;
   });
   test.skip('importAccountToEnterprise request example', async () => {
 
@@ -334,7 +382,7 @@ describe('EnterpriseManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    expect(accountId).not.toBeNull();
+    expect(newAccountId).not.toBeNull();
     expect(newParentAccountGroupId).not.toBeNull();
 
     const newParentCrn = 'crn:v1:bluemix:public:enterprise::a/' + enterpriseAccountId + '::account-group:' + newParentAccountGroupId;
@@ -342,7 +390,7 @@ describe('EnterpriseManagementV1', () => {
     // begin-update_account
 
     const params = {
-      accountId: accountId,
+      accountId: newAccountId,
       parent: newParentCrn,
     };
 
@@ -353,6 +401,30 @@ describe('EnterpriseManagementV1', () => {
     }
 
     // end-update_account
+  });
+  test('deleteAccount request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_account
+
+    const params = {
+      accountId,
+    };
+
+    try {
+      await enterpriseManagementService.deleteAccount(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_account
   });
   test.skip('createEnterprise request example', async () => {
 

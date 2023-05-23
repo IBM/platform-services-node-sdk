@@ -163,6 +163,8 @@ describe('UserManagementV1', () => {
 
     const params = {
       accountId: accountId,
+      includeSettings: true,
+      search: 'state:ACTIVE',
     };
 
     const allResults = [];
@@ -177,7 +179,6 @@ describe('UserManagementV1', () => {
     } catch (err) {
       console.warn(err);
     }
-
     // end-list_users
   });
   test('removeUser request example', async () => {
