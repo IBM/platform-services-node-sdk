@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.68.2-ac7def68-20230310-195410
+ * IBM OpenAPI SDK Code Generator Version: 3.65.0-79fc0b8f-20230209-215651
  */
 
 import * as extend from 'extend';
@@ -1457,6 +1457,740 @@ class IamPolicyManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * policyTemplates
+   ************************/
+
+  /**
+   * Get policy templates by attributes.
+   *
+   * Get policy templates and filter by attributes through query parameters. The following attributes are supported:
+   * account_id account_id is a required query parameter. Only policy templates that have the specified attributes and
+   * that the caller has read access to are returned. If the caller does not have read access to any policy templates an
+   * empty array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID that the policy templates belong to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>>}
+   */
+  public listPolicyTemplates(
+    params: IamPolicyManagementV1.ListPolicyTemplatesParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'acceptLanguage', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicyTemplates'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a policy template.
+   *
+   * Creates a policy template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - name of template.
+   * @param {string} params.accountId - account id where this template will be created.
+   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
+   * @param {string} [params.description] - description of template purpose.
+   * @param {boolean} [params.committed] - committed status for the template.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   */
+  public createPolicyTemplate(
+    params: IamPolicyManagementV1.CreatePolicyTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['name', 'accountId', 'policy'];
+    const _validParams = [
+      'name',
+      'accountId',
+      'policy',
+      'description',
+      'committed',
+      'acceptLanguage',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'account_id': _params.accountId,
+      'policy': _params.policy,
+      'description': _params.description,
+      'committed': _params.committed,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicyTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve latest policy template version by template ID.
+   *
+   * Retrieve the latest version of a policy template by providing a policy template ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   */
+  public getPolicyTemplate(
+    params: IamPolicyManagementV1.GetPolicyTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId'];
+    const _validParams = ['policyTemplateId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPolicyTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a policy template by ID.
+   *
+   * Delete a policy template by providing a policy template ID. This deletes all versions of this template. A policy
+   * template cannot be deleted if the template version is assigned to an account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deletePolicyTemplate(
+    params: IamPolicyManagementV1.DeletePolicyTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId'];
+    const _validParams = ['policyTemplateId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicyTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a new policy template version.
+   *
+   * Creates a new policy template version Details TBD.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
+   * @param {string} [params.description] - description of template purpose.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   */
+  public createPolicyTemplateVersion(
+    params: IamPolicyManagementV1.CreatePolicyTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId', 'policy'];
+    const _validParams = ['policyTemplateId', 'policy', 'description', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'policy': _params.policy,
+      'description': _params.description,
+    };
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicyTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}/versions',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve policy template versions.
+   *
+   * Retrieve the versions of a policy template by providing a policy template ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>>}
+   */
+  public listPolicyTemplateVersions(
+    params: IamPolicyManagementV1.ListPolicyTemplateVersionsParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId'];
+    const _validParams = ['policyTemplateId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicyTemplateVersions'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}/versions',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a policy template version.
+   *
+   * Update a policy template version  Details TBD.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {string} params.version - The policy template version.
+   * @param {string} params.ifMatch - The revision number for updating a policy template version and must match the ETag
+   * value of the existing policy template version. The Etag can be retrieved using the GET
+   * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
+   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
+   * @param {string} [params.description] - description of template purpose.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   */
+  public replacePolicyTemplate(
+    params: IamPolicyManagementV1.ReplacePolicyTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId', 'version', 'ifMatch', 'policy'];
+    const _validParams = [
+      'policyTemplateId',
+      'version',
+      'ifMatch',
+      'policy',
+      'description',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'policy': _params.policy,
+      'description': _params.description,
+    };
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replacePolicyTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}/versions/{version}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a policy template version by ID and version.
+   *
+   * Delete a policy template by providing a policy template ID and version. You can't delete a policy template if the
+   * template version is assigned to an account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {string} params.version - The policy template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deletePolicyTemplateVersion(
+    params: IamPolicyManagementV1.DeletePolicyTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId', 'version'];
+    const _validParams = ['policyTemplateId', 'version', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicyTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}/versions/{version}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a policy template version by ID.
+   *
+   * Retrieve a policy template by providing a policy template ID and version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {string} params.version - The policy template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   */
+  public getPolicyTemplateVersion(
+    params: IamPolicyManagementV1.GetPolicyTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId', 'version'];
+    const _validParams = ['policyTemplateId', 'version', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPolicyTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}/versions/{version}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Commit a policy template version.
+   *
+   * Commit a policy template version  Details TBD.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {string} params.version - The policy template version.
+   * @param {string} params.ifMatch - The revision number for updating a policy template version and must match the ETag
+   * value of the existing policy template version. The Etag can be retrieved using the GET
+   * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public commitPolicyTemplate(
+    params: IamPolicyManagementV1.CommitPolicyTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['policyTemplateId', 'version', 'ifMatch'];
+    const _validParams = ['policyTemplateId', 'version', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'policy_template_id': _params.policyTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitPolicyTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_templates/{policy_template_id}/versions/{version}/commit',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * policyAssignments
+   ************************/
+
+  /**
+   * Get policies template assignments by attributes.
+   *
+   * Get policy template assignments by attributes. The following attributes are supported: account_id, template_id,
+   * template_version, sort account_id is a required query parameter. Only policy template assignments that have the
+   * specified attributes and that the caller has read access to are returned. If the caller does not have read access
+   * to any policy template assignments an empty array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID in which the policies belong to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.templateId] - Optional template id.
+   * @param {string} [params.templateVersion] - Optional policy template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolcyTemplateAssignmentCollection>>}
+   */
+  public listPolicyAssignments(
+    params: IamPolicyManagementV1.ListPolicyAssignmentsParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolcyTemplateAssignmentCollection>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'templateId',
+      'templateVersion',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicyAssignments'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_assignments',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a policy assignment by ID.
+   *
+   * Retrieve a policy template assignment by providing a policy assignment ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - The policy template assignment ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentRecord>>}
+   */
+  public getPolicyAssignment(
+    params: IamPolicyManagementV1.GetPolicyAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentRecord>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPolicyAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_assignments/{assignment_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -1940,9 +2674,179 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listPolicyTemplates` operation. */
+  export interface ListPolicyTemplatesParams {
+    /** The account GUID that the policy templates belong to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createPolicyTemplate` operation. */
+  export interface CreatePolicyTemplateParams {
+    /** name of template. */
+    name: string;
+    /** account id where this template will be created. */
+    accountId: string;
+    /** The core set of properties associated with the template's policy objet. */
+    policy: TemplatePolicy;
+    /** description of template purpose. */
+    description?: string;
+    /** committed status for the template. */
+    committed?: boolean;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPolicyTemplate` operation. */
+  export interface GetPolicyTemplateParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deletePolicyTemplate` operation. */
+  export interface DeletePolicyTemplateParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createPolicyTemplateVersion` operation. */
+  export interface CreatePolicyTemplateVersionParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    /** The core set of properties associated with the template's policy objet. */
+    policy: TemplatePolicy;
+    /** description of template purpose. */
+    description?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listPolicyTemplateVersions` operation. */
+  export interface ListPolicyTemplateVersionsParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `replacePolicyTemplate` operation. */
+  export interface ReplacePolicyTemplateParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    /** The policy template version. */
+    version: string;
+    /** The revision number for updating a policy template version and must match the ETag value of the existing
+     *  policy template version. The Etag can be retrieved using the GET
+     *  /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
+     */
+    ifMatch: string;
+    /** The core set of properties associated with the template's policy objet. */
+    policy: TemplatePolicy;
+    /** description of template purpose. */
+    description?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deletePolicyTemplateVersion` operation. */
+  export interface DeletePolicyTemplateVersionParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    /** The policy template version. */
+    version: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPolicyTemplateVersion` operation. */
+  export interface GetPolicyTemplateVersionParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    /** The policy template version. */
+    version: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `commitPolicyTemplate` operation. */
+  export interface CommitPolicyTemplateParams {
+    /** The policy template ID. */
+    policyTemplateId: string;
+    /** The policy template version. */
+    version: string;
+    /** The revision number for updating a policy template version and must match the ETag value of the existing
+     *  policy template version. The Etag can be retrieved using the GET
+     *  /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
+     */
+    ifMatch: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listPolicyAssignments` operation. */
+  export interface ListPolicyAssignmentsParams {
+    /** The account GUID in which the policies belong to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    /** Optional template id. */
+    templateId?: string;
+    /** Optional policy template version. */
+    templateVersion?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPolicyAssignment` operation. */
+  export interface GetPolicyAssignmentParams {
+    /** The policy template assignment ID. */
+    assignmentId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
+
+  /** On success, includes the  policy assigned. */
+  export interface AssignmentResourceCreated {
+    /** policy id. */
+    id?: string;
+  }
 
   /** Specifies the type of access granted by the policy. */
   export interface Control {
@@ -1981,6 +2885,76 @@ namespace IamPolicyManagementV1 {
     roles: EnrichedRoles[];
   }
 
+  /** A collection of policies assignments. */
+  export interface PolcyTemplateAssignmentCollection {
+    /** List of policy assignments. */
+    policy_assignments?: PolicyAssignmentRecord[];
+  }
+
+  /** The set of properties required for a policy assignment. */
+  export interface PolicyAssignmentOptions {
+    /** The policy subject type; either 'iam_id' or 'access_group_id'. */
+    subject_type: string;
+    /** The policy subject id. */
+    subject_id: string;
+    /** The policy assignment requester id. */
+    root_requester_id: string;
+    /** The template id where this policy is being assigned from. */
+    root_template_id?: string;
+    /** The template version where this policy is being assigned from. */
+    root_template_version?: string;
+  }
+
+  /** The set of properties associated with the policy template assignment. */
+  export interface PolicyAssignmentRecord {
+    /** policy template id. */
+    template_id: string;
+    /** policy template version. */
+    template_version: string;
+    /** Passed in value to correlate with other assignments. */
+    assignment_id: string;
+    /** Assignment target type. */
+    target_type: string;
+    /** assignment target id. */
+    target: string;
+    /** Policy assignment ID. */
+    id?: string;
+    /** The account GUID that the policies assignments belong to.. */
+    account_id?: string;
+    /** The href URL that links to the policies assignments API by policy assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the policy assignment was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy assignment was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy assignment. */
+    last_modified_by_id?: string;
+    /** Object for each properties for a policy assignment. */
+    options?: PolicyAssignmentOptions[];
+    /** Object for each account assigned. */
+    resources?: PolicyAssignmentResources[];
+    /** The policy assignment status. */
+    status: string;
+  }
+
+  /** The policy assignment resources. */
+  export interface PolicyAssignmentResources {
+    /** Account ID where resources are assigned. */
+    target?: string;
+    /** Set of properties for the assigned resource. */
+    policy?: PolicyAssignmentResourcesPolicy;
+  }
+
+  /** Set of properties for the assigned resource. */
+  export interface PolicyAssignmentResourcesPolicy {
+    /** On success, includes the  policy assigned. */
+    resource_created: AssignmentResourceCreated;
+    /** The error response from API. */
+    error_message?: ErrorResponse;
+  }
+
   /** A role associated with a policy. */
   export interface PolicyRole {
     /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
@@ -1991,6 +2965,46 @@ namespace IamPolicyManagementV1 {
     display_name?: string;
     /** The description of the role. */
     description?: string;
+  }
+
+  /** The core set of properties associated with the policy template. */
+  export interface PolicyTemplate {
+    /** name of template. */
+    name: string;
+    /** description of template purpose. */
+    description?: string;
+    /** account id where this template will be created. */
+    account_id: string;
+    /** Template vesrsion. */
+    version: string;
+    /** Template vesrsion committed status. */
+    committed?: boolean;
+    /** The core set of properties associated with the template's policy objet. */
+    policy: TemplatePolicy;
+    /** The policy template ID. */
+    id?: string;
+    /** The href URL that links to the policy templates API by policy tempalte ID. */
+    href?: string;
+    /** The UTC timestamp when the policy template was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy template. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy template was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy template. */
+    last_modified_by_id?: string;
+  }
+
+  /** A collection of policy Templates. */
+  export interface PolicyTemplateCollection {
+    /** List of policy templates. */
+    policy_templates?: PolicyTemplate[];
+  }
+
+  /** A collection of policy Template versions. */
+  export interface PolicyTemplateVersionsCollection {
+    /** List of policy templates versions. */
+    versions?: PolicyTemplate[];
   }
 
   /** An action that can be performed by the policy subject when assigned role. */
@@ -2021,6 +3035,32 @@ namespace IamPolicyManagementV1 {
      *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
+  }
+
+  /** Origin Template information. */
+  export interface TemplateMetada {
+    /** Origin Template CRN. */
+    crn?: string;
+    /** Template version. */
+    version?: string;
+  }
+
+  /** The core set of properties associated with the template's policy objet. */
+  export interface TemplatePolicy {
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
+    description?: string;
+    /** The resource attributes to which the policy grants access. */
+    resource: V2PolicyResource;
+    /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
+     *  'time-based-conditions:weekly:custom-hours'.
+     */
+    pattern?: string;
+    /** Additional access conditions associated with the policy. */
+    rule?: V2PolicyRule;
+    /** Specifies the type of access granted by the policy. */
+    control: Control;
   }
 
   /** The core set of properties associated with the policy. */
@@ -2060,6 +3100,8 @@ namespace IamPolicyManagementV1 {
      *  format=include_last_permit.
      */
     last_permit_frequency?: number;
+    /** Origin Template information. */
+    template?: TemplateMetada;
   }
 
   /** A collection of policies. */
@@ -2117,6 +3159,16 @@ namespace IamPolicyManagementV1 {
     value: string;
   }
 
+  /** Details of conflicting resource. */
+  export interface ConflictsWith {
+    /** The revision number of the resource. */
+    etag?: string;
+    /** The conflicting role id. */
+    role?: string;
+    /** The conflicting policy id. */
+    policy?: string;
+  }
+
   /** An additional set of properties associated with a role. */
   export interface CustomRole {
     /** The role ID. Composed of hexadecimal characters. */
@@ -2151,6 +3203,34 @@ namespace IamPolicyManagementV1 {
     href?: string;
   }
 
+  /** Additional error details. */
+  export interface ErrorDetails {
+    /** Details of conflicting resource. */
+    conflicts_with?: ConflictsWith;
+  }
+
+  /** ErrorObject. */
+  export interface ErrorObject {
+    /** The API error code for the error. */
+    code: string;
+    /** The error message returned by the API. */
+    message: string;
+    /** Additional error details. */
+    details?: ErrorDetails;
+    /** Additional info for error. */
+    more_info?: string;
+  }
+
+  /** The error response from API. */
+  export interface ErrorResponse {
+    /** The unique transaction id for the request. */
+    trace?: string;
+    /** The errors encountered during the response. */
+    errors?: ErrorObject[];
+    /** The http error code of the response. */
+    status_code?: number;
+  }
+
   /** The core set of properties associated with a policy. */
   export interface Policy {
     /** The policy ID. */
@@ -2177,6 +3257,8 @@ namespace IamPolicyManagementV1 {
     last_modified_by_id?: string;
     /** The policy state. */
     state?: string;
+    /** Origin Template information. */
+    template?: TemplateMetada;
   }
 
   /** A collection of policies. */

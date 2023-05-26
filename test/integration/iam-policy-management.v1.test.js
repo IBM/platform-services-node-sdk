@@ -138,6 +138,32 @@ describe('IamPolicyManagementV1_integration', () => {
   const testCustomRoleDescription = `SDK ${testCustomRoleName}`;
   const testCustomRoleActions = ['iam-groups.groups.read'];
 
+  let testTemplateId;
+  let testTemplateVersion;
+  let testTemplateETag;
+  const TEST_TEMPLATE_PREFIX = 'SDKNode';
+  const testTemplateName = TEST_TEMPLATE_PREFIX + testUniqueId;
+  const testTemplatePolicy = {
+    type: 'access',
+    description: 'SDK Test Policy',
+    resource: { attributes: [v2PolicyResourceServiceAttribute] },
+    control,
+  };
+  const testUpdatedTemplatePolicy = {
+    ...testTemplatePolicy,
+    control: {
+      grant: {
+        roles: [
+          {
+            role_id: testEditorRoleCrn,
+          },
+        ],
+      },
+    },
+  };
+
+  let testAssignmentId;
+
   test('should successfully complete initialization', (done) => {
     // Initialize the service client.
     service = IamPolicyManagementV1.newInstance();
@@ -749,6 +775,254 @@ describe('IamPolicyManagementV1_integration', () => {
       }
       expect(foundServiceRole).toBeTruthy();
       expect(foundSystemRole).toBeTruthy();
+    });
+  });
+
+  describe('Policy Template tests', () => {
+    test('Create a policy template', async () => {
+      const testTemplateDescription = 'SDK Test template with viewer role';
+      const params = {
+        name: testTemplateName,
+        accountId: testAccountId,
+        policy: testTemplatePolicy,
+        description: testTemplateDescription,
+      };
+
+      const response = await service.createPolicyTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.policy).toEqual(testTemplatePolicy);
+      expect(result.name).toEqual(testTemplateName);
+      expect(result.description).toEqual(testTemplateDescription);
+      testTemplateId = result.id;
+      testTemplateVersion = result.version;
+    });
+    test('Get a policy template by id', async () => {
+      expect(testTemplateId).toBeDefined();
+      const params = {
+        policyTemplateId: testTemplateId,
+      };
+
+      const response = await service.getPolicyTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      testTemplateETag = response.headers.etag;
+    });
+    test('Replace a policy template', async () => {
+      expect(testTemplateId).toBeDefined();
+      expect(testTemplateVersion).toBeDefined();
+      expect(testTemplateETag).toBeDefined();
+
+      const testTemplateDescription = 'Updated SDK Test template with editor role';
+      const params = {
+        policyTemplateId: testTemplateId,
+        version: testTemplateVersion,
+        ifMatch: testTemplateETag,
+        policy: testUpdatedTemplatePolicy,
+        description: testTemplateDescription,
+      };
+
+      const response = await service.replacePolicyTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.policy.control.grant.roles[0].role_id).toEqual(testEditorRoleCrn);
+      expect(result.name).toEqual(testTemplateName);
+      expect(result.description).toEqual(testTemplateDescription);
+    });
+    test('List policy templates', async () => {
+      const params = {
+        accountId: testAccountId,
+        acceptLanguage: 'default',
+      };
+
+      const response = await service.listPolicyTemplates(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      let foundTestTemplate = false;
+      for (const template of result.policy_templates) {
+        if (template.id === testTemplateId) {
+          foundTestTemplate = true;
+          break;
+        }
+      }
+      expect(foundTestTemplate).toBeTruthy();
+    });
+    test('Create a policy template version', async () => {
+      expect(testTemplateId).toBeDefined();
+      expect(testTemplateVersion).toBeDefined();
+
+      const testTemplateDescription = 'New version of SDK Test template with viewer role';
+      const params = {
+        policyTemplateId: testTemplateId,
+        policy: testTemplatePolicy,
+        description: testTemplateDescription,
+      };
+
+      const response = await service.createPolicyTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(Number(result.version)).toBeGreaterThan(Number(testTemplateVersion));
+    });
+    test('Get a policy template version', async () => {
+      expect(testTemplateId).toBeDefined();
+      expect(testTemplateVersion).toBeDefined();
+      const params = {
+        policyTemplateId: testTemplateId,
+        version: testTemplateVersion,
+      };
+
+      const response = await service.getPolicyTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.version).toEqual(testTemplateVersion);
+      testTemplateETag = response.headers.etag;
+    });
+    test('Commit a policy template version', async () => {
+      expect(testTemplateId).toBeDefined();
+      expect(testTemplateVersion).toBeDefined();
+      expect(testTemplateETag).toBeDefined();
+      const params = {
+        policyTemplateId: testTemplateId,
+        version: testTemplateVersion,
+        ifMatch: testTemplateETag,
+      };
+
+      let response = await service.commitPolicyTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(204);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      response = await service.getPolicyTemplateVersion({
+        policyTemplateId: testTemplateId,
+        version: testTemplateVersion,
+      });
+
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      testTemplateETag = response.headers.etag;
+
+      // Once template is committed, it cannot be updated. Check that update template for first version fails
+      let errorMessage;
+      try {
+        await service.replacePolicyTemplate({
+          policyTemplateId: testTemplateId,
+          version: testTemplateVersion,
+          ifMatch: testTemplateETag,
+          policy: testTemplatePolicy,
+          description: 'Failed SDK update a committed template',
+        });
+      } catch (e) {
+        errorMessage = e.message;
+      }
+
+      expect(errorMessage).toEqual(
+        `Policy template id '${testTemplateId}' and version '${testTemplateVersion}' is committed and cannot be updated`
+      );
+    });
+    test('Delete a policy template version', async () => {
+      const params = {
+        policyTemplateId: testTemplateId,
+        version: testTemplateVersion,
+      };
+
+      const response = await service.deletePolicyTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(204);
+    });
+    test('List policy template versions', async () => {
+      const response = await service.listPolicyTemplateVersions({
+        policyTemplateId: testTemplateId,
+      });
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      const { versions: templates } = result || [];
+      expect(templates).toHaveLength(1);
+      expect(templates[0].version).not.toEqual(testTemplateVersion);
+    });
+    test('Clean up all test policy templates', async () => {
+      // List all policy templates in the account
+      const params = {
+        accountId: testAccountId,
+      };
+
+      let response;
+      try {
+        response = await service.listPolicyTemplates(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Iterate across the policies
+      let template;
+      for (template of result.policy_templates) {
+        // Delete the test policy (or any test policies older than 5 minutes)
+        const createdAt = Date.parse(template.created_at);
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        const fiveMinutesAgo = Date.now() - FIVE_MINUTES;
+        if (
+          template.name.startsWith(TEST_TEMPLATE_PREFIX) &&
+          (template.id === testTemplateId || createdAt < fiveMinutesAgo)
+        ) {
+          const params = {
+            policyTemplateId: template.id,
+          };
+
+          let response;
+          try {
+            response = await service.deletePolicyTemplate(params);
+          } catch (err) {
+            console.warn(err);
+          }
+
+          expect(response).toBeDefined();
+          expect(response.status).toEqual(204);
+        }
+      }
+    });
+  });
+
+  describe('Policy Assignment tests', () => {
+    test('List policy assigments', async () => {
+      const params = {
+        accountId: testAccountId,
+        acceptLanguage: 'default',
+      };
+      const response = await service.listPolicyAssignments(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      testAssignmentId = result.policy_assignments[0].id;
+    });
+    test('Get policy assigment by id', async () => {
+      expect(testAssignmentId).toBeDefined();
+      const params = {
+        assignmentId: testAssignmentId,
+      };
+      const response = await service.getPolicyAssignment(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(response.result).toBeDefined();
     });
   });
 });

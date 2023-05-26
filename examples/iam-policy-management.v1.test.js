@@ -57,6 +57,10 @@ describe('IamPolicyManagementV1', () => {
   let examplePolicyETag;
   let exampleCustomRoleId;
   let exampleCustomRoleEtag;
+  let exampleTemplateId;
+  let exampleTemplateVersion;
+  let exampleTemplateEtag;
+  let exampleAssignmentId;
   const exampleCustomRoleDipslayName = 'IAM Groups read access';
   const exampleUserId = 'IBMid-user1';
   const exampleServiceName = 'iam-groups';
@@ -729,5 +733,461 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-delete_role
+  });
+  test('createPolicyTemplate request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createPolicyTemplate() result:');
+    // begin-create_policy_template
+
+    // Request models needed by this operation.
+
+    // V2PolicyResourceAttribute
+    const v2PolicyResourceAttributeModel = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+
+    // V2PolicyResource
+    const v2PolicyResourceModel = {
+      attributes: [v2PolicyResourceAttributeModel],
+    };
+
+    // Roles
+    const rolesModel = {
+      role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+    };
+
+    // Grant
+    const grantModel = {
+      roles: [rolesModel],
+    };
+
+    // Control
+    const controlModel = {
+      grant: grantModel,
+    };
+
+    // TemplatePolicy
+    const templatePolicyModel = {
+      type: 'access',
+      resource: v2PolicyResourceModel,
+      control: controlModel,
+    };
+
+    const params = {
+      name: 'SDKNodeExampleTemplate',
+      accountId: exampleAccountId,
+      policy: templatePolicyModel,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.createPolicyTemplate(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_policy_template
+    exampleTemplateId = res.result.id;
+    exampleTemplateVersion = res.result.version;
+  });
+  test('getPolicyTemplate request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getPolicyTemplate() result:');
+    // begin-get_policy_template
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.getPolicyTemplate(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_policy_template
+    exampleTemplateEtag = res.headers.etag;
+  });
+  test('replacePolicyTemplate request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    expect(exampleTemplateVersion).not.toBeNull();
+    expect(exampleTemplateEtag).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('replacePolicyTemplate() result:');
+    // begin-replace_policy_template
+
+    // Request models needed by this operation.
+
+    // V2PolicyResourceAttribute
+    const v2PolicyResourceAttributeModel = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+
+    // V2PolicyResource
+    const v2PolicyResourceModel = {
+      attributes: [v2PolicyResourceAttributeModel],
+    };
+
+    // Roles
+    const rolesModel = {
+      role_id: 'crn:v1:bluemix:public:iam::::role:Editor',
+    };
+
+    // Grant
+    const grantModel = {
+      roles: [rolesModel],
+    };
+
+    // Control
+    const controlModel = {
+      grant: grantModel,
+    };
+
+    // TemplatePolicy
+    const templatePolicyModel = {
+      type: 'access',
+      resource: v2PolicyResourceModel,
+      control: controlModel,
+    };
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+      version: exampleTemplateVersion,
+      ifMatch: exampleTemplateEtag,
+      policy: templatePolicyModel,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.replacePolicyTemplate(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-replace_policy_template
+  });
+  test('listPolicyTemplates request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listPolicyTemplates() result:');
+    // begin-list_policy_templates
+
+    const params = {
+      accountId: exampleAccountId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.listPolicyTemplates(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_policy_templates
+  });
+  test('createPolicyTemplateVersion request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createPolicyTemplateVersion() result:');
+    // begin-create_policy_template_version
+
+    // Request models needed by this operation.
+
+    // V2PolicyResourceAttribute
+    const v2PolicyResourceAttributeModel = {
+      key: 'serviceType',
+      operator: 'stringEquals',
+      value: 'service',
+    };
+
+    // V2PolicyResource
+    const v2PolicyResourceModel = {
+      attributes: [v2PolicyResourceAttributeModel],
+    };
+
+    // Roles
+    const rolesModel = {
+      role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+    };
+
+    // Grant
+    const grantModel = {
+      roles: [rolesModel],
+    };
+
+    // Control
+    const controlModel = {
+      grant: grantModel,
+    };
+
+    // TemplatePolicy
+    const templatePolicyModel = {
+      type: 'access',
+      resource: v2PolicyResourceModel,
+      control: controlModel,
+    };
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+      policy: templatePolicyModel,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.createPolicyTemplateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_policy_template_version
+  });
+  test('getPolicyTemplateVersion request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    expect(exampleTemplateVersion).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getPolicyTemplateVersion() result:');
+    // begin-get_policy_template_version
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+      version: exampleTemplateVersion,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.getPolicyTemplateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_policy_template_version
+    exampleTemplateEtag = res.headers.etag;
+  });
+  test('commitPolicyTemplate request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    expect(exampleTemplateVersion).not.toBeNull();
+    expect(exampleTemplateEtag).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-commit_policy_template
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+      version: exampleTemplateVersion,
+      ifMatch: exampleTemplateEtag,
+    };
+
+    try {
+      await iamPolicyManagementService.commitPolicyTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-commit_policy_template
+  });
+  test('deletePolicyTemplateVersion request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    expect(exampleTemplateVersion).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_policy_template_version
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+      version: exampleTemplateVersion,
+    };
+
+    try {
+      await iamPolicyManagementService.deletePolicyTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_policy_template_version
+  });
+  test('listPolicyTemplateVersions request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listPolicyTemplateVersions() result:');
+    // begin-list_policy_template_versions
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.listPolicyTemplateVersions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_policy_template_versions
+  });
+  test('deletePolicyTemplate request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_policy_template
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+    };
+
+    try {
+      await iamPolicyManagementService.deletePolicyTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_policy_template
+  });
+  test('listPolicyAssignments request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listPolicyAssignments() result:');
+    // begin-list_Policy Assignments
+
+    const params = {
+      accountId: exampleAccountId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.listPolicyAssignments(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_Policy Assignments
+    exampleAssignmentId = res.result.policy_assignments[0].id
+  });
+  test('getPolicyAssignment request example', async () => {
+    expect(exampleAssignmentId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getPolicyAssignment() result:');
+    // begin-get_policy_assignment
+
+    const params = {
+      assignmentId: exampleAssignmentId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.getPolicyAssignment(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_policy_assignment
   });
 });
