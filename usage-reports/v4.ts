@@ -827,6 +827,8 @@ namespace UsageReportsV4 {
   export interface AccountSummary {
     /** The ID of the account. */
     account_id: string;
+    /** The list of account resources for the month. */
+    account_resources?: Resource[];
     /** The month in which usages were incurred. Represented in yyyy-mm format. */
     month: string;
     /** Country. */
@@ -839,6 +841,8 @@ namespace UsageReportsV4 {
     offers: Offer[];
     /** Support-related charges. */
     support: SupportSummary[];
+    /** The list of support resources for the month. */
+    support_resources?: any[];
     /** A summary of charges and credits related to a subscription. */
     subscription: SubscriptionSummary;
   }
@@ -1031,6 +1035,7 @@ namespace UsageReportsV4 {
     plan_name?: string;
     /** The pricing region for the plan. */
     pricing_region?: string;
+    pricing_plan_id?: string;
     /** Indicates if the plan charges are billed to the customer. */
     billable: boolean;
     /** The total cost incurred by the plan. */
