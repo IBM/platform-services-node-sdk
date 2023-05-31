@@ -1,3 +1,10 @@
+# [0.35.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.2...v0.35.0) (2023-05-31)
+
+
+### Features
+
+* **build:** force new version to be published ([#210](https://github.com/IBM/platform-services-node-sdk/issues/210)) ([652f468](https://github.com/IBM/platform-services-node-sdk/commit/652f468d3412218130bbf6d6ce195e9ded8a21fc))
+
 ## [0.34.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.1...v0.34.2) (2023-04-28)
 
 
