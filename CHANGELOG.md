@@ -1,3 +1,10 @@
+# [0.36.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.35.0...v0.36.0) (2023-06-01)
+
+
+### Features
+
+* **Usage Reports:** Update Account Summary ([#211](https://github.com/IBM/platform-services-node-sdk/issues/211)) ([b3f6f0a](https://github.com/IBM/platform-services-node-sdk/commit/b3f6f0a84618e459a1e3218f017bbc519389a57c))
+
 # [0.35.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.2...v0.35.0) (2023-05-31)
 
 
