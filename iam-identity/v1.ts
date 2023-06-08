@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.64.0-959a5845-20230112-195144
+ * IBM OpenAPI SDK Code Generator Version: 3.72.0-5d70f2bb-20230511-203609
  */
 
 import * as extend from 'extend';
@@ -1781,6 +1781,310 @@ class IamIdentityV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+
+  /**
+   * Get a list of identities that can assume the trusted profile.
+   *
+   * Get a list of identities that can assume the trusted profile.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.profileId - ID of the trusted profile.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>>}
+   */
+  public getProfileIdentities(
+    params: IamIdentityV1.GetProfileIdentitiesParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['profileId'];
+    const _validParams = ['profileId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'profile-id': _params.profileId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getProfileIdentities'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profiles/{profile-id}/identities',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update the list of identities that can assume the trusted profile.
+   *
+   * Update the list of identities that can assume the trusted profile.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.profileId - ID of the trusted profile.
+   * @param {string} params.ifMatch - Entity tag of the Identities to be updated. Specify the tag that you retrieved
+   * when reading the Profile Identities. This value helps identify parallel usage of this API. Pass * to indicate
+   * updating any available version, which may result in stale updates.
+   * @param {ProfileIdentity[]} [params.identities] - List of identities that can assume the trusted profile.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>>}
+   */
+  public setProfileIdentities(
+    params: IamIdentityV1.SetProfileIdentitiesParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['profileId', 'ifMatch'];
+    const _validParams = ['profileId', 'ifMatch', 'identities', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'identities': _params.identities,
+    };
+
+    const path = {
+      'profile-id': _params.profileId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setProfileIdentities'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profiles/{profile-id}/identities',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Add a specific identity that can assume the trusted profile.
+   *
+   * Add a specific identity that can assume the trusted profile.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.profileId - ID of the trusted profile.
+   * @param {string} params.identityType - Type of the identity.
+   * @param {string} params.identifier - Identifier of the identity that can assume the trusted profiles. This can be a
+   * user identifier (IAM id), serviceid or crn. Internally it uses account id of the service id for the identifier
+   * 'serviceid' and for the identifier 'crn' it uses account id contained in the CRN.
+   * @param {string} params.type - Type of the identity.
+   * @param {string} [params.iamId] - IAM ID of the identity.
+   * @param {string[]} [params.accounts] - Only valid for the type user. Accounts from which a user can assume the
+   * trusted profile.
+   * @param {string} [params.description] - Description of the identity that can assume the trusted profile. This is
+   * optional field for all the types of identities. When this field is not set for the identity type 'serviceid' then
+   * the description of the service id is used. Description is recommended for the identity type 'crn' E.g. 'Instance
+   * 1234 of IBM Cloud Service project'.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>>}
+   */
+  public setProfileIdentity(
+    params: IamIdentityV1.SetProfileIdentityParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>> {
+    const _params = { ...params };
+    const _requiredParams = ['profileId', 'identityType', 'identifier', 'type'];
+    const _validParams = [
+      'profileId',
+      'identityType',
+      'identifier',
+      'type',
+      'iamId',
+      'accounts',
+      'description',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'identifier': _params.identifier,
+      'type': _params.type,
+      'iam_id': _params.iamId,
+      'accounts': _params.accounts,
+      'description': _params.description,
+    };
+
+    const path = {
+      'profile-id': _params.profileId,
+      'identity-type': _params.identityType,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setProfileIdentity'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profiles/{profile-id}/identities/{identity-type}',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get the identity that can assume the trusted profile.
+   *
+   * Get the identity that can assume the trusted profile.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.profileId - ID of the trusted profile.
+   * @param {string} params.identityType - Type of the identity.
+   * @param {string} params.identifierId - Identifier of the identity that can assume the trusted profiles.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>>}
+   */
+  public getProfileIdentity(
+    params: IamIdentityV1.GetProfileIdentityParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>> {
+    const _params = { ...params };
+    const _requiredParams = ['profileId', 'identityType', 'identifierId'];
+    const _validParams = ['profileId', 'identityType', 'identifierId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'profile-id': _params.profileId,
+      'identity-type': _params.identityType,
+      'identifier-id': _params.identifierId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getProfileIdentity'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profiles/{profile-id}/identities/{identity-type}/{identifier-id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete the identity that can assume the trusted profile.
+   *
+   * Delete the identity that can assume the trusted profile.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.profileId - ID of the trusted profile.
+   * @param {string} params.identityType - Type of the identity.
+   * @param {string} params.identifierId - Identifier of the identity that can assume the trusted profiles.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteProfileIdentity(
+    params: IamIdentityV1.DeleteProfileIdentityParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['profileId', 'identityType', 'identifierId'];
+    const _validParams = ['profileId', 'identityType', 'identifierId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'profile-id': _params.profileId,
+      'identity-type': _params.identityType,
+      'identifier-id': _params.identifierId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteProfileIdentity'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profiles/{profile-id}/identities/{identity-type}/{identifier-id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * accountSettings
    ************************/
@@ -1868,6 +2172,7 @@ class IamIdentityV1 extends BaseService {
    * created for the account.
    * @param {string} [params.mfa] - Defines the MFA trait for the account. Valid values:
    *   * NONE - No MFA trait set
+   *   * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
    *   * TOTP - For all non-federated IBMId users
    *   * TOTP4ALL - For all users
    *   * LEVEL1 - Email-based MFA for all users
@@ -2731,6 +3036,111 @@ namespace IamIdentityV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `getProfileIdentities` operation. */
+  export interface GetProfileIdentitiesParams {
+    /** ID of the trusted profile. */
+    profileId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `setProfileIdentities` operation. */
+  export interface SetProfileIdentitiesParams {
+    /** ID of the trusted profile. */
+    profileId: string;
+    /** Entity tag of the Identities to be updated. Specify the tag that you retrieved when reading the Profile
+     *  Identities. This value helps identify parallel usage of this API. Pass * to indicate updating any available
+     *  version, which may result in stale updates.
+     */
+    ifMatch: string;
+    /** List of identities that can assume the trusted profile. */
+    identities?: ProfileIdentity[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `setProfileIdentity` operation. */
+  export interface SetProfileIdentityParams {
+    /** ID of the trusted profile. */
+    profileId: string;
+    /** Type of the identity. */
+    identityType: SetProfileIdentityConstants.IdentityType | string;
+    /** Identifier of the identity that can assume the trusted profiles. This can be a user identifier (IAM id),
+     *  serviceid or crn. Internally it uses account id of the service id for the identifier 'serviceid' and for the
+     *  identifier 'crn' it uses account id contained in the CRN.
+     */
+    identifier: string;
+    /** Type of the identity. */
+    type: SetProfileIdentityConstants.Type | string;
+    /** IAM ID of the identity. */
+    iamId?: string;
+    /** Only valid for the type user. Accounts from which a user can assume the trusted profile. */
+    accounts?: string[];
+    /** Description of the identity that can assume the trusted profile. This is optional field for all the types of
+     *  identities. When this field is not set for the identity type 'serviceid' then the description of the service id
+     *  is used. Description is recommended for the identity type 'crn' E.g. 'Instance 1234 of IBM Cloud Service
+     *  project'.
+     */
+    description?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `setProfileIdentity` operation. */
+  export namespace SetProfileIdentityConstants {
+    /** Type of the identity. */
+    export enum IdentityType {
+      USER = 'user',
+      SERVICEID = 'serviceid',
+      CRN = 'crn',
+    }
+    /** Type of the identity. */
+    export enum Type {
+      USER = 'user',
+      SERVICEID = 'serviceid',
+      CRN = 'crn',
+    }
+  }
+
+  /** Parameters for the `getProfileIdentity` operation. */
+  export interface GetProfileIdentityParams {
+    /** ID of the trusted profile. */
+    profileId: string;
+    /** Type of the identity. */
+    identityType: GetProfileIdentityConstants.IdentityType | string;
+    /** Identifier of the identity that can assume the trusted profiles. */
+    identifierId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `getProfileIdentity` operation. */
+  export namespace GetProfileIdentityConstants {
+    /** Type of the identity. */
+    export enum IdentityType {
+      USER = 'user',
+      SERVICEID = 'serviceid',
+      CRN = 'crn',
+    }
+  }
+
+  /** Parameters for the `deleteProfileIdentity` operation. */
+  export interface DeleteProfileIdentityParams {
+    /** ID of the trusted profile. */
+    profileId: string;
+    /** Type of the identity. */
+    identityType: DeleteProfileIdentityConstants.IdentityType | string;
+    /** Identifier of the identity that can assume the trusted profiles. */
+    identifierId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `deleteProfileIdentity` operation. */
+  export namespace DeleteProfileIdentityConstants {
+    /** Type of the identity. */
+    export enum IdentityType {
+      USER = 'user',
+      SERVICEID = 'serviceid',
+      CRN = 'crn',
+    }
+  }
+
   /** Parameters for the `getAccountSettings` operation. */
   export interface GetAccountSettingsParams {
     /** Unique ID of the account. */
@@ -2767,6 +3177,7 @@ namespace IamIdentityV1 {
     allowedIpAddresses?: string;
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
@@ -2819,9 +3230,10 @@ namespace IamIdentityV1 {
       NOT_RESTRICTED = 'NOT_RESTRICTED',
       NOT_SET = 'NOT_SET',
     }
-    /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+    /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
     export enum Mfa {
       NONE = 'NONE',
+      NONE_NO_ROPC = 'NONE_NO_ROPC',
       TOTP = 'TOTP',
       TOTP4ALL = 'TOTP4ALL',
       LEVEL1 = 'LEVEL1',
@@ -2922,6 +3334,7 @@ namespace IamIdentityV1 {
     entity_tag: string;
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
@@ -2967,6 +3380,7 @@ namespace IamIdentityV1 {
     iam_id: string;
     /** Defines the MFA requirement for the user. Valid values:
      *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
@@ -3150,6 +3564,7 @@ namespace IamIdentityV1 {
   export interface IdBasedMfaEnrollment {
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
@@ -3159,6 +3574,7 @@ namespace IamIdentityV1 {
     trait_account_default: string;
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
@@ -3168,6 +3584,7 @@ namespace IamIdentityV1 {
     trait_user_specific?: string;
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
@@ -3241,11 +3658,40 @@ namespace IamIdentityV1 {
     rules: ProfileClaimRule[];
   }
 
+  /** ProfileIdentitiesResponse. */
+  export interface ProfileIdentitiesResponse {
+    /** Entity tag of the profile identities response. */
+    entity_tag?: string;
+    /** List of identities. */
+    identities?: ProfileIdentity[];
+  }
+
+  /** ProfileIdentity. */
+  export interface ProfileIdentity {
+    /** IAM ID of the identity. */
+    iam_id?: string;
+    /** Identifier of the identity that can assume the trusted profiles. This can be a user identifier (IAM id),
+     *  serviceid or crn. Internally it uses account id of the service id for the identifier 'serviceid' and for the
+     *  identifier 'crn' it uses account id contained in the CRN.
+     */
+    identifier: string;
+    /** Type of the identity. */
+    type: string;
+    /** Only valid for the type user. Accounts from which a user can assume the trusted profile. */
+    accounts?: string[];
+    /** Description of the identity that can assume the trusted profile. This is optional field for all the types of
+     *  identities. When this field is not set for the identity type 'serviceid' then the description of the service id
+     *  is used. Description is recommended for the identity type 'crn' E.g. 'Instance 1234 of IBM Cloud Service
+     *  project'.
+     */
+    description?: string;
+  }
+
   /** Link details. */
   export interface ProfileLink {
-    /** the unique identifier of the claim rule. */
+    /** the unique identifier of the link. */
     id: string;
-    /** version of the claim rule. */
+    /** version of the link. */
     entity_tag: string;
     /** If set contains a date time string of the creation date in ISO format. */
     created_at: string;
