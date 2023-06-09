@@ -1,3 +1,10 @@
+# [0.37.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.36.0...v0.37.0) (2023-06-09)
+
+
+### Features
+
+* **IAM Identity:** add trusted profile identities api ([#212](https://github.com/IBM/platform-services-node-sdk/issues/212)) ([ba13a5e](https://github.com/IBM/platform-services-node-sdk/commit/ba13a5e2475af441690688b4e1c3c20e8aa42c6e))
+
 # [0.36.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.35.0...v0.36.0) (2023-06-01)
 
 
