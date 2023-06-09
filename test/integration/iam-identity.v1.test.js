@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-console */
 /**
  * (C) Copyright IBM Corp. 2020, 2021.
@@ -53,6 +54,7 @@ let profileId1;
 let profileId2;
 let profileIamId;
 let profileEtag;
+let profileIdentitiesEtag;
 
 let claimRuleId1;
 let claimRuleId2;
@@ -1070,6 +1072,100 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
+  test('getProfileIdentities()', async () => {
+    const profileIdentities = [];
+    const params = {
+      profileId: profileId2,
+    };
+
+    const res = await iamIdentityService.getProfileIdentities(params);
+    expect(res.status).toEqual(200);
+
+    const { result } = res;
+    expect(result.identities).toBeDefined();
+    profileIdentitiesEtag = result.entity_tag;
+    for (const elem of result.identities) {
+      if (elem.identifier === iamId) {
+        profileIdentities.push(elem);
+      }
+    }
+    expect(profileIdentities).toHaveLength(0);
+  });
+
+  test('setProfileIdentities()', async () => {
+    const identifiers = [];
+    const profileaccounts=[accountId];
+    const ProfileIdentity= {
+      identifier: iamId,
+      type: 'user',
+      accounts: profileaccounts,
+      description: 'identity description'
+    }
+    const profileIdentities= [ProfileIdentity]
+    const params = {
+      profileId: profileId2,
+      identities: profileIdentities,
+      ifMatch: profileIdentitiesEtag
+    };
+
+    const res = await iamIdentityService.setProfileIdentities(params);
+    expect(res.status).toEqual(200);
+
+    const { result } = res;
+    expect(result.identities).toBeDefined();
+    profileIdentitiesEtag = result.entity_tag;
+    for (const elem of result.identities) {
+      if (elem.identifier === iamId) {
+        identifiers.push(elem);
+      }
+    }
+    expect(identifiers).toHaveLength(1);
+  });
+
+  test('getProfileIdentity()', async () => {
+    const params = {
+      profileId: profileId2,
+      identityType: 'user',
+      identifierId: iamId
+    };
+
+    const res = await iamIdentityService.getProfileIdentity(params);
+    expect(res.status).toEqual(200);
+
+    const { result } = res;
+    expect(result.identifier).toBeDefined();
+  });
+
+  test('setProfileIdentity()', async () => {
+    const profileaccounts=[accountId];
+    const params = {
+      profileId: profileId2,
+      identityType: 'user',
+      identifier: iamIdMember,
+      type: 'user',
+      accounts: profileaccounts,
+      description: 'identity description'
+    };
+
+    const res = await iamIdentityService.setProfileIdentity(params);
+    expect(res.status).toEqual(200);
+
+    const { result } = res;
+    expect(result.identifier).toBeDefined();
+  });
+
+  test('deleteProfileIdentity()', async () => {
+    const params = {
+      profileId: profileId2,
+      identityType: 'user',
+      identifierId: iamIdMember
+    };
+
+    const res = await iamIdentityService.deleteProfileIdentity(params);
+    expect(res.status).toEqual(204);
+
+  });
+
   test('deleteProfile2()', (done) => {
     expect(profileId2).toBeDefined();
     expect(profileId2).not.toBeNull();
@@ -1465,7 +1561,7 @@ describe('IamIdentityV1_integration', () => {
       accountId,
       iamId,
     };
-    const response = await iamIdentityService.getMfaReport(params);
+    const response = await iamIdentityService.getMfaStatus(params);
     expect(response).not.toBeNull();
     expect(response.iam_id).not.toBeNull();
   });

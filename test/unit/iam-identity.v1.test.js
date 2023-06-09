@@ -15,9 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 
 const IamIdentityV1 = require('../../dist/iam-identity/v1');
 
@@ -32,7 +32,7 @@ const {
 
 const iamIdentityServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://iam.cloud.ibm.com',
+  url: 'https://iam.test.cloud.ibm.com',
 };
 
 const iamIdentityService = new IamIdentityV1(iamIdentityServiceOptions);
@@ -46,7 +46,7 @@ function mock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('IamIdentityV1', () => {
@@ -2799,6 +2799,489 @@ describe('IamIdentityV1', () => {
         let err;
         try {
           await iamIdentityService.deleteLink();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getProfileIdentities', () => {
+    describe('positive tests', () => {
+      function __getProfileIdentitiesTest() {
+        // Construct the params object for operation getProfileIdentities
+        const profileId = 'testString';
+        const getProfileIdentitiesParams = {
+          profileId,
+        };
+
+        const getProfileIdentitiesResult = iamIdentityService.getProfileIdentities(getProfileIdentitiesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getProfileIdentitiesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/profiles/{profile-id}/identities', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getProfileIdentitiesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __getProfileIdentitiesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __getProfileIdentitiesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const profileId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getProfileIdentitiesParams = {
+          profileId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.getProfileIdentities(getProfileIdentitiesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.getProfileIdentities({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.getProfileIdentities();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('setProfileIdentities', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ProfileIdentity
+      const profileIdentityModel = {
+        iam_id: 'testString',
+        identifier: 'testString',
+        type: 'user',
+        accounts: ['testString'],
+        description: 'testString',
+      };
+
+      function __setProfileIdentitiesTest() {
+        // Construct the params object for operation setProfileIdentities
+        const profileId = 'testString';
+        const ifMatch = 'testString';
+        const identities = [profileIdentityModel];
+        const setProfileIdentitiesParams = {
+          profileId,
+          ifMatch,
+          identities,
+        };
+
+        const setProfileIdentitiesResult = iamIdentityService.setProfileIdentities(setProfileIdentitiesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(setProfileIdentitiesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/profiles/{profile-id}/identities', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.identities).toEqual(identities);
+        expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __setProfileIdentitiesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __setProfileIdentitiesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __setProfileIdentitiesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const profileId = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const setProfileIdentitiesParams = {
+          profileId,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.setProfileIdentities(setProfileIdentitiesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.setProfileIdentities({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.setProfileIdentities();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('setProfileIdentity', () => {
+    describe('positive tests', () => {
+      function __setProfileIdentityTest() {
+        // Construct the params object for operation setProfileIdentity
+        const profileId = 'testString';
+        const identityType = 'user';
+        const identifier = 'testString';
+        const type = 'user';
+        const iamId = 'testString';
+        const accounts = ['testString'];
+        const description = 'testString';
+        const setProfileIdentityParams = {
+          profileId,
+          identityType,
+          identifier,
+          type,
+          iamId,
+          accounts,
+          description,
+        };
+
+        const setProfileIdentityResult = iamIdentityService.setProfileIdentity(setProfileIdentityParams);
+
+        // all methods should return a Promise
+        expectToBePromise(setProfileIdentityResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/profiles/{profile-id}/identities/{identity-type}', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.identifier).toEqual(identifier);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.iam_id).toEqual(iamId);
+        expect(mockRequestOptions.body.accounts).toEqual(accounts);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
+        expect(mockRequestOptions.path['identity-type']).toEqual(identityType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __setProfileIdentityTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __setProfileIdentityTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __setProfileIdentityTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const profileId = 'testString';
+        const identityType = 'user';
+        const identifier = 'testString';
+        const type = 'user';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const setProfileIdentityParams = {
+          profileId,
+          identityType,
+          identifier,
+          type,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.setProfileIdentity(setProfileIdentityParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.setProfileIdentity({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.setProfileIdentity();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getProfileIdentity', () => {
+    describe('positive tests', () => {
+      function __getProfileIdentityTest() {
+        // Construct the params object for operation getProfileIdentity
+        const profileId = 'testString';
+        const identityType = 'user';
+        const identifierId = 'testString';
+        const getProfileIdentityParams = {
+          profileId,
+          identityType,
+          identifierId,
+        };
+
+        const getProfileIdentityResult = iamIdentityService.getProfileIdentity(getProfileIdentityParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getProfileIdentityResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/profiles/{profile-id}/identities/{identity-type}/{identifier-id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
+        expect(mockRequestOptions.path['identity-type']).toEqual(identityType);
+        expect(mockRequestOptions.path['identifier-id']).toEqual(identifierId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getProfileIdentityTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __getProfileIdentityTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __getProfileIdentityTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const profileId = 'testString';
+        const identityType = 'user';
+        const identifierId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getProfileIdentityParams = {
+          profileId,
+          identityType,
+          identifierId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.getProfileIdentity(getProfileIdentityParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.getProfileIdentity({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.getProfileIdentity();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteProfileIdentity', () => {
+    describe('positive tests', () => {
+      function __deleteProfileIdentityTest() {
+        // Construct the params object for operation deleteProfileIdentity
+        const profileId = 'testString';
+        const identityType = 'user';
+        const identifierId = 'testString';
+        const deleteProfileIdentityParams = {
+          profileId,
+          identityType,
+          identifierId,
+        };
+
+        const deleteProfileIdentityResult = iamIdentityService.deleteProfileIdentity(deleteProfileIdentityParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteProfileIdentityResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/profiles/{profile-id}/identities/{identity-type}/{identifier-id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
+        expect(mockRequestOptions.path['identity-type']).toEqual(identityType);
+        expect(mockRequestOptions.path['identifier-id']).toEqual(identifierId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteProfileIdentityTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __deleteProfileIdentityTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __deleteProfileIdentityTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const profileId = 'testString';
+        const identityType = 'user';
+        const identifierId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteProfileIdentityParams = {
+          profileId,
+          identityType,
+          identifierId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.deleteProfileIdentity(deleteProfileIdentityParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.deleteProfileIdentity({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.deleteProfileIdentity();
         } catch (e) {
           err = e;
         }
