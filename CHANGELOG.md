@@ -1,3 +1,24 @@
+# [0.37.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.36.0...v0.37.0) (2023-06-09)
+
+
+### Features
+
+* **IAM Identity:** add trusted profile identities api ([#212](https://github.com/IBM/platform-services-node-sdk/issues/212)) ([ba13a5e](https://github.com/IBM/platform-services-node-sdk/commit/ba13a5e2475af441690688b4e1c3c20e8aa42c6e))
+
+# [0.36.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.35.0...v0.36.0) (2023-06-01)
+
+
+### Features
+
+* **Usage Reports:** Update Account Summary ([#211](https://github.com/IBM/platform-services-node-sdk/issues/211)) ([b3f6f0a](https://github.com/IBM/platform-services-node-sdk/commit/b3f6f0a84618e459a1e3218f017bbc519389a57c))
+
+# [0.35.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.2...v0.35.0) (2023-05-31)
+
+
+### Features
+
+* **build:** force new version to be published ([#210](https://github.com/IBM/platform-services-node-sdk/issues/210)) ([652f468](https://github.com/IBM/platform-services-node-sdk/commit/652f468d3412218130bbf6d6ce195e9ded8a21fc))
+
 ## [0.34.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.34.1...v0.34.2) (2023-04-28)
 
 

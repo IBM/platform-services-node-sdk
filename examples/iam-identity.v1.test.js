@@ -77,6 +77,7 @@ describe('IamIdentityV1', () => {
 
   let profileId = null;
   let profileEtag = null;
+  let profileIdentitiesEtag = null;
 
   let claimRuleId = null;
   let claimRuleEtag = null;
@@ -825,7 +826,7 @@ describe('IamIdentityV1', () => {
     // begin-create_link
 
     const CreateProfileLinkRequestLink = {
-      crn: 'crn:v1:staging:public:iam-identity::a/18e3020749ce4744b0b472466d61fdb4::computeresource:Fake-Compute-Resource',
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
       namespace: 'default',
       name: 'nice name',
     };
@@ -930,6 +931,166 @@ describe('IamIdentityV1', () => {
     }
 
     // end-delete_link
+  });
+  test('getProfileIdentities request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getProfileIdentities() result:');
+    // begin-get_profile_identities
+
+    const params = {
+      profileId,
+    };
+
+    try {
+      const res = await iamIdentityService.getProfileIdentities(params);
+      const { result } = res;
+      profileIdentitiesEtag = result.entity_tag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_profile_identities
+   
+  });
+  test('setProfileIdentities request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('setProfileIdentities() result:');
+    // begin-set_profile_identities
+    const profileaccounts=[accountId];
+    const ProfileIdentity= {
+      identifier: iamId,
+      type: 'user',
+      accounts: profileaccounts,
+      description: 'identity description'
+    }
+    const profileIdentities= [ProfileIdentity]
+    const params = {
+      profileId: profileId,
+      identities: profileIdentities,
+      ifMatch: profileIdentitiesEtag
+    };
+
+    try {
+      const res = await iamIdentityService.setProfileIdentities(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-set_profile_identities
+  });
+  test('getProfileIdentity request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getProfileIdentity() result:');
+    // begin-get_profile_identity
+
+    const params = {
+      profileId: profileId,
+      identityType: 'user',
+      identifierId: iamId
+    };
+
+    try {
+      const res = await iamIdentityService.getProfileIdentity(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_profile_identity
+   
+  });
+  test('setProfileIdentity request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('setProfileIdentity() result:');
+    // begin-set_profile_identity
+
+    const profileaccounts=[accountId];
+    const params = {
+      profileId: profileId,
+      identityType: 'user',
+      identifier: iamIdMember,
+      type: 'user',
+      accounts: profileaccounts,
+      description: 'identity description'
+    };
+
+    try {
+      const res = await iamIdentityService.setProfileIdentity(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-set_profile_identity
+   
+  });
+  test('deleteProfileIdentity request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteProfileIdentity() result:');
+    // begin-delete_profile_identity
+
+    const params = {
+      profileId: profileId,
+      identityType: 'user',
+      identifierId: iamIdMember
+    };
+
+    try {
+      const res = await iamIdentityService.deleteProfileIdentity(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_profile_identity
+   
   });
   test('deleteProfile request example', async () => {
 
