@@ -2330,10 +2330,12 @@ describe('IamPolicyManagementV1', () => {
         const policyTemplateId = 'testString';
         const policy = templatePolicyModel;
         const description = 'testString';
+        const committed = true;
         const createPolicyTemplateVersionParams = {
           policyTemplateId,
           policy,
           description,
+          committed,
         };
 
         const createPolicyTemplateVersionResult = iamPolicyManagementService.createPolicyTemplateVersion(createPolicyTemplateVersionParams);
@@ -2352,6 +2354,7 @@ describe('IamPolicyManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.policy).toEqual(policy);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
       }
 
@@ -2562,12 +2565,14 @@ describe('IamPolicyManagementV1', () => {
         const ifMatch = 'testString';
         const policy = templatePolicyModel;
         const description = 'testString';
+        const committed = true;
         const replacePolicyTemplateParams = {
           policyTemplateId,
           version,
           ifMatch,
           policy,
           description,
+          committed,
         };
 
         const replacePolicyTemplateResult = iamPolicyManagementService.replacePolicyTemplate(replacePolicyTemplateParams);
@@ -2587,6 +2592,7 @@ describe('IamPolicyManagementV1', () => {
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.policy).toEqual(policy);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
         expect(mockRequestOptions.path.version).toEqual(version);
       }

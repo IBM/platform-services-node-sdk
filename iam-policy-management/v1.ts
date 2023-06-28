@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.65.0-79fc0b8f-20230209-215651
+ * IBM OpenAPI SDK Code Generator Version: 3.71.0-316eb5da-20230504-195406
  */
 
 import * as extend from 'extend';
@@ -1718,6 +1718,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
    * @param {string} [params.description] - description of template purpose.
+   * @param {boolean} [params.committed] - Template vesrsion committed status.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
    */
@@ -1726,7 +1727,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'policy'];
-    const _validParams = ['policyTemplateId', 'policy', 'description', 'headers'];
+    const _validParams = ['policyTemplateId', 'policy', 'description', 'committed', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1735,6 +1736,7 @@ class IamPolicyManagementV1 extends BaseService {
     const body = {
       'policy': _params.policy,
       'description': _params.description,
+      'committed': _params.committed,
     };
 
     const path = {
@@ -1837,6 +1839,7 @@ class IamPolicyManagementV1 extends BaseService {
    * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
    * @param {string} [params.description] - description of template purpose.
+   * @param {boolean} [params.committed] - Template vesrsion committed status.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
    */
@@ -1851,6 +1854,7 @@ class IamPolicyManagementV1 extends BaseService {
       'ifMatch',
       'policy',
       'description',
+      'committed',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1861,6 +1865,7 @@ class IamPolicyManagementV1 extends BaseService {
     const body = {
       'policy': _params.policy,
       'description': _params.description,
+      'committed': _params.committed,
     };
 
     const path = {
@@ -2746,6 +2751,8 @@ namespace IamPolicyManagementV1 {
     policy: TemplatePolicy;
     /** description of template purpose. */
     description?: string;
+    /** Template vesrsion committed status. */
+    committed?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2771,6 +2778,8 @@ namespace IamPolicyManagementV1 {
     policy: TemplatePolicy;
     /** description of template purpose. */
     description?: string;
+    /** Template vesrsion committed status. */
+    committed?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
