@@ -448,8 +448,9 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} params.name - The name of the account. This field must have 3 - 60 characters.
    * @param {string} params.ownerIamId - The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must
    * already exist.
-   * @param {CreateAccountRequestTraits} [params.traits] - The traits object can be used to opt-out of Multi-Factor
-   * Authentication setting when creating a child account in the enterprise. This is an optional field.
+   * @param {CreateAccountRequestTraits} [params.traits] - The traits object can be used to set properties on child
+   * accounts of an enterprise. You can pass a field to opt-out of Multi-Factor Authentication setting or setup
+   * enterprise IAM settings when creating a child account in the enterprise. This is an optional field.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>>}
    */
@@ -1157,8 +1158,9 @@ namespace EnterpriseManagementV1 {
     name: string;
     /** The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must already exist. */
     ownerIamId: string;
-    /** The traits object can be used to opt-out of Multi-Factor Authentication setting when creating a child
-     *  account in the enterprise. This is an optional field.
+    /** The traits object can be used to set properties on child accounts of an enterprise. You can pass a field to
+     *  opt-out of Multi-Factor Authentication setting or setup enterprise IAM settings when creating a child account in
+     *  the enterprise. This is an optional field.
      */
     traits?: CreateAccountRequestTraits;
     headers?: OutgoingHttpHeaders;
@@ -1351,12 +1353,16 @@ namespace EnterpriseManagementV1 {
     account_group_id?: string;
   }
 
-  /** The traits object can be used to opt-out of Multi-Factor Authentication setting when creating a child account in the enterprise. This is an optional field. */
+  /** The traits object can be used to set properties on child accounts of an enterprise. You can pass a field to opt-out of Multi-Factor Authentication setting or setup enterprise IAM settings when creating a child account in the enterprise. This is an optional field. */
   export interface CreateAccountRequestTraits {
-    /** By default MFA will be set on the account. To opt out, pass the traits object with the mfa field set to
-     *  empty string.
+    /** By default MFA will be enabled on a child account. To opt out, pass the traits object with the mfa field set
+     *  to empty string. This is an optional field.
      */
     mfa?: string;
+    /** The Enterprise IAM settings property will be turned off for a newly created child account by default. You
+     *  can enable this property by passing 'true' in this boolean field. This is an optional field.
+     */
+    enterprise_iam_managed?: boolean;
   }
 
   /** A newly-created account. */

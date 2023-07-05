@@ -627,6 +627,7 @@ describe('EnterpriseManagementV1', () => {
       // CreateAccountRequestTraits
       const createAccountRequestTraitsModel = {
         mfa: 'testString',
+        enterprise_iam_managed: true,
       };
 
       function __createAccountTest() {
