@@ -133,7 +133,7 @@ Next, we need to make the lint-checker happy, so run the "lint-fix" script:
 ```sh
 cd <project-root>
 
-npm lint-fix
+npm run lint-fix
 ```
 
 If any lint-check problems remain (perhaps you made other manual changes to the code?), you'll need
