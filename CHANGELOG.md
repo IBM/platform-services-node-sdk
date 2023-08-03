@@ -1,3 +1,10 @@
+# [0.38.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.37.0...v0.38.0) (2023-07-05)
+
+
+### Features
+
+* **Enterprise Management:** re-gen service after update trait object ([#213](https://github.com/IBM/platform-services-node-sdk/issues/213)) ([b772a4b](https://github.com/IBM/platform-services-node-sdk/commit/b772a4b9907dd3817f19fb00a82f42a46d8f83b6))
+
 # [0.37.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.36.0...v0.37.0) (2023-06-09)
 
 
