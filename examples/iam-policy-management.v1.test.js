@@ -1160,7 +1160,7 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-list_Policy Assignments
-    exampleAssignmentId = res.result.policy_assignments[0].id
+    exampleAssignmentId = res.result.assignments[0].id
   });
   test('getPolicyAssignment request example', async () => {
     expect(exampleAssignmentId).not.toBeNull();

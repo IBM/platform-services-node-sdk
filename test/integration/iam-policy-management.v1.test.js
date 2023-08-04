@@ -1012,7 +1012,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(response.status).toBe(200);
       const { result } = response || {};
       expect(result).toBeDefined();
-      testAssignmentId = result.policy_assignments[0].id;
+      testAssignmentId = result.assignments[0].id;
     });
     test('Get policy assigment by id', async () => {
       expect(testAssignmentId).toBeDefined();

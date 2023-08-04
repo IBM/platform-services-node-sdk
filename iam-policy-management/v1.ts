@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.71.0-316eb5da-20230504-195406
+ * IBM OpenAPI SDK Code Generator Version: 3.76.0-ad3e6f96-20230724-172814
  */
 
 import * as extend from 'extend';
@@ -135,11 +135,11 @@ class IamPolicyManagementV1 extends BaseService {
    * * `active` - returns active policies
    * * `deleted` - returns non-active policies.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyCollection>>}
    */
   public listPolicies(
     params: IamPolicyManagementV1.ListPoliciesParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyList>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
     const _validParams = [
@@ -630,11 +630,11 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.policyType] - Optional Policy Type.
    * @param {string} [params.serviceGroupId] - Optional id of service group.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleCollection>>}
    */
   public listRoles(
     params?: IamPolicyManagementV1.ListRolesParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleList>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
     const _validParams = [
@@ -1075,7 +1075,7 @@ class IamPolicyManagementV1 extends BaseService {
    * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
    * **`service_group_id`** attribute and the **`accountId`** attribute. In the rule field, you can specify a single
    * condition by using **`key`**, **`value`**, and condition **`operator`**, or a set of **`conditions`** with a
-   * combination **`operator`**.  The possible combination operators are **`and`** and **`or`**. Combine conditions to
+   * combination **`operator`**. The possible combination operators are **`and`** and **`or`**. Combine conditions to
    * specify a time-based restriction (e.g., access only during business hours, during the Monday-Friday work week). For
    * example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
    * ```json
@@ -1125,8 +1125,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {Control} params.control - Specifies the type of access granted by the policy.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
-   * @param {string} [params.description] - Allows the customer to use their own words to record the purpose/context
-   * related to a policy.
+   * @param {string} [params.description] - Description of the policy.
    * @param {V2PolicySubject} [params.subject] - The subject attributes for whom the policy grants access.
    * @param {V2PolicyResource} [params.resource] - The resource attributes to which the policy grants access.
    * @param {string} [params.pattern] - Indicates pattern of rule, either 'time-based-conditions:once',
@@ -1224,7 +1223,7 @@ class IamPolicyManagementV1 extends BaseService {
    * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
    * **`service_group_id`** attribute and the **`accountId`** attribute. In the rule field, you can specify a single
    * condition by using **`key`**, **`value`**, and condition **`operator`**, or a set of **`conditions`** with a
-   * combination **`operator`**.  The possible combination operators are **`and`** and **`or`**. Combine conditions to
+   * combination **`operator`**. The possible combination operators are **`and`** and **`or`**. Combine conditions to
    * specify a time-based restriction (e.g., access only during business hours, during the Monday-Friday work week). For
    * example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
    * ```json
@@ -1274,8 +1273,7 @@ class IamPolicyManagementV1 extends BaseService {
    * header.
    * @param {Control} params.control - Specifies the type of access granted by the policy.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
-   * @param {string} [params.description] - Allows the customer to use their own words to record the purpose/context
-   * related to a policy.
+   * @param {string} [params.description] - Description of the policy.
    * @param {V2PolicySubject} [params.subject] - The subject attributes for whom the policy grants access.
    * @param {V2PolicyResource} [params.resource] - The resource attributes to which the policy grants access.
    * @param {string} [params.pattern] - Indicates pattern of rule, either 'time-based-conditions:once',
@@ -1462,12 +1460,13 @@ class IamPolicyManagementV1 extends BaseService {
    ************************/
 
   /**
-   * Get policy templates by attributes.
+   * List policy templates by attributes.
    *
-   * Get policy templates and filter by attributes through query parameters. The following attributes are supported:
-   * account_id account_id is a required query parameter. Only policy templates that have the specified attributes and
-   * that the caller has read access to are returned. If the caller does not have read access to any policy templates an
-   * empty array is returned.
+   * List policy templates and filter by attributes by using query parameters. The following attributes are supported:
+   * `account_id`.
+   * `account_id` is a required query parameter. Only policy templates that have the specified attributes and that the
+   * caller has read access to are returned. If the caller does not have read access to any policy templates an empty
+   * array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID that the policy templates belong to.
@@ -1532,14 +1531,17 @@ class IamPolicyManagementV1 extends BaseService {
   /**
    * Create a policy template.
    *
-   * Creates a policy template.
+   * Create a policy template. Policy templates define a policy without requiring a subject, and you can use them to
+   * grant access to multiple subjects.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.name - name of template.
-   * @param {string} params.accountId - account id where this template will be created.
+   * @param {string} params.name - Required field when creating a new template. Otherwise this field is optional. If the
+   * field is included it will change the name value for all existing versions of the template.
+   * @param {string} params.accountId - Enterprise account ID where this template will be created.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
-   * @param {string} [params.description] - description of template purpose.
-   * @param {boolean} [params.committed] - committed status for the template.
+   * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
+   * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template.
    * @param {string} [params.acceptLanguage] - Language code for translations
    * * `default` - English
    * * `de` -  German (Standard)
@@ -1612,7 +1614,7 @@ class IamPolicyManagementV1 extends BaseService {
   }
 
   /**
-   * Retrieve latest policy template version by template ID.
+   * Retrieve latest version of a policy template.
    *
    * Retrieve the latest version of a policy template by providing a policy template ID.
    *
@@ -1664,10 +1666,11 @@ class IamPolicyManagementV1 extends BaseService {
   }
 
   /**
-   * Delete a policy template by ID.
+   * Delete a policy template.
    *
-   * Delete a policy template by providing a policy template ID. This deletes all versions of this template. A policy
-   * template cannot be deleted if the template version is assigned to an account.
+   * Delete a policy template by providing the policy template ID. This deletes all versions of this template. A policy
+   * template can't be deleted if any version of the template is assigned to one or more child accounts. You must remove
+   * the policy assignments first.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
@@ -1712,13 +1715,15 @@ class IamPolicyManagementV1 extends BaseService {
   /**
    * Create a new policy template version.
    *
-   * Creates a new policy template version Details TBD.
+   * Create a new version of a policy template. Use this if you need to make updates to a policy template that is
+   * committed.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
-   * @param {string} [params.description] - description of template purpose.
-   * @param {boolean} [params.committed] - Template vesrsion committed status.
+   * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
+   * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template version.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
    */
@@ -1829,7 +1834,7 @@ class IamPolicyManagementV1 extends BaseService {
   /**
    * Update a policy template version.
    *
-   * Update a policy template version  Details TBD.
+   * Update a specific version of a policy template. You can use this only if the version isn't committed.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
@@ -1838,8 +1843,9 @@ class IamPolicyManagementV1 extends BaseService {
    * value of the existing policy template version. The Etag can be retrieved using the GET
    * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
-   * @param {string} [params.description] - description of template purpose.
-   * @param {boolean} [params.committed] - Template vesrsion committed status.
+   * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
+   * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template version.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
    */
@@ -1904,10 +1910,11 @@ class IamPolicyManagementV1 extends BaseService {
   }
 
   /**
-   * Delete a policy template version by ID and version.
+   * Delete a policy template version.
    *
-   * Delete a policy template by providing a policy template ID and version. You can't delete a policy template if the
-   * template version is assigned to an account.
+   * Delete a specific version of a policy template by providing a policy template ID and version number. You can't
+   * delete a policy template version that is assigned to one or more child accounts. You must remove the policy
+   * assignments first.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
@@ -1952,9 +1959,9 @@ class IamPolicyManagementV1 extends BaseService {
   }
 
   /**
-   * Retrieve a policy template version by ID.
+   * Retrieve a policy template version.
    *
-   * Retrieve a policy template by providing a policy template ID and version.
+   * Retrieve a policy template by providing a policy template ID and version number.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
@@ -2008,7 +2015,8 @@ class IamPolicyManagementV1 extends BaseService {
   /**
    * Commit a policy template version.
    *
-   * Commit a policy template version  Details TBD.
+   * Commit a policy template version. You can make no further changes to the policy template once it's committed. If
+   * you need to make updates after committing a version, create a new version.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
@@ -2066,12 +2074,13 @@ class IamPolicyManagementV1 extends BaseService {
    ************************/
 
   /**
-   * Get policies template assignments by attributes.
+   * Get policy template assignments.
    *
-   * Get policy template assignments by attributes. The following attributes are supported: account_id, template_id,
-   * template_version, sort account_id is a required query parameter. Only policy template assignments that have the
-   * specified attributes and that the caller has read access to are returned. If the caller does not have read access
-   * to any policy template assignments an empty array is returned.
+   * Get policy template assignments by attributes. The following attributes are supported:
+   * `account_id`, `template_id`, `template_version`, `sort`.
+   * `account_id` is a required query parameter. Only policy template assignments that have the specified attributes and
+   * that the caller has read access to are returned. If the caller does not have read access to any policy template
+   * assignments an empty array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID in which the policies belong to.
@@ -2090,12 +2099,12 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.templateId] - Optional template id.
    * @param {string} [params.templateVersion] - Optional policy template version.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolcyTemplateAssignmentCollection>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>>}
    */
   public listPolicyAssignments(
     params: IamPolicyManagementV1.ListPolicyAssignmentsParams
   ): Promise<
-    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolcyTemplateAssignmentCollection>
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>
   > {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
@@ -2146,18 +2155,18 @@ class IamPolicyManagementV1 extends BaseService {
   }
 
   /**
-   * Retrieve a policy assignment by ID.
+   * Retrieve a policy assignment.
    *
    * Retrieve a policy template assignment by providing a policy assignment ID.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.assignmentId - The policy template assignment ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentRecord>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignment>>}
    */
   public getPolicyAssignment(
     params: IamPolicyManagementV1.GetPolicyAssignmentParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentRecord>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignment>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
     const _validParams = ['assignmentId', 'headers'];
@@ -2575,7 +2584,7 @@ namespace IamPolicyManagementV1 {
     control: Control;
     /** The policy type; either 'access' or 'authorization'. */
     type: CreateV2PolicyConstants.Type | string;
-    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
+    /** Description of the policy. */
     description?: string;
     /** The subject attributes for whom the policy grants access. */
     subject?: V2PolicySubject;
@@ -2625,7 +2634,7 @@ namespace IamPolicyManagementV1 {
     control: Control;
     /** The policy type; either 'access' or 'authorization'. */
     type: ReplaceV2PolicyConstants.Type | string;
-    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
+    /** Description of the policy. */
     description?: string;
     /** The subject attributes for whom the policy grants access. */
     subject?: V2PolicySubject;
@@ -2702,15 +2711,19 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `createPolicyTemplate` operation. */
   export interface CreatePolicyTemplateParams {
-    /** name of template. */
+    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
+     *  will change the name value for all existing versions of the template.
+     */
     name: string;
-    /** account id where this template will be created. */
+    /** Enterprise account ID where this template will be created. */
     accountId: string;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
-    /** description of template purpose. */
+    /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
+     *  the purpose or context of the policy for enterprise users managing IAM templates.
+     */
     description?: string;
-    /** committed status for the template. */
+    /** Committed status of the template. */
     committed?: boolean;
     /** Language code for translations
      *  * `default` - English
@@ -2749,9 +2762,11 @@ namespace IamPolicyManagementV1 {
     policyTemplateId: string;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
-    /** description of template purpose. */
+    /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
+     *  the purpose or context of the policy for enterprise users managing IAM templates.
+     */
     description?: string;
-    /** Template vesrsion committed status. */
+    /** Committed status of the template version. */
     committed?: boolean;
     headers?: OutgoingHttpHeaders;
   }
@@ -2776,9 +2791,11 @@ namespace IamPolicyManagementV1 {
     ifMatch: string;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
-    /** description of template purpose. */
+    /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
+     *  the purpose or context of the policy for enterprise users managing IAM templates.
+     */
     description?: string;
-    /** Template vesrsion committed status. */
+    /** Committed status of the template version. */
     committed?: boolean;
     headers?: OutgoingHttpHeaders;
   }
@@ -2857,6 +2874,16 @@ namespace IamPolicyManagementV1 {
     id?: string;
   }
 
+  /** Details of conflicting resource. */
+  export interface ConflictsWith {
+    /** The revision number of the resource. */
+    etag?: string;
+    /** The conflicting role id. */
+    role?: string;
+    /** The conflicting policy id. */
+    policy?: string;
+  }
+
   /** Specifies the type of access granted by the policy. */
   export interface Control {
     /** Permission granted by the policy. */
@@ -2865,6 +2892,40 @@ namespace IamPolicyManagementV1 {
 
   /** ControlResponse. */
   export interface ControlResponse {}
+
+  /** An additional set of properties associated with a role. */
+  export interface CustomRole {
+    /** The role ID. Composed of hexadecimal characters. */
+    id?: string;
+    /** The display name of the role that is shown in the console. */
+    display_name: string;
+    /** The description of the role. */
+    description?: string;
+    /** The actions of the role. For more information, see [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
+    actions: string[];
+    /** The role Cloud Resource Name (CRN). Example CRN:
+     *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
+     */
+    crn?: string;
+    /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
+    name: string;
+    /** The account GUID. */
+    account_id: string;
+    /** The service name. */
+    service_name: string;
+    /** The UTC timestamp when the role was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the role. */
+    created_by_id?: string;
+    /** The UTC timestamp when the role was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy. */
+    last_modified_by_id?: string;
+    /** The href link back to the role. */
+    href?: string;
+  }
 
   /** A role associated with a policy with additional information (display_name, description, actions) when `format=display`. */
   export interface EnrichedRoles {
@@ -2882,6 +2943,34 @@ namespace IamPolicyManagementV1 {
     actions: RoleAction[];
   }
 
+  /** Additional error details. */
+  export interface ErrorDetails {
+    /** Details of conflicting resource. */
+    conflicts_with?: ConflictsWith;
+  }
+
+  /** ErrorObject. */
+  export interface ErrorObject {
+    /** The API error code for the error. */
+    code: string;
+    /** The error message returned by the API. */
+    message: string;
+    /** Additional error details. */
+    details?: ErrorDetails;
+    /** Additional info for error. */
+    more_info?: string;
+  }
+
+  /** The error response from API. */
+  export interface ErrorResponse {
+    /** The unique transaction id for the request. */
+    trace?: string;
+    /** The errors encountered during the response. */
+    errors?: ErrorObject[];
+    /** The http error code of the response. */
+    status_code?: number;
+  }
+
   /** Permission granted by the policy. */
   export interface Grant {
     /** A set of role cloud resource names (CRNs) granted by the policy. */
@@ -2894,28 +2983,38 @@ namespace IamPolicyManagementV1 {
     roles: EnrichedRoles[];
   }
 
-  /** A collection of policies assignments. */
-  export interface PolcyTemplateAssignmentCollection {
-    /** List of policy assignments. */
-    policy_assignments?: PolicyAssignmentRecord[];
-  }
-
-  /** The set of properties required for a policy assignment. */
-  export interface PolicyAssignmentOptions {
-    /** The policy subject type; either 'iam_id' or 'access_group_id'. */
-    subject_type: string;
-    /** The policy subject id. */
-    subject_id: string;
-    /** The policy assignment requester id. */
-    root_requester_id: string;
-    /** The template id where this policy is being assigned from. */
-    root_template_id?: string;
-    /** The template version where this policy is being assigned from. */
-    root_template_version?: string;
+  /** The core set of properties associated with a policy. */
+  export interface Policy {
+    /** The policy ID. */
+    id?: string;
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Customer-defined description. */
+    description?: string;
+    /** The subjects associated with a policy. */
+    subjects: PolicySubject[];
+    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    roles: PolicyRole[];
+    /** The resources associated with a policy. */
+    resources: PolicyResource[];
+    /** The href link back to the policy. */
+    href?: string;
+    /** The UTC timestamp when the policy was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy. */
+    last_modified_by_id?: string;
+    /** The policy state. */
+    state?: string;
+    /** Origin Template information. */
+    template?: TemplateMetadata;
   }
 
   /** The set of properties associated with the policy template assignment. */
-  export interface PolicyAssignmentRecord {
+  export interface PolicyAssignment {
     /** policy template id. */
     template_id: string;
     /** policy template version. */
@@ -2924,8 +3023,10 @@ namespace IamPolicyManagementV1 {
     assignment_id: string;
     /** Assignment target type. */
     target_type: string;
-    /** assignment target id. */
+    /** ID of the target account. */
     target: string;
+    /** List of objects with required properties for a policy assignment. */
+    options: PolicyAssignmentRequestOptionsItem[];
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
@@ -2940,12 +3041,24 @@ namespace IamPolicyManagementV1 {
     last_modified_at?: string;
     /** The iam ID of the entity that last modified the policy assignment. */
     last_modified_by_id?: string;
-    /** Object for each properties for a policy assignment. */
-    options?: PolicyAssignmentOptions[];
     /** Object for each account assigned. */
     resources?: PolicyAssignmentResources[];
     /** The policy assignment status. */
     status: string;
+  }
+
+  /** The set of properties required for a policy assignment. */
+  export interface PolicyAssignmentRequestOptionsItem {
+    /** The policy subject type; either 'iam_id' or 'access_group_id'. */
+    subject_type: string;
+    /** The policy subject id. */
+    subject_id: string;
+    /** The policy assignment requester id. */
+    root_requester_id: string;
+    /** The template id where this policy is being assigned from. */
+    root_template_id?: string;
+    /** The template version where this policy is being assigned from. */
+    root_template_version?: string;
   }
 
   /** The policy assignment resources. */
@@ -2964,6 +3077,20 @@ namespace IamPolicyManagementV1 {
     error_message?: ErrorResponse;
   }
 
+  /** A collection of policies. */
+  export interface PolicyCollection {
+    /** List of policies. */
+    policies?: Policy[];
+  }
+
+  /** The attributes of the resource. Note that only one resource is allowed in a policy. */
+  export interface PolicyResource {
+    /** List of resource attributes. */
+    attributes?: ResourceAttribute[];
+    /** List of access management tags. */
+    tags?: ResourceTag[];
+  }
+
   /** A role associated with a policy. */
   export interface PolicyRole {
     /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
@@ -2976,23 +3103,33 @@ namespace IamPolicyManagementV1 {
     description?: string;
   }
 
+  /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
+  export interface PolicySubject {
+    /** List of subject attributes. */
+    attributes?: SubjectAttribute[];
+  }
+
   /** The core set of properties associated with the policy template. */
   export interface PolicyTemplate {
-    /** name of template. */
+    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
+     *  will change the name value for all existing versions of the template.
+     */
     name: string;
-    /** description of template purpose. */
+    /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
+     *  the purpose or context of the policy for enterprise users managing IAM templates.
+     */
     description?: string;
-    /** account id where this template will be created. */
+    /** Enterprise account ID where this template will be created. */
     account_id: string;
-    /** Template vesrsion. */
+    /** Template version. */
     version: string;
-    /** Template vesrsion committed status. */
+    /** Committed status of the template version. */
     committed?: boolean;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
     /** The policy template ID. */
     id?: string;
-    /** The href URL that links to the policy templates API by policy tempalte ID. */
+    /** The href URL that links to the policy templates API by policy template ID. */
     href?: string;
     /** The UTC timestamp when the policy template was created. */
     created_at?: string;
@@ -3004,16 +3141,58 @@ namespace IamPolicyManagementV1 {
     last_modified_by_id?: string;
   }
 
+  /** A collection of policies assignments. */
+  export interface PolicyTemplateAssignmentCollection {
+    /** List of policy assignments. */
+    assignments?: PolicyAssignment[];
+  }
+
   /** A collection of policy Templates. */
   export interface PolicyTemplateCollection {
     /** List of policy templates. */
     policy_templates?: PolicyTemplate[];
   }
 
-  /** A collection of policy Template versions. */
+  /** A collection of versions for a specific policy template. */
   export interface PolicyTemplateVersionsCollection {
     /** List of policy templates versions. */
     versions?: PolicyTemplate[];
+  }
+
+  /** An attribute associated with a resource. */
+  export interface ResourceAttribute {
+    /** The name of an attribute. */
+    name: string;
+    /** The value of an attribute. */
+    value: string;
+    /** The operator of an attribute. */
+    operator?: string;
+  }
+
+  /** A tag associated with a resource. */
+  export interface ResourceTag {
+    /** The name of an access management tag. */
+    name: string;
+    /** The value of an access management tag. */
+    value: string;
+    /** The operator of an access management tag. */
+    operator?: string;
+  }
+
+  /** A role resource. */
+  export interface Role {
+    /** The display name of the role that is shown in the console. */
+    display_name: string;
+    /** The description of the role. */
+    description?: string;
+    /** The actions of the role. For more information, see [IAM roles and
+     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
+     */
+    actions: string[];
+    /** The role Cloud Resource Name (CRN). Example CRN:
+     *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
+     */
+    crn?: string;
   }
 
   /** An action that can be performed by the policy subject when assigned role. */
@@ -3024,6 +3203,16 @@ namespace IamPolicyManagementV1 {
     display_name: string;
     /** Service defined description for action. */
     description: string;
+  }
+
+  /** A collection of roles returned by the 'list roles' operation. */
+  export interface RoleCollection {
+    /** List of custom roles. */
+    custom_roles?: CustomRole[];
+    /** List of service roles. */
+    service_roles?: Role[];
+    /** List of system roles. */
+    system_roles?: Role[];
   }
 
   /** A role associated with a policy. */
@@ -3046,8 +3235,16 @@ namespace IamPolicyManagementV1 {
     value: any;
   }
 
+  /** An attribute associated with a subject. */
+  export interface SubjectAttribute {
+    /** The name of an attribute. */
+    name: string;
+    /** The value of an attribute. */
+    value: string;
+  }
+
   /** Origin Template information. */
-  export interface TemplateMetada {
+  export interface TemplateMetadata {
     /** Origin Template CRN. */
     crn?: string;
     /** Template version. */
@@ -3058,7 +3255,9 @@ namespace IamPolicyManagementV1 {
   export interface TemplatePolicy {
     /** The policy type; either 'access' or 'authorization'. */
     type: string;
-    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
+    /** Description of the policy. This is shown in child accounts when an access group or trusted profile template
+     *  uses the policy template to assign access.
+     */
     description?: string;
     /** The resource attributes to which the policy grants access. */
     resource: V2PolicyResource;
@@ -3076,7 +3275,7 @@ namespace IamPolicyManagementV1 {
   export interface V2Policy {
     /** The policy type; either 'access' or 'authorization'. */
     type: string;
-    /** Allows the customer to use their own words to record the purpose/context related to a policy. */
+    /** Description of the policy. */
     description?: string;
     /** The subject attributes for whom the policy grants access. */
     subject?: V2PolicySubject;
@@ -3110,7 +3309,7 @@ namespace IamPolicyManagementV1 {
      */
     last_permit_frequency?: number;
     /** Origin Template information. */
-    template?: TemplateMetada;
+    template?: TemplateMetadata;
   }
 
   /** A collection of policies. */
@@ -3165,182 +3364,6 @@ namespace IamPolicyManagementV1 {
     /** The operator of an attribute. */
     operator: string;
     /** The value of the ID of the subject, e.g., service ID, access group ID, IAM ID. */
-    value: string;
-  }
-
-  /** Details of conflicting resource. */
-  export interface ConflictsWith {
-    /** The revision number of the resource. */
-    etag?: string;
-    /** The conflicting role id. */
-    role?: string;
-    /** The conflicting policy id. */
-    policy?: string;
-  }
-
-  /** An additional set of properties associated with a role. */
-  export interface CustomRole {
-    /** The role ID. Composed of hexadecimal characters. */
-    id?: string;
-    /** The display name of the role that is shown in the console. */
-    display_name: string;
-    /** The description of the role. */
-    description?: string;
-    /** The actions of the role. For more information, see [IAM roles and
-     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
-     */
-    actions: string[];
-    /** The role Cloud Resource Name (CRN). Example CRN:
-     *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
-     */
-    crn?: string;
-    /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
-    name: string;
-    /** The account GUID. */
-    account_id: string;
-    /** The service name. */
-    service_name: string;
-    /** The UTC timestamp when the role was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the role. */
-    created_by_id?: string;
-    /** The UTC timestamp when the role was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
-    last_modified_by_id?: string;
-    /** The href link back to the role. */
-    href?: string;
-  }
-
-  /** Additional error details. */
-  export interface ErrorDetails {
-    /** Details of conflicting resource. */
-    conflicts_with?: ConflictsWith;
-  }
-
-  /** ErrorObject. */
-  export interface ErrorObject {
-    /** The API error code for the error. */
-    code: string;
-    /** The error message returned by the API. */
-    message: string;
-    /** Additional error details. */
-    details?: ErrorDetails;
-    /** Additional info for error. */
-    more_info?: string;
-  }
-
-  /** The error response from API. */
-  export interface ErrorResponse {
-    /** The unique transaction id for the request. */
-    trace?: string;
-    /** The errors encountered during the response. */
-    errors?: ErrorObject[];
-    /** The http error code of the response. */
-    status_code?: number;
-  }
-
-  /** The core set of properties associated with a policy. */
-  export interface Policy {
-    /** The policy ID. */
-    id?: string;
-    /** The policy type; either 'access' or 'authorization'. */
-    type: string;
-    /** Customer-defined description. */
-    description?: string;
-    /** The subjects associated with a policy. */
-    subjects: PolicySubject[];
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
-    roles: PolicyRole[];
-    /** The resources associated with a policy. */
-    resources: PolicyResource[];
-    /** The href link back to the policy. */
-    href?: string;
-    /** The UTC timestamp when the policy was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the policy. */
-    created_by_id?: string;
-    /** The UTC timestamp when the policy was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
-    last_modified_by_id?: string;
-    /** The policy state. */
-    state?: string;
-    /** Origin Template information. */
-    template?: TemplateMetada;
-  }
-
-  /** A collection of policies. */
-  export interface PolicyList {
-    /** List of policies. */
-    policies?: Policy[];
-  }
-
-  /** The attributes of the resource. Note that only one resource is allowed in a policy. */
-  export interface PolicyResource {
-    /** List of resource attributes. */
-    attributes?: ResourceAttribute[];
-    /** List of access management tags. */
-    tags?: ResourceTag[];
-  }
-
-  /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
-  export interface PolicySubject {
-    /** List of subject attributes. */
-    attributes?: SubjectAttribute[];
-  }
-
-  /** An attribute associated with a resource. */
-  export interface ResourceAttribute {
-    /** The name of an attribute. */
-    name: string;
-    /** The value of an attribute. */
-    value: string;
-    /** The operator of an attribute. */
-    operator?: string;
-  }
-
-  /** A tag associated with a resource. */
-  export interface ResourceTag {
-    /** The name of an access management tag. */
-    name: string;
-    /** The value of an access management tag. */
-    value: string;
-    /** The operator of an access management tag. */
-    operator?: string;
-  }
-
-  /** A role resource. */
-  export interface Role {
-    /** The display name of the role that is shown in the console. */
-    display_name: string;
-    /** The description of the role. */
-    description?: string;
-    /** The actions of the role. For more information, see [IAM roles and
-     *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
-     */
-    actions: string[];
-    /** The role Cloud Resource Name (CRN). Example CRN:
-     *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
-     */
-    crn?: string;
-  }
-
-  /** A collection of roles returned by the 'list roles' operation. */
-  export interface RoleList {
-    /** List of custom roles. */
-    custom_roles?: CustomRole[];
-    /** List of service roles. */
-    service_roles?: Role[];
-    /** List of system roles. */
-    system_roles?: Role[];
-  }
-
-  /** An attribute associated with a subject. */
-  export interface SubjectAttribute {
-    /** The name of an attribute. */
-    name: string;
-    /** The value of an attribute. */
     value: string;
   }
 
