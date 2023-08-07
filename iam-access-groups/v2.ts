@@ -1468,23 +1468,27 @@ class IamAccessGroupsV2 extends BaseService {
    ************************/
 
   /**
-   * Create Template.
+   * Create template.
    *
-   * Endpoint to create an access group template.
+   * Create an access group template. Make sure that the template is generic enough to apply to multiple different child
+   * accounts. Before you can assign an access group template to child accounts, you must commit it so that no further
+   * changes can be made to the version.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.name - create template input name.
-   * @param {string} params.accountId - create template input account id.
-   * @param {string} [params.description] - create template input description.
-   * @param {AccessGroupInput} [params.group] - Access Group Input Component.
-   * @param {PolicyTemplatesInput[]} [params.policyTemplateReferences] - policy template references.
+   * @param {string} params.name - Give the access group template a unique name that doesn't conflict with an existing
+   * access group templates in the account.
+   * @param {string} params.accountId - Enterprise account id in which the template will be created.
+   * @param {string} [params.description] - Assign an optional description for the access group template.
+   * @param {AccessGroupRequest} [params.group] - Access Group Component.
+   * @param {PolicyTemplates[]} [params.policyTemplateReferences] - Existing policy templates that you can reference to
+   * assign access in the Access group input component.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateResponse>>}
    */
   public createTemplate(
     params: IamAccessGroupsV2.CreateTemplateParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateResponse>> {
     const _params = { ...params };
     const _requiredParams = ['name', 'accountId'];
     const _validParams = [
@@ -1539,16 +1543,17 @@ class IamAccessGroupsV2 extends BaseService {
   }
 
   /**
-   * List Templates.
+   * List templates.
    *
-   * Endpoint to list access group templates in a given account.
+   * List the access group templates in an enterprise account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.accountId - query parameter account id.
+   * @param {string} params.accountId - Enterprise account ID.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
-   * @param {number} [params.limit] - limit parameter.
-   * @param {number} [params.offset] - offset parameter.
-   * @param {boolean} [params.verbose] - query parameter verbose.
+   * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
+   * @param {number} [params.offset] - The offset of the first result item to be returned.
+   * @param {boolean} [params.verbose] - If `verbose=true`, IAM resource details are returned. If performance is a
+   * concern, leave the `verbose` parameter off so that details are not retrieved.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplatesResponse>>}
    */
@@ -1597,22 +1602,23 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Create template version.
    *
-   * Endpoint to create a new template version.
+   * Create a new version of an access group template.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.templateId - parameter template id.
-   * @param {string} [params.name] - The name of the template version.
-   * @param {string} [params.description] - The description of the template version.
-   * @param {AccessGroupInput} [params.group] - Access Group Input Component.
-   * @param {PolicyTemplatesInput[]} [params.policyTemplateReferences] - The policy templates associated with the
-   * template version.
+   * @param {string} params.templateId - ID of the template that you want to create a new version of.
+   * @param {string} [params.name] - This is an optional field. If the field is included it will change the name value
+   * for all existing versions of the template..
+   * @param {string} [params.description] - Assign an optional description for the access group template version.
+   * @param {AccessGroupRequest} [params.group] - Access Group Component.
+   * @param {PolicyTemplates[]} [params.policyTemplateReferences] - The policy templates associated with the template
+   * version.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>>}
    */
   public createTemplateVersion(
     params: IamAccessGroupsV2.CreateTemplateVersionParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId'];
     const _validParams = [
@@ -1673,12 +1679,12 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * List template versions.
    *
-   * Endpoint to list all the versions of a template.
+   * List all the versions of an access group template.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.templateId - template id parameter.
-   * @param {number} [params.limit] - limit parameter.
-   * @param {number} [params.offset] - offset parameter.
+   * @param {string} params.templateId - ID of the template that you want to list all versions of.
+   * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
+   * @param {number} [params.offset] - The offset of the first result item to be returned.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplateVersionsResponse>>}
    */
@@ -1733,25 +1739,31 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Get template version.
    *
-   * Endpoint to get a specific template version.
+   * Get a specific version of a template.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.templateId - template id parameter.
-   * @param {string} params.versionNum - path parameter verison number.
+   * @param {string} params.templateId - ID of the template to get a specific version of.
+   * @param {string} params.versionNum - Version number.
+   * @param {boolean} [params.verbose] - If `verbose=true`, IAM resource details are returned. If performance is a
+   * concern, leave the `verbose` parameter off so that details are not retrieved.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>>}
    */
   public getTemplateVersion(
     params: IamAccessGroupsV2.GetTemplateVersionParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'versionNum'];
-    const _validParams = ['templateId', 'versionNum', 'transactionId', 'headers'];
+    const _validParams = ['templateId', 'versionNum', 'verbose', 'transactionId', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'verbose': _params.verbose,
+    };
 
     const path = {
       'template_id': _params.templateId,
@@ -1768,6 +1780,7 @@ class IamAccessGroupsV2 extends BaseService {
       options: {
         url: '/v1/group_templates/{template_id}/versions/{version_num}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -1789,52 +1802,36 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Update template version.
    *
-   * Endpoint to update a template version.
+   * Update a template version. You can only update a version that isn't committed. Create a new version if you need to
+   * update a committed version.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.templateId - ID of the template.
    * @param {string} params.versionNum - Version number of the template.
    * @param {string} params.ifMatch - ETag value of the template version document.
-   * @param {string} [params.id] - The ID of the access group template.
-   * @param {string} [params.name] - The name of the access group template.
-   * @param {string} [params.description] - The description of the access group template.
-   * @param {string} [params.accountId] - The ID of the account to which the access group template is assigned.
-   * @param {string} [params.version] - The version of the access group template.
-   * @param {boolean} [params.committed] - A boolean indicating whether the access group template is committed.
-   * @param {AccessGroupInput} [params.group] - Access Group Input Component.
-   * @param {PolicyTemplatesInput[]} [params.policyTemplateReferences] - References to policy templates assigned to the
-   * access group template.
-   * @param {string} [params.href] - The URL of the access group template resource.
-   * @param {string} [params.createdAt] - The date and time when the access group template was created.
-   * @param {string} [params.createdById] - The ID of the user who created the access group template.
-   * @param {string} [params.lastModifiedAt] - The date and time when the access group template was last modified.
-   * @param {string} [params.lastModifiedById] - The ID of the user who last modified the access group template.
+   * @param {string} [params.name] - This is an optional field. If the field is included it will change the name value
+   * for all existing versions of the template..
+   * @param {string} [params.description] - Assign an optional description for the access group template version.
+   * @param {AccessGroupRequest} [params.group] - Access Group Component.
+   * @param {PolicyTemplates[]} [params.policyTemplateReferences] - The policy templates associated with the template
+   * version.
    * @param {string} [params.transactionId] - transaction id in header.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>>}
    */
   public updateTemplateVersion(
     params: IamAccessGroupsV2.UpdateTemplateVersionParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'versionNum', 'ifMatch'];
     const _validParams = [
       'templateId',
       'versionNum',
       'ifMatch',
-      'id',
       'name',
       'description',
-      'accountId',
-      'version',
-      'committed',
       'group',
       'policyTemplateReferences',
-      'href',
-      'createdAt',
-      'createdById',
-      'lastModifiedAt',
-      'lastModifiedById',
       'transactionId',
       'headers',
     ];
@@ -1844,19 +1841,10 @@ class IamAccessGroupsV2 extends BaseService {
     }
 
     const body = {
-      'id': _params.id,
       'name': _params.name,
       'description': _params.description,
-      'account_id': _params.accountId,
-      'version': _params.version,
-      'committed': _params.committed,
       'group': _params.group,
       'policy_template_references': _params.policyTemplateReferences,
-      'href': _params.href,
-      'created_at': _params.createdAt,
-      'created_by_id': _params.createdById,
-      'last_modified_at': _params.lastModifiedAt,
-      'last_modified_by_id': _params.lastModifiedById,
     };
 
     const path = {
@@ -1898,10 +1886,10 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Delete template version.
    *
-   * Endpoint to delete a template version.
+   * Delete a template version. You must remove all assignments for a template version before you can delete it.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.templateId - template id parameter.
+   * @param {string} params.templateId - ID of the template to delete.
    * @param {string} params.versionNum - version number in path.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1953,10 +1941,11 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Commit a template.
    *
-   * Endpoint to commit a template. After you commit the template, the version is immutable.
+   * Commit a template version. You must do this before you can assign a template version to child accounts. After you
+   * commit the template version, you can't make any further changes.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.templateId - template id parameter.
+   * @param {string} params.templateId - ID of the template to commit.
    * @param {string} params.versionNum - version number in path.
    * @param {string} params.ifMatch - ETag value of the template version document.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
@@ -2010,24 +1999,30 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Get latest template version.
    *
-   * Endpoint to get the latest version of a template.
+   * Get the latest version of a template.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.templateId - template id parameter.
+   * @param {string} params.templateId - ID of the template to get a specific version of.
+   * @param {boolean} [params.verbose] - If `verbose=true`, IAM resource details are returned. If performance is a
+   * concern, leave the `verbose` parameter off so that details are not retrieved.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>>}
    */
   public getLatestTemplateVersion(
     params: IamAccessGroupsV2.GetLatestTemplateVersionParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.CreateTemplateResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateVersionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId'];
-    const _validParams = ['templateId', 'transactionId', 'headers'];
+    const _validParams = ['templateId', 'verbose', 'transactionId', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'verbose': _params.verbose,
+    };
 
     const path = {
       'template_id': _params.templateId,
@@ -2043,6 +2038,7 @@ class IamAccessGroupsV2 extends BaseService {
       options: {
         url: '/v1/group_templates/{template_id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -2121,7 +2117,9 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Create assignment.
    *
-   * Endpoint to assign a template to an account/account group.
+   * Assign a template version to accounts that have enabled enterprise-managed IAM. You can specify individual
+   * accounts, or an entire account group to assign the template to all current and future child accounts of that
+   * account group.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.templateId - The unique identifier of the template to be assigned.
@@ -2131,11 +2129,11 @@ class IamAccessGroupsV2 extends BaseService {
    * @param {string} params.target - The unique identifier of the entity to which the template should be assigned.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateCreateAssignmentResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateAssignmentResponse>>}
    */
   public createAssignment(
     params: IamAccessGroupsV2.CreateAssignmentParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateCreateAssignmentResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'templateVersion', 'targetType', 'target'];
     const _validParams = [
@@ -2188,21 +2186,38 @@ class IamAccessGroupsV2 extends BaseService {
   }
 
   /**
-   * List Assignments.
+   * List assignments.
    *
-   * Endpoint to list template assignments.
+   * List template assignments from an enterprise account.
    *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - query parameter account id.
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Enterprise account ID.
+   * @param {string} [params.templateId] - Filter results by Template Id.
+   * @param {string} [params.templateVersion] - Filter results by Template Version.
+   * @param {string} [params.target] - Filter results by the assignment target.
+   * @param {string} [params.status] - Filter results by the assignment status.
+   * @param {string} [params.transactionId] - An optional transaction id for the request.
+   * @param {number} [params.limit] - Return up to this limit of results where limit is between 0 and 100.
+   * @param {number} [params.offset] - The offset of the first result item to be returned.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplatesListAssignmentResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplateAssignmentResponse>>}
    */
   public listAssignments(
-    params?: IamAccessGroupsV2.ListAssignmentsParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplatesListAssignmentResponse>> {
+    params: IamAccessGroupsV2.ListAssignmentsParams
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.ListTemplateAssignmentResponse>> {
     const _params = { ...params };
-    const _requiredParams = [];
-    const _validParams = ['accountId', 'headers'];
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'templateId',
+      'templateVersion',
+      'target',
+      'status',
+      'transactionId',
+      'limit',
+      'offset',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2210,6 +2225,12 @@ class IamAccessGroupsV2 extends BaseService {
 
     const query = {
       'account_id': _params.accountId,
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'target': _params.target,
+      'status': _params.status,
+      'limit': _params.limit,
+      'offset': _params.offset,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -2230,6 +2251,7 @@ class IamAccessGroupsV2 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
           },
           _params.headers
         ),
@@ -2245,16 +2267,16 @@ class IamAccessGroupsV2 extends BaseService {
    * Get a specific template assignment.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.assignmentId - assignment id parameter.
+   * @param {string} params.assignmentId - Assignment ID.
    * @param {string} [params.transactionId] - An optional transaction id for the request.
    * @param {boolean} [params.verbose] - Returns resources access group template assigned, possible values `true` or
    * `false`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GetTemplateAssignmentResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateAssignmentVerboseResponse>>}
    */
   public getAssignment(
     params: IamAccessGroupsV2.GetAssignmentParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GetTemplateAssignmentResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateAssignmentVerboseResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
     const _validParams = ['assignmentId', 'transactionId', 'verbose', 'headers'];
@@ -2304,17 +2326,17 @@ class IamAccessGroupsV2 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.assignmentId - ID of the Assignment Record.
    * @param {string} params.ifMatch - Version of the Assignment to be updated. Specify the version that you retrieved
-   * when reading the Assignment. This value  helps identifying parallel usage of this API. Pass * to indicate to update
+   * when reading the Assignment. This value helps identifying parallel usage of this API. Pass * to indicate to update
    * any version available. This might result in stale updates.
-   * @param {number} [params.templateVersion] - Template version which shall be applied to the assignment.
+   * @param {string} params.templateVersion - Template version which shall be applied to the assignment.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GetTemplateAssignmentResponse>>}
+   * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateAssignmentVerboseResponse>>}
    */
   public updateAssignment(
     params: IamAccessGroupsV2.UpdateAssignmentParams
-  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GetTemplateAssignmentResponse>> {
+  ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.TemplateAssignmentVerboseResponse>> {
     const _params = { ...params };
-    const _requiredParams = ['assignmentId', 'ifMatch'];
+    const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
     const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
@@ -2362,7 +2384,7 @@ class IamAccessGroupsV2 extends BaseService {
   /**
    * Delete assignment.
    *
-   * Endpoint to delete template assignment.
+   * Delete an access group template assignment.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.assignmentId - assignment id path parameter.
@@ -2802,16 +2824,18 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `createTemplate` operation. */
   export interface CreateTemplateParams {
-    /** create template input name. */
+    /** Give the access group template a unique name that doesn't conflict with an existing access group templates
+     *  in the account.
+     */
     name: string;
-    /** create template input account id. */
+    /** Enterprise account id in which the template will be created. */
     accountId: string;
-    /** create template input description. */
+    /** Assign an optional description for the access group template. */
     description?: string;
-    /** Access Group Input Component. */
-    group?: AccessGroupInput;
-    /** policy template references. */
-    policyTemplateReferences?: PolicyTemplatesInput[];
+    /** Access Group Component. */
+    group?: AccessGroupRequest;
+    /** Existing policy templates that you can reference to assign access in the Access group input component. */
+    policyTemplateReferences?: PolicyTemplates[];
     /** An optional transaction id for the request. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
@@ -2819,31 +2843,35 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `listTemplates` operation. */
   export interface ListTemplatesParams {
-    /** query parameter account id. */
+    /** Enterprise account ID. */
     accountId: string;
     /** An optional transaction id for the request. */
     transactionId?: string;
-    /** limit parameter. */
+    /** Return up to this limit of results where limit is between 0 and 100. */
     limit?: number;
-    /** offset parameter. */
+    /** The offset of the first result item to be returned. */
     offset?: number;
-    /** query parameter verbose. */
+    /** If `verbose=true`, IAM resource details are returned. If performance is a concern, leave the `verbose`
+     *  parameter off so that details are not retrieved.
+     */
     verbose?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createTemplateVersion` operation. */
   export interface CreateTemplateVersionParams {
-    /** parameter template id. */
+    /** ID of the template that you want to create a new version of. */
     templateId: string;
-    /** The name of the template version. */
+    /** This is an optional field. If the field is included it will change the name value for all existing versions
+     *  of the template..
+     */
     name?: string;
-    /** The description of the template version. */
+    /** Assign an optional description for the access group template version. */
     description?: string;
-    /** Access Group Input Component. */
-    group?: AccessGroupInput;
+    /** Access Group Component. */
+    group?: AccessGroupRequest;
     /** The policy templates associated with the template version. */
-    policyTemplateReferences?: PolicyTemplatesInput[];
+    policyTemplateReferences?: PolicyTemplates[];
     /** An optional transaction id for the request. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
@@ -2851,21 +2879,25 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `listTemplateVersions` operation. */
   export interface ListTemplateVersionsParams {
-    /** template id parameter. */
+    /** ID of the template that you want to list all versions of. */
     templateId: string;
-    /** limit parameter. */
+    /** Return up to this limit of results where limit is between 0 and 100. */
     limit?: number;
-    /** offset parameter. */
+    /** The offset of the first result item to be returned. */
     offset?: number;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getTemplateVersion` operation. */
   export interface GetTemplateVersionParams {
-    /** template id parameter. */
+    /** ID of the template to get a specific version of. */
     templateId: string;
-    /** path parameter verison number. */
+    /** Version number. */
     versionNum: string;
+    /** If `verbose=true`, IAM resource details are returned. If performance is a concern, leave the `verbose`
+     *  parameter off so that details are not retrieved.
+     */
+    verbose?: boolean;
     /** An optional transaction id for the request. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
@@ -2879,32 +2911,16 @@ namespace IamAccessGroupsV2 {
     versionNum: string;
     /** ETag value of the template version document. */
     ifMatch: string;
-    /** The ID of the access group template. */
-    id?: string;
-    /** The name of the access group template. */
+    /** This is an optional field. If the field is included it will change the name value for all existing versions
+     *  of the template..
+     */
     name?: string;
-    /** The description of the access group template. */
+    /** Assign an optional description for the access group template version. */
     description?: string;
-    /** The ID of the account to which the access group template is assigned. */
-    accountId?: string;
-    /** The version of the access group template. */
-    version?: string;
-    /** A boolean indicating whether the access group template is committed. */
-    committed?: boolean;
-    /** Access Group Input Component. */
-    group?: AccessGroupInput;
-    /** References to policy templates assigned to the access group template. */
-    policyTemplateReferences?: PolicyTemplatesInput[];
-    /** The URL of the access group template resource. */
-    href?: string;
-    /** The date and time when the access group template was created. */
-    createdAt?: string;
-    /** The ID of the user who created the access group template. */
-    createdById?: string;
-    /** The date and time when the access group template was last modified. */
-    lastModifiedAt?: string;
-    /** The ID of the user who last modified the access group template. */
-    lastModifiedById?: string;
+    /** Access Group Component. */
+    group?: AccessGroupRequest;
+    /** The policy templates associated with the template version. */
+    policyTemplateReferences?: PolicyTemplates[];
     /** transaction id in header. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
@@ -2912,7 +2928,7 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `deleteTemplateVersion` operation. */
   export interface DeleteTemplateVersionParams {
-    /** template id parameter. */
+    /** ID of the template to delete. */
     templateId: string;
     /** version number in path. */
     versionNum: string;
@@ -2923,7 +2939,7 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `commitTemplate` operation. */
   export interface CommitTemplateParams {
-    /** template id parameter. */
+    /** ID of the template to commit. */
     templateId: string;
     /** version number in path. */
     versionNum: string;
@@ -2936,8 +2952,12 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `getLatestTemplateVersion` operation. */
   export interface GetLatestTemplateVersionParams {
-    /** template id parameter. */
+    /** ID of the template to get a specific version of. */
     templateId: string;
+    /** If `verbose=true`, IAM resource details are returned. If performance is a concern, leave the `verbose`
+     *  parameter off so that details are not retrieved.
+     */
+    verbose?: boolean;
     /** An optional transaction id for the request. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
@@ -2978,14 +2998,39 @@ namespace IamAccessGroupsV2 {
 
   /** Parameters for the `listAssignments` operation. */
   export interface ListAssignmentsParams {
-    /** query parameter account id. */
-    accountId?: string;
+    /** Enterprise account ID. */
+    accountId: string;
+    /** Filter results by Template Id. */
+    templateId?: string;
+    /** Filter results by Template Version. */
+    templateVersion?: string;
+    /** Filter results by the assignment target. */
+    target?: string;
+    /** Filter results by the assignment status. */
+    status?: ListAssignmentsConstants.Status | string;
+    /** An optional transaction id for the request. */
+    transactionId?: string;
+    /** Return up to this limit of results where limit is between 0 and 100. */
+    limit?: number;
+    /** The offset of the first result item to be returned. */
+    offset?: number;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listAssignments` operation. */
+  export namespace ListAssignmentsConstants {
+    /** Filter results by the assignment status. */
+    export enum Status {
+      ACCEPTED = 'accepted',
+      IN_PROGRESS = 'in_progress',
+      SUCCEEDED = 'succeeded',
+      FAILED = 'failed',
+    }
   }
 
   /** Parameters for the `getAssignment` operation. */
   export interface GetAssignmentParams {
-    /** assignment id parameter. */
+    /** Assignment ID. */
     assignmentId: string;
     /** An optional transaction id for the request. */
     transactionId?: string;
@@ -2999,12 +3044,12 @@ namespace IamAccessGroupsV2 {
     /** ID of the Assignment Record. */
     assignmentId: string;
     /** Version of the Assignment to be updated. Specify the version that you retrieved when reading the Assignment.
-     *  This value  helps identifying parallel usage of this API. Pass * to indicate to update any version available.
+     *  This value helps identifying parallel usage of this API. Pass * to indicate to update any version available.
      *  This might result in stale updates.
      */
     ifMatch: string;
     /** Template version which shall be applied to the assignment. */
-    templateVersion?: number;
+    templateVersion: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -3021,25 +3066,47 @@ namespace IamAccessGroupsV2 {
    * model interfaces
    ************************/
 
-  /** Control whether or not child account administrators can add access policies to the enterprise-managed access group in their account. */
+  /** Control whether or not access group administrators in child accounts can add access policies to the enterprise-managed access group in their account. */
   export interface AccessActionControls {
-    /** Action control for managing (Add, Remove & Update) child account access policies in an enterprise-managed
-     *  access group.
+    /** Action control for adding access policies to an enterprise-managed access group in a child account. If an
+     *  access group administrator in a child account adds a policy, they can always update or remove it.
      */
     add?: boolean;
   }
 
-  /** Access Group Input Component. */
-  export interface AccessGroupInput {
-    /** access group input name. */
+  /** Access Group Component. */
+  export interface AccessGroupRequest {
+    /** Give the access group a unique name that doesn't conflict with other templates access group name in the
+     *  given account. This is shown in child accounts.
+     */
     name: string;
-    /** access group input description. */
+    /** Access group description. This is shown in child accounts. */
     description?: string;
-    /** Members Input component. */
-    members?: MembersInput;
+    /** Array of enterprise users to add to the template. All enterprise users that you add to the template must be
+     *  invited to the child accounts where the template is assigned.
+     */
+    members?: Members;
     /** Assertions Input Component. */
-    assertions?: AssertionsInput;
-    /** Access Group Action Controls component. */
+    assertions?: Assertions;
+    /** Access group action controls component. */
+    action_controls?: GroupActionControls;
+  }
+
+  /** Access Group Component. */
+  export interface AccessGroupResponse {
+    /** Give the access group a unique name that doesn't conflict with other templates access group name in the
+     *  given account. This is shown in child accounts.
+     */
+    name: string;
+    /** Access group description. This is shown in child accounts. */
+    description?: string;
+    /** Array of enterprise users to add to the template. All enterprise users that you add to the template must be
+     *  invited to the child accounts where the template is assigned.
+     */
+    members?: Members;
+    /** Assertions Input Component. */
+    assertions?: Assertions;
+    /** Access group action controls component. */
     action_controls?: GroupActionControls;
   }
 
@@ -3109,10 +3176,21 @@ namespace IamAccessGroupsV2 {
     errors?: Error[];
   }
 
-  /** Assertions Action Controls component. Inner action controls will override these action controls. */
+  /** Assertions Input Component. */
+  export interface Assertions {
+    /** Dynamic rules to automatically add federated users to access groups based on specific identity attributes. */
+    rules?: AssertionsRule[];
+    /** Control whether or not access group administrators in child accounts can add, remove, and update dynamic
+     *  rules for the enterprise-managed access group in their account. The inner level RuleActionControls override
+     *  these `remove` and `update` action controls.
+     */
+    action_controls?: AssertionsActionControls;
+  }
+
+  /** Control whether or not access group administrators in child accounts can add, remove, and update dynamic rules for the enterprise-managed access group in their account. The inner level RuleActionControls override these `remove` and `update` action controls. */
   export interface AssertionsActionControls {
-    /** Action control for managing (Add, Remove & Update) child account dynamic rules in an enterprise-managed
-     *  access group.
+    /** Action control for adding dynamic rules to an enterprise-managed access group. If an access group
+     *  administrator in a child account adds a dynamic rule, they can always update or remove it.
      */
     add?: boolean;
     /** Action control for removing enterprise-managed dynamic rules in an enterprise-managed access group. */
@@ -3121,12 +3199,22 @@ namespace IamAccessGroupsV2 {
     update?: boolean;
   }
 
-  /** Assertions Input Component. */
-  export interface AssertionsInput {
-    /** assertions input rules. */
-    rules?: RuleInput[];
-    /** Assertions Action Controls component. Inner action controls will override these action controls. */
-    action_controls?: AssertionsActionControls;
+  /** Rule Input component. */
+  export interface AssertionsRule {
+    /** Dynamic rule name. */
+    name?: string;
+    /** Session duration in hours. Access group membership is revoked after this time period expires. Users must log
+     *  back in to refresh their access group membership.
+     */
+    expiration?: number;
+    /** The identity provider (IdP) URL. */
+    realm_name?: string;
+    /** Conditions of membership. You can think of this as a key:value pair. */
+    conditions?: Conditions[];
+    /** Control whether or not access group administrators in child accounts can update and remove this dynamic rule
+     *  in the enterprise-managed access group in their account.This overrides outer level AssertionsActionControls.
+     */
+    action_controls?: RuleActionControls;
   }
 
   /** Assignment Resource Access Group. */
@@ -3158,43 +3246,13 @@ namespace IamAccessGroupsV2 {
   }
 
   /** Condition Input component. */
-  export interface ConditionInput {
-    /** condition input claim. */
+  export interface Conditions {
+    /** The key in the key:value pair. */
     claim?: string;
-    /** condition input operator. */
+    /** Compares the claim and the value. */
     operator?: string;
-    /** condition input value. */
+    /** The value in the key:value pair. */
     value?: string;
-  }
-
-  /** Successful response output for create template. */
-  export interface CreateTemplateResponse {
-    /** The ID of the access group template. */
-    id: string;
-    /** The name of the access group template. */
-    name: string;
-    /** The description of the access group template. */
-    description: string;
-    /** The ID of the account to which the access group template is assigned. */
-    account_id: string;
-    /** The version of the access group template. */
-    version: string;
-    /** A boolean indicating whether the access group template is committed. */
-    committed: boolean;
-    /** Access Group Input Component. */
-    group: AccessGroupInput;
-    /** References to policy templates assigned to the access group template. */
-    policy_template_references: PolicyTemplatesInput[];
-    /** The URL of the access group template resource. */
-    href: string;
-    /** The date and time when the access group template was created. */
-    created_at: string;
-    /** The ID of the user who created the access group template. */
-    created_by_id: string;
-    /** The date and time when the access group template was last modified. */
-    last_modified_at: string;
-    /** The ID of the user who last modified the access group template. */
-    last_modified_by_id: string;
   }
 
   /** The response from the delete member from access groups request. */
@@ -3245,38 +3303,6 @@ namespace IamAccessGroupsV2 {
     message?: string;
   }
 
-  /** Response object containing the details of a template assignment. */
-  export interface GetTemplateAssignmentResponse {
-    /** The ID of the assignment. */
-    id: string;
-    /** The ID of the account that the assignment belongs to. */
-    account_id: string;
-    /** The ID of the template that the assignment is based on. */
-    template_id: string;
-    /** The version of the template that the assignment is based on. */
-    template_version: string;
-    /** The type of the entity that the assignment applies to. */
-    target_type: string;
-    /** The ID of the entity that the assignment applies to. */
-    target: string;
-    /** The operation that the assignment applies to (e.g. 'create', 'update', 'delete'). */
-    operation: string;
-    /** The status of the assignment (e.g. 'pending', 'success', 'failure'). */
-    status: string;
-    /** List of resources for the assignment. */
-    resources?: ResourceListWithTargetAccountID[];
-    /** The URL of the assignment resource. */
-    href: string;
-    /** The date and time when the assignment was created. */
-    created_at: string;
-    /** The user or system that created the assignment. */
-    created_by: string;
-    /** The date and time when the assignment was last updated. */
-    updated_at: string;
-    /** The user or system that last updated the assignment. */
-    updated_by: string;
-  }
-
   /** An IAM access group. */
   export interface Group {
     /** The group's access group ID. */
@@ -3301,10 +3327,10 @@ namespace IamAccessGroupsV2 {
     is_federated?: boolean;
   }
 
-  /** Access Group Action Controls component. */
+  /** Access group action controls component. */
   export interface GroupActionControls {
-    /** Control whether or not child account administrators can add access policies to the enterprise-managed access
-     *  group in their account.
+    /** Control whether or not access group administrators in child accounts can add access policies to the
+     *  enterprise-managed access group in their account.
      */
     access?: AccessActionControls;
   }
@@ -3327,6 +3353,36 @@ namespace IamAccessGroupsV2 {
     last?: HrefStruct;
     /** The members of an access group. */
     members?: ListGroupMembersResponseMember[];
+  }
+
+  /** Response output for template. */
+  export interface GroupTemplate {
+    /** The ID of the access group template. */
+    id: string;
+    /** The name of the access group template. */
+    name: string;
+    /** The description of the access group template. */
+    description: string;
+    /** The version of the access group template. */
+    version: string;
+    /** A boolean indicating whether the access group template is committed. You must commit a template before you
+     *  can assign it to child accounts.
+     */
+    committed: boolean;
+    /** Access Group Component. */
+    group: AccessGroupResponse;
+    /** References to policy templates assigned to the access group template. */
+    policy_template_references: PolicyTemplates[];
+    /** The URL of the access group template resource. */
+    href: string;
+    /** The date and time when the access group template was created. */
+    created_at: string;
+    /** The ID of the user who created the access group template. */
+    created_by_id: string;
+    /** The date and time when the access group template was last modified. */
+    last_modified_at: string;
+    /** The ID of the user who last modified the access group template. */
+    last_modified_by_id: string;
   }
 
   /** The list of access groups returned as part of a response. */
@@ -3377,48 +3433,24 @@ namespace IamAccessGroupsV2 {
     created_by_id?: string;
   }
 
-  /** Response object for listing template versions. */
-  export interface ListTemplateVersionsResponse {
-    /** The maximum number of resources to return. */
+  /** Response object containing a list of template assignments. */
+  export interface ListTemplateAssignmentResponse {
+    /** Maximum number of items returned in the response. */
     limit: number;
-    /** The offset of the first resource in the list. */
+    /** Index of the first item returned in the response. */
     offset: number;
-    /** The total number of resources in the list. */
+    /** Total number of items matching the query. */
     total_count: number;
     /** A link object. */
     first: HrefStruct;
     /** A link object. */
-    previous?: HrefStruct;
-    /** A link object. */
-    next?: HrefStruct;
-    /** A link object. */
     last: HrefStruct;
-    /** A list of access group template versions. */
-    group_template_versions: ListTemplatesVersionsResponse[];
-  }
-
-  /** Response object for listing templates. */
-  export interface ListTemplatesResponse {
-    /** The maximum number of resources to return. */
-    limit: number;
-    /** The offset of the first resource in the list. */
-    offset: number;
-    /** The total number of resources in the list. */
-    total_count: number;
-    /** A link object. */
-    first: HrefStruct;
-    /** A link object. */
-    previous?: HrefStruct;
-    /** A link object. */
-    next?: HrefStruct;
-    /** A link object. */
-    last: HrefStruct;
-    /** A list of templates. */
-    group_templates: TemplateItem[];
+    /** List of template assignments. */
+    assignments: TemplateAssignmentResponse[];
   }
 
   /** Response object for a single access group template version. */
-  export interface ListTemplatesVersionsResponse {
+  export interface ListTemplateVersionResponse {
     /** The name of the template. */
     name: string;
     /** The description of the template. */
@@ -3429,10 +3461,10 @@ namespace IamAccessGroupsV2 {
     version: string;
     /** A boolean indicating whether the template is committed or not. */
     committed: boolean;
-    /** Access Group Input Component. */
-    group: AccessGroupInput;
+    /** Access Group Component. */
+    group: AccessGroupResponse;
     /** A list of policy templates associated with the template. */
-    policy_template_references: PolicyTemplatesInput[];
+    policy_template_references: PolicyTemplates[];
     /** The URL to the template resource. */
     href: string;
     /** The date and time the template was created. */
@@ -3445,31 +3477,75 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id: string;
   }
 
-  /** Control whether or not child account administrators can add and remove members from the enterprise-managed access group in their account. */
-  export interface MembersActionControls {
-    /** Action control for managing (Add & Remove) child account members in an enterprise-managed access group. */
-    add?: boolean;
-    /** Action control for removing enterprise-managed members in an enterprise-managed access group. */
-    remove?: boolean;
+  /** Response object for listing template versions. */
+  export interface ListTemplateVersionsResponse {
+    /** The maximum number of IAM resources to return. */
+    limit: number;
+    /** The offset of the first IAM resource in the list. */
+    offset: number;
+    /** The total number of IAM resources in the list. */
+    total_count: number;
+    /** A link object. */
+    first: HrefStruct;
+    /** A link object. */
+    previous?: HrefStruct;
+    /** A link object. */
+    next?: HrefStruct;
+    /** A link object. */
+    last: HrefStruct;
+    /** A list of access group template versions. */
+    group_template_versions: ListTemplateVersionResponse[];
   }
 
-  /** Members Input component. */
-  export interface MembersInput {
-    /** Users array. */
+  /** Response object for listing templates. */
+  export interface ListTemplatesResponse {
+    /** The maximum number of IAM resources to return. */
+    limit: number;
+    /** The offset of the first IAM resource in the list. */
+    offset: number;
+    /** The total number of IAM resources in the list. */
+    total_count: number;
+    /** A link object. */
+    first: HrefStruct;
+    /** A link object. */
+    previous?: HrefStruct;
+    /** A link object. */
+    next?: HrefStruct;
+    /** A link object. */
+    last: HrefStruct;
+    /** A list of access group templates. */
+    group_templates: GroupTemplate[];
+  }
+
+  /** Array of enterprise users to add to the template. All enterprise users that you add to the template must be invited to the child accounts where the template is assigned. */
+  export interface Members {
+    /** Array of enterprise users to add to the template. All enterprise users that you add to the template must be
+     *  invited to the child accounts where the template is assigned.
+     */
     users?: string[];
-    /** Service ids array. */
-    service_ids?: string[];
-    /** Control whether or not child account administrators can add and remove members from the enterprise-managed
-     *  access group in their account.
+    /** Array of service IDs to add to the template. */
+    services?: string[];
+    /** Control whether or not access group administrators in child accounts can add and remove members from the
+     *  enterprise-managed access group in their account.
      */
     action_controls?: MembersActionControls;
   }
 
+  /** Control whether or not access group administrators in child accounts can add and remove members from the enterprise-managed access group in their account. */
+  export interface MembersActionControls {
+    /** Action control for adding child account members to an enterprise-managed access group. If an access group
+     *  administrator in a child account adds a member, they can always remove them.
+     */
+    add?: boolean;
+    /** Action control for removing enterprise-managed members from an enterprise-managed access group. */
+    remove?: boolean;
+  }
+
   /** Policy Templates Input component. */
-  export interface PolicyTemplatesInput {
-    /** policy template input id. */
+  export interface PolicyTemplates {
+    /** Policy template ID. */
     id?: string;
-    /** policy template input version. */
+    /** Policy template version. */
     version?: string;
   }
 
@@ -3511,6 +3587,14 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id?: string;
   }
 
+  /** Control whether or not access group administrators in child accounts can update and remove this dynamic rule in the enterprise-managed access group in their account.This overrides outer level AssertionsActionControls. */
+  export interface RuleActionControls {
+    /** Action control for removing this enterprise-managed dynamic rule. */
+    remove?: boolean;
+    /** Action control for updating this enterprise-managed dynamic rule. */
+    update?: boolean;
+  }
+
   /** The conditions of a dynamic rule. */
   export interface RuleConditions {
     /** The claim to evaluate against. This will be found in the `ext` claims of a user's login request. */
@@ -3521,31 +3605,6 @@ namespace IamAccessGroupsV2 {
     value: string;
   }
 
-  /** Rule Input component. */
-  export interface RuleInput {
-    /** rule input name. */
-    name?: string;
-    /** rule input expiration. */
-    expiration?: number;
-    /** rule input realm name. */
-    realm_name?: string;
-    /** rule input conditions. */
-    conditions?: ConditionInput[];
-    /** Control whether or not child account administrators can update and remove dynamic rules from the
-     *  enterprise-managed access group in their account. These action controls will override outer level action
-     *  controls.
-     */
-    action_controls?: RulesActionControls;
-  }
-
-  /** Control whether or not child account administrators can update and remove dynamic rules from the enterprise-managed access group in their account. These action controls will override outer level action controls. */
-  export interface RulesActionControls {
-    /** Action control for removing enterprise-managed dynamic rule in an enterprise-managed access group. */
-    remove?: boolean;
-    /** Action control for updating enterprise-managed dynamic rule in an enterprise-managed access group. */
-    update?: boolean;
-  }
-
   /** A list of dynamic rules attached to the access group. */
   export interface RulesList {
     /** A list of dynamic rules. */
@@ -3553,7 +3612,7 @@ namespace IamAccessGroupsV2 {
   }
 
   /** Response object containing the details of a template assignment. */
-  export interface TemplateCreateAssignmentResponse {
+  export interface TemplateAssignmentResponse {
     /** The ID of the assignment. */
     id: string;
     /** The ID of the account that the assignment belongs to. */
@@ -3568,56 +3627,114 @@ namespace IamAccessGroupsV2 {
     target: string;
     /** The operation that the assignment applies to (e.g. 'assign', 'update', 'remove'). */
     operation: string;
-    /** The status of the assignment (e.g. 'accepted', 'in_progress', 'succeeded', 'failed'). */
+    /** The status of the assignment (e.g. 'accepted', 'in_progress', 'succeeded', 'failed', 'superseded'). */
     status: string;
     /** The URL of the assignment resource. */
     href: string;
     /** The date and time when the assignment was created. */
     created_at: string;
     /** The user or system that created the assignment. */
-    created_by: string;
-    /** The date and time when the assignment was last updated. */
-    updated_at: string;
-    /** The user or system that last updated the assignment. */
-    updated_by: string;
-  }
-
-  /** TemplateItem. */
-  export interface TemplateItem {
-    /** The ID of the template. */
-    id: string;
-    /** The name of the template. */
-    name: string;
-    /** The description of the template. */
-    description: string;
-    /** The version of the template. */
-    version: string;
-    /** The timestamp when the template was created. */
-    created_at: string;
-    /** The ID of the user who created the template. */
     created_by_id: string;
-    /** The timestamp when the template was last modified. */
+    /** The date and time when the assignment was last updated. */
     last_modified_at: string;
-    /** The ID of the user who last modified the template. */
+    /** The user or system that last updated the assignment. */
     last_modified_by_id: string;
-    /** The URL to access the template resource. */
-    href: string;
   }
 
-  /** Response object containing a list of template assignments. */
-  export interface TemplatesListAssignmentResponse {
-    /** Maximum number of items returned in the response. */
-    limit: number;
-    /** Index of the first item returned in the response. */
-    offset: number;
-    /** Total number of items matching the query. */
-    total_count: number;
-    /** A link object. */
-    first: HrefStruct;
-    /** A link object. */
-    last: HrefStruct;
-    /** List of template assignments. */
-    assignments: TemplateCreateAssignmentResponse[];
+  /** Response object containing the details of a template assignment. */
+  export interface TemplateAssignmentVerboseResponse {
+    /** The ID of the assignment. */
+    id: string;
+    /** The ID of the account that the assignment belongs to. */
+    account_id: string;
+    /** The ID of the template that the assignment is based on. */
+    template_id: string;
+    /** The version of the template that the assignment is based on. */
+    template_version: string;
+    /** The type of the entity that the assignment applies to. */
+    target_type: string;
+    /** The ID of the entity that the assignment applies to. */
+    target: string;
+    /** The operation that the assignment applies to (e.g. 'create', 'update', 'delete'). */
+    operation: string;
+    /** The status of the assignment (e.g. 'pending', 'success', 'failure'). */
+    status: string;
+    /** List of resources for the assignment. */
+    resources?: ResourceListWithTargetAccountID[];
+    /** The URL of the assignment resource. */
+    href: string;
+    /** The date and time when the assignment was created. */
+    created_at: string;
+    /** The user or system that created the assignment. */
+    created_by_id: string;
+    /** The date and time when the assignment was last updated. */
+    last_modified_at: string;
+    /** The user or system that last updated the assignment. */
+    last_modified_by_id: string;
+  }
+
+  /** Response output for template. */
+  export interface TemplateResponse {
+    /** The ID of the access group template. */
+    id: string;
+    /** The name of the access group template. */
+    name: string;
+    /** The description of the access group template. */
+    description: string;
+    /** The ID of the account to which the access group template is assigned. */
+    account_id: string;
+    /** The version of the access group template. */
+    version: string;
+    /** A boolean indicating whether the access group template is committed. You must commit a template before you
+     *  can assign it to child accounts.
+     */
+    committed: boolean;
+    /** Access Group Component. */
+    group: AccessGroupResponse;
+    /** References to policy templates assigned to the access group template. */
+    policy_template_references: PolicyTemplates[];
+    /** The URL of the access group template resource. */
+    href: string;
+    /** The date and time when the access group template was created. */
+    created_at: string;
+    /** The ID of the user who created the access group template. */
+    created_by_id: string;
+    /** The date and time when the access group template was last modified. */
+    last_modified_at: string;
+    /** The ID of the user who last modified the access group template. */
+    last_modified_by_id: string;
+  }
+
+  /** Response output for template. */
+  export interface TemplateVersionResponse {
+    /** The ID of the access group template. */
+    id: string;
+    /** The name of the access group template. */
+    name: string;
+    /** The description of the access group template. */
+    description: string;
+    /** The ID of the account to which the access group template is assigned. */
+    account_id: string;
+    /** The version of the access group template. */
+    version: string;
+    /** A boolean indicating whether the access group template is committed. You must commit a template before you
+     *  can assign it to child accounts.
+     */
+    committed: boolean;
+    /** Access Group Component. */
+    group: AccessGroupResponse;
+    /** References to policy templates assigned to the access group template. */
+    policy_template_references: PolicyTemplates[];
+    /** The URL of the access group template resource. */
+    href: string;
+    /** The date and time when the access group template was created. */
+    created_at: string;
+    /** The ID of the user who created the access group template. */
+    created_by_id: string;
+    /** The date and time when the access group template was last modified. */
+    last_modified_at: string;
+    /** The ID of the user who last modified the access group template. */
+    last_modified_by_id: string;
   }
 
   /*************************
@@ -3827,9 +3944,9 @@ namespace IamAccessGroupsV2 {
 
     /**
      * Returns the next page of results by invoking listTemplates().
-     * @returns {Promise<IamAccessGroupsV2.TemplateItem[]>}
+     * @returns {Promise<IamAccessGroupsV2.GroupTemplate[]>}
      */
-    public async getNext(): Promise<IamAccessGroupsV2.TemplateItem[]> {
+    public async getNext(): Promise<IamAccessGroupsV2.GroupTemplate[]> {
       if (!this.hasNext()) {
         throw new Error('No more results available');
       }
@@ -3855,10 +3972,10 @@ namespace IamAccessGroupsV2 {
 
     /**
      * Returns all results by invoking listTemplates() repeatedly until all pages of results have been retrieved.
-     * @returns {Promise<IamAccessGroupsV2.TemplateItem[]>}
+     * @returns {Promise<IamAccessGroupsV2.GroupTemplate[]>}
      */
-    public async getAll(): Promise<IamAccessGroupsV2.TemplateItem[]> {
-      const results: TemplateItem[] = [];
+    public async getAll(): Promise<IamAccessGroupsV2.GroupTemplate[]> {
+      const results: GroupTemplate[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
@@ -3908,9 +4025,9 @@ namespace IamAccessGroupsV2 {
 
     /**
      * Returns the next page of results by invoking listTemplateVersions().
-     * @returns {Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]>}
+     * @returns {Promise<IamAccessGroupsV2.ListTemplateVersionResponse[]>}
      */
-    public async getNext(): Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]> {
+    public async getNext(): Promise<IamAccessGroupsV2.ListTemplateVersionResponse[]> {
       if (!this.hasNext()) {
         throw new Error('No more results available');
       }
@@ -3936,10 +4053,10 @@ namespace IamAccessGroupsV2 {
 
     /**
      * Returns all results by invoking listTemplateVersions() repeatedly until all pages of results have been retrieved.
-     * @returns {Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]>}
+     * @returns {Promise<IamAccessGroupsV2.ListTemplateVersionResponse[]>}
      */
-    public async getAll(): Promise<IamAccessGroupsV2.ListTemplatesVersionsResponse[]> {
-      const results: ListTemplatesVersionsResponse[] = [];
+    public async getAll(): Promise<IamAccessGroupsV2.ListTemplateVersionResponse[]> {
+      const results: ListTemplateVersionResponse[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);

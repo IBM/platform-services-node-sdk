@@ -30,7 +30,6 @@ const {
   checkMediaHeaders,
   expectToBePromise,
   checkUserHeader,
-  checkForSuccessfulExecution,
 } = unitTestUtils;
 
 const iamAccessGroupsServiceOptions = {
@@ -2093,33 +2092,33 @@ describe('IamAccessGroupsV2', () => {
         remove: false,
       };
 
-      // MembersInput
-      const membersInputModel = {
+      // Members
+      const membersModel = {
         users: ['IBMid-50PJGPKYJJ', 'IBMid-665000T8WY'],
-        service_ids: ['testString'],
+        services: ['iam-ServiceId-345', 'iam-ServiceId-456'],
         action_controls: membersActionControlsModel,
       };
 
-      // ConditionInput
-      const conditionInputModel = {
+      // Conditions
+      const conditionsModel = {
         claim: 'blueGroup',
         operator: 'CONTAINS',
-        value: '"test-bluegroup-saml"',
+        value: 'test-bluegroup-saml',
       };
 
-      // RulesActionControls
-      const rulesActionControlsModel = {
+      // RuleActionControls
+      const ruleActionControlsModel = {
         remove: false,
         update: false,
       };
 
-      // RuleInput
-      const ruleInputModel = {
+      // AssertionsRule
+      const assertionsRuleModel = {
         name: 'Manager group rule',
         expiration: 12,
         realm_name: 'https://idp.example.org/SAML2',
-        conditions: [conditionInputModel],
-        action_controls: rulesActionControlsModel,
+        conditions: [conditionsModel],
+        action_controls: ruleActionControlsModel,
       };
 
       // AssertionsActionControls
@@ -2129,9 +2128,9 @@ describe('IamAccessGroupsV2', () => {
         update: true,
       };
 
-      // AssertionsInput
-      const assertionsInputModel = {
-        rules: [ruleInputModel],
+      // Assertions
+      const assertionsModel = {
+        rules: [assertionsRuleModel],
         action_controls: assertionsActionControlsModel,
       };
 
@@ -2145,17 +2144,17 @@ describe('IamAccessGroupsV2', () => {
         access: accessActionControlsModel,
       };
 
-      // AccessGroupInput
-      const accessGroupInputModel = {
+      // AccessGroupRequest
+      const accessGroupRequestModel = {
         name: 'IAM Admin Group',
         description: 'This access group template allows admin access to all IAM platform services in the account.',
-        members: membersInputModel,
-        assertions: assertionsInputModel,
+        members: membersModel,
+        assertions: assertionsModel,
         action_controls: groupActionControlsModel,
       };
 
-      // PolicyTemplatesInput
-      const policyTemplatesInputModel = {
+      // PolicyTemplates
+      const policyTemplatesModel = {
         id: 'policyTemplateId-123',
         version: '1',
       };
@@ -2165,8 +2164,8 @@ describe('IamAccessGroupsV2', () => {
         const name = 'IAM Admin Group template';
         const accountId = 'accountID-123';
         const description = 'This access group template allows admin access to all IAM platform services in the account.';
-        const group = accessGroupInputModel;
-        const policyTemplateReferences = [policyTemplatesInputModel];
+        const group = accessGroupRequestModel;
+        const policyTemplateReferences = [policyTemplatesModel];
         const transactionId = 'testString';
         const createTemplateParams = {
           name,
@@ -2358,9 +2357,9 @@ describe('IamAccessGroupsV2', () => {
       const serviceUrl = iamAccessGroupsServiceOptions.url;
       const path = '/v1/group_templates';
       const mockPagerResponse1 =
-        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id","href":"href"}],"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"limit":1}';
+        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id","href":"href"}],"total_count":2,"limit":1}';
+        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2419,33 +2418,33 @@ describe('IamAccessGroupsV2', () => {
         remove: false,
       };
 
-      // MembersInput
-      const membersInputModel = {
+      // Members
+      const membersModel = {
         users: ['IBMid-50PJGPKYJJ', 'IBMid-665000T8WY'],
-        service_ids: ['testString'],
+        services: ['iam-ServiceId-345'],
         action_controls: membersActionControlsModel,
       };
 
-      // ConditionInput
-      const conditionInputModel = {
+      // Conditions
+      const conditionsModel = {
         claim: 'blueGroup',
         operator: 'CONTAINS',
-        value: '"test-bluegroup-saml"',
+        value: 'test-bluegroup-saml',
       };
 
-      // RulesActionControls
-      const rulesActionControlsModel = {
+      // RuleActionControls
+      const ruleActionControlsModel = {
         remove: true,
         update: true,
       };
 
-      // RuleInput
-      const ruleInputModel = {
+      // AssertionsRule
+      const assertionsRuleModel = {
         name: 'Manager group rule',
         expiration: 12,
         realm_name: 'https://idp.example.org/SAML2',
-        conditions: [conditionInputModel],
-        action_controls: rulesActionControlsModel,
+        conditions: [conditionsModel],
+        action_controls: ruleActionControlsModel,
       };
 
       // AssertionsActionControls
@@ -2455,9 +2454,9 @@ describe('IamAccessGroupsV2', () => {
         update: true,
       };
 
-      // AssertionsInput
-      const assertionsInputModel = {
-        rules: [ruleInputModel],
+      // Assertions
+      const assertionsModel = {
+        rules: [assertionsRuleModel],
         action_controls: assertionsActionControlsModel,
       };
 
@@ -2471,17 +2470,17 @@ describe('IamAccessGroupsV2', () => {
         access: accessActionControlsModel,
       };
 
-      // AccessGroupInput
-      const accessGroupInputModel = {
+      // AccessGroupRequest
+      const accessGroupRequestModel = {
         name: 'IAM Admin Group 8',
         description: 'This access group template allows admin access to all IAM platform services in the account.',
-        members: membersInputModel,
-        assertions: assertionsInputModel,
+        members: membersModel,
+        assertions: assertionsModel,
         action_controls: groupActionControlsModel,
       };
 
-      // PolicyTemplatesInput
-      const policyTemplatesInputModel = {
+      // PolicyTemplates
+      const policyTemplatesModel = {
         id: 'policyTemplateId-123',
         version: '1',
       };
@@ -2491,8 +2490,8 @@ describe('IamAccessGroupsV2', () => {
         const templateId = 'testString';
         const name = 'IAM Admin Group template 2';
         const description = 'This access group template allows admin access to all IAM platform services in the account.';
-        const group = accessGroupInputModel;
-        const policyTemplateReferences = [policyTemplatesInputModel];
+        const group = accessGroupRequestModel;
+        const policyTemplateReferences = [policyTemplatesModel];
         const transactionId = 'testString';
         const createTemplateVersionParams = {
           templateId,
@@ -2676,9 +2675,9 @@ describe('IamAccessGroupsV2', () => {
       const serviceUrl = iamAccessGroupsServiceOptions.url;
       const path = '/v1/group_templates/testString/versions';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"service_ids":["service_ids"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
       const mockPagerResponse2 =
-        '{"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"service_ids":["service_ids"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
+        '{"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2729,10 +2728,12 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation getTemplateVersion
         const templateId = 'testString';
         const versionNum = 'testString';
+        const verbose = true;
         const transactionId = 'testString';
         const getTemplateVersionParams = {
           templateId,
           versionNum,
+          verbose,
           transactionId,
         };
 
@@ -2751,6 +2752,7 @@ describe('IamAccessGroupsV2', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
         expect(mockRequestOptions.path.template_id).toEqual(templateId);
         expect(mockRequestOptions.path.version_num).toEqual(versionNum);
       }
@@ -2825,33 +2827,33 @@ describe('IamAccessGroupsV2', () => {
         remove: false,
       };
 
-      // MembersInput
-      const membersInputModel = {
+      // Members
+      const membersModel = {
         users: ['IBMid-665000T8WY'],
-        service_ids: ['testString'],
+        services: ['iam-ServiceId-e371b0e5-1c80-48e3-bf12-c6a8ef2b1a11'],
         action_controls: membersActionControlsModel,
       };
 
-      // ConditionInput
-      const conditionInputModel = {
+      // Conditions
+      const conditionsModel = {
         claim: 'blueGroup',
         operator: 'CONTAINS',
-        value: '"test-bluegroup-saml"',
+        value: 'test-bluegroup-saml',
       };
 
-      // RulesActionControls
-      const rulesActionControlsModel = {
+      // RuleActionControls
+      const ruleActionControlsModel = {
         remove: false,
         update: false,
       };
 
-      // RuleInput
-      const ruleInputModel = {
+      // AssertionsRule
+      const assertionsRuleModel = {
         name: 'Manager group rule',
         expiration: 12,
         realm_name: 'https://idp.example.org/SAML2',
-        conditions: [conditionInputModel],
-        action_controls: rulesActionControlsModel,
+        conditions: [conditionsModel],
+        action_controls: ruleActionControlsModel,
       };
 
       // AssertionsActionControls
@@ -2861,9 +2863,9 @@ describe('IamAccessGroupsV2', () => {
         update: true,
       };
 
-      // AssertionsInput
-      const assertionsInputModel = {
-        rules: [ruleInputModel],
+      // Assertions
+      const assertionsModel = {
+        rules: [assertionsRuleModel],
         action_controls: assertionsActionControlsModel,
       };
 
@@ -2877,17 +2879,17 @@ describe('IamAccessGroupsV2', () => {
         access: accessActionControlsModel,
       };
 
-      // AccessGroupInput
-      const accessGroupInputModel = {
+      // AccessGroupRequest
+      const accessGroupRequestModel = {
         name: 'IAM Admin Group 8',
         description: 'This access group template allows admin access to all IAM platform services in the account.',
-        members: membersInputModel,
-        assertions: assertionsInputModel,
+        members: membersModel,
+        assertions: assertionsModel,
         action_controls: groupActionControlsModel,
       };
 
-      // PolicyTemplatesInput
-      const policyTemplatesInputModel = {
+      // PolicyTemplates
+      const policyTemplatesModel = {
         id: 'policyTemplateId-123',
         version: '1',
       };
@@ -2897,37 +2899,19 @@ describe('IamAccessGroupsV2', () => {
         const templateId = 'testString';
         const versionNum = 'testString';
         const ifMatch = 'testString';
-        const id = 'testString';
         const name = 'IAM Admin Group template 2';
         const description = 'This access group template allows admin access to all IAM platform services in the account.';
-        const accountId = 'testString';
-        const version = 'testString';
-        const committed = true;
-        const group = accessGroupInputModel;
-        const policyTemplateReferences = [policyTemplatesInputModel];
-        const href = 'testString';
-        const createdAt = '2019-01-01T12:00:00.000Z';
-        const createdById = 'testString';
-        const lastModifiedAt = '2019-01-01T12:00:00.000Z';
-        const lastModifiedById = 'testString';
+        const group = accessGroupRequestModel;
+        const policyTemplateReferences = [policyTemplatesModel];
         const transactionId = '83adf5bd-de790caa3';
         const updateTemplateVersionParams = {
           templateId,
           versionNum,
           ifMatch,
-          id,
           name,
           description,
-          accountId,
-          version,
-          committed,
           group,
           policyTemplateReferences,
-          href,
-          createdAt,
-          createdById,
-          lastModifiedAt,
-          lastModifiedById,
           transactionId,
         };
 
@@ -2947,19 +2931,10 @@ describe('IamAccessGroupsV2', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(mockRequestOptions.body.id).toEqual(id);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.description).toEqual(description);
-        expect(mockRequestOptions.body.account_id).toEqual(accountId);
-        expect(mockRequestOptions.body.version).toEqual(version);
-        expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.body.group).toEqual(group);
         expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
-        expect(mockRequestOptions.body.href).toEqual(href);
-        expect(mockRequestOptions.body.created_at).toEqual(createdAt);
-        expect(mockRequestOptions.body.created_by_id).toEqual(createdById);
-        expect(mockRequestOptions.body.last_modified_at).toEqual(lastModifiedAt);
-        expect(mockRequestOptions.body.last_modified_by_id).toEqual(lastModifiedById);
         expect(mockRequestOptions.path.template_id).toEqual(templateId);
         expect(mockRequestOptions.path.version_num).toEqual(versionNum);
       }
@@ -3220,9 +3195,11 @@ describe('IamAccessGroupsV2', () => {
       function __getLatestTemplateVersionTest() {
         // Construct the params object for operation getLatestTemplateVersion
         const templateId = 'testString';
+        const verbose = true;
         const transactionId = 'testString';
         const getLatestTemplateVersionParams = {
           templateId,
+          verbose,
           transactionId,
         };
 
@@ -3241,6 +3218,7 @@ describe('IamAccessGroupsV2', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
         expect(mockRequestOptions.path.template_id).toEqual(templateId);
       }
 
@@ -3496,8 +3474,22 @@ describe('IamAccessGroupsV2', () => {
       function __listAssignmentsTest() {
         // Construct the params object for operation listAssignments
         const accountId = 'accountID-123';
+        const templateId = 'testString';
+        const templateVersion = 'testString';
+        const target = 'testString';
+        const status = 'accepted';
+        const transactionId = 'testString';
+        const limit = 50;
+        const offset = 0;
         const listAssignmentsParams = {
           accountId,
+          templateId,
+          templateVersion,
+          target,
+          status,
+          transactionId,
+          limit,
+          offset,
         };
 
         const listAssignmentsResult = iamAccessGroupsService.listAssignments(listAssignmentsParams);
@@ -3514,7 +3506,14 @@ describe('IamAccessGroupsV2', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.template_id).toEqual(templateId);
+        expect(mockRequestOptions.qs.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.qs.target).toEqual(target);
+        expect(mockRequestOptions.qs.status).toEqual(status);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -3534,9 +3533,11 @@ describe('IamAccessGroupsV2', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
+        const accountId = 'accountID-123';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const listAssignmentsParams = {
+          accountId,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -3546,11 +3547,29 @@ describe('IamAccessGroupsV2', () => {
         iamAccessGroupsService.listAssignments(listAssignmentsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
+    });
 
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        iamAccessGroupsService.listAssignments({});
-        checkForSuccessfulExecution(createRequestMock);
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAssignments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAssignments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3651,7 +3670,7 @@ describe('IamAccessGroupsV2', () => {
         // Construct the params object for operation updateAssignment
         const assignmentId = 'testString';
         const ifMatch = 'testString';
-        const templateVersion = 1;
+        const templateVersion = '1';
         const updateAssignmentParams = {
           assignmentId,
           ifMatch,
@@ -3696,11 +3715,13 @@ describe('IamAccessGroupsV2', () => {
         // parameters
         const assignmentId = 'testString';
         const ifMatch = 'testString';
+        const templateVersion = '1';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const updateAssignmentParams = {
           assignmentId,
           ifMatch,
+          templateVersion,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
