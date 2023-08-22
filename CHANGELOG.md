@@ -1,3 +1,10 @@
+# [0.39.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.38.0...v0.39.0) (2023-08-22)
+
+
+### Features
+
+* **IAM Access Groups:** add support for access group templates ([#215](https://github.com/IBM/platform-services-node-sdk/issues/215)) ([81a756d](https://github.com/IBM/platform-services-node-sdk/commit/81a756d2e6e7f9f03bcc50e3211b0fd4cd392ae2))
+
 # [0.38.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.37.0...v0.38.0) (2023-07-05)
 
 
