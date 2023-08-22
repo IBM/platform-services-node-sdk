@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 
 const IamAccessGroupsV2 = require('../../dist/iam-access-groups/v2');
 const nock = require('nock');
@@ -54,7 +54,7 @@ function unmock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('IamAccessGroupsV2', () => {
@@ -223,9 +223,10 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const transactionId = 'testString';
         const iamId = 'testString';
+        const search = 'testString';
         const membershipType = 'static';
-        const limit = 100;
-        const offset = 38;
+        const limit = 50;
+        const offset = 0;
         const sort = 'name';
         const showFederated = false;
         const hidePublicAccess = false;
@@ -233,6 +234,7 @@ describe('IamAccessGroupsV2', () => {
           accountId,
           transactionId,
           iamId,
+          search,
           membershipType,
           limit,
           offset,
@@ -258,6 +260,7 @@ describe('IamAccessGroupsV2', () => {
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.iam_id).toEqual(iamId);
+        expect(mockRequestOptions.qs.search).toEqual(search);
         expect(mockRequestOptions.qs.membership_type).toEqual(membershipType);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.offset).toEqual(offset);
@@ -350,6 +353,7 @@ describe('IamAccessGroupsV2', () => {
           accountId: 'testString',
           transactionId: 'testString',
           iamId: 'testString',
+          search: 'testString',
           membershipType: 'static',
           limit: 10,
           sort: 'name',
@@ -372,6 +376,7 @@ describe('IamAccessGroupsV2', () => {
           accountId: 'testString',
           transactionId: 'testString',
           iamId: 'testString',
+          search: 'testString',
           membershipType: 'static',
           limit: 10,
           sort: 'name',
@@ -861,8 +866,8 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const membershipType = 'static';
-        const limit = 100;
-        const offset = 38;
+        const limit = 50;
+        const offset = 0;
         const type = 'testString';
         const verbose = false;
         const sort = 'testString';
@@ -1300,7 +1305,7 @@ describe('IamAccessGroupsV2', () => {
         const accountId = 'testString';
         const iamId = 'testString';
         const type = 'user';
-        const groups = ['access-group-id-1'];
+        const groups = ['AccessGroupId-b0d32f56-f85c-4bf1-af37-7bbd92b1b2b3'];
         const transactionId = 'testString';
         const addMemberToMultipleAccessGroupsParams = {
           accountId,
@@ -2068,6 +2073,1769 @@ describe('IamAccessGroupsV2', () => {
         let err;
         try {
           await iamAccessGroupsService.updateAccountSettings();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createTemplate', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // MembersActionControls
+      const membersActionControlsModel = {
+        add: true,
+        remove: false,
+      };
+
+      // Members
+      const membersModel = {
+        users: ['IBMid-50PJGPKYJJ', 'IBMid-665000T8WY'],
+        services: ['iam-ServiceId-345', 'iam-ServiceId-456'],
+        action_controls: membersActionControlsModel,
+      };
+
+      // Conditions
+      const conditionsModel = {
+        claim: 'blueGroup',
+        operator: 'CONTAINS',
+        value: 'test-bluegroup-saml',
+      };
+
+      // RuleActionControls
+      const ruleActionControlsModel = {
+        remove: false,
+        update: false,
+      };
+
+      // AssertionsRule
+      const assertionsRuleModel = {
+        name: 'Manager group rule',
+        expiration: 12,
+        realm_name: 'https://idp.example.org/SAML2',
+        conditions: [conditionsModel],
+        action_controls: ruleActionControlsModel,
+      };
+
+      // AssertionsActionControls
+      const assertionsActionControlsModel = {
+        add: false,
+        remove: true,
+        update: true,
+      };
+
+      // Assertions
+      const assertionsModel = {
+        rules: [assertionsRuleModel],
+        action_controls: assertionsActionControlsModel,
+      };
+
+      // AccessActionControls
+      const accessActionControlsModel = {
+        add: false,
+      };
+
+      // GroupActionControls
+      const groupActionControlsModel = {
+        access: accessActionControlsModel,
+      };
+
+      // AccessGroupRequest
+      const accessGroupRequestModel = {
+        name: 'IAM Admin Group',
+        description: 'This access group template allows admin access to all IAM platform services in the account.',
+        members: membersModel,
+        assertions: assertionsModel,
+        action_controls: groupActionControlsModel,
+      };
+
+      // PolicyTemplates
+      const policyTemplatesModel = {
+        id: 'policyTemplateId-123',
+        version: '1',
+      };
+
+      function __createTemplateTest() {
+        // Construct the params object for operation createTemplate
+        const name = 'IAM Admin Group template';
+        const accountId = 'accountID-123';
+        const description = 'This access group template allows admin access to all IAM platform services in the account.';
+        const group = accessGroupRequestModel;
+        const policyTemplateReferences = [policyTemplatesModel];
+        const transactionId = 'testString';
+        const createTemplateParams = {
+          name,
+          accountId,
+          description,
+          group,
+          policyTemplateReferences,
+          transactionId,
+        };
+
+        const createTemplateResult = iamAccessGroupsService.createTemplate(createTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.group).toEqual(group);
+        expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __createTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __createTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const name = 'IAM Admin Group template';
+        const accountId = 'accountID-123';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createTemplateParams = {
+          name,
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.createTemplate(createTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listTemplates', () => {
+    describe('positive tests', () => {
+      function __listTemplatesTest() {
+        // Construct the params object for operation listTemplates
+        const accountId = 'accountID-123';
+        const transactionId = 'testString';
+        const limit = 50;
+        const offset = 0;
+        const verbose = true;
+        const listTemplatesParams = {
+          accountId,
+          transactionId,
+          limit,
+          offset,
+          verbose,
+        };
+
+        const listTemplatesResult = iamAccessGroupsService.listTemplates(listTemplatesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listTemplatesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listTemplatesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __listTemplatesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __listTemplatesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'accountID-123';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listTemplatesParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.listTemplates(listTemplatesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listTemplates({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listTemplates();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('TemplatesPager tests', () => {
+      const serviceUrl = iamAccessGroupsServiceOptions.url;
+      const path = '/v1/group_templates';
+      const mockPagerResponse1 =
+        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'accountID-123',
+          transactionId: 'testString',
+          limit: 50,
+          verbose: true,
+        };
+        const allResults = [];
+        const pager = new IamAccessGroupsV2.TemplatesPager(iamAccessGroupsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'accountID-123',
+          transactionId: 'testString',
+          limit: 50,
+          verbose: true,
+        };
+        const pager = new IamAccessGroupsV2.TemplatesPager(iamAccessGroupsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createTemplateVersion', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // MembersActionControls
+      const membersActionControlsModel = {
+        add: true,
+        remove: false,
+      };
+
+      // Members
+      const membersModel = {
+        users: ['IBMid-50PJGPKYJJ', 'IBMid-665000T8WY'],
+        services: ['iam-ServiceId-345'],
+        action_controls: membersActionControlsModel,
+      };
+
+      // Conditions
+      const conditionsModel = {
+        claim: 'blueGroup',
+        operator: 'CONTAINS',
+        value: 'test-bluegroup-saml',
+      };
+
+      // RuleActionControls
+      const ruleActionControlsModel = {
+        remove: true,
+        update: true,
+      };
+
+      // AssertionsRule
+      const assertionsRuleModel = {
+        name: 'Manager group rule',
+        expiration: 12,
+        realm_name: 'https://idp.example.org/SAML2',
+        conditions: [conditionsModel],
+        action_controls: ruleActionControlsModel,
+      };
+
+      // AssertionsActionControls
+      const assertionsActionControlsModel = {
+        add: false,
+        remove: true,
+        update: true,
+      };
+
+      // Assertions
+      const assertionsModel = {
+        rules: [assertionsRuleModel],
+        action_controls: assertionsActionControlsModel,
+      };
+
+      // AccessActionControls
+      const accessActionControlsModel = {
+        add: false,
+      };
+
+      // GroupActionControls
+      const groupActionControlsModel = {
+        access: accessActionControlsModel,
+      };
+
+      // AccessGroupRequest
+      const accessGroupRequestModel = {
+        name: 'IAM Admin Group 8',
+        description: 'This access group template allows admin access to all IAM platform services in the account.',
+        members: membersModel,
+        assertions: assertionsModel,
+        action_controls: groupActionControlsModel,
+      };
+
+      // PolicyTemplates
+      const policyTemplatesModel = {
+        id: 'policyTemplateId-123',
+        version: '1',
+      };
+
+      function __createTemplateVersionTest() {
+        // Construct the params object for operation createTemplateVersion
+        const templateId = 'testString';
+        const name = 'IAM Admin Group template 2';
+        const description = 'This access group template allows admin access to all IAM platform services in the account.';
+        const group = accessGroupRequestModel;
+        const policyTemplateReferences = [policyTemplatesModel];
+        const transactionId = 'testString';
+        const createTemplateVersionParams = {
+          templateId,
+          name,
+          description,
+          group,
+          policyTemplateReferences,
+          transactionId,
+        };
+
+        const createTemplateVersionResult = iamAccessGroupsService.createTemplateVersion(createTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}/versions', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.group).toEqual(group);
+        expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __createTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __createTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createTemplateVersionParams = {
+          templateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.createTemplateVersion(createTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listTemplateVersions', () => {
+    describe('positive tests', () => {
+      function __listTemplateVersionsTest() {
+        // Construct the params object for operation listTemplateVersions
+        const templateId = 'testString';
+        const limit = 100;
+        const offset = 0;
+        const listTemplateVersionsParams = {
+          templateId,
+          limit,
+          offset,
+        };
+
+        const listTemplateVersionsResult = iamAccessGroupsService.listTemplateVersions(listTemplateVersionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listTemplateVersionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}/versions', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listTemplateVersionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __listTemplateVersionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __listTemplateVersionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listTemplateVersionsParams = {
+          templateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.listTemplateVersions(listTemplateVersionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listTemplateVersions({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listTemplateVersions();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('TemplateVersionsPager tests', () => {
+      const serviceUrl = iamAccessGroupsServiceOptions.url;
+      const path = '/v1/group_templates/testString/versions';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          templateId: 'testString',
+          limit: 100,
+        };
+        const allResults = [];
+        const pager = new IamAccessGroupsV2.TemplateVersionsPager(iamAccessGroupsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          templateId: 'testString',
+          limit: 100,
+        };
+        const pager = new IamAccessGroupsV2.TemplateVersionsPager(iamAccessGroupsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __getTemplateVersionTest() {
+        // Construct the params object for operation getTemplateVersion
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const verbose = true;
+        const transactionId = 'testString';
+        const getTemplateVersionParams = {
+          templateId,
+          versionNum,
+          verbose,
+          transactionId,
+        };
+
+        const getTemplateVersionResult = iamAccessGroupsService.getTemplateVersion(getTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}/versions/{version_num}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+        expect(mockRequestOptions.path.version_num).toEqual(versionNum);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __getTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __getTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getTemplateVersionParams = {
+          templateId,
+          versionNum,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.getTemplateVersion(getTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateTemplateVersion', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // MembersActionControls
+      const membersActionControlsModel = {
+        add: true,
+        remove: false,
+      };
+
+      // Members
+      const membersModel = {
+        users: ['IBMid-665000T8WY'],
+        services: ['iam-ServiceId-e371b0e5-1c80-48e3-bf12-c6a8ef2b1a11'],
+        action_controls: membersActionControlsModel,
+      };
+
+      // Conditions
+      const conditionsModel = {
+        claim: 'blueGroup',
+        operator: 'CONTAINS',
+        value: 'test-bluegroup-saml',
+      };
+
+      // RuleActionControls
+      const ruleActionControlsModel = {
+        remove: false,
+        update: false,
+      };
+
+      // AssertionsRule
+      const assertionsRuleModel = {
+        name: 'Manager group rule',
+        expiration: 12,
+        realm_name: 'https://idp.example.org/SAML2',
+        conditions: [conditionsModel],
+        action_controls: ruleActionControlsModel,
+      };
+
+      // AssertionsActionControls
+      const assertionsActionControlsModel = {
+        add: false,
+        remove: true,
+        update: true,
+      };
+
+      // Assertions
+      const assertionsModel = {
+        rules: [assertionsRuleModel],
+        action_controls: assertionsActionControlsModel,
+      };
+
+      // AccessActionControls
+      const accessActionControlsModel = {
+        add: false,
+      };
+
+      // GroupActionControls
+      const groupActionControlsModel = {
+        access: accessActionControlsModel,
+      };
+
+      // AccessGroupRequest
+      const accessGroupRequestModel = {
+        name: 'IAM Admin Group 8',
+        description: 'This access group template allows admin access to all IAM platform services in the account.',
+        members: membersModel,
+        assertions: assertionsModel,
+        action_controls: groupActionControlsModel,
+      };
+
+      // PolicyTemplates
+      const policyTemplatesModel = {
+        id: 'policyTemplateId-123',
+        version: '1',
+      };
+
+      function __updateTemplateVersionTest() {
+        // Construct the params object for operation updateTemplateVersion
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const ifMatch = 'testString';
+        const name = 'IAM Admin Group template 2';
+        const description = 'This access group template allows admin access to all IAM platform services in the account.';
+        const group = accessGroupRequestModel;
+        const policyTemplateReferences = [policyTemplatesModel];
+        const transactionId = '83adf5bd-de790caa3';
+        const updateTemplateVersionParams = {
+          templateId,
+          versionNum,
+          ifMatch,
+          name,
+          description,
+          group,
+          policyTemplateReferences,
+          transactionId,
+        };
+
+        const updateTemplateVersionResult = iamAccessGroupsService.updateTemplateVersion(updateTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}/versions/{version_num}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.group).toEqual(group);
+        expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+        expect(mockRequestOptions.path.version_num).toEqual(versionNum);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __updateTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __updateTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateTemplateVersionParams = {
+          templateId,
+          versionNum,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.updateTemplateVersion(updateTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __deleteTemplateVersionTest() {
+        // Construct the params object for operation deleteTemplateVersion
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const transactionId = 'testString';
+        const deleteTemplateVersionParams = {
+          templateId,
+          versionNum,
+          transactionId,
+        };
+
+        const deleteTemplateVersionResult = iamAccessGroupsService.deleteTemplateVersion(deleteTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}/versions/{version_num}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+        expect(mockRequestOptions.path.version_num).toEqual(versionNum);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __deleteTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __deleteTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteTemplateVersionParams = {
+          templateId,
+          versionNum,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.deleteTemplateVersion(deleteTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('commitTemplate', () => {
+    describe('positive tests', () => {
+      function __commitTemplateTest() {
+        // Construct the params object for operation commitTemplate
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const ifMatch = 'testString';
+        const transactionId = 'testString';
+        const commitTemplateParams = {
+          templateId,
+          versionNum,
+          ifMatch,
+          transactionId,
+        };
+
+        const commitTemplateResult = iamAccessGroupsService.commitTemplate(commitTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(commitTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}/versions/{version_num}/commit', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+        expect(mockRequestOptions.path.version_num).toEqual(versionNum);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __commitTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __commitTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __commitTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const versionNum = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const commitTemplateParams = {
+          templateId,
+          versionNum,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.commitTemplate(commitTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.commitTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.commitTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getLatestTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __getLatestTemplateVersionTest() {
+        // Construct the params object for operation getLatestTemplateVersion
+        const templateId = 'testString';
+        const verbose = true;
+        const transactionId = 'testString';
+        const getLatestTemplateVersionParams = {
+          templateId,
+          verbose,
+          transactionId,
+        };
+
+        const getLatestTemplateVersionResult = iamAccessGroupsService.getLatestTemplateVersion(getLatestTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getLatestTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLatestTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __getLatestTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __getLatestTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getLatestTemplateVersionParams = {
+          templateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.getLatestTemplateVersion(getLatestTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getLatestTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getLatestTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteTemplate', () => {
+    describe('positive tests', () => {
+      function __deleteTemplateTest() {
+        // Construct the params object for operation deleteTemplate
+        const templateId = 'testString';
+        const transactionId = 'testString';
+        const deleteTemplateParams = {
+          templateId,
+          transactionId,
+        };
+
+        const deleteTemplateResult = iamAccessGroupsService.deleteTemplate(deleteTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_templates/{template_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.path.template_id).toEqual(templateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __deleteTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __deleteTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteTemplateParams = {
+          templateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.deleteTemplate(deleteTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createAssignment', () => {
+    describe('positive tests', () => {
+      function __createAssignmentTest() {
+        // Construct the params object for operation createAssignment
+        const templateId = 'AccessGroupTemplateId-4be4';
+        const templateVersion = '1';
+        const targetType = 'AccountGroup';
+        const target = '0a45594d0f-123';
+        const transactionId = 'testString';
+        const createAssignmentParams = {
+          templateId,
+          templateVersion,
+          targetType,
+          target,
+          transactionId,
+        };
+
+        const createAssignmentResult = iamAccessGroupsService.createAssignment(createAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_assignments', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.body.template_id).toEqual(templateId);
+        expect(mockRequestOptions.body.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.body.target_type).toEqual(targetType);
+        expect(mockRequestOptions.body.target).toEqual(target);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __createAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __createAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const templateId = 'AccessGroupTemplateId-4be4';
+        const templateVersion = '1';
+        const targetType = 'AccountGroup';
+        const target = '0a45594d0f-123';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createAssignmentParams = {
+          templateId,
+          templateVersion,
+          targetType,
+          target,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.createAssignment(createAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.createAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listAssignments', () => {
+    describe('positive tests', () => {
+      function __listAssignmentsTest() {
+        // Construct the params object for operation listAssignments
+        const accountId = 'accountID-123';
+        const templateId = 'testString';
+        const templateVersion = 'testString';
+        const target = 'testString';
+        const status = 'accepted';
+        const transactionId = 'testString';
+        const limit = 50;
+        const offset = 0;
+        const listAssignmentsParams = {
+          accountId,
+          templateId,
+          templateVersion,
+          target,
+          status,
+          transactionId,
+          limit,
+          offset,
+        };
+
+        const listAssignmentsResult = iamAccessGroupsService.listAssignments(listAssignmentsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listAssignmentsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_assignments', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.template_id).toEqual(templateId);
+        expect(mockRequestOptions.qs.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.qs.target).toEqual(target);
+        expect(mockRequestOptions.qs.status).toEqual(status);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listAssignmentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __listAssignmentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __listAssignmentsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'accountID-123';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listAssignmentsParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.listAssignments(listAssignmentsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAssignments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.listAssignments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getAssignment', () => {
+    describe('positive tests', () => {
+      function __getAssignmentTest() {
+        // Construct the params object for operation getAssignment
+        const assignmentId = 'testString';
+        const transactionId = 'testString';
+        const verbose = false;
+        const getAssignmentParams = {
+          assignmentId,
+          transactionId,
+          verbose,
+        };
+
+        const getAssignmentResult = iamAccessGroupsService.getAssignment(getAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_assignments/{assignment_id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.qs.verbose).toEqual(verbose);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __getAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __getAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getAssignmentParams = {
+          assignmentId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.getAssignment(getAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.getAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateAssignment', () => {
+    describe('positive tests', () => {
+      function __updateAssignmentTest() {
+        // Construct the params object for operation updateAssignment
+        const assignmentId = 'testString';
+        const ifMatch = 'testString';
+        const templateVersion = '1';
+        const updateAssignmentParams = {
+          assignmentId,
+          ifMatch,
+          templateVersion,
+        };
+
+        const updateAssignmentResult = iamAccessGroupsService.updateAssignment(updateAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_assignments/{assignment_id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __updateAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __updateAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const ifMatch = 'testString';
+        const templateVersion = '1';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateAssignmentParams = {
+          assignmentId,
+          ifMatch,
+          templateVersion,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.updateAssignment(updateAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.updateAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteAssignment', () => {
+    describe('positive tests', () => {
+      function __deleteAssignmentTest() {
+        // Construct the params object for operation deleteAssignment
+        const assignmentId = 'testString';
+        const transactionId = 'testString';
+        const deleteAssignmentParams = {
+          assignmentId,
+          transactionId,
+        };
+
+        const deleteAssignmentResult = iamAccessGroupsService.deleteAssignment(deleteAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/group_assignments/{assignment_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.enableRetries();
+        __deleteAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamAccessGroupsService.disableRetries();
+        __deleteAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteAssignmentParams = {
+          assignmentId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamAccessGroupsService.deleteAssignment(deleteAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamAccessGroupsService.deleteAssignment();
         } catch (e) {
           err = e;
         }

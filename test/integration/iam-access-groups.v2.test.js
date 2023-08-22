@@ -1,32 +1,32 @@
 /**
- * (C) Copyright IBM Corp. 2020, 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 /* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const IamAccessGroupsV2 = require('../../dist/iam-access-groups/v2');
 const authHelper = require('../resources/auth-helper.js');
 
-// testcase timeout value (25s).
-const timeout = 25000;
+// testcase timeout value (200s).
+const timeout = 200000;
 
 // Location of our config file.
 const configFile = 'iam_access_groups_v2.env';
 
-// Use authHelper to skip tests if our configFile is not available.
 const describe = authHelper.prepareTests(configFile);
 
 describe('IamAccessGroupsV2_integration', () => {
@@ -45,6 +45,13 @@ describe('IamAccessGroupsV2_integration', () => {
   let testClaimRuleId;
   let testClaimRuleETag;
   let testAccountSettings;
+  let testPolicyTemplateId;
+  let testAccountGroupId;
+  let testTemplateId;
+  let testTemplateETag;
+  let testTemplateLatestEtag;
+  let testAssignmentId;
+  let testAssignmentEtag;
 
   test('should successfully complete initialization', (done) => {
     // Initialize the service client.
@@ -56,9 +63,10 @@ describe('IamAccessGroupsV2_integration', () => {
     expect(iamAccessGroupsService).not.toBeNull();
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
-
     // Retrieve the test account id to be used with the tests.
     testAccountId = config.testAccountId;
+    testPolicyTemplateId = config.testPolicyTemplateId;
+    testAccountGroupId = config.testAccountGroupId;
 
     expect(testAccountId).not.toBeNull();
     done();
@@ -610,5 +618,499 @@ describe('IamAccessGroupsV2_integration', () => {
         }
       }
     }
+  });
+
+  test('createTemplate()', async () => {
+    // Request models needed by this operation.
+
+    // MembersActionControls
+    const membersActionControlsModel = {
+      add: true,
+      remove: false,
+    };
+
+    // MembersInput
+    const membersInputModel = {
+      users: ['IBMid-50PJGPKYJJ', 'IBMid-665000T8WY'],
+      action_controls: membersActionControlsModel,
+    };
+
+    // ConditionInput
+    const conditionInputModel = {
+      claim: 'blueGroup',
+      operator: 'CONTAINS',
+      value: '"test-bluegroup-saml"',
+    };
+
+    // RulesActionControls
+    const rulesActionControlsModel = {
+      remove: false,
+      update: false,
+    };
+
+    // RuleInput
+    const ruleInputModel = {
+      name: 'Manager group rule',
+      expiration: 12,
+      realm_name: 'https://idp.example.org/SAML2',
+      conditions: [conditionInputModel],
+      action_controls: rulesActionControlsModel,
+    };
+
+    // AssertionsActionControls
+    const assertionsActionControlsModel = {
+      add: false,
+      remove: true,
+      update: true,
+    };
+
+    // AssertionsInput
+    const assertionsInputModel = {
+      rules: [ruleInputModel],
+      action_controls: assertionsActionControlsModel,
+    };
+
+    // AccessActionControls
+    const accessActionControlsModel = {
+      add: false,
+    };
+
+    // GroupActionControls
+    const groupActionControlsModel = {
+      access: accessActionControlsModel,
+    };
+
+    // AccessGroupInput
+    const accessGroupInputModel = {
+      name: 'IAM Admin Group',
+      description:
+        'This access group template allows admin access to all IAM platform services in the account.',
+      members: membersInputModel,
+      assertions: assertionsInputModel,
+      action_controls: groupActionControlsModel,
+    };
+
+    // PolicyTemplatesInput
+    const policyTemplatesInputModel = {
+      id: testPolicyTemplateId,
+      version: '1',
+    };
+
+    const params = {
+      name: 'IAM Admin Group template',
+      accountId: testAccountId,
+      description:
+        'This access group template allows admin access to all IAM platform services in the account.',
+      group: accessGroupInputModel,
+      policyTemplateReferences: [policyTemplatesInputModel],
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.createTemplate(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    testTemplateId = res.result.id;
+  });
+
+  test('listTemplates()', async () => {
+    const params = {
+      accountId: testAccountId,
+      transactionId: 'testString',
+      limit: 50,
+      offset: 0,
+      verbose: true,
+    };
+
+    const res = await iamAccessGroupsService.listTemplates(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listTemplates() via TemplatesPager', async () => {
+    const params = {
+      accountId: testAccountId,
+      transactionId: 'testString',
+      limit: 50,
+      verbose: true,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new IamAccessGroupsV2.TemplatesPager(iamAccessGroupsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new IamAccessGroupsV2.TemplatesPager(iamAccessGroupsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createTemplateVersion()', async () => {
+    // Request models needed by this operation.
+
+    // MembersActionControls
+    const membersActionControlsModel = {
+      add: true,
+      remove: false,
+    };
+
+    // MembersInput
+    const membersInputModel = {
+      users: ['IBMid-50PJGPKYJJ', 'IBMid-665000T8WY'],
+      action_controls: membersActionControlsModel,
+    };
+
+    // ConditionInput
+    const conditionInputModel = {
+      claim: 'blueGroup',
+      operator: 'CONTAINS',
+      value: '"test-bluegroup-saml"',
+    };
+
+    // RulesActionControls
+    const rulesActionControlsModel = {
+      remove: true,
+      update: true,
+    };
+
+    // RuleInput
+    const ruleInputModel = {
+      name: 'Manager group rule',
+      expiration: 12,
+      realm_name: 'https://idp.example.org/SAML2',
+      conditions: [conditionInputModel],
+      action_controls: rulesActionControlsModel,
+    };
+
+    // AssertionsActionControls
+    const assertionsActionControlsModel = {
+      add: false,
+      remove: true,
+      update: true,
+    };
+
+    // AssertionsInput
+    const assertionsInputModel = {
+      rules: [ruleInputModel],
+      action_controls: assertionsActionControlsModel,
+    };
+
+    // AccessActionControls
+    const accessActionControlsModel = {
+      add: false,
+    };
+
+    // GroupActionControls
+    const groupActionControlsModel = {
+      access: accessActionControlsModel,
+    };
+
+    // AccessGroupInput
+    const accessGroupInputModel = {
+      name: 'IAM Admin Group 8',
+      description:
+        'This access group template allows admin access to all IAM platform services in the account.',
+      members: membersInputModel,
+      assertions: assertionsInputModel,
+      action_controls: groupActionControlsModel,
+    };
+
+    // PolicyTemplatesInput
+    const policyTemplatesInputModel = {
+      id: testPolicyTemplateId,
+      version: '1',
+    };
+
+    const params = {
+      templateId: testTemplateId,
+      name: 'IAM Admin Group template 2',
+      description:
+        'This access group template allows admin access to all IAM platform services in the account.',
+      group: accessGroupInputModel,
+      policyTemplateReferences: [policyTemplatesInputModel],
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.createTemplateVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listTemplateVersions()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      limit: 100,
+      offset: 0,
+    };
+
+    const res = await iamAccessGroupsService.listTemplateVersions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listTemplateVersions() via TemplateVersionsPager', async () => {
+    const params = {
+      templateId: testTemplateId,
+      limit: 100,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new IamAccessGroupsV2.TemplateVersionsPager(iamAccessGroupsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new IamAccessGroupsV2.TemplateVersionsPager(iamAccessGroupsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getTemplateVersion()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      versionNum: '1',
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.getTemplateVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+
+    testTemplateETag = res.headers.etag;
+  });
+
+  test('updateTemplateVersion()', async () => {
+    // Request models needed by this operation.
+
+    // MembersActionControls
+    const membersActionControlsModel = {
+      add: true,
+      remove: false,
+    };
+
+    // MembersInput
+    const membersInputModel = {
+      users: ['IBMid-665000T8WY'],
+      action_controls: membersActionControlsModel,
+    };
+
+    // ConditionInput
+    const conditionInputModel = {
+      claim: 'blueGroup',
+      operator: 'CONTAINS',
+      value: '"test-bluegroup-saml"',
+    };
+
+    // RulesActionControls
+    const rulesActionControlsModel = {
+      remove: false,
+      update: false,
+    };
+
+    // RuleInput
+    const ruleInputModel = {
+      name: 'Manager group rule',
+      expiration: 12,
+      realm_name: 'https://idp.example.org/SAML2',
+      conditions: [conditionInputModel],
+      action_controls: rulesActionControlsModel,
+    };
+
+    // AssertionsActionControls
+    const assertionsActionControlsModel = {
+      add: false,
+      remove: true,
+      update: true,
+    };
+
+    // AssertionsInput
+    const assertionsInputModel = {
+      rules: [ruleInputModel],
+      action_controls: assertionsActionControlsModel,
+    };
+
+    // AccessActionControls
+    const accessActionControlsModel = {
+      add: false,
+    };
+
+    // GroupActionControls
+    const groupActionControlsModel = {
+      access: accessActionControlsModel,
+    };
+
+    // AccessGroupInput
+    const accessGroupInputModel = {
+      name: 'IAM Admin Group 8',
+      description:
+        'This access group template allows admin access to all IAM platform services in the account.',
+      members: membersInputModel,
+      assertions: assertionsInputModel,
+      action_controls: groupActionControlsModel,
+    };
+
+    // PolicyTemplatesInput
+    const policyTemplatesInputModel = {
+      id: testPolicyTemplateId,
+      version: '1',
+    };
+
+    const params = {
+      templateId: testTemplateId,
+      versionNum: '1',
+      ifMatch: testTemplateETag,
+      name: 'IAM Admin Group template 2',
+      description:
+        'This access group template allows admin access to all IAM platform services in the account.',
+      group: accessGroupInputModel,
+      policyTemplateReferences: [policyTemplatesInputModel],
+    };
+
+    const res = await iamAccessGroupsService.updateTemplateVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getLatestTemplateVersion()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.getLatestTemplateVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+
+    testTemplateLatestEtag = res.headers.etag;
+  });
+
+  test('commitTemplate()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      versionNum: '2',
+      ifMatch: testTemplateLatestEtag,
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.commitTemplate(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createAssignment()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      templateVersion: '2',
+      targetType: 'AccountGroup',
+      target: testAccountGroupId,
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.createAssignment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+
+    testAssignmentId = res.result.id;
+    await new Promise((r) => setTimeout(r, 60000));
+  }, 70000);
+
+  test('listAssignments()', async () => {
+    const params = {
+      accountId: testAccountId,
+    };
+
+    const res = await iamAccessGroupsService.listAssignments(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getAssignment()', async () => {
+    const params = {
+      assignmentId: testAssignmentId,
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.getAssignment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    testAssignmentEtag = res.headers.etag;
+  });
+
+  test('updateAssignment()', async () => {
+    const params = {
+      assignmentId: testAssignmentId,
+      ifMatch: testAssignmentEtag,
+      templateVersion: '2',
+    };
+
+    const res = await iamAccessGroupsService.updateAssignment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+    await new Promise((r) => setTimeout(r, 80000));
+  }, 90000);
+
+  test('deleteAssignment()', async () => {
+    const params = {
+      assignmentId: testAssignmentId,
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.deleteAssignment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+
+    await new Promise((r) => setTimeout(r, 80000));
+  }, 90000);
+
+  test('deleteTemplateVersion()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      versionNum: '2',
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.deleteTemplateVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteTemplate()', async () => {
+    const params = {
+      templateId: testTemplateId,
+      transactionId: 'testString',
+    };
+
+    const res = await iamAccessGroupsService.deleteTemplate(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
   });
 });
