@@ -1,3 +1,10 @@
+## [0.39.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.39.0...v0.39.1) (2023-08-31)
+
+
+### Bug Fixes
+
+* enable builds on Windows ([#220](https://github.com/IBM/platform-services-node-sdk/issues/220)) ([a678743](https://github.com/IBM/platform-services-node-sdk/commit/a678743a649058e1173a632cf20edba3115acda6))
+
 # [0.39.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.38.0...v0.39.0) (2023-08-22)
 
 
