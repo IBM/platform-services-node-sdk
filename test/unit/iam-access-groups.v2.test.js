@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-await-in-loop */
+
+const nock = require('nock');
+
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-
 const IamAccessGroupsV2 = require('../../dist/iam-access-groups/v2');
-const nock = require('nock');
-
-/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -58,7 +58,6 @@ const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnv
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('IamAccessGroupsV2', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -69,7 +68,7 @@ describe('IamAccessGroupsV2', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = IamAccessGroupsV2.newInstance();
@@ -337,9 +336,9 @@ describe('IamAccessGroupsV2', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -974,9 +973,9 @@ describe('IamAccessGroupsV2', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -2109,7 +2108,6 @@ describe('IamAccessGroupsV2', () => {
       // RuleActionControls
       const ruleActionControlsModel = {
         remove: false,
-        update: false,
       };
 
       // AssertionsRule
@@ -2125,7 +2123,6 @@ describe('IamAccessGroupsV2', () => {
       const assertionsActionControlsModel = {
         add: false,
         remove: true,
-        update: true,
       };
 
       // Assertions
@@ -2357,16 +2354,16 @@ describe('IamAccessGroupsV2', () => {
       const serviceUrl = iamAccessGroupsServiceOptions.url;
       const path = '/v1/group_templates';
       const mockPagerResponse1 =
-        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"limit":1}';
+        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true}}],"action_controls":{"add":false,"remove":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
+        '{"group_templates":[{"id":"id","name":"name","description":"description","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true}}],"action_controls":{"add":false,"remove":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -2434,8 +2431,7 @@ describe('IamAccessGroupsV2', () => {
 
       // RuleActionControls
       const ruleActionControlsModel = {
-        remove: true,
-        update: true,
+        remove: false,
       };
 
       // AssertionsRule
@@ -2451,7 +2447,6 @@ describe('IamAccessGroupsV2', () => {
       const assertionsActionControlsModel = {
         add: false,
         remove: true,
-        update: true,
       };
 
       // Assertions
@@ -2675,16 +2670,16 @@ describe('IamAccessGroupsV2', () => {
       const serviceUrl = iamAccessGroupsServiceOptions.url;
       const path = '/v1/group_templates/testString/versions';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?offset=1"},"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true}}],"action_controls":{"add":false,"remove":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
       const mockPagerResponse2 =
-        '{"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true,"update":true}}],"action_controls":{"add":false,"remove":true,"update":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
+        '{"total_count":2,"group_template_versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"group":{"name":"name","description":"description","members":{"users":["users"],"services":["services"],"action_controls":{"add":false,"remove":true}},"assertions":{"rules":[{"name":"name","expiration":10,"realm_name":"realm_name","conditions":[{"claim":"claim","operator":"operator","value":"value"}],"action_controls":{"remove":true}}],"action_controls":{"add":false,"remove":true}},"action_controls":{"access":{"add":false}}},"policy_template_references":[{"id":"id","version":"version"}],"href":"href","created_at":"created_at","created_by_id":"created_by_id","last_modified_at":"last_modified_at","last_modified_by_id":"last_modified_by_id"}],"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -2844,7 +2839,6 @@ describe('IamAccessGroupsV2', () => {
       // RuleActionControls
       const ruleActionControlsModel = {
         remove: false,
-        update: false,
       };
 
       // AssertionsRule
@@ -2860,7 +2854,6 @@ describe('IamAccessGroupsV2', () => {
       const assertionsActionControlsModel = {
         add: false,
         remove: true,
-        update: true,
       };
 
       // Assertions
