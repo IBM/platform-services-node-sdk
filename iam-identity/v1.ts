@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.72.0-5d70f2bb-20230511-203609
+ * IBM OpenAPI SDK Code Generator Version: 3.74.0-89f1dbab-20230630-160213
  */
 
 import * as extend from 'extend';
@@ -105,18 +105,18 @@ class IamIdentityV1 extends BaseService {
    * space developer in order to manage service IDs of the entity.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - Account ID of the API keys to query. If a service IAM ID is specified in
+   * @param {string} [params.accountId] - Account ID of the API keys(s) to query. If a service IAM ID is specified in
    * iam_id then account_id must match the account of the IAM ID. If a user IAM ID is specified in iam_id then then
    * account_id must match the account of the Authorization token.
-   * @param {string} [params.iamId] - IAM ID of the API keys to be queried. The IAM ID may be that of a user or a
+   * @param {string} [params.iamId] - IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a
    * service. For a user IAM ID iam_id must match the Authorization token.
    * @param {number} [params.pagesize] - Optional size of a single page. Default is 20 items per page. Valid range is 1
    * to 100.
    * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
    * Default is start with first page.
-   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API keys. Can be 'entity'
+   * @param {string} [params.scope] - Optional parameter to define the scope of the queried API Keys. Can be 'entity'
    * (default) or 'account'.
-   * @param {string} [params.type] - Optional parameter to filter the type of the queried API keys. Can be 'user' or
+   * @param {string} [params.type] - Optional parameter to filter the type of the queried API Keys. Can be 'user' or
    * 'serviceid'.
    * @param {string} [params.sort] - Optional sort property, valid values are name, description, created_at and
    * created_by. If specified, the items are sorted by the value of this property.
@@ -197,8 +197,8 @@ class IamIdentityV1 extends BaseService {
    * @param {string} [params.accountId] - The account ID of the API key.
    * @param {string} [params.apikey] - You can optionally passthrough the API key value for this API key. If passed, NO
    * validation of that apiKey value is done, i.e. the value can be non-URL safe. If omitted, the API key management
-   * will create an URL safe opaque API key value. The value of the API key is checked for uniqueness. Please ensure
-   * enough variations when passing in this value.
+   * will create an URL safe opaque API key value. The value of the API key is checked for uniqueness. Ensure enough
+   * variations when passing in this value.
    * @param {boolean} [params.storeValue] - Send true or false to set whether the API key value is retrievable in the
    * future by using the Get details of an API key request. If you create an API key for a user, you must specify
    * `false` or omit the value. We don't allow storing of API keys for users.
@@ -324,7 +324,7 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.id - Unique ID of the API key.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
    * @param {boolean} [params.includeActivity] - Defines if the entity's activity is included in the response.
-   * Retrieving activity data is an expensive operation, so please only request this when needed.
+   * Retrieving activity data is an expensive operation, so only request this when needed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>>}
    */
@@ -574,7 +574,7 @@ class IamIdentityV1 extends BaseService {
    *
    * Returns a list of service IDs. Users can manage user API keys for themself, or service ID API keys for service IDs
    * that are bound to an entity they have access to. Note: apikey details are only included in the response when
-   * creating a Service ID with an api key.
+   * creating a Service ID with an apikey.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - Account ID of the service ID(s) to query. This parameter is required (unless
@@ -723,13 +723,13 @@ class IamIdentityV1 extends BaseService {
    *
    * Returns the details of a service ID. Users can manage user API keys for themself, or service ID API keys for
    * service IDs that are bound to an entity they have access to. Note: apikey details are only included in the response
-   * when creating a Service ID with an api key.
+   * when creating a Service ID with an apikey.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - Unique ID of the service ID.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
    * @param {boolean} [params.includeActivity] - Defines if the entity's activity is included in the response.
-   * Retrieving activity data is an expensive operation, so please only request this when needed.
+   * Retrieving activity data is an expensive operation, so only request this when needed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>>}
    */
@@ -1119,7 +1119,7 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile to get.
    * @param {boolean} [params.includeActivity] - Defines if the entity's activity is included in the response.
-   * Retrieving activity data is an expensive operation, so please only request this when needed.
+   * Retrieving activity data is an expensive operation, so only request this when needed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>>}
    */
@@ -1844,7 +1844,7 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.ifMatch - Entity tag of the Identities to be updated. Specify the tag that you retrieved
    * when reading the Profile Identities. This value helps identify parallel usage of this API. Pass * to indicate
    * updating any available version, which may result in stale updates.
-   * @param {ProfileIdentity[]} [params.identities] - List of identities that can assume the trusted profile.
+   * @param {ProfileIdentityRequest[]} [params.identities] - List of identities that can assume the trusted profile.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>>}
    */
@@ -1909,7 +1909,6 @@ class IamIdentityV1 extends BaseService {
    * user identifier (IAM id), serviceid or crn. Internally it uses account id of the service id for the identifier
    * 'serviceid' and for the identifier 'crn' it uses account id contained in the CRN.
    * @param {string} params.type - Type of the identity.
-   * @param {string} [params.iamId] - IAM ID of the identity.
    * @param {string[]} [params.accounts] - Only valid for the type user. Accounts from which a user can assume the
    * trusted profile.
    * @param {string} [params.description] - Description of the identity that can assume the trusted profile. This is
@@ -1917,11 +1916,11 @@ class IamIdentityV1 extends BaseService {
    * the description of the service id is used. Description is recommended for the identity type 'crn' E.g. 'Instance
    * 1234 of IBM Cloud Service project'.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentityResponse>>}
    */
   public setProfileIdentity(
     params: IamIdentityV1.SetProfileIdentityParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentityResponse>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'identityType', 'identifier', 'type'];
     const _validParams = [
@@ -1929,7 +1928,6 @@ class IamIdentityV1 extends BaseService {
       'identityType',
       'identifier',
       'type',
-      'iamId',
       'accounts',
       'description',
       'headers',
@@ -1942,7 +1940,6 @@ class IamIdentityV1 extends BaseService {
     const body = {
       'identifier': _params.identifier,
       'type': _params.type,
-      'iam_id': _params.iamId,
       'accounts': _params.accounts,
       'description': _params.description,
     };
@@ -1991,11 +1988,11 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.identityType - Type of the identity.
    * @param {string} params.identifierId - Identifier of the identity that can assume the trusted profiles.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentityResponse>>}
    */
   public getProfileIdentity(
     params: IamIdentityV1.GetProfileIdentityParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentity>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentityResponse>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'identityType', 'identifierId'];
     const _validParams = ['profileId', 'identityType', 'identifierId', 'headers'];
@@ -2150,7 +2147,7 @@ class IamIdentityV1 extends BaseService {
   /**
    * Update account configurations.
    *
-   * Allows a user to configure settings on their account with regards to MFA, MFA excemption list,  session lifetimes,
+   * Allows a user to configure settings on their account with regards to MFA, MFA excemption list, session lifetimes,
    * access control for creating new identities, and enforcing IP restrictions on token creation.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -2158,15 +2155,17 @@ class IamIdentityV1 extends BaseService {
    * retrieved as entity_tag (ETag header) when reading the account. This value helps identifying parallel usage of this
    * API. Pass * to indicate to update any version available. This might result in stale updates.
    * @param {string} params.accountId - The id of the account to update the settings for.
-   * @param {string} [params.restrictCreateServiceId] - Defines whether or not creating a Service Id is access
+   * @param {string} [params.restrictCreateServiceId] - Defines whether or not creating a service ID is access
    * controlled. Valid values:
-   *   * RESTRICTED - to apply access control
-   *   * NOT_RESTRICTED - to remove access control
-   *   * NOT_SET - to unset a previously set value.
+   *   * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service
+   * IDs, including the account owner
+   *   * NOT_RESTRICTED - all members of an account can create service IDs
+   *   * NOT_SET - to 'unset' a previous set value.
    * @param {string} [params.restrictCreatePlatformApikey] - Defines whether or not creating platform API keys is access
    * controlled. Valid values:
-   *   * RESTRICTED - to apply access control
-   *   * NOT_RESTRICTED - to remove access control
+   *   * RESTRICTED - only users assigned the 'User API key creator' role on the IAM Identity Service can create API
+   * keys, including the account owner
+   *   * NOT_RESTRICTED - all members of an account can create platform API keys
    *   * NOT_SET - to 'unset' a previous set value.
    * @param {string} [params.allowedIpAddresses] - Defines the IP addresses and subnets from which IAM tokens can be
    * created for the account.
@@ -2440,6 +2439,957 @@ class IamIdentityV1 extends BaseService {
     return this.createRequest(parameters);
   }
   /*************************
+   * accountSettingsAssignments
+   ************************/
+
+  /**
+   * List assignments.
+   *
+   * List account settings assignments.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - Account ID of the Assignments to query. This parameter is required unless
+   * using a pagetoken.
+   * @param {string} [params.templateId] - Filter results by Template Id.
+   * @param {string} [params.templateVersion] - Filter results Template Version.
+   * @param {string} [params.target] - Filter results by the assignment target.
+   * @param {string} [params.targetType] - Filter results by the assignment's target type.
+   * @param {number} [params.limit] - Optional size of a single page. Default is 20 items per page. Valid range is 1 to
+   * 100.
+   * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
+   * Default is start with first page.
+   * @param {string} [params.sort] - If specified, the items are sorted by the value of this property.
+   * @param {string} [params.order] - Sort order.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentListResponse>>}
+   */
+  public listAccountSettingsAssignments(
+    params?: IamIdentityV1.ListAccountSettingsAssignmentsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentListResponse>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'templateId',
+      'templateVersion',
+      'target',
+      'targetType',
+      'limit',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'target': _params.target,
+      'target_type': _params.targetType,
+      'limit': _params.limit,
+      'pagetoken': _params.pagetoken,
+      'sort': _params.sort,
+      'order': _params.order,
+      'include_history': _params.includeHistory,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAccountSettingsAssignments'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_assignments/',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create assignment.
+   *
+   * Create an assigment for an account settings template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the template to assign.
+   * @param {number} params.templateVersion - Version of the template to assign.
+   * @param {string} params.targetType - Type of target to deploy to.
+   * @param {string} params.target - Identifier of target to deploy to.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
+   */
+  public createAccountSettingsAssignment(
+    params: IamIdentityV1.CreateAccountSettingsAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'templateVersion', 'targetType', 'target'];
+    const _validParams = ['templateId', 'templateVersion', 'targetType', 'target', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'target_type': _params.targetType,
+      'target': _params.target,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createAccountSettingsAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_assignments/',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get assignment.
+   *
+   * Get an assigment for an account settings template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - ID of the Assignment Record.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
+   */
+  public getAccountSettingsAssignment(
+    params: IamIdentityV1.GetAccountSettingsAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAccountSettingsAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_assignments/{assignment_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete assignment.
+   *
+   * Delete an account settings template assignment. This removes any IAM resources created by this assignment in child
+   * accounts.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - ID of the Assignment Record.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>>}
+   */
+  public deleteAccountSettingsAssignment(
+    params: IamIdentityV1.DeleteAccountSettingsAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteAccountSettingsAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_assignments/{assignment_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update assignment.
+   *
+   * Update an account settings assignment. Call this method to retry failed assignments or migrate the settings in
+   * child accounts to a new version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - ID of the Assignment Record.
+   * @param {string} params.ifMatch - Version of the assignment to be updated. Specify the version that you retrieved
+   * when reading the assignment. This value  helps identifying parallel usage of this API. Pass * to indicate to update
+   * any version available. This might result in stale updates.
+   * @param {number} params.templateVersion - Template version to be applied to the assignment. To retry all failed
+   * assignemtns, provide the existing version. To migrate to a different version, provide the new version number.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
+   */
+  public updateAccountSettingsAssignment(
+    params: IamIdentityV1.UpdateAccountSettingsAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
+    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_version': _params.templateVersion,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateAccountSettingsAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_assignments/{assignment_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * accountSettingsTemplate
+   ************************/
+
+  /**
+   * List account settings templates.
+   *
+   * List account settings templates in an enterprise account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - Account ID of the account settings templates to query. This parameter is
+   * required unless using a pagetoken.
+   * @param {string} [params.limit] - Optional size of a single page.
+   * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
+   * Default is start with first page.
+   * @param {string} [params.sort] - Optional sort property. If specified, the returned templated are sorted according
+   * to this property.
+   * @param {string} [params.order] - Optional sort order.
+   * @param {string} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateList>>}
+   */
+  public listAccountSettingsTemplates(
+    params?: IamIdentityV1.ListAccountSettingsTemplatesParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateList>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'limit',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'limit': _params.limit,
+      'pagetoken': _params.pagetoken,
+      'sort': _params.sort,
+      'order': _params.order,
+      'include_history': _params.includeHistory,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAccountSettingsTemplates'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create an account settings template.
+   *
+   * Create a new account settings template in an enterprise account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - ID of the account where the template resides.
+   * @param {string} [params.name] - The name of the trusted profile template. This is visible only in the enterprise
+   * account.
+   * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
+   * enterprise account users.
+   * @param {AccountSettingsComponent} [params.accountSettings] -
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
+   */
+  public createAccountSettingsTemplate(
+    params?: IamIdentityV1.CreateAccountSettingsTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'name', 'description', 'accountSettings', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'description': _params.description,
+      'account_settings': _params.accountSettings,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createAccountSettingsTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get latest version of an account settings template.
+   *
+   * Get the latest version of a specific account settings template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
+   */
+  public getLatestAccountSettingsTemplateVersion(
+    params: IamIdentityV1.GetLatestAccountSettingsTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLatestAccountSettingsTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete all versions of an account settings template.
+   *
+   * Delete all versions of an account settings template in an enterprise account. If any version is assigned to child
+   * accounts, you must first delete the assignment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteAllVersionsOfAccountSettingsTemplate(
+    params: IamIdentityV1.DeleteAllVersionsOfAccountSettingsTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteAllVersionsOfAccountSettingsTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List account settings template versions.
+   *
+   * List the versions of a specific account settings template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {string} [params.limit] - Optional size of a single page.
+   * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
+   * Default is start with first page.
+   * @param {string} [params.sort] - Optional sort property. If specified, the returned templated are sorted according
+   * to this property.
+   * @param {string} [params.order] - Optional sort order.
+   * @param {string} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateList>>}
+   */
+  public listVersionsOfAccountSettingsTemplate(
+    params: IamIdentityV1.ListVersionsOfAccountSettingsTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateList>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = [
+      'templateId',
+      'limit',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'limit': _params.limit,
+      'pagetoken': _params.pagetoken,
+      'sort': _params.sort,
+      'order': _params.order,
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVersionsOfAccountSettingsTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}/versions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a new version of an account settings template.
+   *
+   * Create a new version of an account settings template in an Enterprise Account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {string} [params.accountId] - ID of the account where the template resides.
+   * @param {string} [params.name] - The name of the trusted profile template. This is visible only in the enterprise
+   * account.
+   * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
+   * enterprise account users.
+   * @param {AccountSettingsComponent} [params.accountSettings] -
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
+   */
+  public createAccountSettingsTemplateVersion(
+    params: IamIdentityV1.CreateAccountSettingsTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = [
+      'templateId',
+      'accountId',
+      'name',
+      'description',
+      'accountSettings',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'description': _params.description,
+      'account_settings': _params.accountSettings,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createAccountSettingsTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}/versions',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get version of an account settings template.
+   *
+   * Get a specific version of an account settings template in an Enterprise Account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {string} params.version - Version of the account settings template.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
+   */
+  public getAccountSettingsTemplateVersion(
+    params: IamIdentityV1.GetAccountSettingsTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'version'];
+    const _validParams = ['templateId', 'version', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAccountSettingsTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}/versions/{version}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update version of an account settings template.
+   *
+   * Update a specific version of an account settings template in an Enterprise Account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.ifMatch - Entity tag of the Template to be updated. Specify the tag that you retrieved when
+   * reading the account settings template. This value helps identifying parallel usage of this API. Pass * to indicate
+   * to update any version available. This might result in stale updates.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {string} params.version - Version of the account settings template.
+   * @param {string} [params.accountId] - ID of the account where the template resides.
+   * @param {string} [params.name] - The name of the trusted profile template. This is visible only in the enterprise
+   * account.
+   * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
+   * enterprise account users.
+   * @param {AccountSettingsComponent} [params.accountSettings] -
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
+   */
+  public updateAccountSettingsTemplateVersion(
+    params: IamIdentityV1.UpdateAccountSettingsTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['ifMatch', 'templateId', 'version'];
+    const _validParams = [
+      'ifMatch',
+      'templateId',
+      'version',
+      'accountId',
+      'name',
+      'description',
+      'accountSettings',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'description': _params.description,
+      'account_settings': _params.accountSettings,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateAccountSettingsTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}/versions/{version}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete version of an account settings template.
+   *
+   * Delete a specific version of an account settings template in an Enterprise Account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {string} params.version - Version of the account settings template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteAccountSettingsTemplateVersion(
+    params: IamIdentityV1.DeleteAccountSettingsTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'version'];
+    const _validParams = ['templateId', 'version', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteAccountSettingsTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}/versions/{version}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Commit a template version.
+   *
+   * Commit a specific version of an account settings template in an Enterprise Account. A Template must be committed
+   * before being assigned, and once committed, can no longer be modified.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the account settings template.
+   * @param {string} params.version - Version of the account settings template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public commitAccountSettingsTemplate(
+    params: IamIdentityV1.CommitAccountSettingsTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'version'];
+    const _validParams = ['templateId', 'version', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitAccountSettingsTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/account_settings_templates/{template_id}/versions/{version}/commit',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
    * activityOperations
    ************************/
 
@@ -2453,7 +3403,7 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.accountId - ID of the account.
    * @param {string} [params.type] - Optional report type. The supported value is 'inactive'. List all identities that
    * have not authenticated within the time indicated by duration.
-   * @param {string} [params.duration] - Optional duration of the report. The supported unit of duration is hours.
+   * @param {string} [params.duration] - Optional duration of the report, supported unit of duration is hours.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>>}
    */
@@ -2502,7 +3452,7 @@ class IamIdentityV1 extends BaseService {
   }
 
   /**
-   * Get activity report for the account.
+   * Get activity report across on account scope.
    *
    * Get activity report for the account by specifying the account ID and the reference that is generated by triggering
    * the report. Reports older than a day are deleted when generating a new report.
@@ -2552,6 +3502,978 @@ class IamIdentityV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * trustedProfileAssignments
+   ************************/
+
+  /**
+   * List assignments.
+   *
+   * List trusted profile template assignments.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - Account ID of the Assignments to query. This parameter is required unless
+   * using a pagetoken.
+   * @param {string} [params.templateId] - Filter results by Template Id.
+   * @param {string} [params.templateVersion] - Filter results Template Version.
+   * @param {string} [params.target] - Filter results by the assignment target.
+   * @param {string} [params.targetType] - Filter results by the assignment's target type.
+   * @param {number} [params.limit] - Optional size of a single page. Default is 20 items per page. Valid range is 1 to
+   * 100.
+   * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
+   * Default is start with first page.
+   * @param {string} [params.sort] - If specified, the items are sorted by the value of this property.
+   * @param {string} [params.order] - Sort order.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentListResponse>>}
+   */
+  public listTrustedProfileAssignments(
+    params?: IamIdentityV1.ListTrustedProfileAssignmentsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentListResponse>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'templateId',
+      'templateVersion',
+      'target',
+      'targetType',
+      'limit',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'target': _params.target,
+      'target_type': _params.targetType,
+      'limit': _params.limit,
+      'pagetoken': _params.pagetoken,
+      'sort': _params.sort,
+      'order': _params.order,
+      'include_history': _params.includeHistory,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listTrustedProfileAssignments'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_assignments/',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create assignment.
+   *
+   * Create an assigment for a trusted profile template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the template to assign.
+   * @param {number} params.templateVersion - Version of the template to assign.
+   * @param {string} params.targetType - Type of target to deploy to.
+   * @param {string} params.target - Identifier of target to deploy to.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
+   */
+  public createTrustedProfileAssignment(
+    params: IamIdentityV1.CreateTrustedProfileAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'templateVersion', 'targetType', 'target'];
+    const _validParams = ['templateId', 'templateVersion', 'targetType', 'target', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'target_type': _params.targetType,
+      'target': _params.target,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createTrustedProfileAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_assignments/',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get assignment.
+   *
+   * Get an assigment for a trusted profile template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - ID of the Assignment Record.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
+   */
+  public getTrustedProfileAssignment(
+    params: IamIdentityV1.GetTrustedProfileAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getTrustedProfileAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_assignments/{assignment_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete assignment.
+   *
+   * Delete a trusted profile assignment. This removes any IAM resources created by this assignment in child accounts.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - ID of the Assignment Record.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>>}
+   */
+  public deleteTrustedProfileAssignment(
+    params: IamIdentityV1.DeleteTrustedProfileAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteTrustedProfileAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_assignments/{assignment_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update assignment.
+   *
+   * Update a trusted profile assignment. Call this method to retry failed assignments or migrate the trusted profile in
+   * child accounts to a new version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - ID of the Assignment Record.
+   * @param {string} params.ifMatch - Version of the Assignment to be updated. Specify the version that you retrieved
+   * when reading the Assignment. This value  helps identifying parallel usage of this API. Pass * to indicate to update
+   * any version available. This might result in stale updates.
+   * @param {number} params.templateVersion - Template version to be applied to the assignment. To retry all failed
+   * assignemtns, provide the existing version. To migrate to a different version, provide the new version number.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
+   */
+  public updateTrustedProfileAssignment(
+    params: IamIdentityV1.UpdateTrustedProfileAssignmentParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
+    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_version': _params.templateVersion,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateTrustedProfileAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_assignments/{assignment_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * trustedProfileTemplate
+   ************************/
+
+  /**
+   * List trusted profile templates.
+   *
+   * List the trusted profile templates in an enterprise account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - Account ID of the trusted profile templates to query. This parameter is
+   * required unless using a pagetoken.
+   * @param {string} [params.limit] - Optional size of a single page.
+   * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
+   * Default is start with first page.
+   * @param {string} [params.sort] - Optional sort property. If specified, the returned templates are sorted according
+   * to this property.
+   * @param {string} [params.order] - Optional sort order.
+   * @param {string} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateList>>}
+   */
+  public listProfileTemplates(
+    params?: IamIdentityV1.ListProfileTemplatesParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateList>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'limit',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'limit': _params.limit,
+      'pagetoken': _params.pagetoken,
+      'sort': _params.sort,
+      'order': _params.order,
+      'include_history': _params.includeHistory,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listProfileTemplates'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a trusted profile template.
+   *
+   * Create a new trusted profile template in an enterprise account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - ID of the account where the template resides.
+   * @param {string} [params.name] - The name of the trusted profile template. This is visible only in the enterprise
+   * account. Required field when creating a new template. Otherwise this field is optional. If the field is included it
+   * will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
+   * enterprise account users.
+   * @param {TemplateProfileComponentRequest} [params.profile] - Input body parameters for the TemplateProfileComponent.
+   * @param {PolicyTemplateReference[]} [params.policyTemplateReferences] - Existing policy templates that you can
+   * reference to assign access in the trusted profile component.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>>}
+   */
+  public createProfileTemplate(
+    params?: IamIdentityV1.CreateProfileTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'accountId',
+      'name',
+      'description',
+      'profile',
+      'policyTemplateReferences',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'description': _params.description,
+      'profile': _params.profile,
+      'policy_template_references': _params.policyTemplateReferences,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createProfileTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get latest version of a trusted profile template.
+   *
+   * Get the latest version of a trusted profile template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>>}
+   */
+  public getLatestProfileTemplateVersion(
+    params: IamIdentityV1.GetLatestProfileTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLatestProfileTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete all versions of a trusted profile template.
+   *
+   * Delete all versions of a trusted profile template in an enterprise account. If any version is assigned to child
+   * accounts, you must first delete the assignment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteAllVersionsOfProfileTemplate(
+    params: IamIdentityV1.DeleteAllVersionsOfProfileTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = ['templateId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteAllVersionsOfProfileTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List trusted profile template versions.
+   *
+   * List the versions of a trusted profile template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {string} [params.limit] - Optional size of a single page.
+   * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
+   * Default is start with first page.
+   * @param {string} [params.sort] - Optional sort property. If specified, the returned templated are sorted according
+   * to this property.
+   * @param {string} [params.order] - Optional sort order.
+   * @param {string} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateList>>}
+   */
+  public listVersionsOfProfileTemplate(
+    params: IamIdentityV1.ListVersionsOfProfileTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateList>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = [
+      'templateId',
+      'limit',
+      'pagetoken',
+      'sort',
+      'order',
+      'includeHistory',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'limit': _params.limit,
+      'pagetoken': _params.pagetoken,
+      'sort': _params.sort,
+      'order': _params.order,
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVersionsOfProfileTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}/versions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create new version of a trusted profile template.
+   *
+   * Create a new version of a trusted profile template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {string} [params.accountId] - ID of the account where the template resides.
+   * @param {string} [params.name] - The name of the trusted profile template. This is visible only in the enterprise
+   * account. Required field when creating a new template. Otherwise this field is optional. If the field is included it
+   * will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
+   * enterprise account users.
+   * @param {TemplateProfileComponentRequest} [params.profile] - Input body parameters for the TemplateProfileComponent.
+   * @param {PolicyTemplateReference[]} [params.policyTemplateReferences] - Existing policy templates that you can
+   * reference to assign access in the trusted profile component.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>>}
+   */
+  public createProfileTemplateVersion(
+    params: IamIdentityV1.CreateProfileTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId'];
+    const _validParams = [
+      'templateId',
+      'accountId',
+      'name',
+      'description',
+      'profile',
+      'policyTemplateReferences',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'description': _params.description,
+      'profile': _params.profile,
+      'policy_template_references': _params.policyTemplateReferences,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createProfileTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}/versions',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get version of trusted profile template.
+   *
+   * Get a specific version of a trusted profile template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {string} params.version - Version of the Profile Template.
+   * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>>}
+   */
+  public getProfileTemplateVersion(
+    params: IamIdentityV1.GetProfileTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'version'];
+    const _validParams = ['templateId', 'version', 'includeHistory', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getProfileTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}/versions/{version}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update version of trusted profile template.
+   *
+   * Update a specific version of a trusted profile template in an enterprise account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.ifMatch - Entity tag of the Template to be updated. Specify the tag that you retrieved when
+   * reading the Profile Template. This value helps identifying parallel usage of this API. Pass * to indicate to update
+   * any version available. This might result in stale updates.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {string} params.version - Version of the Profile Template.
+   * @param {string} [params.accountId] - ID of the account where the template resides.
+   * @param {string} [params.name] - The name of the trusted profile template. This is visible only in the enterprise
+   * account. Required field when creating a new template. Otherwise this field is optional. If the field is included it
+   * will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
+   * enterprise account users.
+   * @param {TemplateProfileComponentRequest} [params.profile] - Input body parameters for the TemplateProfileComponent.
+   * @param {PolicyTemplateReference[]} [params.policyTemplateReferences] - Existing policy templates that you can
+   * reference to assign access in the trusted profile component.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>>}
+   */
+  public updateProfileTemplateVersion(
+    params: IamIdentityV1.UpdateProfileTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['ifMatch', 'templateId', 'version'];
+    const _validParams = [
+      'ifMatch',
+      'templateId',
+      'version',
+      'accountId',
+      'name',
+      'description',
+      'profile',
+      'policyTemplateReferences',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'description': _params.description,
+      'profile': _params.profile,
+      'policy_template_references': _params.policyTemplateReferences,
+    };
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateProfileTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}/versions/{version}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete version of trusted profile template.
+   *
+   * Delete a specific version of a trusted profile template in an enterprise account. If the version is assigned to
+   * child accounts, you must first delete the assignment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {string} params.version - Version of the Profile Template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteProfileTemplateVersion(
+    params: IamIdentityV1.DeleteProfileTemplateVersionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'version'];
+    const _validParams = ['templateId', 'version', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteProfileTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}/versions/{version}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Commit a template version.
+   *
+   * Commit a specific version of a trusted profile template in an enterprise account. You must commit a template before
+   * you can assign it to child accounts. Once a template is committed, you can no longer modify the template.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.templateId - ID of the trusted profile template.
+   * @param {string} params.version - Version of the Profile Template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public commitProfileTemplate(
+    params: IamIdentityV1.CommitProfileTemplateParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['templateId', 'version'];
+    const _validParams = ['templateId', 'version', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'template_id': _params.templateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitProfileTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profile_templates/{template_id}/versions/{version}/commit',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -2584,12 +4506,12 @@ namespace IamIdentityV1 {
 
   /** Parameters for the `listApiKeys` operation. */
   export interface ListApiKeysParams {
-    /** Account ID of the API keys to query. If a service IAM ID is specified in iam_id then account_id must match
-     *  the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the account
-     *  of the Authorization token.
+    /** Account ID of the API keys(s) to query. If a service IAM ID is specified in iam_id then account_id must
+     *  match the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the
+     *  account of the Authorization token.
      */
     accountId?: string;
-    /** IAM ID of the API keys to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
+    /** IAM ID of the API key(s) to be queried. The IAM ID may be that of a user or a service. For a user IAM ID
      *  iam_id must match the Authorization token.
      */
     iamId?: string;
@@ -2597,9 +4519,9 @@ namespace IamIdentityV1 {
     pagesize?: number;
     /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
     pagetoken?: string;
-    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
     scope?: ListApiKeysConstants.Scope | string;
-    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
     type?: ListApiKeysConstants.Type | string;
     /** Optional sort property, valid values are name, description, created_at and created_by. If specified, the
      *  items are sorted by the value of this property.
@@ -2614,12 +4536,12 @@ namespace IamIdentityV1 {
 
   /** Constants for the `listApiKeys` operation. */
   export namespace ListApiKeysConstants {
-    /** Optional parameter to define the scope of the queried API keys. Can be 'entity' (default) or 'account'. */
+    /** Optional parameter to define the scope of the queried API Keys. Can be 'entity' (default) or 'account'. */
     export enum Scope {
       ENTITY = 'entity',
       ACCOUNT = 'account',
     }
-    /** Optional parameter to filter the type of the queried API keys. Can be 'user' or 'serviceid'. */
+    /** Optional parameter to filter the type of the queried API Keys. Can be 'user' or 'serviceid'. */
     export enum Type {
       USER = 'user',
       SERVICEID = 'serviceid',
@@ -2647,8 +4569,8 @@ namespace IamIdentityV1 {
     accountId?: string;
     /** You can optionally passthrough the API key value for this API key. If passed, NO validation of that apiKey
      *  value is done, i.e. the value can be non-URL safe. If omitted, the API key management will create an URL safe
-     *  opaque API key value. The value of the API key is checked for uniqueness. Please ensure enough variations when
-     *  passing in this value.
+     *  opaque API key value. The value of the API key is checked for uniqueness. Ensure enough variations when passing
+     *  in this value.
      */
     apikey?: string;
     /** Send true or false to set whether the API key value is retrievable in the future by using the Get details of
@@ -2677,7 +4599,7 @@ namespace IamIdentityV1 {
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
     /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
-     *  operation, so please only request this when needed.
+     *  operation, so only request this when needed.
      */
     includeActivity?: boolean;
     headers?: OutgoingHttpHeaders;
@@ -2782,7 +4704,7 @@ namespace IamIdentityV1 {
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
     /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
-     *  operation, so please only request this when needed.
+     *  operation, so only request this when needed.
      */
     includeActivity?: boolean;
     headers?: OutgoingHttpHeaders;
@@ -2883,7 +4805,7 @@ namespace IamIdentityV1 {
     /** ID of the trusted profile to get. */
     profileId: string;
     /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
-     *  operation, so please only request this when needed.
+     *  operation, so only request this when needed.
      */
     includeActivity?: boolean;
     headers?: OutgoingHttpHeaders;
@@ -3053,7 +4975,7 @@ namespace IamIdentityV1 {
      */
     ifMatch: string;
     /** List of identities that can assume the trusted profile. */
-    identities?: ProfileIdentity[];
+    identities?: ProfileIdentityRequest[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -3070,8 +4992,6 @@ namespace IamIdentityV1 {
     identifier: string;
     /** Type of the identity. */
     type: SetProfileIdentityConstants.Type | string;
-    /** IAM ID of the identity. */
-    iamId?: string;
     /** Only valid for the type user. Accounts from which a user can assume the trusted profile. */
     accounts?: string[];
     /** Description of the identity that can assume the trusted profile. This is optional field for all the types of
@@ -3159,15 +5079,17 @@ namespace IamIdentityV1 {
     ifMatch: string;
     /** The id of the account to update the settings for. */
     accountId: string;
-    /** Defines whether or not creating a Service Id is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
-     *    * NOT_SET - to unset a previously set value.
+    /** Defines whether or not creating a service ID is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
+     *    * NOT_SET - to 'unset' a previous set value.
      */
     restrictCreateServiceId?: UpdateAccountSettingsConstants.RestrictCreateServiceId | string;
     /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
+     *    * RESTRICTED - only users assigned the 'User API key creator' role on the IAM Identity Service can create API
+     *  keys, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create platform API keys
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrictCreatePlatformApikey?:
@@ -3218,13 +5140,13 @@ namespace IamIdentityV1 {
 
   /** Constants for the `updateAccountSettings` operation. */
   export namespace UpdateAccountSettingsConstants {
-    /** Defines whether or not creating a Service Id is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to unset a previously set value. */
+    /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
     export enum RestrictCreateServiceId {
       RESTRICTED = 'RESTRICTED',
       NOT_RESTRICTED = 'NOT_RESTRICTED',
       NOT_SET = 'NOT_SET',
     }
-    /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+    /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - only users assigned the 'User API key creator' role on the IAM Identity Service can create API keys, including the account owner * NOT_RESTRICTED - all members of an account can create platform API keys * NOT_SET - to 'unset' a previous set value. */
     export enum RestrictCreatePlatformApikey {
       RESTRICTED = 'RESTRICTED',
       NOT_RESTRICTED = 'NOT_RESTRICTED',
@@ -3273,6 +5195,261 @@ namespace IamIdentityV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listAccountSettingsAssignments` operation. */
+  export interface ListAccountSettingsAssignmentsParams {
+    /** Account ID of the Assignments to query. This parameter is required unless using a pagetoken. */
+    accountId?: string;
+    /** Filter results by Template Id. */
+    templateId?: string;
+    /** Filter results Template Version. */
+    templateVersion?: string;
+    /** Filter results by the assignment target. */
+    target?: string;
+    /** Filter results by the assignment's target type. */
+    targetType?: ListAccountSettingsAssignmentsConstants.TargetType | string;
+    /** Optional size of a single page. Default is 20 items per page. Valid range is 1 to 100. */
+    limit?: number;
+    /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
+    pagetoken?: string;
+    /** If specified, the items are sorted by the value of this property. */
+    sort?: ListAccountSettingsAssignmentsConstants.Sort | string;
+    /** Sort order. */
+    order?: ListAccountSettingsAssignmentsConstants.Order | string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listAccountSettingsAssignments` operation. */
+  export namespace ListAccountSettingsAssignmentsConstants {
+    /** Filter results by the assignment's target type. */
+    export enum TargetType {
+      ACCOUNT = 'Account',
+      ACCOUNTGROUP = 'AccountGroup',
+    }
+    /** If specified, the items are sorted by the value of this property. */
+    export enum Sort {
+      TEMPLATE_ID = 'template_id',
+      CREATED_AT = 'created_at',
+      LAST_MODIFIED_AT = 'last_modified_at',
+    }
+    /** Sort order. */
+    export enum Order {
+      ASC = 'asc',
+      DESC = 'desc',
+    }
+  }
+
+  /** Parameters for the `createAccountSettingsAssignment` operation. */
+  export interface CreateAccountSettingsAssignmentParams {
+    /** ID of the template to assign. */
+    templateId: string;
+    /** Version of the template to assign. */
+    templateVersion: number;
+    /** Type of target to deploy to. */
+    targetType: CreateAccountSettingsAssignmentConstants.TargetType | string;
+    /** Identifier of target to deploy to. */
+    target: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createAccountSettingsAssignment` operation. */
+  export namespace CreateAccountSettingsAssignmentConstants {
+    /** Type of target to deploy to. */
+    export enum TargetType {
+      ACCOUNT = 'Account',
+      ACCOUNTGROUP = 'AccountGroup',
+    }
+  }
+
+  /** Parameters for the `getAccountSettingsAssignment` operation. */
+  export interface GetAccountSettingsAssignmentParams {
+    /** ID of the Assignment Record. */
+    assignmentId: string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAccountSettingsAssignment` operation. */
+  export interface DeleteAccountSettingsAssignmentParams {
+    /** ID of the Assignment Record. */
+    assignmentId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateAccountSettingsAssignment` operation. */
+  export interface UpdateAccountSettingsAssignmentParams {
+    /** ID of the Assignment Record. */
+    assignmentId: string;
+    /** Version of the assignment to be updated. Specify the version that you retrieved when reading the assignment.
+     *  This value  helps identifying parallel usage of this API. Pass * to indicate to update any version available.
+     *  This might result in stale updates.
+     */
+    ifMatch: string;
+    /** Template version to be applied to the assignment. To retry all failed assignemtns, provide the existing
+     *  version. To migrate to a different version, provide the new version number.
+     */
+    templateVersion: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listAccountSettingsTemplates` operation. */
+  export interface ListAccountSettingsTemplatesParams {
+    /** Account ID of the account settings templates to query. This parameter is required unless using a pagetoken. */
+    accountId?: string;
+    /** Optional size of a single page. */
+    limit?: string;
+    /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
+    pagetoken?: string;
+    /** Optional sort property. If specified, the returned templated are sorted according to this property. */
+    sort?: ListAccountSettingsTemplatesConstants.Sort | string;
+    /** Optional sort order. */
+    order?: ListAccountSettingsTemplatesConstants.Order | string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listAccountSettingsTemplates` operation. */
+  export namespace ListAccountSettingsTemplatesConstants {
+    /** Optional sort property. If specified, the returned templated are sorted according to this property. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      LAST_MODIFIED_AT = 'last_modified_at',
+      NAME = 'name',
+    }
+    /** Optional sort order. */
+    export enum Order {
+      ASC = 'asc',
+      DESC = 'desc',
+    }
+  }
+
+  /** Parameters for the `createAccountSettingsTemplate` operation. */
+  export interface CreateAccountSettingsTemplateParams {
+    /** ID of the account where the template resides. */
+    accountId?: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. */
+    name?: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    accountSettings?: AccountSettingsComponent;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getLatestAccountSettingsTemplateVersion` operation. */
+  export interface GetLatestAccountSettingsTemplateVersionParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAllVersionsOfAccountSettingsTemplate` operation. */
+  export interface DeleteAllVersionsOfAccountSettingsTemplateParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listVersionsOfAccountSettingsTemplate` operation. */
+  export interface ListVersionsOfAccountSettingsTemplateParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    /** Optional size of a single page. */
+    limit?: string;
+    /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
+    pagetoken?: string;
+    /** Optional sort property. If specified, the returned templated are sorted according to this property. */
+    sort?: ListVersionsOfAccountSettingsTemplateConstants.Sort | string;
+    /** Optional sort order. */
+    order?: ListVersionsOfAccountSettingsTemplateConstants.Order | string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listVersionsOfAccountSettingsTemplate` operation. */
+  export namespace ListVersionsOfAccountSettingsTemplateConstants {
+    /** Optional sort property. If specified, the returned templated are sorted according to this property. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      LAST_MODIFIED_AT = 'last_modified_at',
+      NAME = 'name',
+    }
+    /** Optional sort order. */
+    export enum Order {
+      ASC = 'asc',
+      DESC = 'desc',
+    }
+  }
+
+  /** Parameters for the `createAccountSettingsTemplateVersion` operation. */
+  export interface CreateAccountSettingsTemplateVersionParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    /** ID of the account where the template resides. */
+    accountId?: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. */
+    name?: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    accountSettings?: AccountSettingsComponent;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getAccountSettingsTemplateVersion` operation. */
+  export interface GetAccountSettingsTemplateVersionParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    /** Version of the account settings template. */
+    version: string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateAccountSettingsTemplateVersion` operation. */
+  export interface UpdateAccountSettingsTemplateVersionParams {
+    /** Entity tag of the Template to be updated. Specify the tag that you retrieved when reading the account
+     *  settings template. This value helps identifying parallel usage of this API. Pass * to indicate to update any
+     *  version available. This might result in stale updates.
+     */
+    ifMatch: string;
+    /** ID of the account settings template. */
+    templateId: string;
+    /** Version of the account settings template. */
+    version: string;
+    /** ID of the account where the template resides. */
+    accountId?: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. */
+    name?: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    accountSettings?: AccountSettingsComponent;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAccountSettingsTemplateVersion` operation. */
+  export interface DeleteAccountSettingsTemplateVersionParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    /** Version of the account settings template. */
+    version: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `commitAccountSettingsTemplate` operation. */
+  export interface CommitAccountSettingsTemplateParams {
+    /** ID of the account settings template. */
+    templateId: string;
+    /** Version of the account settings template. */
+    version: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `createReport` operation. */
   export interface CreateReportParams {
     /** ID of the account. */
@@ -3281,7 +5458,7 @@ namespace IamIdentityV1 {
      *  within the time indicated by duration.
      */
     type?: string;
-    /** Optional duration of the report. The supported unit of duration is hours. */
+    /** Optional duration of the report, supported unit of duration is hours. */
     duration?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -3294,6 +5471,279 @@ namespace IamIdentityV1 {
      *  account.
      */
     reference: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listTrustedProfileAssignments` operation. */
+  export interface ListTrustedProfileAssignmentsParams {
+    /** Account ID of the Assignments to query. This parameter is required unless using a pagetoken. */
+    accountId?: string;
+    /** Filter results by Template Id. */
+    templateId?: string;
+    /** Filter results Template Version. */
+    templateVersion?: string;
+    /** Filter results by the assignment target. */
+    target?: string;
+    /** Filter results by the assignment's target type. */
+    targetType?: ListTrustedProfileAssignmentsConstants.TargetType | string;
+    /** Optional size of a single page. Default is 20 items per page. Valid range is 1 to 100. */
+    limit?: number;
+    /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
+    pagetoken?: string;
+    /** If specified, the items are sorted by the value of this property. */
+    sort?: ListTrustedProfileAssignmentsConstants.Sort | string;
+    /** Sort order. */
+    order?: ListTrustedProfileAssignmentsConstants.Order | string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listTrustedProfileAssignments` operation. */
+  export namespace ListTrustedProfileAssignmentsConstants {
+    /** Filter results by the assignment's target type. */
+    export enum TargetType {
+      ACCOUNT = 'Account',
+      ACCOUNTGROUP = 'AccountGroup',
+    }
+    /** If specified, the items are sorted by the value of this property. */
+    export enum Sort {
+      TEMPLATE_ID = 'template_id',
+      CREATED_AT = 'created_at',
+      LAST_MODIFIED_AT = 'last_modified_at',
+    }
+    /** Sort order. */
+    export enum Order {
+      ASC = 'asc',
+      DESC = 'desc',
+    }
+  }
+
+  /** Parameters for the `createTrustedProfileAssignment` operation. */
+  export interface CreateTrustedProfileAssignmentParams {
+    /** ID of the template to assign. */
+    templateId: string;
+    /** Version of the template to assign. */
+    templateVersion: number;
+    /** Type of target to deploy to. */
+    targetType: CreateTrustedProfileAssignmentConstants.TargetType | string;
+    /** Identifier of target to deploy to. */
+    target: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createTrustedProfileAssignment` operation. */
+  export namespace CreateTrustedProfileAssignmentConstants {
+    /** Type of target to deploy to. */
+    export enum TargetType {
+      ACCOUNT = 'Account',
+      ACCOUNTGROUP = 'AccountGroup',
+    }
+  }
+
+  /** Parameters for the `getTrustedProfileAssignment` operation. */
+  export interface GetTrustedProfileAssignmentParams {
+    /** ID of the Assignment Record. */
+    assignmentId: string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteTrustedProfileAssignment` operation. */
+  export interface DeleteTrustedProfileAssignmentParams {
+    /** ID of the Assignment Record. */
+    assignmentId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateTrustedProfileAssignment` operation. */
+  export interface UpdateTrustedProfileAssignmentParams {
+    /** ID of the Assignment Record. */
+    assignmentId: string;
+    /** Version of the Assignment to be updated. Specify the version that you retrieved when reading the Assignment.
+     *  This value  helps identifying parallel usage of this API. Pass * to indicate to update any version available.
+     *  This might result in stale updates.
+     */
+    ifMatch: string;
+    /** Template version to be applied to the assignment. To retry all failed assignemtns, provide the existing
+     *  version. To migrate to a different version, provide the new version number.
+     */
+    templateVersion: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listProfileTemplates` operation. */
+  export interface ListProfileTemplatesParams {
+    /** Account ID of the trusted profile templates to query. This parameter is required unless using a pagetoken. */
+    accountId?: string;
+    /** Optional size of a single page. */
+    limit?: string;
+    /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
+    pagetoken?: string;
+    /** Optional sort property. If specified, the returned templates are sorted according to this property. */
+    sort?: ListProfileTemplatesConstants.Sort | string;
+    /** Optional sort order. */
+    order?: ListProfileTemplatesConstants.Order | string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listProfileTemplates` operation. */
+  export namespace ListProfileTemplatesConstants {
+    /** Optional sort property. If specified, the returned templates are sorted according to this property. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      LAST_MODIFIED_AT = 'last_modified_at',
+      NAME = 'name',
+    }
+    /** Optional sort order. */
+    export enum Order {
+      ASC = 'asc',
+      DESC = 'desc',
+    }
+  }
+
+  /** Parameters for the `createProfileTemplate` operation. */
+  export interface CreateProfileTemplateParams {
+    /** ID of the account where the template resides. */
+    accountId?: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. Required field
+     *  when creating a new template. Otherwise this field is optional. If the field is included it will change the name
+     *  value for all existing versions of the template.
+     */
+    name?: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    /** Input body parameters for the TemplateProfileComponent. */
+    profile?: TemplateProfileComponentRequest;
+    /** Existing policy templates that you can reference to assign access in the trusted profile component. */
+    policyTemplateReferences?: PolicyTemplateReference[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getLatestProfileTemplateVersion` operation. */
+  export interface GetLatestProfileTemplateVersionParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteAllVersionsOfProfileTemplate` operation. */
+  export interface DeleteAllVersionsOfProfileTemplateParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listVersionsOfProfileTemplate` operation. */
+  export interface ListVersionsOfProfileTemplateParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** Optional size of a single page. */
+    limit?: string;
+    /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
+    pagetoken?: string;
+    /** Optional sort property. If specified, the returned templated are sorted according to this property. */
+    sort?: ListVersionsOfProfileTemplateConstants.Sort | string;
+    /** Optional sort order. */
+    order?: ListVersionsOfProfileTemplateConstants.Order | string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listVersionsOfProfileTemplate` operation. */
+  export namespace ListVersionsOfProfileTemplateConstants {
+    /** Optional sort property. If specified, the returned templated are sorted according to this property. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      LAST_MODIFIED_AT = 'last_modified_at',
+      NAME = 'name',
+    }
+    /** Optional sort order. */
+    export enum Order {
+      ASC = 'asc',
+      DESC = 'desc',
+    }
+  }
+
+  /** Parameters for the `createProfileTemplateVersion` operation. */
+  export interface CreateProfileTemplateVersionParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** ID of the account where the template resides. */
+    accountId?: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. Required field
+     *  when creating a new template. Otherwise this field is optional. If the field is included it will change the name
+     *  value for all existing versions of the template.
+     */
+    name?: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    /** Input body parameters for the TemplateProfileComponent. */
+    profile?: TemplateProfileComponentRequest;
+    /** Existing policy templates that you can reference to assign access in the trusted profile component. */
+    policyTemplateReferences?: PolicyTemplateReference[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getProfileTemplateVersion` operation. */
+  export interface GetProfileTemplateVersionParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** Version of the Profile Template. */
+    version: string;
+    /** Defines if the entity history is included in the response. */
+    includeHistory?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateProfileTemplateVersion` operation. */
+  export interface UpdateProfileTemplateVersionParams {
+    /** Entity tag of the Template to be updated. Specify the tag that you retrieved when reading the Profile
+     *  Template. This value helps identifying parallel usage of this API. Pass * to indicate to update any version
+     *  available. This might result in stale updates.
+     */
+    ifMatch: string;
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** Version of the Profile Template. */
+    version: string;
+    /** ID of the account where the template resides. */
+    accountId?: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. Required field
+     *  when creating a new template. Otherwise this field is optional. If the field is included it will change the name
+     *  value for all existing versions of the template.
+     */
+    name?: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    /** Input body parameters for the TemplateProfileComponent. */
+    profile?: TemplateProfileComponentRequest;
+    /** Existing policy templates that you can reference to assign access in the trusted profile component. */
+    policyTemplateReferences?: PolicyTemplateReference[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteProfileTemplateVersion` operation. */
+  export interface DeleteProfileTemplateVersionParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** Version of the Profile Template. */
+    version: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `commitProfileTemplate` operation. */
+  export interface CommitProfileTemplateParams {
+    /** ID of the trusted profile template. */
+    templateId: string;
+    /** Version of the Profile Template. */
+    version: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -3310,15 +5760,72 @@ namespace IamIdentityV1 {
     complies: boolean;
   }
 
+  /** AccountSettingsComponent. */
+  export interface AccountSettingsComponent {
+    /** Defines whether or not creating a service ID is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
+     *    * NOT_SET - to 'unset' a previous set value.
+     */
+    restrict_create_service_id?: string;
+    /** Defines whether or not creating platform API keys is access controlled. Valid values:
+     *    * RESTRICTED - to apply access control
+     *    * NOT_RESTRICTED - to remove access control
+     *    * NOT_SET - to 'unset' a previous set value.
+     */
+    restrict_create_platform_apikey?: string;
+    /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
+    allowed_ip_addresses?: string;
+    /** Defines the MFA trait for the account. Valid values:
+     *    * NONE - No MFA trait set
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    mfa?: string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    user_mfa?: AccountSettingsUserMFA[];
+    /** Defines the session expiration in seconds for the account. Valid values:
+     *    * Any whole number between between '900' and '86400'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    session_expiration_in_seconds?: string;
+    /** Defines the period of time in seconds in which a session will be invalidated due to inactivity. Valid
+     *  values:
+     *    * Any whole number between '900' and '7200'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    session_invalidation_in_seconds?: string;
+    /** Defines the max allowed sessions per identity required by the account. Valid values:
+     *    * Any whole number greater than 0
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    max_sessions_per_identity?: string;
+    /** Defines the access token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '3600'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    system_access_token_expiration_in_seconds?: string;
+    /** Defines the refresh token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '259200'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    system_refresh_token_expiration_in_seconds?: string;
+  }
+
   /** Response body format for Account Settings REST requests. */
   export interface AccountSettingsResponse {
     /** Context with key properties for problem determination. */
     context?: ResponseContext;
     /** Unique ID of the account. */
     account_id: string;
-    /** Defines whether or not creating a Service Id is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
+    /** Defines whether or not creating a service ID is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrict_create_service_id: string;
@@ -3372,6 +5879,60 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds: string;
+  }
+
+  /** AccountSettingsTemplateList. */
+  export interface AccountSettingsTemplateList {
+    /** Context with key properties for problem determination. */
+    context?: ResponseContext;
+    /** The offset of the current page. */
+    offset?: number;
+    /** Optional size of a single page. */
+    limit?: number;
+    /** Link to the first page. */
+    first?: string;
+    /** Link to the previous available page. If 'previous' property is not part of the response no previous page is
+     *  available.
+     */
+    previous?: string;
+    /** Link to the next available page. If 'next' property is not part of the response no next page is available. */
+    next?: string;
+    /** List of account settings templates based on the query paramters and the page size. The
+     *  account_settings_templates array is always part of the response but might be empty depending on the query
+     *  parameter values provided.
+     */
+    account_settings_templates: AccountSettingsTemplateResponse[];
+  }
+
+  /** Response body format for account settings template REST requests. */
+  export interface AccountSettingsTemplateResponse {
+    /** ID of the the template. */
+    id: string;
+    /** Version of the the template. */
+    version: number;
+    /** ID of the account where the template resides. */
+    account_id: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. */
+    name: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    /** Committed flag determines if the template is ready for assignment. */
+    committed: boolean;
+    account_settings: AccountSettingsComponent;
+    /** History of the Template. */
+    history?: EnityHistoryRecord[];
+    /** Entity tag for this templateId-version combination. */
+    entity_tag: string;
+    /** Cloud resource name. */
+    crn: string;
+    /** Template Created At. */
+    created_at?: string;
+    /** IAMid of the creator. */
+    created_by_id?: string;
+    /** Template last modified at. */
+    last_modified_at?: string;
+    /** IAMid of the identity that made the latest modification. */
+    last_modified_by_id?: string;
   }
 
   /** AccountSettingsUserMFA. */
@@ -3560,6 +6121,33 @@ namespace IamIdentityV1 {
     last_authn?: string;
   }
 
+  /** Error information. */
+  export interface Error {
+    /** Error code of the REST Exception. */
+    code: string;
+    /** Error message code of the REST Exception. */
+    message_code: string;
+    /** Error message of the REST Exception. Error messages are derived base on the input locale of the REST request
+     *  and the available Message catalogs. Dynamic fallback to 'us-english' is happening if no message catalog is
+     *  available for the provided input locale.
+     */
+    message: string;
+    /** Error details of the REST Exception. */
+    details?: string;
+  }
+
+  /** Response body parameters in case of error situations. */
+  export interface ExceptionResponse {
+    /** Context with key properties for problem determination. */
+    context?: ResponseContext;
+    /** Error message code of the REST Exception. */
+    status_code: string;
+    /** List of errors that occured. */
+    errors: Error[];
+    /** Unique ID of the requst. */
+    trace?: string;
+  }
+
   /** IdBasedMfaEnrollment. */
   export interface IdBasedMfaEnrollment {
     /** Defines the MFA trait for the account. Valid values:
@@ -3612,6 +6200,14 @@ namespace IamIdentityV1 {
     account_based_mfa?: AccountBasedMfaEnrollment;
   }
 
+  /** Metadata for external access policy. */
+  export interface PolicyTemplateReference {
+    /** ID of Access Policy Template. */
+    id: string;
+    /** Version of Access Policy Template. */
+    version: string;
+  }
+
   /** ProfileClaimRule. */
   export interface ProfileClaimRule {
     /** the unique identifier of the claim rule. */
@@ -3638,9 +6234,7 @@ namespace IamIdentityV1 {
 
   /** ProfileClaimRuleConditions. */
   export interface ProfileClaimRuleConditions {
-    /** The claim to evaluate against. [Learn
-     *  more](/docs/account?topic=account-iam-condition-properties&interface=ui#cr-attribute-names).
-     */
+    /** The claim to evaluate against. */
     claim: string;
     /** The operation to perform on the claim. valid values are EQUALS, NOT_EQUALS, EQUALS_IGNORE_CASE,
      *  NOT_EQUALS_IGNORE_CASE, CONTAINS, IN.
@@ -3663,13 +6257,32 @@ namespace IamIdentityV1 {
     /** Entity tag of the profile identities response. */
     entity_tag?: string;
     /** List of identities. */
-    identities?: ProfileIdentity[];
+    identities?: ProfileIdentityResponse[];
   }
 
-  /** ProfileIdentity. */
-  export interface ProfileIdentity {
+  /** ProfileIdentityRequest. */
+  export interface ProfileIdentityRequest {
+    /** Identifier of the identity that can assume the trusted profiles. This can be a user identifier (IAM id),
+     *  serviceid or crn. Internally it uses account id of the service id for the identifier 'serviceid' and for the
+     *  identifier 'crn' it uses account id contained in the CRN.
+     */
+    identifier: string;
+    /** Type of the identity. */
+    type: string;
+    /** Only valid for the type user. Accounts from which a user can assume the trusted profile. */
+    accounts?: string[];
+    /** Description of the identity that can assume the trusted profile. This is optional field for all the types of
+     *  identities. When this field is not set for the identity type 'serviceid' then the description of the service id
+     *  is used. Description is recommended for the identity type 'crn' E.g. 'Instance 1234 of IBM Cloud Service
+     *  project'.
+     */
+    description?: string;
+  }
+
+  /** ProfileIdentityResponse. */
+  export interface ProfileIdentityResponse {
     /** IAM ID of the identity. */
-    iam_id?: string;
+    iam_id: string;
     /** Identifier of the identity that can assume the trusted profiles. This can be a user identifier (IAM id),
      *  serviceid or crn. Internally it uses account id of the service id for the identifier 'serviceid' and for the
      *  identifier 'crn' it uses account id contained in the CRN.
@@ -3853,6 +6466,133 @@ namespace IamIdentityV1 {
     serviceids: ServiceId[];
   }
 
+  /** List Response body format for Template Assignments Records. */
+  export interface TemplateAssignmentListResponse {
+    /** Context with key properties for problem determination. */
+    context?: ResponseContext;
+    /** The offset of the current page. */
+    offset?: number;
+    /** Optional size of a single page. Default is 20 items per page. Valid range is 1 to 100. */
+    limit?: number;
+    /** Link to the first page. */
+    first?: string;
+    /** Link to the previous available page. If 'previous' property is not part of the response no previous page is
+     *  available.
+     */
+    previous?: string;
+    /** Link to the next available page. If 'next' property is not part of the response no next page is available. */
+    next?: string;
+    /** List of Assignments based on the query paramters and the page size. The assignments array is always part of
+     *  the response but might be empty depending on the query parameter values provided.
+     */
+    assignments: TemplateAssignmentResponse[];
+  }
+
+  /** Body parameters for created resource. */
+  export interface TemplateAssignmentResource {
+    /** Id of the created resource. */
+    id?: string;
+  }
+
+  /** Body parameters for assignment error. */
+  export interface TemplateAssignmentResourceError {
+    /** Name of the error. */
+    name?: string;
+    /** Internal error code. */
+    errorCode?: string;
+    /** Error message detailing the nature of the error. */
+    message?: string;
+    /** Internal status code for the error. */
+    statusCode?: string;
+  }
+
+  /** Response body format for Template Assignment Record. */
+  export interface TemplateAssignmentResponse {
+    /** Context with key properties for problem determination. */
+    context?: ResponseContext;
+    /** Assignment record Id. */
+    id: string;
+    /** Enterprise account Id. */
+    account_id: string;
+    /** Template Id. */
+    template_id: string;
+    /** Template version. */
+    template_version: number;
+    /** Assignment target type. */
+    target_type: string;
+    /** Assignment target. */
+    target: string;
+    /** Assignment status. */
+    status: string;
+    /** Status breakdown per target account of IAM resources created or errors encountered in attempting to create
+     *  those IAM resources. IAM resources are only included in the response providing the assignment is not in
+     *  progress. IAM resources are also only included when getting a single assignment, and excluded by list APIs.
+     */
+    resources?: TemplateAssignmentResponseResource[];
+    /** Assignment history. */
+    history?: EnityHistoryRecord[];
+    /** Href. */
+    href?: string;
+    /** Assignment created at. */
+    created_at: string;
+    /** IAMid of the identity that created the assignment. */
+    created_by_id: string;
+    /** Assignment modified at. */
+    last_modified_at: string;
+    /** IAMid of the identity that last modified the assignment. */
+    last_modified_by_id: string;
+    /** Entity tag for this assignment record. */
+    entity_tag: string;
+  }
+
+  /** Overview of resources assignment per target account. */
+  export interface TemplateAssignmentResponseResource {
+    /** Target account where the IAM resource is created. */
+    target: string;
+    profile?: TemplateAssignmentResponseResourceDetail;
+    account_settings?: TemplateAssignmentResponseResourceDetail;
+    /** Policy resource(s) included only for trusted profile assignments with policy references. */
+    policy_template_refs?: TemplateAssignmentResponseResourceDetail[];
+  }
+
+  /** TemplateAssignmentResponseResourceDetail. */
+  export interface TemplateAssignmentResponseResourceDetail {
+    /** Policy Template Id, only returned for a profile assignment with policy references. */
+    id?: string;
+    /** Policy version, only returned for a profile assignment with policy references. */
+    version?: string;
+    /** Body parameters for created resource. */
+    resource_created?: TemplateAssignmentResource;
+    /** Body parameters for assignment error. */
+    error_message?: TemplateAssignmentResourceError;
+    /** Status for the target account's assignment. */
+    status: string;
+  }
+
+  /** Input body parameters for the TemplateProfileComponent. */
+  export interface TemplateProfileComponentRequest {
+    /** Name of the Profile. */
+    name: string;
+    /** Description of the Profile. */
+    description?: string;
+    /** Rules for the Profile. */
+    rules?: TrustedProfileTemplateClaimRule[];
+    /** Identities for the Profile. */
+    identities?: ProfileIdentityRequest[];
+  }
+
+  /** Input body parameters for the TemplateProfileComponent. */
+  export interface TemplateProfileComponentResponse {
+    /** Name of the Profile. */
+    name: string;
+    /** Description of the Profile. */
+    description?: string;
+    /** Rules for the Profile. */
+    rules?: TrustedProfileTemplateClaimRule[];
+    /** Identities for the Profile. */
+    identities?: ProfileIdentityResponse[];
+  }
+
   /** Response body format for trusted profile V1 REST requests. */
   export interface TrustedProfile {
     /** Context with key properties for problem determination. */
@@ -3883,6 +6623,16 @@ namespace IamIdentityV1 {
     iam_id: string;
     /** ID of the account that this trusted profile belong to. */
     account_id: string;
+    /** ID of the IAM template that was used to create an enterprise-managed trusted profile in your account. When
+     *  returned, this indicates that the trusted profile is created from and managed by a template in the root
+     *  enterprise account.
+     */
+    template_id?: string;
+    /** ID of the assignment that was used to create an enterprise-managed trusted profile in your account. When
+     *  returned, this indicates that the trusted profile is created from and managed by a template in the root
+     *  enterprise account.
+     */
+    assignment_id?: string;
     /** IMS acount ID of the trusted profile. */
     ims_account_id?: number;
     /** IMS user ID of the trusted profile. */
@@ -3890,6 +6640,78 @@ namespace IamIdentityV1 {
     /** History of the trusted profile. */
     history?: EnityHistoryRecord[];
     activity?: Activity;
+  }
+
+  /** TrustedProfileTemplateClaimRule. */
+  export interface TrustedProfileTemplateClaimRule {
+    /** Name of the claim rule to be created or updated. */
+    name?: string;
+    /** Type of the claim rule. */
+    type: string;
+    /** The realm name of the Idp this claim rule applies to. This field is required only if the type is specified
+     *  as 'Profile-SAML'.
+     */
+    realm_name?: string;
+    /** Session expiration in seconds, only required if type is 'Profile-SAML'. */
+    expiration?: number;
+    /** Conditions of this claim rule. */
+    conditions: ProfileClaimRuleConditions[];
+  }
+
+  /** TrustedProfileTemplateList. */
+  export interface TrustedProfileTemplateList {
+    /** Context with key properties for problem determination. */
+    context?: ResponseContext;
+    /** The offset of the current page. */
+    offset?: number;
+    /** Optional size of a single page. */
+    limit?: number;
+    /** Link to the first page. */
+    first?: string;
+    /** Link to the previous available page. If 'previous' property is not part of the response no previous page is
+     *  available.
+     */
+    previous?: string;
+    /** Link to the next available page. If 'next' property is not part of the response no next page is available. */
+    next?: string;
+    /** List of Profile Templates based on the query paramters and the page size. The profile_templates array is
+     *  always part of the response but might be empty depending on the query parameter values provided.
+     */
+    profile_templates: TrustedProfileTemplateResponse[];
+  }
+
+  /** Response body format for Trusted Profile Template REST requests. */
+  export interface TrustedProfileTemplateResponse {
+    /** ID of the the template. */
+    id: string;
+    /** Version of the the template. */
+    version: number;
+    /** ID of the account where the template resides. */
+    account_id: string;
+    /** The name of the trusted profile template. This is visible only in the enterprise account. */
+    name: string;
+    /** The description of the trusted profile template. Describe the template for enterprise account users. */
+    description?: string;
+    /** Committed flag determines if the template is ready for assignment. */
+    committed?: boolean;
+    /** Input body parameters for the TemplateProfileComponent. */
+    profile?: TemplateProfileComponentResponse;
+    /** Existing policy templates that you can reference to assign access in the trusted profile component. */
+    policy_template_references?: PolicyTemplateReference[];
+    /** History of the trusted profile template. */
+    history?: EnityHistoryRecord[];
+    /** Entity tag for this templateId-version combination. */
+    entity_tag?: string;
+    /** Cloud resource name. */
+    crn?: string;
+    /** Timestamp of when the template was created. */
+    created_at?: string;
+    /** IAMid of the creator. */
+    created_by_id?: string;
+    /** Timestamp of when the template was last modified. */
+    last_modified_at?: string;
+    /** IAMid of the identity that made the latest modification. */
+    last_modified_by_id?: string;
   }
 
   /** Response body format for the List trusted profiles V1 REST request. */
