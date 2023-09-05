@@ -1,3 +1,10 @@
+# [0.41.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.40.1...v0.41.0) (2023-09-05)
+
+
+### Features
+
+* **IAM Policy Management:** add support for policy templates ([#209](https://github.com/IBM/platform-services-node-sdk/issues/209)) ([5e72f45](https://github.com/IBM/platform-services-node-sdk/commit/5e72f4506a5187217aae675b90771635e7733992))
+
 ## [0.40.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.40.0...v0.40.1) (2023-09-05)
 
 
