@@ -34,6 +34,9 @@ const { expectToBePromise } = require('ibm-cloud-sdk-core/lib/sdk-test-helpers')
 // IAM_IDENTITY_APIKEY=<IAM APIKEY for the User>
 // IAM_IDENTITY_ACCOUNT_ID=<AccountID which is unique to the User>
 // IAM_IDENTITY_IAM_ID=<IAM ID which is unique to the User account>
+// IAM_IDENTITY_IAM_ID_MEMBER=<IAM ID of a user belonging to the account but different to the one above>
+// IAM_IDENTITY_ENTERPISE_ACCOUNT_ID=<AccountID of the enterprise account>
+// IAM_IDENTITY_ENTERPISE_SUBACCOUNT_ID=<AccountID of an account in the enterprise>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -52,7 +55,7 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('IamIdentityV1', () => {
-  jest.setTimeout(30000);
+  jest.setTimeout(300000);
 
   // begin-common
 
@@ -63,12 +66,15 @@ describe('IamIdentityV1', () => {
   const config = readExternalSources(IamIdentityV1.DEFAULT_SERVICE_NAME);
   const apikeyName = 'Example-ApiKey';
   const serviceIdName = 'Example-ServiceId';
+  const realmName = 'https://sdk.test.realm/1234';
 
   let accountId = config.accountId;
   let iamId = config.iamId;
   let iamIdMember = config.iamIdMember;
   let iamApikey = config.apikey;
-
+  let enterpriseAccountId = config.enterpriseAccountId;
+  let enterpriseSubAccountId = config.enterpriseSubaccountId;
+  
   let apikeyId = null;
   let apikeyEtag = null;
 
@@ -89,7 +95,20 @@ describe('IamIdentityV1', () => {
   let reportReference = null;
   let reportReferenceMfa=null;
 
-  test('createApiKey request example', async () => {
+  let profileTemplateId;
+  let profileTemplateVersion;
+  let profileTemplateEtag;
+  let profileTemplateAssignmentId;
+  let profileTemplateAssignmentEtag;
+
+  let accountSettingsTemplateId;
+  let accountSettingsTemplateVersion;
+  let accountSettingsTemplateEtag;
+  let accountSettingsTemplateAssignmentId;
+  let accountSettingsTemplateAssignmentEtag;
+
+
+test('createApiKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
@@ -666,7 +685,7 @@ describe('IamIdentityV1', () => {
     const params = {
       profileId: profileId,
       type: 'Profile-SAML',
-      realmName: 'https://w3id.sso.ibm.com/auth/sps/samlidp2/saml20',
+      realmName: realmName,
       expiration: 43200,
       conditions,
     };
@@ -768,7 +787,7 @@ describe('IamIdentityV1', () => {
       ruleId: claimRuleId,
       ifMatch: claimRuleEtag,
       type: 'Profile-SAML',
-      realmName: 'https://w3id.sso.ibm.com/auth/sps/samlidp2/saml20',
+      realmName: realmName,
       expiration: 33200,
       conditions,
     };
@@ -1327,4 +1346,943 @@ describe('IamIdentityV1', () => {
     }
     // end-get_mfa_status
   });
+
+  test('scenarioProfileTemplateEx()', async () => {
+    await createProfileTemplateEx();
+  });
+    
+  async function createProfileTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createProfileTemplate() result:');
+    // begin-create_profile_template
+    const condition = {
+      claim: "blueGroups",
+      operator: "EQUALS",
+      value: "\"cloud-docs-dev\"",
+    }
+    const claimRule = {
+       name: "My Rule",
+       realm_name: realmName,
+       type: 'Profile-SAML',
+       expiration: 43200,
+       conditions: [condition],
+    }
+    const profile = {
+      rules: [claimRule],
+      name: "Profile-From-Example-Template",
+      description: "Trusted profile created from a template",
+    }
+    const templateParams = {
+      name: "Example-Profile-Template",
+      description: "IAM enterprise trusted profile template example",
+      accountId: enterpriseAccountId,
+      profile: profile,
+    }
+
+    try {
+      const res = await iamIdentityService.createProfileTemplate(templateParams);
+      profileTemplateEtag = res.headers.etag;
+      const { result } = res;
+      profileTemplateId = result.id;
+      profileTemplateVersion = result.version;
+      console.log(JSON.stringify(result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_profile_template
+
+    await getProfileTemplateEx();
+  }
+
+  async function getProfileTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getProfileTemplate() result:');
+    // begin-get_profile_template_version
+    const params = {
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+    }
+    try {
+      const res = await iamIdentityService.getProfileTemplateVersion(params);
+      profileTemplateEtag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_profile_template_version
+
+    await listProfileTemplatesEx();
+  }
+
+  async function listProfileTemplatesEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listProfileTemplates() result:');
+    // begin-list_profile_templates
+    const params = {
+      accountId: enterpriseAccountId,
+    }
+    try {
+      const res = await iamIdentityService.listProfileTemplates(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-list_profile_templates
+
+    await updateProfileTemplateEx();
+  }
+
+  async function updateProfileTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateProfileTemplate() result:');
+    // begin-update_profile_template_version
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+      ifMatch: profileTemplateEtag,
+      name: "Example-Profile-Template",
+      description: "IAM enterprise trusted profile template example - updated",
+    }
+    try {
+      const res = await iamIdentityService.updateProfileTemplateVersion(params);
+      profileTemplateEtag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-update_profile_template_version
+
+    await assignProfileTemplateEx();
+  }
+
+  async function assignProfileTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('commitProfileTemplate() result:');
+    // begin-commit_profile_template
+    const commitParams = {
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+    }
+    try {
+      const res = await iamIdentityService.commitProfileTemplate(commitParams);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-commit_profile_template
+
+    originalLog('createProfileTemplateAssignment() result:');
+    // begin-create_trusted_profile_assignment
+    const assignParams = {
+      templateId: profileTemplateId,
+      templateVersion: profileTemplateVersion,
+      targetType: "Account",
+      target: enterpriseSubAccountId,
+    }
+
+    try {
+      const assRes = await iamIdentityService.createTrustedProfileAssignment(assignParams);
+      const { result } = assRes;
+      profileTemplateAssignmentId = result.id;
+      profileTemplateAssignmentEtag= assRes.headers.etag;
+      console.log(JSON.stringify(result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_trusted_profile_assignment
+
+    await getProfileTemplateAssignmentsEx();
+  }
+
+  async function getProfileTemplateAssignmentsEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getProfileTemplateAssignments() result:');
+    // begin-get_trusted_profile_assignment
+    const params = {
+      assignmentId: profileTemplateAssignmentId,
+    }
+    try {
+      const res = await iamIdentityService.getTrustedProfileAssignment(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_trusted_profile_assignment
+
+    await listProfileTemplateAssignmentsEx();
+  }
+
+  async function listProfileTemplateAssignmentsEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listProfileTemplateAssignments() result:');
+    // begin-list_trusted_profile_assignments
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: profileTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.listTrustedProfileAssignments(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-list_trusted_profile_assignments
+
+    await createNewProfileTemplateVersionEx();
+  }
+
+  async function createNewProfileTemplateVersionEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createNewProfileTemplateVersion() result:');
+    // begin-create_profile_template_version
+    const condition = {
+      claim: "blueGroups",
+      operator: "EQUALS",
+      value: "\"cloud-docs-dev\"",
+    }
+    const claimRule = {
+       name: "My Rule",
+       realm_name: realmName,
+       type: 'Profile-SAML',
+       expiration: 43200,
+       conditions: [condition],
+    }
+    const identity = {
+      identifier: iamId,
+      accounts: [enterpriseAccountId],
+      type: "user",
+      description: "Identity description",
+   }
+   const profile = {
+      rules: [claimRule],
+      name: "Profile-From-Example-Template",
+      description: "Trusted profile created from a template - new version",
+      identities: [identity],
+    }
+    const templateParams = {
+      templateId: profileTemplateId,
+      name: "Example-Profile-Template",
+      description: "IAM enterprise trusted profile template example - new version",
+      accountId: enterpriseAccountId,
+      profile: profile,
+    }
+  
+    try {
+      const res = await iamIdentityService.createProfileTemplateVersion(templateParams);
+      const { result } = res;
+      profileTemplateVersion = result.version;
+      console.log(JSON.stringify(result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_profile_template_version
+
+    await getLatestProfileTemplateVersionEx();
+  }
+
+  async function getLatestProfileTemplateVersionEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getLatestProfileTemplateVersion() result:');
+    // begin-get_latest_profile_template_version
+    const params = {
+      templateId: profileTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.getLatestProfileTemplateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_latest_profile_template_version
+
+    await listProfileTemplateVersionsEx();
+  }
+
+  async function listProfileTemplateVersionsEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listProfileTemplateVersions() result:');
+    // begin-list_versions_of_profile_template
+    const params = {
+      templateId: profileTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.listVersionsOfProfileTemplate(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_list_versions_of_profile_template
+
+    await updateProfileTemplateAssignmentEx();
+  }
+
+  async function updateProfileTemplateAssignmentEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateProfileTemplateAssignment() result:');
+
+    const commitParams = {
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+    }
+
+    const res = await iamIdentityService.commitProfileTemplate(commitParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    
+    await waitUntilTrustedProfileAssignmentFinishedEx(profileTemplateAssignmentId);
+
+    // begin-update_trusted_profile_assignment
+    const assignParams = {
+      assignmentId: profileTemplateAssignmentId,
+      templateVersion: profileTemplateVersion,
+      ifMatch: profileTemplateAssignmentEtag,
+    }
+
+    try {
+      const assRes = await iamIdentityService.updateTrustedProfileAssignment(assignParams);
+      console.log(JSON.stringify(assRes.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-update_trusted_profile_assignment
+
+    await deleteProfileTemplateAssignmentEx();
+  }
+
+  async function deleteProfileTemplateAssignmentEx() {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteProfileTemplateAssignment() result:');
+
+    await waitUntilTrustedProfileAssignmentFinishedEx(profileTemplateAssignmentId);
+
+    // begin-delete_trusted_profile_assignment
+    const params = {
+      assignmentId: profileTemplateAssignmentId,
+    }
+    try {
+      const res = await iamIdentityService.deleteTrustedProfileAssignment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+  // end-delete_trusted_profile_assignment
+
+    await deleteProfileTemplateVersionEx();
+  }
+
+  async function deleteProfileTemplateVersionEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteProfileTemplateVersion() result:');
+    // begin-delete_profile_template_version
+    const params = {
+      templateId: profileTemplateId,
+      version: 1,
+    }
+    try {
+      const res = await iamIdentityService.deleteProfileTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_profile_template_version
+
+    await testDeleteProfileTemplateEx();
+  }
+
+  async function testDeleteProfileTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteProfileTemplateVersion() result:');
+
+    await waitUntilTrustedProfileAssignmentFinishedEx(profileTemplateAssignmentId);
+
+    // begin-delete_all_versions_of_profile_template
+    const params = {
+      templateId: profileTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.deleteAllVersionsOfProfileTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_all_versions_of_profile_template
+  }
+
+  test('scenarioAccountSettingsTemplateEx()', async () => {
+    await createAccountSettingsTemplateEx();
+  });
+    
+  async function createAccountSettingsTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createAccountSettingsTemplate() result:');
+
+    // begin-create_account_settings_template
+    const settings = {
+      mfa: "LEVEL1",
+      system_access_token_expiration_in_seconds: "3000",
+    }
+    const templateParams = {
+      name: "Example-Account-Settings-Template",
+      description: "IAM enterprise account settings template example",
+      accountId: enterpriseAccountId,
+      accountSettings: settings,
+    }
+
+    try {
+      const res = await iamIdentityService.createAccountSettingsTemplate(templateParams);
+      accountSettingsTemplateEtag = res.headers.etag;
+      const { result } = res;
+      accountSettingsTemplateId = result.id;
+      accountSettingsTemplateVersion = result.version;
+      console.log(JSON.stringify(result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_account_settings_template
+
+    await getAccountSettingsTemplateEx();
+  }
+
+  async function getAccountSettingsTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getAccountSettingsTemplate() result:');
+
+    // begin-get_account_settings_template_version
+    const params = {
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+    }
+    try {
+      const res = await iamIdentityService.getAccountSettingsTemplateVersion(params);
+      accountSettingsTemplateEtag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_account_settings_template_version
+
+    await listAccountSettingsTemplatesEx();
+  }
+
+  async function listAccountSettingsTemplatesEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listAccountSettingsTemplates() result:');
+
+    // begin-list_account_settings_templates
+    const params = {
+      accountId: enterpriseAccountId,
+    }
+    try {
+      const res = await iamIdentityService.listAccountSettingsTemplates(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-list_account_settings_templates
+
+    await updateAccountSettingsTemplateEx();
+  }
+
+  async function updateAccountSettingsTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateAccountSettingsTemplate() result:');
+
+    // begin-update_account_settings_template_version
+    const settings = {
+      mfa: "LEVEL1",
+      system_access_token_expiration_in_seconds: "3000",
+    }
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+      ifMatch: accountSettingsTemplateEtag,
+      name: "Example-Account-Settings-Template",
+      description: "IAM enterprise account settings template example - updated",
+      accountSettings: settings,
+    }
+    try {
+      const res = await iamIdentityService.updateAccountSettingsTemplateVersion(params);
+      accountSettingsTemplateEtag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-update_account_settings_template_version
+
+    await assignAccountSettingsTemplateEx();
+  }
+
+  async function assignAccountSettingsTemplateEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('commitAccountSettingsTemplate() result:');
+
+    // begin-commit_account_settings_template
+    const commitParams = {
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+    }
+    try {
+      const res = await iamIdentityService.commitAccountSettingsTemplate(commitParams);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-commit_account_settings_template
+
+    originalLog('createAccountSettingsAssignment() result:');
+
+    // begin-create_account_settings_assignment
+    const assignParams = {
+      templateId: accountSettingsTemplateId,
+      templateVersion: accountSettingsTemplateVersion,
+      targetType: "Account",
+      target: enterpriseSubAccountId,
+    }
+
+    try {
+      const assRes = await iamIdentityService.createAccountSettingsAssignment(assignParams);
+      const { result } = assRes;
+      accountSettingsTemplateAssignmentId = result.id;
+      accountSettingsTemplateAssignmentEtag= assRes.headers.etag;
+      console.log(JSON.stringify(result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_account_settings_assignment
+
+    await listAccountSettingsTemplateAssignmentsEx();
+  }
+
+  async function listAccountSettingsTemplateAssignmentsEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listAccountSettingsTemplateAssignments() result:');
+
+    // begin-list_account_settings_assignments
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: accountSettingsTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.listAccountSettingsAssignments(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-list_account_settings_assignments
+
+    await createNewAccountSettingsTemplateVersionEx();
+  }
+
+  async function createNewAccountSettingsTemplateVersionEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createNewAccountSettingsTemplateVersion() result:');
+
+    // begin-create_account_settings_template_version
+    const settings = {
+      mfa: "LEVEL1",
+      system_access_token_expiration_in_seconds: "2600",
+      restrict_create_platform_apikey: "RESTRICTED",
+      restrict_create_service_id: "RESTRICTED",
+    }
+    const templateParams = {
+      templateId: accountSettingsTemplateId,
+      name: "Example-Account-Settings-Template",
+      description: "IAM enterprise account settings template example - new version",
+      accountId: enterpriseAccountId,
+      accountSettings: settings,
+    }
+  
+    try {
+      const res = await iamIdentityService.createAccountSettingsTemplateVersion(templateParams);
+      const { result } = res;
+      accountSettingsTemplateVersion = result.version;
+      console.log(JSON.stringify(result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-create_account_settings_template_version
+
+    await getLatestAccountSettingsTemplateVersionEx();
+  }
+
+  async function getLatestAccountSettingsTemplateVersionEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getLatestAccountSettingsTemplateVersion() result:');
+
+    // begin-get_latest_account_settings_template_version
+    const params = {
+      templateId: accountSettingsTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.getLatestAccountSettingsTemplateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_latest_account_settings_template_version
+
+    await listAccountSettingsTemplateVersionsEx();
+  }
+
+  async function listAccountSettingsTemplateVersionsEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listAccountSettingsTemplateVersions() result:');
+
+    // begin-list_versions_of_account_settings_template
+    const params = {
+      templateId: accountSettingsTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.listVersionsOfAccountSettingsTemplate(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-list_versions_of_account_settings_template
+
+    await updateAccountSettingsTemplateAssignmentEx();
+  }
+
+  async function updateAccountSettingsTemplateAssignmentEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateAccountSettingsTemplateAssignment() result:');
+
+    const commitParams = {
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+    }
+
+    const res = await iamIdentityService.commitAccountSettingsTemplate(commitParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    
+    await waitUntilAccountSettingsAssignmentFinishedEx(accountSettingsTemplateAssignmentId);
+
+    // begin-update_account_settings_assignment
+    const assignParams = {
+      assignmentId: accountSettingsTemplateAssignmentId,
+      templateVersion: accountSettingsTemplateVersion,
+      ifMatch: accountSettingsTemplateAssignmentEtag,
+    }
+
+    try {
+      const assRes = await iamIdentityService.updateAccountSettingsAssignment(assignParams);
+      console.log(JSON.stringify(assRes.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-update_account_settings_assignment
+
+    await deleteAccountSettingsTemplateAssignmentEx();
+  }
+
+  async function deleteAccountSettingsTemplateAssignmentEx() {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteAccountSettingsTemplateAssignment() result:');
+
+    await waitUntilAccountSettingsAssignmentFinishedEx(accountSettingsTemplateAssignmentId);
+
+    // begin-delete_account_settings_assignment
+    const params = {
+      assignmentId: accountSettingsTemplateAssignmentId,
+    }
+    try {
+      const res = await iamIdentityService.deleteAccountSettingsAssignment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_account_settings_assignment
+
+    await deleteAccountSettingsTemplateVersionEx();
+  }
+
+  async function deleteAccountSettingsTemplateVersionEx() {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteAccountSettingsTemplateVersion() result:');
+    // begin-delete_account_settings_template_version
+    const params = {
+      templateId: accountSettingsTemplateId,
+      version: 1,
+    }
+    try {
+      const res = await iamIdentityService.deleteAccountSettingsTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_account_settings_template_version
+
+    await testDeleteAccountSettingsTemplateEx();
+  }
+
+  async function testDeleteAccountSettingsTemplateEx() {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('testDeleteAccountSettingsTemplate() result:');
+    await waitUntilAccountSettingsAssignmentFinishedEx(accountSettingsTemplateAssignmentId);
+
+    // begin-delete_all_versions_of_account_settings_template
+    const params = {
+      templateId: accountSettingsTemplateId,
+    }
+    try {
+      const res = await iamIdentityService.deleteAllVersionsOfAccountSettingsTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_all_versions_of_account_settings_template
+  }
+
+  function isFinishedEx(status) {
+    return ("succeeded" === status.toLowerCase() || "failed" === status.toLowerCase());
+  }
+
+  async function waitUntilTrustedProfileAssignmentFinishedEx(assignmentId) {
+    let finished = false;
+    const params = {
+      assignmentId: assignmentId,
+    }
+
+    for (let i = 0; i < 60; i++) {
+      try {
+        const response = await iamIdentityService.getTrustedProfileAssignment(params);
+        const { result } = response;
+        finished = isFinishedEx(result.status);
+        if (finished) {
+          profileTemplateAssignmentEtag= response.headers.etag;
+          finished = true;
+          break;
+        }
+        await sleepEx(10000);
+      } catch (e) {
+        if (e.status === 404) {
+          finished = true;
+          break;
+        }
+      }
+    }
+    expect(finished).toBe(true);
+  }
+
+  async function waitUntilAccountSettingsAssignmentFinishedEx(assignmentId) {
+    let finished = false;
+    const params = {
+      assignmentId: assignmentId,
+    }
+
+    for (let i = 0; i < 60; i++) {
+      try {
+        const response = await iamIdentityService.getAccountSettingsAssignment(params);
+        const { result } = response;
+        finished = isFinishedEx(result.status);
+        if (finished) {
+          accountSettingsTemplateAssignmentEtag= response.headers.etag;
+          finished = true;
+          break;
+        }
+        await sleepEx(10000);
+      } catch (e) {
+        if (e.status === 404) {
+          finished = true;
+          break;
+        }
+      }
+    }
+    expect(finished).toBe(true);
+  }
+
+  function sleepEx(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+
 });

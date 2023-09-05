@@ -1,3 +1,10 @@
+# [0.40.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.39.1...v0.40.0) (2023-09-05)
+
+
+### Features
+
+* **IAM Identity:** add support for IAM enterprise ([#216](https://github.com/IBM/platform-services-node-sdk/issues/216)) ([9fe5fb9](https://github.com/IBM/platform-services-node-sdk/commit/9fe5fb9b0640c172983d8c2bedc5fc929e504ad9))
+
 ## [0.39.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.39.0...v0.39.1) (2023-08-31)
 
 
