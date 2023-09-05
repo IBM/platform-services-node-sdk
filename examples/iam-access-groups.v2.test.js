@@ -729,7 +729,6 @@ describe('IamAccessGroupsV2', () => {
     // RulesActionControls
     const rulesActionControlsModel = {
       remove: false,
-      update: false,
     };
 
     // RuleInput
@@ -745,7 +744,6 @@ describe('IamAccessGroupsV2', () => {
     const assertionsActionControlsModel = {
       add: false,
       remove: true,
-      update: true,
     };
 
     // AssertionsInput
@@ -1032,7 +1030,6 @@ describe('IamAccessGroupsV2', () => {
     // RulesActionControls
     const rulesActionControlsModel = {
       remove: false,
-      update: false,
     };
 
     // RuleInput

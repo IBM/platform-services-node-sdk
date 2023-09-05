@@ -21,7 +21,7 @@ const IamIdentityV1 = require('../../dist/iam-identity/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
-const timeout = 30000;
+const timeout = 300000;
 
 // Location of our config file.
 const configFile = 'iam_identity.env';
@@ -34,14 +34,19 @@ const profileName1 = 'Node-SDK-IT-Profile1';
 const profileName2 = 'Node-SDK-IT-Profile2';
 const newDescription = 'This is an updated description';
 const claimRuleType = 'Profile-SAML';
-const realmName = 'https://w3id.sso.ibm.com/auth/sps/samlidp2/saml20';
+const realmName = 'https://sdk.test.realm/1234';
 const invalidAccountId = 'invalid';
+const profileTemplateName = 'Node-SDK-IT-ProfileTemplate';
+const profileTemplateProfileName = 'Node-SDK-IT-Profile-FromTemplate';
+const accountSettingsTemplateName = 'Node-SDK-IT-AccountSettingsTemplate';
 
 let iamIdentityService;
 let accountId;
 let iamId;
 let iamIdMember;
 let iamApikey;
+let enterpriseAccountId;
+let enterpriseSubAccountId;
 
 let apikeyId1;
 let apikeyEtag1;
@@ -67,6 +72,21 @@ let accountSettingsEtag;
 let reportReference;
 let reportReferenceMfa;
 
+let profileTemplateId;
+let profileTemplateVersion;
+let profileTemplateEtag;
+let profileTemplateAssignmentId;
+let profileTemplateAssignmentEtag;
+let profileTemplateScenarioComplete = false;
+
+let accountSettingsTemplateId;
+let accountSettingsTemplateVersion;
+let accountSettingsTemplateEtag;
+let accountSettingsTemplateAssignmentId;
+let accountSettingsTemplateAssignmentEtag;
+let accountSettingsTemplateScenarioComplete = false;
+
+
 describe('IamIdentityV1_integration', () => {
   jest.setTimeout(timeout);
 
@@ -82,8 +102,14 @@ describe('IamIdentityV1_integration', () => {
     iamId = config.iamId;
     iamIdMember = config.iamIdMember;
     iamApikey = config.apikey;
+    enterpriseAccountId = config.enterpriseAccountId;
+    enterpriseSubAccountId = config.enterpriseSubaccountId
     expect(accountId).not.toBeNull();
     expect(accountId).toBeDefined();
+    expect(enterpriseAccountId).not.toBeNull();
+    expect(enterpriseAccountId).toBeDefined();
+    expect(enterpriseSubAccountId).not.toBeNull();
+    expect(enterpriseSubAccountId).toBeDefined();
     expect(iamId).not.toBeNull();
     expect(iamId).toBeDefined();
     expect(iamIdMember).not.toBeNull();
@@ -1492,7 +1518,7 @@ describe('IamIdentityV1_integration', () => {
         expect(response.report_end_time).not.toBeNull();
         break;
       }
-      await sleep(1);
+      await sleep(1000);
     }
   });
   test('getReportNotFound()', async () => {
@@ -1543,7 +1569,7 @@ describe('IamIdentityV1_integration', () => {
         expect(response.report_duration).not.toBeNull();
         break;
       }
-      await sleep(1);
+      await sleep(1000);
     }
   });
   test('getMfaReportNotFound()', async () => {
@@ -1565,6 +1591,527 @@ describe('IamIdentityV1_integration', () => {
     expect(response).not.toBeNull();
     expect(response.iam_id).not.toBeNull();
   });
+
+  test('scenarioProfileTemplate()', async () => {
+    await createProfileTemplate();
+    expect(profileTemplateScenarioComplete).toBe(true);
+  });
+    
+  async function createProfileTemplate() {
+    const condition = {
+      claim: "blueGroups",
+      operator: "EQUALS",
+      value: "\"cloud-docs-dev\"",
+    }
+    const claimRule = {
+       name: "My Rule",
+       realm_name: realmName,
+       type: claimRuleType,
+       expiration: 43200,
+       conditions: [condition],
+    }
+    const profile = {
+      rules: [claimRule],
+      name: profileTemplateProfileName,
+      description: "node SDK test Profile created from Profile Template #1",
+    }
+    const templateParams = {
+      name: profileTemplateName,
+      description: "node SDK test Profile Template ",
+      accountId: enterpriseAccountId,
+      profile,
+    }
+
+    const res = await iamIdentityService.createProfileTemplate(templateParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(201);
+    expect(res.headers.etag).not.toBeNull();
+    profileTemplateEtag = res.headers.etag;
+    expect(profileTemplateEtag).not.toBeNull();
+    const { result } = res;
+    expect(result).not.toBeNull();
+    profileTemplateId = result.id;
+    expect(profileTemplateId).not.toBeNull();
+    profileTemplateVersion = result.version;
+    expect(profileTemplateVersion).not.toBeNull();
+
+    await getProfileTemplate();
+  }
+
+  async function getProfileTemplate() {
+    const params = {
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+    }
+    const res = await iamIdentityService.getProfileTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    profileTemplateEtag = res.headers.etag;
+    expect(profileTemplateEtag).not.toBeNull();
+
+    await listProfileTemplates();
+  }
+
+  async function listProfileTemplates() {
+    const params = {
+      accountId: enterpriseAccountId,
+    }
+    const res = await iamIdentityService.listProfileTemplates(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+
+    await updateProfileTemplate();
+  }
+
+  async function updateProfileTemplate() {
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+      ifMatch: profileTemplateEtag,
+      name: profileTemplateName,
+      description: "node SDK test Profile Template - updated",
+    }
+    const res = await iamIdentityService.updateProfileTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    profileTemplateEtag = res.headers.etag;
+    expect(profileTemplateEtag).not.toBeNull();
+    const { result } = res;
+    expect(result).not.toBeNull();
+
+    await assignProfileTemplate();
+  }
+
+  async function assignProfileTemplate() {
+    const commitParams = {
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+    }
+    const res = await iamIdentityService.commitProfileTemplate(commitParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    const assignParams = {
+      templateId: profileTemplateId,
+      templateVersion: profileTemplateVersion,
+      targetType: "Account",
+      target: enterpriseSubAccountId,
+    }
+
+    const assRes = await iamIdentityService.createTrustedProfileAssignment(assignParams);
+    expect(assRes).not.toBeNull();
+    expect(assRes.status).toEqual(202);
+    const { result } = assRes;
+    profileTemplateAssignmentId = result.id;
+    expect(profileTemplateAssignmentId).not.toBeNull();
+    expect(assRes.headers).not.toBeNull();
+    profileTemplateAssignmentEtag= assRes.headers.etag;
+    expect(profileTemplateAssignmentEtag).not.toBeNull();
+
+    await listProfileTemplateAssignments();
+  }
+
+  async function listProfileTemplateAssignments() {
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: profileTemplateId,
+    }
+    const res = await iamIdentityService.listTrustedProfileAssignments(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+    expect(result.assignments).not.toBeNull();
+
+    await createNewProfileTemplateVersion();
+  }
+
+  async function createNewProfileTemplateVersion() {
+    const condition = {
+      claim: "blueGroups",
+      operator: "EQUALS",
+      value: "\"cloud-docs-dev\"",
+    }
+    const claimRule = {
+       name: "My Rule",
+       realm_name: realmName,
+       type: claimRuleType,
+       expiration: 43200,
+       conditions: [condition],
+    }
+    const identity = {
+      identifier: iamId,
+      accounts: [enterpriseAccountId],
+      type: "user",
+      description: "Identity description",
+   }
+   const profile = {
+      rules: [claimRule],
+      name: profileTemplateProfileName,
+      description: "node SDK test Profile created from Profile Template - new version",
+      identities: [identity],
+    }
+    const templateParams = {
+      templateId: profileTemplateId,
+      name: profileTemplateName,
+      description: "node SDK test Profile Template - new version",
+      accountId: enterpriseAccountId,
+      profile,
+    }
+  
+    const res = await iamIdentityService.createProfileTemplateVersion(templateParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(201);
+    const { result } = res;
+    expect(result).not.toBeNull();
+    profileTemplateVersion = result.version;
+    expect(profileTemplateVersion).not.toBeNull();
+
+    await getLatestProfileTemplateVersion();
+  }
+
+  async function getLatestProfileTemplateVersion() {
+    const params = {
+      templateId: profileTemplateId,
+    }
+    const res = await iamIdentityService.getLatestProfileTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+
+    await listProfileTemplateVersions();
+  }
+
+  async function listProfileTemplateVersions() {
+    const params = {
+      templateId: profileTemplateId,
+    }
+    const res = await iamIdentityService.listVersionsOfProfileTemplate(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+    expect(result.profile_templates).not.toBeNull();
+
+    await updateProfileTemplateAssignment();
+  }
+
+  async function updateProfileTemplateAssignment() {
+    const commitParams = {
+      templateId: profileTemplateId,
+      version: profileTemplateVersion,
+    }
+
+    const res = await iamIdentityService.commitProfileTemplate(commitParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    
+    await waitUntilTrustedProfileAssignmentFinished(profileTemplateAssignmentId);
+
+    const assignParams = {
+      assignmentId: profileTemplateAssignmentId,
+      templateVersion: profileTemplateVersion,
+      ifMatch: profileTemplateAssignmentEtag,
+    }
+
+    const assRes = await iamIdentityService.updateTrustedProfileAssignment(assignParams);
+    expect(assRes).not.toBeNull();
+    expect(assRes.status).toEqual(202);
+
+    await deleteProfileTemplateAssignment();
+  }
+
+  async function deleteProfileTemplateAssignment() {
+
+    await waitUntilTrustedProfileAssignmentFinished(profileTemplateAssignmentId);
+
+    const params = {
+      assignmentId: profileTemplateAssignmentId,
+    }
+    const res = await iamIdentityService.deleteTrustedProfileAssignment(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(202);
+
+    await deleteProfileTemplateVersion();
+  }
+
+  async function deleteProfileTemplateVersion() {
+
+    const params = {
+      templateId: profileTemplateId,
+      version: 1,
+    }
+    const res = await iamIdentityService.deleteProfileTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+
+    await testDeleteProfileTemplate();
+  }
+
+  async function testDeleteProfileTemplate() {
+
+    await waitUntilTrustedProfileAssignmentFinished(profileTemplateAssignmentId);
+
+    const params = {
+      templateId: profileTemplateId,
+    }
+    const res = await iamIdentityService.deleteAllVersionsOfProfileTemplate(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+
+    profileTemplateScenarioComplete = true;
+  }
+
+  test('scenarioAccountSettingsTemplate()', async () => {
+    await createAccountSettingsTemplate();
+    expect(accountSettingsTemplateScenarioComplete).toBe(true);
+  });
+    
+  async function createAccountSettingsTemplate() {
+    const settings = {
+      mfa: "LEVEL1",
+      system_access_token_expiration_in_seconds: "3000",
+    }
+    const templateParams = {
+      name: accountSettingsTemplateName,
+      description: "node SDK test Account Settings Template",
+      accountId: enterpriseAccountId,
+      accountSettings: settings,
+    }
+
+    const res = await iamIdentityService.createAccountSettingsTemplate(templateParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(201);
+    expect(res.headers.etag).not.toBeNull();
+    accountSettingsTemplateEtag = res.headers.etag;
+    expect(accountSettingsTemplateEtag).not.toBeNull();
+    const { result } = res;
+    expect(result).not.toBeNull();
+    accountSettingsTemplateId = result.id;
+    expect(accountSettingsTemplateId).not.toBeNull();
+    accountSettingsTemplateVersion = result.version;
+    expect(accountSettingsTemplateVersion).not.toBeNull();
+
+    await getAccountSettingsTemplate();
+  }
+
+  async function getAccountSettingsTemplate() {
+    const params = {
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+    }
+    const res = await iamIdentityService.getAccountSettingsTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    accountSettingsTemplateEtag = res.headers.etag;
+    expect(accountSettingsTemplateEtag).not.toBeNull();
+
+    await listAccountSettingsTemplates();
+  }
+
+  async function listAccountSettingsTemplates() {
+    const params = {
+      accountId: enterpriseAccountId,
+    }
+    const res = await iamIdentityService.listAccountSettingsTemplates(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+
+    await updateAccountSettingsTemplate();
+  }
+
+  async function updateAccountSettingsTemplate() {
+    const settings = {
+      mfa: "LEVEL1",
+      system_access_token_expiration_in_seconds: "3000",
+    }
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+      ifMatch: accountSettingsTemplateEtag,
+      name: accountSettingsTemplateName,
+      description: "node SDK test Account Settings Template - updated",
+      accountSettings: settings,
+    }
+    const res = await iamIdentityService.updateAccountSettingsTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    accountSettingsTemplateEtag = res.headers.etag;
+    expect(accountSettingsTemplateEtag).not.toBeNull();
+    const { result } = res;
+    expect(result).not.toBeNull();
+
+    await assignAccountSettingsTemplate();
+  }
+
+  async function assignAccountSettingsTemplate() {
+    const commitParams = {
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+    }
+    const res = await iamIdentityService.commitAccountSettingsTemplate(commitParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    const assignParams = {
+      templateId: accountSettingsTemplateId,
+      templateVersion: accountSettingsTemplateVersion,
+      targetType: "Account",
+      target: enterpriseSubAccountId,
+    }
+
+    const assRes = await iamIdentityService.createAccountSettingsAssignment(assignParams);
+    expect(assRes).not.toBeNull();
+    expect(assRes.status).toEqual(202);
+    const { result } = assRes;
+    accountSettingsTemplateAssignmentId = result.id;
+    expect(accountSettingsTemplateAssignmentId).not.toBeNull();
+    expect(assRes.headers).not.toBeNull();
+    accountSettingsTemplateAssignmentEtag= assRes.headers.etag;
+    expect(accountSettingsTemplateAssignmentEtag).not.toBeNull();
+
+    await listAccountSettingsTemplateAssignments();
+  }
+
+  async function listAccountSettingsTemplateAssignments() {
+    const params = {
+      accountId: enterpriseAccountId,
+      templateId: accountSettingsTemplateId,
+    }
+    const res = await iamIdentityService.listAccountSettingsAssignments(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+    expect(result.assignments).not.toBeNull();
+
+    await createNewAccountSettingsTemplateVersion();
+  }
+
+  async function createNewAccountSettingsTemplateVersion() {
+    const settings = {
+      mfa: "LEVEL1",
+      system_access_token_expiration_in_seconds: "2600",
+      restrict_create_platform_apikey: "RESTRICTED",
+      restrict_create_service_id: "RESTRICTED",
+    }
+    const templateParams = {
+      templateId: accountSettingsTemplateId,
+      name: accountSettingsTemplateName,
+      description: "node SDK test Account Settings Template - new version",
+      accountId: enterpriseAccountId,
+      accountSettings: settings,
+    }
+  
+    const res = await iamIdentityService.createAccountSettingsTemplateVersion(templateParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(201);
+    const { result } = res;
+    expect(result).not.toBeNull();
+    accountSettingsTemplateVersion = result.version;
+    expect(accountSettingsTemplateVersion).not.toBeNull();
+
+    await getLatestAccountSettingsTemplateVersion();
+  }
+
+  async function getLatestAccountSettingsTemplateVersion() {
+    const params = {
+      templateId: accountSettingsTemplateId,
+    }
+    const res = await iamIdentityService.getLatestAccountSettingsTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+
+    await listAccountSettingsTemplateVersions();
+  }
+
+  async function listAccountSettingsTemplateVersions() {
+    const params = {
+      templateId: accountSettingsTemplateId,
+    }
+    const res = await iamIdentityService.listVersionsOfAccountSettingsTemplate(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    const { result } = res;
+    expect(result).not.toBeNull();
+    expect(result.profile_templates).not.toBeNull();
+
+    await updateAccountSettingsTemplateAssignment();
+  }
+
+  async function updateAccountSettingsTemplateAssignment() {
+    const commitParams = {
+      templateId: accountSettingsTemplateId,
+      version: accountSettingsTemplateVersion,
+    }
+
+    const res = await iamIdentityService.commitAccountSettingsTemplate(commitParams);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    
+    await waitUntilAccountSettingsAssignmentFinished(accountSettingsTemplateAssignmentId);
+
+    const assignParams = {
+      assignmentId: accountSettingsTemplateAssignmentId,
+      templateVersion: accountSettingsTemplateVersion,
+      ifMatch: accountSettingsTemplateAssignmentEtag,
+    }
+
+    const assRes = await iamIdentityService.updateAccountSettingsAssignment(assignParams);
+    expect(assRes).not.toBeNull();
+    expect(assRes.status).toEqual(202);
+
+    await deleteAccountSettingsTemplateAssignment();
+  }
+
+  async function deleteAccountSettingsTemplateAssignment() {
+
+    await waitUntilAccountSettingsAssignmentFinished(accountSettingsTemplateAssignmentId);
+
+    const params = {
+      assignmentId: accountSettingsTemplateAssignmentId,
+    }
+    const res = await iamIdentityService.deleteAccountSettingsAssignment(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(202);
+
+    await deleteAccountSettingsTemplateVersion();
+  }
+
+  async function deleteAccountSettingsTemplateVersion() {
+
+    const params = {
+      templateId: accountSettingsTemplateId,
+      version: 1,
+    }
+    const res = await iamIdentityService.deleteAccountSettingsTemplateVersion(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+
+    await testDeleteAccountSettingsTemplate();
+  }
+
+  async function testDeleteAccountSettingsTemplate() {
+
+    await waitUntilAccountSettingsAssignmentFinished(accountSettingsTemplateAssignmentId);
+
+    const params = {
+      templateId: accountSettingsTemplateId,
+    }
+    const res = await iamIdentityService.deleteAllVersionsOfAccountSettingsTemplate(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+
+    accountSettingsTemplateScenarioComplete = true;
+  }
+
   function getPageTokenFromURL(urlstring) {
     let pageToken = null;
     if (urlstring) {
@@ -1574,6 +2121,64 @@ describe('IamIdentityV1_integration', () => {
       pageToken = url.searchParams.get('pagetoken');
     }
     return pageToken;
+  }
+
+  function isFinished(status) {
+    return (status.toLowerCase() === "succeeded" || status.toLowerCase() === "failed");
+  }
+
+  async function waitUntilTrustedProfileAssignmentFinished(assignmentId) {
+    let finished = false;
+    const params = {
+      assignmentId,
+    }
+
+    for (let i = 0; i < 60; i++) {
+      try {
+        const response = await iamIdentityService.getTrustedProfileAssignment(params);
+        const { result } = response;
+        finished = isFinished(result.status);
+        if (finished) {
+          profileTemplateAssignmentEtag= response.headers.etag;
+          finished = true;
+          break;
+        }
+        await sleep(10000);
+      } catch (e) {
+        if (e.status === 404) {
+          finished = true;
+          break;
+        }
+      }
+    }
+    expect(finished).toBe(true);
+  }
+
+  async function waitUntilAccountSettingsAssignmentFinished(assignmentId) {
+    let finished = false;
+    const params = {
+      assignmentId,
+    }
+
+    for (let i = 0; i < 60; i++) {
+      try {
+        const response = await iamIdentityService.getAccountSettingsAssignment(params);
+        const { result } = response;
+        finished = isFinished(result.status);
+        if (finished) {
+          accountSettingsTemplateAssignmentEtag= response.headers.etag;
+          finished = true;
+          break;
+        }
+        await sleep(10000);
+      } catch (e) {
+        if (e.status === 404) {
+          finished = true;
+          break;
+        }
+      }
+    }
+    expect(finished).toBe(true);
   }
 
   async function getApiKeyById(apikeyId) {
@@ -1728,6 +2333,91 @@ describe('IamIdentityV1_integration', () => {
           expect(response.status).toEqual(204);
         }
       }
+
+      // list profile templates
+      const profileTemplateParams = {
+        accountId: enterpriseAccountId,
+      };
+      const profileTemplatesResponse = await iamIdentityService.listProfileTemplates(profileTemplateParams);
+
+      const profilesTemplatesResult = profileTemplatesResponse.result;
+      if (profilesTemplatesResult.profile_templates) {
+        for (const elem of profilesTemplatesResult.profile_templates) {
+          if (elem.name === profileTemplateName) {
+            console.log('Cleaning profile template: ', elem.id);
+            // list profile template assignments
+            const assignmentParams = {
+              accountId: enterpriseAccountId,
+              templateId: elem.id,
+            }
+            const assResponse = await iamIdentityService.listTrustedProfileAssignments(assignmentParams);
+            expect(assResponse).not.toBeNull();
+            expect(assResponse.status).toEqual(200);
+            const assignmentsResult = assResponse.result;
+            for (const assElem of assignmentsResult.assignments) {
+              if (!isFinished(assElem.status)) {
+                await waitUntilTrustedProfileAssignmentFinished(assElem.id);
+              }
+              const delAssParams = {
+                assignmentId: assElem.id,
+              }
+              const assDelResponse = await iamIdentityService.deleteTrustedProfileAssignment(delAssParams);
+              expect(assDelResponse).not.toBeNull();
+              expect(assDelResponse.status).toEqual(202);
+              await waitUntilTrustedProfileAssignmentFinished(assElem.id);
+            }
+            const deleteParams = {
+              templateId: elem.id,
+            };
+            const response = await iamIdentityService.deleteAllVersionsOfProfileTemplate(deleteParams);
+            expect(response).not.toBeNull();
+            expect(response.status).toEqual(204);
+          }
+        }
+      }
+
+      // list account settings templates
+      const accountSettingsTemplateParams = {
+        accountId: enterpriseAccountId,
+      };
+      const accountSettingsTemplatesResponse = await iamIdentityService.listAccountSettingsTemplates(accountSettingsTemplateParams);
+
+      const accountSettingsTemplatesResult = accountSettingsTemplatesResponse.result;
+      if (accountSettingsTemplatesResult.account_settings_templates) {
+        for (const elem of accountSettingsTemplatesResult.account_settings_templates) {
+          if (elem.name === accountSettingsTemplateName) {
+            console.log('Cleaning account settings template: ', elem.id);
+            // list account settings template assignments
+            const assignmentParams = {
+              accountId: enterpriseAccountId,
+              templateId: elem.id,
+            }
+            const assResponse = await iamIdentityService.listAccountSettingsAssignments(assignmentParams);
+            expect(assResponse).not.toBeNull();
+            expect(assResponse.status).toEqual(200);
+            const assignmentsResult = assResponse.result;
+            for (const assElem of assignmentsResult.assignments) {
+              if (!isFinished(assElem.status)) {
+                await waitUntilAccountSettingsAssignmentFinished(assElem.id);
+              }
+              const delAssParams = {
+                assignmentId: assElem.id,
+              }
+              const assDelResponse = await iamIdentityService.deleteAccountSettingsAssignment(delAssParams);
+              expect(assDelResponse).not.toBeNull();
+              expect(assDelResponse.status).toEqual(202);
+              await waitUntilAccountSettingsAssignmentFinished(assElem.id);
+            }
+            const deleteParams = {
+              templateId: elem.id,
+            };
+            const response = await iamIdentityService.deleteAllVersionsOfAccountSettingsTemplate(deleteParams);
+            expect(response).not.toBeNull();
+            expect(response.status).toEqual(204);
+          }
+        }
+      }
+
       console.log('Finished cleaning resources!');
     } catch (err) {
       console.log(err);
