@@ -1,3 +1,10 @@
+## [0.40.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.40.0...v0.40.1) (2023-09-05)
+
+
+### Bug Fixes
+
+* **IAM Access Groups:** remove update action control from assertions ([#221](https://github.com/IBM/platform-services-node-sdk/issues/221)) ([590b0ca](https://github.com/IBM/platform-services-node-sdk/commit/590b0ca12636e249fc2707aa94abf4a59811e029))
+
 # [0.40.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.39.1...v0.40.0) (2023-09-05)
 
 
