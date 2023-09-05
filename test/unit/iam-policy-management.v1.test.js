@@ -1856,4 +1856,1257 @@ describe('IamPolicyManagementV1', () => {
       });
     });
   });
+
+  describe('listPolicyTemplates', () => {
+    describe('positive tests', () => {
+      function __listPolicyTemplatesTest() {
+        // Construct the params object for operation listPolicyTemplates
+        const accountId = 'testString';
+        const acceptLanguage = 'default';
+        const listPolicyTemplatesParams = {
+          accountId,
+          acceptLanguage,
+        };
+
+        const listPolicyTemplatesResult = iamPolicyManagementService.listPolicyTemplates(listPolicyTemplatesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listPolicyTemplatesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listPolicyTemplatesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listPolicyTemplatesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listPolicyTemplatesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listPolicyTemplatesParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.listPolicyTemplates(listPolicyTemplatesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listPolicyTemplates({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listPolicyTemplates();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createPolicyTemplate', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // V2PolicyResourceAttribute
+      const v2PolicyResourceAttributeModel = {
+        key: 'testString',
+        operator: 'stringEquals',
+        value: 'testString',
+      };
+
+      // V2PolicyResourceTag
+      const v2PolicyResourceTagModel = {
+        key: 'testString',
+        value: 'testString',
+        operator: 'stringEquals',
+      };
+
+      // V2PolicyResource
+      const v2PolicyResourceModel = {
+        attributes: [v2PolicyResourceAttributeModel],
+        tags: [v2PolicyResourceTagModel],
+      };
+
+      // V2PolicyRuleRuleAttribute
+      const v2PolicyRuleModel = {
+        key: 'testString',
+        operator: 'timeLessThan',
+        value: 'testString',
+      };
+
+      // Roles
+      const rolesModel = {
+        role_id: 'testString',
+      };
+
+      // Grant
+      const grantModel = {
+        roles: [rolesModel],
+      };
+
+      // Control
+      const controlModel = {
+        grant: grantModel,
+      };
+
+      // TemplatePolicy
+      const templatePolicyModel = {
+        type: 'access',
+        description: 'testString',
+        resource: v2PolicyResourceModel,
+        pattern: 'testString',
+        rule: v2PolicyRuleModel,
+        control: controlModel,
+      };
+
+      function __createPolicyTemplateTest() {
+        // Construct the params object for operation createPolicyTemplate
+        const name = 'testString';
+        const accountId = 'testString';
+        const policy = templatePolicyModel;
+        const description = 'testString';
+        const committed = true;
+        const acceptLanguage = 'default';
+        const createPolicyTemplateParams = {
+          name,
+          accountId,
+          policy,
+          description,
+          committed,
+          acceptLanguage,
+        };
+
+        const createPolicyTemplateResult = iamPolicyManagementService.createPolicyTemplate(createPolicyTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createPolicyTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.policy).toEqual(policy);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createPolicyTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createPolicyTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createPolicyTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const name = 'testString';
+        const accountId = 'testString';
+        const policy = templatePolicyModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createPolicyTemplateParams = {
+          name,
+          accountId,
+          policy,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.createPolicyTemplate(createPolicyTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createPolicyTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createPolicyTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getPolicyTemplate', () => {
+    describe('positive tests', () => {
+      function __getPolicyTemplateTest() {
+        // Construct the params object for operation getPolicyTemplate
+        const policyTemplateId = 'testString';
+        const getPolicyTemplateParams = {
+          policyTemplateId,
+        };
+
+        const getPolicyTemplateResult = iamPolicyManagementService.getPolicyTemplate(getPolicyTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getPolicyTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPolicyTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getPolicyTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getPolicyTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getPolicyTemplateParams = {
+          policyTemplateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getPolicyTemplate(getPolicyTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getPolicyTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getPolicyTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deletePolicyTemplate', () => {
+    describe('positive tests', () => {
+      function __deletePolicyTemplateTest() {
+        // Construct the params object for operation deletePolicyTemplate
+        const policyTemplateId = 'testString';
+        const deletePolicyTemplateParams = {
+          policyTemplateId,
+        };
+
+        const deletePolicyTemplateResult = iamPolicyManagementService.deletePolicyTemplate(deletePolicyTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deletePolicyTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deletePolicyTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deletePolicyTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deletePolicyTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deletePolicyTemplateParams = {
+          policyTemplateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.deletePolicyTemplate(deletePolicyTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deletePolicyTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deletePolicyTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createPolicyTemplateVersion', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // V2PolicyResourceAttribute
+      const v2PolicyResourceAttributeModel = {
+        key: 'testString',
+        operator: 'stringEquals',
+        value: 'testString',
+      };
+
+      // V2PolicyResourceTag
+      const v2PolicyResourceTagModel = {
+        key: 'testString',
+        value: 'testString',
+        operator: 'stringEquals',
+      };
+
+      // V2PolicyResource
+      const v2PolicyResourceModel = {
+        attributes: [v2PolicyResourceAttributeModel],
+        tags: [v2PolicyResourceTagModel],
+      };
+
+      // V2PolicyRuleRuleAttribute
+      const v2PolicyRuleModel = {
+        key: 'testString',
+        operator: 'timeLessThan',
+        value: 'testString',
+      };
+
+      // Roles
+      const rolesModel = {
+        role_id: 'testString',
+      };
+
+      // Grant
+      const grantModel = {
+        roles: [rolesModel],
+      };
+
+      // Control
+      const controlModel = {
+        grant: grantModel,
+      };
+
+      // TemplatePolicy
+      const templatePolicyModel = {
+        type: 'access',
+        description: 'testString',
+        resource: v2PolicyResourceModel,
+        pattern: 'testString',
+        rule: v2PolicyRuleModel,
+        control: controlModel,
+      };
+
+      function __createPolicyTemplateVersionTest() {
+        // Construct the params object for operation createPolicyTemplateVersion
+        const policyTemplateId = 'testString';
+        const policy = templatePolicyModel;
+        const description = 'testString';
+        const committed = true;
+        const createPolicyTemplateVersionParams = {
+          policyTemplateId,
+          policy,
+          description,
+          committed,
+        };
+
+        const createPolicyTemplateVersionResult = iamPolicyManagementService.createPolicyTemplateVersion(createPolicyTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createPolicyTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}/versions', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.policy).toEqual(policy);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createPolicyTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createPolicyTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createPolicyTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const policy = templatePolicyModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createPolicyTemplateVersionParams = {
+          policyTemplateId,
+          policy,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.createPolicyTemplateVersion(createPolicyTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createPolicyTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createPolicyTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listPolicyTemplateVersions', () => {
+    describe('positive tests', () => {
+      function __listPolicyTemplateVersionsTest() {
+        // Construct the params object for operation listPolicyTemplateVersions
+        const policyTemplateId = 'testString';
+        const listPolicyTemplateVersionsParams = {
+          policyTemplateId,
+        };
+
+        const listPolicyTemplateVersionsResult = iamPolicyManagementService.listPolicyTemplateVersions(listPolicyTemplateVersionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listPolicyTemplateVersionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}/versions', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listPolicyTemplateVersionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listPolicyTemplateVersionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listPolicyTemplateVersionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listPolicyTemplateVersionsParams = {
+          policyTemplateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.listPolicyTemplateVersions(listPolicyTemplateVersionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listPolicyTemplateVersions({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listPolicyTemplateVersions();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('replacePolicyTemplate', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // V2PolicyResourceAttribute
+      const v2PolicyResourceAttributeModel = {
+        key: 'testString',
+        operator: 'stringEquals',
+        value: 'testString',
+      };
+
+      // V2PolicyResourceTag
+      const v2PolicyResourceTagModel = {
+        key: 'testString',
+        value: 'testString',
+        operator: 'stringEquals',
+      };
+
+      // V2PolicyResource
+      const v2PolicyResourceModel = {
+        attributes: [v2PolicyResourceAttributeModel],
+        tags: [v2PolicyResourceTagModel],
+      };
+
+      // V2PolicyRuleRuleAttribute
+      const v2PolicyRuleModel = {
+        key: 'testString',
+        operator: 'timeLessThan',
+        value: 'testString',
+      };
+
+      // Roles
+      const rolesModel = {
+        role_id: 'testString',
+      };
+
+      // Grant
+      const grantModel = {
+        roles: [rolesModel],
+      };
+
+      // Control
+      const controlModel = {
+        grant: grantModel,
+      };
+
+      // TemplatePolicy
+      const templatePolicyModel = {
+        type: 'access',
+        description: 'testString',
+        resource: v2PolicyResourceModel,
+        pattern: 'testString',
+        rule: v2PolicyRuleModel,
+        control: controlModel,
+      };
+
+      function __replacePolicyTemplateTest() {
+        // Construct the params object for operation replacePolicyTemplate
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const ifMatch = 'testString';
+        const policy = templatePolicyModel;
+        const description = 'testString';
+        const committed = true;
+        const replacePolicyTemplateParams = {
+          policyTemplateId,
+          version,
+          ifMatch,
+          policy,
+          description,
+          committed,
+        };
+
+        const replacePolicyTemplateResult = iamPolicyManagementService.replacePolicyTemplate(replacePolicyTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(replacePolicyTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}/versions/{version}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.policy).toEqual(policy);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replacePolicyTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __replacePolicyTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __replacePolicyTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const ifMatch = 'testString';
+        const policy = templatePolicyModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const replacePolicyTemplateParams = {
+          policyTemplateId,
+          version,
+          ifMatch,
+          policy,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.replacePolicyTemplate(replacePolicyTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.replacePolicyTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.replacePolicyTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deletePolicyTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __deletePolicyTemplateVersionTest() {
+        // Construct the params object for operation deletePolicyTemplateVersion
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const deletePolicyTemplateVersionParams = {
+          policyTemplateId,
+          version,
+        };
+
+        const deletePolicyTemplateVersionResult = iamPolicyManagementService.deletePolicyTemplateVersion(deletePolicyTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deletePolicyTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}/versions/{version}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deletePolicyTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deletePolicyTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deletePolicyTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deletePolicyTemplateVersionParams = {
+          policyTemplateId,
+          version,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.deletePolicyTemplateVersion(deletePolicyTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deletePolicyTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deletePolicyTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getPolicyTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __getPolicyTemplateVersionTest() {
+        // Construct the params object for operation getPolicyTemplateVersion
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const getPolicyTemplateVersionParams = {
+          policyTemplateId,
+          version,
+        };
+
+        const getPolicyTemplateVersionResult = iamPolicyManagementService.getPolicyTemplateVersion(getPolicyTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getPolicyTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}/versions/{version}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPolicyTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getPolicyTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getPolicyTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getPolicyTemplateVersionParams = {
+          policyTemplateId,
+          version,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getPolicyTemplateVersion(getPolicyTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getPolicyTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getPolicyTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('commitPolicyTemplate', () => {
+    describe('positive tests', () => {
+      function __commitPolicyTemplateTest() {
+        // Construct the params object for operation commitPolicyTemplate
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const ifMatch = 'testString';
+        const commitPolicyTemplateParams = {
+          policyTemplateId,
+          version,
+          ifMatch,
+        };
+
+        const commitPolicyTemplateResult = iamPolicyManagementService.commitPolicyTemplate(commitPolicyTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(commitPolicyTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_templates/{policy_template_id}/versions/{version}/commit', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __commitPolicyTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __commitPolicyTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __commitPolicyTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const policyTemplateId = 'testString';
+        const version = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const commitPolicyTemplateParams = {
+          policyTemplateId,
+          version,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.commitPolicyTemplate(commitPolicyTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.commitPolicyTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.commitPolicyTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listPolicyAssignments', () => {
+    describe('positive tests', () => {
+      function __listPolicyAssignmentsTest() {
+        // Construct the params object for operation listPolicyAssignments
+        const accountId = 'testString';
+        const acceptLanguage = 'default';
+        const templateId = 'testString';
+        const templateVersion = 'testString';
+        const listPolicyAssignmentsParams = {
+          accountId,
+          acceptLanguage,
+          templateId,
+          templateVersion,
+        };
+
+        const listPolicyAssignmentsResult = iamPolicyManagementService.listPolicyAssignments(listPolicyAssignmentsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listPolicyAssignmentsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_assignments', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.template_id).toEqual(templateId);
+        expect(mockRequestOptions.qs.template_version).toEqual(templateVersion);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listPolicyAssignmentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listPolicyAssignmentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listPolicyAssignmentsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listPolicyAssignmentsParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.listPolicyAssignments(listPolicyAssignmentsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listPolicyAssignments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listPolicyAssignments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getPolicyAssignment', () => {
+    describe('positive tests', () => {
+      function __getPolicyAssignmentTest() {
+        // Construct the params object for operation getPolicyAssignment
+        const assignmentId = 'testString';
+        const getPolicyAssignmentParams = {
+          assignmentId,
+        };
+
+        const getPolicyAssignmentResult = iamPolicyManagementService.getPolicyAssignment(getPolicyAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getPolicyAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/policy_assignments/{assignment_id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPolicyAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getPolicyAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getPolicyAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getPolicyAssignmentParams = {
+          assignmentId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getPolicyAssignment(getPolicyAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getPolicyAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getPolicyAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
 });
