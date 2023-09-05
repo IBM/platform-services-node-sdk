@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.74.0-89f1dbab-20230630-160213
+ * IBM OpenAPI SDK Code Generator Version: 3.78.0-67aec9b7-20230818-174940
  */
 
 /* eslint-disable max-classes-per-file */
@@ -26,10 +26,10 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
-  getAuthenticatorFromEnvironment,
-  validateParams,
   UserOptions,
+  getAuthenticatorFromEnvironment,
   getQueryParam,
+  validateParams,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -3069,7 +3069,11 @@ namespace IamAccessGroupsV2 {
   /** Control whether or not access group administrators in child accounts can add access policies to the enterprise-managed access group in their account. */
   export interface AccessActionControls {
     /** Action control for adding access policies to an enterprise-managed access group in a child account. If an
-     *  access group administrator in a child account adds a policy, they can always update or remove it.
+     *  access group administrator in a child account adds a policy, they can always update or remove it. Note that if
+     *  conflicts arise between an update to this control in a new version and polices added to the access group by an
+     *  administrator in a child account, you must resolve those conflicts in the child account. This prevents breaking
+     *  access in the child account. For more information, see [Working with
+     *  versions](https://test.cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-working-with-versions#new-version-scenarios).
      */
     add?: boolean;
   }
@@ -3190,13 +3194,17 @@ namespace IamAccessGroupsV2 {
   /** Control whether or not access group administrators in child accounts can add, remove, and update dynamic rules for the enterprise-managed access group in their account. The inner level RuleActionControls override these `remove` and `update` action controls. */
   export interface AssertionsActionControls {
     /** Action control for adding dynamic rules to an enterprise-managed access group. If an access group
-     *  administrator in a child account adds a dynamic rule, they can always update or remove it.
+     *  administrator in a child account adds a dynamic rule, they can always update or remove it. Note that if
+     *  conflicts arise between an update to this control and rules added or updated by an administrator in the child
+     *  account, you must resolve those conflicts in the child account. This prevents breaking access that the rules
+     *  might grant in the child account. For more information, see [Working with versions].
      */
     add?: boolean;
-    /** Action control for removing enterprise-managed dynamic rules in an enterprise-managed access group. */
+    /** Action control for removing enterprise-managed dynamic rules in an enterprise-managed access group. Note
+     *  that if a rule is removed from an enterprise-managed access group by an administrator in a child account and and
+     *  you reassign the template, the rule is reinstated.
+     */
     remove?: boolean;
-    /** Action control for updating enterprise-managed dynamic rules in an enterprise-managed access group. */
-    update?: boolean;
   }
 
   /** Rule Input component. */
@@ -3534,10 +3542,17 @@ namespace IamAccessGroupsV2 {
   /** Control whether or not access group administrators in child accounts can add and remove members from the enterprise-managed access group in their account. */
   export interface MembersActionControls {
     /** Action control for adding child account members to an enterprise-managed access group. If an access group
-     *  administrator in a child account adds a member, they can always remove them.
+     *  administrator in a child account adds a member, they can always remove them. Note that if conflicts arise
+     *  between an update to this control in a new version and members added by an administrator in the child account,
+     *  you must resolve those conflicts in the child account. This prevents breaking access in the child account. For
+     *  more information, see [Working with versions]
+     *  (https://test.cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-working-with-versions#new-version-scenarios).
      */
     add?: boolean;
-    /** Action control for removing enterprise-managed members from an enterprise-managed access group. */
+    /** Action control for removing enterprise-managed members from an enterprise-managed access group. Note that if
+     *  an enterprise member is removed from an enterprise-managed access group in a child account and you reassign the
+     *  template, the membership is reinstated.
+     */
     remove?: boolean;
   }
 
@@ -3591,8 +3606,6 @@ namespace IamAccessGroupsV2 {
   export interface RuleActionControls {
     /** Action control for removing this enterprise-managed dynamic rule. */
     remove?: boolean;
-    /** Action control for updating this enterprise-managed dynamic rule. */
-    update?: boolean;
   }
 
   /** The conditions of a dynamic rule. */
@@ -3795,7 +3808,7 @@ namespace IamAccessGroupsV2 {
       const response = await this.client.listAccessGroups(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'offset');
@@ -3876,7 +3889,7 @@ namespace IamAccessGroupsV2 {
       const response = await this.client.listAccessGroupMembers(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'offset');
@@ -3957,7 +3970,7 @@ namespace IamAccessGroupsV2 {
       const response = await this.client.listTemplates(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'offset');
@@ -4038,7 +4051,7 @@ namespace IamAccessGroupsV2 {
       const response = await this.client.listTemplateVersions(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'offset');

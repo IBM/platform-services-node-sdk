@@ -645,7 +645,6 @@ describe('IamAccessGroupsV2_integration', () => {
     // RulesActionControls
     const rulesActionControlsModel = {
       remove: false,
-      update: false,
     };
 
     // RuleInput
@@ -661,7 +660,6 @@ describe('IamAccessGroupsV2_integration', () => {
     const assertionsActionControlsModel = {
       add: false,
       remove: true,
-      update: true,
     };
 
     // AssertionsInput
@@ -779,7 +777,6 @@ describe('IamAccessGroupsV2_integration', () => {
     // RulesActionControls
     const rulesActionControlsModel = {
       remove: true,
-      update: true,
     };
 
     // RuleInput
@@ -795,7 +792,6 @@ describe('IamAccessGroupsV2_integration', () => {
     const assertionsActionControlsModel = {
       add: false,
       remove: true,
-      update: true,
     };
 
     // AssertionsInput
@@ -923,7 +919,6 @@ describe('IamAccessGroupsV2_integration', () => {
     // RulesActionControls
     const rulesActionControlsModel = {
       remove: false,
-      update: false,
     };
 
     // RuleInput
@@ -939,7 +934,6 @@ describe('IamAccessGroupsV2_integration', () => {
     const assertionsActionControlsModel = {
       add: false,
       remove: true,
-      update: true,
     };
 
     // AssertionsInput
