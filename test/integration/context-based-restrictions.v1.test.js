@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -919,9 +919,34 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('listAvailableServiceOperations()', async () => {
+  test('listAvailableServiceOperations() with Service Name', async () => {
     const params = {
       serviceName: 'containers-kubernetes',
+      transactionId: uuidv4(),
+    };
+
+    const res = await contextBasedRestrictionsService.listAvailableServiceOperations(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listAvailableServiceOperations() with Service Group', async () => {
+    const params = {
+      serviceGroupId: 'IAM',
+      transactionId: uuidv4(),
+    };
+
+    const res = await contextBasedRestrictionsService.listAvailableServiceOperations(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listAvailableServiceOperations() with Resource Type', async () => {
+    const params = {
+      serviceName: 'iam-access-management',
+      resourceType: 'iam-access-management.customRole',
       transactionId: uuidv4(),
     };
 

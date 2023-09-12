@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.57.1-4c556507-20220928-143422
+ * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
  */
 
 import * as extend from 'extend';
@@ -23,9 +23,9 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
+  UserOptions,
   getAuthenticatorFromEnvironment,
   validateParams,
-  UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -39,7 +39,7 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class ContextBasedRestrictionsV1 extends BaseService {
-  static DEFAULT_SERVICE_URL: string = 'https://cbr.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://cbr.test.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'context_based_restrictions';
 
@@ -115,10 +115,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>>}
    */
@@ -191,10 +191,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {string} [params.name] - The name of the zone.
    * @param {string} [params.sort] - Sorts results by using a valid sort field. To learn more, see
    * [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
@@ -265,10 +265,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>>}
    */
@@ -336,10 +336,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>>}
    */
@@ -420,16 +420,16 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Empty>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.EmptyObject>>}
    */
   public deleteZone(
     params: ContextBasedRestrictionsV1.DeleteZoneParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Empty>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['zoneId'];
     const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'headers'];
@@ -480,10 +480,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {string} [params.type] - Specifies the types of services to retrieve.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetList>>}
@@ -553,10 +553,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>>}
    */
@@ -629,10 +629,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {string} [params.region] - The `region` resource attribute.
    * @param {string} [params.resource] - The `resource` resource attribute.
    * @param {string} [params.resourceType] - The `resourceType` resource attribute.
@@ -727,10 +727,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>>}
    */
@@ -800,10 +800,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>>}
    */
@@ -884,16 +884,16 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Empty>>}
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.EmptyObject>>}
    */
   public deleteRule(
     params: ContextBasedRestrictionsV1.DeleteRuleParams
-  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Empty>> {
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['ruleId'];
     const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'headers'];
@@ -948,10 +948,10 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.AccountSettings>>}
    */
@@ -1007,25 +1007,34 @@ class ContextBasedRestrictionsV1 extends BaseService {
    *
    * This operation lists all available service operations.
    *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.serviceName - The name of the service.
+   * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.xCorrelationId] - The supplied or generated value of this header is logged for a request
    * and repeated in a response header for the corresponding response. The same value is used for downstream requests
    * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
    * random (version 4) UUID.
-   * @param {string} [params.transactionId] - The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It
-   * is supported for backward compatibility with other IBM platform services that support the `Transaction-Id` header
-   * only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
-   * `Transaction-Id`.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
+   * @param {string} [params.serviceName] - The name of the service.
+   * @param {string} [params.serviceGroupId] - The id of the service group.
+   * @param {string} [params.resourceType] - The type of resource.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OperationsList>>}
    */
   public listAvailableServiceOperations(
-    params: ContextBasedRestrictionsV1.ListAvailableServiceOperationsParams
+    params?: ContextBasedRestrictionsV1.ListAvailableServiceOperationsParams
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OperationsList>> {
     const _params = { ...params };
-    const _requiredParams = ['serviceName'];
-    const _validParams = ['serviceName', 'xCorrelationId', 'transactionId', 'headers'];
+    const _requiredParams = [];
+    const _validParams = [
+      'xCorrelationId',
+      'transactionId',
+      'serviceName',
+      'serviceGroupId',
+      'resourceType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1033,6 +1042,8 @@ class ContextBasedRestrictionsV1 extends BaseService {
 
     const query = {
       'service_name': _params.serviceName,
+      'service_group_id': _params.serviceGroupId,
+      'resource_type': _params.resourceType,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1082,7 +1093,7 @@ namespace ContextBasedRestrictionsV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1112,8 +1123,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1130,8 +1141,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1154,8 +1165,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1188,8 +1199,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1206,8 +1217,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1222,8 +1233,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1263,8 +1274,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1291,8 +1302,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1341,8 +1352,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1377,8 +1388,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1405,8 +1416,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1423,8 +1434,8 @@ namespace ContextBasedRestrictionsV1 {
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
@@ -1434,19 +1445,23 @@ namespace ContextBasedRestrictionsV1 {
 
   /** Parameters for the `listAvailableServiceOperations` operation. */
   export interface ListAvailableServiceOperationsParams {
-    /** The name of the service. */
-    serviceName: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
      *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for backward
-     *  compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
      *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
      *  `Transaction-Id`.
      */
     transactionId?: string;
+    /** The name of the service. */
+    serviceName?: string;
+    /** The id of the service group. */
+    serviceGroupId?: string;
+    /** The type of resource. */
+    resourceType?: string;
     headers?: OutgoingHttpHeaders;
   }
 
