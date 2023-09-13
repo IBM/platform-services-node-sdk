@@ -946,7 +946,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
   test('listAvailableServiceOperations() with Resource Type', async () => {
     const params = {
       serviceName: 'iam-access-management',
-      resourceType: 'iam-access-management.customRole',
+      resourceType: 'customRole',
       transactionId: uuidv4(),
     };
 
