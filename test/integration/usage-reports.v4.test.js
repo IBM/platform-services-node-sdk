@@ -33,6 +33,10 @@ let accountId;
 let resourceGroupId;
 let orgId;
 let billingMonth;
+let cosBucket;
+let cosLocation;
+let snapshotDateFrom;
+let snapshotDateTo;
 
 describe('UsageReportsV4_integration', () => {
   jest.setTimeout(timeout);
@@ -49,10 +53,18 @@ describe('UsageReportsV4_integration', () => {
     resourceGroupId = config.resourceGroupId;
     orgId = config.orgId;
     billingMonth = config.billingMonth;
+    cosBucket = config.cosBucket;
+    cosLocation = config.cosLocation;
+    snapshotDateFrom = config.snapshotDateFrom;
+    snapshotDateTo = config.snapshotDateTo;
     expect(accountId).not.toBeNull();
     expect(resourceGroupId).not.toBeNull();
     expect(orgId).not.toBeNull();
     expect(billingMonth).not.toBeNull();
+    expect(cosBucket).not.toBeNull();
+    expect(cosLocation).not.toBeNull();
+    expect(snapshotDateFrom).not.toBeNull();
+    expect(snapshotDateTo).not.toBeNull();
 
     // console.log('Finished setup.');
   });
@@ -292,5 +304,75 @@ describe('UsageReportsV4_integration', () => {
     const numResources = resources.length;
     // console.log(`getResourceUsageOrg() response contained ${numResources} total resources`);
     expect(numResources).toBeGreaterThan(0);
+  });
+
+  test('createReportsSnapshotConfig()', async () => {
+    const params = {
+      accountId,
+      interval: 'daily',
+      cosBucket,
+      cosLocation,
+      cosReportsFolder: 'IBMCloud-Billing-Reports',
+      reportTypes: ['account_summary', 'enterprise_summary', 'account_resource_instance_usage'],
+      versioning: 'new',
+    };
+
+    const res = await usageReportsService.createReportsSnapshotConfig(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getReportsSnapshotConfig()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await usageReportsService.getReportsSnapshotConfig(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateReportsSnapshotConfig()', async () => {
+    const params = {
+      accountId,
+      interval: 'daily',
+      cosBucket,
+      cosLocation,
+      cosReportsFolder: 'IBMCloud-Billing-Reports',
+      reportTypes: ['account_summary', 'enterprise_summary'],
+      versioning: 'new',
+    };
+
+    const res = await usageReportsService.updateReportsSnapshotConfig(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getReportsSnapshot()', async () => {
+    const params = {
+      accountId,
+      month: billingMonth,
+      dateFrom: snapshotDateFrom,
+      dateTo: snapshotDateTo,
+    };
+
+    const res = await usageReportsService.getReportsSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteReportsSnapshotConfig()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await usageReportsService.deleteReportsSnapshotConfig(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
   });
 });
