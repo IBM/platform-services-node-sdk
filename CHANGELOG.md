@@ -1,3 +1,10 @@
+# [0.42.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.41.0...v0.42.0) (2023-09-14)
+
+
+### Features
+
+* **Usage Reports:** add billing snapshot config service to usage reports ([#222](https://github.com/IBM/platform-services-node-sdk/issues/222)) ([e3bc285](https://github.com/IBM/platform-services-node-sdk/commit/e3bc28590405d1728b915d9984c0758747ab73e8))
+
 # [0.41.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.40.1...v0.41.0) (2023-09-05)
 
 
