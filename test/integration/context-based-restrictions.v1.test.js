@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -919,7 +919,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     });
   });
 
-  test('listAvailableServiceOperations()', async () => {
+  test('listAvailableServiceOperations() with Service Name', async () => {
     const params = {
       serviceName: 'containers-kubernetes',
       transactionId: uuidv4(),
@@ -929,6 +929,55 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    res.result.api_types.forEach((apiType) => {
+      expect(apiType.type).not.toEqual('');
+    });
+  });
+
+  test('listAvailableServiceOperations() with Service Group', async () => {
+    const params = {
+      serviceGroupId: 'IAM',
+      transactionId: uuidv4(),
+    };
+
+    const res = await contextBasedRestrictionsService.listAvailableServiceOperations(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    res.result.api_types.forEach((apiType) => {
+      expect(apiType.type).not.toEqual('');
+    });
+  });
+
+  test('listAvailableServiceOperations() with Resource Type', async () => {
+    const params = {
+      serviceName: 'iam-access-management',
+      resourceType: 'customRole',
+      transactionId: uuidv4(),
+    };
+
+    const res = await contextBasedRestrictionsService.listAvailableServiceOperations(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    res.result.api_types.forEach((apiType) => {
+      expect(apiType.type).not.toEqual('');
+    });
+  });
+
+  test('listAvailableServiceOperations() with mutual exclusion error', async () => {
+    const params = {
+      serviceName: 'iam-access-management',
+      serviceGroupId: 'IAM',
+      transactionId: uuidv4(),
+    };
+
+    await expect(
+      contextBasedRestrictionsService.listAvailableServiceOperations(params)
+    ).rejects.toMatchObject({
+      'message':
+        "The following query parameters are mutually exclusive: 'service_group_id, service_name'. Specify exactly one of the mutually exclusive parameters and try your request again.",
+    });
   });
 
   test('deleteRule() - Delete rule with "Missing required parameters: ruleId" error', async () => {

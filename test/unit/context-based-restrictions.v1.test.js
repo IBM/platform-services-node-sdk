@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
-
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 const ContextBasedRestrictionsV1 = require('../../dist/context-based-restrictions/v1');
 
 const {
@@ -37,20 +36,30 @@ const contextBasedRestrictionsServiceOptions = {
 
 const contextBasedRestrictionsService = new ContextBasedRestrictionsV1(contextBasedRestrictionsServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(contextBasedRestrictionsService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(contextBasedRestrictionsService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('ContextBasedRestrictionsV1', () => {
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = ContextBasedRestrictionsV1.newInstance();
@@ -109,7 +118,7 @@ describe('ContextBasedRestrictionsV1', () => {
       // AddressIPAddress
       const addressModel = {
         type: 'ipAddress',
-        value: '169.23.56.234',
+        value: '169.23.56.234, 3ffe:1900:fe21:4545::',
       };
 
       function __createZoneTest() {
@@ -122,13 +131,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const createZoneParams = {
-          name: name,
-          accountId: accountId,
-          addresses: addresses,
-          description: description,
-          excluded: excluded,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          name,
+          accountId,
+          addresses,
+          description,
+          excluded,
+          xCorrelationId,
+          transactionId,
         };
 
         const createZoneResult = contextBasedRestrictionsService.createZone(createZoneParams);
@@ -202,11 +211,11 @@ describe('ContextBasedRestrictionsV1', () => {
         const name = 'testString';
         const sort = 'testString';
         const listZonesParams = {
-          accountId: accountId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
-          name: name,
-          sort: sort,
+          accountId,
+          xCorrelationId,
+          transactionId,
+          name,
+          sort,
         };
 
         const listZonesResult = contextBasedRestrictionsService.listZones(listZonesParams);
@@ -296,9 +305,9 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const getZoneParams = {
-          zoneId: zoneId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          zoneId,
+          xCorrelationId,
+          transactionId,
         };
 
         const getZoneResult = contextBasedRestrictionsService.getZone(getZoneParams);
@@ -385,7 +394,7 @@ describe('ContextBasedRestrictionsV1', () => {
       // AddressIPAddress
       const addressModel = {
         type: 'ipAddress',
-        value: '169.23.56.234',
+        value: '169.23.56.234, 3ffe:1900:fe21:4545::',
       };
 
       function __replaceZoneTest() {
@@ -400,15 +409,15 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const replaceZoneParams = {
-          zoneId: zoneId,
-          ifMatch: ifMatch,
-          name: name,
-          accountId: accountId,
-          addresses: addresses,
-          description: description,
-          excluded: excluded,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          zoneId,
+          ifMatch,
+          name,
+          accountId,
+          addresses,
+          description,
+          excluded,
+          xCorrelationId,
+          transactionId,
         };
 
         const replaceZoneResult = contextBasedRestrictionsService.replaceZone(replaceZoneParams);
@@ -504,9 +513,9 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const deleteZoneParams = {
-          zoneId: zoneId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          zoneId,
+          xCorrelationId,
+          transactionId,
         };
 
         const deleteZoneResult = contextBasedRestrictionsService.deleteZone(deleteZoneParams);
@@ -594,9 +603,9 @@ describe('ContextBasedRestrictionsV1', () => {
         const transactionId = 'testString';
         const type = 'all';
         const listAvailableServicerefTargetsParams = {
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
-          type: type,
+          xCorrelationId,
+          transactionId,
+          type,
         };
 
         const listAvailableServicerefTargetsResult = contextBasedRestrictionsService.listAvailableServicerefTargets(listAvailableServicerefTargetsParams);
@@ -711,13 +720,13 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const createRuleParams = {
-          contexts: contexts,
-          resources: resources,
-          description: description,
-          operations: operations,
-          enforcementMode: enforcementMode,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          contexts,
+          resources,
+          description,
+          operations,
+          enforcementMode,
+          xCorrelationId,
+          transactionId,
         };
 
         const createRuleResult = contextBasedRestrictionsService.createRule(createRuleParams);
@@ -799,19 +808,19 @@ describe('ContextBasedRestrictionsV1', () => {
         const sort = 'testString';
         const enforcementMode = 'enabled';
         const listRulesParams = {
-          accountId: accountId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
-          region: region,
-          resource: resource,
-          resourceType: resourceType,
-          serviceInstance: serviceInstance,
-          serviceName: serviceName,
-          serviceType: serviceType,
-          serviceGroupId: serviceGroupId,
-          zoneId: zoneId,
-          sort: sort,
-          enforcementMode: enforcementMode,
+          accountId,
+          xCorrelationId,
+          transactionId,
+          region,
+          resource,
+          resourceType,
+          serviceInstance,
+          serviceName,
+          serviceType,
+          serviceGroupId,
+          zoneId,
+          sort,
+          enforcementMode,
         };
 
         const listRulesResult = contextBasedRestrictionsService.listRules(listRulesParams);
@@ -909,9 +918,9 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const getRuleParams = {
-          ruleId: ruleId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          ruleId,
+          xCorrelationId,
+          transactionId,
         };
 
         const getRuleResult = contextBasedRestrictionsService.getRule(getRuleParams);
@@ -1048,15 +1057,15 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const replaceRuleParams = {
-          ruleId: ruleId,
-          ifMatch: ifMatch,
-          contexts: contexts,
-          resources: resources,
-          description: description,
-          operations: operations,
-          enforcementMode: enforcementMode,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          ruleId,
+          ifMatch,
+          contexts,
+          resources,
+          description,
+          operations,
+          enforcementMode,
+          xCorrelationId,
+          transactionId,
         };
 
         const replaceRuleResult = contextBasedRestrictionsService.replaceRule(replaceRuleParams);
@@ -1152,9 +1161,9 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const deleteRuleParams = {
-          ruleId: ruleId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          ruleId,
+          xCorrelationId,
+          transactionId,
         };
 
         const deleteRuleResult = contextBasedRestrictionsService.deleteRule(deleteRuleParams);
@@ -1242,9 +1251,9 @@ describe('ContextBasedRestrictionsV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const getAccountSettingsParams = {
-          accountId: accountId,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          accountId,
+          xCorrelationId,
+          transactionId,
         };
 
         const getAccountSettingsResult = contextBasedRestrictionsService.getAccountSettings(getAccountSettingsParams);
@@ -1328,13 +1337,17 @@ describe('ContextBasedRestrictionsV1', () => {
     describe('positive tests', () => {
       function __listAvailableServiceOperationsTest() {
         // Construct the params object for operation listAvailableServiceOperations
-        const serviceName = 'testString';
         const xCorrelationId = 'testString';
+        const serviceName = 'testString';
+        const serviceGroupId = 'testString';
+        const resourceType = 'testString';
         const transactionId = 'testString';
         const listAvailableServiceOperationsParams = {
-          serviceName: serviceName,
-          xCorrelationId: xCorrelationId,
-          transactionId: transactionId,
+          xCorrelationId,
+          transactionId,
+          serviceName,
+          serviceGroupId,
+          resourceType,
         };
 
         const listAvailableServiceOperationsResult = contextBasedRestrictionsService.listAvailableServiceOperations(listAvailableServiceOperationsParams);
@@ -1354,6 +1367,8 @@ describe('ContextBasedRestrictionsV1', () => {
         checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.service_name).toEqual(serviceName);
+        expect(mockRequestOptions.qs.service_group_id).toEqual(serviceGroupId);
+        expect(mockRequestOptions.qs.resource_type).toEqual(resourceType);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1373,11 +1388,9 @@ describe('ContextBasedRestrictionsV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const serviceName = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const listAvailableServiceOperationsParams = {
-          serviceName,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -1387,29 +1400,10 @@ describe('ContextBasedRestrictionsV1', () => {
         contextBasedRestrictionsService.listAvailableServiceOperations(listAvailableServiceOperationsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await contextBasedRestrictionsService.listAvailableServiceOperations({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await contextBasedRestrictionsService.listAvailableServiceOperations();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        contextBasedRestrictionsService.listAvailableServiceOperations({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
