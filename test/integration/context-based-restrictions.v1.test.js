@@ -929,6 +929,9 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    res.result.api_types.forEach(api_type => {
+      expect(api_type.type).not.toEqual("")
+    });
   });
 
   test('listAvailableServiceOperations() with Service Group', async () => {
@@ -941,6 +944,9 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    res.result.api_types.forEach(api_type => {
+      expect(api_type.type).not.toEqual("")
+    });
   });
 
   test('listAvailableServiceOperations() with Resource Type', async () => {
@@ -954,6 +960,21 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    res.result.api_types.forEach(api_type => {
+      expect(api_type.type).not.toEqual("")
+    });
+  });
+
+  test('listAvailableServiceOperations() with mutual exclusion error', async () => {
+    const params = {
+      serviceName: 'iam-access-management',
+      serviceGroupId: 'IAM',
+      transactionId: uuidv4(),
+    };
+
+    await expect(contextBasedRestrictionsService.listAvailableServiceOperations(params)).rejects.toMatchObject({
+      'message': 'The following query parameters are mutually exclusive: \'service_group_id, service_name\'. Specify exactly one of the mutually exclusive parameters and try your request again.',
+    });
   });
 
   test('deleteRule() - Delete rule with "Missing required parameters: ruleId" error', async () => {

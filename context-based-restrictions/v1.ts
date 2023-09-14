@@ -1477,6 +1477,8 @@ namespace ContextBasedRestrictionsV1 {
     display_name: string;
     /** The description of the API type. */
     description: string;
+    /** The type of the API type. */
+    type: string;
     /** The actions available for the API type. */
     actions: Action[];
   }
@@ -1728,7 +1730,7 @@ namespace ContextBasedRestrictionsV1 {
     last_modified_by_id: string;
   }
 
-  /** A single IP address. */
+  /** A single IP address. IPv4 and IPv6 are supported. */
   export interface AddressIPAddress extends Address {
     /** The type of address. */
     type: string;
@@ -1736,7 +1738,7 @@ namespace ContextBasedRestrictionsV1 {
     value: string;
   }
 
-  /** An IP address range. */
+  /** An IP address range. IPv4 and IPv6 are supported. */
   export interface AddressIPAddressRange extends Address {
     /** The type of address. */
     type: string;
