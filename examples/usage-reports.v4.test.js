@@ -34,6 +34,10 @@ const authHelper = require('../test/resources/auth-helper.js');
 // USAGE_REPORTS_RESOURCE_GROUP_ID=<the id of the resource group whose usage info will be retrieved>
 // USAGE_REPORTS_ORG_ID=<the id of the organization whose usage info will be retrieved>
 // USAGE_REPORTS_BILLING_MONTH=<the billing month (yyyy-mm) for which usage info will be retrieved>
+// USAGE_REPORTS_COS_BUCKET=<The name of the COS bucket to store the snapshot of the billing reports.>
+// USAGE_REPORTS_COS_LOCATION=<Region of the COS instance.>
+// USAGE_REPORTS_DATE_FROM=<Timestamp in milliseconds for which billing report snapshot is requested.>
+// USAGE_REPORTS_DATE_TO=<Timestamp in milliseconds for which billing report snapshot is requested.>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -66,6 +70,10 @@ describe('UsageReportsV4', () => {
   let resourceGroupId = config.resourceGroupId;
   let orgId = config.orgId;
   let billingMonth = config.billingMonth;
+  let cosBucket = config.cosBucket;
+  let cosLocation = config.cosLocation;
+  let snapshotDateFrom = config.snapshotDateFrom;
+  let snapshotDateTo = config.snapshotDateTo;
 
   test('getAccountSummary request example', async () => {
 
@@ -266,5 +274,147 @@ describe('UsageReportsV4', () => {
     }
 
     // end-get_resource_usage_org
+  });
+  test('createReportsSnapshotConfig request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createReportsSnapshotConfig() result:');
+    // begin-create_reports_snapshot_config
+
+    const params = {
+      accountId,
+      interval: 'daily',
+      cosBucket,
+      cosLocation,
+    };
+
+    let res;
+    try {
+      res = await usageReportsService.createReportsSnapshotConfig(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_reports_snapshot_config
+  });
+
+  test('getReportsSnapshotConfig request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getReportsSnapshotConfig() result:');
+    // begin-get_reports_snapshot_config
+
+    const params = {
+      accountId,
+    };
+
+    let res;
+    try {
+      res = await usageReportsService.getReportsSnapshotConfig(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_reports_snapshot_config
+  });
+
+  test('updateReportsSnapshotConfig request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateReportsSnapshotConfig() result:');
+    // begin-update_reports_snapshot_config
+
+    const params = {
+      accountId,
+    };
+
+    let res;
+    try {
+      res = await usageReportsService.updateReportsSnapshotConfig(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_reports_snapshot_config
+  });
+
+  test('getReportsSnapshot request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getReportsSnapshot() result:');
+    // begin-get_reports_snapshot
+
+    const params = {
+      accountId,
+      month: billingMonth,
+      dateFrom: snapshotDateFrom,
+      dateTo: snapshotDateTo,
+    };
+
+    let res;
+    try {
+      res = await usageReportsService.getReportsSnapshot(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_reports_snapshot
+  });
+
+  test('deleteReportsSnapshotConfig request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_reports_snapshot_config
+
+    const params = {
+      accountId,
+    };
+
+    try {
+      await usageReportsService.deleteReportsSnapshotConfig(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_reports_snapshot_config
   });
 });

@@ -15,9 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 
 const UsageReportsV4 = require('../../dist/usage-reports/v4');
 const nock = require('nock');
@@ -54,7 +54,7 @@ function unmock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('UsageReportsV4', () => {
@@ -1051,6 +1051,479 @@ describe('UsageReportsV4', () => {
         let err;
         try {
           await usageReportsService.getOrgUsage();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createReportsSnapshotConfig', () => {
+    describe('positive tests', () => {
+      function __createReportsSnapshotConfigTest() {
+        // Construct the params object for operation createReportsSnapshotConfig
+        const accountId = 'abc';
+        const interval = 'daily';
+        const cosBucket = 'bucket_name';
+        const cosLocation = 'us-south';
+        const cosReportsFolder = 'IBMCloud-Billing-Reports';
+        const reportTypes = ['account_summary', 'enterprise_summary', 'account_resource_instance_usage'];
+        const versioning = 'new';
+        const createReportsSnapshotConfigParams = {
+          accountId,
+          interval,
+          cosBucket,
+          cosLocation,
+          cosReportsFolder,
+          reportTypes,
+          versioning,
+        };
+
+        const createReportsSnapshotConfigResult = usageReportsService.createReportsSnapshotConfig(createReportsSnapshotConfigParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createReportsSnapshotConfigResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-reports-snapshot-config', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.interval).toEqual(interval);
+        expect(mockRequestOptions.body.cos_bucket).toEqual(cosBucket);
+        expect(mockRequestOptions.body.cos_location).toEqual(cosLocation);
+        expect(mockRequestOptions.body.cos_reports_folder).toEqual(cosReportsFolder);
+        expect(mockRequestOptions.body.report_types).toEqual(reportTypes);
+        expect(mockRequestOptions.body.versioning).toEqual(versioning);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createReportsSnapshotConfigTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.enableRetries();
+        __createReportsSnapshotConfigTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.disableRetries();
+        __createReportsSnapshotConfigTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'abc';
+        const interval = 'daily';
+        const cosBucket = 'bucket_name';
+        const cosLocation = 'us-south';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createReportsSnapshotConfigParams = {
+          accountId,
+          interval,
+          cosBucket,
+          cosLocation,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        usageReportsService.createReportsSnapshotConfig(createReportsSnapshotConfigParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await usageReportsService.createReportsSnapshotConfig({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await usageReportsService.createReportsSnapshotConfig();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getReportsSnapshotConfig', () => {
+    describe('positive tests', () => {
+      function __getReportsSnapshotConfigTest() {
+        // Construct the params object for operation getReportsSnapshotConfig
+        const accountId = 'abc';
+        const getReportsSnapshotConfigParams = {
+          accountId,
+        };
+
+        const getReportsSnapshotConfigResult = usageReportsService.getReportsSnapshotConfig(getReportsSnapshotConfigParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getReportsSnapshotConfigResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-reports-snapshot-config', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getReportsSnapshotConfigTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.enableRetries();
+        __getReportsSnapshotConfigTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.disableRetries();
+        __getReportsSnapshotConfigTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'abc';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getReportsSnapshotConfigParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        usageReportsService.getReportsSnapshotConfig(getReportsSnapshotConfigParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await usageReportsService.getReportsSnapshotConfig({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await usageReportsService.getReportsSnapshotConfig();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateReportsSnapshotConfig', () => {
+    describe('positive tests', () => {
+      function __updateReportsSnapshotConfigTest() {
+        // Construct the params object for operation updateReportsSnapshotConfig
+        const accountId = 'abc';
+        const interval = 'daily';
+        const cosBucket = 'bucket_name';
+        const cosLocation = 'us-south';
+        const cosReportsFolder = 'IBMCloud-Billing-Reports';
+        const reportTypes = ['account_summary', 'enterprise_summary', 'account_resource_instance_usage'];
+        const versioning = 'new';
+        const updateReportsSnapshotConfigParams = {
+          accountId,
+          interval,
+          cosBucket,
+          cosLocation,
+          cosReportsFolder,
+          reportTypes,
+          versioning,
+        };
+
+        const updateReportsSnapshotConfigResult = usageReportsService.updateReportsSnapshotConfig(updateReportsSnapshotConfigParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateReportsSnapshotConfigResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-reports-snapshot-config', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.interval).toEqual(interval);
+        expect(mockRequestOptions.body.cos_bucket).toEqual(cosBucket);
+        expect(mockRequestOptions.body.cos_location).toEqual(cosLocation);
+        expect(mockRequestOptions.body.cos_reports_folder).toEqual(cosReportsFolder);
+        expect(mockRequestOptions.body.report_types).toEqual(reportTypes);
+        expect(mockRequestOptions.body.versioning).toEqual(versioning);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateReportsSnapshotConfigTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.enableRetries();
+        __updateReportsSnapshotConfigTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.disableRetries();
+        __updateReportsSnapshotConfigTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'abc';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateReportsSnapshotConfigParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        usageReportsService.updateReportsSnapshotConfig(updateReportsSnapshotConfigParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await usageReportsService.updateReportsSnapshotConfig({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await usageReportsService.updateReportsSnapshotConfig();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteReportsSnapshotConfig', () => {
+    describe('positive tests', () => {
+      function __deleteReportsSnapshotConfigTest() {
+        // Construct the params object for operation deleteReportsSnapshotConfig
+        const accountId = 'abc';
+        const deleteReportsSnapshotConfigParams = {
+          accountId,
+        };
+
+        const deleteReportsSnapshotConfigResult = usageReportsService.deleteReportsSnapshotConfig(deleteReportsSnapshotConfigParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteReportsSnapshotConfigResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-reports-snapshot-config', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteReportsSnapshotConfigTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.enableRetries();
+        __deleteReportsSnapshotConfigTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.disableRetries();
+        __deleteReportsSnapshotConfigTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'abc';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteReportsSnapshotConfigParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        usageReportsService.deleteReportsSnapshotConfig(deleteReportsSnapshotConfigParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await usageReportsService.deleteReportsSnapshotConfig({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await usageReportsService.deleteReportsSnapshotConfig();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getReportsSnapshot', () => {
+    describe('positive tests', () => {
+      function __getReportsSnapshotTest() {
+        // Construct the params object for operation getReportsSnapshot
+        const accountId = 'abc';
+        const month = '2023-02';
+        const dateFrom = 1675209600000;
+        const dateTo = 1675987200000;
+        const getReportsSnapshotParams = {
+          accountId,
+          month,
+          dateFrom,
+          dateTo,
+        };
+
+        const getReportsSnapshotResult = usageReportsService.getReportsSnapshot(getReportsSnapshotParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getReportsSnapshotResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-reports-snapshots', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.month).toEqual(month);
+        expect(mockRequestOptions.qs.date_from).toEqual(dateFrom);
+        expect(mockRequestOptions.qs.date_to).toEqual(dateTo);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getReportsSnapshotTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.enableRetries();
+        __getReportsSnapshotTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.disableRetries();
+        __getReportsSnapshotTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'abc';
+        const month = '2023-02';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getReportsSnapshotParams = {
+          accountId,
+          month,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        usageReportsService.getReportsSnapshot(getReportsSnapshotParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await usageReportsService.getReportsSnapshot({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await usageReportsService.getReportsSnapshot();
         } catch (e) {
           err = e;
         }
