@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.64.1-cee95189-20230124-211647
+ * IBM OpenAPI SDK Code Generator Version: 3.75.0-726bc7e3-20230713-221716
  */
 
 /* eslint-disable max-classes-per-file */
@@ -654,6 +654,318 @@ class UsageReportsV4 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * billingReportsSnapshot
+   ************************/
+
+  /**
+   * Setup the snapshot configuration.
+   *
+   * Snapshots of the billing reports would be taken on a periodic interval and stored based on the configuration setup
+   * by the customer for the given Account Id.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account ID for which billing report snapshot is configured.
+   * @param {string} params.interval - Frequency of taking the snapshot of the billing reports.
+   * @param {string} params.cosBucket - The name of the COS bucket to store the snapshot of the billing reports.
+   * @param {string} params.cosLocation - Region of the COS instance.
+   * @param {string} [params.cosReportsFolder] - The billing reports root folder to store the billing reports snapshots.
+   * Defaults to "IBMCloud-Billing-Reports".
+   * @param {string[]} [params.reportTypes] - The type of billing reports to take snapshot of. Possible values are
+   * [account_summary, enterprise_summary, account_resource_instance_usage].
+   * @param {string} [params.versioning] - A new version of report is created or the existing report version is
+   * overwritten with every update. Defaults to "new".
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>>}
+   */
+  public createReportsSnapshotConfig(
+    params: UsageReportsV4.CreateReportsSnapshotConfigParams
+  ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'interval', 'cosBucket', 'cosLocation'];
+    const _validParams = [
+      'accountId',
+      'interval',
+      'cosBucket',
+      'cosLocation',
+      'cosReportsFolder',
+      'reportTypes',
+      'versioning',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'interval': _params.interval,
+      'cos_bucket': _params.cosBucket,
+      'cos_location': _params.cosLocation,
+      'cos_reports_folder': _params.cosReportsFolder,
+      'report_types': _params.reportTypes,
+      'versioning': _params.versioning,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'createReportsSnapshotConfig'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/billing-reports-snapshot-config',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Fetch the snapshot configuration.
+   *
+   * Returns the configuration of snapshot of the billing reports setup by the customer for the given Account Id.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account ID for which the billing report snapshot is configured.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>>}
+   */
+  public getReportsSnapshotConfig(
+    params: UsageReportsV4.GetReportsSnapshotConfigParams
+  ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getReportsSnapshotConfig'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/billing-reports-snapshot-config',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update the snapshot configuration.
+   *
+   * Updates the configuration of snapshot of the billing reports setup by the customer for the given Account Id.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account ID for which billing report snapshot is configured.
+   * @param {string} [params.interval] - Frequency of taking the snapshot of the billing reports.
+   * @param {string} [params.cosBucket] - The name of the COS bucket to store the snapshot of the billing reports.
+   * @param {string} [params.cosLocation] - Region of the COS instance.
+   * @param {string} [params.cosReportsFolder] - The billing reports root folder to store the billing reports snapshots.
+   * @param {string[]} [params.reportTypes] - The type of billing reports to take snapshot of. Possible values are
+   * [account_summary, enterprise_summary, account_resource_instance_usage].
+   * @param {string} [params.versioning] - A new version of report is created or the existing report version is
+   * overwritten with every update.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>>}
+   */
+  public updateReportsSnapshotConfig(
+    params: UsageReportsV4.UpdateReportsSnapshotConfigParams
+  ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'interval',
+      'cosBucket',
+      'cosLocation',
+      'cosReportsFolder',
+      'reportTypes',
+      'versioning',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'interval': _params.interval,
+      'cos_bucket': _params.cosBucket,
+      'cos_location': _params.cosLocation,
+      'cos_reports_folder': _params.cosReportsFolder,
+      'report_types': _params.reportTypes,
+      'versioning': _params.versioning,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'updateReportsSnapshotConfig'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/billing-reports-snapshot-config',
+        method: 'PATCH',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete the snapshot configuration.
+   *
+   * Delete the configuration of snapshot of the billing reports setup by the customer for the given Account Id.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account ID for which the billing report snapshot is configured.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UsageReportsV4.Response<UsageReportsV4.EmptyObject>>}
+   */
+  public deleteReportsSnapshotConfig(
+    params: UsageReportsV4.DeleteReportsSnapshotConfigParams
+  ): Promise<UsageReportsV4.Response<UsageReportsV4.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'deleteReportsSnapshotConfig'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/billing-reports-snapshot-config',
+        method: 'DELETE',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Fetch the current or past snapshots.
+   *
+   * Returns the billing reports snapshots captured for the given Account Id in the specific time period.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account ID for which the billing report snapshot is requested.
+   * @param {string} params.month - The month for which billing report snapshot is requested.  Format is yyyy-mm.
+   * @param {number} [params.dateFrom] - Timestamp in milliseconds for which billing report snapshot is requested.
+   * @param {number} [params.dateTo] - Timestamp in milliseconds for which billing report snapshot is requested.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotList>>}
+   */
+  public getReportsSnapshot(
+    params: UsageReportsV4.GetReportsSnapshotParams
+  ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotList>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'month'];
+    const _validParams = ['accountId', 'month', 'dateFrom', 'dateTo', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'month': _params.month,
+      'date_from': _params.dateFrom,
+      'date_to': _params.dateTo,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getReportsSnapshot'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/billing-reports-snapshots',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -816,6 +1128,117 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createReportsSnapshotConfig` operation. */
+  export interface CreateReportsSnapshotConfigParams {
+    /** Account ID for which billing report snapshot is configured. */
+    accountId: string;
+    /** Frequency of taking the snapshot of the billing reports. */
+    interval: CreateReportsSnapshotConfigConstants.Interval | string;
+    /** The name of the COS bucket to store the snapshot of the billing reports. */
+    cosBucket: string;
+    /** Region of the COS instance. */
+    cosLocation: string;
+    /** The billing reports root folder to store the billing reports snapshots. Defaults to
+     *  "IBMCloud-Billing-Reports".
+     */
+    cosReportsFolder?: string;
+    /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
+     *  account_resource_instance_usage].
+     */
+    reportTypes?: CreateReportsSnapshotConfigConstants.ReportTypes | string[];
+    /** A new version of report is created or the existing report version is overwritten with every update. Defaults
+     *  to "new".
+     */
+    versioning?: CreateReportsSnapshotConfigConstants.Versioning | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createReportsSnapshotConfig` operation. */
+  export namespace CreateReportsSnapshotConfigConstants {
+    /** Frequency of taking the snapshot of the billing reports. */
+    export enum Interval {
+      DAILY = 'daily',
+    }
+    /** ReportTypes */
+    export enum ReportTypes {
+      ACCOUNT_SUMMARY = 'account_summary',
+      ENTERPRISE_SUMMARY = 'enterprise_summary',
+      ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
+    }
+    /** A new version of report is created or the existing report version is overwritten with every update. Defaults to "new". */
+    export enum Versioning {
+      NEW = 'new',
+      OVERWRITE = 'overwrite',
+    }
+  }
+
+  /** Parameters for the `getReportsSnapshotConfig` operation. */
+  export interface GetReportsSnapshotConfigParams {
+    /** Account ID for which the billing report snapshot is configured. */
+    accountId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateReportsSnapshotConfig` operation. */
+  export interface UpdateReportsSnapshotConfigParams {
+    /** Account ID for which billing report snapshot is configured. */
+    accountId: string;
+    /** Frequency of taking the snapshot of the billing reports. */
+    interval?: UpdateReportsSnapshotConfigConstants.Interval | string;
+    /** The name of the COS bucket to store the snapshot of the billing reports. */
+    cosBucket?: string;
+    /** Region of the COS instance. */
+    cosLocation?: string;
+    /** The billing reports root folder to store the billing reports snapshots. */
+    cosReportsFolder?: string;
+    /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
+     *  account_resource_instance_usage].
+     */
+    reportTypes?: UpdateReportsSnapshotConfigConstants.ReportTypes | string[];
+    /** A new version of report is created or the existing report version is overwritten with every update. */
+    versioning?: UpdateReportsSnapshotConfigConstants.Versioning | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateReportsSnapshotConfig` operation. */
+  export namespace UpdateReportsSnapshotConfigConstants {
+    /** Frequency of taking the snapshot of the billing reports. */
+    export enum Interval {
+      DAILY = 'daily',
+    }
+    /** ReportTypes */
+    export enum ReportTypes {
+      ACCOUNT_SUMMARY = 'account_summary',
+      ENTERPRISE_SUMMARY = 'enterprise_summary',
+      ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
+    }
+    /** A new version of report is created or the existing report version is overwritten with every update. */
+    export enum Versioning {
+      NEW = 'new',
+      OVERWRITE = 'overwrite',
+    }
+  }
+
+  /** Parameters for the `deleteReportsSnapshotConfig` operation. */
+  export interface DeleteReportsSnapshotConfigParams {
+    /** Account ID for which the billing report snapshot is configured. */
+    accountId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getReportsSnapshot` operation. */
+  export interface GetReportsSnapshotParams {
+    /** Account ID for which the billing report snapshot is requested. */
+    accountId: string;
+    /** The month for which billing report snapshot is requested.  Format is yyyy-mm. */
+    month: string;
+    /** Timestamp in milliseconds for which billing report snapshot is requested. */
+    dateFrom?: number;
+    /** Timestamp in milliseconds for which billing report snapshot is requested. */
+    dateTo?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1096,6 +1519,169 @@ namespace UsageReportsV4 {
     billable_cost: number;
     /** Non-billable charges for all cloud resources used in the account. */
     non_billable_cost: number;
+  }
+
+  /** SnapshotConfigHistoryItem. */
+  export interface SnapshotConfigHistoryItem {
+    /** Timestamp in milliseconds when the snapshot configuration was created. */
+    start_time?: number;
+    /** Timestamp in milliseconds when the snapshot configuration ends. */
+    end_time?: number;
+    /** Account that updated the billing snapshot configuration. */
+    updated_by?: string;
+    /** Account ID for which billing report snapshot is configured. */
+    account_id?: string;
+    /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
+    state?: string;
+    /** Type of account. Possible values [enterprise, account]. */
+    account_type?: string;
+    /** Frequency of taking the snapshot of the billing reports. */
+    interval?: string;
+    /** A new version of report is created or the existing report version is overwritten with every update. */
+    versioning?: string;
+    /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
+     *  account_resource_instance_usage].
+     */
+    report_types?: string[];
+    /** Compression format of the snapshot report. */
+    compression?: string;
+    /** Type of content stored in snapshot report. */
+    content_type?: string;
+    /** The billing reports root folder to store the billing reports snapshots. Defaults to
+     *  "IBMCloud-Billing-Reports".
+     */
+    cos_reports_folder?: string;
+    /** The name of the COS bucket to store the snapshot of the billing reports. */
+    cos_bucket?: string;
+    /** Region of the COS instance. */
+    cos_location?: string;
+    /** The endpoint of the COS instance. */
+    cos_endpoint?: string;
+  }
+
+  /** List of billing reports snapshots. */
+  export interface SnapshotList {
+    /** Number of total snapshots. */
+    count?: number;
+    /** Reference to the first page of the search query. */
+    first?: SnapshotListFirst;
+    /** Reference to the next page of the search query if any. */
+    next?: SnapshotListNext;
+    snapshots?: SnapshotListSnapshotsItem[];
+  }
+
+  /** Reference to the first page of the search query. */
+  export interface SnapshotListFirst {
+    href?: string;
+  }
+
+  /** Reference to the next page of the search query if any. */
+  export interface SnapshotListNext {
+    href?: string;
+  }
+
+  /** Snapshot Schema. */
+  export interface SnapshotListSnapshotsItem {
+    /** Account ID for which billing report snapshot is configured. */
+    account_id?: string;
+    /** Month of captured snapshot. */
+    month?: string;
+    /** Type of account. Possible values are [enterprise, account]. */
+    account_type?: string;
+    /** Timestamp of snapshot processed. */
+    expected_processed_at?: number;
+    /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
+    state?: string;
+    /** Period of billing in snapshot. */
+    billing_period?: SnapshotListSnapshotsItemBillingPeriod;
+    /** Id of the snapshot captured. */
+    snapshot_id?: string;
+    /** Character encoding used. */
+    charset?: string;
+    /** Compression format of the snapshot report. */
+    compression?: string;
+    /** Type of content stored in snapshot report. */
+    content_type?: string;
+    /** The name of the COS bucket to store the snapshot of the billing reports. */
+    bucket?: string;
+    /** Version of the snapshot. */
+    version?: string;
+    /** Date and time of creation of snapshot. */
+    created_on?: string;
+    /** List of report types configured for the snapshot. */
+    report_types?: SnapshotListSnapshotsItemReportTypesItem[];
+    /** List of location of reports. */
+    files?: SnapshotListSnapshotsItemFilesItem[];
+    /** Timestamp at which snapshot is captured. */
+    processed_at?: number;
+  }
+
+  /** Period of billing in snapshot. */
+  export interface SnapshotListSnapshotsItemBillingPeriod {
+    /** Date and time of start of billing in the respective snapshot. */
+    start?: string;
+    /** Date and time of end of billing in the respective snapshot. */
+    end?: string;
+  }
+
+  /** SnapshotListSnapshotsItemFilesItem. */
+  export interface SnapshotListSnapshotsItemFilesItem {
+    /** The type of billing report stored. Possible values are [account_summary, enterprise_summary,
+     *  account_resource_instance_usage].
+     */
+    report_types?: string;
+    /** Absolute path of the billing report in the COS instance. */
+    location?: string;
+    /** Account ID for which billing report is captured. */
+    account_id?: string;
+  }
+
+  /** SnapshotListSnapshotsItemReportTypesItem. */
+  export interface SnapshotListSnapshotsItemReportTypesItem {
+    /** The type of billing report of the snapshot. Possible values are [account_summary, enterprise_summary,
+     *  account_resource_instance_usage].
+     */
+    type?: string;
+    /** Version of the snapshot. */
+    version?: string;
+  }
+
+  /** Billing reports snapshot configuration. */
+  export interface SnapshotConfig {
+    /** Account ID for which billing report snapshot is configured. */
+    account_id?: string;
+    /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
+    state?: string;
+    /** Type of account. Possible values are [enterprise, account]. */
+    account_type?: string;
+    /** Frequency of taking the snapshot of the billing reports. */
+    interval?: string;
+    /** A new version of report is created or the existing report version is overwritten with every update. */
+    versioning?: string;
+    /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
+     *  account_resource_instance_usage].
+     */
+    report_types?: string[];
+    /** Compression format of the snapshot report. */
+    compression?: string;
+    /** Type of content stored in snapshot report. */
+    content_type?: string;
+    /** The billing reports root folder to store the billing reports snapshots. Defaults to
+     *  "IBMCloud-Billing-Reports".
+     */
+    cos_reports_folder?: string;
+    /** The name of the COS bucket to store the snapshot of the billing reports. */
+    cos_bucket?: string;
+    /** Region of the COS instance. */
+    cos_location?: string;
+    /** The endpoint of the COS instance. */
+    cos_endpoint?: string;
+    /** Timestamp in milliseconds when the snapshot configuration was created. */
+    created_at?: number;
+    /** Timestamp in milliseconds when the snapshot configuration was last updated. */
+    last_updated_at?: number;
+    /** List of previous versions of the snapshot configurations. */
+    history?: SnapshotConfigHistoryItem[];
   }
 
   /** Subscription. */
