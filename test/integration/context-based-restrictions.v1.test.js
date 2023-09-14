@@ -929,8 +929,8 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    res.result.api_types.forEach(api_type => {
-      expect(api_type.type).not.toEqual("")
+    res.result.api_types.forEach((apiType) => {
+      expect(apiType.type).not.toEqual('');
     });
   });
 
@@ -944,8 +944,8 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    res.result.api_types.forEach(api_type => {
-      expect(api_type.type).not.toEqual("")
+    res.result.api_types.forEach((apiType) => {
+      expect(apiType.type).not.toEqual('');
     });
   });
 
@@ -960,8 +960,8 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    res.result.api_types.forEach(api_type => {
-      expect(api_type.type).not.toEqual("")
+    res.result.api_types.forEach((apiType) => {
+      expect(apiType.type).not.toEqual('');
     });
   });
 
@@ -972,8 +972,11 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       transactionId: uuidv4(),
     };
 
-    await expect(contextBasedRestrictionsService.listAvailableServiceOperations(params)).rejects.toMatchObject({
-      'message': 'The following query parameters are mutually exclusive: \'service_group_id, service_name\'. Specify exactly one of the mutually exclusive parameters and try your request again.',
+    await expect(
+      contextBasedRestrictionsService.listAvailableServiceOperations(params)
+    ).rejects.toMatchObject({
+      'message':
+        "The following query parameters are mutually exclusive: 'service_group_id, service_name'. Specify exactly one of the mutually exclusive parameters and try your request again.",
     });
   });
 
