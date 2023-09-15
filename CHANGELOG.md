@@ -1,3 +1,10 @@
+# [0.43.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.42.0...v0.43.0) (2023-09-15)
+
+
+### Features
+
+* **Context-Based Restrictions:** add service group support to operations ([#224](https://github.com/IBM/platform-services-node-sdk/issues/224)) ([9b2782a](https://github.com/IBM/platform-services-node-sdk/commit/9b2782a9373d39ae3d67182b791cefd1a7ffc7f0))
+
 # [0.42.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.41.0...v0.42.0) (2023-09-14)
 
 
