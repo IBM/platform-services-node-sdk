@@ -39,7 +39,7 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class ContextBasedRestrictionsV1 extends BaseService {
-  static DEFAULT_SERVICE_URL: string = 'https://cbr.test.cloud.ibm.com';
+  static DEFAULT_SERVICE_URL: string = 'https://cbr.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'context_based_restrictions';
 

@@ -1338,10 +1338,10 @@ describe('ContextBasedRestrictionsV1', () => {
       function __listAvailableServiceOperationsTest() {
         // Construct the params object for operation listAvailableServiceOperations
         const xCorrelationId = 'testString';
+        const transactionId = 'testString';
         const serviceName = 'testString';
         const serviceGroupId = 'testString';
         const resourceType = 'testString';
-        const transactionId = 'testString';
         const listAvailableServiceOperationsParams = {
           xCorrelationId,
           transactionId,
@@ -1400,6 +1400,7 @@ describe('ContextBasedRestrictionsV1', () => {
         contextBasedRestrictionsService.listAvailableServiceOperations(listAvailableServiceOperationsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
+
       test('should not have any problems when no parameters are passed in', () => {
         // invoke the method with no parameters
         contextBasedRestrictionsService.listAvailableServiceOperations({});
