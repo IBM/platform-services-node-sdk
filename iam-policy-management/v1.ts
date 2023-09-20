@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.76.0-ad3e6f96-20230724-172814
+ * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
  */
 
 import * as extend from 'extend';
@@ -23,9 +23,9 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
+  UserOptions,
   getAuthenticatorFromEnvironment,
   validateParams,
-  UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -449,11 +449,11 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyId - The policy ID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateMetaData>>}
    */
   public getPolicy(
     params: IamPolicyManagementV1.GetPolicyParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateMetaData>> {
     const _params = { ...params };
     const _requiredParams = ['policyId'];
     const _validParams = ['policyId', 'headers'];
@@ -1361,11 +1361,11 @@ class IamPolicyManagementV1 extends BaseService {
    * * `display` - returns the list of all actions included in each of the policy roles and translations for all
    * relevant fields.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyTemplateMetaData>>}
    */
   public getV2Policy(
     params: IamPolicyManagementV1.GetV2PolicyParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyTemplateMetaData>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'format', 'headers'];
@@ -1721,6 +1721,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise this field is optional. If
+   * the field is included it will change the name value for all existing versions of the template.
    * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template version.
@@ -1732,7 +1734,14 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'policy'];
-    const _validParams = ['policyTemplateId', 'policy', 'description', 'committed', 'headers'];
+    const _validParams = [
+      'policyTemplateId',
+      'policy',
+      'name',
+      'description',
+      'committed',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1740,6 +1749,7 @@ class IamPolicyManagementV1 extends BaseService {
 
     const body = {
       'policy': _params.policy,
+      'name': _params.name,
       'description': _params.description,
       'committed': _params.committed,
     };
@@ -1843,6 +1853,8 @@ class IamPolicyManagementV1 extends BaseService {
    * value of the existing policy template version. The Etag can be retrieved using the GET
    * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise this field is optional. If
+   * the field is included it will change the name value for all existing versions of the template.
    * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template version.
@@ -1859,6 +1871,7 @@ class IamPolicyManagementV1 extends BaseService {
       'version',
       'ifMatch',
       'policy',
+      'name',
       'description',
       'committed',
       'headers',
@@ -1870,6 +1883,7 @@ class IamPolicyManagementV1 extends BaseService {
 
     const body = {
       'policy': _params.policy,
+      'name': _params.name,
       'description': _params.description,
       'committed': _params.committed,
     };
@@ -2021,9 +2035,6 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {string} params.version - The policy template version.
-   * @param {string} params.ifMatch - The revision number for updating a policy template version and must match the ETag
-   * value of the existing policy template version. The Etag can be retrieved using the GET
-   * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
    */
@@ -2031,8 +2042,8 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.CommitPolicyTemplateParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['policyTemplateId', 'version', 'ifMatch'];
-    const _validParams = ['policyTemplateId', 'version', 'ifMatch', 'headers'];
+    const _requiredParams = ['policyTemplateId', 'version'];
+    const _validParams = ['policyTemplateId', 'version', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2056,14 +2067,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'If-Match': _params.ifMatch,
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2762,6 +2766,10 @@ namespace IamPolicyManagementV1 {
     policyTemplateId: string;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
+    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
+     *  will change the name value for all existing versions of the template.
+     */
+    name?: string;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
      *  the purpose or context of the policy for enterprise users managing IAM templates.
      */
@@ -2791,6 +2799,10 @@ namespace IamPolicyManagementV1 {
     ifMatch: string;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
+    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
+     *  will change the name value for all existing versions of the template.
+     */
+    name?: string;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
      *  the purpose or context of the policy for enterprise users managing IAM templates.
      */
@@ -2824,11 +2836,6 @@ namespace IamPolicyManagementV1 {
     policyTemplateId: string;
     /** The policy template version. */
     version: string;
-    /** The revision number for updating a policy template version and must match the ETag value of the existing
-     *  policy template version. The Etag can be retrieved using the GET
-     *  /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
-     */
-    ifMatch: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -3009,8 +3016,6 @@ namespace IamPolicyManagementV1 {
     last_modified_by_id?: string;
     /** The policy state. */
     state?: string;
-    /** Origin Template information. */
-    template?: TemplateMetadata;
   }
 
   /** The set of properties associated with the policy template assignment. */
@@ -3026,7 +3031,7 @@ namespace IamPolicyManagementV1 {
     /** ID of the target account. */
     target: string;
     /** List of objects with required properties for a policy assignment. */
-    options: PolicyAssignmentRequestOptionsItem[];
+    options: PolicyAssignmentOptions[];
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
@@ -3048,7 +3053,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** The set of properties required for a policy assignment. */
-  export interface PolicyAssignmentRequestOptionsItem {
+  export interface PolicyAssignmentOptions {
     /** The policy subject type; either 'iam_id' or 'access_group_id'. */
     subject_type: string;
     /** The policy subject id. */
@@ -3061,26 +3066,28 @@ namespace IamPolicyManagementV1 {
     root_template_version?: string;
   }
 
+  /** Set of properties for the assigned resource. */
+  export interface PolicyAssignmentResourcePolicy {
+    /** On success, includes the  policy assigned. */
+    resource_created?: AssignmentResourceCreated;
+    /** policy status. */
+    status?: string;
+    /** The error response from API. */
+    error_message?: ErrorResponse;
+  }
+
   /** The policy assignment resources. */
   export interface PolicyAssignmentResources {
     /** Account ID where resources are assigned. */
     target?: string;
     /** Set of properties for the assigned resource. */
-    policy?: PolicyAssignmentResourcesPolicy;
-  }
-
-  /** Set of properties for the assigned resource. */
-  export interface PolicyAssignmentResourcesPolicy {
-    /** On success, includes the  policy assigned. */
-    resource_created: AssignmentResourceCreated;
-    /** The error response from API. */
-    error_message?: ErrorResponse;
+    policy?: PolicyAssignmentResourcePolicy;
   }
 
   /** A collection of policies. */
   export interface PolicyCollection {
     /** List of policies. */
-    policies?: Policy[];
+    policies?: PolicyTemplateMetaData[];
   }
 
   /** The attributes of the resource. Note that only one resource is allowed in a policy. */
@@ -3151,6 +3158,39 @@ namespace IamPolicyManagementV1 {
   export interface PolicyTemplateCollection {
     /** List of policy templates. */
     policy_templates?: PolicyTemplate[];
+  }
+
+  /** The core set of properties associated with a policy. */
+  export interface PolicyTemplateMetaData {
+    /** The policy ID. */
+    id?: string;
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Customer-defined description. */
+    description?: string;
+    /** The subjects associated with a policy. */
+    subjects: PolicySubject[];
+    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    roles: PolicyRole[];
+    /** The resources associated with a policy. */
+    resources: PolicyResource[];
+    /** The href link back to the policy. */
+    href?: string;
+    /** The UTC timestamp when the policy was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy. */
+    last_modified_by_id?: string;
+    /** The policy state. */
+    state?: string;
+    /** The details of the IAM template that was used to create an enterprise-managed policy in your account. When
+     *  returned, this indicates that the policy is created from and managed by a template in the root enterprise
+     *  account.
+     */
+    template?: TemplateMetadata;
   }
 
   /** A collection of versions for a specific policy template. */
@@ -3243,12 +3283,18 @@ namespace IamPolicyManagementV1 {
     value: string;
   }
 
-  /** Origin Template information. */
+  /** The details of the IAM template that was used to create an enterprise-managed policy in your account. When returned, this indicates that the policy is created from and managed by a template in the root enterprise account. */
   export interface TemplateMetadata {
-    /** Origin Template CRN. */
-    crn?: string;
+    /** The policy template ID. */
+    id?: string;
     /** Template version. */
     version?: string;
+    /** policy assignment id. */
+    assignment_id?: string;
+    /** orchestrator template id. */
+    root_id?: string;
+    /** orchestrator template version. */
+    root_version?: string;
   }
 
   /** The core set of properties associated with the template's policy objet. */
@@ -3260,7 +3306,7 @@ namespace IamPolicyManagementV1 {
      */
     description?: string;
     /** The resource attributes to which the policy grants access. */
-    resource: V2PolicyResource;
+    resource?: V2PolicyResource;
     /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
      *  'time-based-conditions:weekly:custom-hours'.
      */
@@ -3308,14 +3354,12 @@ namespace IamPolicyManagementV1 {
      *  format=include_last_permit.
      */
     last_permit_frequency?: number;
-    /** Origin Template information. */
-    template?: TemplateMetadata;
   }
 
   /** A collection of policies. */
   export interface V2PolicyCollection {
     /** List of policies. */
-    policies?: V2Policy[];
+    policies?: V2PolicyTemplateMetaData[];
   }
 
   /** The resource attributes to which the policy grants access. */
@@ -3365,6 +3409,50 @@ namespace IamPolicyManagementV1 {
     operator: string;
     /** The value of the ID of the subject, e.g., service ID, access group ID, IAM ID. */
     value: string;
+  }
+
+  /** The core set of properties associated with the policy. */
+  export interface V2PolicyTemplateMetaData {
+    /** The policy type; either 'access' or 'authorization'. */
+    type: string;
+    /** Description of the policy. */
+    description?: string;
+    /** The subject attributes for whom the policy grants access. */
+    subject?: V2PolicySubject;
+    /** The resource attributes to which the policy grants access. */
+    resource?: V2PolicyResource;
+    /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
+     *  'time-based-conditions:weekly:custom-hours'.
+     */
+    pattern?: string;
+    /** Additional access conditions associated with the policy. */
+    rule?: V2PolicyRule;
+    /** The policy ID. */
+    id?: string;
+    /** The href URL that links to the policies API by policy ID. */
+    href?: string;
+    control: ControlResponse;
+    /** The UTC timestamp when the policy was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy. */
+    last_modified_by_id?: string;
+    /** The policy state, either 'deleted' or 'active'. */
+    state: string;
+    /** The optional last permit time of policy, when passing query parameter format=include_last_permit. */
+    last_permit_at?: string;
+    /** The optional count of times that policy has provided a permit, when passing query parameter
+     *  format=include_last_permit.
+     */
+    last_permit_frequency?: number;
+    /** The details of the IAM template that was used to create an enterprise-managed policy in your account. When
+     *  returned, this indicates that the policy is created from and managed by a template in the root enterprise
+     *  account.
+     */
+    template?: TemplateMetadata;
   }
 
   /** Specifies the type of access granted by the policy. */

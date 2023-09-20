@@ -61,6 +61,7 @@ describe('IamPolicyManagementV1', () => {
   let exampleTemplateVersion;
   let exampleTemplateEtag;
   let exampleAssignmentId;
+  let exampleAssignmentPolicyId;
   const exampleCustomRoleDipslayName = 'IAM Groups read access';
   const exampleUserId = 'IBMid-user1';
   const exampleServiceName = 'iam-groups';
@@ -1042,7 +1043,6 @@ describe('IamPolicyManagementV1', () => {
     const params = {
       policyTemplateId: exampleTemplateId,
       version: exampleTemplateVersion,
-      ifMatch: exampleTemplateEtag,
     };
 
     try {
@@ -1184,10 +1184,40 @@ describe('IamPolicyManagementV1', () => {
     try {
       res = await iamPolicyManagementService.getPolicyAssignment(params);
       console.log(JSON.stringify(res.result, null, 2));
+      exampleAssignmentPolicyId = res.result.resources[0].policy.resource_created.id;
     } catch (err) {
       console.warn(err);
     }
 
     // end-get_policy_assignment
+  });
+  test('getV2Policy to get Template meta data request example', async () => {
+    expect(exampleAssignmentPolicyId).toBeDefined();
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getV2Policy() result:');
+    // begin-get_v2_policy
+
+    const params = {
+      id: exampleAssignmentPolicyId,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.getV2Policy(params);
+      examplePolicyETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-get_v2_policy
   });
 });
