@@ -1,3 +1,10 @@
+## [0.43.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.43.0...v0.43.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* **Global Search/Tagging:** regen services with latest API definitions ([#225](https://github.com/IBM/platform-services-node-sdk/issues/225)) ([293dde1](https://github.com/IBM/platform-services-node-sdk/commit/293dde1e87b04a91754492b2655c51f5bfc68865))
+
 # [0.43.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.42.0...v0.43.0) (2023-09-15)
 
 
