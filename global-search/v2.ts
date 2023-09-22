@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
+ * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
  */
 
 import * as extend from 'extend';
@@ -23,9 +23,9 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
+  UserOptions,
   getAuthenticatorFromEnvironment,
   validateParams,
-  UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -34,7 +34,7 @@ import { getSdkHeaders } from '../lib/common';
  * platform. The search repository stores and searches cloud resources attributes, which categorize or classify
  * resources. A resource is a physical or logical component that can be created or reserved for an application or
  * service instance. They are owned by resource providers, such as Cloud Foundry, IBM Kubernetes Service, or resource
- * controller in IBM Cloud. Resources are uniquely identified by a Cloud Resource Name (CRN)  or by an IMS ID. The
+ * controller in IBM Cloud. Resources are uniquely identified by a Cloud Resource Name (CRN) or by an IMS ID. The
  * properties of a resource include tags and system properties. Both properties are defined in an IBM Cloud billing
  * account, and span across many regions.
  *
@@ -126,8 +126,19 @@ class GlobalSearchV2 extends BaseService {
    * @param {string} [params.searchCursor] - An opaque cursor that is returned on each call and that must be set on the
    * subsequent call to get the next batch of items. If the search returns no items, then the search_cursor is not
    * present in the response.
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.accountId] - The account ID to filter resources.
    * @param {number} [params.limit] - The maximum number of hits to return. Defaults to 10.
    * @param {number} [params.timeout] - A search timeout in milliseconds, bounding the search request to run within the
@@ -163,6 +174,8 @@ class GlobalSearchV2 extends BaseService {
       'query',
       'fields',
       'searchCursor',
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'accountId',
       'limit',
@@ -214,6 +227,8 @@ class GlobalSearchV2 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -265,7 +280,22 @@ namespace GlobalSearchV2 {
      *  batch of items. If the search returns no items, then the search_cursor is not present in the response.
      */
     searchCursor?: string;
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;

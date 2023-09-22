@@ -18,7 +18,6 @@
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-
 const GlobalSearchV2 = require('../../dist/global-search/v2');
 
 const {
@@ -50,7 +49,6 @@ const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnv
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('GlobalSearchV2', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -61,7 +59,7 @@ describe('GlobalSearchV2', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = GlobalSearchV2.newInstance();
@@ -120,9 +118,11 @@ describe('GlobalSearchV2', () => {
         const query = 'testString';
         const fields = ['testString'];
         const searchCursor = 'testString';
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const accountId = 'testString';
-        const limit = 1;
+        const limit = 10;
         const timeout = 0;
         const sort = ['testString'];
         const isDeleted = 'false';
@@ -134,6 +134,8 @@ describe('GlobalSearchV2', () => {
           query,
           fields,
           searchCursor,
+          xRequestId,
+          xCorrelationId,
           transactionId,
           accountId,
           limit,
@@ -160,6 +162,8 @@ describe('GlobalSearchV2', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.query).toEqual(query);
         expect(mockRequestOptions.body.fields).toEqual(fields);

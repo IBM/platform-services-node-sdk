@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
+ * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
  */
 
 import * as extend from 'extend';
@@ -23,9 +23,9 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
+  UserOptions,
   getAuthenticatorFromEnvironment,
   validateParams,
-  UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -108,8 +108,19 @@ class GlobalTaggingV1 extends BaseService {
    * attached to the specified resource.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.impersonateUser] - The user on whose behalf the get operation must be performed (_for
    * administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account to list the tags for. If it is not set, then it
@@ -143,6 +154,8 @@ class GlobalTaggingV1 extends BaseService {
     const _params = { ...params };
     const _requiredParams = [];
     const _validParams = [
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'impersonateUser',
       'accountId',
@@ -190,6 +203,8 @@ class GlobalTaggingV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -211,8 +226,19 @@ class GlobalTaggingV1 extends BaseService {
    * @param {string[]} params.tagNames - An array of tag names to create.
    * @param {string} [params.impersonateUser] - The user on whose behalf the create operation must be performed (_for
    * administrators only_).
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.accountId] - The ID of the billing account where the tag must be created. It is a required
    * parameter if `impersonate_user` is set.
    * @param {string} [params.tagType] - The type of the tags you want to create. The only allowed value is `access`.
@@ -227,6 +253,8 @@ class GlobalTaggingV1 extends BaseService {
     const _validParams = [
       'tagNames',
       'impersonateUser',
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'accountId',
       'tagType',
@@ -263,6 +291,8 @@ class GlobalTaggingV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -279,8 +309,19 @@ class GlobalTaggingV1 extends BaseService {
    * Delete the tags that are not attached to any resource.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.providers] - Select a provider. Supported values are `ghost` and `ims`.
    * @param {string} [params.impersonateUser] - The user on whose behalf the delete all operation must be performed
    * (_for administrators only_).
@@ -297,6 +338,8 @@ class GlobalTaggingV1 extends BaseService {
     const _params = { ...params };
     const _requiredParams = [];
     const _validParams = [
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'providers',
       'impersonateUser',
@@ -330,6 +373,8 @@ class GlobalTaggingV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -347,8 +392,19 @@ class GlobalTaggingV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.tagName - The name of tag to be deleted.
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To delete tags
    * both in Global Search and Tagging and in IMS, use `ghost,ims`.
    * @param {string} [params.impersonateUser] - The user on whose behalf the delete operation must be performed (_for
@@ -367,6 +423,8 @@ class GlobalTaggingV1 extends BaseService {
     const _requiredParams = ['tagName'];
     const _validParams = [
       'tagName',
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'providers',
       'impersonateUser',
@@ -405,6 +463,8 @@ class GlobalTaggingV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -425,8 +485,19 @@ class GlobalTaggingV1 extends BaseService {
    * @param {Resource[]} params.resources - List of resources on which the tag or tags are attached.
    * @param {string} [params.tagName] - The name of the tag to attach.
    * @param {string[]} [params.tagNames] - An array of tag names to attach.
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.impersonateUser] - The user on whose behalf the attach operation must be performed (_for
    * administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account of the tagged resource. It is a required
@@ -445,6 +516,8 @@ class GlobalTaggingV1 extends BaseService {
       'resources',
       'tagName',
       'tagNames',
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'impersonateUser',
       'accountId',
@@ -484,6 +557,8 @@ class GlobalTaggingV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -503,11 +578,22 @@ class GlobalTaggingV1 extends BaseService {
    * @param {Resource[]} params.resources - List of resources on which the tag or tags are detached.
    * @param {string} [params.tagName] - The name of the tag to detach.
    * @param {string[]} [params.tagNames] - An array of tag names to detach.
-   * @param {string} [params.transactionId] - An alphanumeric string that can be used to trace a request across
-   * services. If not specified, it automatically generated with the prefix "gst-".
+   * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
+   * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
+   * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
+   * value includes any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or
+   * invalid, it is automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.xCorrelationId] - An alphanumeric string that is used to trace the request as a part of a
+   * larger context: the same value is used for downstream requests and retries of those requests. The value may include
+   * ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_)
+   * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
+   * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
+   * automatically replaced by a random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
+   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.impersonateUser] - The user on whose behalf the detach operation must be performed (_for
    * administrators only_).
-   * @param {string} [params.accountId] - The ID of the billing account of the untagged resource.  It is a required
+   * @param {string} [params.accountId] - The ID of the billing account of the untagged resource. It is a required
    * parameter if `tag_type` is set to `service`, otherwise it is inferred from the authorization IAM token.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
    * `service` and `access` are not supported for IMS resources.
@@ -523,6 +609,8 @@ class GlobalTaggingV1 extends BaseService {
       'resources',
       'tagName',
       'tagNames',
+      'xRequestId',
+      'xCorrelationId',
       'transactionId',
       'impersonateUser',
       'accountId',
@@ -562,6 +650,8 @@ class GlobalTaggingV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'x-request-id': _params.xRequestId,
+            'x-correlation-id': _params.xCorrelationId,
             'transaction-id': _params.transactionId,
           },
           _params.headers
@@ -603,7 +693,22 @@ namespace GlobalTaggingV1 {
 
   /** Parameters for the `listTags` operation. */
   export interface ListTagsParams {
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
@@ -673,7 +778,22 @@ namespace GlobalTaggingV1 {
     tagNames: string[];
     /** The user on whose behalf the create operation must be performed (_for administrators only_). */
     impersonateUser?: string;
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
@@ -696,7 +816,22 @@ namespace GlobalTaggingV1 {
 
   /** Parameters for the `deleteTagAll` operation. */
   export interface DeleteTagAllParams {
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
@@ -734,7 +869,22 @@ namespace GlobalTaggingV1 {
   export interface DeleteTagParams {
     /** The name of tag to be deleted. */
     tagName: string;
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
@@ -778,7 +928,22 @@ namespace GlobalTaggingV1 {
     tagName?: string;
     /** An array of tag names to attach. */
     tagNames?: string[];
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
@@ -813,13 +978,28 @@ namespace GlobalTaggingV1 {
     tagName?: string;
     /** An array of tag names to detach. */
     tagNames?: string[];
-    /** An alphanumeric string that can be used to trace a request across services. If not specified, it
+    /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
+     *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
+     *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
+     *  is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically
+     *  replaced by a random (version 4) UUID.
+     */
+    xRequestId?: string;
+    /** An alphanumeric string that is used to trace the request as a part of a larger context: the same value is
+     *  used for downstream requests and retries of those requests. The value may include ASCII alphanumerics and any of
+     *  following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up to
+     *  1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or is
+     *  longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is automatically replaced
+     *  by a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
     /** The user on whose behalf the detach operation must be performed (_for administrators only_). */
     impersonateUser?: string;
-    /** The ID of the billing account of the untagged resource.  It is a required parameter if `tag_type` is set to
+    /** The ID of the billing account of the untagged resource. It is a required parameter if `tag_type` is set to
      *  `service`, otherwise it is inferred from the authorization IAM token.
      */
     accountId?: string;

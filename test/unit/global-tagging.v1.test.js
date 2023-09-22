@@ -15,10 +15,9 @@
  */
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
-
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
 
 const {
@@ -46,11 +45,10 @@ function mock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('GlobalTaggingV1', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -61,7 +59,7 @@ describe('GlobalTaggingV1', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = GlobalTaggingV1.newInstance();
@@ -117,6 +115,8 @@ describe('GlobalTaggingV1', () => {
     describe('positive tests', () => {
       function __listTagsTest() {
         // Construct the params object for operation listTags
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const impersonateUser = 'testString';
         const accountId = 'testString';
@@ -125,11 +125,13 @@ describe('GlobalTaggingV1', () => {
         const providers = ['ghost'];
         const attachedTo = 'testString';
         const offset = 0;
-        const limit = 1;
+        const limit = 100;
         const timeout = 0;
         const orderByName = 'asc';
         const attachedOnly = false;
         const listTagsParams = {
+          xRequestId,
+          xCorrelationId,
           transactionId,
           impersonateUser,
           accountId,
@@ -158,6 +160,8 @@ describe('GlobalTaggingV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
@@ -216,12 +220,16 @@ describe('GlobalTaggingV1', () => {
         // Construct the params object for operation createTag
         const tagNames = ['testString'];
         const impersonateUser = 'testString';
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'access';
         const createTagParams = {
           tagNames,
           impersonateUser,
+          xRequestId,
+          xCorrelationId,
           transactionId,
           accountId,
           tagType,
@@ -241,6 +249,8 @@ describe('GlobalTaggingV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
@@ -310,12 +320,16 @@ describe('GlobalTaggingV1', () => {
     describe('positive tests', () => {
       function __deleteTagAllTest() {
         // Construct the params object for operation deleteTagAll
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const providers = 'ghost';
         const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const deleteTagAllParams = {
+          xRequestId,
+          xCorrelationId,
           transactionId,
           providers,
           impersonateUser,
@@ -337,6 +351,8 @@ describe('GlobalTaggingV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.providers).toEqual(providers);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
@@ -387,6 +403,8 @@ describe('GlobalTaggingV1', () => {
       function __deleteTagTest() {
         // Construct the params object for operation deleteTag
         const tagName = 'testString';
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const providers = ['ghost'];
         const impersonateUser = 'testString';
@@ -394,6 +412,8 @@ describe('GlobalTaggingV1', () => {
         const tagType = 'user';
         const deleteTagParams = {
           tagName,
+          xRequestId,
+          xCorrelationId,
           transactionId,
           providers,
           impersonateUser,
@@ -415,6 +435,8 @@ describe('GlobalTaggingV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.providers).toEqual(providers);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
@@ -496,6 +518,8 @@ describe('GlobalTaggingV1', () => {
         const resources = [resourceModel];
         const tagName = 'testString';
         const tagNames = ['testString'];
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const impersonateUser = 'testString';
         const accountId = 'testString';
@@ -504,6 +528,8 @@ describe('GlobalTaggingV1', () => {
           resources,
           tagName,
           tagNames,
+          xRequestId,
+          xCorrelationId,
           transactionId,
           impersonateUser,
           accountId,
@@ -524,6 +550,8 @@ describe('GlobalTaggingV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
@@ -606,6 +634,8 @@ describe('GlobalTaggingV1', () => {
         const resources = [resourceModel];
         const tagName = 'testString';
         const tagNames = ['testString'];
+        const xRequestId = 'testString';
+        const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const impersonateUser = 'testString';
         const accountId = 'testString';
@@ -614,6 +644,8 @@ describe('GlobalTaggingV1', () => {
           resources,
           tagName,
           tagNames,
+          xRequestId,
+          xCorrelationId,
           transactionId,
           impersonateUser,
           accountId,
@@ -634,6 +666,8 @@ describe('GlobalTaggingV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
+        checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
