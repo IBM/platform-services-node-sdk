@@ -38,6 +38,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testPolicyId;
   let testV2PolicyETag;
   let testV2PolicyId;
+  let testAssignmentPolicyId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -896,7 +897,6 @@ describe('IamPolicyManagementV1_integration', () => {
       const params = {
         policyTemplateId: testTemplateId,
         version: testTemplateVersion,
-        ifMatch: testTemplateETag,
       };
 
       let response = await service.commitPolicyTemplate(params);
@@ -1002,7 +1002,7 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Policy Assignment tests', () => {
-    test('List policy assigments', async () => {
+    test('List policy assignments', async () => {
       const params = {
         accountId: testAccountId,
         acceptLanguage: 'default',
@@ -1014,7 +1014,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result).toBeDefined();
       testAssignmentId = result.assignments[0].id;
     });
-    test('Get policy assigment by id', async () => {
+    test('Get policy assignment by id', async () => {
       expect(testAssignmentId).toBeDefined();
       const params = {
         assignmentId: testAssignmentId,
@@ -1023,6 +1023,29 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(response).toBeDefined();
       expect(response.status).toBe(200);
       expect(response.result).toBeDefined();
+      testAssignmentPolicyId = response.result.resources[0].policy.resource_created.id;
+    });
+    test('GetPolicyV2 - Retrieve Policy Template MetaData created from assignment', async () => {
+      expect(testPolicyId).toBeDefined();
+
+      const params = {
+        id: testAssignmentPolicyId,
+      };
+
+      let response;
+      try {
+        response = await service.getV2Policy(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.id).toEqual(testAssignmentPolicyId);
+      expect(result.type).toEqual(policyType);
+      expect(result.template).toBeDefined();
     });
   });
 });

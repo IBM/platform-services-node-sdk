@@ -18,7 +18,6 @@
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-
 const IamPolicyManagementV1 = require('../../dist/iam-policy-management/v1');
 
 const {
@@ -50,7 +49,6 @@ const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnv
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('IamPolicyManagementV1', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -61,7 +59,7 @@ describe('IamPolicyManagementV1', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = IamPolicyManagementV1.newInstance();
@@ -2329,11 +2327,13 @@ describe('IamPolicyManagementV1', () => {
         // Construct the params object for operation createPolicyTemplateVersion
         const policyTemplateId = 'testString';
         const policy = templatePolicyModel;
+        const name = 'testString';
         const description = 'testString';
         const committed = true;
         const createPolicyTemplateVersionParams = {
           policyTemplateId,
           policy,
+          name,
           description,
           committed,
         };
@@ -2353,6 +2353,7 @@ describe('IamPolicyManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.policy).toEqual(policy);
+        expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
@@ -2564,6 +2565,7 @@ describe('IamPolicyManagementV1', () => {
         const version = 'testString';
         const ifMatch = 'testString';
         const policy = templatePolicyModel;
+        const name = 'testString';
         const description = 'testString';
         const committed = true;
         const replacePolicyTemplateParams = {
@@ -2571,6 +2573,7 @@ describe('IamPolicyManagementV1', () => {
           version,
           ifMatch,
           policy,
+          name,
           description,
           committed,
         };
@@ -2591,6 +2594,7 @@ describe('IamPolicyManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.policy).toEqual(policy);
+        expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
@@ -2845,11 +2849,9 @@ describe('IamPolicyManagementV1', () => {
         // Construct the params object for operation commitPolicyTemplate
         const policyTemplateId = 'testString';
         const version = 'testString';
-        const ifMatch = 'testString';
         const commitPolicyTemplateParams = {
           policyTemplateId,
           version,
-          ifMatch,
         };
 
         const commitPolicyTemplateResult = iamPolicyManagementService.commitPolicyTemplate(commitPolicyTemplateParams);
@@ -2866,7 +2868,6 @@ describe('IamPolicyManagementV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
         expect(mockRequestOptions.path.version).toEqual(version);
       }
@@ -2890,13 +2891,11 @@ describe('IamPolicyManagementV1', () => {
         // parameters
         const policyTemplateId = 'testString';
         const version = 'testString';
-        const ifMatch = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const commitPolicyTemplateParams = {
           policyTemplateId,
           version,
-          ifMatch,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
