@@ -1,3 +1,10 @@
+## [0.45.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.0...v0.45.1) (2023-10-18)
+
+
+### Bug Fixes
+
+* bump @babel/traverse to avoid CVE-2023-45133 ([#229](https://github.com/IBM/platform-services-node-sdk/issues/229)) ([37c02a2](https://github.com/IBM/platform-services-node-sdk/commit/37c02a2d6c412c0bb883991cedb254d87462d592))
+
 # [0.45.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.44.0...v0.45.0) (2023-10-18)
 
 
