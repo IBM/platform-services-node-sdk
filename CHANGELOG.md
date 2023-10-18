@@ -1,3 +1,10 @@
+# [0.45.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.44.0...v0.45.0) (2023-10-18)
+
+
+### Features
+
+* **Usage Reports:** Update query param for getting reports snapshot list ([#228](https://github.com/IBM/platform-services-node-sdk/issues/228)) ([b8d7613](https://github.com/IBM/platform-services-node-sdk/commit/b8d7613cc6213e40ad3f75b398d6a76991b09f58))
+
 # [0.44.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.43.1...v0.44.0) (2023-09-25)
 
 
