@@ -1446,11 +1446,15 @@ describe('UsageReportsV4', () => {
         const month = '2023-02';
         const dateFrom = 1675209600000;
         const dateTo = 1675987200000;
+        const limit = 30;
+        const start = 'testString';
         const getReportsSnapshotParams = {
           accountId,
           month,
           dateFrom,
           dateTo,
+          limit,
+          start,
         };
 
         const getReportsSnapshotResult = usageReportsService.getReportsSnapshot(getReportsSnapshotParams);
@@ -1471,6 +1475,8 @@ describe('UsageReportsV4', () => {
         expect(mockRequestOptions.qs.month).toEqual(month);
         expect(mockRequestOptions.qs.date_from).toEqual(dateFrom);
         expect(mockRequestOptions.qs.date_to).toEqual(dateTo);
+        expect(mockRequestOptions.qs._limit).toEqual(limit);
+        expect(mockRequestOptions.qs._start).toEqual(start);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1529,6 +1535,62 @@ describe('UsageReportsV4', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('GetReportsSnapshotPager tests', () => {
+      const serviceUrl = usageReportsServiceOptions.url;
+      const path = '/v1/billing-reports-snapshots';
+      const mockPagerResponse1 =
+        '{"snapshots":[{"account_id":"abc","month":"2023-06","account_type":"account","expected_processed_at":1687470383610,"state":"enabled","billing_period":{"start":"2023-06-01T00:00:00.000Z","end":"2023-06-30T23:59:59.999Z"},"snapshot_id":"1685577600000","charset":"UTF-8","compression":"GZIP","content_type":"text/csv","bucket":"bucket_name","version":"1.0","created_on":"2023-06-22T21:47:28.297Z","report_types":[{"type":"account_summary","version":"1.0"}],"files":[{"report_types":"account_summary","location":"june/2023-06/1685577600000/2023-06-account-summary-272b9a4f73e11030d0ba037daee47a35.csv.gz","account_id":"abc"}],"processed_at":1687470448297}],"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"snapshots":[{"account_id":"abc","month":"2023-06","account_type":"account","expected_processed_at":1687470383610,"state":"enabled","billing_period":{"start":"2023-06-01T00:00:00.000Z","end":"2023-06-30T23:59:59.999Z"},"snapshot_id":"1685577600000","charset":"UTF-8","compression":"GZIP","content_type":"text/csv","bucket":"bucket_name","version":"1.0","created_on":"2023-06-22T21:47:28.297Z","report_types":[{"type":"account_summary","version":"1.0"}],"files":[{"report_types":"account_summary","location":"june/2023-06/1685577600000/2023-06-account-summary-272b9a4f73e11030d0ba037daee47a35.csv.gz","account_id":"abc"}],"processed_at":1687470448297}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get(uri => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'abc',
+          month: '2023-02',
+          dateFrom: 1675209600000,
+          dateTo: 1675987200000,
+          limit: 30,
+        };
+        const allResults = [];
+        const pager = new UsageReportsV4.GetReportsSnapshotPager(usageReportsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'abc',
+          month: '2023-02',
+          dateFrom: 1675209600000,
+          dateTo: 1675987200000,
+          limit: 30,
+        };
+        const pager = new UsageReportsV4.GetReportsSnapshotPager(usageReportsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });

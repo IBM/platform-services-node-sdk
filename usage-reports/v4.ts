@@ -919,6 +919,9 @@ class UsageReportsV4 extends BaseService {
    * @param {string} params.month - The month for which billing report snapshot is requested.  Format is yyyy-mm.
    * @param {number} [params.dateFrom] - Timestamp in milliseconds for which billing report snapshot is requested.
    * @param {number} [params.dateTo] - Timestamp in milliseconds for which billing report snapshot is requested.
+   * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
+   * @param {string} [params.start] - The offset from which the records must be fetched. Offset information is included
+   * in the response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotList>>}
    */
@@ -927,7 +930,7 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'month'];
-    const _validParams = ['accountId', 'month', 'dateFrom', 'dateTo', 'headers'];
+    const _validParams = ['accountId', 'month', 'dateFrom', 'dateTo', 'limit', 'start', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -938,6 +941,8 @@ class UsageReportsV4 extends BaseService {
       'month': _params.month,
       'date_from': _params.dateFrom,
       'date_to': _params.dateTo,
+      '_limit': _params.limit,
+      '_start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1239,6 +1244,10 @@ namespace UsageReportsV4 {
     dateFrom?: number;
     /** Timestamp in milliseconds for which billing report snapshot is requested. */
     dateTo?: number;
+    /** Number of usage records returned. The default value is 30. Maximum value is 200. */
+    limit?: number;
+    /** The offset from which the records must be fetched. Offset information is included in the response. */
+    start?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1578,6 +1587,7 @@ namespace UsageReportsV4 {
   /** Reference to the next page of the search query if any. */
   export interface SnapshotListNext {
     href?: string;
+    offset?: string;
   }
 
   /** Snapshot Schema. */
@@ -1986,6 +1996,87 @@ namespace UsageReportsV4 {
      */
     public async getAll(): Promise<UsageReportsV4.InstanceUsage[]> {
       const results: InstanceUsage[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * GetReportsSnapshotPager can be used to simplify the use of getReportsSnapshot().
+   */
+  export class GetReportsSnapshotPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: UsageReportsV4;
+
+    protected params: UsageReportsV4.GetReportsSnapshotParams;
+
+    /**
+     * Construct a GetReportsSnapshotPager object.
+     *
+     * @param {UsageReportsV4}  client - The service client instance used to invoke getReportsSnapshot()
+     * @param {Object} params - The parameters to be passed to getReportsSnapshot()
+     * @constructor
+     * @returns {GetReportsSnapshotPager}
+     */
+    constructor(client: UsageReportsV4, params: UsageReportsV4.GetReportsSnapshotParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getReportsSnapshot().
+     * @returns {Promise<UsageReportsV4.SnapshotListSnapshotsItem[]>}
+     */
+    public async getNext(): Promise<UsageReportsV4.SnapshotListSnapshotsItem[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.getReportsSnapshot(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, '_start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.snapshots;
+    }
+
+    /**
+     * Returns all results by invoking getReportsSnapshot() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<UsageReportsV4.SnapshotListSnapshotsItem[]>}
+     */
+    public async getAll(): Promise<UsageReportsV4.SnapshotListSnapshotsItem[]> {
+      const results: SnapshotListSnapshotsItem[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
