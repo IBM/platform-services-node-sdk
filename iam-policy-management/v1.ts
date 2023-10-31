@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
+ * IBM OpenAPI SDK Code Generator Version: 3.81.0-c73a091c-20231026-215706
  */
 
 import * as extend from 'extend';
@@ -229,12 +229,13 @@ class IamPolicyManagementV1 extends BaseService {
    * their support of authorization policies. To create an authorization policy, use **`"type": "authorization"`** in
    * the body. The subject attributes must match the supported authorization subjects of the resource. Multiple subject
    * attributes might be provided. The following attributes are supported:
-   *   serviceName, serviceInstance, region, resourceType, resource, accountId Assign roles that are supported by the
-   * service or platform roles. For more information, see [IAM roles and
+   *   serviceName, serviceInstance, region, resourceType, resource, accountId, resourceGroupId Assign roles that are
+   * supported by the service or platform roles. For more information, see [IAM roles and
    * actions](/docs/account?topic=account-iam-service-roles-actions). The user must also have the same level of access
    * or greater to the target resource in order to grant the role. Use only the resource attributes supported by the
    * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
-   * Both the policy subject and the policy resource must include the **`serviceName`** and **`accountId`** attributes.
+   * Both the policy subject and the policy resource must include the **`accountId`** attributes. The policy subject
+   * must include either **`serviceName`** or **`resourceGroupId`** (or both) attributes.
    *
    * ### Attribute Operators
    *
@@ -347,12 +348,13 @@ class IamPolicyManagementV1 extends BaseService {
    * To update an authorization policy, use **`"type": "authorization"`** in the body. The subject attributes must match
    * the supported authorization subjects of the resource. Multiple subject attributes might be provided. The following
    * attributes are supported:
-   *   serviceName, serviceInstance, region, resourceType, resource, accountId Assign roles that are supported by the
-   * service or platform roles. For more information, see [IAM roles and
+   *   serviceName, serviceInstance, region, resourceType, resource, accountId, resourceGroupId Assign roles that are
+   * supported by the service or platform roles. For more information, see [IAM roles and
    * actions](/docs/account?topic=account-iam-service-roles-actions). The user must also have the same level of access
    * or greater to the target resource in order to grant the role. Use only the resource attributes supported by the
    * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
-   * Both the policy subject and the policy resource must include the **`serviceName`** and **`accountId`** attributes.
+   * Both the policy subject and the policy resource must include the **`accountId`** attributes. The policy subject
+   * must include either **`serviceName`** or **`resourceGroupId`** (or both) attributes.
    *
    * ### Attribute Operators
    *
@@ -1110,6 +1112,20 @@ class IamPolicyManagementV1 extends BaseService {
    * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui). If the subject is a
    * locked service-id, the request will fail.
    *
+   * ### Authorization
+   *
+   * Authorization policies are supported by services on a case by case basis. Refer to service documentation to verify
+   * their support of authorization policies. To create an authorization policy, use **`"type": "authorization"`** in
+   * the body. The subject attributes must match the supported authorization subjects of the resource. Multiple subject
+   * attributes might be provided. The following attributes are supported:
+   *   serviceName, serviceInstance, region, resourceType, resource, accountId, resourceGroupId Assign roles that are
+   * supported by the service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). The user must also have the same level of access
+   * or greater to the target resource in order to grant the role. Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * Both the policy subject and the policy resource must include the **`accountId`** attributes. The policy subject
+   * must include either **`serviceName`** or **`resourceGroupId`** (or both) attributes.
+   *
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals`, `stringMatch`, and `stringEquals` operators are available. For more
@@ -1214,7 +1230,7 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * ### Access
    *
-   * To create an access policy, use **`"type": "access"`** in the body. The supported subject attributes are
+   * To update an access policy, use **`"type": "access"`** in the body. The supported subject attributes are
    * **`iam_id`** and **`access_group_id`**. Use the **`iam_id`** subject attribute to assign access to a user or
    * service-id. Use the **`access_group_id`** subject attribute to assign access to an access group. Assign roles that
    * are supported by the service or platform roles. For more information, see [IAM roles and
@@ -1254,6 +1270,20 @@ class IamPolicyManagementV1 extends BaseService {
    * and
    * [Limiting access with time-based
    * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui).
+   *
+   * ### Authorization
+   *
+   * To update an authorization policy, use **`"type": "authorization"`** in the body. The subject attributes must match
+   * the supported authorization subjects of the resource. Multiple subject attributes might be provided. The following
+   * attributes are supported:
+   *   serviceName, serviceInstance, region, resourceType, resource, accountId, resourceGroupId Assign roles that are
+   * supported by the service or platform roles. For more information, see [IAM roles and
+   * actions](/docs/account?topic=account-iam-service-roles-actions). The user must also have the same level of access
+   * or greater to the target resource in order to grant the role. Use only the resource attributes supported by the
+   * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
+   * Both the policy subject and the policy resource must include the **`accountId`** attributes. The policy subject
+   * must include either **`serviceName`** or **`resourceGroupId`** (or both) attributes.
+   *
    * ### Attribute Operators
    *
    * Currently, only the `stringEquals`, `stringMatch`, and `stringEquals` operators are available. For more
@@ -1555,11 +1585,11 @@ class IamPolicyManagementV1 extends BaseService {
    * * `zh-cn` - Chinese (Simplified, PRC)
    * * `zh-tw` - (Chinese, Taiwan).
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>>}
    */
   public createPolicyTemplate(
     params: IamPolicyManagementV1.CreatePolicyTemplateParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>> {
     const _params = { ...params };
     const _requiredParams = ['name', 'accountId', 'policy'];
     const _validParams = [
@@ -1727,11 +1757,11 @@ class IamPolicyManagementV1 extends BaseService {
    * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template version.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>>}
    */
   public createPolicyTemplateVersion(
     params: IamPolicyManagementV1.CreatePolicyTemplateVersionParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'policy'];
     const _validParams = [
@@ -2959,13 +2989,37 @@ namespace IamPolicyManagementV1 {
   /** ErrorObject. */
   export interface ErrorObject {
     /** The API error code for the error. */
-    code: string;
+    code: ErrorObject.Constants.Code | string;
     /** The error message returned by the API. */
     message: string;
     /** Additional error details. */
     details?: ErrorDetails;
     /** Additional info for error. */
     more_info?: string;
+  }
+  export namespace ErrorObject {
+    export namespace Constants {
+      /** The API error code for the error. */
+      export enum Code {
+        INSUFFICENT_PERMISSIONS = 'insufficent_permissions',
+        INVALID_BODY = 'invalid_body',
+        INVALID_TOKEN = 'invalid_token',
+        MISSING_REQUIRED_QUERY_PARAMETER = 'missing_required_query_parameter',
+        NOT_FOUND = 'not_found',
+        POLICY_CONFLICT_ERROR = 'policy_conflict_error',
+        POLICY_NOT_FOUND = 'policy_not_found',
+        REQUEST_NOT_PROCESSED = 'request_not_processed',
+        ROLE_CONFLICT_ERROR = 'role_conflict_error',
+        ROLE_NOT_FOUND = 'role_not_found',
+        TOO_MANY_REQUESTS = 'too_many_requests',
+        UNABLE_TO_PROCESS = 'unable_to_process',
+        UNSUPPORTED_CONTENT_TYPE = 'unsupported_content_type',
+        POLICY_TEMPLATE_CONFLICT_ERROR = 'policy_template_conflict_error',
+        POLICY_TEMPLATE_NOT_FOUND = 'policy_template_not_found',
+        POLICY_ASSIGNMENT_NOT_FOUND = 'policy_assignment_not_found',
+        POLICY_ASSIGNMENT_CONFLICT_ERROR = 'policy_assignment_conflict_error',
+      }
+    }
   }
 
   /** The error response from API. */
@@ -2988,6 +3042,14 @@ namespace IamPolicyManagementV1 {
   export interface GrantWithEnrichedRoles {
     /** A set of roles granted by the policy. */
     roles: EnrichedRoles[];
+  }
+
+  /** policy template current and limit details with in an account. */
+  export interface LimitData {
+    /** policy template current count. */
+    current?: number;
+    /** policy template limit count. */
+    limit?: number;
   }
 
   /** The core set of properties associated with a policy. */
@@ -3015,7 +3077,16 @@ namespace IamPolicyManagementV1 {
     /** The iam ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state. */
-    state?: string;
+    state?: Policy.Constants.State | string;
+  }
+  export namespace Policy {
+    export namespace Constants {
+      /** The policy state. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
   }
 
   /** The set of properties associated with the policy template assignment. */
@@ -3027,7 +3098,7 @@ namespace IamPolicyManagementV1 {
     /** Passed in value to correlate with other assignments. */
     assignment_id: string;
     /** Assignment target type. */
-    target_type: string;
+    target_type: PolicyAssignment.Constants.TargetType | string;
     /** ID of the target account. */
     target: string;
     /** List of objects with required properties for a policy assignment. */
@@ -3049,13 +3120,28 @@ namespace IamPolicyManagementV1 {
     /** Object for each account assigned. */
     resources?: PolicyAssignmentResources[];
     /** The policy assignment status. */
-    status: string;
+    status: PolicyAssignment.Constants.Status | string;
+  }
+  export namespace PolicyAssignment {
+    export namespace Constants {
+      /** Assignment target type. */
+      export enum TargetType {
+        ACCOUNT = 'Account',
+      }
+      /** The policy assignment status. */
+      export enum Status {
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
+        FAILED = 'failed',
+      }
+    }
   }
 
   /** The set of properties required for a policy assignment. */
   export interface PolicyAssignmentOptions {
     /** The policy subject type; either 'iam_id' or 'access_group_id'. */
-    subject_type: string;
+    subject_type: PolicyAssignmentOptions.Constants.SubjectType | string;
     /** The policy subject id. */
     subject_id: string;
     /** The policy assignment requester id. */
@@ -3064,6 +3150,15 @@ namespace IamPolicyManagementV1 {
     root_template_id?: string;
     /** The template version where this policy is being assigned from. */
     root_template_version?: string;
+  }
+  export namespace PolicyAssignmentOptions {
+    export namespace Constants {
+      /** The policy subject type; either 'iam_id' or 'access_group_id'. */
+      export enum SubjectType {
+        IAM_ID = 'iam_id',
+        ACCESS_GROUP_ID = 'access_group_id',
+      }
+    }
   }
 
   /** Set of properties for the assigned resource. */
@@ -3160,6 +3255,40 @@ namespace IamPolicyManagementV1 {
     policy_templates?: PolicyTemplate[];
   }
 
+  /** The core set of properties associated with the policy template. */
+  export interface PolicyTemplateLimitData {
+    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
+     *  will change the name value for all existing versions of the template.
+     */
+    name: string;
+    /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
+     *  the purpose or context of the policy for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** Enterprise account ID where this template will be created. */
+    account_id: string;
+    /** Template version. */
+    version: string;
+    /** Committed status of the template version. */
+    committed?: boolean;
+    /** The core set of properties associated with the template's policy objet. */
+    policy: TemplatePolicy;
+    /** The policy template ID. */
+    id?: string;
+    /** The href URL that links to the policy templates API by policy template ID. */
+    href?: string;
+    /** The UTC timestamp when the policy template was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy template. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy template was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy template. */
+    last_modified_by_id?: string;
+    /** policy template count details. */
+    counts?: TemplateCountData;
+  }
+
   /** The core set of properties associated with a policy. */
   export interface PolicyTemplateMetaData {
     /** The policy ID. */
@@ -3185,12 +3314,21 @@ namespace IamPolicyManagementV1 {
     /** The iam ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state. */
-    state?: string;
+    state?: PolicyTemplateMetaData.Constants.State | string;
     /** The details of the IAM template that was used to create an enterprise-managed policy in your account. When
      *  returned, this indicates that the policy is created from and managed by a template in the root enterprise
      *  account.
      */
     template?: TemplateMetadata;
+  }
+  export namespace PolicyTemplateMetaData {
+    export namespace Constants {
+      /** The policy state. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
   }
 
   /** A collection of versions for a specific policy template. */
@@ -3268,11 +3406,63 @@ namespace IamPolicyManagementV1 {
     /** The name of an attribute. */
     key: string;
     /** The operator of an attribute. */
-    operator: string;
+    operator: RuleAttribute.Constants.Operator | string;
     /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
      *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
+  }
+  export namespace RuleAttribute {
+    export namespace Constants {
+      /** The operator of an attribute. */
+      export enum Operator {
+        TIMELESSTHAN = 'timeLessThan',
+        TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
+        TIMEGREATERTHAN = 'timeGreaterThan',
+        TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATETIMELESSTHAN = 'dateTimeLessThan',
+        DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
+        DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
+        DATETIMEGREATERTHANOREQUALS = 'dateTimeGreaterThanOrEquals',
+        DAYOFWEEKEQUALS = 'dayOfWeekEquals',
+        DAYOFWEEKANYOF = 'dayOfWeekAnyOf',
+      }
+    }
+  }
+
+  /** Rule that specifies additional conditions. */
+  export interface RuleAttributeWithConditions {
+    /** The name of an attribute. */
+    key?: string;
+    /** The operator of an attribute. */
+    operator: RuleAttributeWithConditions.Constants.Operator | string;
+    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
+     *  an array of strings (e.g., array of days to permit access) for rule attribute.
+     */
+    value?: any;
+    /** List of additional conditions associated with a policy, e.g., time-based conditions that grant access over a
+     *  certain time period.
+     */
+    conditions?: RuleAttribute[];
+  }
+  export namespace RuleAttributeWithConditions {
+    export namespace Constants {
+      /** The operator of an attribute. */
+      export enum Operator {
+        TIMELESSTHAN = 'timeLessThan',
+        TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
+        TIMEGREATERTHAN = 'timeGreaterThan',
+        TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATETIMELESSTHAN = 'dateTimeLessThan',
+        DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
+        DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
+        DATETIMEGREATERTHANOREQUALS = 'dateTimeGreaterThanOrEquals',
+        DAYOFWEEKEQUALS = 'dayOfWeekEquals',
+        DAYOFWEEKANYOF = 'dayOfWeekAnyOf',
+        AND = 'and',
+        OR = 'or',
+      }
+    }
   }
 
   /** An attribute associated with a subject. */
@@ -3281,6 +3471,14 @@ namespace IamPolicyManagementV1 {
     name: string;
     /** The value of an attribute. */
     value: string;
+  }
+
+  /** policy template count details. */
+  export interface TemplateCountData {
+    /** policy template current and limit details with in an account. */
+    template?: LimitData;
+    /** policy template current and limit details with in an account. */
+    version?: LimitData;
   }
 
   /** The details of the IAM template that was used to create an enterprise-managed policy in your account. When returned, this indicates that the policy is created from and managed by a template in the root enterprise account. */
@@ -3300,7 +3498,7 @@ namespace IamPolicyManagementV1 {
   /** The core set of properties associated with the template's policy objet. */
   export interface TemplatePolicy {
     /** The policy type; either 'access' or 'authorization'. */
-    type: string;
+    type: TemplatePolicy.Constants.Type | string;
     /** Description of the policy. This is shown in child accounts when an access group or trusted profile template
      *  uses the policy template to assign access.
      */
@@ -3316,11 +3514,20 @@ namespace IamPolicyManagementV1 {
     /** Specifies the type of access granted by the policy. */
     control: Control;
   }
+  export namespace TemplatePolicy {
+    export namespace Constants {
+      /** The policy type; either 'access' or 'authorization'. */
+      export enum Type {
+        ACCESS = 'access',
+        AUTHORIZATION = 'authorization',
+      }
+    }
+  }
 
   /** The core set of properties associated with the policy. */
   export interface V2Policy {
     /** The policy type; either 'access' or 'authorization'. */
-    type: string;
+    type: V2Policy.Constants.Type | string;
     /** Description of the policy. */
     description?: string;
     /** The subject attributes for whom the policy grants access. */
@@ -3347,13 +3554,27 @@ namespace IamPolicyManagementV1 {
     /** The iam ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state, either 'deleted' or 'active'. */
-    state: string;
+    state: V2Policy.Constants.State | string;
     /** The optional last permit time of policy, when passing query parameter format=include_last_permit. */
     last_permit_at?: string;
     /** The optional count of times that policy has provided a permit, when passing query parameter
      *  format=include_last_permit.
      */
     last_permit_frequency?: number;
+  }
+  export namespace V2Policy {
+    export namespace Constants {
+      /** The policy type; either 'access' or 'authorization'. */
+      export enum Type {
+        ACCESS = 'access',
+        AUTHORIZATION = 'authorization',
+      }
+      /** The policy state, either 'deleted' or 'active'. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
   }
 
   /** A collection of policies. */
@@ -3375,11 +3596,21 @@ namespace IamPolicyManagementV1 {
     /** The name of a resource attribute. */
     key: string;
     /** The operator of an attribute. */
-    operator: string;
+    operator: V2PolicyResourceAttribute.Constants.Operator | string;
     /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
      *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
+  }
+  export namespace V2PolicyResourceAttribute {
+    export namespace Constants {
+      /** The operator of an attribute. */
+      export enum Operator {
+        STRINGEQUALS = 'stringEquals',
+        STRINGEXISTS = 'stringExists',
+        STRINGMATCH = 'stringMatch',
+      }
+    }
   }
 
   /** A tag associated with a resource. */
@@ -3389,7 +3620,16 @@ namespace IamPolicyManagementV1 {
     /** The value of an access management tag. */
     value: string;
     /** The operator of an access management tag. */
-    operator: string;
+    operator: V2PolicyResourceTag.Constants.Operator | string;
+  }
+  export namespace V2PolicyResourceTag {
+    export namespace Constants {
+      /** The operator of an access management tag. */
+      export enum Operator {
+        STRINGEQUALS = 'stringEquals',
+        STRINGMATCH = 'stringMatch',
+      }
+    }
   }
 
   /** Additional access conditions associated with the policy. */
@@ -3406,15 +3646,23 @@ namespace IamPolicyManagementV1 {
     /** The name of a subject attribute, e.g., iam_id, access_group_id. */
     key: string;
     /** The operator of an attribute. */
-    operator: string;
+    operator: V2PolicySubjectAttribute.Constants.Operator | string;
     /** The value of the ID of the subject, e.g., service ID, access group ID, IAM ID. */
     value: string;
+  }
+  export namespace V2PolicySubjectAttribute {
+    export namespace Constants {
+      /** The operator of an attribute. */
+      export enum Operator {
+        STRINGEQUALS = 'stringEquals',
+      }
+    }
   }
 
   /** The core set of properties associated with the policy. */
   export interface V2PolicyTemplateMetaData {
     /** The policy type; either 'access' or 'authorization'. */
-    type: string;
+    type: V2PolicyTemplateMetaData.Constants.Type | string;
     /** Description of the policy. */
     description?: string;
     /** The subject attributes for whom the policy grants access. */
@@ -3441,7 +3689,7 @@ namespace IamPolicyManagementV1 {
     /** The iam ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state, either 'deleted' or 'active'. */
-    state: string;
+    state: V2PolicyTemplateMetaData.Constants.State | string;
     /** The optional last permit time of policy, when passing query parameter format=include_last_permit. */
     last_permit_at?: string;
     /** The optional count of times that policy has provided a permit, when passing query parameter
@@ -3453,6 +3701,20 @@ namespace IamPolicyManagementV1 {
      *  account.
      */
     template?: TemplateMetadata;
+  }
+  export namespace V2PolicyTemplateMetaData {
+    export namespace Constants {
+      /** The policy type; either 'access' or 'authorization'. */
+      export enum Type {
+        ACCESS = 'access',
+        AUTHORIZATION = 'authorization',
+      }
+      /** The policy state, either 'deleted' or 'active'. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
   }
 
   /** Specifies the type of access granted by the policy. */
@@ -3472,21 +3734,47 @@ namespace IamPolicyManagementV1 {
     /** The name of an attribute. */
     key: string;
     /** The operator of an attribute. */
-    operator: string;
+    operator: V2PolicyRuleRuleAttribute.Constants.Operator | string;
     /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
      *  an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
+  export namespace V2PolicyRuleRuleAttribute {
+    export namespace Constants {
+      /** The operator of an attribute. */
+      export enum Operator {
+        TIMELESSTHAN = 'timeLessThan',
+        TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
+        TIMEGREATERTHAN = 'timeGreaterThan',
+        TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATETIMELESSTHAN = 'dateTimeLessThan',
+        DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
+        DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
+        DATETIMEGREATERTHANOREQUALS = 'dateTimeGreaterThanOrEquals',
+        DAYOFWEEKEQUALS = 'dayOfWeekEquals',
+        DAYOFWEEKANYOF = 'dayOfWeekAnyOf',
+      }
+    }
+  }
 
   /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
   export interface V2PolicyRuleRuleWithConditions extends V2PolicyRule {
     /** Operator to evaluate conditions. */
-    operator: string;
+    operator: V2PolicyRuleRuleWithConditions.Constants.Operator | string;
     /** List of conditions associated with a policy, e.g., time-based conditions that grant access over a certain
      *  time period.
      */
-    conditions: RuleAttribute[];
+    conditions: RuleAttributeWithConditions[];
+  }
+  export namespace V2PolicyRuleRuleWithConditions {
+    export namespace Constants {
+      /** Operator to evaluate conditions. */
+      export enum Operator {
+        AND = 'and',
+        OR = 'or',
+      }
+    }
   }
 }
 
