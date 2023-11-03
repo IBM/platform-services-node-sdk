@@ -1,3 +1,10 @@
+# [0.46.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.3...v0.46.0) (2023-11-03)
+
+
+### Features
+
+* **Context-Based Restrictions:** add enforcement_modes to operations response ([#232](https://github.com/IBM/platform-services-node-sdk/issues/232)) ([e3df58f](https://github.com/IBM/platform-services-node-sdk/commit/e3df58fdeed16a86a1b580d93e3532c869843023))
+
 ## [0.45.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.2...v0.45.3) (2023-11-01)
 
 
