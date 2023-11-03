@@ -102,10 +102,18 @@ describe('ContextBasedRestrictionsV1', () => {
       type: 'ipAddress',
       value: '169.23.56.234',
     };
+    const ipAddressV6Model = {
+      type: 'ipAddress',
+      value: '3ffe:1900:fe21:4545::',
+    };
     // AddressIPAddressRange
     const ipRangeAddressModel = {
       type: 'ipRange',
       value: '169.23.22.0-169.23.22.255',
+    };
+    const ipRangeAddressV6Model = {
+      type: 'ipRange',
+      value: '3ffe:1900:fe21:4545::-3ffe:1900:fe21:6767::',
     };
     // AddressSubnet
     const subnetAddressModel = {
@@ -134,7 +142,7 @@ describe('ContextBasedRestrictionsV1', () => {
     const params = {
       name: 'an example of zone',
       accountId,
-      addresses: [ipAddressModel, ipRangeAddressModel, subnetAddressModel, vpcAddressModel, serviceRefAddressModel],
+      addresses: [ipAddressModel, ipAddressV6Model, ipRangeAddressModel, ipRangeAddressV6Model, subnetAddressModel, vpcAddressModel, serviceRefAddressModel],
       excluded: [excludedIPAddressModel],
       description: 'this is an example of zone',
     };
