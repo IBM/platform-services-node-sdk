@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
+ * IBM OpenAPI SDK Code Generator Version: 3.81.0-c73a091c-20231026-215706
  */
 
 import * as extend from 'extend';
@@ -1481,6 +1481,8 @@ namespace ContextBasedRestrictionsV1 {
     type: string;
     /** The actions available for the API type. */
     actions: Action[];
+    /** The enforcement modes supported by the API type. */
+    enforcement_modes?: string[];
   }
 
   /** An output account settings. */
@@ -1520,7 +1522,19 @@ namespace ContextBasedRestrictionsV1 {
   /** A zone address. */
   export interface Address {
     /** The type of address. */
-    type?: string;
+    type?: Address.Constants.Type | string;
+  }
+  export namespace Address {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        IPADDRESS = 'ipAddress',
+        IPRANGE = 'ipRange',
+        SUBNET = 'subnet',
+        VPC = 'vpc',
+        SERVICEREF = 'serviceRef',
+      }
+    }
   }
 
   /** The operations this rule applies to. */
@@ -1587,7 +1601,7 @@ namespace ContextBasedRestrictionsV1 {
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
      *   * `report` - The restrictions are evaluated and reported, but not enforced.
      */
-    enforcement_mode?: string;
+    enforcement_mode?: Rule.Constants.EnforcementMode | string;
     /** The href link to the resource. */
     href: string;
     /** The time the resource was created. */
@@ -1598,6 +1612,16 @@ namespace ContextBasedRestrictionsV1 {
     last_modified_at: string;
     /** IAM ID of the user or service which modified the resource. */
     last_modified_by_id: string;
+  }
+  export namespace Rule {
+    export namespace Constants {
+      /** The rule enforcement mode: * `enabled` - The restrictions are enforced and reported. This is the default. * `disabled` - The restrictions are disabled. Nothing is enforced or reported. * `report` - The restrictions are evaluated and reported, but not enforced. */
+      export enum EnforcementMode {
+        ENABLED = 'enabled',
+        DISABLED = 'disabled',
+        REPORT = 'report',
+      }
+    }
   }
 
   /** A rule context. */
@@ -1733,41 +1757,81 @@ namespace ContextBasedRestrictionsV1 {
   /** A single IP address. IPv4 and IPv6 are supported. */
   export interface AddressIPAddress extends Address {
     /** The type of address. */
-    type: string;
+    type: AddressIPAddress.Constants.Type | string;
     /** The IP address. */
     value: string;
+  }
+  export namespace AddressIPAddress {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        IPADDRESS = 'ipAddress',
+      }
+    }
   }
 
   /** An IP address range. IPv4 and IPv6 are supported. */
   export interface AddressIPAddressRange extends Address {
     /** The type of address. */
-    type: string;
+    type: AddressIPAddressRange.Constants.Type | string;
     /** The ip range in <first-ip>-<last-ip> format. */
     value: string;
+  }
+  export namespace AddressIPAddressRange {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        IPRANGE = 'ipRange',
+      }
+    }
   }
 
   /** A service reference. */
   export interface AddressServiceRef extends Address {
     /** The type of address. */
-    type: string;
+    type: AddressServiceRef.Constants.Type | string;
     /** A service reference value. */
     ref: ServiceRefValue;
+  }
+  export namespace AddressServiceRef {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        SERVICEREF = 'serviceRef',
+      }
+    }
   }
 
   /** A subnet in CIDR format. */
   export interface AddressSubnet extends Address {
     /** The type of address. */
-    type: string;
+    type: AddressSubnet.Constants.Type | string;
     /** The subnet in CIDR format. */
     value: string;
+  }
+  export namespace AddressSubnet {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        SUBNET = 'subnet',
+      }
+    }
   }
 
   /** A single VPC address. */
   export interface AddressVPC extends Address {
     /** The type of address. */
-    type: string;
+    type: AddressVPC.Constants.Type | string;
     /** The VPC CRN. */
     value: string;
+  }
+  export namespace AddressVPC {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        VPC = 'vpc',
+      }
+    }
   }
 }
 

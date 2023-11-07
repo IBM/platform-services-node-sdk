@@ -118,7 +118,7 @@ describe('ContextBasedRestrictionsV1', () => {
       // AddressIPAddress
       const addressModel = {
         type: 'ipAddress',
-        value: '169.23.56.234, 3ffe:1900:fe21:4545::',
+        value: '169.23.56.234',
       };
 
       function __createZoneTest() {
@@ -394,7 +394,7 @@ describe('ContextBasedRestrictionsV1', () => {
       // AddressIPAddress
       const addressModel = {
         type: 'ipAddress',
-        value: '169.23.56.234, 3ffe:1900:fe21:4545::',
+        value: '169.23.56.234',
       };
 
       function __replaceZoneTest() {

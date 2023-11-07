@@ -1,3 +1,24 @@
+# [0.46.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.3...v0.46.0) (2023-11-03)
+
+
+### Features
+
+* **Context-Based Restrictions:** add enforcement_modes to operations response ([#232](https://github.com/IBM/platform-services-node-sdk/issues/232)) ([e3df58f](https://github.com/IBM/platform-services-node-sdk/commit/e3df58fdeed16a86a1b580d93e3532c869843023))
+
+## [0.45.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.2...v0.45.3) (2023-11-01)
+
+
+### Bug Fixes
+
+* bump node core version to 4.1.4 ([#231](https://github.com/IBM/platform-services-node-sdk/issues/231)) ([be2b58b](https://github.com/IBM/platform-services-node-sdk/commit/be2b58b92b01c5f48cd43e5e5191759e8fb6fce4))
+
+## [0.45.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.1...v0.45.2) (2023-10-31)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** add nested conditions to rule.conditions ([#230](https://github.com/IBM/platform-services-node-sdk/issues/230)) ([155b276](https://github.com/IBM/platform-services-node-sdk/commit/155b2769383e9ec2d09119e23dcdc9bbfea16530))
+
 ## [0.45.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.0...v0.45.1) (2023-10-18)
 
 
