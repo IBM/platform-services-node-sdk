@@ -1,3 +1,10 @@
+## [0.46.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.46.0...v0.46.1) (2023-11-07)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** add nested conditions to rule.conditions ([#233](https://github.com/IBM/platform-services-node-sdk/issues/233)) ([15be7c6](https://github.com/IBM/platform-services-node-sdk/commit/15be7c69f9821248ff47790ee58fa5a79bbbf2bc))
+
 # [0.46.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.45.3...v0.46.0) (2023-11-03)
 
 
