@@ -3052,6 +3052,9 @@ namespace IamPolicyManagementV1 {
     limit?: number;
   }
 
+  /** Condition that specifies additional conditions or RuleAttribute to grant access.s. */
+  export interface NestedCondition {}
+
   /** The core set of properties associated with a policy. */
   export interface Policy {
     /** The policy ID. */
@@ -3430,41 +3433,6 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Rule that specifies additional conditions. */
-  export interface RuleAttributeWithConditions {
-    /** The name of an attribute. */
-    key?: string;
-    /** The operator of an attribute. */
-    operator: RuleAttributeWithConditions.Constants.Operator | string;
-    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
-     *  an array of strings (e.g., array of days to permit access) for rule attribute.
-     */
-    value?: any;
-    /** List of additional conditions associated with a policy, e.g., time-based conditions that grant access over a
-     *  certain time period.
-     */
-    conditions?: RuleAttribute[];
-  }
-  export namespace RuleAttributeWithConditions {
-    export namespace Constants {
-      /** The operator of an attribute. */
-      export enum Operator {
-        TIMELESSTHAN = 'timeLessThan',
-        TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
-        TIMEGREATERTHAN = 'timeGreaterThan',
-        TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
-        DATETIMELESSTHAN = 'dateTimeLessThan',
-        DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
-        DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
-        DATETIMEGREATERTHANOREQUALS = 'dateTimeGreaterThanOrEquals',
-        DAYOFWEEKEQUALS = 'dayOfWeekEquals',
-        DAYOFWEEKANYOF = 'dayOfWeekAnyOf',
-        AND = 'and',
-        OR = 'or',
-      }
-    }
-  }
-
   /** An attribute associated with a subject. */
   export interface SubjectAttribute {
     /** The name of an attribute. */
@@ -3730,6 +3698,54 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Rule that specifies additional access granted (e.g., time-based condition). */
+  export interface NestedConditionRuleAttribute extends NestedCondition {
+    /** The name of an attribute. */
+    key: string;
+    /** The operator of an attribute. */
+    operator: NestedConditionRuleAttribute.Constants.Operator | string;
+    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
+     *  an array of strings (e.g., array of days to permit access) for rule attribute.
+     */
+    value: any;
+  }
+  export namespace NestedConditionRuleAttribute {
+    export namespace Constants {
+      /** The operator of an attribute. */
+      export enum Operator {
+        TIMELESSTHAN = 'timeLessThan',
+        TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
+        TIMEGREATERTHAN = 'timeGreaterThan',
+        TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATETIMELESSTHAN = 'dateTimeLessThan',
+        DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
+        DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
+        DATETIMEGREATERTHANOREQUALS = 'dateTimeGreaterThanOrEquals',
+        DAYOFWEEKEQUALS = 'dayOfWeekEquals',
+        DAYOFWEEKANYOF = 'dayOfWeekAnyOf',
+      }
+    }
+  }
+
+  /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
+  export interface NestedConditionRuleWithConditions extends NestedCondition {
+    /** Operator to evaluate conditions. */
+    operator: NestedConditionRuleWithConditions.Constants.Operator | string;
+    /** List of conditions associated with a policy, e.g., time-based conditions that grant access over a certain
+     *  time period.
+     */
+    conditions: RuleAttribute[];
+  }
+  export namespace NestedConditionRuleWithConditions {
+    export namespace Constants {
+      /** Operator to evaluate conditions. */
+      export enum Operator {
+        AND = 'and',
+        OR = 'or',
+      }
+    }
+  }
+
+  /** Rule that specifies additional access granted (e.g., time-based condition). */
   export interface V2PolicyRuleRuleAttribute extends V2PolicyRule {
     /** The name of an attribute. */
     key: string;
@@ -3759,15 +3775,15 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
-  export interface V2PolicyRuleRuleWithConditions extends V2PolicyRule {
+  export interface V2PolicyRuleRuleWithNestedConditions extends V2PolicyRule {
     /** Operator to evaluate conditions. */
-    operator: V2PolicyRuleRuleWithConditions.Constants.Operator | string;
+    operator: V2PolicyRuleRuleWithNestedConditions.Constants.Operator | string;
     /** List of conditions associated with a policy, e.g., time-based conditions that grant access over a certain
      *  time period.
      */
-    conditions: RuleAttributeWithConditions[];
+    conditions: NestedCondition[];
   }
-  export namespace V2PolicyRuleRuleWithConditions {
+  export namespace V2PolicyRuleRuleWithNestedConditions {
     export namespace Constants {
       /** Operator to evaluate conditions. */
       export enum Operator {
