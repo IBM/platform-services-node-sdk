@@ -1,3 +1,10 @@
+# [0.47.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.46.1...v0.47.0) (2023-11-14)
+
+
+### Features
+
+* **IAM Identity:** add comply_state variable to mfa report ([#234](https://github.com/IBM/platform-services-node-sdk/issues/234)) ([36a3ab8](https://github.com/IBM/platform-services-node-sdk/commit/36a3ab8663c12329fd115bc527e57db2e89a6808))
+
 ## [0.46.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.46.0...v0.46.1) (2023-11-07)
 
 
