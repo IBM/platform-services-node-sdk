@@ -118,7 +118,6 @@ describe('GlobalTaggingV1', () => {
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const fullData = false;
@@ -133,7 +132,6 @@ describe('GlobalTaggingV1', () => {
           xRequestId,
           xCorrelationId,
           transactionId,
-          impersonateUser,
           accountId,
           tagType,
           fullData,
@@ -163,7 +161,6 @@ describe('GlobalTaggingV1', () => {
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
-        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
         expect(mockRequestOptions.qs.full_data).toEqual(fullData);
@@ -219,7 +216,6 @@ describe('GlobalTaggingV1', () => {
       function __createTagTest() {
         // Construct the params object for operation createTag
         const tagNames = ['testString'];
-        const impersonateUser = 'testString';
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
@@ -227,7 +223,6 @@ describe('GlobalTaggingV1', () => {
         const tagType = 'access';
         const createTagParams = {
           tagNames,
-          impersonateUser,
           xRequestId,
           xCorrelationId,
           transactionId,
@@ -253,7 +248,6 @@ describe('GlobalTaggingV1', () => {
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
-        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
       }
@@ -324,7 +318,6 @@ describe('GlobalTaggingV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const providers = 'ghost';
-        const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const deleteTagAllParams = {
@@ -332,7 +325,6 @@ describe('GlobalTaggingV1', () => {
           xCorrelationId,
           transactionId,
           providers,
-          impersonateUser,
           accountId,
           tagType,
         };
@@ -355,7 +347,6 @@ describe('GlobalTaggingV1', () => {
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.providers).toEqual(providers);
-        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
       }
@@ -407,7 +398,6 @@ describe('GlobalTaggingV1', () => {
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
         const providers = ['ghost'];
-        const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const deleteTagParams = {
@@ -416,7 +406,6 @@ describe('GlobalTaggingV1', () => {
           xCorrelationId,
           transactionId,
           providers,
-          impersonateUser,
           accountId,
           tagType,
         };
@@ -439,7 +428,6 @@ describe('GlobalTaggingV1', () => {
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
         checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.providers).toEqual(providers);
-        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
         expect(mockRequestOptions.path.tag_name).toEqual(tagName);
@@ -521,7 +509,6 @@ describe('GlobalTaggingV1', () => {
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const attachTagParams = {
@@ -531,7 +518,6 @@ describe('GlobalTaggingV1', () => {
           xRequestId,
           xCorrelationId,
           transactionId,
-          impersonateUser,
           accountId,
           tagType,
         };
@@ -556,7 +542,6 @@ describe('GlobalTaggingV1', () => {
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
-        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
       }
@@ -637,7 +622,6 @@ describe('GlobalTaggingV1', () => {
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const transactionId = 'testString';
-        const impersonateUser = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const detachTagParams = {
@@ -647,7 +631,6 @@ describe('GlobalTaggingV1', () => {
           xRequestId,
           xCorrelationId,
           transactionId,
-          impersonateUser,
           accountId,
           tagType,
         };
@@ -672,7 +655,6 @@ describe('GlobalTaggingV1', () => {
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
-        expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
       }
