@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.79.0-2eb6af3d-20230905-174838
+ * IBM OpenAPI SDK Code Generator Version: 3.82.1-2082d402-20231115-195014
  */
 
 import * as extend from 'extend';
@@ -121,8 +121,6 @@ class GlobalTaggingV1 extends BaseService {
    * automatically replaced by a random (version 4) UUID.
    * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
    * across services. If not specified, it automatically generated with the prefix "gst-".
-   * @param {string} [params.impersonateUser] - The user on whose behalf the get operation must be performed (_for
-   * administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account to list the tags for. If it is not set, then it
    * is taken from the authorization token. This parameter is required if `tag_type` is set to `service`.
    * @param {string} [params.tagType] - The type of the tag you want to list. Supported values are `user`, `service` and
@@ -157,7 +155,6 @@ class GlobalTaggingV1 extends BaseService {
       'xRequestId',
       'xCorrelationId',
       'transactionId',
-      'impersonateUser',
       'accountId',
       'tagType',
       'fullData',
@@ -176,7 +173,6 @@ class GlobalTaggingV1 extends BaseService {
     }
 
     const query = {
-      'impersonate_user': _params.impersonateUser,
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
       'full_data': _params.fullData,
@@ -224,8 +220,6 @@ class GlobalTaggingV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string[]} params.tagNames - An array of tag names to create.
-   * @param {string} [params.impersonateUser] - The user on whose behalf the create operation must be performed (_for
-   * administrators only_).
    * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
    * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
    * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
@@ -239,8 +233,7 @@ class GlobalTaggingV1 extends BaseService {
    * automatically replaced by a random (version 4) UUID.
    * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
    * across services. If not specified, it automatically generated with the prefix "gst-".
-   * @param {string} [params.accountId] - The ID of the billing account where the tag must be created. It is a required
-   * parameter if `impersonate_user` is set.
+   * @param {string} [params.accountId] - The ID of the billing account where the tag must be created.
    * @param {string} [params.tagType] - The type of the tags you want to create. The only allowed value is `access`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>>}
@@ -252,7 +245,6 @@ class GlobalTaggingV1 extends BaseService {
     const _requiredParams = ['tagNames'];
     const _validParams = [
       'tagNames',
-      'impersonateUser',
       'xRequestId',
       'xCorrelationId',
       'transactionId',
@@ -270,7 +262,6 @@ class GlobalTaggingV1 extends BaseService {
     };
 
     const query = {
-      'impersonate_user': _params.impersonateUser,
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
     };
@@ -323,8 +314,6 @@ class GlobalTaggingV1 extends BaseService {
    * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
    * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.providers] - Select a provider. Supported values are `ghost` and `ims`.
-   * @param {string} [params.impersonateUser] - The user on whose behalf the delete all operation must be performed
-   * (_for administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account to delete the tags for. If it is not set, then
    * it is taken from the authorization token. It is a required parameter if `tag_type` is set to `service`.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
@@ -342,7 +331,6 @@ class GlobalTaggingV1 extends BaseService {
       'xCorrelationId',
       'transactionId',
       'providers',
-      'impersonateUser',
       'accountId',
       'tagType',
       'headers',
@@ -354,7 +342,6 @@ class GlobalTaggingV1 extends BaseService {
 
     const query = {
       'providers': _params.providers,
-      'impersonate_user': _params.impersonateUser,
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
     };
@@ -407,8 +394,6 @@ class GlobalTaggingV1 extends BaseService {
    * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string[]} [params.providers] - Select a provider. Supported values are `ghost` and `ims`. To delete tags
    * both in Global Search and Tagging and in IMS, use `ghost,ims`.
-   * @param {string} [params.impersonateUser] - The user on whose behalf the delete operation must be performed (_for
-   * administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account to delete the tag for. It is a required
    * parameter if `tag_type` is set to `service`, otherwise it is inferred from the authorization IAM token.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
@@ -427,7 +412,6 @@ class GlobalTaggingV1 extends BaseService {
       'xCorrelationId',
       'transactionId',
       'providers',
-      'impersonateUser',
       'accountId',
       'tagType',
       'headers',
@@ -439,7 +423,6 @@ class GlobalTaggingV1 extends BaseService {
 
     const query = {
       'providers': _params.providers,
-      'impersonate_user': _params.impersonateUser,
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
     };
@@ -498,8 +481,6 @@ class GlobalTaggingV1 extends BaseService {
    * automatically replaced by a random (version 4) UUID.
    * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
    * across services. If not specified, it automatically generated with the prefix "gst-".
-   * @param {string} [params.impersonateUser] - The user on whose behalf the attach operation must be performed (_for
-   * administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account of the tagged resource. It is a required
    * parameter if `tag_type` is set to `service`. Otherwise, it is inferred from the authorization IAM token.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
@@ -519,7 +500,6 @@ class GlobalTaggingV1 extends BaseService {
       'xRequestId',
       'xCorrelationId',
       'transactionId',
-      'impersonateUser',
       'accountId',
       'tagType',
       'headers',
@@ -536,7 +516,6 @@ class GlobalTaggingV1 extends BaseService {
     };
 
     const query = {
-      'impersonate_user': _params.impersonateUser,
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
     };
@@ -591,8 +570,6 @@ class GlobalTaggingV1 extends BaseService {
    * automatically replaced by a random (version 4) UUID.
    * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
    * across services. If not specified, it automatically generated with the prefix "gst-".
-   * @param {string} [params.impersonateUser] - The user on whose behalf the detach operation must be performed (_for
-   * administrators only_).
    * @param {string} [params.accountId] - The ID of the billing account of the untagged resource. It is a required
    * parameter if `tag_type` is set to `service`, otherwise it is inferred from the authorization IAM token.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
@@ -612,7 +589,6 @@ class GlobalTaggingV1 extends BaseService {
       'xRequestId',
       'xCorrelationId',
       'transactionId',
-      'impersonateUser',
       'accountId',
       'tagType',
       'headers',
@@ -629,7 +605,6 @@ class GlobalTaggingV1 extends BaseService {
     };
 
     const query = {
-      'impersonate_user': _params.impersonateUser,
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
     };
@@ -712,8 +687,6 @@ namespace GlobalTaggingV1 {
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
-    /** The user on whose behalf the get operation must be performed (_for administrators only_). */
-    impersonateUser?: string;
     /** The ID of the billing account to list the tags for. If it is not set, then it is taken from the
      *  authorization token. This parameter is required if `tag_type` is set to `service`.
      */
@@ -776,8 +749,6 @@ namespace GlobalTaggingV1 {
   export interface CreateTagParams {
     /** An array of tag names to create. */
     tagNames: string[];
-    /** The user on whose behalf the create operation must be performed (_for administrators only_). */
-    impersonateUser?: string;
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
      *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
      *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
@@ -797,9 +768,7 @@ namespace GlobalTaggingV1 {
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
-    /** The ID of the billing account where the tag must be created. It is a required parameter if
-     *  `impersonate_user` is set.
-     */
+    /** The ID of the billing account where the tag must be created. */
     accountId?: string;
     /** The type of the tags you want to create. The only allowed value is `access`. */
     tagType?: CreateTagConstants.TagType | string;
@@ -837,8 +806,6 @@ namespace GlobalTaggingV1 {
     transactionId?: string;
     /** Select a provider. Supported values are `ghost` and `ims`. */
     providers?: DeleteTagAllConstants.Providers | string;
-    /** The user on whose behalf the delete all operation must be performed (_for administrators only_). */
-    impersonateUser?: string;
     /** The ID of the billing account to delete the tags for. If it is not set, then it is taken from the
      *  authorization token. It is a required parameter if `tag_type` is set to `service`.
      */
@@ -892,8 +859,6 @@ namespace GlobalTaggingV1 {
      *  and in IMS, use `ghost,ims`.
      */
     providers?: DeleteTagConstants.Providers[] | string[];
-    /** The user on whose behalf the delete operation must be performed (_for administrators only_). */
-    impersonateUser?: string;
     /** The ID of the billing account to delete the tag for. It is a required parameter if `tag_type` is set to
      *  `service`, otherwise it is inferred from the authorization IAM token.
      */
@@ -947,8 +912,6 @@ namespace GlobalTaggingV1 {
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
-    /** The user on whose behalf the attach operation must be performed (_for administrators only_). */
-    impersonateUser?: string;
     /** The ID of the billing account of the tagged resource. It is a required parameter if `tag_type` is set to
      *  `service`. Otherwise, it is inferred from the authorization IAM token.
      */
@@ -997,8 +960,6 @@ namespace GlobalTaggingV1 {
      *  automatically generated with the prefix "gst-".
      */
     transactionId?: string;
-    /** The user on whose behalf the detach operation must be performed (_for administrators only_). */
-    impersonateUser?: string;
     /** The ID of the billing account of the untagged resource. It is a required parameter if `tag_type` is set to
      *  `service`, otherwise it is inferred from the authorization IAM token.
      */
@@ -1047,11 +1008,20 @@ namespace GlobalTaggingV1 {
   /** Result of a delete_tag request. */
   export interface DeleteTagResultsItem {
     /** The provider of the tag. */
-    provider?: string;
+    provider?: DeleteTagResultsItem.Constants.Provider | string;
     /** It is `true` if the operation exits with an error (for example, the tag does not exist). */
     is_error?: boolean;
     /** DeleteTagResultsItem accepts additional properties. */
     [propName: string]: any;
+  }
+  export namespace DeleteTagResultsItem {
+    export namespace Constants {
+      /** The provider of the tag. */
+      export enum Provider {
+        GHOST = 'ghost',
+        IMS = 'ims',
+      }
+    }
   }
 
   /** Results of deleting unattatched tags. */
