@@ -362,6 +362,34 @@ describe('UsageReportsV4', () => {
     // end-update_reports_snapshot_config
   });
 
+  test('validateReportsSnapshotConfig request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('validateReportsSnapshotConfig() result:');
+    // begin-validate_reports_snapshot_config
+
+    const params = {
+      accountId,
+    };
+
+    let res;
+    try {
+      res = await usageReportsService.validateReportsSnapshotConfig(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-validate_reports_snapshot_config
+  });
+
   test('getReportsSnapshot request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -380,12 +408,18 @@ describe('UsageReportsV4', () => {
       month: billingMonth,
       dateFrom: snapshotDateFrom,
       dateTo: snapshotDateTo,
+      limit: 30,
     };
 
-    let res;
+    const allResults = [];
     try {
-      res = await usageReportsService.getReportsSnapshot(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new UsageReportsV4.GetReportsSnapshotPager(usageReportsService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }

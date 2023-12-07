@@ -1438,6 +1438,108 @@ describe('UsageReportsV4', () => {
     });
   });
 
+  describe('validateReportsSnapshotConfig', () => {
+    describe('positive tests', () => {
+      function __validateReportsSnapshotConfigTest() {
+        // Construct the params object for operation validateReportsSnapshotConfig
+        const accountId = 'abc';
+        const interval = 'daily';
+        const cosBucket = 'bucket_name';
+        const cosLocation = 'us-south';
+        const cosReportsFolder = 'IBMCloud-Billing-Reports';
+        const reportTypes = ['account_summary', 'enterprise_summary', 'account_resource_instance_usage'];
+        const versioning = 'new';
+        const validateReportsSnapshotConfigParams = {
+          accountId,
+          interval,
+          cosBucket,
+          cosLocation,
+          cosReportsFolder,
+          reportTypes,
+          versioning,
+        };
+
+        const validateReportsSnapshotConfigResult = usageReportsService.validateReportsSnapshotConfig(validateReportsSnapshotConfigParams);
+
+        // all methods should return a Promise
+        expectToBePromise(validateReportsSnapshotConfigResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-reports-snapshot-config/validate', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.interval).toEqual(interval);
+        expect(mockRequestOptions.body.cos_bucket).toEqual(cosBucket);
+        expect(mockRequestOptions.body.cos_location).toEqual(cosLocation);
+        expect(mockRequestOptions.body.cos_reports_folder).toEqual(cosReportsFolder);
+        expect(mockRequestOptions.body.report_types).toEqual(reportTypes);
+        expect(mockRequestOptions.body.versioning).toEqual(versioning);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __validateReportsSnapshotConfigTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.enableRetries();
+        __validateReportsSnapshotConfigTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        usageReportsService.disableRetries();
+        __validateReportsSnapshotConfigTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'abc';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const validateReportsSnapshotConfigParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        usageReportsService.validateReportsSnapshotConfig(validateReportsSnapshotConfigParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await usageReportsService.validateReportsSnapshotConfig({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await usageReportsService.validateReportsSnapshotConfig();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getReportsSnapshot', () => {
     describe('positive tests', () => {
       function __getReportsSnapshotTest() {
