@@ -351,18 +351,63 @@ describe('UsageReportsV4_integration', () => {
     expect(res.result).toBeDefined();
   });
 
+  test('validateReportsSnapshotConfig()', async () => {
+    const params = {
+      accountId,
+      interval: 'daily',
+      cosBucket,
+      cosLocation,
+      cosReportsFolder: 'IBMCloud-Billing-Reports',
+      reportTypes: ['account_summary', 'enterprise_summary', 'account_resource_instance_usage'],
+      versioning: 'new',
+    };
+
+    const res = await usageReportsService.validateReportsSnapshotConfig(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('getReportsSnapshot()', async () => {
     const params = {
       accountId,
       month: billingMonth,
       dateFrom: snapshotDateFrom,
       dateTo: snapshotDateTo,
+      limit: 30,
     };
 
     const res = await usageReportsService.getReportsSnapshot(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+  });
+
+  test('getReportsSnapshot() via GetReportsSnapshotPager', async () => {
+    const params = {
+      accountId,
+      month: billingMonth,
+      dateFrom: snapshotDateFrom,
+      dateTo: snapshotDateTo,
+      limit: 30,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new UsageReportsV4.GetReportsSnapshotPager(usageReportsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new UsageReportsV4.GetReportsSnapshotPager(usageReportsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
   test('deleteReportsSnapshotConfig()', async () => {
