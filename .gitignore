@@ -60,6 +60,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+.nvmrc
 
 # TypeScript v1 declaration files
 typings/
