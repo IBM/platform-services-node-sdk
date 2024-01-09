@@ -1,3 +1,10 @@
+## [0.48.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.48.0...v0.48.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump node core to 4.2.2 ([#237](https://github.com/IBM/platform-services-node-sdk/issues/237)) ([3f7dfe5](https://github.com/IBM/platform-services-node-sdk/commit/3f7dfe5520550ac89069f6e31f9d7b260a85b17d))
+
 # [0.48.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.47.1...v0.48.0) (2023-12-08)
 
 
