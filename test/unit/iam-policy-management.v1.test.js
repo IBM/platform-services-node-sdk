@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1861,9 +1861,11 @@ describe('IamPolicyManagementV1', () => {
         // Construct the params object for operation listPolicyTemplates
         const accountId = 'testString';
         const acceptLanguage = 'default';
+        const state = 'active';
         const listPolicyTemplatesParams = {
           accountId,
           acceptLanguage,
+          state,
         };
 
         const listPolicyTemplatesResult = iamPolicyManagementService.listPolicyTemplates(listPolicyTemplatesParams);
@@ -1882,6 +1884,7 @@ describe('IamPolicyManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.state).toEqual(state);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -2104,8 +2107,10 @@ describe('IamPolicyManagementV1', () => {
       function __getPolicyTemplateTest() {
         // Construct the params object for operation getPolicyTemplate
         const policyTemplateId = 'testString';
+        const state = 'active';
         const getPolicyTemplateParams = {
           policyTemplateId,
+          state,
         };
 
         const getPolicyTemplateResult = iamPolicyManagementService.getPolicyTemplate(getPolicyTemplateParams);
@@ -2122,6 +2127,7 @@ describe('IamPolicyManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.state).toEqual(state);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
       }
 
@@ -2424,8 +2430,10 @@ describe('IamPolicyManagementV1', () => {
       function __listPolicyTemplateVersionsTest() {
         // Construct the params object for operation listPolicyTemplateVersions
         const policyTemplateId = 'testString';
+        const state = 'active';
         const listPolicyTemplateVersionsParams = {
           policyTemplateId,
+          state,
         };
 
         const listPolicyTemplateVersionsResult = iamPolicyManagementService.listPolicyTemplateVersions(listPolicyTemplateVersionsParams);
@@ -2442,6 +2450,7 @@ describe('IamPolicyManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.state).toEqual(state);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
       }
 
