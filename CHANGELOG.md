@@ -1,3 +1,10 @@
+# [0.49.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.48.1...v0.49.0) (2024-01-12)
+
+
+### Features
+
+* **IAM Policy Management:** re-gen service after fix the template state parameter ([#238](https://github.com/IBM/platform-services-node-sdk/issues/238)) ([66ef839](https://github.com/IBM/platform-services-node-sdk/commit/66ef839c431be9c14caf401d08526015c4a003d3))
+
 ## [0.48.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.48.0...v0.48.1) (2024-01-09)
 
 
