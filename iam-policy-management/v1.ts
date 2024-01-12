@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.81.0-c73a091c-20231026-215706
+ * IBM OpenAPI SDK Code Generator Version: 3.84.0-a4533f12-20240103-170852
  */
 
 import * as extend from 'extend';
@@ -50,7 +50,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {IamPolicyManagementV1}
    */
 
@@ -75,7 +75,7 @@ class IamPolicyManagementV1 extends BaseService {
    * Construct a IamPolicyManagementV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -341,7 +341,87 @@ class IamPolicyManagementV1 extends BaseService {
    * actions](/docs/account?topic=account-iam-service-roles-actions). Use only the resource attributes supported by the
    * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
    * The policy resource must include either the **`serviceType`**, **`serviceName`**,  or **`resourceGroupId`**
-   * attribute and the **`accountId`** attribute.` If the subject is a locked service-id, the request will fail.
+   * attribute and the **`accountId`** attribute.`
+   *
+   * In the rule field, you can specify a single condition by using **`key`**, **`value`**, and condition
+   * **`operator`**, or a set of **`conditions`** with a combination **`operator`**. The possible combination operators
+   * are **`and`** and **`or`**.
+   *
+   * Currently, we support two types of patterns:
+   *
+   * 1. `time-based`: Used to specify a time-based restriction
+   *
+   * Combine conditions to specify a time-based restriction (e.g., access only during business hours, during the
+   * Monday-Friday work week). For example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following
+   * rule:
+   * ```json
+   *   "rule": {
+   *     "operator": "and",
+   *     "conditions": [{
+   *       "key": "{{environment.attributes.day_of_week}}",
+   *       "operator": "dayOfWeekAnyOf",
+   *       "value": ["1+00:00", "2+00:00", "3+00:00", "4+00:00", "5+00:00"]
+   *     },
+   *       "key": "{{environment.attributes.current_time}}",
+   *       "operator": "timeGreaterThanOrEquals",
+   *       "value": "09:00:00+00:00"
+   *     },
+   *       "key": "{{environment.attributes.current_time}}",
+   *       "operator": "timeLessThanOrEquals",
+   *       "value": "17:00:00+00:00"
+   *     }]
+   *   }
+   * ``` You can use the following operators in the **`key`** and **`value`** pair:
+   * ```
+   *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
+   *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
+   *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
+   * ``` The pattern field that matches the rule is required when rule is provided. For the business hour rule example
+   * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
+   * operators](/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties) and
+   * [Limiting access with time-based conditions](/docs/account?topic=account-iam-time-based&interface=ui). If the
+   * subject is a locked service-id, the request will fail.
+   *
+   * 2. `attribute-based`: Used to specify a combination of OR/AND based conditions applied on resource attributes.
+   *
+   * Combine conditions to specify an attribute-based condition using AN/OR-based operators.
+   *
+   * For example, a policy can grant access based on multiple conditions applied on the resource attributes below:
+   * ```json
+   *   "pattern": "attribute-based-condition:resource:literal-and-wildcard"
+   *   "rule": {
+   *       "operator": "or",
+   *       "conditions": [
+   *         {
+   *           "operator": "and",
+   *           "conditions": [
+   *             {
+   *               "key": "{{resource.attributes.prefix}}",
+   *               "operator": "stringEquals",
+   *               "value": "home/test"
+   *             },
+   *             {
+   *               "key": "{{environment.attributes.delimiter}}",
+   *               "operator": "stringEquals",
+   *               "value": "/"
+   *             }
+   *           ]
+   *         },
+   *         {
+   *           "key": "{{resource.attributes.path}}",
+   *           "operator": "stringMatch",
+   *           "value": "home/David/_*"
+   *         }
+   *       ]
+   *   }
+   * ```
+   *
+   * In addition to satisfying the `resources` section, the policy grants permission only if either the `path` begins
+   * with `home/David/` **OR**  the `prefix` is `home/test` and the `delimiter` is `/`. This mechanism helps you
+   * consolidate multiple policies in to a single policy,  making policies easier to administer and stay within the
+   * policy limit for an account. View the list of operators that can be used in the condition
+   * [here](/docs/account?topic=account-wildcard#string-comparisons).
+   *
    *
    * ### Authorization
    *
@@ -1512,6 +1592,7 @@ class IamPolicyManagementV1 extends BaseService {
    * * `pt-br` - Portuguese (Brazil)
    * * `zh-cn` - Chinese (Simplified, PRC)
    * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.state] - The policy template state.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>>}
    */
@@ -1520,7 +1601,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'acceptLanguage', 'headers'];
+    const _validParams = ['accountId', 'acceptLanguage', 'state', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1528,6 +1609,7 @@ class IamPolicyManagementV1 extends BaseService {
 
     const query = {
       'account_id': _params.accountId,
+      'state': _params.state,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1650,6 +1732,7 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {string} [params.state] - The policy template state.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>>}
    */
@@ -1658,11 +1741,15 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
-    const _validParams = ['policyTemplateId', 'headers'];
+    const _validParams = ['policyTemplateId', 'state', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'state': _params.state,
+    };
 
     const path = {
       'policy_template_id': _params.policyTemplateId,
@@ -1678,6 +1765,7 @@ class IamPolicyManagementV1 extends BaseService {
       options: {
         url: '/v1/policy_templates/{policy_template_id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -1824,6 +1912,7 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
+   * @param {string} [params.state] - The policy template state.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>>}
    */
@@ -1834,11 +1923,15 @@ class IamPolicyManagementV1 extends BaseService {
   > {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
-    const _validParams = ['policyTemplateId', 'headers'];
+    const _validParams = ['policyTemplateId', 'state', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'state': _params.state,
+    };
 
     const path = {
       'policy_template_id': _params.policyTemplateId,
@@ -1854,6 +1947,7 @@ class IamPolicyManagementV1 extends BaseService {
       options: {
         url: '/v1/policy_templates/{policy_template_id}/versions',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -2740,7 +2834,18 @@ namespace IamPolicyManagementV1 {
      *  * `zh-tw` - (Chinese, Taiwan).
      */
     acceptLanguage?: string;
+    /** The policy template state. */
+    state?: ListPolicyTemplatesConstants.State | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listPolicyTemplates` operation. */
+  export namespace ListPolicyTemplatesConstants {
+    /** The policy template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
   }
 
   /** Parameters for the `createPolicyTemplate` operation. */
@@ -2780,7 +2885,18 @@ namespace IamPolicyManagementV1 {
   export interface GetPolicyTemplateParams {
     /** The policy template ID. */
     policyTemplateId: string;
+    /** The policy template state. */
+    state?: GetPolicyTemplateConstants.State | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `getPolicyTemplate` operation. */
+  export namespace GetPolicyTemplateConstants {
+    /** The policy template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
   }
 
   /** Parameters for the `deletePolicyTemplate` operation. */
@@ -2813,7 +2929,18 @@ namespace IamPolicyManagementV1 {
   export interface ListPolicyTemplateVersionsParams {
     /** The policy template ID. */
     policyTemplateId: string;
+    /** The policy template state. */
+    state?: ListPolicyTemplateVersionsConstants.State | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listPolicyTemplateVersions` operation. */
+  export namespace ListPolicyTemplateVersionsConstants {
+    /** The policy template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
   }
 
   /** Parameters for the `replacePolicyTemplate` operation. */
@@ -3052,7 +3179,7 @@ namespace IamPolicyManagementV1 {
     limit?: number;
   }
 
-  /** Condition that specifies additional conditions or RuleAttribute to grant access.s. */
+  /** Condition that specifies additional conditions or RuleAttribute to grant access. */
   export interface NestedCondition {}
 
   /** The core set of properties associated with a policy. */
@@ -3232,6 +3359,8 @@ namespace IamPolicyManagementV1 {
     committed?: boolean;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
+    /** State of policy template. */
+    state?: PolicyTemplate.Constants.State | string;
     /** The policy template ID. */
     id?: string;
     /** The href URL that links to the policy templates API by policy template ID. */
@@ -3244,6 +3373,15 @@ namespace IamPolicyManagementV1 {
     last_modified_at?: string;
     /** The iam ID of the entity that last modified the policy template. */
     last_modified_by_id?: string;
+  }
+  export namespace PolicyTemplate {
+    export namespace Constants {
+      /** State of policy template. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
   }
 
   /** A collection of policies assignments. */
@@ -3276,6 +3414,8 @@ namespace IamPolicyManagementV1 {
     committed?: boolean;
     /** The core set of properties associated with the template's policy objet. */
     policy: TemplatePolicy;
+    /** State of policy template. */
+    state?: PolicyTemplateLimitData.Constants.State | string;
     /** The policy template ID. */
     id?: string;
     /** The href URL that links to the policy templates API by policy template ID. */
@@ -3290,6 +3430,15 @@ namespace IamPolicyManagementV1 {
     last_modified_by_id?: string;
     /** policy template count details. */
     counts?: TemplateCountData;
+  }
+  export namespace PolicyTemplateLimitData {
+    export namespace Constants {
+      /** State of policy template. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
   }
 
   /** The core set of properties associated with a policy. */

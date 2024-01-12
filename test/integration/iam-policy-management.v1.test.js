@@ -797,6 +797,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.policy).toEqual(testTemplatePolicy);
       expect(result.name).toEqual(testTemplateName);
       expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
       testTemplateId = result.id;
       testTemplateVersion = result.version;
     });
@@ -811,6 +812,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(response.status).toEqual(200);
       const { result } = response || {};
       expect(result).toBeDefined();
+      expect(result.state).toEqual('active');
       testTemplateETag = response.headers.etag;
     });
     test('Replace a policy template', async () => {
@@ -835,6 +837,7 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(result.policy.control.grant.roles[0].role_id).toEqual(testEditorRoleCrn);
       expect(result.name).toEqual(testTemplateName);
       expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
     });
     test('List policy templates', async () => {
       const params = {
@@ -873,6 +876,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(Number(result.version)).toBeGreaterThan(Number(testTemplateVersion));
+      expect(result.state).toEqual('active');
     });
     test('Get a policy template version', async () => {
       expect(testTemplateId).toBeDefined();
@@ -888,6 +892,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(result.version).toEqual(testTemplateVersion);
+      expect(result.state).toEqual('active');
       testTemplateETag = response.headers.etag;
     });
     test('Commit a policy template version', async () => {
@@ -953,6 +958,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const { versions: templates } = result || [];
       expect(templates).toHaveLength(1);
       expect(templates[0].version).not.toEqual(testTemplateVersion);
+      expect(templates[0].state).toEqual('active');
     });
     test('Clean up all test policy templates', async () => {
       // List all policy templates in the account
