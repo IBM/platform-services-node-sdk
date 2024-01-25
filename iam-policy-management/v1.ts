@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.84.0-a4533f12-20240103-170852
+ * IBM OpenAPI SDK Code Generator Version: 3.84.1-55f6d880-20240110-194020
  */
 
 import * as extend from 'extend';
@@ -3559,8 +3559,8 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: RuleAttribute.Constants.Operator | string;
-    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
-     *  an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
+     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
@@ -3714,8 +3714,8 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: V2PolicyResourceAttribute.Constants.Operator | string;
-    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
-     *  an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
+     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
@@ -3764,8 +3764,10 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: V2PolicySubjectAttribute.Constants.Operator | string;
-    /** The value of the ID of the subject, e.g., service ID, access group ID, IAM ID. */
-    value: string;
+    /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
+     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
+     */
+    value: any;
   }
   export namespace V2PolicySubjectAttribute {
     export namespace Constants {
@@ -3852,8 +3854,8 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: NestedConditionRuleAttribute.Constants.Operator | string;
-    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
-     *  an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
+     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
@@ -3900,8 +3902,8 @@ namespace IamPolicyManagementV1 {
     key: string;
     /** The operator of an attribute. */
     operator: V2PolicyRuleRuleAttribute.Constants.Operator | string;
-    /** The value of a rule or resource attribute; can be boolean or string for resource attribute. Can be string or
-     *  an array of strings (e.g., array of days to permit access) for rule attribute.
+    /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
+     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
      */
     value: any;
   }
