@@ -1,3 +1,10 @@
+## [0.49.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.49.0...v0.49.1) (2024-01-26)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** update subject attribute value based on API def  ([#239](https://github.com/IBM/platform-services-node-sdk/issues/239)) ([60501d7](https://github.com/IBM/platform-services-node-sdk/commit/60501d7f6404dd7d10eb0f95c9097da0ba88d969))
+
 # [0.49.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.48.1...v0.49.0) (2024-01-12)
 
 
