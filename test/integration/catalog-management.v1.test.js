@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { readExternalSources, getQueryParam } = require('ibm-cloud-sdk-core');
+
+/* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
+
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const CatalogManagementV1 = require('../../dist/catalog-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -22,4269 +25,3507 @@ const authHelper = require('../resources/auth-helper.js');
 const timeout = 200000;
 
 // Location of our config file.
-const configFile = 'catalog_mgmt.env';
+const configFile = 'catalog_management_v1.env';
 
 const describe = authHelper.prepareTests(configFile);
 
 describe('CatalogManagementV1_integration', () => {
   jest.setTimeout(timeout);
 
-  let catalogManagementServiceAuthorized;
-  let catalogManagementServiceNotAuthorized;
-  let config;
+  // Service instance
+  let catalogManagementService;
 
-  const kindVpe = 'vpe';
-  const kindRoks = 'roks';
+  // Variables to hold link values
+  let accountRevLink;
+  let catalogIdLink;
+  let catalogRevLink;
+  let objectIdLink;
+  let objectRevLink;
+  let offeringIdLink;
+  let offeringRevLink;
+  let versionIdLink;
+  let versionLocatorLink;
+  let versionRevLink;
 
-  const regionUsSouth = 'us-south';
-  const namespaceNode = 'node-sdk';
-  const importOfferingZipUrl =
-    'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml';
+  test('Initialize service', async () => {
+    catalogManagementService = CatalogManagementV1.newInstance();
 
-  const bogusVersionLocatorId = 'bogus-version-locator-id';
-  const bogusRevision = 'bogus-revision';
+    expect(catalogManagementService).not.toBeNull();
 
-  const labelNodeSdk = 'node-sdk';
-  const repoTypeGitPublic = 'git_public';
-
-  const objectName = 'object_created_by_node_sdk10';
-  const objectCrn =
-    'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com';
-
-  let catalogId;
-  let offeringId;
-  const createdOfferingIds = [];
-  let objectId;
-  const createdObjectIds = [];
-  let versionLocatorId;
-  let offeringInstanceId;
-  let refreshTokenAuthorized;
-  let refreshTokenNotAuthorized;
-
-  let accountId;
-  let clusterId;
-  let gitAuthToken;
-
-  test('Initialize services', async () => {
-    catalogManagementServiceAuthorized = CatalogManagementV1.newInstance({});
-    catalogManagementServiceNotAuthorized = CatalogManagementV1.newInstance({
-      serviceName: 'NOT_AUTHORIZED',
-    });
-
-    expect(catalogManagementServiceAuthorized).toBeDefined();
-    expect(catalogManagementServiceNotAuthorized).toBeDefined();
-
-    config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
+    const config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
+
+    catalogManagementService.enableRetries();
   });
-
-  test('Read necessary config values', async () => {
-    accountId = config.accountId;
-    expect(accountId).not.toBeNull();
-
-    clusterId = config.clusterId;
-    expect(clusterId).not.toBeNull();
-
-    gitAuthToken = config.gitAuthToken;
-    expect(gitAuthToken).not.toBeNull();
-  });
-
-  test('Acquire refresh tokens for services', async () => {
-    const params = {
-      catalogIdentifier: 'bogus-catalog-id',
-    };
-
-    await expect(catalogManagementServiceAuthorized.getCatalog(params)).rejects.toThrow();
-
-    const iamAuthenticator = catalogManagementServiceAuthorized.getAuthenticator();
-    refreshTokenAuthorized = iamAuthenticator.getRefreshToken();
-    expect(refreshTokenAuthorized).toBeDefined();
-
-    await expect(catalogManagementServiceNotAuthorized.getCatalog(params)).rejects.toThrow();
-
-    const iamAuthenticatorNotAuthorized = catalogManagementServiceNotAuthorized.getAuthenticator();
-    refreshTokenNotAuthorized = iamAuthenticatorNotAuthorized.getRefreshToken();
-    expect(refreshTokenNotAuthorized).toBeDefined();
-  });
-
-  // ====
-  // Create Catalog
-  // ====
-
-  test('createCatalog() returns 400 when user is not authorized', async () => {
-    const params = {
-      label: labelNodeSdk,
-      tags: ['node', 'sdk'],
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.createCatalog(params)).rejects.toMatchObject(
-      { status: 400 }
-    );
-  });
-
-  test('createCatalog() returns 400 when backend input validation fails', async () => {
-    const params = {
-      rev: bogusRevision,
-      label: labelNodeSdk,
-      tags: ['node', 'sdk'],
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    await expect(catalogManagementServiceAuthorized.createCatalog(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('createCatalog() creates a catalog', async () => {
-    const params = {
-      label: labelNodeSdk,
-      tags: ['node', 'sdk'],
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    const res = await catalogManagementServiceAuthorized.createCatalog(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result).toBeDefined();
-    expect(res.result.id).not.toBeNull();
-    catalogId = res.result.id;
-  });
-
-  // ====
-  // Get Catalog
-  // ====
-
-  test('getCatalog() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getCatalog(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getCatalog() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.getCatalog(params)).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getCatalog() returns the catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getCatalog(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-    expect(res.result.id).toBe(catalogId);
-  });
-
-  // ====
-  // Replace Catalog
-  // ====
-
-  test('replaceCatalog() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      id: catalogId,
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.replaceCatalog(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('replaceCatalog() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      id: `invalid-${catalogId}`,
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceCatalog(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('replaceCatalog() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-      id: `invalid-${catalogId}`,
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceCatalog(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('replaceCatalog() updates the catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const tags = ['node', 'sdk', 'update'];
-    const params = {
-      catalogIdentifier: catalogId,
-      id: catalogId,
-      tags,
-      owningAccount: accountId,
-      kind: kindVpe,
-    };
-
-    const res = await catalogManagementServiceAuthorized.replaceCatalog(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-    expect(res.result.tags).toStrictEqual(tags);
-  });
-
-  // ====
-  // List Catalog
-  // ====
-
-  test('listCatalogs()', async () => {
-    expect(catalogId).toBeDefined();
-
-    const res = await catalogManagementServiceAuthorized.listCatalogs();
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-
-    const result = res.result.resources.find(({ id }) => id === catalogId);
-    expect(result).toBeDefined();
-  });
-
-  // ====
-  // Create Offering
-  // ====
-
-  test('createOffering() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.createOffering(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('createOffering() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      catalogId,
-      name: 'Offering created by node sdk',
-    };
-
-    await expect(catalogManagementServiceAuthorized.createOffering(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('createOffering() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      id: catalogId,
-      name: 'offering-created-by-node-sdk',
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.createOffering(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('createOffering() creates an offering', async () => {
-    expect(catalogId).toBeDefined();
-
-    for (let i = 0; i < 2; i++) {
-      const params = {
-        catalogIdentifier: catalogId,
-        label: labelNodeSdk,
-        name: `offering-created-by-node-sdk-${i}`,
-      };
-
-      const res = await catalogManagementServiceAuthorized.createOffering(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(201);
-
-      expect(res.result).toBeDefined();
-      expect(res.result.id).toBeDefined();
-      if (offeringId === undefined) {
-        offeringId = res.result.id;
-      }
-      createdOfferingIds.push(res.result.id);
-    }
-  });
-
-  // ====
-  // Get Offering
-  // ====
-
-  test('getOffering() returns 404 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getOffering(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getOffering() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.getOffering(params)).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getOffering() returns the offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-    expect(res.result.id).toBe(offeringId);
-    expect(res.result.catalog_id).toBe(catalogId);
-  });
-
-  // ====
-  // Replace Offering
-  // ====
-
-  test('replaceOffering() returns 404 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-      id: `invalid-${offeringId}`,
-      name: 'updated-offering-name-created-by-node-sdk',
-      catalogId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceOffering(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('replaceOffering() returns 400 backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      id: offeringId,
-      name: 'updated offering name created by node sdk',
-      catalogId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceOffering(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('replaceOffering() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      id: offeringId,
-      name: 'updated-offering-name-created-by-node-sdk',
-      catalogId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.replaceOffering(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  // once the version related conflict is resolved this test requires a conflict case
-  test('replaceOffering() returns 409 when conflict occurs', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      id: offeringId,
-      name: 'updated-offering-name-by-node-sdk',
-      catalogId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceOffering(params)).rejects.toMatchObject({
-      status: 409,
-    });
-  });
-
-  // it has a version related conflict which I don't know how to resolve
-  test.skip('replaceOffering() updates offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const updatedOfferingName = 'updated-offering-name-by-node-sdk';
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      id: offeringId,
-      name: updatedOfferingName,
-      catalogId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.replaceOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-
-    expect(res.result.id).toBe(offeringId);
-    expect(res.result.catalog_id).toBe(catalogId);
-    expect(res.result.name).toBe(updatedOfferingName);
-  });
-
-  // ====
-  // Update Offerings
-  // ====
-
-  test('updateOffering() updates offering', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      label: labelNodeSdk,
-      name: `offering-created-by-node-sdk-update-test`,
-    };
-
-    const res = await catalogManagementServiceAuthorized.createOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-
-    expect(res.result).toBeDefined();
-    expect(res.result.id).toBeDefined();
-    createdOfferingIds.push(res.result.id);
-
-    const jsonPatchOperation = {
-      op: 'replace',
-      path: '/name',
-      value: 'updated-offering-name-by-node-sdk-patch',
-    };
-
-    const updateParams = {
-      catalogIdentifier: catalogId,
-      offeringId: res.result.id,
-      ifMatch: `"${res.result._rev}"`,
-      updates: [jsonPatchOperation],
-    };
-
-    const res2 = await catalogManagementServiceAuthorized.updateOffering(updateParams);
-    expect(res2).toBeDefined();
-    expect(res2.status).toBe(200);
-    expect(res2.result).toBeDefined();
-    expect(res2.result.name).toBe('updated-offering-name-by-node-sdk-patch');
-  });
-
-  test('updateOffering() returns 412 on bad request', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const jsonPatchOperation = {
-      op: 'replace',
-      path: '/name',
-      value: 'updated-offering-name-by-node-sdk-patch',
-    };
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      ifMatch: bogusRevision,
-      updates: [jsonPatchOperation],
-    };
-
-    await expect(catalogManagementServiceAuthorized.updateOffering(params)).rejects.toMatchObject({
-      status: 412,
-    });
-  });
-
-  // ====
-  // List Offerings
-  // ====
-
-  test('listOfferings() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.listOfferings(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test('listOfferings() returns 400 when backend input validation fails', async () => {
-    const params = {
-      catalogIdentifier: catalogId,
-      digest: true,
-      sort: 'bogus-sort-value',
-    };
-
-    await expect(catalogManagementServiceAuthorized.listOfferings(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('listOfferings() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.listOfferings(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('listOfferings() returns list of offerings', async () => {
-    expect(catalogId).toBeDefined();
-
-    let offset = 0;
-    const limit = 1;
-    let fetch = true;
-    let amountOfOfferings = 0;
-
-    while (fetch) {
-      const params = {
-        catalogIdentifier: catalogId,
-        limit,
-        offset,
-      };
-
-      const res = await catalogManagementServiceAuthorized.listOfferings(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(200);
-      expect(res.result).toBeDefined();
-
-      const offsetValue = getQueryParam(res.result.next, 'offset');
-
-      if (offsetValue) {
-        offset = offsetValue;
-      } else {
-        fetch = false;
-      }
-
-      if (res.result.resource_count > 0) {
-        amountOfOfferings += res.result.resource_count;
-      }
-    }
-    console.log('Amount of offerings: ', amountOfOfferings);
-  });
-
-  // ====
-  // Import Offering
-  // ====
-
-  test('importOffering() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      tags: ['sdk', 'node'],
-      targetKinds: [kindVpe],
-      zipurl: importOfferingZipUrl,
-      offeringId,
-      targetVersion: '0.0.3',
-      repoType: repoTypeGitPublic,
-      xAuthToken: gitAuthToken,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.importOffering(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('importOffering() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      tags: ['sdk', 'node'],
-      targetKinds: ['rocks'],
-      zipurl: importOfferingZipUrl,
-      offeringId,
-      targetVersion: '0.0.2-patch',
-      repoType: repoTypeGitPublic,
-      xAuthToken: gitAuthToken,
-    };
-
-    await expect(catalogManagementServiceAuthorized.importOffering(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('importOffering() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-      tags: ['sdk', 'node'],
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      offeringId,
-      targetVersion: '0.0.2',
-      repoType: repoTypeGitPublic,
-      xAuthToken: gitAuthToken,
-    };
-
-    await expect(catalogManagementServiceAuthorized.importOffering(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('importOffering() imports the offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      tags: ['sdk', 'node'],
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      offeringId,
-      targetVersion: '0.0.2',
-      repoType: repoTypeGitPublic,
-      xAuthToken: gitAuthToken,
-    };
-
-    const res = await catalogManagementServiceAuthorized.importOffering(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result.kinds[0].versions[0].version_locator).toBeDefined();
-    versionLocatorId = res.result.kinds[0].versions[0].version_locator;
-  });
-
-  test('importOffering() returns 409 when conflict occurs', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      tags: ['sdk', 'node'],
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      offeringId,
-      targetVersion: '0.0.2',
-      repoType: repoTypeGitPublic,
-      xAuthToken: gitAuthToken,
-    };
-
-    await expect(catalogManagementServiceAuthorized.importOffering(params)).rejects.toMatchObject({
-      status: 409,
-    });
-  });
-
-  // ====
-  // Reload Offering
-  // ====
-
-  test('reloadOffering() returns 404 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-      targetVersion: '0.0.2',
-      kinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      repoType: repoTypeGitPublic,
-    };
-
-    await expect(catalogManagementServiceAuthorized.reloadOffering(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('reloadOffering() returns 403 when the user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      targetVersion: '0.0.2',
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      repoType: repoTypeGitPublic,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.reloadOffering(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  // Error: Could not find a kind with a target/format value of roks:operator for the current offering, Code: 400
-  test.skip('reloadOffering() reloads the offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      targetVersion: '0.0.2',
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      repoType: repoTypeGitPublic,
-    };
-
-    const res = await catalogManagementServiceAuthorized.reloadOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Create Object
-  // ====
-
-  test('createObject() returns 400 when backend validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const publishObjectModel = {
-      permit_ibm_public_publish: true,
-      ibm_approved: true,
-      public_approved: true,
-    };
-
-    const stateModel = {
-      current: 'new',
-    };
-
-    const params = {
-      catalogIdentifier: catalogId,
-      catalogId,
-      name: objectName,
-      crn: objectCrn,
-      parentId: 'bogus region name',
-      kind: kindVpe,
-      publish: publishObjectModel,
-      state: stateModel,
-    };
-
-    await expect(catalogManagementServiceAuthorized.createObject(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('createObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const publishObjectModel = {
-      permit_ibm_public_publish: true,
-      ibm_approved: true,
-      public_approved: true,
-    };
-
-    const stateModel = {
-      current: 'new',
-    };
-
-    const params = {
-      catalogIdentifier: catalogId,
-      catalogId,
-      name: objectName,
-      crn: objectCrn,
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      publish: publishObjectModel,
-      state: stateModel,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.createObject(params)).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('createObject() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const publishObjectModel = {
-      permit_ibm_public_publish: true,
-      ibm_approved: true,
-      public_approved: true,
-    };
-
-    const stateModel = {
-      current: 'new',
-    };
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-      catalogId: `invalid-${catalogId}`,
-      name: objectName,
-      crn: objectCrn,
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      publish: publishObjectModel,
-      state: stateModel,
-    };
-
-    await expect(catalogManagementServiceAuthorized.createObject(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('createObject() creates an object', async () => {
-    expect(catalogId).toBeDefined();
-
-    for (let i = 0; i < 2; i++) {
-      const publishObjectModel = {
-        permit_ibm_public_publish: true,
-        ibm_approved: true,
-        public_approved: true,
-      };
-
-      const stateModel = {
-        current: 'new',
-      };
-
-      const params = {
-        catalogIdentifier: catalogId,
-        catalogId,
-        name: `${objectName}_${i}`,
-        crn: objectCrn,
-        parentId: regionUsSouth,
-        kind: kindVpe,
-        publish: publishObjectModel,
-        state: stateModel,
-      };
-
-      const res = await catalogManagementServiceAuthorized.createObject(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(201);
-      expect(res.result).toBeDefined();
-      expect(res.result.id).toBeDefined();
-
-      if (objectId === undefined) {
-        objectId = res.result.id;
-      }
-      createdObjectIds.push(res.result.id);
-    }
-  });
-
-  // ====
-  // Get Offering Audit
-  // ====
-
-  test('getOfferingAudit() returns 200 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingAudit(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-  });
-
-  test('getOfferingAudit() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingAudit(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getOfferingAudit() returns offering audit log', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingAudit(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Catalog Account
-  // ====
 
   test('getCatalogAccount()', async () => {
-    const res = await catalogManagementServiceAuthorized.getCatalogAccount();
+    const res = await catalogManagementService.getCatalogAccount();
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    expect(res.result.id).toBe(accountId);
+    accountRevLink = res.result._rev;
   });
 
-  // ====
-  // Update Catalog Account
-  // ====
+  test('updateCatalogAccount()', async () => {
+    // Request models needed by this operation.
 
-  test('updateCatalogAccount() returns 400 when no such catalog account', async () => {
-    const params = {
-      id: `invalid-${accountId}`,
+    // FilterTerms
+    const filterTermsModel = {
+      filter_terms: ['testString'],
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.updateCatalogAccount(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('updateCatalogAccount() returns 403 when user is not authorized', async () => {
-    const params = {
-      id: accountId,
+    // CategoryFilter
+    const categoryFilterModel = {
+      include: true,
+      filter: filterTermsModel,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.updateCatalogAccount(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  // user is not granted
-  test.skip('updateCatalogAccount() returns 400 when backend input validation fails', async () => {
-    // a body with failing data comes here
-
-    const params = {
-      id: accountId,
+    // IDFilter
+    const idFilterModel = {
+      include: filterTermsModel,
+      exclude: filterTermsModel,
     };
 
-    const res = await catalogManagementServiceAuthorized.updateCatalogAccount(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(400);
-  });
-
-  // user is not granted
-  test.skip('updateCatalogAccount() updates catalog account', async () => {
-    // data
-
-    const params = {
-      id: accountId,
+    // Filters
+    const filtersModel = {
+      include_all: true,
+      category_filters: { 'key1': categoryFilterModel },
+      id_filters: idFilterModel,
     };
 
-    const res = await catalogManagementServiceAuthorized.updateCatalogAccount(params);
+    const params = {
+      id: 'testString',
+      rev: 'testString',
+      hideIbmCloudCatalog: true,
+      accountFilters: filtersModel,
+    };
+
+    const res = await catalogManagementService.updateCatalogAccount(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    accountRevLink = res.result._rev;
   });
 
-  // ====
-  // Get Catalog Account Audit
-  // ====
+  test('createCatalog()', async () => {
+    // Request models needed by this operation.
 
-  test('getCatalogAccountAudit() returns 403 when user is not authorized', async () => {
-    await expect(
-      catalogManagementServiceNotAuthorized.getCatalogAccountAudit()
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    // Feature
+    const featureModel = {
+      title: 'testString',
+      title_i18n: { 'key1': 'testString' },
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
+    };
+
+    // FilterTerms
+    const filterTermsModel = {
+      filter_terms: ['testString'],
+    };
+
+    // CategoryFilter
+    const categoryFilterModel = {
+      include: true,
+      filter: filterTermsModel,
+    };
+
+    // IDFilter
+    const idFilterModel = {
+      include: filterTermsModel,
+      exclude: filterTermsModel,
+    };
+
+    // Filters
+    const filtersModel = {
+      include_all: true,
+      category_filters: { 'key1': categoryFilterModel },
+      id_filters: idFilterModel,
+    };
+
+    // SyndicationCluster
+    const syndicationClusterModel = {
+      region: 'testString',
+      id: 'testString',
+      name: 'testString',
+      resource_group_name: 'testString',
+      type: 'testString',
+      namespaces: ['testString'],
+      all_namespaces: true,
+    };
+
+    // SyndicationHistory
+    const syndicationHistoryModel = {
+      namespaces: ['testString'],
+      clusters: [syndicationClusterModel],
+      last_run: '2019-01-01T12:00:00.000Z',
+    };
+
+    // SyndicationAuthorization
+    const syndicationAuthorizationModel = {
+      token: 'testString',
+      last_run: '2019-01-01T12:00:00.000Z',
+    };
+
+    // SyndicationResource
+    const syndicationResourceModel = {
+      remove_related_components: true,
+      clusters: [syndicationClusterModel],
+      history: syndicationHistoryModel,
+      authorization: syndicationAuthorizationModel,
+    };
+
+    // TrustedProfileInfo
+    const trustedProfileInfoModel = {
+      trusted_profile_id: 'testString',
+      catalog_crn: 'testString',
+      catalog_name: 'testString',
+      target_service_id: 'testString',
+    };
+
+    // TargetAccountContext
+    const targetAccountContextModel = {
+      api_key: 'testString',
+      trusted_profile: trustedProfileInfoModel,
+      name: 'testString',
+      label: 'testString',
+      project_id: 'testString',
+    };
+
+    const params = {
+      label: 'testString',
+      labelI18n: { 'key1': 'testString' },
+      shortDescription: 'testString',
+      shortDescriptionI18n: { 'key1': 'testString' },
+      catalogIconUrl: 'testString',
+      catalogBannerUrl: 'testString',
+      tags: ['testString'],
+      features: [featureModel],
+      disabled: true,
+      resourceGroupId: 'testString',
+      owningAccount: 'testString',
+      catalogFilters: filtersModel,
+      syndicationSettings: syndicationResourceModel,
+      kind: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      targetAccountContexts: [targetAccountContextModel],
+    };
+
+    const res = await catalogManagementService.createCatalog(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    catalogIdLink = res.result.id;
+    catalogRevLink = res.result._rev;
   });
 
-  test('getCatalogAccountAudit() returns audit logs', async () => {
-    const res = await catalogManagementServiceAuthorized.getCatalogAccountAudit();
+  test('getCatalog()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+    };
+
+    const res = await catalogManagementService.getCatalog(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    catalogRevLink = res.result._rev;
   });
 
-  // ====
-  // Get Catalog Account Filters
-  // ====
+  test('replaceCatalog()', async () => {
+    // Request models needed by this operation.
 
-  test('getCatalogAccountFilters() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalog: catalogId,
+    // Feature
+    const featureModel = {
+      title: 'testString',
+      title_i18n: { 'key1': 'testString' },
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getCatalogAccountFilters(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getCatalogAccountFilters() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalog: `invalid-${catalogId}`,
+    // FilterTerms
+    const filterTermsModel = {
+      filter_terms: ['testString'],
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getCatalogAccountFilters(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getCatalogAccountFilters() returns the account filters', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalog: catalogId,
+    // CategoryFilter
+    const categoryFilterModel = {
+      include: true,
+      filter: filterTermsModel,
     };
 
-    const res = await catalogManagementServiceAuthorized.getCatalogAccountFilters(params);
+    // IDFilter
+    const idFilterModel = {
+      include: filterTermsModel,
+      exclude: filterTermsModel,
+    };
+
+    // Filters
+    const filtersModel = {
+      include_all: true,
+      category_filters: { 'key1': categoryFilterModel },
+      id_filters: idFilterModel,
+    };
+
+    // SyndicationCluster
+    const syndicationClusterModel = {
+      region: 'testString',
+      id: 'testString',
+      name: 'testString',
+      resource_group_name: 'testString',
+      type: 'testString',
+      namespaces: ['testString'],
+      all_namespaces: true,
+    };
+
+    // SyndicationHistory
+    const syndicationHistoryModel = {
+      namespaces: ['testString'],
+      clusters: [syndicationClusterModel],
+      last_run: '2019-01-01T12:00:00.000Z',
+    };
+
+    // SyndicationAuthorization
+    const syndicationAuthorizationModel = {
+      token: 'testString',
+      last_run: '2019-01-01T12:00:00.000Z',
+    };
+
+    // SyndicationResource
+    const syndicationResourceModel = {
+      remove_related_components: true,
+      clusters: [syndicationClusterModel],
+      history: syndicationHistoryModel,
+      authorization: syndicationAuthorizationModel,
+    };
+
+    // TrustedProfileInfo
+    const trustedProfileInfoModel = {
+      trusted_profile_id: 'testString',
+      catalog_crn: 'testString',
+      catalog_name: 'testString',
+      target_service_id: 'testString',
+    };
+
+    // TargetAccountContext
+    const targetAccountContextModel = {
+      api_key: 'testString',
+      trusted_profile: trustedProfileInfoModel,
+      name: 'testString',
+      label: 'testString',
+      project_id: 'testString',
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      id: 'testString',
+      rev: 'testString',
+      label: 'testString',
+      labelI18n: { 'key1': 'testString' },
+      shortDescription: 'testString',
+      shortDescriptionI18n: { 'key1': 'testString' },
+      catalogIconUrl: 'testString',
+      catalogBannerUrl: 'testString',
+      tags: ['testString'],
+      features: [featureModel],
+      disabled: true,
+      resourceGroupId: 'testString',
+      owningAccount: 'testString',
+      catalogFilters: filtersModel,
+      syndicationSettings: syndicationResourceModel,
+      kind: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      targetAccountContexts: [targetAccountContextModel],
+    };
+
+    const res = await catalogManagementService.replaceCatalog(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+    catalogRevLink = res.result._rev;
   });
 
-  // ====
-  // Get Catalog Audit
-  // ====
+  test('replaceOffering()', async () => {
+    // Request models needed by this operation.
 
-  test('getCatalogAudit() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
+    // Rating
+    const ratingModel = {
+      one_star_count: 38,
+      two_star_count: 38,
+      three_star_count: 38,
+      four_star_count: 38,
     };
 
-    await expect(catalogManagementServiceAuthorized.getCatalogAudit(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getCatalogAudit() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
+    // Feature
+    const featureModel = {
+      title: 'testString',
+      title_i18n: { 'key1': 'testString' },
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getCatalogAudit(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getCatalogAudit() returns the catalog audit logs', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
+    // Flavor
+    const flavorModel = {
+      name: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      index: 38,
     };
 
-    const res = await catalogManagementServiceAuthorized.getCatalogAudit(params);
+    // RenderTypeAssociationsParametersItem
+    const renderTypeAssociationsParametersItemModel = {
+      name: 'testString',
+      optionsRefresh: true,
+    };
+
+    // RenderTypeAssociations
+    const renderTypeAssociationsModel = {
+      parameters: [renderTypeAssociationsParametersItemModel],
+    };
+
+    // RenderType
+    const renderTypeModel = {
+      type: 'testString',
+      grouping: 'testString',
+      original_grouping: 'testString',
+      grouping_index: 38,
+      config_constraints: { anyKey: 'anyValue' },
+      associations: renderTypeAssociationsModel,
+    };
+
+    // Configuration
+    const configurationModel = {
+      key: 'testString',
+      type: 'testString',
+      default_value: 'testString',
+      display_name: 'testString',
+      value_constraint: 'testString',
+      description: 'testString',
+      required: true,
+      options: ['testString'],
+      hidden: true,
+      custom_config: renderTypeModel,
+      type_metadata: 'testString',
+    };
+
+    // Output
+    const outputModel = {
+      key: 'testString',
+      description: 'testString',
+    };
+
+    // IAMResource
+    const iamResourceModel = {
+      name: 'testString',
+      description: 'testString',
+      role_crns: ['testString'],
+    };
+
+    // IAMPermission
+    const iamPermissionModel = {
+      service_name: 'testString',
+      role_crns: ['testString'],
+      resources: [iamResourceModel],
+    };
+
+    // Validation
+    const validationModel = {
+      validated: '2019-01-01T12:00:00.000Z',
+      requested: '2019-01-01T12:00:00.000Z',
+      state: 'testString',
+      last_operation: 'testString',
+      target: { anyKey: 'anyValue' },
+      message: 'testString',
+    };
+
+    // Resource
+    const resourceModel = {
+      type: 'mem',
+      value: 'testString',
+    };
+
+    // SchematicsEnvValues
+    const schematicsEnvValuesModel = {
+      value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
+      sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+    };
+
+    // Script
+    const scriptModel = {
+      instructions: 'testString',
+      instructions_i18n: { 'key1': 'testString' },
+      script: 'testString',
+      script_permission: 'testString',
+      delete_script: 'testString',
+      scope: 'testString',
+    };
+
+    // ScriptRef
+    const scriptRefModel = {
+      short_description: 'testString',
+      type: 'ansible',
+      path: 'scripts/validate-post-ansible-playbook.yaml',
+      stage: 'pre',
+      action: 'validate',
+    };
+
+    // VersionEntitlement
+    const versionEntitlementModel = {
+      provider_name: 'testString',
+      provider_id: 'testString',
+      product_id: 'testString',
+      part_numbers: ['testString'],
+      image_repo_name: 'testString',
+    };
+
+    // License
+    const licenseModel = {
+      id: 'testString',
+      name: 'testString',
+      type: 'testString',
+      url: 'testString',
+      description: 'testString',
+    };
+
+    // State
+    const stateModel = {
+      current: 'testString',
+      current_entered: '2019-01-01T12:00:00.000Z',
+      pending: 'testString',
+      pending_requested: '2019-01-01T12:00:00.000Z',
+      previous: 'testString',
+    };
+
+    // DeprecatePending
+    const deprecatePendingModel = {
+      deprecate_date: '2019-01-01T12:00:00.000Z',
+      deprecate_state: 'testString',
+      description: 'testString',
+    };
+
+    // URLProxy
+    const urlProxyModel = {
+      url: 'testString',
+      sha: 'testString',
+    };
+
+    // MediaItem
+    const mediaItemModel = {
+      url: 'testString',
+      api_url: 'testString',
+      url_proxy: urlProxyModel,
+      caption: 'testString',
+      caption_i18n: { 'key1': 'testString' },
+      type: 'testString',
+      thumbnail_url: 'testString',
+    };
+
+    // ArchitectureDiagram
+    const architectureDiagramModel = {
+      diagram: mediaItemModel,
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
+    };
+
+    // CostComponent
+    const costComponentModel = {
+      name: 'testString',
+      unit: 'testString',
+      hourlyQuantity: 'testString',
+      monthlyQuantity: 'testString',
+      price: 'testString',
+      hourlyCost: 'testString',
+      monthlyCost: 'testString',
+    };
+
+    // CostResource
+    const costResourceModel = {
+      name: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      hourlyCost: 'testString',
+      monthlyCost: 'testString',
+      costComponents: [costComponentModel],
+    };
+
+    // CostBreakdown
+    const costBreakdownModel = {
+      totalHourlyCost: 'testString',
+      totalMonthlyCost: 'testString',
+      resources: [costResourceModel],
+    };
+
+    // CostSummary
+    const costSummaryModel = {
+      totalDetectedResources: 38,
+      totalSupportedResources: 38,
+      totalUnsupportedResources: 38,
+      totalUsageBasedResources: 38,
+      totalNoPriceResources: 38,
+      unsupportedResourceCounts: { 'key1': 38 },
+      noPriceResourceCounts: { 'key1': 38 },
+    };
+
+    // Project
+    const projectModel = {
+      name: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      pastBreakdown: costBreakdownModel,
+      breakdown: costBreakdownModel,
+      diff: costBreakdownModel,
+      summary: costSummaryModel,
+    };
+
+    // CostEstimate
+    const costEstimateModel = {
+      version: 'testString',
+      currency: 'testString',
+      projects: [projectModel],
+      summary: costSummaryModel,
+      totalHourlyCost: 'testString',
+      totalMonthlyCost: 'testString',
+      pastTotalHourlyCost: 'testString',
+      pastTotalMonthlyCost: 'testString',
+      diffTotalHourlyCost: 'testString',
+      diffTotalMonthlyCost: 'testString',
+      timeGenerated: '2019-01-01T12:00:00.000Z',
+    };
+
+    // OfferingReference
+    const offeringReferenceModel = {
+      catalog_id: 'testString',
+      id: 'testString',
+      name: 'testString',
+      kind: 'testString',
+      version: 'testString',
+      flavors: ['testString'],
+    };
+
+    // SolutionInfo
+    const solutionInfoModel = {
+      architecture_diagrams: [architectureDiagramModel],
+      features: [featureModel],
+      cost_estimate: costEstimateModel,
+      dependencies: [offeringReferenceModel],
+      install_type: 'testString',
+    };
+
+    // SCCProfile
+    const sccProfileModel = {
+      id: 'testString',
+      name: 'testString',
+      version: 'testString',
+      description: 'testString',
+      type: 'testString',
+      ui_href: 'testString',
+    };
+
+    // ClaimedControl
+    const claimedControlModel = {
+      profile: sccProfileModel,
+      names: ['testString'],
+    };
+
+    // Claims
+    const claimsModel = {
+      profiles: [sccProfileModel],
+      controls: [claimedControlModel],
+    };
+
+    // Result
+    const resultModel = {
+      failure_count: 38,
+      scan_time: '2019-01-01T12:00:00.000Z',
+      error_message: 'testString',
+      complete_scan: true,
+      unscanned_resources: ['testString'],
+    };
+
+    // SCCAssessment
+    const sccAssessmentModel = {
+      id: 'testString',
+      description: 'testString',
+      version: 'testString',
+      type: 'testString',
+      method: 'testString',
+      ui_href: 'testString',
+    };
+
+    // SCCSpecification
+    const sccSpecificationModel = {
+      id: 'testString',
+      description: 'testString',
+      component_name: 'testString',
+      assessments: [sccAssessmentModel],
+      ui_href: 'testString',
+    };
+
+    // SCCControl
+    const sccControlModel = {
+      id: 'testString',
+      name: 'testString',
+      version: 'testString',
+      description: 'testString',
+      profile: sccProfileModel,
+      parent_name: 'testString',
+      specifications: [sccSpecificationModel],
+      ui_href: 'testString',
+    };
+
+    // EvaluatedControl
+    const evaluatedControlModel = {
+      id: 'testString',
+      name: 'testString',
+      description: 'testString',
+      specifications: [sccSpecificationModel],
+      failure_count: 38,
+      pass_count: 38,
+      parent: sccControlModel,
+      ui_href: 'testString',
+    };
+
+    // Evaluation
+    const evaluationModel = {
+      scan_id: 'testString',
+      account_id: 'testString',
+      profile: sccProfileModel,
+      result: resultModel,
+      controls: [evaluatedControlModel],
+    };
+
+    // Compliance
+    const complianceModel = {
+      authority: 'testString',
+      claims: claimsModel,
+      evaluations: [evaluationModel],
+    };
+
+    // Version
+    const versionModel = {
+      crn: 'testString',
+      version: 'testString',
+      flavor: flavorModel,
+      sha: 'testString',
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      offering_id: offeringIdLink,
+      catalog_id: catalogIdLink,
+      kind_id: 'testString',
+      tags: ['testString'],
+      repo_url: 'testString',
+      source_url: 'testString',
+      tgz_url: 'testString',
+      configuration: [configurationModel],
+      outputs: [outputModel],
+      iam_permissions: [iamPermissionModel],
+      metadata: { anyKey: 'anyValue' },
+      validation: validationModel,
+      required_resources: [resourceModel],
+      single_instance: true,
+      schematics_env_values: schematicsEnvValuesModel,
+      install: scriptModel,
+      pre_install: [scriptModel],
+      scripts: { 'key1': scriptRefModel },
+      entitlement: versionEntitlementModel,
+      licenses: [licenseModel],
+      image_manifest_url: 'testString',
+      deprecated: true,
+      package_version: 'testString',
+      state: stateModel,
+      version_locator: versionIdLink,
+      long_description: 'testString',
+      long_description_i18n: { 'key1': 'testString' },
+      whitelisted_accounts: ['testString'],
+      image_pull_key_name: 'testString',
+      deprecate_pending: deprecatePendingModel,
+      solution_info: solutionInfoModel,
+      is_consumable: true,
+      compliance_v3: complianceModel,
+    };
+
+    // Kind
+    const kindModel = {
+      id: 'testString',
+      format_kind: 'testString',
+      install_kind: 'testString',
+      target_kind: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      tags: ['testString'],
+      additional_features: [featureModel],
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      versions: [versionModel],
+    };
+
+    // PublishObject
+    const publishObjectModel = {
+      pc_managed: true,
+      approval_type: 'testString',
+      publish_approved: true,
+      share_with_all: true,
+      share_with_ibm: true,
+      share_enabled: true,
+      original_crn: 'testString',
+      public_crn: 'testString',
+      approval_record: { anyKey: 'anyValue' },
+      permit_ibm_public_publish: true,
+      ibm_approved: true,
+      public_approved: true,
+    };
+
+    // ProviderInfo
+    const providerInfoModel = {
+      id: 'testString',
+      name: 'testString',
+    };
+
+    // RepoInfo
+    const repoInfoModel = {
+      token: 'testString',
+      type: 'testString',
+    };
+
+    // ImagePullKey
+    const imagePullKeyModel = {
+      name: 'testString',
+      value: 'testString',
+      description: 'testString',
+    };
+
+    // SupportWaitTime
+    const supportWaitTimeModel = {
+      value: 38,
+      type: 'testString',
+    };
+
+    // SupportTime
+    const supportTimeModel = {
+      day: 38,
+      start_time: 'testString',
+      end_time: 'testString',
+    };
+
+    // SupportAvailability
+    const supportAvailabilityModel = {
+      times: [supportTimeModel],
+      timezone: 'testString',
+      always_available: true,
+    };
+
+    // SupportDetail
+    const supportDetailModel = {
+      type: 'testString',
+      contact: 'testString',
+      response_wait_time: supportWaitTimeModel,
+      availability: supportAvailabilityModel,
+    };
+
+    // SupportEscalation
+    const supportEscalationModel = {
+      escalation_wait_time: supportWaitTimeModel,
+      response_wait_time: supportWaitTimeModel,
+      contact: 'testString',
+    };
+
+    // Support
+    const supportModel = {
+      url: 'testString',
+      process: 'testString',
+      process_i18n: { 'key1': 'testString' },
+      locations: ['testString'],
+      support_details: [supportDetailModel],
+      support_escalation: supportEscalationModel,
+      support_type: 'testString',
+    };
+
+    // LearnMoreLinks
+    const learnMoreLinksModel = {
+      first_party: 'testString',
+      third_party: 'testString',
+    };
+
+    // Constraint
+    const constraintModel = {
+      type: 'testString',
+      rule: 'testString',
+    };
+
+    // Badge
+    const badgeModel = {
+      id: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
+      icon: 'testString',
+      authority: 'testString',
+      tag: 'testString',
+      learn_more_links: learnMoreLinksModel,
+      constraints: [constraintModel],
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      id: 'testString',
+      rev: 'testString',
+      url: 'testString',
+      crn: 'testString',
+      label: 'testString',
+      labelI18n: { 'key1': 'testString' },
+      name: 'testString',
+      offeringIconUrl: 'testString',
+      offeringDocsUrl: 'testString',
+      offeringSupportUrl: 'testString',
+      tags: ['testString'],
+      keywords: ['testString'],
+      rating: ratingModel,
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      shortDescription: 'testString',
+      shortDescriptionI18n: { 'key1': 'testString' },
+      longDescription: 'testString',
+      longDescriptionI18n: { 'key1': 'testString' },
+      features: [featureModel],
+      kinds: [kindModel],
+      publish: publishObjectModel,
+      pcManaged: true,
+      publishApproved: true,
+      shareWithAll: true,
+      shareWithIbm: true,
+      shareEnabled: true,
+      permitRequestIbmPublicPublish: true,
+      ibmPublishApproved: true,
+      publicPublishApproved: true,
+      publicOriginalCrn: 'testString',
+      publishPublicCrn: 'testString',
+      portalApprovalRecord: 'testString',
+      portalUiUrl: 'testString',
+      catalogId: catalogIdLink,
+      catalogName: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      disclaimer: 'testString',
+      hidden: true,
+      provider: 'testString',
+      providerInfo: providerInfoModel,
+      repoInfo: repoInfoModel,
+      imagePullKeys: [imagePullKeyModel],
+      support: supportModel,
+      media: [mediaItemModel],
+      deprecatePending: deprecatePendingModel,
+      productKind: 'testString',
+      badges: [badgeModel],
+    };
+
+    const res = await catalogManagementService.replaceOffering(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Consumption Offerings
-  // ====
-
-  test('getConsumptionOfferings() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalog: catalogId,
-      select: 'all',
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getConsumptionOfferings(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getConsumptionOfferings() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalog: `invalid-${catalogId}`,
-      select: 'all',
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getConsumptionOfferings(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getConsumptionOfferings() the catalog consumption offerings', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalog: catalogId,
-      select: 'all',
-    };
-
-    const res = await catalogManagementServiceAuthorized.getConsumptionOfferings(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Import Offering Version
-  // ====
-
-  test('importOfferingVersion() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      targetKinds: ['rocks'],
-      zipurl: importOfferingZipUrl,
-      targetVersion: '0.0.3',
-      repoType: repoTypeGitPublic,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.importOfferingVersion(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('importOfferingVersion() returns 404 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      targetVersion: '0.0.3',
-      repoType: repoTypeGitPublic,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.importOfferingVersion(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('importOfferingVersion() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      targetVersion: '0.0.3',
-      repoType: repoTypeGitPublic,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.importOfferingVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    offeringIdLink = res.result.id;
+    offeringRevLink = res.result._rev;
+    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
+    versionIdLink = res.result.kinds[0].versions[0].id;
+    versionRevLink = res.result.kinds[0].versions[0]._rev;
   });
 
   test('importOfferingVersion()', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
+    // Request models needed by this operation.
 
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      targetKinds: [kindRoks],
-      zipurl: importOfferingZipUrl,
-      targetVersion: '0.0.3',
-      repoType: repoTypeGitPublic,
+    // Flavor
+    const flavorModel = {
+      name: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      index: 38,
     };
 
-    const res = await catalogManagementServiceAuthorized.importOfferingVersion(params);
+    // ImportOfferingBodyMetadataOperatingSystem
+    const importOfferingBodyMetadataOperatingSystemModel = {
+      dedicated_host_only: true,
+      vendor: 'testString',
+      name: 'testString',
+      href: 'testString',
+      display_name: 'testString',
+      family: 'testString',
+      version: 'testString',
+      architecture: 'testString',
+    };
+
+    // ImportOfferingBodyMetadataFile
+    const importOfferingBodyMetadataFileModel = {
+      size: 38,
+    };
+
+    // ImportOfferingBodyMetadataImagesItem
+    const importOfferingBodyMetadataImagesItemModel = {
+      id: 'testString',
+      name: 'testString',
+      region: 'testString',
+    };
+
+    // ImportOfferingBodyMetadata
+    const importOfferingBodyMetadataModel = {
+      operating_system: importOfferingBodyMetadataOperatingSystemModel,
+      file: importOfferingBodyMetadataFileModel,
+      minimum_provisioned_size: 38,
+      images: [importOfferingBodyMetadataImagesItemModel],
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      tags: ['testString'],
+      content: 'This is a mock byte array value.',
+      name: 'testString',
+      label: 'testString',
+      installKind: 'testString',
+      targetKinds: ['testString'],
+      formatKind: 'testString',
+      productKind: 'testString',
+      sha: 'testString',
+      version: 'testString',
+      flavor: flavorModel,
+      metadata: importOfferingBodyMetadataModel,
+      workingDirectory: 'testString',
+      zipurl: 'testString',
+      targetVersion: 'testString',
+      includeConfig: true,
+      isVsi: true,
+      repotype: 'testString',
+      xAuthToken: 'testString',
+    };
+
+    const res = await catalogManagementService.importOfferingVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    offeringIdLink = res.result.id;
+    offeringRevLink = res.result._rev;
+    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
+    versionIdLink = res.result.kinds[0].versions[0].version_locator;
+    versionRevLink = res.result.kinds[0].versions[0]._rev;
+  });
+
+  test('importOffering()', async () => {
+    // Request models needed by this operation.
+
+    // Flavor
+    const flavorModel = {
+      name: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      index: 38,
+    };
+
+    // ImportOfferingBodyMetadataOperatingSystem
+    const importOfferingBodyMetadataOperatingSystemModel = {
+      dedicated_host_only: true,
+      vendor: 'testString',
+      name: 'testString',
+      href: 'testString',
+      display_name: 'testString',
+      family: 'testString',
+      version: 'testString',
+      architecture: 'testString',
+    };
+
+    // ImportOfferingBodyMetadataFile
+    const importOfferingBodyMetadataFileModel = {
+      size: 38,
+    };
+
+    // ImportOfferingBodyMetadataImagesItem
+    const importOfferingBodyMetadataImagesItemModel = {
+      id: 'testString',
+      name: 'testString',
+      region: 'testString',
+    };
+
+    // ImportOfferingBodyMetadata
+    const importOfferingBodyMetadataModel = {
+      operating_system: importOfferingBodyMetadataOperatingSystemModel,
+      file: importOfferingBodyMetadataFileModel,
+      minimum_provisioned_size: 38,
+      images: [importOfferingBodyMetadataImagesItemModel],
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      tags: ['testString'],
+      content: 'This is a mock byte array value.',
+      name: 'testString',
+      label: 'testString',
+      installKind: 'testString',
+      targetKinds: ['testString'],
+      formatKind: 'testString',
+      productKind: 'testString',
+      sha: 'testString',
+      version: 'testString',
+      flavor: flavorModel,
+      metadata: importOfferingBodyMetadataModel,
+      workingDirectory: 'testString',
+      zipurl: 'testString',
+      offeringId: offeringIdLink,
+      targetVersion: 'testString',
+      includeConfig: true,
+      isVsi: true,
+      repotype: 'testString',
+      xAuthToken: 'testString',
+    };
+
+    const res = await catalogManagementService.importOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    offeringRevLink = res.result._rev;
+    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
+  });
+
+  test('getOffering()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      type: 'testString',
+      digest: true,
+    };
+
+    const res = await catalogManagementService.getOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    offeringRevLink = res.result._rev;
+    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
+    versionIdLink = res.result.kinds[0].versions[0].version_locator;
+    versionRevLink = res.result.kinds[0].versions[0]._rev;
+  });
+
+  test('createOffering()', async () => {
+    // Request models needed by this operation.
+
+    // Rating
+    const ratingModel = {
+      one_star_count: 38,
+      two_star_count: 38,
+      three_star_count: 38,
+      four_star_count: 38,
+    };
+
+    // Feature
+    const featureModel = {
+      title: 'testString',
+      title_i18n: { 'key1': 'testString' },
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
+    };
+
+    // Flavor
+    const flavorModel = {
+      name: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      index: 38,
+    };
+
+    // RenderTypeAssociationsParametersItem
+    const renderTypeAssociationsParametersItemModel = {
+      name: 'testString',
+      optionsRefresh: true,
+    };
+
+    // RenderTypeAssociations
+    const renderTypeAssociationsModel = {
+      parameters: [renderTypeAssociationsParametersItemModel],
+    };
+
+    // RenderType
+    const renderTypeModel = {
+      type: 'testString',
+      grouping: 'testString',
+      original_grouping: 'testString',
+      grouping_index: 38,
+      config_constraints: { anyKey: 'anyValue' },
+      associations: renderTypeAssociationsModel,
+    };
+
+    // Configuration
+    const configurationModel = {
+      key: 'testString',
+      type: 'testString',
+      default_value: 'testString',
+      display_name: 'testString',
+      value_constraint: 'testString',
+      description: 'testString',
+      required: true,
+      options: ['testString'],
+      hidden: true,
+      custom_config: renderTypeModel,
+      type_metadata: 'testString',
+    };
+
+    // Output
+    const outputModel = {
+      key: 'testString',
+      description: 'testString',
+    };
+
+    // IAMResource
+    const iamResourceModel = {
+      name: 'testString',
+      description: 'testString',
+      role_crns: ['testString'],
+    };
+
+    // IAMPermission
+    const iamPermissionModel = {
+      service_name: 'testString',
+      role_crns: ['testString'],
+      resources: [iamResourceModel],
+    };
+
+    // Validation
+    const validationModel = {
+      validated: '2019-01-01T12:00:00.000Z',
+      requested: '2019-01-01T12:00:00.000Z',
+      state: 'testString',
+      last_operation: 'testString',
+      target: { anyKey: 'anyValue' },
+      message: 'testString',
+    };
+
+    // Resource
+    const resourceModel = {
+      type: 'mem',
+      value: 'testString',
+    };
+
+    // SchematicsEnvValues
+    const schematicsEnvValuesModel = {
+      value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
+      sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+    };
+
+    // Script
+    const scriptModel = {
+      instructions: 'testString',
+      instructions_i18n: { 'key1': 'testString' },
+      script: 'testString',
+      script_permission: 'testString',
+      delete_script: 'testString',
+      scope: 'testString',
+    };
+
+    // ScriptRef
+    const scriptRefModel = {
+      short_description: 'testString',
+      type: 'ansible',
+      path: 'scripts/validate-post-ansible-playbook.yaml',
+      stage: 'pre',
+      action: 'validate',
+    };
+
+    // VersionEntitlement
+    const versionEntitlementModel = {
+      provider_name: 'testString',
+      provider_id: 'testString',
+      product_id: 'testString',
+      part_numbers: ['testString'],
+      image_repo_name: 'testString',
+    };
+
+    // License
+    const licenseModel = {
+      id: 'testString',
+      name: 'testString',
+      type: 'testString',
+      url: 'testString',
+      description: 'testString',
+    };
+
+    // State
+    const stateModel = {
+      current: 'testString',
+      current_entered: '2019-01-01T12:00:00.000Z',
+      pending: 'testString',
+      pending_requested: '2019-01-01T12:00:00.000Z',
+      previous: 'testString',
+    };
+
+    // DeprecatePending
+    const deprecatePendingModel = {
+      deprecate_date: '2019-01-01T12:00:00.000Z',
+      deprecate_state: 'testString',
+      description: 'testString',
+    };
+
+    // URLProxy
+    const urlProxyModel = {
+      url: 'testString',
+      sha: 'testString',
+    };
+
+    // MediaItem
+    const mediaItemModel = {
+      url: 'testString',
+      api_url: 'testString',
+      url_proxy: urlProxyModel,
+      caption: 'testString',
+      caption_i18n: { 'key1': 'testString' },
+      type: 'testString',
+      thumbnail_url: 'testString',
+    };
+
+    // ArchitectureDiagram
+    const architectureDiagramModel = {
+      diagram: mediaItemModel,
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
+    };
+
+    // CostComponent
+    const costComponentModel = {
+      name: 'testString',
+      unit: 'testString',
+      hourlyQuantity: 'testString',
+      monthlyQuantity: 'testString',
+      price: 'testString',
+      hourlyCost: 'testString',
+      monthlyCost: 'testString',
+    };
+
+    // CostResource
+    const costResourceModel = {
+      name: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      hourlyCost: 'testString',
+      monthlyCost: 'testString',
+      costComponents: [costComponentModel],
+    };
+
+    // CostBreakdown
+    const costBreakdownModel = {
+      totalHourlyCost: 'testString',
+      totalMonthlyCost: 'testString',
+      resources: [costResourceModel],
+    };
+
+    // CostSummary
+    const costSummaryModel = {
+      totalDetectedResources: 38,
+      totalSupportedResources: 38,
+      totalUnsupportedResources: 38,
+      totalUsageBasedResources: 38,
+      totalNoPriceResources: 38,
+      unsupportedResourceCounts: { 'key1': 38 },
+      noPriceResourceCounts: { 'key1': 38 },
+    };
+
+    // Project
+    const projectModel = {
+      name: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      pastBreakdown: costBreakdownModel,
+      breakdown: costBreakdownModel,
+      diff: costBreakdownModel,
+      summary: costSummaryModel,
+    };
+
+    // CostEstimate
+    const costEstimateModel = {
+      version: 'testString',
+      currency: 'testString',
+      projects: [projectModel],
+      summary: costSummaryModel,
+      totalHourlyCost: 'testString',
+      totalMonthlyCost: 'testString',
+      pastTotalHourlyCost: 'testString',
+      pastTotalMonthlyCost: 'testString',
+      diffTotalHourlyCost: 'testString',
+      diffTotalMonthlyCost: 'testString',
+      timeGenerated: '2019-01-01T12:00:00.000Z',
+    };
+
+    // OfferingReference
+    const offeringReferenceModel = {
+      catalog_id: 'testString',
+      id: 'testString',
+      name: 'testString',
+      kind: 'testString',
+      version: 'testString',
+      flavors: ['testString'],
+    };
+
+    // SolutionInfo
+    const solutionInfoModel = {
+      architecture_diagrams: [architectureDiagramModel],
+      features: [featureModel],
+      cost_estimate: costEstimateModel,
+      dependencies: [offeringReferenceModel],
+      install_type: 'testString',
+    };
+
+    // SCCProfile
+    const sccProfileModel = {
+      id: 'testString',
+      name: 'testString',
+      version: 'testString',
+      description: 'testString',
+      type: 'testString',
+      ui_href: 'testString',
+    };
+
+    // ClaimedControl
+    const claimedControlModel = {
+      profile: sccProfileModel,
+      names: ['testString'],
+    };
+
+    // Claims
+    const claimsModel = {
+      profiles: [sccProfileModel],
+      controls: [claimedControlModel],
+    };
+
+    // Result
+    const resultModel = {
+      failure_count: 38,
+      scan_time: '2019-01-01T12:00:00.000Z',
+      error_message: 'testString',
+      complete_scan: true,
+      unscanned_resources: ['testString'],
+    };
+
+    // SCCAssessment
+    const sccAssessmentModel = {
+      id: 'testString',
+      description: 'testString',
+      version: 'testString',
+      type: 'testString',
+      method: 'testString',
+      ui_href: 'testString',
+    };
+
+    // SCCSpecification
+    const sccSpecificationModel = {
+      id: 'testString',
+      description: 'testString',
+      component_name: 'testString',
+      assessments: [sccAssessmentModel],
+      ui_href: 'testString',
+    };
+
+    // SCCControl
+    const sccControlModel = {
+      id: 'testString',
+      name: 'testString',
+      version: 'testString',
+      description: 'testString',
+      profile: sccProfileModel,
+      parent_name: 'testString',
+      specifications: [sccSpecificationModel],
+      ui_href: 'testString',
+    };
+
+    // EvaluatedControl
+    const evaluatedControlModel = {
+      id: 'testString',
+      name: 'testString',
+      description: 'testString',
+      specifications: [sccSpecificationModel],
+      failure_count: 38,
+      pass_count: 38,
+      parent: sccControlModel,
+      ui_href: 'testString',
+    };
+
+    // Evaluation
+    const evaluationModel = {
+      scan_id: 'testString',
+      account_id: 'testString',
+      profile: sccProfileModel,
+      result: resultModel,
+      controls: [evaluatedControlModel],
+    };
+
+    // Compliance
+    const complianceModel = {
+      authority: 'testString',
+      claims: claimsModel,
+      evaluations: [evaluationModel],
+    };
+
+    // Version
+    const versionModel = {
+      crn: 'testString',
+      version: 'testString',
+      flavor: flavorModel,
+      sha: 'testString',
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      offering_id: offeringIdLink,
+      catalog_id: catalogIdLink,
+      kind_id: 'testString',
+      tags: ['testString'],
+      repo_url: 'testString',
+      source_url: 'testString',
+      tgz_url: 'testString',
+      configuration: [configurationModel],
+      outputs: [outputModel],
+      iam_permissions: [iamPermissionModel],
+      metadata: { anyKey: 'anyValue' },
+      validation: validationModel,
+      required_resources: [resourceModel],
+      single_instance: true,
+      schematics_env_values: schematicsEnvValuesModel,
+      install: scriptModel,
+      pre_install: [scriptModel],
+      scripts: { 'key1': scriptRefModel },
+      entitlement: versionEntitlementModel,
+      licenses: [licenseModel],
+      image_manifest_url: 'testString',
+      deprecated: true,
+      package_version: 'testString',
+      state: stateModel,
+      version_locator: versionIdLink,
+      long_description: 'testString',
+      long_description_i18n: { 'key1': 'testString' },
+      whitelisted_accounts: ['testString'],
+      image_pull_key_name: 'testString',
+      deprecate_pending: deprecatePendingModel,
+      solution_info: solutionInfoModel,
+      is_consumable: true,
+      compliance_v3: complianceModel,
+    };
+
+    // Kind
+    const kindModel = {
+      id: 'testString',
+      format_kind: 'testString',
+      install_kind: 'testString',
+      target_kind: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      tags: ['testString'],
+      additional_features: [featureModel],
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      versions: [versionModel],
+    };
+
+    // PublishObject
+    const publishObjectModel = {
+      pc_managed: true,
+      approval_type: 'testString',
+      publish_approved: true,
+      share_with_all: true,
+      share_with_ibm: true,
+      share_enabled: true,
+      original_crn: 'testString',
+      public_crn: 'testString',
+      approval_record: { anyKey: 'anyValue' },
+      permit_ibm_public_publish: true,
+      ibm_approved: true,
+      public_approved: true,
+    };
+
+    // ProviderInfo
+    const providerInfoModel = {
+      id: 'testString',
+      name: 'testString',
+    };
+
+    // RepoInfo
+    const repoInfoModel = {
+      token: 'testString',
+      type: 'testString',
+    };
+
+    // ImagePullKey
+    const imagePullKeyModel = {
+      name: 'testString',
+      value: 'testString',
+      description: 'testString',
+    };
+
+    // SupportWaitTime
+    const supportWaitTimeModel = {
+      value: 38,
+      type: 'testString',
+    };
+
+    // SupportTime
+    const supportTimeModel = {
+      day: 38,
+      start_time: 'testString',
+      end_time: 'testString',
+    };
+
+    // SupportAvailability
+    const supportAvailabilityModel = {
+      times: [supportTimeModel],
+      timezone: 'testString',
+      always_available: true,
+    };
+
+    // SupportDetail
+    const supportDetailModel = {
+      type: 'testString',
+      contact: 'testString',
+      response_wait_time: supportWaitTimeModel,
+      availability: supportAvailabilityModel,
+    };
+
+    // SupportEscalation
+    const supportEscalationModel = {
+      escalation_wait_time: supportWaitTimeModel,
+      response_wait_time: supportWaitTimeModel,
+      contact: 'testString',
+    };
+
+    // Support
+    const supportModel = {
+      url: 'testString',
+      process: 'testString',
+      process_i18n: { 'key1': 'testString' },
+      locations: ['testString'],
+      support_details: [supportDetailModel],
+      support_escalation: supportEscalationModel,
+      support_type: 'testString',
+    };
+
+    // LearnMoreLinks
+    const learnMoreLinksModel = {
+      first_party: 'testString',
+      third_party: 'testString',
+    };
+
+    // Constraint
+    const constraintModel = {
+      type: 'testString',
+      rule: 'testString',
+    };
+
+    // Badge
+    const badgeModel = {
+      id: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      description: 'testString',
+      description_i18n: { 'key1': 'testString' },
+      icon: 'testString',
+      authority: 'testString',
+      tag: 'testString',
+      learn_more_links: learnMoreLinksModel,
+      constraints: [constraintModel],
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      url: 'testString',
+      crn: 'testString',
+      label: 'testString',
+      labelI18n: { 'key1': 'testString' },
+      name: 'testString',
+      offeringIconUrl: 'testString',
+      offeringDocsUrl: 'testString',
+      offeringSupportUrl: 'testString',
+      tags: ['testString'],
+      keywords: ['testString'],
+      rating: ratingModel,
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      shortDescription: 'testString',
+      shortDescriptionI18n: { 'key1': 'testString' },
+      longDescription: 'testString',
+      longDescriptionI18n: { 'key1': 'testString' },
+      features: [featureModel],
+      kinds: [kindModel],
+      publish: publishObjectModel,
+      pcManaged: true,
+      publishApproved: true,
+      shareWithAll: true,
+      shareWithIbm: true,
+      shareEnabled: true,
+      permitRequestIbmPublicPublish: true,
+      ibmPublishApproved: true,
+      publicPublishApproved: true,
+      publicOriginalCrn: 'testString',
+      publishPublicCrn: 'testString',
+      portalApprovalRecord: 'testString',
+      portalUiUrl: 'testString',
+      catalogId: catalogIdLink,
+      catalogName: 'testString',
+      metadata: { anyKey: 'anyValue' },
+      disclaimer: 'testString',
+      hidden: true,
+      provider: 'testString',
+      providerInfo: providerInfoModel,
+      repoInfo: repoInfoModel,
+      imagePullKeys: [imagePullKeyModel],
+      support: supportModel,
+      media: [mediaItemModel],
+      deprecatePending: deprecatePendingModel,
+      productKind: 'testString',
+      badges: [badgeModel],
+    };
+
+    const res = await catalogManagementService.createOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    offeringIdLink = res.result.id;
+    offeringRevLink = res.result._rev;
+    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
+    versionIdLink = res.result.kinds[0].versions[0].version_locator;
+    versionRevLink = res.result.kinds[0].versions[0]._rev;
+  });
+
+  test('reloadOffering()', async () => {
+    // Request models needed by this operation.
+
+    // Flavor
+    const flavorModel = {
+      name: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      index: 38,
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      targetVersion: 'testString',
+      tags: ['testString'],
+      content: 'This is a mock byte array value.',
+      targetKinds: ['testString'],
+      formatKind: 'testString',
+      flavor: flavorModel,
+      workingDirectory: 'testString',
+      zipurl: 'testString',
+      repoType: 'testString',
+    };
+
+    const res = await catalogManagementService.reloadOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    offeringRevLink = res.result._rev;
+  });
+
+  test('updateOffering()', async () => {
+    // Request models needed by this operation.
+
+    // JsonPatchOperation
+    const jsonPatchOperationModel = {
+      op: 'add',
+      path: 'testString',
+      value: 'testString',
+      from: 'testString',
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      ifMatch: 'testString',
+      updates: [jsonPatchOperationModel],
+    };
+
+    const res = await catalogManagementService.updateOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    offeringRevLink = res.result._rev;
+  });
+
+  test('createObject()', async () => {
+    // Request models needed by this operation.
+
+    // PublishObject
+    const publishObjectModel = {
+      pc_managed: true,
+      approval_type: 'testString',
+      publish_approved: true,
+      share_with_all: true,
+      share_with_ibm: true,
+      share_enabled: true,
+      original_crn: 'testString',
+      public_crn: 'testString',
+      approval_record: { anyKey: 'anyValue' },
+      permit_ibm_public_publish: true,
+      ibm_approved: true,
+      public_approved: true,
+    };
+
+    // State
+    const stateModel = {
+      current: 'testString',
+      current_entered: '2019-01-01T12:00:00.000Z',
+      pending: 'testString',
+      pending_requested: '2019-01-01T12:00:00.000Z',
+      previous: 'testString',
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      name: 'testString',
+      crn: 'testString',
+      url: 'testString',
+      parentId: 'testString',
+      labelI18n: { 'key1': 'testString' },
+      label: 'testString',
+      tags: ['testString'],
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      shortDescription: 'testString',
+      shortDescriptionI18n: { 'key1': 'testString' },
+      kind: 'testString',
+      publish: publishObjectModel,
+      state: stateModel,
+      catalogId: catalogIdLink,
+      catalogName: 'testString',
+      data: { anyKey: 'anyValue' },
+    };
+
+    const res = await catalogManagementService.createObject(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    objectIdLink = res.result.id;
+    objectRevLink = res.result._rev;
+  });
+
+  test('getObject()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+    };
+
+    const res = await catalogManagementService.getObject(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    objectRevLink = res.result._rev;
+  });
+
+  test('replaceObject()', async () => {
+    // Request models needed by this operation.
+
+    // PublishObject
+    const publishObjectModel = {
+      pc_managed: true,
+      approval_type: 'testString',
+      publish_approved: true,
+      share_with_all: true,
+      share_with_ibm: true,
+      share_enabled: true,
+      original_crn: 'testString',
+      public_crn: 'testString',
+      approval_record: { anyKey: 'anyValue' },
+      permit_ibm_public_publish: true,
+      ibm_approved: true,
+      public_approved: true,
+    };
+
+    // State
+    const stateModel = {
+      current: 'testString',
+      current_entered: '2019-01-01T12:00:00.000Z',
+      pending: 'testString',
+      pending_requested: '2019-01-01T12:00:00.000Z',
+      previous: 'testString',
+    };
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      id: 'testString',
+      rev: 'testString',
+      name: 'testString',
+      crn: 'testString',
+      url: 'testString',
+      parentId: 'testString',
+      labelI18n: { 'key1': 'testString' },
+      label: 'testString',
+      tags: ['testString'],
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      shortDescription: 'testString',
+      shortDescriptionI18n: { 'key1': 'testString' },
+      kind: 'testString',
+      publish: publishObjectModel,
+      state: stateModel,
+      catalogId: catalogIdLink,
+      catalogName: 'testString',
+      data: { anyKey: 'anyValue' },
+    };
+
+    const res = await catalogManagementService.replaceObject(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    objectRevLink = res.result._rev;
+  });
+
+  test('listCatalogAccountAudits()', async () => {
+    const params = {
+      start: 'testString',
+      limit: 100,
+      lookupnames: true,
+    };
+
+    const res = await catalogManagementService.listCatalogAccountAudits(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listCatalogAccountAudits() via CatalogAccountAuditsPager', async () => {
+    const params = {
+      limit: 10,
+      lookupnames: true,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.CatalogAccountAuditsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.CatalogAccountAuditsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getCatalogAccountAudit()', async () => {
+    const params = {
+      auditlogIdentifier: 'testString',
+      lookupnames: true,
+    };
+
+    const res = await catalogManagementService.getCatalogAccountAudit(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getCatalogAccountFilters()', async () => {
+    const params = {
+      catalog: catalogIdLink,
+    };
+
+    const res = await catalogManagementService.getCatalogAccountFilters(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getShareApprovalList()', async () => {
+    const params = {
+      objectType: 'offering',
+      start: 'testString',
+      limit: 100,
+    };
+
+    const res = await catalogManagementService.getShareApprovalList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getShareApprovalList() via GetShareApprovalListPager', async () => {
+    const params = {
+      objectType: 'offering',
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('addShareApprovalList()', async () => {
+    const params = {
+      objectType: 'offering',
+      accesses: ['testString'],
+    };
+
+    const res = await catalogManagementService.addShareApprovalList(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Replace Offering Icon
-  // ====
-
-  test.skip('replaceOfferingIcon() returns 404 when no such offerings', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
+  test('getShareApprovalListAsSource()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-      fileName: 'filename.jpg',
+      objectType: 'offering',
+      approvalStateIdentifier: 'approved',
+      start: 'testString',
+      limit: 100,
+      enterpriseId: 'testString',
     };
 
-    const res = await catalogManagementServiceAuthorized.replaceOfferingIcon(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(404);
-  });
-
-  test.skip('replaceOfferingIcon() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      fileName: 'filename.jpg',
-    };
-
-    const res = await catalogManagementServiceNotAuthorized.replaceOfferingIcon(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(403);
-  });
-
-  test.skip('replaceOfferingIcon() replaces the offerings icon', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      fileName: 'filename.jpg',
-    };
-
-    const res = await catalogManagementServiceAuthorized.replaceOfferingIcon(params);
+    const res = await catalogManagementService.getShareApprovalListAsSource(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Update Offering IBM
-  // ====
-
-  // once the user is granted for this operation this test can be executed
-  test.skip('updateOfferingIbm() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
+  test('getShareApprovalListAsSource() via GetShareApprovalListAsSourcePager', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      approvalType: 'bogus approval type',
-      approved: true,
+      objectType: 'offering',
+      approvalStateIdentifier: 'approved',
+      limit: 10,
+      enterpriseId: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.updateOfferingIbm(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  // once the user is granted for this operation this test can be executed
-  test.skip('updateOfferingIbm() returns 404 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
+  test('updateShareApprovalListAsSource()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-      approvalType: 'allow_request',
-      approved: true,
+      objectType: 'offering',
+      approvalStateIdentifier: 'approved',
+      accesses: ['testString'],
+      enterpriseId: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.updateOfferingIbm(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
+    const res = await catalogManagementService.updateShareApprovalListAsSource(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
   });
 
-  test('updateOfferingIbm() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      approvalType: 'allow_request',
-      approved: true,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.updateOfferingIbm(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  // this user is not permitted to execute this operation
-  test.skip('updateOfferingIbm() updates offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      approvalType: 'allow_request',
-      approved: true,
-    };
-
-    const res = await catalogManagementServiceAuthorized.updateOfferingIbm(params);
+  test('listCatalogs()', async () => {
+    const res = await catalogManagementService.listCatalogs();
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Offering Updates
-  // ====
-
-  // go and python fails, this one is not...
-  test.skip('getOfferingUpdates() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
+  test('listCatalogAudits()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      kind: 'rocks',
-      version: '0.0.2',
-      clusterId,
-      region: regionUsSouth,
+      catalogIdentifier: catalogIdLink,
+      start: 'testString',
+      limit: 100,
+      lookupnames: true,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingUpdates(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  // it always complaining about offering types which is somehow related to create/import offerings
-  // once this is resolved there is a chance we can squeeze a 404 out from the service
-
-  test.skip('getOfferingUpdates() returns 404 when no such offerings', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-      kind: kindRoks,
-      version: '0.0.2',
-      clusterId,
-      region: regionUsSouth,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingUpdates(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getOfferingUpdates() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      kind: kindRoks,
-      version: '0.0.2',
-      clusterId,
-      region: regionUsSouth,
-      namespaces: namespaceNode,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingUpdates(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  // requires a special offering
-  // Error: Could not find kind[roks] for offering
-
-  test.skip('getOfferingUpdates() returns offering updates', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-      kind: kindRoks,
-      version: '0.0.2',
-      clusterId,
-      region: regionUsSouth,
-      namespace: namespaceNode,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingUpdates(params);
+    const res = await catalogManagementService.listCatalogAudits(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Offering About
-  // ====
-
-  test('getOfferingAbout() returns 400 when backend input validation fails', async () => {
+  test('listCatalogAudits() via CatalogAuditsPager', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      catalogIdentifier: catalogIdLink,
+      limit: 10,
+      lookupnames: true,
     };
 
-    await expect(catalogManagementServiceAuthorized.getOfferingAbout(params)).rejects.toMatchObject(
-      {
-        status: 400,
-      }
-    );
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.CatalogAuditsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.CatalogAuditsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('getOfferingAbout() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getCatalogAudit()', async () => {
     const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
+      catalogIdentifier: catalogIdLink,
+      auditlogIdentifier: 'testString',
+      lookupnames: true,
     };
 
-    await expect(catalogManagementServiceAuthorized.getOfferingAbout(params)).rejects.toMatchObject(
-      {
-        status: 404,
-      }
-    );
-  });
-
-  test('getOfferingAbout() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingAbout(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getOfferingAbout() returns offering about', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingAbout(params);
+    const res = await catalogManagementService.getCatalogAudit(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Offering License
-  // ====
-
-  test('getOfferingLicense() returns 400 when backend input validation fails', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('listEnterpriseAudits()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
-      licenseId: 'license-id-is-needed',
+      enterpriseIdentifier: 'testString',
+      start: 'testString',
+      limit: 100,
+      lookupnames: true,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingLicense(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('getOfferingLicense() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-      licenseId: 'license-id-is-needed',
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingLicense(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('getOfferingLicense() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      licenseId: 'license-id-is-needed',
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingLicense(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test.skip('getOfferingLicense() returns the offering license', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      licenseId: 'license-id-is-needed',
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingLicense(params);
+    const res = await catalogManagementService.listEnterpriseAudits(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Offering Container Images
-  // ====
-
-  test('getOfferingContainerImages() returns 400 when backend input validation fails', async () => {
+  test('listEnterpriseAudits() via EnterpriseAuditsPager', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      enterpriseIdentifier: 'testString',
+      limit: 10,
+      lookupnames: true,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingContainerImages(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.EnterpriseAuditsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.EnterpriseAuditsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('getOfferingContainerImages() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getEnterpriseAudit()', async () => {
     const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
+      enterpriseIdentifier: 'testString',
+      auditlogIdentifier: 'testString',
+      lookupnames: true,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingContainerImages(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getOfferingContainerImages() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingContainerImages(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getOfferingContainerImages() returns offering container images', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingContainerImages(params);
+    const res = await catalogManagementService.getEnterpriseAudit(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Deprecate Version
-  // ====
-
-  test('deprecateVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getConsumptionOfferings()', async () => {
     const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
+      digest: true,
+      catalog: catalogIdLink,
+      select: 'all',
+      includeHidden: true,
+      limit: 100,
+      offset: 0,
     };
 
-    await expect(catalogManagementServiceAuthorized.deprecateVersion(params)).rejects.toMatchObject(
-      {
-        status: 404,
-      }
-    );
+    const res = await catalogManagementService.getConsumptionOfferings(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('deprecateVersion() returns 400 when backend input validation fails', async () => {
+  test('getConsumptionOfferings() via GetConsumptionOfferingsPager', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      digest: true,
+      catalog: catalogIdLink,
+      select: 'all',
+      includeHidden: true,
+      limit: 10,
     };
 
-    await expect(catalogManagementServiceAuthorized.deprecateVersion(params)).rejects.toMatchObject(
-      {
-        status: 400,
-      }
-    );
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('deprecateVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('listOfferings()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
+      catalogIdentifier: catalogIdLink,
+      digest: true,
+      limit: 100,
+      offset: 0,
+      name: 'testString',
+      sort: 'testString',
+      includeHidden: true,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.deprecateVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const res = await catalogManagementService.listOfferings(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  // the flow of different states
-  // Error: Cannot request the state deprecated from the current state new.
-
-  test.skip('deprecateVersion() deprecates the version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('listOfferings() via OfferingsPager', async () => {
     const params = {
-      versionLocId: versionLocatorId,
+      catalogIdentifier: catalogIdLink,
+      digest: true,
+      limit: 10,
+      name: 'testString',
+      sort: 'testString',
+      includeHidden: true,
     };
 
-    const res = await catalogManagementServiceAuthorized.deprecateVersion(params);
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.OfferingsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.OfferingsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('listOfferingAudits()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      start: 'testString',
+      limit: 100,
+      lookupnames: true,
+    };
+
+    const res = await catalogManagementService.listOfferingAudits(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listOfferingAudits() via OfferingAuditsPager', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      limit: 10,
+      lookupnames: true,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.OfferingAuditsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.OfferingAuditsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getOfferingAudit()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      auditlogIdentifier: 'testString',
+      lookupnames: true,
+    };
+
+    const res = await catalogManagementService.getOfferingAudit(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('setOfferingPublish()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      approvalType: 'pc_managed',
+      approved: 'true',
+      portalRecord: 'testString',
+      portalUrl: 'testString',
+      xApproverToken: 'testString',
+      xAuthToken: 'testString',
+    };
+
+    const res = await catalogManagementService.setOfferingPublish(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deprecateOffering()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      setting: 'true',
+      description: 'testString',
+      daysUntilDeprecate: 38,
+    };
+
+    const res = await catalogManagementService.deprecateOffering(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Account Publish Version
-  // ====
-
-  test('accountPublishVersion() returns 400 when backend input validation fails', async () => {
+  test('shareOffering()', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      ibm: true,
+      _public: true,
+      enabled: true,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.accountPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
+    const res = await catalogManagementService.shareOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('accountPublishVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getOfferingAccess()', async () => {
     const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      accessIdentifier: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.accountPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
+    const res = await catalogManagementService.getOfferingAccess(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('accountPublishVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getOfferingAccessList()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      start: 'testString',
+      limit: 100,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.accountPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const res = await catalogManagementService.getOfferingAccessList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  // the phases of different states is unknown
-  // Error: Cannot request the state account-published from the current state new.
-
-  test.skip('accountPublishVersion()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getOfferingAccessList() via GetOfferingAccessListPager', async () => {
     const params = {
-      versionLocId: versionLocatorId,
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      limit: 10,
     };
 
-    const res = await catalogManagementServiceAuthorized.accountPublishVersion(params);
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('addOfferingAccessList()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      accesses: ['testString'],
+    };
+
+    const res = await catalogManagementService.addOfferingAccessList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingUpdates()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      kind: 'testString',
+      xAuthRefreshToken: 'testString',
+      target: 'testString',
+      version: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      resourceGroupId: 'testString',
+      namespace: 'testString',
+      sha: 'testString',
+      channel: 'testString',
+      namespaces: ['testString'],
+      allNamespaces: true,
+      flavor: 'testString',
+      installType: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingUpdates(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingSource()', async () => {
+    const params = {
+      version: 'testString',
+      accept: 'application/yaml',
+      catalogId: 'testString',
+      name: 'testString',
+      id: 'testString',
+      kind: 'testString',
+      channel: 'testString',
+      flavor: 'testString',
+      asIs: true,
+      installType: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingSource(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingSourceArchive()', async () => {
+    const params = {
+      version: 'testString',
+      accept: 'application/yaml',
+      catalogId: 'testString',
+      name: 'testString',
+      id: 'testString',
+      kind: 'testString',
+      channel: 'testString',
+      flavor: 'testString',
+      asIs: true,
+      installType: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingSourceArchive(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingSourceUrl()', async () => {
+    const params = {
+      keyIdentifier: 'testString',
+      accept: 'application/yaml',
+      catalogId: 'testString',
+      name: 'testString',
+      id: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingSourceUrl(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingAbout()', async () => {
+    const params = {
+      versionLocId: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingAbout(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingLicense()', async () => {
+    const params = {
+      versionLocId: 'testString',
+      licenseId: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingLicense(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingContainerImages()', async () => {
+    const params = {
+      versionLocId: 'testString',
+    };
+
+    const res = await catalogManagementService.getOfferingContainerImages(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('archiveVersion()', async () => {
+    const params = {
+      versionLocId: 'testString',
+    };
+
+    const res = await catalogManagementService.archiveVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // IBM Publish Version
-  // ====
-
-  test('ibmPublishVersion() returns 400 when backend input validation fails', async () => {
+  test('setDeprecateVersion()', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      versionLocId: 'testString',
+      setting: 'true',
+      description: 'testString',
+      daysUntilDeprecate: 38,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.ibmPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('ibmPublishVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.ibmPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('ibmPublishVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.ibmPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  // user is not allowed to publish
-  test.skip('ibmPublishVersion()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.ibmPublishVersion(params);
+    const res = await catalogManagementService.setDeprecateVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Public Publish Version
-  // ====
-
-  test('publicPublishVersion() returns 400 when backend input validation fails', async () => {
+  test('consumableVersion()', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      versionLocId: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.publicPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('publicPublishVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.publicPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('publicPublishVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.publicPublishVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test.skip('publicPublishVersion() publishes the version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.publicPublishVersion(params);
+    const res = await catalogManagementService.consumableVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Commit Version
-  // ====
-
-  test('commitVersion() returns 400 when backend input validation fails', async () => {
+  test('prereleaseVersion()', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      versionLocId: 'testString',
     };
 
-    await expect(catalogManagementServiceAuthorized.commitVersion(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('commitVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.commitVersion(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('commitVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.commitVersion(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  // workflow of versions
-  // Error: Could not find a working copy for the active version with id
-  test.skip('commitVersion()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.commitVersion(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Copy Version
-  // ====
-
-  test('copyVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      targetKinds: [kindRoks],
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.copyVersion(params)).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('copyVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-      targetKinds: [kindRoks],
-    };
-
-    await expect(catalogManagementServiceAuthorized.copyVersion(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('copyVersion() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-      targetKinds: [kindRoks],
-    };
-
-    await expect(catalogManagementServiceAuthorized.copyVersion(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  // Error: Only helm charts can be copied to a new target at this time.
-  test.skip('copyVersion() copies a version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      targetKinds: [kindRoks],
-    };
-
-    const res = await catalogManagementServiceAuthorized.copyVersion(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Offering Working Copy
-  // ====
-
-  test('getOfferingWorkingCopy() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingWorkingCopy(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('getOfferingWorkingCopy() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingWorkingCopy(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getOfferingWorkingCopy() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingWorkingCopy(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  // requires published state which this user cannot create
-  // Error: Cannot create a working copy for version 60cb36c3-39fd-40ed-9887-6bc98aa7b7be.  The version
-  // must be in a published state, deprecated state, or invalidated state to create a working copy
-  test.skip('getOfferingWorkingCopy() returns the offering working copy', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingWorkingCopy(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Version
-  // ====
-
-  test('getVersion() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getVersion(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('getVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getVersion(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.getVersion(params)).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getVersion() returns the version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getVersion(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Cluster
-  // ====
-
-  // possibly this user doesn't have right to execute this operation
-  test.skip('getCluster() returns 403 when user is not authorized', async () => {
-    const params = {
-      clusterId,
-      region: regionUsSouth,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.getCluster(params)).rejects.toMatchObject({
-      status: 401,
-    });
-  });
-
-  test('getCluster() returns 404 when no such cluster', async () => {
-    const params = {
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      xAuthRefreshToken: refreshTokenAuthorized,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getCluster(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('getCluster()', async () => {
-    // possibly this user doesn't have right to get the cluster details
-    // until it is not clear it is skipped
-
-    const params = {
-      clusterId,
-      region: regionUsSouth,
-      xAuthRefreshToken: refreshTokenAuthorized,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getCluster(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Namespaces
-  // ====
-
-  test('getNamespaces() returns 404 when no such cluster', async () => {
-    const params = {
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      xAuthRefreshToken: refreshTokenAuthorized,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getNamespaces(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('getNamespaces() returns 403 when user is not authorized', async () => {
-    const params = {
-      clusterId,
-      region: regionUsSouth,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.getNamespaces(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test.skip('getNamespaces() returns namespaces', async () => {
-    const params = {
-      clusterId,
-      region: regionUsSouth,
-      xAuthRefreshToken: refreshTokenAuthorized,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getNamespaces(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Deploy Operators
-  // ====
-
-  test('deployOperators() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.deployOperators(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('deployOperators() returns 404 when no such cluster', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.deployOperators(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('deployOperators() returns 400 when backend input validation fails', async () => {
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId: bogusVersionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.deployOperators(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  // possibly this user doesn't have right to get the cluster details
-  // until it is not clear it is skipped
-  // The specified cluster could not be found. If applicable, make sure that you target the correct account
-  // and resource group."
-  test.skip('deployOperators() deploys an operator', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deployOperators(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // List Operators
-  // ====
-
-  test('listOperators() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.listOperators(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test('listOperators() returns 400 when backend input validation fails', async () => {
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: bogusVersionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.listOperators(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('listOperators() returns 404 when no such cluster', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.listOperators(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  // possibly this user doesn't have right to get the cluster details
-  // until it is not clear it is skipped
-  // The specified cluster could not be found. If applicable, make sure that you target the correct account
-  // and resource group."
-  test.skip('listOperators() returns list of operators', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.listOperators(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Replace Operators
-  // ====
-
-  test('replaceOperators() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.replaceOperators(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('replaceOperators() returns 404 when no such cluster', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceOperators(params)).rejects.toMatchObject(
-      {
-        status: 404,
-      }
-    );
-  });
-
-  test('replaceOperators() returns 400 when backend input validation fails', async () => {
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: bogusVersionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceOperators(params)).rejects.toMatchObject(
-      {
-        status: 400,
-      }
-    );
-  });
-
-  // possibly this user doesn't have right to get the cluster details
-  // until it is not clear it is skipped
-  // The specified cluster could not be found. If applicable, make sure that you target the correct account
-  // and resource group."
-  test.skip('replaceOperators()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      allNamespaces: true,
-      versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.replaceOperators(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Install Version
-  // ====
-
-  test('installVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.installVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('installVersion() returns 404 when no such cluster', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.installVersion(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('installVersion() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: bogusVersionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.installVersion(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  // possibly this user doesn't have right to get the cluster details
-  // until it is not clear it is skipped
-  // The specified cluster could not be found. If applicable, make sure that you target the correct account
-  // and resource group."
-  test.skip('installVersion()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.installVersion(params);
+    const res = await catalogManagementService.prereleaseVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Preinstall Version
-  // ====
-
-  test('preinstallVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('suspendVersion()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
+      versionLocId: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.preinstallVersion(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test.skip('preinstallVersion() returns 404 when no such cluster', async () => {
-    // it requires a version where preinstall script is installed
-    // but I don't know how to do it
-    // one it is done possible to squeeze a 404 from the cluster
-    // until then it checks 400
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId: `invalid-${clusterId}`,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.preinstallVersion(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('preinstallVersion() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: bogusVersionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.preinstallVersion(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test.skip('preinstallVersion()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.preinstallVersion(params);
+    const res = await catalogManagementService.suspendVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Preinstall
-  // ====
-
-  test('getPreinstall() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('commitVersion()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
+      versionLocId: 'testString',
     };
 
-    await expect(catalogManagementServiceNotAuthorized.getPreinstall(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test('getPreinstall() returns 404 when no such version', async () => {
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getPreinstall(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getPreinstall() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getPreinstall(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test.skip('getPreinstall()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getPreinstall(params);
+    const res = await catalogManagementService.commitVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Validate Install
-  // ====
+  test('copyVersion()', async () => {
+    // Request models needed by this operation.
 
-  test('validateInstall() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
+    // Flavor
+    const flavorModel = {
+      name: 'testString',
+      label: 'testString',
+      label_i18n: { 'key1': 'testString' },
+      index: 38,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.validateInstall(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const params = {
+      versionLocId: 'testString',
+      tags: ['testString'],
+      content: 'This is a mock byte array value.',
+      targetKinds: ['testString'],
+      formatKind: 'testString',
+      flavor: flavorModel,
+      workingDirectory: 'testString',
+    };
+
+    const res = await catalogManagementService.copyVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('validateInstall() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getOfferingWorkingCopy()', async () => {
     const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
+      versionLocId: 'testString',
     };
 
-    await expect(catalogManagementServiceAuthorized.validateInstall(params)).rejects.toMatchObject({
-      status: 404,
-    });
+    const res = await catalogManagementService.getOfferingWorkingCopy(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('validateInstall() returns 400 when backend input validation fails', async () => {
+  test('copyFromPreviousVersion()', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: bogusVersionLocatorId,
+      versionLocId: 'testString',
+      type: 'testString',
+      versionLocIdToCopyFrom: 'testString',
     };
 
-    await expect(catalogManagementServiceAuthorized.validateInstall(params)).rejects.toMatchObject({
-      status: 400,
-    });
+    const res = await catalogManagementService.copyFromPreviousVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  // possibly this user doesn't have right to get the cluster details
-  // until it is not clear it is skipped
-  // The specified cluster could not be found. If applicable, make sure that you target the correct account
-  // and resource group."
-  test.skip('validateInstall()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getVersion()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
+      versionLocId: 'testString',
     };
 
-    const res = await catalogManagementServiceAuthorized.validateInstall(params);
+    const res = await catalogManagementService.getVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deprecateVersion()', async () => {
+    const params = {
+      versionLocId: 'testString',
+    };
+
+    const res = await catalogManagementService.deprecateVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Validation Status
-  // ====
-
-  test('getValidationStatus() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getCluster()', async () => {
     const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
+      clusterId: 'testString',
+      region: 'testString',
+      xAuthRefreshToken: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getValidationStatus(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const res = await catalogManagementService.getCluster(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('getValidationStatus() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('getNamespaces()', async () => {
     const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-      xAuthRefreshToken: refreshTokenAuthorized,
+      clusterId: 'testString',
+      region: 'testString',
+      xAuthRefreshToken: 'testString',
+      limit: 100,
+      offset: 0,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getValidationStatus(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
+    const res = await catalogManagementService.getNamespaces(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
-  test('getValidationStatus() returns 400 when backend input validation fails', async () => {
+  test('getNamespaces() via GetNamespacesPager', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
+      clusterId: 'testString',
+      region: 'testString',
+      xAuthRefreshToken: 'testString',
+      limit: 10,
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.getValidationStatus(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetNamespacesPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetNamespacesPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('deployOperators()', async () => {
+    const params = {
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      namespaces: ['testString'],
+      allNamespaces: true,
+      versionLocatorId: 'testString',
+      channel: 'testString',
+      installPlan: 'testString',
+    };
+
+    const res = await catalogManagementService.deployOperators(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listOperators()', async () => {
+    const params = {
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      versionLocatorId: 'testString',
+    };
+
+    const res = await catalogManagementService.listOperators(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('replaceOperators()', async () => {
+    const params = {
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      namespaces: ['testString'],
+      allNamespaces: true,
+      versionLocatorId: 'testString',
+      channel: 'testString',
+      installPlan: 'testString',
+    };
+
+    const res = await catalogManagementService.replaceOperators(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('installVersion()', async () => {
+    // Request models needed by this operation.
+
+    // DeployRequestBodyOverrideValues
+    const deployRequestBodyOverrideValuesModel = {
+      vsi_instance_name: 'testString',
+      vpc_profile: 'testString',
+      subnet_id: 'testString',
+      vpc_id: 'testString',
+      subnet_zone: 'testString',
+      ssh_key_id: 'testString',
+      vpc_region: 'testString',
+      foo: 'testString',
+    };
+
+    // DeployRequestBodyEnvironmentVariablesItem
+    const deployRequestBodyEnvironmentVariablesItemModel = {
+      name: 'testString',
+      value: 'testString',
+      secure: true,
+      hidden: true,
+    };
+
+    // DeployRequestBodySchematics
+    const deployRequestBodySchematicsModel = {
+      name: 'testString',
+      description: 'testString',
+      tags: ['testString'],
+      resource_group_id: 'testString',
+      terraform_version: 'testString',
+      region: 'testString',
+    };
+
+    const params = {
+      versionLocId: 'testString',
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      namespace: 'testString',
+      overrideValues: deployRequestBodyOverrideValuesModel,
+      environmentVariables: [deployRequestBodyEnvironmentVariablesItemModel],
+      entitlementApikey: 'testString',
+      schematics: deployRequestBodySchematicsModel,
+      script: 'testString',
+      scriptId: 'testString',
+      versionLocatorId: 'testString',
+      vcenterId: 'testString',
+      vcenterLocation: 'testString',
+      vcenterUser: 'testString',
+      vcenterPassword: 'testString',
+      vcenterDatastore: 'testString',
+    };
+
+    const res = await catalogManagementService.installVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('preinstallVersion()', async () => {
+    // Request models needed by this operation.
+
+    // DeployRequestBodyOverrideValues
+    const deployRequestBodyOverrideValuesModel = {
+      vsi_instance_name: 'testString',
+      vpc_profile: 'testString',
+      subnet_id: 'testString',
+      vpc_id: 'testString',
+      subnet_zone: 'testString',
+      ssh_key_id: 'testString',
+      vpc_region: 'testString',
+      foo: 'testString',
+    };
+
+    // DeployRequestBodyEnvironmentVariablesItem
+    const deployRequestBodyEnvironmentVariablesItemModel = {
+      name: 'testString',
+      value: 'testString',
+      secure: true,
+      hidden: true,
+    };
+
+    // DeployRequestBodySchematics
+    const deployRequestBodySchematicsModel = {
+      name: 'testString',
+      description: 'testString',
+      tags: ['testString'],
+      resource_group_id: 'testString',
+      terraform_version: 'testString',
+      region: 'testString',
+    };
+
+    const params = {
+      versionLocId: 'testString',
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      namespace: 'testString',
+      overrideValues: deployRequestBodyOverrideValuesModel,
+      environmentVariables: [deployRequestBodyEnvironmentVariablesItemModel],
+      entitlementApikey: 'testString',
+      schematics: deployRequestBodySchematicsModel,
+      script: 'testString',
+      scriptId: 'testString',
+      versionLocatorId: 'testString',
+      vcenterId: 'testString',
+      vcenterLocation: 'testString',
+      vcenterUser: 'testString',
+      vcenterPassword: 'testString',
+      vcenterDatastore: 'testString',
+    };
+
+    const res = await catalogManagementService.preinstallVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getPreinstall()', async () => {
+    const params = {
+      versionLocId: 'testString',
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      namespace: 'testString',
+    };
+
+    const res = await catalogManagementService.getPreinstall(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('validateInstall()', async () => {
+    // Request models needed by this operation.
+
+    // DeployRequestBodyOverrideValues
+    const deployRequestBodyOverrideValuesModel = {
+      vsi_instance_name: 'testString',
+      vpc_profile: 'testString',
+      subnet_id: 'testString',
+      vpc_id: 'testString',
+      subnet_zone: 'testString',
+      ssh_key_id: 'testString',
+      vpc_region: 'testString',
+      foo: 'testString',
+    };
+
+    // DeployRequestBodyEnvironmentVariablesItem
+    const deployRequestBodyEnvironmentVariablesItemModel = {
+      name: 'testString',
+      value: 'testString',
+      secure: true,
+      hidden: true,
+    };
+
+    // DeployRequestBodySchematics
+    const deployRequestBodySchematicsModel = {
+      name: 'testString',
+      description: 'testString',
+      tags: ['testString'],
+      resource_group_id: 'testString',
+      terraform_version: 'testString',
+      region: 'testString',
+    };
+
+    const params = {
+      versionLocId: 'testString',
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      namespace: 'testString',
+      overrideValues: deployRequestBodyOverrideValuesModel,
+      environmentVariables: [deployRequestBodyEnvironmentVariablesItemModel],
+      entitlementApikey: 'testString',
+      schematics: deployRequestBodySchematicsModel,
+      script: 'testString',
+      scriptId: 'testString',
+      versionLocatorId: 'testString',
+      vcenterId: 'testString',
+      vcenterLocation: 'testString',
+      vcenterUser: 'testString',
+      vcenterPassword: 'testString',
+      vcenterDatastore: 'testString',
+      targetContextName: 'testString',
+    };
+
+    const res = await catalogManagementService.validateInstall(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
   });
 
   test('getValidationStatus()', async () => {
-    expect(versionLocatorId).toBeDefined();
-
     const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: refreshTokenAuthorized,
+      versionLocId: 'testString',
+      xAuthRefreshToken: 'testString',
+      targetContextName: 'testString',
     };
 
-    const res = await catalogManagementServiceAuthorized.getValidationStatus(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Get Override Values
-  // ====
-
-  test('getOverrideValues() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.getOverrideValues(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getOverrideValues() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOverrideValues(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getOverrideValues() returns 400 when backend input validation fails', async () => {
-    const params = {
-      versionLocId: bogusVersionLocatorId,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOverrideValues(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test.skip('getOverrideValues()', async () => {
-    // requires validation run before this operation
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOverrideValues(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Search Objects
-  // ====
-
-  test('searchObjects() returns 400 when backend input validation fails', async () => {
-    const params = {
-      query: ' ',
-      collapse: true,
-      digest: true,
-    };
-
-    await expect(catalogManagementServiceAuthorized.searchObjects(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('searchObjects() returns 200 when user is not authorized', async () => {
-    const params = {
-      query: `name: ${objectName}`,
-      collapse: true,
-      digest: true,
-    };
-
-    const res = await catalogManagementServiceNotAuthorized.searchObjects(params);
+    const res = await catalogManagementService.getValidationStatus(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
   test('searchObjects()', async () => {
-    let offset = 0;
-    const limit = 1;
-    let fetch = true;
-    let amountOfObjects = 0;
+    const params = {
+      query: 'testString',
+      kind: 'vpe',
+      limit: 100,
+      offset: 0,
+      collapse: true,
+      digest: true,
+    };
 
-    while (fetch) {
-      const params = {
-        query: 'name: object*',
-        collapse: true,
-        digest: true,
-        limit,
-        offset,
-      };
+    const res = await catalogManagementService.searchObjects(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
 
-      const res = await catalogManagementServiceAuthorized.searchObjects(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(200);
-      expect(res.result).toBeDefined();
+  test('searchObjects() via SearchObjectsPager', async () => {
+    const params = {
+      query: 'testString',
+      kind: 'vpe',
+      limit: 10,
+      collapse: true,
+      digest: true,
+    };
 
-      const offsetValue = getQueryParam(res.result.next, 'offset');
+    const allResults = [];
 
-      if (offsetValue) {
-        offset = offsetValue;
-      } else {
-        fetch = false;
-      }
-
-      if (res.result.resource_count > 0) {
-        amountOfObjects += res.result.resource_count;
-      }
+    // Test getNext().
+    let pager = new CatalogManagementV1.SearchObjectsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
     }
-    console.log('Amount of objects: ', amountOfObjects);
-  });
 
-  // ====
-  // List Objects
-  // ====
-
-  test('listObjects() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      sort: ' ',
-      name: ' ',
-    };
-
-    await expect(catalogManagementServiceAuthorized.listObjects(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('listObjects() returns 403 when user is not authorized', async () => {
-    const params = {
-      catalogIdentifier: catalogId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.listObjects(params)).rejects.toMatchObject({
-      status: 403,
-    });
+    // Test getAll().
+    pager = new CatalogManagementV1.SearchObjectsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
   test('listObjects()', async () => {
-    expect(catalogId).toBeDefined();
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      limit: 100,
+      offset: 0,
+      name: 'testString',
+      sort: 'testString',
+    };
 
-    let offset = 0;
-    const limit = 1;
-    let fetch = true;
-    let amountOfObjects = 0;
+    const res = await catalogManagementService.listObjects(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
 
-    while (fetch) {
-      const params = {
-        catalogIdentifier: catalogId,
-        limit,
-        offset,
-      };
+  test('listObjects() via ObjectsPager', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      limit: 10,
+      name: 'testString',
+      sort: 'testString',
+    };
 
-      const res = await catalogManagementServiceAuthorized.listObjects(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(200);
-      expect(res.result).toBeDefined();
+    const allResults = [];
 
-      const offsetValue = getQueryParam(res.result.next, 'offset');
-
-      if (offsetValue) {
-        offset = offsetValue;
-      } else {
-        fetch = false;
-      }
-
-      if (res.result.resource_count > 0) {
-        amountOfObjects += res.result.resource_count;
-      }
+    // Test getNext().
+    let pager = new CatalogManagementV1.ObjectsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
     }
-    console.log('Amount of objects: ', amountOfObjects);
+
+    // Test getAll().
+    pager = new CatalogManagementV1.ObjectsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  // ====
-  // Replace Object
-  // ====
-
-  test('replaceObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('listObjectAudits()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      id: objectId,
-      name: 'updated-object-name-created-by-node-sdk',
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      catalogId,
-      data: {},
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      start: 'testString',
+      limit: 100,
+      lookupnames: true,
     };
 
-    await expect(catalogManagementServiceNotAuthorized.replaceObject(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test('replaceObject() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-      id: `invalid-${objectId}`,
-      name: 'updated-object-name-created-by-node-sdk',
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      catalogId,
-      data: {},
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceObject(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('replaceObject() returns 400 backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      id: objectId,
-      name: 'updated object name created by node sdk',
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      catalogId,
-      data: {},
-    };
-
-    await expect(catalogManagementServiceAuthorized.replaceObject(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  // cannot change name of object, what can be changed?
-  test.skip('replaceObject()', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      id: objectId,
-      name: 'updated-object-name-created-by-node-sdk',
-      parentId: regionUsSouth,
-      kind: kindVpe,
-      catalogId,
-      data: {},
-    };
-
-    const res = await catalogManagementServiceAuthorized.replaceObject(params);
+    const res = await catalogManagementService.listObjectAudits(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Object
-  // ====
-
-  test('getObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('listObjectAudits() via ObjectAuditsPager', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      limit: 10,
+      lookupnames: true,
     };
 
-    await expect(catalogManagementServiceNotAuthorized.getObject(params)).rejects.toMatchObject({
-      status: 403,
-    });
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.ObjectAuditsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.ObjectAuditsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('getObject() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('getObjectAudit()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `$invalid-${objectId}`,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      auditlogIdentifier: 'testString',
+      lookupnames: true,
     };
 
-    await expect(catalogManagementServiceAuthorized.getObject(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('getObject() returns the object', async () => {
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getObject(params);
+    const res = await catalogManagementService.getObjectAudit(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Object Audit
-  // ====
-
-  test('getObjectAudit() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('consumableShareObject()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getObjectAudit(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const res = await catalogManagementService.consumableShareObject(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
   });
 
-  test('getObjectAudit() returns 200 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('shareObject()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      ibm: true,
+      _public: true,
+      enabled: true,
     };
 
-    const res = await catalogManagementServiceAuthorized.getObjectAudit(params);
+    const res = await catalogManagementService.shareObject(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('getObjectAudit() returns audit log of the object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('getObjectAccessList()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      start: 'testString',
+      limit: 100,
     };
 
-    const res = await catalogManagementServiceAuthorized.getObjectAudit(params);
+    const res = await catalogManagementService.getObjectAccessList(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Account Publish Object
-  // ====
-
-  test('accountPublishObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('getObjectAccessList() via GetObjectAccessListPager', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      limit: 10,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.accountPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetObjectAccessListPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetObjectAccessListPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('accountPublishObject() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('getObjectAccess()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      accessIdentifier: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.accountPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('accountPublishObject() publishes object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.accountPublishObject(params);
+    const res = await catalogManagementService.getObjectAccess(params);
     expect(res).toBeDefined();
-    expect(res.status).toBe(202);
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Shared Publish Object
-  // ====
-
-  test('sharedPublishObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('createObjectAccess()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      accessIdentifier: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.sharedPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('sharedPublishObject() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.sharedPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('sharedPublishObject() publishes object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.sharedPublishObject(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(202);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // IBM Publish Object
-  // ====
-
-  test('ibmPublishObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.ibmPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('ibmPublishObject() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.ibmPublishObject(params)).rejects.toMatchObject(
-      {
-        status: 404,
-      }
-    );
-  });
-
-  // Error: Object not approved to request publishing to IBM for
-  test.skip('ibmPublishObject() publishes object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.ibmPublishObject(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(202);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Public Publish Object
-  // ====
-
-  test('publicPublishObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.publicPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('publicPublishObject() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.publicPublishObject(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  // Error: Object not approved to request publishing to IBM for
-  test.skip('publicPublishObject() publishes the object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.publicPublishObject(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(202);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Create Object Access
-  // ====
-
-  test('createObjectAccess() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.createObjectAccess(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('createObjectAccess() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-      accountIdentifier: accountId,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.createObjectAccess(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('createObjectAccess() creates object access', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.createObjectAccess(params);
+    const res = await catalogManagementService.createObjectAccess(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Get Object Access List
-  // ====
-
-  test('getObjectAccessList() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('getObjectAccessListDeprecated()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      limit: 100,
+      offset: 0,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getObjectAccessList(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getObjectAccessList() returns 200 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getObjectAccessList(params);
+    const res = await catalogManagementService.getObjectAccessListDeprecated(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('getObjectAccessList() returns the access list of the object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('getObjectAccessListDeprecated() via GetObjectAccessListDeprecatedPager', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      limit: 10,
     };
 
-    const res = await catalogManagementServiceAuthorized.getObjectAccessList(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  // ====
-  // Get Object Access
-  // ====
-
-  test('getObjectAccess() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
+  test('addObjectAccessList()', async () => {
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      accesses: ['testString'],
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getObjectAccess(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('getObjectAccess() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-      accountIdentifier: accountId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.getObjectAccess(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  // Error: Error loading version with id: 6e263640-4805-471d-a30c-d7667325581c.
-  // e59ad442-d113-49e4-bcd4-5431990135fd: Error[404 Not Found]
-  test.skip('getObjectAccess() returns accesses of the object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getObjectAccess(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Add object Access List
-  // ====
-
-  test('addObjectAccessList() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.addObjectAccessList(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('addObjectAccessList() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-      accounts: [accountId],
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.addObjectAccessList(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('addObjectAccessList() adds object access list to account', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    const res = await catalogManagementServiceAuthorized.addObjectAccessList(params);
+    const res = await catalogManagementService.addObjectAccessList(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Create Offering Instance
-  // ====
+  test('createOfferingInstance()', async () => {
+    // Request models needed by this operation.
 
-  // don't know what kind_format is needed here, vpe, helm and offering don't work
-  test.skip('createOfferingInstance() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      id: offeringId,
-      catalogId: `invalid-${catalogId}`,
-      offeringId,
-      kindFormat: kindVpe,
-      version: '0.0.2',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
+    // OfferingInstanceLastOperation
+    const offeringInstanceLastOperationModel = {
+      operation: 'testString',
+      state: 'testString',
+      message: 'testString',
+      transaction_id: 'testString',
+      updated: '2019-01-01T12:00:00.000Z',
+      code: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.createOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  // don't know what kind_format is needed here, vpe, helm and offering don't work
-  test.skip('createOfferingInstance() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
     const params = {
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      id: offeringId,
-      catalogId,
-      offeringId,
-      kindFormat: kindVpe,
-      version: '0.0.2',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
+      xAuthRefreshToken: 'testString',
+      id: 'testString',
+      rev: 'testString',
+      url: 'testString',
+      crn: 'testString',
+      label: 'testString',
+      catalogId: 'testString',
+      offeringId: 'testString',
+      kindFormat: 'testString',
+      version: 'testString',
+      versionId: 'testString',
+      clusterId: 'testString',
+      clusterRegion: 'testString',
+      clusterNamespaces: ['testString'],
+      clusterAllNamespaces: true,
+      schematicsWorkspaceId: 'testString',
+      installPlan: 'testString',
+      channel: 'testString',
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      metadata: { anyKey: 'anyValue' },
+      resourceGroupId: 'testString',
+      location: 'testString',
+      disabled: true,
+      account: 'testString',
+      lastOperation: offeringInstanceLastOperationModel,
+      kindTarget: 'testString',
+      sha: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.createOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('createOfferingInstance() returns 400 when backend input validation fails', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      id: offeringId,
-      catalogId,
-      offeringId,
-      kindFormat: 'bogus kind',
-      version: '0.0.2',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.createOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test.skip('createOfferingInstance() creates an instance', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      id: offeringId,
-      catalogId,
-      offeringId,
-      kindFormat: kindVpe,
-      version: '0.0.2',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
-    };
-
-    const res = await catalogManagementServiceAuthorized.createOfferingInstance(params);
+    const res = await catalogManagementService.createOfferingInstance(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
-    expect(res.result.id).toBeDefined();
-    offeringInstanceId = res.result.id;
   });
 
-  // ====
-  // Get Offering Instance
-  // ====
-
-  test.skip('getOfferingInstance() returns 403 when user is not authorized', async () => {
-    expect(offeringInstanceId).toBeDefined();
-
+  test('getOfferingInstance()', async () => {
     const params = {
-      instanceIdentifier: offeringInstanceId,
+      instanceIdentifier: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.getOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test.skip('getOfferingInstance() returns 404 when no such offering instance', async () => {
-    expect(offeringInstanceId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: `invalid-${offeringInstanceId}`,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.getOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('getOfferingInstance()', async () => {
-    expect(offeringInstanceId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.getOfferingInstance(params);
+    const res = await catalogManagementService.getOfferingInstance(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Put Offering Instance
-  // ====
+  test('putOfferingInstance()', async () => {
+    // Request models needed by this operation.
 
-  test.skip('putOfferingInstance() returns 403 when user is not authorized', async () => {
-    expect(offeringInstanceId).toBeDefined();
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      id: offeringInstanceId,
-      catalogId,
-      offeringId,
-      kindFormat: kindVpe,
-      version: '0.0.3',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
+    // OfferingInstanceLastOperation
+    const offeringInstanceLastOperationModel = {
+      operation: 'testString',
+      state: 'testString',
+      message: 'testString',
+      transaction_id: 'testString',
+      updated: '2019-01-01T12:00:00.000Z',
+      code: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.putOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test.skip('putOfferingInstance() returns 404 when no such catalog', async () => {
-    expect(offeringInstanceId).toBeDefined();
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
     const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      id: offeringInstanceId,
-      catalogId: `invalid-${catalogId}`,
-      offeringId,
-      kindFormat: kindVpe,
-      version: '0.0.3',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
+      instanceIdentifier: 'testString',
+      xAuthRefreshToken: 'testString',
+      id: 'testString',
+      rev: 'testString',
+      url: 'testString',
+      crn: 'testString',
+      label: 'testString',
+      catalogId: 'testString',
+      offeringId: 'testString',
+      kindFormat: 'testString',
+      version: 'testString',
+      versionId: 'testString',
+      clusterId: 'testString',
+      clusterRegion: 'testString',
+      clusterNamespaces: ['testString'],
+      clusterAllNamespaces: true,
+      schematicsWorkspaceId: 'testString',
+      installPlan: 'testString',
+      channel: 'testString',
+      created: '2019-01-01T12:00:00.000Z',
+      updated: '2019-01-01T12:00:00.000Z',
+      metadata: { anyKey: 'anyValue' },
+      resourceGroupId: 'testString',
+      location: 'testString',
+      disabled: true,
+      account: 'testString',
+      lastOperation: offeringInstanceLastOperationModel,
+      kindTarget: 'testString',
+      sha: 'testString',
     };
 
-    await expect(
-      catalogManagementServiceAuthorized.putOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('putOfferingInstance() returns 400 when backend input validation fails', async () => {
-    expect(offeringInstanceId).toBeDefined();
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      id: offeringInstanceId,
-      catalogId,
-      offeringId,
-      kindFormat: 'bogus kind',
-      version: '0.0.3',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.putOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test.skip('putOfferingInstance() updates the offering instance', async () => {
-    expect(offeringInstanceId).toBeDefined();
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      id: offeringInstanceId,
-      catalogId,
-      offeringId,
-      kindFormat: kindVpe,
-      version: '0.0.3',
-      clusterId,
-      clusterRegion: regionUsSouth,
-      cluster_all_namespaces: true,
-    };
-
-    const res = await catalogManagementServiceAuthorized.putOfferingInstance(params);
+    const res = await catalogManagementService.putOfferingInstance(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Delete Version
-  // ====
-
-  test('deleteVersion() returns 400 when backend input validation fails', async () => {
+  test('listOfferingInstanceAudits()', async () => {
     const params = {
-      versionLocId: bogusVersionLocatorId,
+      instanceIdentifier: 'testString',
+      start: 'testString',
+      limit: 100,
+      lookupnames: true,
     };
 
-    await expect(catalogManagementServiceAuthorized.deleteVersion(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  test('deleteVersion() returns 404 when no such version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.deleteVersion(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('deleteVersion() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.deleteVersion(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test('deleteVersion() deletes the version', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteVersion(params);
+    const res = await catalogManagementService.listOfferingInstanceAudits(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // ====
-  // Delete Operators
-  // ====
-
-  test('deleteOperators() returns 403 when user is not authorized', async () => {
-    expect(versionLocatorId).toBeDefined();
-
+  test('listOfferingInstanceAudits() via OfferingInstanceAuditsPager', async () => {
     const params = {
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
+      instanceIdentifier: 'testString',
+      limit: 10,
+      lookupnames: true,
     };
 
-    await expect(
-      catalogManagementServiceNotAuthorized.deleteOperators(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('deleteOperators() returns 404 when no such operator', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: `invalid-${versionLocatorId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.deleteOperators(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('deleteOperators() returns 400 when backend input validation fails', async () => {
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId: bogusVersionLocatorId,
-    };
-
-    await expect(catalogManagementServiceAuthorized.deleteOperators(params)).rejects.toMatchObject({
-      status: 400,
-    });
-  });
-
-  // Error: Error loading version with id: fdeefb18-57aa-4390-a9e0-b66b551db803.
-  // 2c187aa6-5009-4a2f-8f57-86533d2d3a18: Error[404 Not Found] -
-  // Version not found: Catalog[fdeefb18-57aa-4390-a9e0-b66b551db803]:Version[2c187aa6-5009-4a2f-8f57-86533d2d3a18]
-  test.skip('deleteOperators() deletes the operator', async () => {
-    expect(versionLocatorId).toBeDefined();
-
-    const params = {
-      xAuthRefreshToken: refreshTokenAuthorized,
-      clusterId,
-      region: regionUsSouth,
-      versionLocatorId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteOperators(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Delete Offering Instance
-  // ====
-
-  test.skip('deleteOfferingInstance() returns 403 when user is not authorized', async () => {
-    expect(offeringInstanceId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: refreshTokenNotAuthorized,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.deleteOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test.skip('deleteOfferingInstance() returns 404 when no such offering instance', async () => {
-    expect(offeringInstanceId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: `invalid-${offeringInstanceId}`,
-      xAuthRefreshToken: refreshTokenAuthorized,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.deleteOfferingInstance(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test.skip('deleteOfferingInstance()', async () => {
-    expect(offeringInstanceId).toBeDefined();
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: refreshTokenAuthorized,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteOfferingInstance(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Delete Object Access List
-  // ====
-
-  test('deleteObjectAccessList() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.deleteObjectAccessList(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('deleteObjectAccessList() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.deleteObjectAccessList(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('deleteObjectAccessList() deletes access list of the object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteObjectAccessList(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Delete Object Access
-  // ====
-
-  test('deleteObjectAccess() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.deleteObjectAccess(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('deleteObjectAccess() returns 404 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    await expect(
-      catalogManagementServiceAuthorized.deleteObjectAccess(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('deleteObjectAccess() deletes access to object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteObjectAccess(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  // ====
-  // Delete Object
-  // ====
-
-  test('deleteObject() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.deleteObject(params)).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('deleteObject() returns 200 when no such object', async () => {
-    expect(catalogId).toBeDefined();
-    expect(objectId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: `invalid-${objectId}`,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteObject(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-  });
-
-  test('deleteObject() deletes the object', async () => {
-    expect(catalogId).toBeDefined();
-
-    for (let i = 0; i < createdObjectIds.length; i++) {
-      const params = {
-        catalogIdentifier: catalogId,
-        objectIdentifier: createdObjectIds[i],
-      };
-
-      const res = await catalogManagementServiceAuthorized.deleteObject(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(200);
-      expect(res.result).toBeDefined();
-    }
-  });
-
-  // ====
-  // Delete Offering
-  // ====
-
-  test('deleteOffering() returns 200 when no such offering', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: `invalid-${offeringId}`,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteOffering(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-  });
-
-  test('deleteOffering() returns 403 when user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-    expect(offeringId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId,
-    };
-
-    await expect(
-      catalogManagementServiceNotAuthorized.deleteOffering(params)
-    ).rejects.toMatchObject({
-      status: 403,
-    });
-  });
-
-  test('deleteOffering() deletes the offering', async () => {
-    expect(catalogId).toBeDefined();
-
-    for (let i = 0; i < createdOfferingIds.length; i++) {
-      const params = {
-        catalogIdentifier: catalogId,
-        offeringId: createdOfferingIds[i],
-      };
-
-      const res = await catalogManagementServiceAuthorized.deleteOffering(params);
-      expect(res).toBeDefined();
-      expect(res.status).toBe(200);
-    }
-  });
-
-  // ====
-  // Delete Catalog
-  // ====
-
-  test.skip('deleteCatalog() returns 404 when no such catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: `invalid-${catalogId}`,
-    };
-
-    await expect(catalogManagementServiceAuthorized.deleteCatalog(params)).rejects.toMatchObject({
-      status: 404,
-    });
-  });
-
-  test('deleteCatalog() returns 403 when the user is not authorized', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-    };
-
-    await expect(catalogManagementServiceNotAuthorized.deleteCatalog(params)).rejects.toMatchObject(
-      {
-        status: 403,
-      }
-    );
-  });
-
-  test('deleteCatalog() deletes the catalog', async () => {
-    expect(catalogId).toBeDefined();
-
-    const params = {
-      catalogIdentifier: catalogId,
-    };
-
-    const res = await catalogManagementServiceAuthorized.deleteCatalog(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-  });
-
-  afterAll(async () => {
-    for (let i = 0; i < createdObjectIds.length; i++) {
-      try {
-        const params = {
-          catalogIdentifier: catalogId,
-          objectIdentifier: createdObjectIds[i],
-        };
-
-        await catalogManagementServiceAuthorized.deleteObject(params);
-      } catch (e) {
-        console.log('Cleanup: Object is already deleted.');
-      }
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
     }
 
-    for (let i = 0; i < createdOfferingIds.length; i++) {
-      try {
-        const params = {
-          catalogIdentifier: catalogId,
-          offeringId: createdOfferingIds[i],
-        };
+    // Test getAll().
+    pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
 
-        await catalogManagementServiceAuthorized.deleteOffering(params);
-      } catch (e) {
-        console.log('Cleanup: Offering is already deleted.');
-      }
-    }
+  test('getOfferingInstanceAudit()', async () => {
+    const params = {
+      instanceIdentifier: 'testString',
+      auditlogIdentifier: 'testString',
+      lookupnames: true,
+    };
 
-    try {
-      const params = {
-        catalogIdentifier: catalogId,
-      };
+    const res = await catalogManagementService.getOfferingInstanceAudit(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
 
-      await catalogManagementServiceAuthorized.deleteCatalog(params);
-    } catch (e) {
-      console.log('Cleanup: Catalog is already deleted.');
-    }
+  test('deleteShareApprovalList()', async () => {
+    const params = {
+      objectType: 'offering',
+      accesses: ['testString'],
+    };
+
+    const res = await catalogManagementService.deleteShareApprovalList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteOfferingAccessList()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      accesses: ['testString'],
+    };
+
+    const res = await catalogManagementService.deleteOfferingAccessList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteOffering()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+    };
+
+    const res = await catalogManagementService.deleteOffering(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteObjectAccess()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      accessIdentifier: 'testString',
+    };
+
+    const res = await catalogManagementService.deleteObjectAccess(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteObjectAccessList()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+      accesses: ['testString'],
+    };
+
+    const res = await catalogManagementService.deleteObjectAccessList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteObject()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      objectIdentifier: objectIdLink,
+    };
+
+    const res = await catalogManagementService.deleteObject(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteCatalog()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+    };
+
+    const res = await catalogManagementService.deleteCatalog(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteVersion()', async () => {
+    const params = {
+      versionLocId: 'testString',
+    };
+
+    const res = await catalogManagementService.deleteVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteOperators()', async () => {
+    const params = {
+      xAuthRefreshToken: 'testString',
+      clusterId: 'testString',
+      region: 'testString',
+      versionLocatorId: 'testString',
+    };
+
+    const res = await catalogManagementService.deleteOperators(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteOfferingInstance()', async () => {
+    const params = {
+      instanceIdentifier: 'testString',
+      xAuthRefreshToken: 'testString',
+    };
+
+    const res = await catalogManagementService.deleteOfferingInstance(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 });
