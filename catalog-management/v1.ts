@@ -125,7 +125,11 @@ class CatalogManagementV1 extends BaseService {
       return Promise.reject(_validationErrors);
     }
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAccount');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAccount'
+    );
 
     const parameters = {
       options: {
@@ -178,7 +182,11 @@ class CatalogManagementV1 extends BaseService {
       'account_filters': _params.accountFilters,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateCatalogAccount');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateCatalogAccount'
+    );
 
     const parameters = {
       options: {
@@ -231,7 +239,11 @@ class CatalogManagementV1 extends BaseService {
       'lookupnames': _params.lookupnames,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalogAccountAudits');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listCatalogAccountAudits'
+    );
 
     const parameters = {
       options: {
@@ -284,7 +296,11 @@ class CatalogManagementV1 extends BaseService {
       'auditlog_identifier': _params.auditlogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAccountAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAccountAudit'
+    );
 
     const parameters = {
       options: {
@@ -333,7 +349,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog': _params.catalog,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAccountFilters');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAccountFilters'
+    );
 
     const parameters = {
       options: {
@@ -388,7 +408,11 @@ class CatalogManagementV1 extends BaseService {
       'object_type': _params.objectType,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareApprovalList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getShareApprovalList'
+    );
 
     const parameters = {
       options: {
@@ -440,7 +464,11 @@ class CatalogManagementV1 extends BaseService {
       'object_type': _params.objectType,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteShareApprovalList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteShareApprovalList'
+    );
 
     const parameters = {
       options: {
@@ -492,7 +520,11 @@ class CatalogManagementV1 extends BaseService {
       'object_type': _params.objectType,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'addShareApprovalList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addShareApprovalList'
+    );
 
     const parameters = {
       options: {
@@ -539,7 +571,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ShareApprovalListAccessResult>> {
     const _params = { ...params };
     const _requiredParams = ['objectType', 'approvalStateIdentifier'];
-    const _validParams = ['objectType', 'approvalStateIdentifier', 'start', 'limit', 'enterpriseId', 'headers'];
+    const _validParams = [
+      'objectType',
+      'approvalStateIdentifier',
+      'start',
+      'limit',
+      'enterpriseId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -556,7 +595,11 @@ class CatalogManagementV1 extends BaseService {
       'approval_state_identifier': _params.approvalStateIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareApprovalListAsSource');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getShareApprovalListAsSource'
+    );
 
     const parameters = {
       options: {
@@ -601,7 +644,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['objectType', 'approvalStateIdentifier', 'accesses'];
-    const _validParams = ['objectType', 'approvalStateIdentifier', 'accesses', 'enterpriseId', 'headers'];
+    const _validParams = [
+      'objectType',
+      'approvalStateIdentifier',
+      'accesses',
+      'enterpriseId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -617,7 +666,11 @@ class CatalogManagementV1 extends BaseService {
       'approval_state_identifier': _params.approvalStateIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateShareApprovalListAsSource');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateShareApprovalListAsSource'
+    );
 
     const parameters = {
       options: {
@@ -667,7 +720,11 @@ class CatalogManagementV1 extends BaseService {
       return Promise.reject(_validationErrors);
     }
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalogs');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listCatalogs'
+    );
 
     const parameters = {
       options: {
@@ -719,7 +776,25 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['label', 'labelI18n', 'shortDescription', 'shortDescriptionI18n', 'catalogIconUrl', 'catalogBannerUrl', 'tags', 'features', 'disabled', 'resourceGroupId', 'owningAccount', 'catalogFilters', 'syndicationSettings', 'kind', 'metadata', 'targetAccountContexts', 'headers'];
+    const _validParams = [
+      'label',
+      'labelI18n',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'catalogIconUrl',
+      'catalogBannerUrl',
+      'tags',
+      'features',
+      'disabled',
+      'resourceGroupId',
+      'owningAccount',
+      'catalogFilters',
+      'syndicationSettings',
+      'kind',
+      'metadata',
+      'targetAccountContexts',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -744,7 +819,11 @@ class CatalogManagementV1 extends BaseService {
       'target_account_contexts': _params.targetAccountContexts,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createCatalog');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createCatalog'
+    );
 
     const parameters = {
       options: {
@@ -849,7 +928,28 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'id', 'rev', 'label', 'labelI18n', 'shortDescription', 'shortDescriptionI18n', 'catalogIconUrl', 'catalogBannerUrl', 'tags', 'features', 'disabled', 'resourceGroupId', 'owningAccount', 'catalogFilters', 'syndicationSettings', 'kind', 'metadata', 'targetAccountContexts', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'id',
+      'rev',
+      'label',
+      'labelI18n',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'catalogIconUrl',
+      'catalogBannerUrl',
+      'tags',
+      'features',
+      'disabled',
+      'resourceGroupId',
+      'owningAccount',
+      'catalogFilters',
+      'syndicationSettings',
+      'kind',
+      'metadata',
+      'targetAccountContexts',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -880,7 +980,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceCatalog');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceCatalog'
+    );
 
     const parameters = {
       options: {
@@ -930,7 +1034,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteCatalog');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteCatalog'
+    );
 
     const parameters = {
       options: {
@@ -939,13 +1047,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -986,7 +1088,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listCatalogAudits');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listCatalogAudits'
+    );
 
     const parameters = {
       options: {
@@ -1042,7 +1148,11 @@ class CatalogManagementV1 extends BaseService {
       'auditlog_identifier': _params.auditlogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getCatalogAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getCatalogAudit'
+    );
 
     const parameters = {
       options: {
@@ -1103,7 +1213,11 @@ class CatalogManagementV1 extends BaseService {
       'enterprise_identifier': _params.enterpriseIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listEnterpriseAudits');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listEnterpriseAudits'
+    );
 
     const parameters = {
       options: {
@@ -1159,7 +1273,11 @@ class CatalogManagementV1 extends BaseService {
       'auditlog_identifier': _params.auditlogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getEnterpriseAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getEnterpriseAudit'
+    );
 
     const parameters = {
       options: {
@@ -1212,7 +1330,15 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['digest', 'catalog', 'select', 'includeHidden', 'limit', 'offset', 'headers'];
+    const _validParams = [
+      'digest',
+      'catalog',
+      'select',
+      'includeHidden',
+      'limit',
+      'offset',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1227,7 +1353,11 @@ class CatalogManagementV1 extends BaseService {
       'offset': _params.offset,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getConsumptionOfferings');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getConsumptionOfferings'
+    );
 
     const parameters = {
       options: {
@@ -1276,7 +1406,16 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingSearchResult>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'digest', 'limit', 'offset', 'name', 'sort', 'includeHidden', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'digest',
+      'limit',
+      'offset',
+      'name',
+      'sort',
+      'includeHidden',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1295,7 +1434,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listOfferings');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOfferings'
+    );
 
     const parameters = {
       options: {
@@ -1388,7 +1531,56 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'url', 'crn', 'label', 'labelI18n', 'name', 'offeringIconUrl', 'offeringDocsUrl', 'offeringSupportUrl', 'tags', 'keywords', 'rating', 'created', 'updated', 'shortDescription', 'shortDescriptionI18n', 'longDescription', 'longDescriptionI18n', 'features', 'kinds', 'publish', 'pcManaged', 'publishApproved', 'shareWithAll', 'shareWithIbm', 'shareEnabled', 'permitRequestIbmPublicPublish', 'ibmPublishApproved', 'publicPublishApproved', 'publicOriginalCrn', 'publishPublicCrn', 'portalApprovalRecord', 'portalUiUrl', 'catalogId', 'catalogName', 'metadata', 'disclaimer', 'hidden', 'provider', 'providerInfo', 'repoInfo', 'imagePullKeys', 'support', 'media', 'deprecatePending', 'productKind', 'badges', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'url',
+      'crn',
+      'label',
+      'labelI18n',
+      'name',
+      'offeringIconUrl',
+      'offeringDocsUrl',
+      'offeringSupportUrl',
+      'tags',
+      'keywords',
+      'rating',
+      'created',
+      'updated',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'longDescription',
+      'longDescriptionI18n',
+      'features',
+      'kinds',
+      'publish',
+      'pcManaged',
+      'publishApproved',
+      'shareWithAll',
+      'shareWithIbm',
+      'shareEnabled',
+      'permitRequestIbmPublicPublish',
+      'ibmPublishApproved',
+      'publicPublishApproved',
+      'publicOriginalCrn',
+      'publishPublicCrn',
+      'portalApprovalRecord',
+      'portalUiUrl',
+      'catalogId',
+      'catalogName',
+      'metadata',
+      'disclaimer',
+      'hidden',
+      'provider',
+      'providerInfo',
+      'repoInfo',
+      'imagePullKeys',
+      'support',
+      'media',
+      'deprecatePending',
+      'productKind',
+      'badges',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1447,7 +1639,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createOffering'
+    );
 
     const parameters = {
       options: {
@@ -1518,7 +1714,30 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'tags', 'content', 'name', 'label', 'installKind', 'targetKinds', 'formatKind', 'productKind', 'sha', 'version', 'flavor', 'metadata', 'workingDirectory', 'zipurl', 'targetVersion', 'includeConfig', 'isVsi', 'repotype', 'xAuthToken', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'tags',
+      'content',
+      'name',
+      'label',
+      'installKind',
+      'targetKinds',
+      'formatKind',
+      'productKind',
+      'sha',
+      'version',
+      'flavor',
+      'metadata',
+      'workingDirectory',
+      'zipurl',
+      'targetVersion',
+      'includeConfig',
+      'isVsi',
+      'repotype',
+      'xAuthToken',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1553,7 +1772,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'importOfferingVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'importOfferingVersion'
+    );
 
     const parameters = {
       options: {
@@ -1625,7 +1848,30 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'tags', 'content', 'name', 'label', 'installKind', 'targetKinds', 'formatKind', 'productKind', 'sha', 'version', 'flavor', 'metadata', 'workingDirectory', 'zipurl', 'offeringId', 'targetVersion', 'includeConfig', 'isVsi', 'repotype', 'xAuthToken', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'tags',
+      'content',
+      'name',
+      'label',
+      'installKind',
+      'targetKinds',
+      'formatKind',
+      'productKind',
+      'sha',
+      'version',
+      'flavor',
+      'metadata',
+      'workingDirectory',
+      'zipurl',
+      'offeringId',
+      'targetVersion',
+      'includeConfig',
+      'isVsi',
+      'repotype',
+      'xAuthToken',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1660,7 +1906,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'importOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'importOffering'
+    );
 
     const parameters = {
       options: {
@@ -1718,7 +1968,20 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'targetVersion'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'targetVersion', 'tags', 'content', 'targetKinds', 'formatKind', 'flavor', 'workingDirectory', 'zipurl', 'repoType', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'targetVersion',
+      'tags',
+      'content',
+      'targetKinds',
+      'formatKind',
+      'flavor',
+      'workingDirectory',
+      'zipurl',
+      'repoType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1744,7 +2007,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'reloadOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'reloadOffering'
+    );
 
     const parameters = {
       options: {
@@ -1900,7 +2167,59 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'id', 'rev', 'url', 'crn', 'label', 'labelI18n', 'name', 'offeringIconUrl', 'offeringDocsUrl', 'offeringSupportUrl', 'tags', 'keywords', 'rating', 'created', 'updated', 'shortDescription', 'shortDescriptionI18n', 'longDescription', 'longDescriptionI18n', 'features', 'kinds', 'publish', 'pcManaged', 'publishApproved', 'shareWithAll', 'shareWithIbm', 'shareEnabled', 'permitRequestIbmPublicPublish', 'ibmPublishApproved', 'publicPublishApproved', 'publicOriginalCrn', 'publishPublicCrn', 'portalApprovalRecord', 'portalUiUrl', 'catalogId', 'catalogName', 'metadata', 'disclaimer', 'hidden', 'provider', 'providerInfo', 'repoInfo', 'imagePullKeys', 'support', 'media', 'deprecatePending', 'productKind', 'badges', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'id',
+      'rev',
+      'url',
+      'crn',
+      'label',
+      'labelI18n',
+      'name',
+      'offeringIconUrl',
+      'offeringDocsUrl',
+      'offeringSupportUrl',
+      'tags',
+      'keywords',
+      'rating',
+      'created',
+      'updated',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'longDescription',
+      'longDescriptionI18n',
+      'features',
+      'kinds',
+      'publish',
+      'pcManaged',
+      'publishApproved',
+      'shareWithAll',
+      'shareWithIbm',
+      'shareEnabled',
+      'permitRequestIbmPublicPublish',
+      'ibmPublishApproved',
+      'publicPublishApproved',
+      'publicOriginalCrn',
+      'publishPublicCrn',
+      'portalApprovalRecord',
+      'portalUiUrl',
+      'catalogId',
+      'catalogName',
+      'metadata',
+      'disclaimer',
+      'hidden',
+      'provider',
+      'providerInfo',
+      'repoInfo',
+      'imagePullKeys',
+      'support',
+      'media',
+      'deprecatePending',
+      'productKind',
+      'badges',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1962,7 +2281,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceOffering'
+    );
 
     const parameters = {
       options: {
@@ -2017,7 +2340,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updateOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateOffering'
+    );
 
     const parameters = {
       options: {
@@ -2070,7 +2397,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOffering'
+    );
 
     const parameters = {
       options: {
@@ -2079,13 +2410,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2111,7 +2436,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLogs>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'start', 'limit', 'lookupnames', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'start',
+      'limit',
+      'lookupnames',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2128,7 +2460,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listOfferingAudits');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOfferingAudits'
+    );
 
     const parameters = {
       options: {
@@ -2170,7 +2506,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'auditlogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'auditlogIdentifier', 'lookupnames', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'auditlogIdentifier',
+      'lookupnames',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2186,7 +2528,11 @@ class CatalogManagementV1 extends BaseService {
       'auditlog_identifier': _params.auditlogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingAudit'
+    );
 
     const parameters = {
       options: {
@@ -2242,7 +2588,17 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ApprovalResult>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'approvalType', 'approved'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'approvalType', 'approved', 'portalRecord', 'portalUrl', 'xApproverToken', 'xAuthToken', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'approvalType',
+      'approved',
+      'portalRecord',
+      'portalUrl',
+      'xApproverToken',
+      'xAuthToken',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2260,7 +2616,11 @@ class CatalogManagementV1 extends BaseService {
       'approved': _params.approved,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'setOfferingPublish');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setOfferingPublish'
+    );
 
     const parameters = {
       options: {
@@ -2307,7 +2667,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'setting'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'setting', 'description', 'daysUntilDeprecate', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'setting',
+      'description',
+      'daysUntilDeprecate',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2324,7 +2691,11 @@ class CatalogManagementV1 extends BaseService {
       'setting': _params.setting,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deprecateOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deprecateOffering'
+    );
 
     const parameters = {
       options: {
@@ -2367,7 +2738,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ShareSetting>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'ibm', '_public', 'enabled', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'ibm',
+      '_public',
+      'enabled',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2384,7 +2762,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'shareOffering');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'shareOffering'
+    );
 
     const parameters = {
       options: {
@@ -2439,7 +2821,11 @@ class CatalogManagementV1 extends BaseService {
       'access_identifier': _params.accessIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingAccess'
+    );
 
     const parameters = {
       options: {
@@ -2496,7 +2882,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingAccessList'
+    );
 
     const parameters = {
       options: {
@@ -2550,7 +2940,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOfferingAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOfferingAccessList'
+    );
 
     const parameters = {
       options: {
@@ -2604,7 +2998,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'addOfferingAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addOfferingAccessList'
+    );
 
     const parameters = {
       options: {
@@ -2662,7 +3060,25 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionUpdateDescriptor[]>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'kind', 'xAuthRefreshToken'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'kind', 'xAuthRefreshToken', 'target', 'version', 'clusterId', 'region', 'resourceGroupId', 'namespace', 'sha', 'channel', 'namespaces', 'allNamespaces', 'flavor', 'installType', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'kind',
+      'xAuthRefreshToken',
+      'target',
+      'version',
+      'clusterId',
+      'region',
+      'resourceGroupId',
+      'namespace',
+      'sha',
+      'channel',
+      'namespaces',
+      'allNamespaces',
+      'flavor',
+      'installType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2689,7 +3105,11 @@ class CatalogManagementV1 extends BaseService {
       'offering_id': _params.offeringId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingUpdates');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingUpdates'
+    );
 
     const parameters = {
       options: {
@@ -2740,7 +3160,19 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<NodeJS.ReadableStream>> {
     const _params = { ...params };
     const _requiredParams = ['version'];
-    const _validParams = ['version', 'accept', 'catalogId', 'name', 'id', 'kind', 'channel', 'flavor', 'asIs', 'installType', 'headers'];
+    const _validParams = [
+      'version',
+      'accept',
+      'catalogId',
+      'name',
+      'id',
+      'kind',
+      'channel',
+      'flavor',
+      'asIs',
+      'installType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2758,7 +3190,11 @@ class CatalogManagementV1 extends BaseService {
       'installType': _params.installType,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingSource');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingSource'
+    );
 
     const parameters = {
       options: {
@@ -2810,7 +3246,19 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<NodeJS.ReadableStream>> {
     const _params = { ...params };
     const _requiredParams = ['version'];
-    const _validParams = ['version', 'accept', 'catalogId', 'name', 'id', 'kind', 'channel', 'flavor', 'asIs', 'installType', 'headers'];
+    const _validParams = [
+      'version',
+      'accept',
+      'catalogId',
+      'name',
+      'id',
+      'kind',
+      'channel',
+      'flavor',
+      'asIs',
+      'installType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2828,7 +3276,11 @@ class CatalogManagementV1 extends BaseService {
       'installType': _params.installType,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingSourceArchive');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingSourceArchive'
+    );
 
     const parameters = {
       options: {
@@ -2888,7 +3340,11 @@ class CatalogManagementV1 extends BaseService {
       'key_identifier': _params.keyIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingSourceUrl');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingSourceUrl'
+    );
 
     const parameters = {
       options: {
@@ -2941,7 +3397,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingAbout');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingAbout'
+    );
 
     const parameters = {
       options: {
@@ -2992,7 +3452,11 @@ class CatalogManagementV1 extends BaseService {
       'license_id': _params.licenseId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingLicense');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingLicense'
+    );
 
     const parameters = {
       options: {
@@ -3041,7 +3505,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingContainerImages');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingContainerImages'
+    );
 
     const parameters = {
       options: {
@@ -3089,7 +3557,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'archiveVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'archiveVersion'
+    );
 
     const parameters = {
       options: {
@@ -3098,13 +3570,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3131,7 +3597,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'setting'];
-    const _validParams = ['versionLocId', 'setting', 'description', 'daysUntilDeprecate', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'setting',
+      'description',
+      'daysUntilDeprecate',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3147,7 +3619,11 @@ class CatalogManagementV1 extends BaseService {
       'setting': _params.setting,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'setDeprecateVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setDeprecateVersion'
+    );
 
     const parameters = {
       options: {
@@ -3196,7 +3672,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'consumableVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'consumableVersion'
+    );
 
     const parameters = {
       options: {
@@ -3205,13 +3685,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3243,7 +3717,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'prereleaseVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'prereleaseVersion'
+    );
 
     const parameters = {
       options: {
@@ -3252,13 +3730,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3290,7 +3762,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'suspendVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'suspendVersion'
+    );
 
     const parameters = {
       options: {
@@ -3299,13 +3775,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3337,7 +3807,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'commitVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitVersion'
+    );
 
     const parameters = {
       options: {
@@ -3346,13 +3820,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3384,7 +3852,16 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'tags', 'content', 'targetKinds', 'formatKind', 'flavor', 'workingDirectory', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'tags',
+      'content',
+      'targetKinds',
+      'formatKind',
+      'flavor',
+      'workingDirectory',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3452,7 +3929,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingWorkingCopy');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingWorkingCopy'
+    );
 
     const parameters = {
       options: {
@@ -3505,7 +3986,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id_to_copy_from': _params.versionLocIdToCopyFrom,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'copyFromPreviousVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'copyFromPreviousVersion'
+    );
 
     const parameters = {
       options: {
@@ -3514,13 +3999,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3601,7 +4080,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVersion'
+    );
 
     const parameters = {
       options: {
@@ -3610,13 +4093,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3650,7 +4127,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deprecateVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deprecateVersion'
+    );
 
     const parameters = {
       options: {
@@ -3659,13 +4140,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -3766,7 +4241,11 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getNamespaces');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getNamespaces'
+    );
 
     const parameters = {
       options: {
@@ -3813,7 +4292,17 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
     const _params = { ...params };
     const _requiredParams = ['xAuthRefreshToken'];
-    const _validParams = ['xAuthRefreshToken', 'clusterId', 'region', 'namespaces', 'allNamespaces', 'versionLocatorId', 'channel', 'installPlan', 'headers'];
+    const _validParams = [
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'namespaces',
+      'allNamespaces',
+      'versionLocatorId',
+      'channel',
+      'installPlan',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3829,7 +4318,11 @@ class CatalogManagementV1 extends BaseService {
       'install_plan': _params.installPlan,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deployOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deployOperators'
+    );
 
     const parameters = {
       options: {
@@ -3872,7 +4365,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
     const _params = { ...params };
     const _requiredParams = ['xAuthRefreshToken', 'clusterId', 'region', 'versionLocatorId'];
-    const _validParams = ['xAuthRefreshToken', 'clusterId', 'region', 'versionLocatorId', 'headers'];
+    const _validParams = [
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'versionLocatorId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3884,7 +4383,11 @@ class CatalogManagementV1 extends BaseService {
       'version_locator_id': _params.versionLocatorId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOperators'
+    );
 
     const parameters = {
       options: {
@@ -3930,7 +4433,17 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OperatorDeployResult[]>> {
     const _params = { ...params };
     const _requiredParams = ['xAuthRefreshToken'];
-    const _validParams = ['xAuthRefreshToken', 'clusterId', 'region', 'namespaces', 'allNamespaces', 'versionLocatorId', 'channel', 'installPlan', 'headers'];
+    const _validParams = [
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'namespaces',
+      'allNamespaces',
+      'versionLocatorId',
+      'channel',
+      'installPlan',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3946,7 +4459,11 @@ class CatalogManagementV1 extends BaseService {
       'install_plan': _params.installPlan,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceOperators'
+    );
 
     const parameters = {
       options: {
@@ -3989,7 +4506,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['xAuthRefreshToken', 'clusterId', 'region', 'versionLocatorId'];
-    const _validParams = ['xAuthRefreshToken', 'clusterId', 'region', 'versionLocatorId', 'headers'];
+    const _validParams = [
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'versionLocatorId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4001,7 +4524,11 @@ class CatalogManagementV1 extends BaseService {
       'version_locator_id': _params.versionLocatorId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOperators');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOperators'
+    );
 
     const parameters = {
       options: {
@@ -4057,7 +4584,26 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'xAuthRefreshToken'];
-    const _validParams = ['versionLocId', 'xAuthRefreshToken', 'clusterId', 'region', 'namespace', 'overrideValues', 'environmentVariables', 'entitlementApikey', 'schematics', 'script', 'scriptId', 'versionLocatorId', 'vcenterId', 'vcenterLocation', 'vcenterUser', 'vcenterPassword', 'vcenterDatastore', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'namespace',
+      'overrideValues',
+      'environmentVariables',
+      'entitlementApikey',
+      'schematics',
+      'script',
+      'scriptId',
+      'versionLocatorId',
+      'vcenterId',
+      'vcenterLocation',
+      'vcenterUser',
+      'vcenterPassword',
+      'vcenterDatastore',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4085,7 +4631,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'installVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'installVersion'
+    );
 
     const parameters = {
       options: {
@@ -4143,7 +4693,26 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'xAuthRefreshToken'];
-    const _validParams = ['versionLocId', 'xAuthRefreshToken', 'clusterId', 'region', 'namespace', 'overrideValues', 'environmentVariables', 'entitlementApikey', 'schematics', 'script', 'scriptId', 'versionLocatorId', 'vcenterId', 'vcenterLocation', 'vcenterUser', 'vcenterPassword', 'vcenterDatastore', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'namespace',
+      'overrideValues',
+      'environmentVariables',
+      'entitlementApikey',
+      'schematics',
+      'script',
+      'scriptId',
+      'versionLocatorId',
+      'vcenterId',
+      'vcenterLocation',
+      'vcenterUser',
+      'vcenterPassword',
+      'vcenterDatastore',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4171,7 +4740,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'preinstallVersion');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'preinstallVersion'
+    );
 
     const parameters = {
       options: {
@@ -4215,7 +4788,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.InstallStatus>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'xAuthRefreshToken'];
-    const _validParams = ['versionLocId', 'xAuthRefreshToken', 'clusterId', 'region', 'namespace', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'namespace',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4231,7 +4811,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPreinstall');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPreinstall'
+    );
 
     const parameters = {
       options: {
@@ -4290,7 +4874,27 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'xAuthRefreshToken'];
-    const _validParams = ['versionLocId', 'xAuthRefreshToken', 'clusterId', 'region', 'namespace', 'overrideValues', 'environmentVariables', 'entitlementApikey', 'schematics', 'script', 'scriptId', 'versionLocatorId', 'vcenterId', 'vcenterLocation', 'vcenterUser', 'vcenterPassword', 'vcenterDatastore', 'targetContextName', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'xAuthRefreshToken',
+      'clusterId',
+      'region',
+      'namespace',
+      'overrideValues',
+      'environmentVariables',
+      'entitlementApikey',
+      'schematics',
+      'script',
+      'scriptId',
+      'versionLocatorId',
+      'vcenterId',
+      'vcenterLocation',
+      'vcenterUser',
+      'vcenterPassword',
+      'vcenterDatastore',
+      'targetContextName',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4322,7 +4926,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'validateInstall');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'validateInstall'
+    );
 
     const parameters = {
       options: {
@@ -4379,7 +4987,11 @@ class CatalogManagementV1 extends BaseService {
       'version_loc_id': _params.versionLocId,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getValidationStatus');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getValidationStatus'
+    );
 
     const parameters = {
       options: {
@@ -4444,7 +5056,11 @@ class CatalogManagementV1 extends BaseService {
       'digest': _params.digest,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'searchObjects');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'searchObjects'
+    );
 
     const parameters = {
       options: {
@@ -4561,7 +5177,27 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'name', 'crn', 'url', 'parentId', 'labelI18n', 'label', 'tags', 'created', 'updated', 'shortDescription', 'shortDescriptionI18n', 'kind', 'publish', 'state', 'catalogId', 'catalogName', 'data', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'name',
+      'crn',
+      'url',
+      'parentId',
+      'labelI18n',
+      'label',
+      'tags',
+      'created',
+      'updated',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'kind',
+      'publish',
+      'state',
+      'catalogId',
+      'catalogName',
+      'data',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4591,7 +5227,11 @@ class CatalogManagementV1 extends BaseService {
       'catalog_identifier': _params.catalogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createObject'
+    );
 
     const parameters = {
       options: {
@@ -4701,7 +5341,30 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'id', 'rev', 'name', 'crn', 'url', 'parentId', 'labelI18n', 'label', 'tags', 'created', 'updated', 'shortDescription', 'shortDescriptionI18n', 'kind', 'publish', 'state', 'catalogId', 'catalogName', 'data', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'id',
+      'rev',
+      'name',
+      'crn',
+      'url',
+      'parentId',
+      'labelI18n',
+      'label',
+      'tags',
+      'created',
+      'updated',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'kind',
+      'publish',
+      'state',
+      'catalogId',
+      'catalogName',
+      'data',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4734,7 +5397,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceObject'
+    );
 
     const parameters = {
       options: {
@@ -4786,7 +5453,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteObject'
+    );
 
     const parameters = {
       options: {
@@ -4795,13 +5466,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -4827,7 +5492,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLogs>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'start', 'limit', 'lookupnames', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'start',
+      'limit',
+      'lookupnames',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4844,7 +5516,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listObjectAudits');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listObjectAudits'
+    );
 
     const parameters = {
       options: {
@@ -4886,7 +5562,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier', 'auditlogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'auditlogIdentifier', 'lookupnames', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'auditlogIdentifier',
+      'lookupnames',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4902,7 +5584,11 @@ class CatalogManagementV1 extends BaseService {
       'auditlog_identifier': _params.auditlogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAudit'
+    );
 
     const parameters = {
       options: {
@@ -4953,7 +5639,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'consumableShareObject');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'consumableShareObject'
+    );
 
     const parameters = {
       options: {
@@ -4962,13 +5652,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -4994,7 +5678,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ShareSetting>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'ibm', '_public', 'enabled', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'ibm',
+      '_public',
+      'enabled',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5070,7 +5761,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAccessList'
+    );
 
     const parameters = {
       options: {
@@ -5124,7 +5819,11 @@ class CatalogManagementV1 extends BaseService {
       'access_identifier': _params.accessIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAccess'
+    );
 
     const parameters = {
       options: {
@@ -5179,7 +5878,11 @@ class CatalogManagementV1 extends BaseService {
       'access_identifier': _params.accessIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createObjectAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createObjectAccess'
+    );
 
     const parameters = {
       options: {
@@ -5188,13 +5891,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -5233,7 +5930,11 @@ class CatalogManagementV1 extends BaseService {
       'access_identifier': _params.accessIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteObjectAccess');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteObjectAccess'
+    );
 
     const parameters = {
       options: {
@@ -5242,13 +5943,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -5272,7 +5967,9 @@ class CatalogManagementV1 extends BaseService {
   public getObjectAccessListDeprecated(
     params: CatalogManagementV1.GetObjectAccessListDeprecatedParams
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectAccessListResult>> {
-    CatalogManagementV1._logger.warn('A deprecated operation has been invoked: getObjectAccessListDeprecated');
+    CatalogManagementV1._logger.warn(
+      'A deprecated operation has been invoked: getObjectAccessListDeprecated'
+    );
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
     const _validParams = ['catalogIdentifier', 'objectIdentifier', 'limit', 'offset', 'headers'];
@@ -5291,7 +5988,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getObjectAccessListDeprecated');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getObjectAccessListDeprecated'
+    );
 
     const parameters = {
       options: {
@@ -5345,7 +6046,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteObjectAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteObjectAccessList'
+    );
 
     const parameters = {
       options: {
@@ -5399,7 +6104,11 @@ class CatalogManagementV1 extends BaseService {
       'object_identifier': _params.objectIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'addObjectAccessList');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addObjectAccessList'
+    );
 
     const parameters = {
       options: {
@@ -5472,7 +6181,37 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
     const _params = { ...params };
     const _requiredParams = ['xAuthRefreshToken'];
-    const _validParams = ['xAuthRefreshToken', 'id', 'rev', 'url', 'crn', 'label', 'catalogId', 'offeringId', 'kindFormat', 'version', 'versionId', 'clusterId', 'clusterRegion', 'clusterNamespaces', 'clusterAllNamespaces', 'schematicsWorkspaceId', 'installPlan', 'channel', 'created', 'updated', 'metadata', 'resourceGroupId', 'location', 'disabled', 'account', 'lastOperation', 'kindTarget', 'sha', 'headers'];
+    const _validParams = [
+      'xAuthRefreshToken',
+      'id',
+      'rev',
+      'url',
+      'crn',
+      'label',
+      'catalogId',
+      'offeringId',
+      'kindFormat',
+      'version',
+      'versionId',
+      'clusterId',
+      'clusterRegion',
+      'clusterNamespaces',
+      'clusterAllNamespaces',
+      'schematicsWorkspaceId',
+      'installPlan',
+      'channel',
+      'created',
+      'updated',
+      'metadata',
+      'resourceGroupId',
+      'location',
+      'disabled',
+      'account',
+      'lastOperation',
+      'kindTarget',
+      'sha',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5508,7 +6247,11 @@ class CatalogManagementV1 extends BaseService {
       'sha': _params.sha,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -5558,7 +6301,11 @@ class CatalogManagementV1 extends BaseService {
       'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -5627,7 +6374,38 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
     const _params = { ...params };
     const _requiredParams = ['instanceIdentifier', 'xAuthRefreshToken'];
-    const _validParams = ['instanceIdentifier', 'xAuthRefreshToken', 'id', 'rev', 'url', 'crn', 'label', 'catalogId', 'offeringId', 'kindFormat', 'version', 'versionId', 'clusterId', 'clusterRegion', 'clusterNamespaces', 'clusterAllNamespaces', 'schematicsWorkspaceId', 'installPlan', 'channel', 'created', 'updated', 'metadata', 'resourceGroupId', 'location', 'disabled', 'account', 'lastOperation', 'kindTarget', 'sha', 'headers'];
+    const _validParams = [
+      'instanceIdentifier',
+      'xAuthRefreshToken',
+      'id',
+      'rev',
+      'url',
+      'crn',
+      'label',
+      'catalogId',
+      'offeringId',
+      'kindFormat',
+      'version',
+      'versionId',
+      'clusterId',
+      'clusterRegion',
+      'clusterNamespaces',
+      'clusterAllNamespaces',
+      'schematicsWorkspaceId',
+      'installPlan',
+      'channel',
+      'created',
+      'updated',
+      'metadata',
+      'resourceGroupId',
+      'location',
+      'disabled',
+      'account',
+      'lastOperation',
+      'kindTarget',
+      'sha',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5667,7 +6445,11 @@ class CatalogManagementV1 extends BaseService {
       'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'putOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'putOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -5719,7 +6501,11 @@ class CatalogManagementV1 extends BaseService {
       'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOfferingInstance');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOfferingInstance'
+    );
 
     const parameters = {
       options: {
@@ -5776,7 +6562,11 @@ class CatalogManagementV1 extends BaseService {
       'instance_identifier': _params.instanceIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listOfferingInstanceAudits');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOfferingInstanceAudits'
+    );
 
     const parameters = {
       options: {
@@ -5832,7 +6622,11 @@ class CatalogManagementV1 extends BaseService {
       'auditlog_identifier': _params.auditlogIdentifier,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getOfferingInstanceAudit');
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingInstanceAudit'
+    );
 
     const parameters = {
       options: {
@@ -6031,7 +6825,9 @@ namespace CatalogManagementV1 {
     /** The type for the object. */
     objectType: UpdateShareApprovalListAsSourceConstants.ObjectType | string;
     /** The different possible approval states for share requests or access request. */
-    approvalStateIdentifier: UpdateShareApprovalListAsSourceConstants.ApprovalStateIdentifier | string;
+    approvalStateIdentifier:
+      | UpdateShareApprovalListAsSourceConstants.ApprovalStateIdentifier
+      | string;
     /** A list of accesses to update to the specified approval state. */
     accesses: string[];
     /** Execute the request in the context of an enterprise or enterpise account group ID. Use '-ent-enterpriseid'
@@ -9661,7 +10457,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {CatalogAccountAuditsPager}
      */
-    constructor(client: CatalogManagementV1, params?: CatalogManagementV1.ListCatalogAccountAuditsParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params?: CatalogManagementV1.ListCatalogAccountAuditsParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -9740,7 +10539,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {GetShareApprovalListPager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.GetShareApprovalListParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.GetShareApprovalListParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -9819,7 +10621,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {GetShareApprovalListAsSourcePager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.GetShareApprovalListAsSourceParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.GetShareApprovalListAsSourceParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -9977,7 +10782,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {EnterpriseAuditsPager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.ListEnterpriseAuditsParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.ListEnterpriseAuditsParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -10056,7 +10864,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {GetConsumptionOfferingsPager}
      */
-    constructor(client: CatalogManagementV1, params?: CatalogManagementV1.GetConsumptionOfferingsParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params?: CatalogManagementV1.GetConsumptionOfferingsParams
+    ) {
       if (params && params.offset) {
         throw new Error(`the params.offset field should not be set`);
       }
@@ -10293,7 +11104,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {GetOfferingAccessListPager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.GetOfferingAccessListParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.GetOfferingAccessListParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -10688,7 +11502,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {GetObjectAccessListPager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.GetObjectAccessListParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.GetObjectAccessListParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -10767,7 +11584,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {GetObjectAccessListDeprecatedPager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.GetObjectAccessListDeprecatedParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.GetObjectAccessListDeprecatedParams
+    ) {
       if (params && params.offset) {
         throw new Error(`the params.offset field should not be set`);
       }
@@ -10846,7 +11666,10 @@ namespace CatalogManagementV1 {
      * @constructor
      * @returns {OfferingInstanceAuditsPager}
      */
-    constructor(client: CatalogManagementV1, params: CatalogManagementV1.ListOfferingInstanceAuditsParams) {
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.ListOfferingInstanceAuditsParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }

@@ -36,16 +36,10 @@ describe('CatalogManagementV1_integration', () => {
   let catalogManagementService;
 
   // Variables to hold link values
-  let accountRevLink;
   let catalogIdLink;
-  let catalogRevLink;
   let objectIdLink;
-  let objectRevLink;
   let offeringIdLink;
-  let offeringRevLink;
   let versionIdLink;
-  let versionLocatorLink;
-  let versionRevLink;
 
   test('Initialize service', async () => {
     catalogManagementService = CatalogManagementV1.newInstance();
@@ -63,7 +57,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    accountRevLink = res.result._rev;
   });
 
   test('updateCatalogAccount()', async () => {
@@ -104,7 +97,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    accountRevLink = res.result._rev;
   });
 
   test('createCatalog()', async () => {
@@ -215,7 +207,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
     catalogIdLink = res.result.id;
-    catalogRevLink = res.result._rev;
   });
 
   test('getCatalog()', async () => {
@@ -227,7 +218,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    catalogRevLink = res.result._rev;
   });
 
   test('replaceCatalog()', async () => {
@@ -340,7 +330,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    catalogRevLink = res.result._rev;
   });
 
   test('replaceOffering()', async () => {
@@ -445,7 +434,8 @@ describe('CatalogManagementV1_integration', () => {
     // SchematicsEnvValues
     const schematicsEnvValuesModel = {
       value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
-      sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+      sm_ref:
+        'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
     };
 
     // Script
@@ -919,10 +909,7 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
     offeringIdLink = res.result.id;
-    offeringRevLink = res.result._rev;
-    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
     versionIdLink = res.result.kinds[0].versions[0].id;
-    versionRevLink = res.result.kinds[0].versions[0]._rev;
   });
 
   test('importOfferingVersion()', async () => {
@@ -997,10 +984,7 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
     offeringIdLink = res.result.id;
-    offeringRevLink = res.result._rev;
-    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
     versionIdLink = res.result.kinds[0].versions[0].version_locator;
-    versionRevLink = res.result.kinds[0].versions[0]._rev;
   });
 
   test('importOffering()', async () => {
@@ -1074,8 +1058,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
-    offeringRevLink = res.result._rev;
-    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
   });
 
   test('getOffering()', async () => {
@@ -1090,10 +1072,7 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    offeringRevLink = res.result._rev;
-    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
     versionIdLink = res.result.kinds[0].versions[0].version_locator;
-    versionRevLink = res.result.kinds[0].versions[0]._rev;
   });
 
   test('createOffering()', async () => {
@@ -1198,7 +1177,8 @@ describe('CatalogManagementV1_integration', () => {
     // SchematicsEnvValues
     const schematicsEnvValuesModel = {
       value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
-      sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+      sm_ref:
+        'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
     };
 
     // Script
@@ -1669,10 +1649,7 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
     offeringIdLink = res.result.id;
-    offeringRevLink = res.result._rev;
-    versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
     versionIdLink = res.result.kinds[0].versions[0].version_locator;
-    versionRevLink = res.result.kinds[0].versions[0]._rev;
   });
 
   test('reloadOffering()', async () => {
@@ -1704,7 +1681,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    offeringRevLink = res.result._rev;
   });
 
   test('updateOffering()', async () => {
@@ -1729,7 +1705,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    offeringRevLink = res.result._rev;
   });
 
   test('createObject()', async () => {
@@ -1786,7 +1761,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
     objectIdLink = res.result.id;
-    objectRevLink = res.result._rev;
   });
 
   test('getObject()', async () => {
@@ -1799,7 +1773,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    objectRevLink = res.result._rev;
   });
 
   test('replaceObject()', async () => {
@@ -1858,7 +1831,6 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    objectRevLink = res.result._rev;
   });
 
   test('listCatalogAccountAudits()', async () => {
@@ -1996,7 +1968,10 @@ describe('CatalogManagementV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+    let pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(
+      catalogManagementService,
+      params
+    );
     while (pager.hasNext()) {
       const nextPage = await pager.getNext();
       expect(nextPage).not.toBeNull();
@@ -2004,7 +1979,10 @@ describe('CatalogManagementV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+    pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(
+      catalogManagementService,
+      params
+    );
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
@@ -2164,7 +2142,10 @@ describe('CatalogManagementV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+    let pager = new CatalogManagementV1.GetConsumptionOfferingsPager(
+      catalogManagementService,
+      params
+    );
     while (pager.hasNext()) {
       const nextPage = await pager.getNext();
       expect(nextPage).not.toBeNull();
@@ -2364,7 +2345,10 @@ describe('CatalogManagementV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
+    let pager = new CatalogManagementV1.GetOfferingAccessListPager(
+      catalogManagementService,
+      params
+    );
     while (pager.hasNext()) {
       const nextPage = await pager.getNext();
       expect(nextPage).not.toBeNull();
@@ -3214,7 +3198,10 @@ describe('CatalogManagementV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
+    let pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(
+      catalogManagementService,
+      params
+    );
     while (pager.hasNext()) {
       const nextPage = await pager.getNext();
       expect(nextPage).not.toBeNull();
@@ -3222,7 +3209,10 @@ describe('CatalogManagementV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
+    pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(
+      catalogManagementService,
+      params
+    );
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
@@ -3378,7 +3368,10 @@ describe('CatalogManagementV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
+    let pager = new CatalogManagementV1.OfferingInstanceAuditsPager(
+      catalogManagementService,
+      params
+    );
     while (pager.hasNext()) {
       const nextPage = await pager.getNext();
       expect(nextPage).not.toBeNull();
