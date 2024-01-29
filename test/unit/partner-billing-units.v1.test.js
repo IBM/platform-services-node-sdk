@@ -118,7 +118,7 @@ describe('PartnerBillingUnitsV1', () => {
         const partnerId = 'testString';
         const customerId = 'testString';
         const resellerId = 'testString';
-        const date = '2022-04';
+        const date = '2024-01';
         const limit = 30;
         const getBillingOptionsParams = {
           partnerId,
@@ -214,7 +214,7 @@ describe('PartnerBillingUnitsV1', () => {
         const partnerId = 'testString';
         const customerId = 'testString';
         const resellerId = 'testString';
-        const date = '2022-04';
+        const date = '2024-01';
         const limit = 30;
         const getCreditPoolsReportParams = {
           partnerId,
