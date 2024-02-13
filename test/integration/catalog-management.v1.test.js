@@ -284,6 +284,18 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
+  test('deleteShareApprovalList()', async () => {
+    const params = {
+      objectType: 'offering',
+      accesses: ['-acct-testString'],
+    };
+
+    const res = await catalogManagementService.deleteShareApprovalList(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('getShareApprovalListAsSource()', async () => {
     const params = {
       objectType: 'offering',
@@ -305,6 +317,19 @@ describe('CatalogManagementV1_integration', () => {
     };
 
     const res = await catalogManagementService.updateShareApprovalListAsSource(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingSourceArchive()', async () => {
+    const params = {
+      catalogId: catalogIdLink,
+      id: offeringIdLink,
+      version: '1.0.0',
+    };
+
+    const res = await catalogManagementService.getOfferingSourceArchive(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();

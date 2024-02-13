@@ -612,6 +612,35 @@ describe('CatalogManagementV1', () => {
     // end-add_share_approval_list
   });
 
+  test('deleteShareApprovalList request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteShareApprovalList() result:');
+    // begin-add_share_approval_list
+
+    const params = {
+      objectType: 'offering',
+      accesses: ['-acct-testString'],
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.deleteShareApprovalList(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-add_share_approval_list
+  });
+
   test('getShareApprovalListAsSource request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -670,6 +699,36 @@ describe('CatalogManagementV1', () => {
     try {
       res = await catalogManagementService.updateShareApprovalListAsSource(params);
       console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_share_approval_list_as_source
+  });
+
+  test('getOfferingSourceArchive request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getOfferingSourceArchive() result:');
+    // begin-update_share_approval_list_as_source
+
+    const params = {
+      catalogId: catalogIdLink,
+      id: offeringIdLink,
+      version: '1.0.0',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getOfferingSourceArchive(params);
+      console.log(res.result);
     } catch (err) {
       console.warn(err);
     }
