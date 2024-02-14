@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 /* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
 
 const CatalogManagementV1 = require('../dist/catalog-management/v1');
 // eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
 // You can use the readExternalSources method to access additional configuration values
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+// const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
 // This file provides an example of how to use the Catalog Management service.
@@ -34,15 +34,12 @@ const { readExternalSources } = require('ibm-cloud-sdk-core');
 // CATALOG_MANAGEMENT_AUTH_TYPE=iam
 // CATALOG_MANAGEMENT_APIKEY=<IAM apikey>
 // CATALOG_MANAGEMENT_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
-// CATALOG_MANAGEMENT_CLUSTER_ID=<ID of the cluster>
-// CATALOG_MANAGEMENT_ACCOUNT_ID=<ID of the Account>
-// CATALOG_MANAGEMENT_GIT_TOKEN=<Token used in communication with Git repository>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'catalog_mgmt.env';
+const configFile = 'catalog_management_v1.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -54,80 +51,133 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
+function genRandonString(length) {
+  var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  var charLength = chars.length;
+  var result = '';
+  for (var i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * charLength));
+  }
+  return result;
+}
+
 describe('CatalogManagementV1', () => {
+  // Service instance
+  let catalogManagementService;
 
-  // begin-common
+  // Variables to hold link values
+  let accountRevLink;
+  let objectCatalogIdLink;
+  let catalogIdLink;
+  let catalogRevLink;
+  let objectIdLink;
+  let objectRevLink;
+  let offeringIdLink;
+  let offeringRevLink;
+  let versionIdLink;
+  let versionLocatorLink;
+  let versionRevLink;
 
-  const catalogManagementService = CatalogManagementV1.newInstance({});
-
-  // end-common
-
-  let bearerToken;
-  let catalogId;
-  let offeringId;
-  let versionLocatorId;
-  let offeringInstanceId;
-  let objectId;
+  let zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
+  let objectName = genRandonString(15);
 
   // To access additional configuration values, uncomment this line and extract the values from config
-  const config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
-  expect(config).not.toBeNull();
+  // const config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
 
-  const accountId = config.accountId;
-  expect(accountId).not.toBeUndefined();
+  test('Initialize service', async () => {
+    // begin-common
 
-  const gitTokenForPublicRepo = config.gitToken;
-  expect(gitTokenForPublicRepo).not.toBeUndefined();
+    catalogManagementService = CatalogManagementV1.newInstance();
 
-  const clusterId = config.clusterId;
-  expect(clusterId).not.toBeUndefined();
+    // end-common
+  });
 
-  test('Acquire bearer token', async () => {
-    await catalogManagementService.getCatalogAccount();
-    bearerToken = catalogManagementService.getAuthenticator().getRefreshToken()
-    expect(bearerToken).not.toBeUndefined();
-  })
-
-  test('createCatalog request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('getCatalogAccount request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getCatalogAccount() result:');
+    // begin-get_catalog_account
+
+    let res;
+    try {
+      res = await catalogManagementService.getCatalogAccount({});
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_catalog_account
+    const responseBody = res.result;
+    accountRevLink = responseBody._rev;
+  });
+
+  test('updateCatalogAccount request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateCatalogAccount() result:');
+    // begin-update_catalog_account
+
+    let res;
+    try {
+      res = await catalogManagementService.updateCatalogAccount({ rev: accountRevLink });
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_catalog_account
+    const responseBody = res.result;
+    accountRevLink = responseBody._rev;
+  });
+
+  test('createCatalog request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
       expect(true).toBeFalsy();
     });
 
     originalLog('createCatalog() result:');
     // begin-create_catalog
 
-    const params = {
-      label: 'Catalog Management Service',
-      tags: ['node', 'sdk'],
-      kind: 'vpe',
-      owningAccount: accountId
-    }
-
+    let res;
     try {
-      const res = await catalogManagementService.createCatalog(params)
-      catalogId = res.result.id;
+      res = await catalogManagementService.createCatalog({ label: 'testString' });
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
-      console.warn(err)
+      console.warn(err);
     }
 
     // end-create_catalog
+    const responseBody = res.result;
+    catalogIdLink = responseBody.id;
+    catalogRevLink = responseBody._rev;
   });
 
   test('getCatalog request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -135,27 +185,29 @@ describe('CatalogManagementV1', () => {
     // begin-get_catalog
 
     const params = {
-      catalogIdentifier: catalogId,
+      catalogIdentifier: catalogIdLink,
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.getCatalog(params)
+      res = await catalogManagementService.getCatalog(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-get_catalog
+    const responseBody = res.result;
+    catalogRevLink = responseBody._rev;
   });
 
   test('replaceCatalog request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -163,175 +215,30 @@ describe('CatalogManagementV1', () => {
     // begin-replace_catalog
 
     const params = {
-      catalogIdentifier: catalogId,
-      id: catalogId,
-      tags: ['node', 'sdk', 'updated'],
-      owningAccount: accountId,
-      kind: 'vpe',
+      catalogIdentifier: catalogIdLink,
+      id: catalogIdLink,
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.replaceCatalog(params)
+      res = await catalogManagementService.replaceCatalog(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-replace_catalog
-  });
-
-  test('listCatalogs request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('listCatalogs() result:');
-    // begin-list_catalogs
-
-    try {
-      const res = await catalogManagementService.listCatalogs({})
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-list_catalogs
-  });
-
-  test('createOffering request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('createOffering() result:');
-    // begin-create_offering
-
-    const params = {
-      catalogIdentifier: catalogId,
-      name: 'offering-name'
-    };
-
-    try {
-      const res = await catalogManagementService.createOffering(params);
-      offeringId = res.result.id;
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-create_offering
-  });
-
-  test('getOffering request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOffering() result:');
-    // begin-get_offering
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
-    };
-
-    try {
-      const res = await catalogManagementService.getOffering(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err)
-    }
-
-    // end-get_offering
-  });
-
-  test.skip('replaceOffering request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('replaceOffering() result:');
-    // begin-replace_offering
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
-      id: offeringId,
-      name: 'updated-offering-name'
-    };
-
-    try {
-      const res = await catalogManagementService.replaceOffering(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-replace_offering
-  });
-
-  test('listOfferings request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('listOfferings() result:');
-    // begin-list_offerings
-
-    const params = {
-      catalogIdentifier: catalogId,
-      limit: 100,
-      offset: 0,
-    };
-
-    try {
-      const res = await catalogManagementService.listOfferings(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-list_offerings
+    const responseBody = res.result;
+    catalogRevLink = responseBody._rev;
   });
 
   test('importOffering request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -339,35 +246,129 @@ describe('CatalogManagementV1', () => {
     // begin-import_offering
 
     const params = {
-      catalogIdentifier: catalogId,
-      tags: ['node', 'sdk'],
-      target_kinds: ['roks'],
-      zipurl: 'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml',
-      offeringId: offeringId,
-      targetVersion: '0.0.2',
-      repoType: 'git_public',
-      xAuthToken: gitTokenForPublicRepo,
+      catalogIdentifier: catalogIdLink,
+      zipurl: zipurl,
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.importOffering(params);
-      versionLocatorId = res.result.kinds[0].versions[0].version_locator;
+      res = await catalogManagementService.importOffering(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-import_offering
+    const responseBody = res.result;
+    offeringRevLink = responseBody._rev;
+    offeringIdLink = responseBody.id;
+    versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
   });
 
-  test.skip('reloadOffering request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('importOfferingVersion request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('importOfferingVersion() result:');
+    // begin-import_offering_version
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      zipurl: zipurl,
+      targetVersion: '1.0.1',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.importOfferingVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-import_offering_version
+    const responseBody = res.result;
+    offeringIdLink = responseBody.id;
+    offeringRevLink = responseBody._rev;
+    versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
+    versionIdLink = responseBody.kinds[0].versions[0].version_locator;
+    versionRevLink = responseBody.kinds[0].versions[0]._rev;
+  });
+
+  test('getOffering request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getOffering() result:');
+    // begin-get_offering
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getOffering(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_offering
+    const responseBody = res.result;
+    offeringRevLink = responseBody._rev;
+    versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
+    versionIdLink = responseBody.kinds[0].versions[0].version_locator;
+    versionRevLink = responseBody.kinds[0].versions[0]._rev;
+  });
+
+  test('createOffering request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createOffering() result:');
+    // begin-create_offering
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.createOffering(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+  });
+
+  test('reloadOffering request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
       expect(true).toBeFalsy();
     });
 
@@ -375,193 +376,171 @@ describe('CatalogManagementV1', () => {
     // begin-reload_offering
 
     const params = {
-      catalogIdentifier: catalogId,
-      tags: ['node', 'sdk'],
-      target_kinds: ['roks'],
-      zipurl: 'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml',
-      offeringId: offeringId,
-      targetVersion: '0.0.2',
-      repoType: 'git_public',
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      targetVersion: '1.0.0',
+      zipurl: zipurl,
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.reloadOffering(params);
+      res = await catalogManagementService.reloadOffering(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-reload_offering
+    const responseBody = res.result;
+    offeringRevLink = responseBody._rev;
+  });
+
+  test('updateOffering request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateOffering() result:');
+    // begin-update_offering
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      ifMatch: `"${offeringRevLink}"`,
+      updates: [
+        {
+          "op": "replace",
+          "path": "/label",
+          "value": "testString"
+        }
+      ]
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.updateOffering(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_offering
+    const responseBody = res.result;
+    offeringRevLink = responseBody._rev;
+  });
+
+  test('createCatalog request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createCatalog() result:');
+    // begin-create_catalog
+
+    let res;
+    try {
+      res = await catalogManagementService.createCatalog({ label: 'testString', kind: 'vpe' });
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_catalog
+    const responseBody = res.result;
+    objectCatalogIdLink = responseBody.id;
   });
 
   test('createObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('createObject() result:');
     // begin-create_object
 
-    const publishObjectModel = {
-      permit_ibm_public_publish: true,
-      ibm_approved: true,
-      public_approved: true,
-    };
-
-    const stateModel = {
-      current: 'new',
-    };
-
     const params = {
-      catalogIdentifier: catalogId,
-      catalogId: catalogId,
-      name: 'object_in_ibm_cloud',
-      crn: 'crn:v1:bluemix:public:iam-global-endpoint:global:::endpoint:private.iam.cloud.ibm.com',
-      parentId: 'us-south',
+      catalogIdentifier: objectCatalogIdLink,
+      name: objectName,
       kind: 'vpe',
-      publish: publishObjectModel,
-      state: stateModel,
+      parentId: 'us-south',
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.createObject(params);
-      objectId = res.result.id;
+      res = await catalogManagementService.createObject(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-create_object
+    const responseBody = res.result;
+    objectIdLink = responseBody.id;
+    objectRevLink = responseBody._rev;
   });
 
-  test('getOfferingAudit request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('getObject request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
-    originalLog('getOfferingAudit() result:');
-    // begin-get_offering_audit
+    originalLog('getObject() result:');
+    // begin-get_object
 
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
+      catalogIdentifier: objectCatalogIdLink,
+      objectIdentifier: objectIdLink,
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.getOfferingAudit(params);
+      res = await catalogManagementService.getObject(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-get_offering_audit
+    // end-get_object
+    const responseBody = res.result;
+    objectRevLink = responseBody._rev;
   });
-
-  test('getCatalogAccount request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getCatalogAccount() result:');
-    // begin-get_catalog_account
-
-    try {
-      const res = await catalogManagementService.getCatalogAccount({});
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_catalog_account
-  });
-
-  test.skip('updateCatalogAccount request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-update_catalog_account
-
-    try {
-      await catalogManagementService.updateCatalogAccount({});
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-update_catalog_account
-  });
-
-  test('getCatalogAccountAudit request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getCatalogAccountAudit() result:');
-    // begin-get_catalog_account_audit
-
-    try {
-      const res = await catalogManagementService.getCatalogAccountAudit({});
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_catalog_account_audit
-  });
-
 
   test('getCatalogAccountFilters request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('getCatalogAccountFilters() result:');
     // begin-get_catalog_account_filters
 
+    let res;
     try {
-      const res = await catalogManagementService.getCatalogAccountFilters({});
+      res = await catalogManagementService.getCatalogAccountFilters({});
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -570,53 +549,247 @@ describe('CatalogManagementV1', () => {
     // end-get_catalog_account_filters
   });
 
-  test('getCatalogAudit request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('getShareApprovalList request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
-    originalLog('getCatalogAudit() result:');
-    // begin-get_catalog_audit
+    originalLog('getShareApprovalList() result:');
+    // begin-get_share_approval_list
 
     const params = {
-      catalogIdentifier: catalogId,
+      objectType: 'offering',
+      limit: 10,
     };
 
+    const allResults = [];
     try {
-      const res = await catalogManagementService.getCatalogAudit(params);
+      const pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_share_approval_list
+  });
+
+  test('addShareApprovalList request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('addShareApprovalList() result:');
+    // begin-add_share_approval_list
+
+    const params = {
+      objectType: 'offering',
+      accesses: ['-acct-testString'],
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.addShareApprovalList(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-get_catalog_audit
+    // end-add_share_approval_list
+  });
+
+  test('deleteShareApprovalList request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteShareApprovalList() result:');
+    // begin-add_share_approval_list
+
+    const params = {
+      objectType: 'offering',
+      accesses: ['-acct-testString'],
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.deleteShareApprovalList(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-add_share_approval_list
+  });
+
+  test('getShareApprovalListAsSource request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getShareApprovalListAsSource() result:');
+    // begin-get_share_approval_list_as_source
+
+    const params = {
+      objectType: 'offering',
+      approvalStateIdentifier: 'approved',
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_share_approval_list_as_source
+  });
+
+  test('updateShareApprovalListAsSource request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateShareApprovalListAsSource() result:');
+    // begin-update_share_approval_list_as_source
+
+    const params = {
+      objectType: 'offering',
+      approvalStateIdentifier: 'approved',
+      accesses: ['-acct-testString'],
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.updateShareApprovalListAsSource(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_share_approval_list_as_source
+  });
+
+  test('getOfferingSourceArchive request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getOfferingSourceArchive() result:');
+    // begin-update_share_approval_list_as_source
+
+    const params = {
+      catalogId: catalogIdLink,
+      id: offeringIdLink,
+      version: '1.0.0',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getOfferingSourceArchive(params);
+      console.log(res.result);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_share_approval_list_as_source
+  });
+
+  test('listCatalogs request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listCatalogs() result:');
+    // begin-list_catalogs
+
+    let res;
+    try {
+      res = await catalogManagementService.listCatalogs({});
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_catalogs
   });
 
   test('getConsumptionOfferings request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     originalLog('getConsumptionOfferings() result:');
     // begin-get_consumption_offerings
 
+    const params = {
+      digest: true,
+      catalog: catalogIdLink,
+      select: 'all',
+      includeHidden: true,
+      limit: 10,
+    };
+
+    const allResults = [];
     try {
-      const res = await catalogManagementService.getConsumptionOfferings({});
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -624,427 +797,50 @@ describe('CatalogManagementV1', () => {
     // end-get_consumption_offerings
   });
 
-  test('importOfferingVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('listOfferings request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
-    originalLog('importOfferingVersion() result:');
-    // begin-import_offering_version
+    originalLog('listOfferings() result:');
+    // begin-list_offerings
 
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
-      targetKinds: ['roks'],
-      zipurl: 'https://github.com/rhm-samples/node-red-operator/blob/master/node-red-operator/bundle/0.0.2/node-red-operator.v0.0.2.clusterserviceversion.yaml',
-      targetVersion: '0.0.3',
-      repoType: 'git_public',
+      catalogIdentifier: catalogIdLink,
+      digest: true,
+      limit: 10,
+      name: 'testString',
+      includeHidden: true,
     };
 
+    const allResults = [];
     try {
-      const res = await catalogManagementService.importOfferingVersion(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new CatalogManagementV1.OfferingsPager(catalogManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-import_offering_version
-  });
-
-  test.skip('replaceOfferingIcon request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('replaceOfferingIcon() result:');
-    // begin-replace_offering_icon
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
-      fileName: 'offering_icon.png',
-    };
-
-    try {
-      const res = await catalogManagementService.replaceOfferingIcon(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-replace_offering_icon
-  });
-
-  test.skip('updateOfferingIbm request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('updateOfferingIbm() result:');
-    // begin-update_offering_ibm
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
-      approvalType: 'allow_request',
-      approved: 'true',
-    };
-
-    try {
-      const res = await catalogManagementService.updateOfferingIbm(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-update_offering_ibm
-  });
-
-  test.skip('getOfferingUpdates request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOfferingUpdates() result:');
-    // begin-get_offering_updates
-
-    const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
-      kind: 'roks',
-      version: '0.0.2',
-      clusterId: clusterId,
-      region: 'us-south',
-      namespace: 'application-development-namespace',
-    };
-
-    try {
-      const res = await catalogManagementService.getOfferingUpdates(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_offering_updates
-  });
-
-  test.skip('getOfferingAbout request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOfferingAbout() result:');
-    // begin-get_offering_about
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.getOfferingAbout(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_offering_about
-  });
-
-  test.skip('getOfferingLicense request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOfferingLicense() result:');
-    // begin-get_offering_license
-
-    const params = {
-      versionLocId: versionLocatorId,
-      licenseId: 'license-id',
-    };
-
-    try {
-      const res = await catalogManagementService.getOfferingLicense(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_offering_license
-  });
-
-  test('getOfferingContainerImages request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOfferingContainerImages() result:');
-    // begin-get_offering_container_images
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.getOfferingContainerImages(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_offering_container_images
-  });
-
-  test.skip('deprecateVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-deprecate_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.deprecateVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-deprecate_version
-  });
-
-  test.skip('accountPublishVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-account_publish_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.accountPublishVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-account_publish_version
-  });
-
-  test.skip('ibmPublishVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-ibm_publish_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.ibmPublishVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-ibm_publish_version
-  });
-
-  test.skip('publicPublishVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-public_publish_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.publicPublishVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-public_publish_version
-  });
-
-  test.skip('commitVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-commit_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.commitVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-commit_version
-  });
-
-  test.skip('copyVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-copy_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-      targetKinds: ['roks'],
-    };
-
-    try {
-      await catalogManagementService.copyVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-copy_version
-  });
-
-  test.skip('getOfferingWorkingCopy request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOfferingWorkingCopy() result:');
-    // begin-get_offering_working_copy
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.getOfferingWorkingCopy(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_offering_working_copy
+    // end-list_offerings
   });
 
   test('getVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -1052,11 +848,12 @@ describe('CatalogManagementV1', () => {
     // begin-get_version
 
     const params = {
-      versionLocId: versionLocatorId,
+      versionLocId: versionLocatorLink,
     };
 
+    let res;
     try {
-      const res = await catalogManagementService.getVersion(params);
+      res = await catalogManagementService.getVersion(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -1065,359 +862,13 @@ describe('CatalogManagementV1', () => {
     // end-get_version
   });
 
-  test.skip('getCluster request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getCluster() result:');
-    // begin-get_cluster
-
-    const params = {
-      clusterId: clusterId,
-      region: 'us-south',
-      xAuthRefreshToken: bearerToken,
-    };
-
-    try {
-      const res = await catalogManagementService.getCluster(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_cluster
-  });
-
-  test.skip('getNamespaces request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getNamespaces() result:');
-    // begin-get_namespaces
-
-    const params = {
-      clusterId: clusterId,
-      region: 'us-south',
-      xAuthRefreshToken: bearerToken,
-    };
-
-    try {
-      const res = await catalogManagementService.getNamespaces(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_namespaces
-  });
-
-  test.skip('deployOperators request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('deployOperators() result:');
-    // begin-deploy_operators
-
-    const params = {
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      allNamespaces: true,
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.deployOperators(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-deploy_operators
-  });
-
-  test.skip('listOperators request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('listOperators() result:');
-    // begin-list_operators
-
-    const params = {
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.listOperators(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-list_operators
-  });
-
-  test.skip('replaceOperators request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('replaceOperators() result:');
-    // begin-replace_operators
-
-    const params = {
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      allNamespaces: true,
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.replaceOperators(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-replace_operators
-  });
-
-  test.skip('installVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-install_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.installVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-install_version
-  });
-
-  test.skip('preinstallVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-preinstall_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.preinstallVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-preinstall_version
-  });
-
-  test.skip('getPreinstall request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getPreinstall() result:');
-    // begin-get_preinstall
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-    };
-
-    try {
-      const res = await catalogManagementService.getPreinstall(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_preinstall
-  });
-
-  test.skip('validateInstall request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-validate_install
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.validateInstall(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-validate_install
-  });
-
-  test('getValidationStatus request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getValidationStatus() result:');
-    // begin-get_validation_status
-
-    const params = {
-      versionLocId: versionLocatorId,
-      xAuthRefreshToken: bearerToken,
-    };
-
-    try {
-      const res = await catalogManagementService.getValidationStatus(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_validation_status
-  });
-
-  test.skip('getOverrideValues request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOverrideValues() result:');
-    // begin-get_override_values
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      const res = await catalogManagementService.getOverrideValues(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_override_values
-  });
-
   test('searchObjects request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -1425,16 +876,21 @@ describe('CatalogManagementV1', () => {
     // begin-search_objects
 
     const params = {
-      query: 'name: object*',
-      collapse: true,
+      query: 'testString',
+      kind: 'vpe',
+      limit: 10,
       digest: true,
-      limit: 100,
-      offset: 0,
     };
 
+    const allResults = [];
     try {
-      const res = await catalogManagementService.searchObjects(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new CatalogManagementV1.SearchObjectsPager(catalogManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -1443,14 +899,12 @@ describe('CatalogManagementV1', () => {
   });
 
   test('listObjects request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
@@ -1458,14 +912,20 @@ describe('CatalogManagementV1', () => {
     // begin-list_objects
 
     const params = {
-      catalogIdentifier: catalogId,
-      limit: 100,
-      offset: 0,
+      catalogIdentifier: catalogIdLink,
+      limit: 10,
+      name: 'testString',
     };
 
+    const allResults = [];
     try {
-      const res = await catalogManagementService.listObjects(params);
-      console.log(JSON.stringify(res.result, null, 2));
+      const pager = new CatalogManagementV1.ObjectsPager(catalogManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
     } catch (err) {
       console.warn(err);
     }
@@ -1473,601 +933,21 @@ describe('CatalogManagementV1', () => {
     // end-list_objects
   });
 
-  test.skip('replaceObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('replaceObject() result:');
-    // begin-replace_object
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      id: objectId,
-      name: 'updated-object-name',
-      parentId: 'us-south',
-      kind: 'vpe',
-      catalogId: catalogId,
-    };
-
-    try {
-      const res = await catalogManagementService.replaceObject(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-replace_object
-  });
-
-  test('getObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getObject() result:');
-    // begin-get_object
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      const res = await catalogManagementService.getObject(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_object
-  });
-
-  test('getObjectAudit request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getObjectAudit() result:');
-    // begin-get_object_audit
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      const res = await catalogManagementService.getObjectAudit(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_object_audit
-  });
-
-  test('accountPublishObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-account_publish_object
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      await catalogManagementService.accountPublishObject(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-account_publish_object
-  });
-
-  test.skip('sharedPublishObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-shared_publish_object
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      await catalogManagementService.sharedPublishObject(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-shared_publish_object
-  });
-
-  test.skip('ibmPublishObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-ibm_publish_object
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      await catalogManagementService.ibmPublishObject(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-ibm_publish_object
-  });
-
-  test.skip('publicPublishObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-public_publish_object
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      await catalogManagementService.publicPublishObject(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-public_publish_object
-  });
-
-  test('createObjectAccess request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-create_object_access
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    try {
-      await catalogManagementService.createObjectAccess(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-create_object_access
-  });
-
-  test('getObjectAccess request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getObjectAccess() result:');
-    // begin-get_object_access
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    try {
-      const res = await catalogManagementService.getObjectAccess(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_object_access
-  });
-
-  test('addObjectAccessList request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('addObjectAccessList() result:');
-    // begin-add_object_access_list
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    try {
-      const res = await catalogManagementService.addObjectAccessList(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-add_object_access_list
-  });
-
-  test('getObjectAccessList request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getObjectAccessList() result:');
-    // begin-get_object_access_list
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-    };
-
-    try {
-      const res = await catalogManagementService.getObjectAccessList(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_object_access_list
-  });
-
-  test.skip('createOfferingInstance request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('createOfferingInstance() result:');
-    // begin-create_offering_instance
-
-    const params = {
-      xAuthRefreshToken: bearerToken,
-      id: offeringId,
-      catalogId: catalogId,
-      offeringId: offeringId,
-      kindFormat: 'vpe',
-      version: '0.0.2',
-      clusterId: clusterId,
-      clusterRegion: 'us-south',
-      clusterAllNamespaces: true,
-    };
-
-    try {
-      const res = await catalogManagementService.createOfferingInstance(params);
-      offeringInstanceId = res.result.id;
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-create_offering_instance
-  });
-
-  test.skip('getOfferingInstance request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getOfferingInstance() result:');
-    // begin-get_offering_instance
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-    };
-
-    try {
-      const res = await catalogManagementService.getOfferingInstance(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_offering_instance
-  });
-
-  test.skip('putOfferingInstance request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('putOfferingInstance() result:');
-    // begin-put_offering_instance
-
-    const params = {
-      instanceIdentifier: offeringInstanceId,
-      xAuthRefreshToken: bearerToken,
-      id: offeringId,
-      catalogId: catalogId,
-      offeringId: offeringId,
-      kindFormat: 'vpe',
-      version: '0.0.2',
-      clusterId: clusterId,
-      clusterRegion: 'us-south',
-      clusterAllNamespaces: true,
-    };
-
-    try {
-      const res = await catalogManagementService.putOfferingInstance(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-put_offering_instance
-  });
-
-  test('deleteVersion request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-delete_version
-
-    const params = {
-      versionLocId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.deleteVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_version
-  });
-
-  test.skip('deleteOperators request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-delete_operators
-
-    const params = {
-      xAuthRefreshToken: bearerToken,
-      clusterId: clusterId,
-      region: 'us-south',
-      versionLocatorId: versionLocatorId,
-    };
-
-    try {
-      await catalogManagementService.deleteOperators(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_operators
-  });
-
-  test.skip('deleteOfferingInstance request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-delete_offering_instance
-
-    const params = {
-      instanceIdentifier: 'testString',
-      xAuthRefreshToken: bearerToken,
-    };
-
-    try {
-      await catalogManagementService.deleteOfferingInstance(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_offering_instance
-  });
-
-  test('deleteObjectAccessList request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('deleteObjectAccessList() result:');
-    // begin-delete_object_access_list
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accounts: [accountId],
-    };
-
-    try {
-      const res = await catalogManagementService.deleteObjectAccessList(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_object_access_list
-  });
-
-  test('deleteObjectAccess request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    // begin-delete_object_access
-
-    const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
-      accountIdentifier: accountId,
-    };
-
-    try {
-      await catalogManagementService.deleteObjectAccess(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_object_access
-  });
-
   test('deleteObject request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     // begin-delete_object
 
     const params = {
-      catalogIdentifier: catalogId,
-      objectIdentifier: objectId,
+      catalogIdentifier: objectCatalogIdLink,
+      objectIdentifier: objectIdLink,
     };
 
     try {
@@ -2079,50 +959,45 @@ describe('CatalogManagementV1', () => {
     // end-delete_object
   });
 
-  test('deleteOffering request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('deleteVersion request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
-    // begin-delete_offering
+    // begin-delete_version
 
     const params = {
-      catalogIdentifier: catalogId,
-      offeringId: offeringId,
+      versionLocId: versionLocatorLink,
     };
 
     try {
-      await catalogManagementService.deleteOffering(params);
+      await catalogManagementService.deleteVersion(params);
     } catch (err) {
       console.warn(err);
     }
 
-    // end-delete_offering
+    // end-delete_version
   });
 
   test('deleteCatalog request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
       originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
     });
 
     // begin-delete_catalog
 
     const params = {
-      catalogIdentifier: catalogId,
+      catalogIdentifier: catalogIdLink,
     };
 
     try {
@@ -2134,4 +1009,28 @@ describe('CatalogManagementV1', () => {
     // end-delete_catalog
   });
 
+  test('deleteObjectCatalog object catalog request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_catalog
+
+    const params = {
+      catalogIdentifier: objectCatalogIdLink,
+    };
+
+    try {
+      await catalogManagementService.deleteCatalog(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_catalog
+  });
 });

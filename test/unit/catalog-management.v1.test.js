@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-await-in-loop */
+
+const nock = require('nock');
+
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
-
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 const CatalogManagementV1 = require('../../dist/catalog-management/v1');
 
 const {
@@ -37,20 +40,36 @@ const catalogManagementServiceOptions = {
 
 const catalogManagementService = new CatalogManagementV1(catalogManagementServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(catalogManagementService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(catalogManagementService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
+  }
+}
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('CatalogManagementV1', () => {
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = CatalogManagementV1.newInstance();
@@ -78,6 +97,7 @@ describe('CatalogManagementV1', () => {
       expect(testInstance).toBeInstanceOf(CatalogManagementV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -100,13 +120,14 @@ describe('CatalogManagementV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(CatalogManagementV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('getCatalogAccount', () => {
     describe('positive tests', () => {
       function __getCatalogAccountTest() {
         // Construct the params object for operation getCatalogAccount
-        const params = {};
+        const getCatalogAccountParams = {};
 
-        const getCatalogAccountResult = catalogManagementService.getCatalogAccount(params);
+        const getCatalogAccountResult = catalogManagementService.getCatalogAccount(getCatalogAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAccountResult);
@@ -141,14 +162,14 @@ describe('CatalogManagementV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCatalogAccountParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getCatalogAccount(params);
+        catalogManagementService.getCatalogAccount(getCatalogAccountParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -159,6 +180,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('updateCatalogAccount', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -190,15 +212,17 @@ describe('CatalogManagementV1', () => {
       function __updateCatalogAccountTest() {
         // Construct the params object for operation updateCatalogAccount
         const id = 'testString';
+        const rev = 'testString';
         const hideIbmCloudCatalog = true;
         const accountFilters = filtersModel;
-        const params = {
-          id: id,
-          hideIbmCloudCatalog: hideIbmCloudCatalog,
-          accountFilters: accountFilters,
+        const updateCatalogAccountParams = {
+          id,
+          rev,
+          hideIbmCloudCatalog,
+          accountFilters,
         };
 
-        const updateCatalogAccountResult = catalogManagementService.updateCatalogAccount(params);
+        const updateCatalogAccountResult = catalogManagementService.updateCatalogAccount(updateCatalogAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(updateCatalogAccountResult);
@@ -209,10 +233,11 @@ describe('CatalogManagementV1', () => {
         const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(mockRequestOptions, '/catalogaccount', 'PUT');
-        const expectedAccept = undefined;
+        const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body._rev).toEqual(rev);
         expect(mockRequestOptions.body.hide_IBM_cloud_catalog).toEqual(hideIbmCloudCatalog);
         expect(mockRequestOptions.body.account_filters).toEqual(accountFilters);
       }
@@ -236,14 +261,14 @@ describe('CatalogManagementV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateCatalogAccountParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.updateCatalogAccount(params);
+        catalogManagementService.updateCatalogAccount(updateCatalogAccountParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -254,13 +279,139 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('listCatalogAccountAudits', () => {
+    describe('positive tests', () => {
+      function __listCatalogAccountAuditsTest() {
+        // Construct the params object for operation listCatalogAccountAudits
+        const start = 'testString';
+        const limit = 100;
+        const lookupnames = true;
+        const listCatalogAccountAuditsParams = {
+          start,
+          limit,
+          lookupnames,
+        };
+
+        const listCatalogAccountAuditsResult = catalogManagementService.listCatalogAccountAudits(listCatalogAccountAuditsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listCatalogAccountAuditsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogaccount/audits', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listCatalogAccountAuditsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __listCatalogAccountAuditsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __listCatalogAccountAuditsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listCatalogAccountAuditsParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.listCatalogAccountAudits(listCatalogAccountAuditsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        catalogManagementService.listCatalogAccountAudits({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+
+    describe('CatalogAccountAuditsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogaccount/audits';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          limit: 10,
+          lookupnames: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.CatalogAccountAuditsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          limit: 10,
+          lookupnames: true,
+        };
+        const pager = new CatalogManagementV1.CatalogAccountAuditsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
   describe('getCatalogAccountAudit', () => {
     describe('positive tests', () => {
       function __getCatalogAccountAuditTest() {
         // Construct the params object for operation getCatalogAccountAudit
-        const params = {};
+        const auditlogIdentifier = 'testString';
+        const lookupnames = true;
+        const getCatalogAccountAuditParams = {
+          auditlogIdentifier,
+          lookupnames,
+        };
 
-        const getCatalogAccountAuditResult = catalogManagementService.getCatalogAccountAudit(params);
+        const getCatalogAccountAuditResult = catalogManagementService.getCatalogAccountAudit(getCatalogAccountAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAccountAuditResult);
@@ -270,10 +421,12 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogaccount/audit', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/catalogaccount/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.auditlog_identifier).toEqual(auditlogIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -293,36 +446,57 @@ describe('CatalogManagementV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
+        const auditlogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCatalogAccountAuditParams = {
+          auditlogIdentifier,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getCatalogAccountAudit(params);
+        catalogManagementService.getCatalogAccountAudit(getCatalogAccountAuditParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
+    });
 
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        catalogManagementService.getCatalogAccountAudit({});
-        checkForSuccessfulExecution(createRequestMock);
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getCatalogAccountAudit({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getCatalogAccountAudit();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getCatalogAccountFilters', () => {
     describe('positive tests', () => {
       function __getCatalogAccountFiltersTest() {
         // Construct the params object for operation getCatalogAccountFilters
         const catalog = 'testString';
-        const params = {
-          catalog: catalog,
+        const getCatalogAccountFiltersParams = {
+          catalog,
         };
 
-        const getCatalogAccountFiltersResult = catalogManagementService.getCatalogAccountFilters(params);
+        const getCatalogAccountFiltersResult = catalogManagementService.getCatalogAccountFilters(getCatalogAccountFiltersParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAccountFiltersResult);
@@ -358,14 +532,14 @@ describe('CatalogManagementV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCatalogAccountFiltersParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getCatalogAccountFilters(params);
+        catalogManagementService.getCatalogAccountFilters(getCatalogAccountFiltersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -376,13 +550,581 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('getShareApprovalList', () => {
+    describe('positive tests', () => {
+      function __getShareApprovalListTest() {
+        // Construct the params object for operation getShareApprovalList
+        const objectType = 'offering';
+        const start = 'testString';
+        const limit = 100;
+        const getShareApprovalListParams = {
+          objectType,
+          start,
+          limit,
+        };
+
+        const getShareApprovalListResult = catalogManagementService.getShareApprovalList(getShareApprovalListParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getShareApprovalListResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.object_type).toEqual(objectType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getShareApprovalListTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getShareApprovalListTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getShareApprovalListTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const objectType = 'offering';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getShareApprovalListParams = {
+          objectType,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getShareApprovalList(getShareApprovalListParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getShareApprovalList({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getShareApprovalList();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('GetShareApprovalListPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/shareapproval/offering/access';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          objectType: 'offering',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          objectType: 'offering',
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('deleteShareApprovalList', () => {
+    describe('positive tests', () => {
+      function __deleteShareApprovalListTest() {
+        // Construct the params object for operation deleteShareApprovalList
+        const objectType = 'offering';
+        const accesses = ['testString'];
+        const deleteShareApprovalListParams = {
+          objectType,
+          accesses,
+        };
+
+        const deleteShareApprovalListResult = catalogManagementService.deleteShareApprovalList(deleteShareApprovalListParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteShareApprovalListResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access', 'DELETE');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(accesses);
+        expect(mockRequestOptions.path.object_type).toEqual(objectType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteShareApprovalListTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __deleteShareApprovalListTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __deleteShareApprovalListTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const objectType = 'offering';
+        const accesses = ['testString'];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteShareApprovalListParams = {
+          objectType,
+          accesses,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.deleteShareApprovalList(deleteShareApprovalListParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.deleteShareApprovalList({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.deleteShareApprovalList();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('addShareApprovalList', () => {
+    describe('positive tests', () => {
+      function __addShareApprovalListTest() {
+        // Construct the params object for operation addShareApprovalList
+        const objectType = 'offering';
+        const accesses = ['testString'];
+        const addShareApprovalListParams = {
+          objectType,
+          accesses,
+        };
+
+        const addShareApprovalListResult = catalogManagementService.addShareApprovalList(addShareApprovalListParams);
+
+        // all methods should return a Promise
+        expectToBePromise(addShareApprovalListResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(accesses);
+        expect(mockRequestOptions.path.object_type).toEqual(objectType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addShareApprovalListTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __addShareApprovalListTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __addShareApprovalListTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const objectType = 'offering';
+        const accesses = ['testString'];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const addShareApprovalListParams = {
+          objectType,
+          accesses,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.addShareApprovalList(addShareApprovalListParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.addShareApprovalList({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.addShareApprovalList();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getShareApprovalListAsSource', () => {
+    describe('positive tests', () => {
+      function __getShareApprovalListAsSourceTest() {
+        // Construct the params object for operation getShareApprovalListAsSource
+        const objectType = 'offering';
+        const approvalStateIdentifier = 'approved';
+        const start = 'testString';
+        const limit = 100;
+        const enterpriseId = 'testString';
+        const getShareApprovalListAsSourceParams = {
+          objectType,
+          approvalStateIdentifier,
+          start,
+          limit,
+          enterpriseId,
+        };
+
+        const getShareApprovalListAsSourceResult = catalogManagementService.getShareApprovalListAsSource(getShareApprovalListAsSourceParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getShareApprovalListAsSourceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access/source/{approval_state_identifier}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.enterprise_id).toEqual(enterpriseId);
+        expect(mockRequestOptions.path.object_type).toEqual(objectType);
+        expect(mockRequestOptions.path.approval_state_identifier).toEqual(approvalStateIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getShareApprovalListAsSourceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getShareApprovalListAsSourceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getShareApprovalListAsSourceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const objectType = 'offering';
+        const approvalStateIdentifier = 'approved';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getShareApprovalListAsSourceParams = {
+          objectType,
+          approvalStateIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getShareApprovalListAsSource(getShareApprovalListAsSourceParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getShareApprovalListAsSource({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getShareApprovalListAsSource();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('GetShareApprovalListAsSourcePager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/shareapproval/offering/access/source/approved';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          objectType: 'offering',
+          approvalStateIdentifier: 'approved',
+          limit: 10,
+          enterpriseId: 'testString',
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          objectType: 'offering',
+          approvalStateIdentifier: 'approved',
+          limit: 10,
+          enterpriseId: 'testString',
+        };
+        const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('updateShareApprovalListAsSource', () => {
+    describe('positive tests', () => {
+      function __updateShareApprovalListAsSourceTest() {
+        // Construct the params object for operation updateShareApprovalListAsSource
+        const objectType = 'offering';
+        const approvalStateIdentifier = 'approved';
+        const accesses = ['testString'];
+        const enterpriseId = 'testString';
+        const updateShareApprovalListAsSourceParams = {
+          objectType,
+          approvalStateIdentifier,
+          accesses,
+          enterpriseId,
+        };
+
+        const updateShareApprovalListAsSourceResult = catalogManagementService.updateShareApprovalListAsSource(updateShareApprovalListAsSourceParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateShareApprovalListAsSourceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access/source/{approval_state_identifier}', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(accesses);
+        expect(mockRequestOptions.qs.enterprise_id).toEqual(enterpriseId);
+        expect(mockRequestOptions.path.object_type).toEqual(objectType);
+        expect(mockRequestOptions.path.approval_state_identifier).toEqual(approvalStateIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateShareApprovalListAsSourceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __updateShareApprovalListAsSourceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __updateShareApprovalListAsSourceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const objectType = 'offering';
+        const approvalStateIdentifier = 'approved';
+        const accesses = ['testString'];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateShareApprovalListAsSourceParams = {
+          objectType,
+          approvalStateIdentifier,
+          accesses,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.updateShareApprovalListAsSource(updateShareApprovalListAsSourceParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.updateShareApprovalListAsSource({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.updateShareApprovalListAsSource();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('listCatalogs', () => {
     describe('positive tests', () => {
       function __listCatalogsTest() {
         // Construct the params object for operation listCatalogs
-        const params = {};
+        const listCatalogsParams = {};
 
-        const listCatalogsResult = catalogManagementService.listCatalogs(params);
+        const listCatalogsResult = catalogManagementService.listCatalogs(listCatalogsParams);
 
         // all methods should return a Promise
         expectToBePromise(listCatalogsResult);
@@ -417,14 +1159,14 @@ describe('CatalogManagementV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listCatalogsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.listCatalogs(params);
+        catalogManagementService.listCatalogs(listCatalogsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -435,6 +1177,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('createCatalog', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -442,7 +1185,9 @@ describe('CatalogManagementV1', () => {
       // Feature
       const featureModel = {
         title: 'testString',
+        title_i18n: { 'key1': 'testString' },
         description: 'testString',
+        description_i18n: { 'key1': 'testString' },
       };
 
       // FilterTerms
@@ -501,13 +1246,31 @@ describe('CatalogManagementV1', () => {
         authorization: syndicationAuthorizationModel,
       };
 
+      // TrustedProfileInfo
+      const trustedProfileInfoModel = {
+        trusted_profile_id: 'testString',
+        catalog_crn: 'testString',
+        catalog_name: 'testString',
+        target_service_id: 'testString',
+      };
+
+      // TargetAccountContext
+      const targetAccountContextModel = {
+        api_key: 'testString',
+        trusted_profile: trustedProfileInfoModel,
+        name: 'testString',
+        label: 'testString',
+        project_id: 'testString',
+      };
+
       function __createCatalogTest() {
         // Construct the params object for operation createCatalog
-        const id = 'testString';
-        const rev = 'testString';
         const label = 'testString';
+        const labelI18n = { 'key1': 'testString' };
         const shortDescription = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
         const catalogIconUrl = 'testString';
+        const catalogBannerUrl = 'testString';
         const tags = ['testString'];
         const features = [featureModel];
         const disabled = true;
@@ -516,23 +1279,28 @@ describe('CatalogManagementV1', () => {
         const catalogFilters = filtersModel;
         const syndicationSettings = syndicationResourceModel;
         const kind = 'testString';
-        const params = {
-          id: id,
-          rev: rev,
-          label: label,
-          shortDescription: shortDescription,
-          catalogIconUrl: catalogIconUrl,
-          tags: tags,
-          features: features,
-          disabled: disabled,
-          resourceGroupId: resourceGroupId,
-          owningAccount: owningAccount,
-          catalogFilters: catalogFilters,
-          syndicationSettings: syndicationSettings,
-          kind: kind,
+        const metadata = { anyKey: 'anyValue' };
+        const targetAccountContexts = [targetAccountContextModel];
+        const createCatalogParams = {
+          label,
+          labelI18n,
+          shortDescription,
+          shortDescriptionI18n,
+          catalogIconUrl,
+          catalogBannerUrl,
+          tags,
+          features,
+          disabled,
+          resourceGroupId,
+          owningAccount,
+          catalogFilters,
+          syndicationSettings,
+          kind,
+          metadata,
+          targetAccountContexts,
         };
 
-        const createCatalogResult = catalogManagementService.createCatalog(params);
+        const createCatalogResult = catalogManagementService.createCatalog(createCatalogParams);
 
         // all methods should return a Promise
         expectToBePromise(createCatalogResult);
@@ -546,11 +1314,12 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.id).toEqual(id);
-        expect(mockRequestOptions.body._rev).toEqual(rev);
         expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.label_i18n).toEqual(labelI18n);
         expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.short_description_i18n).toEqual(shortDescriptionI18n);
         expect(mockRequestOptions.body.catalog_icon_url).toEqual(catalogIconUrl);
+        expect(mockRequestOptions.body.catalog_banner_url).toEqual(catalogBannerUrl);
         expect(mockRequestOptions.body.tags).toEqual(tags);
         expect(mockRequestOptions.body.features).toEqual(features);
         expect(mockRequestOptions.body.disabled).toEqual(disabled);
@@ -559,6 +1328,8 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.catalog_filters).toEqual(catalogFilters);
         expect(mockRequestOptions.body.syndication_settings).toEqual(syndicationSettings);
         expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.target_account_contexts).toEqual(targetAccountContexts);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -580,14 +1351,14 @@ describe('CatalogManagementV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createCatalogParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.createCatalog(params);
+        catalogManagementService.createCatalog(createCatalogParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -598,16 +1369,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getCatalog', () => {
     describe('positive tests', () => {
       function __getCatalogTest() {
         // Construct the params object for operation getCatalog
         const catalogIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
+        const getCatalogParams = {
+          catalogIdentifier,
         };
 
-        const getCatalogResult = catalogManagementService.getCatalog(params);
+        const getCatalogResult = catalogManagementService.getCatalog(getCatalogParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogResult);
@@ -644,7 +1416,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCatalogParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -652,7 +1424,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getCatalog(params);
+        catalogManagementService.getCatalog(getCatalogParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -681,6 +1453,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('replaceCatalog', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -688,7 +1461,9 @@ describe('CatalogManagementV1', () => {
       // Feature
       const featureModel = {
         title: 'testString',
+        title_i18n: { 'key1': 'testString' },
         description: 'testString',
+        description_i18n: { 'key1': 'testString' },
       };
 
       // FilterTerms
@@ -747,14 +1522,34 @@ describe('CatalogManagementV1', () => {
         authorization: syndicationAuthorizationModel,
       };
 
+      // TrustedProfileInfo
+      const trustedProfileInfoModel = {
+        trusted_profile_id: 'testString',
+        catalog_crn: 'testString',
+        catalog_name: 'testString',
+        target_service_id: 'testString',
+      };
+
+      // TargetAccountContext
+      const targetAccountContextModel = {
+        api_key: 'testString',
+        trusted_profile: trustedProfileInfoModel,
+        name: 'testString',
+        label: 'testString',
+        project_id: 'testString',
+      };
+
       function __replaceCatalogTest() {
         // Construct the params object for operation replaceCatalog
         const catalogIdentifier = 'testString';
         const id = 'testString';
         const rev = 'testString';
         const label = 'testString';
+        const labelI18n = { 'key1': 'testString' };
         const shortDescription = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
         const catalogIconUrl = 'testString';
+        const catalogBannerUrl = 'testString';
         const tags = ['testString'];
         const features = [featureModel];
         const disabled = true;
@@ -763,24 +1558,31 @@ describe('CatalogManagementV1', () => {
         const catalogFilters = filtersModel;
         const syndicationSettings = syndicationResourceModel;
         const kind = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          id: id,
-          rev: rev,
-          label: label,
-          shortDescription: shortDescription,
-          catalogIconUrl: catalogIconUrl,
-          tags: tags,
-          features: features,
-          disabled: disabled,
-          resourceGroupId: resourceGroupId,
-          owningAccount: owningAccount,
-          catalogFilters: catalogFilters,
-          syndicationSettings: syndicationSettings,
-          kind: kind,
+        const metadata = { anyKey: 'anyValue' };
+        const targetAccountContexts = [targetAccountContextModel];
+        const replaceCatalogParams = {
+          catalogIdentifier,
+          id,
+          rev,
+          label,
+          labelI18n,
+          shortDescription,
+          shortDescriptionI18n,
+          catalogIconUrl,
+          catalogBannerUrl,
+          tags,
+          features,
+          disabled,
+          resourceGroupId,
+          owningAccount,
+          catalogFilters,
+          syndicationSettings,
+          kind,
+          metadata,
+          targetAccountContexts,
         };
 
-        const replaceCatalogResult = catalogManagementService.replaceCatalog(params);
+        const replaceCatalogResult = catalogManagementService.replaceCatalog(replaceCatalogParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceCatalogResult);
@@ -797,8 +1599,11 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.id).toEqual(id);
         expect(mockRequestOptions.body._rev).toEqual(rev);
         expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.label_i18n).toEqual(labelI18n);
         expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.short_description_i18n).toEqual(shortDescriptionI18n);
         expect(mockRequestOptions.body.catalog_icon_url).toEqual(catalogIconUrl);
+        expect(mockRequestOptions.body.catalog_banner_url).toEqual(catalogBannerUrl);
         expect(mockRequestOptions.body.tags).toEqual(tags);
         expect(mockRequestOptions.body.features).toEqual(features);
         expect(mockRequestOptions.body.disabled).toEqual(disabled);
@@ -807,6 +1612,8 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.catalog_filters).toEqual(catalogFilters);
         expect(mockRequestOptions.body.syndication_settings).toEqual(syndicationSettings);
         expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.target_account_contexts).toEqual(targetAccountContexts);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
       }
 
@@ -830,7 +1637,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceCatalogParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -838,7 +1645,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.replaceCatalog(params);
+        catalogManagementService.replaceCatalog(replaceCatalogParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -867,16 +1674,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deleteCatalog', () => {
     describe('positive tests', () => {
       function __deleteCatalogTest() {
         // Construct the params object for operation deleteCatalog
         const catalogIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
+        const deleteCatalogParams = {
+          catalogIdentifier,
         };
 
-        const deleteCatalogResult = catalogManagementService.deleteCatalog(params);
+        const deleteCatalogResult = catalogManagementService.deleteCatalog(deleteCatalogParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteCatalogResult);
@@ -913,7 +1721,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteCatalogParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -921,7 +1729,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deleteCatalog(params);
+        catalogManagementService.deleteCatalog(deleteCatalogParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -950,16 +1758,166 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('listCatalogAudits', () => {
+    describe('positive tests', () => {
+      function __listCatalogAuditsTest() {
+        // Construct the params object for operation listCatalogAudits
+        const catalogIdentifier = 'testString';
+        const start = 'testString';
+        const limit = 100;
+        const lookupnames = true;
+        const listCatalogAuditsParams = {
+          catalogIdentifier,
+          start,
+          limit,
+          lookupnames,
+        };
+
+        const listCatalogAuditsResult = catalogManagementService.listCatalogAudits(listCatalogAuditsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listCatalogAuditsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/audits', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listCatalogAuditsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __listCatalogAuditsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __listCatalogAuditsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listCatalogAuditsParams = {
+          catalogIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.listCatalogAudits(listCatalogAuditsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.listCatalogAudits({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.listCatalogAudits();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('CatalogAuditsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/audits';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.CatalogAuditsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const pager = new CatalogManagementV1.CatalogAuditsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
   describe('getCatalogAudit', () => {
     describe('positive tests', () => {
       function __getCatalogAuditTest() {
         // Construct the params object for operation getCatalogAudit
         const catalogIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
+        const auditlogIdentifier = 'testString';
+        const lookupnames = true;
+        const getCatalogAuditParams = {
+          catalogIdentifier,
+          auditlogIdentifier,
+          lookupnames,
         };
 
-        const getCatalogAuditResult = catalogManagementService.getCatalogAudit(params);
+        const getCatalogAuditResult = catalogManagementService.getCatalogAudit(getCatalogAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAuditResult);
@@ -969,11 +1927,13 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/audit', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.auditlog_identifier).toEqual(auditlogIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -994,17 +1954,19 @@ describe('CatalogManagementV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const catalogIdentifier = 'testString';
+        const auditlogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCatalogAuditParams = {
           catalogIdentifier,
+          auditlogIdentifier,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getCatalogAudit(params);
+        catalogManagementService.getCatalogAudit(getCatalogAuditParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1033,6 +1995,244 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('listEnterpriseAudits', () => {
+    describe('positive tests', () => {
+      function __listEnterpriseAuditsTest() {
+        // Construct the params object for operation listEnterpriseAudits
+        const enterpriseIdentifier = 'testString';
+        const start = 'testString';
+        const limit = 100;
+        const lookupnames = true;
+        const listEnterpriseAuditsParams = {
+          enterpriseIdentifier,
+          start,
+          limit,
+          lookupnames,
+        };
+
+        const listEnterpriseAuditsResult = catalogManagementService.listEnterpriseAudits(listEnterpriseAuditsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listEnterpriseAuditsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/enterprises/{enterprise_identifier}/audits', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.enterprise_identifier).toEqual(enterpriseIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listEnterpriseAuditsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __listEnterpriseAuditsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __listEnterpriseAuditsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const enterpriseIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listEnterpriseAuditsParams = {
+          enterpriseIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.listEnterpriseAudits(listEnterpriseAuditsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.listEnterpriseAudits({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.listEnterpriseAudits();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('EnterpriseAuditsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/enterprises/testString/audits';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          enterpriseIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.EnterpriseAuditsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          enterpriseIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const pager = new CatalogManagementV1.EnterpriseAuditsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getEnterpriseAudit', () => {
+    describe('positive tests', () => {
+      function __getEnterpriseAuditTest() {
+        // Construct the params object for operation getEnterpriseAudit
+        const enterpriseIdentifier = 'testString';
+        const auditlogIdentifier = 'testString';
+        const lookupnames = true;
+        const getEnterpriseAuditParams = {
+          enterpriseIdentifier,
+          auditlogIdentifier,
+          lookupnames,
+        };
+
+        const getEnterpriseAuditResult = catalogManagementService.getEnterpriseAudit(getEnterpriseAuditParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getEnterpriseAuditResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/enterprises/{enterprise_identifier}/audits/{auditlog_identifier}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.enterprise_identifier).toEqual(enterpriseIdentifier);
+        expect(mockRequestOptions.path.auditlog_identifier).toEqual(auditlogIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getEnterpriseAuditTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getEnterpriseAuditTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getEnterpriseAuditTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const enterpriseIdentifier = 'testString';
+        const auditlogIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getEnterpriseAuditParams = {
+          enterpriseIdentifier,
+          auditlogIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getEnterpriseAudit(getEnterpriseAuditParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getEnterpriseAudit({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getEnterpriseAudit();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getConsumptionOfferings', () => {
     describe('positive tests', () => {
       function __getConsumptionOfferingsTest() {
@@ -1041,18 +2241,18 @@ describe('CatalogManagementV1', () => {
         const catalog = 'testString';
         const select = 'all';
         const includeHidden = true;
-        const limit = 1000;
-        const offset = 38;
-        const params = {
-          digest: digest,
-          catalog: catalog,
-          select: select,
-          includeHidden: includeHidden,
-          limit: limit,
-          offset: offset,
+        const limit = 100;
+        const offset = 0;
+        const getConsumptionOfferingsParams = {
+          digest,
+          catalog,
+          select,
+          includeHidden,
+          limit,
+          offset,
         };
 
-        const getConsumptionOfferingsResult = catalogManagementService.getConsumptionOfferings(params);
+        const getConsumptionOfferingsResult = catalogManagementService.getConsumptionOfferings(getConsumptionOfferingsParams);
 
         // all methods should return a Promise
         expectToBePromise(getConsumptionOfferingsResult);
@@ -1093,14 +2293,14 @@ describe('CatalogManagementV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getConsumptionOfferingsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getConsumptionOfferings(params);
+        catalogManagementService.getConsumptionOfferings(getConsumptionOfferingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -1110,27 +2310,86 @@ describe('CatalogManagementV1', () => {
         checkForSuccessfulExecution(createRequestMock);
       });
     });
+
+    describe('GetConsumptionOfferingsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/offerings';
+      const mockPagerResponse1 =
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","install_kind":"install_kind","target_kind":"target_kind","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"permit_request_ibm_public_publish":false,"ibm_publish_approved":true,"public_publish_approved":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}]}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","install_kind":"install_kind","target_kind":"target_kind","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"permit_request_ibm_public_publish":false,"ibm_publish_approved":true,"public_publish_approved":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}]}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          digest: true,
+          catalog: 'testString',
+          select: 'all',
+          includeHidden: true,
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          digest: true,
+          catalog: 'testString',
+          select: 'all',
+          includeHidden: true,
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('listOfferings', () => {
     describe('positive tests', () => {
       function __listOfferingsTest() {
         // Construct the params object for operation listOfferings
         const catalogIdentifier = 'testString';
         const digest = true;
-        const limit = 1000;
-        const offset = 38;
+        const limit = 100;
+        const offset = 0;
         const name = 'testString';
         const sort = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          digest: digest,
-          limit: limit,
-          offset: offset,
-          name: name,
-          sort: sort,
+        const includeHidden = true;
+        const listOfferingsParams = {
+          catalogIdentifier,
+          digest,
+          limit,
+          offset,
+          name,
+          sort,
+          includeHidden,
         };
 
-        const listOfferingsResult = catalogManagementService.listOfferings(params);
+        const listOfferingsResult = catalogManagementService.listOfferings(listOfferingsParams);
 
         // all methods should return a Promise
         expectToBePromise(listOfferingsResult);
@@ -1149,6 +2408,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.qs.offset).toEqual(offset);
         expect(mockRequestOptions.qs.name).toEqual(name);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs.includeHidden).toEqual(includeHidden);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
       }
 
@@ -1172,7 +2432,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listOfferingsParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -1180,7 +2440,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.listOfferings(params);
+        catalogManagementService.listOfferings(listOfferingsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1208,7 +2468,66 @@ describe('CatalogManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('OfferingsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/offerings';
+      const mockPagerResponse1 =
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","install_kind":"install_kind","target_kind":"target_kind","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"permit_request_ibm_public_publish":false,"ibm_publish_approved":true,"public_publish_approved":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}]}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","install_kind":"install_kind","target_kind":"target_kind","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"permit_request_ibm_public_publish":false,"ibm_publish_approved":true,"public_publish_approved":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}]}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          digest: true,
+          limit: 10,
+          name: 'testString',
+          sort: 'testString',
+          includeHidden: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.OfferingsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          digest: true,
+          limit: 10,
+          name: 'testString',
+          sort: 'testString',
+          includeHidden: true,
+        };
+        const pager = new CatalogManagementV1.OfferingsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createOffering', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1224,7 +2543,38 @@ describe('CatalogManagementV1', () => {
       // Feature
       const featureModel = {
         title: 'testString',
+        title_i18n: { 'key1': 'testString' },
         description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+      };
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
+      // RenderTypeAssociationsParametersItem
+      const renderTypeAssociationsParametersItemModel = {
+        name: 'testString',
+        optionsRefresh: true,
+      };
+
+      // RenderTypeAssociations
+      const renderTypeAssociationsModel = {
+        parameters: [renderTypeAssociationsParametersItemModel],
+      };
+
+      // RenderType
+      const renderTypeModel = {
+        type: 'testString',
+        grouping: 'testString',
+        original_grouping: 'testString',
+        grouping_index: 38,
+        config_constraints: { anyKey: 'anyValue' },
+        associations: renderTypeAssociationsModel,
       };
 
       // Configuration
@@ -1232,11 +2582,34 @@ describe('CatalogManagementV1', () => {
         key: 'testString',
         type: 'testString',
         default_value: 'testString',
+        display_name: 'testString',
         value_constraint: 'testString',
         description: 'testString',
         required: true,
         options: ['testString'],
         hidden: true,
+        custom_config: renderTypeModel,
+        type_metadata: 'testString',
+      };
+
+      // Output
+      const outputModel = {
+        key: 'testString',
+        description: 'testString',
+      };
+
+      // IAMResource
+      const iamResourceModel = {
+        name: 'testString',
+        description: 'testString',
+        role_crns: ['testString'],
+      };
+
+      // IAMPermission
+      const iamPermissionModel = {
+        service_name: 'testString',
+        role_crns: ['testString'],
+        resources: [iamResourceModel],
       };
 
       // Validation
@@ -1245,7 +2618,8 @@ describe('CatalogManagementV1', () => {
         requested: '2019-01-01T12:00:00.000Z',
         state: 'testString',
         last_operation: 'testString',
-        target: { 'key1': 'testString' },
+        target: { anyKey: 'anyValue' },
+        message: 'testString',
       };
 
       // Resource
@@ -1254,13 +2628,29 @@ describe('CatalogManagementV1', () => {
         value: 'testString',
       };
 
+      // SchematicsEnvValues
+      const schematicsEnvValuesModel = {
+        value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
+        sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+      };
+
       // Script
       const scriptModel = {
         instructions: 'testString',
+        instructions_i18n: { 'key1': 'testString' },
         script: 'testString',
         script_permission: 'testString',
         delete_script: 'testString',
         scope: 'testString',
+      };
+
+      // ScriptRef
+      const scriptRefModel = {
+        short_description: 'testString',
+        type: 'ansible',
+        path: 'scripts/validate-post-ansible-playbook.yaml',
+        stage: 'pre',
+        action: 'validate',
       };
 
       // VersionEntitlement
@@ -1290,12 +2680,214 @@ describe('CatalogManagementV1', () => {
         previous: 'testString',
       };
 
+      // DeprecatePending
+      const deprecatePendingModel = {
+        deprecate_date: '2019-01-01T12:00:00.000Z',
+        deprecate_state: 'testString',
+        description: 'testString',
+      };
+
+      // URLProxy
+      const urlProxyModel = {
+        url: 'testString',
+        sha: 'testString',
+      };
+
+      // MediaItem
+      const mediaItemModel = {
+        url: 'testString',
+        api_url: 'testString',
+        url_proxy: urlProxyModel,
+        caption: 'testString',
+        caption_i18n: { 'key1': 'testString' },
+        type: 'testString',
+        thumbnail_url: 'testString',
+      };
+
+      // ArchitectureDiagram
+      const architectureDiagramModel = {
+        diagram: mediaItemModel,
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+      };
+
+      // CostComponent
+      const costComponentModel = {
+        name: 'testString',
+        unit: 'testString',
+        hourlyQuantity: 'testString',
+        monthlyQuantity: 'testString',
+        price: 'testString',
+        hourlyCost: 'testString',
+        monthlyCost: 'testString',
+      };
+
+      // CostResource
+      const costResourceModel = {
+        name: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        hourlyCost: 'testString',
+        monthlyCost: 'testString',
+        costComponents: [costComponentModel],
+      };
+
+      // CostBreakdown
+      const costBreakdownModel = {
+        totalHourlyCost: 'testString',
+        totalMonthlyCost: 'testString',
+        resources: [costResourceModel],
+      };
+
+      // CostSummary
+      const costSummaryModel = {
+        totalDetectedResources: 38,
+        totalSupportedResources: 38,
+        totalUnsupportedResources: 38,
+        totalUsageBasedResources: 38,
+        totalNoPriceResources: 38,
+        unsupportedResourceCounts: { 'key1': 38 },
+        noPriceResourceCounts: { 'key1': 38 },
+      };
+
+      // Project
+      const projectModel = {
+        name: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        pastBreakdown: costBreakdownModel,
+        breakdown: costBreakdownModel,
+        diff: costBreakdownModel,
+        summary: costSummaryModel,
+      };
+
+      // CostEstimate
+      const costEstimateModel = {
+        version: 'testString',
+        currency: 'testString',
+        projects: [projectModel],
+        summary: costSummaryModel,
+        totalHourlyCost: 'testString',
+        totalMonthlyCost: 'testString',
+        pastTotalHourlyCost: 'testString',
+        pastTotalMonthlyCost: 'testString',
+        diffTotalHourlyCost: 'testString',
+        diffTotalMonthlyCost: 'testString',
+        timeGenerated: '2019-01-01T12:00:00.000Z',
+      };
+
+      // OfferingReference
+      const offeringReferenceModel = {
+        catalog_id: 'testString',
+        id: 'testString',
+        name: 'testString',
+        kind: 'testString',
+        version: 'testString',
+        flavors: ['testString'],
+      };
+
+      // SolutionInfo
+      const solutionInfoModel = {
+        architecture_diagrams: [architectureDiagramModel],
+        features: [featureModel],
+        cost_estimate: costEstimateModel,
+        dependencies: [offeringReferenceModel],
+        install_type: 'testString',
+      };
+
+      // SCCProfile
+      const sccProfileModel = {
+        id: 'testString',
+        name: 'testString',
+        version: 'testString',
+        description: 'testString',
+        type: 'testString',
+        ui_href: 'testString',
+      };
+
+      // ClaimedControl
+      const claimedControlModel = {
+        profile: sccProfileModel,
+        names: ['testString'],
+      };
+
+      // Claims
+      const claimsModel = {
+        profiles: [sccProfileModel],
+        controls: [claimedControlModel],
+      };
+
+      // Result
+      const resultModel = {
+        failure_count: 38,
+        scan_time: '2019-01-01T12:00:00.000Z',
+        error_message: 'testString',
+        complete_scan: true,
+        unscanned_resources: ['testString'],
+      };
+
+      // SCCAssessment
+      const sccAssessmentModel = {
+        id: 'testString',
+        description: 'testString',
+        version: 'testString',
+        type: 'testString',
+        method: 'testString',
+        ui_href: 'testString',
+      };
+
+      // SCCSpecification
+      const sccSpecificationModel = {
+        id: 'testString',
+        description: 'testString',
+        component_name: 'testString',
+        assessments: [sccAssessmentModel],
+        ui_href: 'testString',
+      };
+
+      // SCCControl
+      const sccControlModel = {
+        id: 'testString',
+        name: 'testString',
+        version: 'testString',
+        description: 'testString',
+        profile: sccProfileModel,
+        parent_name: 'testString',
+        specifications: [sccSpecificationModel],
+        ui_href: 'testString',
+      };
+
+      // EvaluatedControl
+      const evaluatedControlModel = {
+        id: 'testString',
+        name: 'testString',
+        description: 'testString',
+        specifications: [sccSpecificationModel],
+        failure_count: 38,
+        pass_count: 38,
+        parent: sccControlModel,
+        ui_href: 'testString',
+      };
+
+      // Evaluation
+      const evaluationModel = {
+        scan_id: 'testString',
+        account_id: 'testString',
+        profile: sccProfileModel,
+        result: resultModel,
+        controls: [evaluatedControlModel],
+      };
+
+      // Compliance
+      const complianceModel = {
+        authority: 'testString',
+        claims: claimsModel,
+        evaluations: [evaluationModel],
+      };
+
       // Version
       const versionModel = {
-        id: 'testString',
-        _rev: 'testString',
         crn: 'testString',
         version: 'testString',
+        flavor: flavorModel,
         sha: 'testString',
         created: '2019-01-01T12:00:00.000Z',
         updated: '2019-01-01T12:00:00.000Z',
@@ -1307,12 +2899,16 @@ describe('CatalogManagementV1', () => {
         source_url: 'testString',
         tgz_url: 'testString',
         configuration: [configurationModel],
-        metadata: { 'key1': 'testString' },
+        outputs: [outputModel],
+        iam_permissions: [iamPermissionModel],
+        metadata: { anyKey: 'anyValue' },
         validation: validationModel,
         required_resources: [resourceModel],
         single_instance: true,
+        schematics_env_values: schematicsEnvValuesModel,
         install: scriptModel,
         pre_install: [scriptModel],
+        scripts: { 'key1': scriptRefModel },
         entitlement: versionEntitlementModel,
         licenses: [licenseModel],
         image_manifest_url: 'testString',
@@ -1320,52 +2916,44 @@ describe('CatalogManagementV1', () => {
         package_version: 'testString',
         state: stateModel,
         version_locator: 'testString',
-        console_url: 'testString',
         long_description: 'testString',
+        long_description_i18n: { 'key1': 'testString' },
         whitelisted_accounts: ['testString'],
-      };
-
-      // Deployment
-      const deploymentModel = {
-        id: 'testString',
-        label: 'testString',
-        name: 'testString',
-        short_description: 'testString',
-        long_description: 'testString',
-        metadata: { 'key1': 'testString' },
-        tags: ['testString'],
-        created: '2019-01-01T12:00:00.000Z',
-        updated: '2019-01-01T12:00:00.000Z',
-      };
-
-      // Plan
-      const planModel = {
-        id: 'testString',
-        label: 'testString',
-        name: 'testString',
-        short_description: 'testString',
-        long_description: 'testString',
-        metadata: { 'key1': 'testString' },
-        tags: ['testString'],
-        additional_features: [featureModel],
-        created: '2019-01-01T12:00:00.000Z',
-        updated: '2019-01-01T12:00:00.000Z',
-        deployments: [deploymentModel],
+        image_pull_key_name: 'testString',
+        deprecate_pending: deprecatePendingModel,
+        solution_info: solutionInfoModel,
+        is_consumable: true,
+        compliance_v3: complianceModel,
       };
 
       // Kind
       const kindModel = {
         id: 'testString',
         format_kind: 'testString',
+        install_kind: 'testString',
         target_kind: 'testString',
-        metadata: { 'key1': 'testString' },
-        install_description: 'testString',
+        metadata: { anyKey: 'anyValue' },
         tags: ['testString'],
         additional_features: [featureModel],
         created: '2019-01-01T12:00:00.000Z',
         updated: '2019-01-01T12:00:00.000Z',
         versions: [versionModel],
-        plans: [planModel],
+      };
+
+      // PublishObject
+      const publishObjectModel = {
+        pc_managed: true,
+        approval_type: 'testString',
+        publish_approved: true,
+        share_with_all: true,
+        share_with_ibm: true,
+        share_enabled: true,
+        original_crn: 'testString',
+        public_crn: 'testString',
+        approval_record: { anyKey: 'anyValue' },
+        permit_ibm_public_publish: true,
+        ibm_approved: true,
+        public_approved: true,
       };
 
       // ProviderInfo
@@ -1380,29 +2968,92 @@ describe('CatalogManagementV1', () => {
         type: 'testString',
       };
 
+      // ImagePullKey
+      const imagePullKeyModel = {
+        name: 'testString',
+        value: 'testString',
+        description: 'testString',
+      };
+
+      // SupportWaitTime
+      const supportWaitTimeModel = {
+        value: 38,
+        type: 'testString',
+      };
+
+      // SupportTime
+      const supportTimeModel = {
+        day: 38,
+        start_time: 'testString',
+        end_time: 'testString',
+      };
+
+      // SupportAvailability
+      const supportAvailabilityModel = {
+        times: [supportTimeModel],
+        timezone: 'testString',
+        always_available: true,
+      };
+
+      // SupportDetail
+      const supportDetailModel = {
+        type: 'testString',
+        contact: 'testString',
+        response_wait_time: supportWaitTimeModel,
+        availability: supportAvailabilityModel,
+      };
+
+      // SupportEscalation
+      const supportEscalationModel = {
+        escalation_wait_time: supportWaitTimeModel,
+        response_wait_time: supportWaitTimeModel,
+        contact: 'testString',
+      };
+
       // Support
       const supportModel = {
         url: 'testString',
         process: 'testString',
+        process_i18n: { 'key1': 'testString' },
         locations: ['testString'],
+        support_details: [supportDetailModel],
+        support_escalation: supportEscalationModel,
+        support_type: 'testString',
       };
 
-      // MediaItem
-      const mediaItemModel = {
-        url: 'testString',
-        caption: 'testString',
+      // LearnMoreLinks
+      const learnMoreLinksModel = {
+        first_party: 'testString',
+        third_party: 'testString',
+      };
+
+      // Constraint
+      const constraintModel = {
         type: 'testString',
-        thumbnail_url: 'testString',
+        rule: 'testString',
+      };
+
+      // Badge
+      const badgeModel = {
+        id: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+        icon: 'testString',
+        authority: 'testString',
+        tag: 'testString',
+        learn_more_links: learnMoreLinksModel,
+        constraints: [constraintModel],
       };
 
       function __createOfferingTest() {
         // Construct the params object for operation createOffering
         const catalogIdentifier = 'testString';
-        const id = 'testString';
-        const rev = 'testString';
         const url = 'testString';
         const crn = 'testString';
         const label = 'testString';
+        const labelI18n = { 'key1': 'testString' };
         const name = 'testString';
         const offeringIconUrl = 'testString';
         const offeringDocsUrl = 'testString';
@@ -1413,9 +3064,17 @@ describe('CatalogManagementV1', () => {
         const created = '2019-01-01T12:00:00.000Z';
         const updated = '2019-01-01T12:00:00.000Z';
         const shortDescription = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
         const longDescription = 'testString';
+        const longDescriptionI18n = { 'key1': 'testString' };
         const features = [featureModel];
         const kinds = [kindModel];
+        const publish = publishObjectModel;
+        const pcManaged = true;
+        const publishApproved = true;
+        const shareWithAll = true;
+        const shareWithIbm = true;
+        const shareEnabled = true;
         const permitRequestIbmPublicPublish = true;
         const ibmPublishApproved = true;
         const publicPublishApproved = true;
@@ -1425,54 +3084,69 @@ describe('CatalogManagementV1', () => {
         const portalUiUrl = 'testString';
         const catalogId = 'testString';
         const catalogName = 'testString';
-        const metadata = { 'key1': 'testString' };
+        const metadata = { anyKey: 'anyValue' };
         const disclaimer = 'testString';
         const hidden = true;
         const provider = 'testString';
         const providerInfo = providerInfoModel;
         const repoInfo = repoInfoModel;
+        const imagePullKeys = [imagePullKeyModel];
         const support = supportModel;
         const media = [mediaItemModel];
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          id: id,
-          rev: rev,
-          url: url,
-          crn: crn,
-          label: label,
-          name: name,
-          offeringIconUrl: offeringIconUrl,
-          offeringDocsUrl: offeringDocsUrl,
-          offeringSupportUrl: offeringSupportUrl,
-          tags: tags,
-          keywords: keywords,
-          rating: rating,
-          created: created,
-          updated: updated,
-          shortDescription: shortDescription,
-          longDescription: longDescription,
-          features: features,
-          kinds: kinds,
-          permitRequestIbmPublicPublish: permitRequestIbmPublicPublish,
-          ibmPublishApproved: ibmPublishApproved,
-          publicPublishApproved: publicPublishApproved,
-          publicOriginalCrn: publicOriginalCrn,
-          publishPublicCrn: publishPublicCrn,
-          portalApprovalRecord: portalApprovalRecord,
-          portalUiUrl: portalUiUrl,
-          catalogId: catalogId,
-          catalogName: catalogName,
-          metadata: metadata,
-          disclaimer: disclaimer,
-          hidden: hidden,
-          provider: provider,
-          providerInfo: providerInfo,
-          repoInfo: repoInfo,
-          support: support,
-          media: media,
+        const deprecatePending = deprecatePendingModel;
+        const productKind = 'testString';
+        const badges = [badgeModel];
+        const createOfferingParams = {
+          catalogIdentifier,
+          url,
+          crn,
+          label,
+          labelI18n,
+          name,
+          offeringIconUrl,
+          offeringDocsUrl,
+          offeringSupportUrl,
+          tags,
+          keywords,
+          rating,
+          created,
+          updated,
+          shortDescription,
+          shortDescriptionI18n,
+          longDescription,
+          longDescriptionI18n,
+          features,
+          kinds,
+          publish,
+          pcManaged,
+          publishApproved,
+          shareWithAll,
+          shareWithIbm,
+          shareEnabled,
+          permitRequestIbmPublicPublish,
+          ibmPublishApproved,
+          publicPublishApproved,
+          publicOriginalCrn,
+          publishPublicCrn,
+          portalApprovalRecord,
+          portalUiUrl,
+          catalogId,
+          catalogName,
+          metadata,
+          disclaimer,
+          hidden,
+          provider,
+          providerInfo,
+          repoInfo,
+          imagePullKeys,
+          support,
+          media,
+          deprecatePending,
+          productKind,
+          badges,
         };
 
-        const createOfferingResult = catalogManagementService.createOffering(params);
+        const createOfferingResult = catalogManagementService.createOffering(createOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(createOfferingResult);
@@ -1486,11 +3160,10 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.id).toEqual(id);
-        expect(mockRequestOptions.body._rev).toEqual(rev);
         expect(mockRequestOptions.body.url).toEqual(url);
         expect(mockRequestOptions.body.crn).toEqual(crn);
         expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.label_i18n).toEqual(labelI18n);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.offering_icon_url).toEqual(offeringIconUrl);
         expect(mockRequestOptions.body.offering_docs_url).toEqual(offeringDocsUrl);
@@ -1501,9 +3174,17 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.created).toEqual(created);
         expect(mockRequestOptions.body.updated).toEqual(updated);
         expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.short_description_i18n).toEqual(shortDescriptionI18n);
         expect(mockRequestOptions.body.long_description).toEqual(longDescription);
+        expect(mockRequestOptions.body.long_description_i18n).toEqual(longDescriptionI18n);
         expect(mockRequestOptions.body.features).toEqual(features);
         expect(mockRequestOptions.body.kinds).toEqual(kinds);
+        expect(mockRequestOptions.body.publish).toEqual(publish);
+        expect(mockRequestOptions.body.pc_managed).toEqual(pcManaged);
+        expect(mockRequestOptions.body.publish_approved).toEqual(publishApproved);
+        expect(mockRequestOptions.body.share_with_all).toEqual(shareWithAll);
+        expect(mockRequestOptions.body.share_with_ibm).toEqual(shareWithIbm);
+        expect(mockRequestOptions.body.share_enabled).toEqual(shareEnabled);
         expect(mockRequestOptions.body.permit_request_ibm_public_publish).toEqual(permitRequestIbmPublicPublish);
         expect(mockRequestOptions.body.ibm_publish_approved).toEqual(ibmPublishApproved);
         expect(mockRequestOptions.body.public_publish_approved).toEqual(publicPublishApproved);
@@ -1519,8 +3200,12 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.provider).toEqual(provider);
         expect(mockRequestOptions.body.provider_info).toEqual(providerInfo);
         expect(mockRequestOptions.body.repo_info).toEqual(repoInfo);
+        expect(mockRequestOptions.body.image_pull_keys).toEqual(imagePullKeys);
         expect(mockRequestOptions.body.support).toEqual(support);
         expect(mockRequestOptions.body.media).toEqual(media);
+        expect(mockRequestOptions.body.deprecate_pending).toEqual(deprecatePending);
+        expect(mockRequestOptions.body.product_kind).toEqual(productKind);
+        expect(mockRequestOptions.body.badges).toEqual(badges);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
       }
 
@@ -1544,7 +3229,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createOfferingParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -1552,7 +3237,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.createOffering(params);
+        catalogManagementService.createOffering(createOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1581,34 +3266,99 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('importOfferingVersion', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
+      // ImportOfferingBodyMetadataOperatingSystem
+      const importOfferingBodyMetadataOperatingSystemModel = {
+        dedicated_host_only: true,
+        vendor: 'testString',
+        name: 'testString',
+        href: 'testString',
+        display_name: 'testString',
+        family: 'testString',
+        version: 'testString',
+        architecture: 'testString',
+      };
+
+      // ImportOfferingBodyMetadataFile
+      const importOfferingBodyMetadataFileModel = {
+        size: 38,
+      };
+
+      // ImportOfferingBodyMetadataImagesItem
+      const importOfferingBodyMetadataImagesItemModel = {
+        id: 'testString',
+        name: 'testString',
+        region: 'testString',
+      };
+
+      // ImportOfferingBodyMetadata
+      const importOfferingBodyMetadataModel = {
+        operating_system: importOfferingBodyMetadataOperatingSystemModel,
+        file: importOfferingBodyMetadataFileModel,
+        minimum_provisioned_size: 38,
+        images: [importOfferingBodyMetadataImagesItemModel],
+      };
+
       function __importOfferingVersionTest() {
         // Construct the params object for operation importOfferingVersion
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
         const tags = ['testString'];
-        const targetKinds = ['testString'];
         const content = 'This is a mock byte array value.';
+        const name = 'testString';
+        const label = 'testString';
+        const installKind = 'testString';
+        const targetKinds = ['testString'];
+        const formatKind = 'testString';
+        const productKind = 'testString';
+        const sha = 'testString';
+        const version = 'testString';
+        const flavor = flavorModel;
+        const metadata = importOfferingBodyMetadataModel;
+        const workingDirectory = 'testString';
         const zipurl = 'testString';
         const targetVersion = 'testString';
         const includeConfig = true;
         const isVsi = true;
-        const repoType = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          tags: tags,
-          targetKinds: targetKinds,
-          content: content,
-          zipurl: zipurl,
-          targetVersion: targetVersion,
-          includeConfig: includeConfig,
-          isVsi: isVsi,
-          repoType: repoType,
+        const repotype = 'testString';
+        const xAuthToken = 'testString';
+        const importOfferingVersionParams = {
+          catalogIdentifier,
+          offeringId,
+          tags,
+          content,
+          name,
+          label,
+          installKind,
+          targetKinds,
+          formatKind,
+          productKind,
+          sha,
+          version,
+          flavor,
+          metadata,
+          workingDirectory,
+          zipurl,
+          targetVersion,
+          includeConfig,
+          isVsi,
+          repotype,
+          xAuthToken,
         };
 
-        const importOfferingVersionResult = catalogManagementService.importOfferingVersion(params);
+        const importOfferingVersionResult = catalogManagementService.importOfferingVersion(importOfferingVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(importOfferingVersionResult);
@@ -1622,14 +3372,25 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Auth-Token', xAuthToken);
         expect(mockRequestOptions.body.tags).toEqual(tags);
-        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
         expect(mockRequestOptions.body.content).toEqual(content);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.install_kind).toEqual(installKind);
+        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
+        expect(mockRequestOptions.body.format_kind).toEqual(formatKind);
+        expect(mockRequestOptions.body.product_kind).toEqual(productKind);
+        expect(mockRequestOptions.body.sha).toEqual(sha);
+        expect(mockRequestOptions.body.version).toEqual(version);
+        expect(mockRequestOptions.body.flavor).toEqual(flavor);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.working_directory).toEqual(workingDirectory);
         expect(mockRequestOptions.qs.zipurl).toEqual(zipurl);
         expect(mockRequestOptions.qs.targetVersion).toEqual(targetVersion);
         expect(mockRequestOptions.qs.includeConfig).toEqual(includeConfig);
         expect(mockRequestOptions.qs.isVSI).toEqual(isVsi);
-        expect(mockRequestOptions.qs.repoType).toEqual(repoType);
+        expect(mockRequestOptions.qs.repotype).toEqual(repotype);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
       }
@@ -1655,7 +3416,7 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const importOfferingVersionParams = {
           catalogIdentifier,
           offeringId,
           headers: {
@@ -1664,7 +3425,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.importOfferingVersion(params);
+        catalogManagementService.importOfferingVersion(importOfferingVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1693,36 +3454,99 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('importOffering', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
+      // ImportOfferingBodyMetadataOperatingSystem
+      const importOfferingBodyMetadataOperatingSystemModel = {
+        dedicated_host_only: true,
+        vendor: 'testString',
+        name: 'testString',
+        href: 'testString',
+        display_name: 'testString',
+        family: 'testString',
+        version: 'testString',
+        architecture: 'testString',
+      };
+
+      // ImportOfferingBodyMetadataFile
+      const importOfferingBodyMetadataFileModel = {
+        size: 38,
+      };
+
+      // ImportOfferingBodyMetadataImagesItem
+      const importOfferingBodyMetadataImagesItemModel = {
+        id: 'testString',
+        name: 'testString',
+        region: 'testString',
+      };
+
+      // ImportOfferingBodyMetadata
+      const importOfferingBodyMetadataModel = {
+        operating_system: importOfferingBodyMetadataOperatingSystemModel,
+        file: importOfferingBodyMetadataFileModel,
+        minimum_provisioned_size: 38,
+        images: [importOfferingBodyMetadataImagesItemModel],
+      };
+
       function __importOfferingTest() {
         // Construct the params object for operation importOffering
         const catalogIdentifier = 'testString';
         const tags = ['testString'];
-        const targetKinds = ['testString'];
         const content = 'This is a mock byte array value.';
+        const name = 'testString';
+        const label = 'testString';
+        const installKind = 'testString';
+        const targetKinds = ['testString'];
+        const formatKind = 'testString';
+        const productKind = 'testString';
+        const sha = 'testString';
+        const version = 'testString';
+        const flavor = flavorModel;
+        const metadata = importOfferingBodyMetadataModel;
+        const workingDirectory = 'testString';
         const zipurl = 'testString';
         const offeringId = 'testString';
         const targetVersion = 'testString';
         const includeConfig = true;
         const isVsi = true;
-        const repoType = 'testString';
+        const repotype = 'testString';
         const xAuthToken = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          tags: tags,
-          targetKinds: targetKinds,
-          content: content,
-          zipurl: zipurl,
-          offeringId: offeringId,
-          targetVersion: targetVersion,
-          includeConfig: includeConfig,
-          isVsi: isVsi,
-          repoType: repoType,
-          xAuthToken: xAuthToken,
+        const importOfferingParams = {
+          catalogIdentifier,
+          tags,
+          content,
+          name,
+          label,
+          installKind,
+          targetKinds,
+          formatKind,
+          productKind,
+          sha,
+          version,
+          flavor,
+          metadata,
+          workingDirectory,
+          zipurl,
+          offeringId,
+          targetVersion,
+          includeConfig,
+          isVsi,
+          repotype,
+          xAuthToken,
         };
 
-        const importOfferingResult = catalogManagementService.importOffering(params);
+        const importOfferingResult = catalogManagementService.importOffering(importOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(importOfferingResult);
@@ -1738,14 +3562,24 @@ describe('CatalogManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'X-Auth-Token', xAuthToken);
         expect(mockRequestOptions.body.tags).toEqual(tags);
-        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
         expect(mockRequestOptions.body.content).toEqual(content);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.install_kind).toEqual(installKind);
+        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
+        expect(mockRequestOptions.body.format_kind).toEqual(formatKind);
+        expect(mockRequestOptions.body.product_kind).toEqual(productKind);
+        expect(mockRequestOptions.body.sha).toEqual(sha);
+        expect(mockRequestOptions.body.version).toEqual(version);
+        expect(mockRequestOptions.body.flavor).toEqual(flavor);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.working_directory).toEqual(workingDirectory);
         expect(mockRequestOptions.qs.zipurl).toEqual(zipurl);
         expect(mockRequestOptions.qs.offeringID).toEqual(offeringId);
         expect(mockRequestOptions.qs.targetVersion).toEqual(targetVersion);
         expect(mockRequestOptions.qs.includeConfig).toEqual(includeConfig);
         expect(mockRequestOptions.qs.isVSI).toEqual(isVsi);
-        expect(mockRequestOptions.qs.repoType).toEqual(repoType);
+        expect(mockRequestOptions.qs.repotype).toEqual(repotype);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
       }
 
@@ -1769,7 +3603,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const importOfferingParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -1777,7 +3611,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.importOffering(params);
+        catalogManagementService.importOffering(importOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1806,30 +3640,47 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('reloadOffering', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
       function __reloadOfferingTest() {
         // Construct the params object for operation reloadOffering
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
         const targetVersion = 'testString';
         const tags = ['testString'];
-        const targetKinds = ['testString'];
         const content = 'This is a mock byte array value.';
+        const targetKinds = ['testString'];
+        const formatKind = 'testString';
+        const flavor = flavorModel;
+        const workingDirectory = 'testString';
         const zipurl = 'testString';
         const repoType = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          targetVersion: targetVersion,
-          tags: tags,
-          targetKinds: targetKinds,
-          content: content,
-          zipurl: zipurl,
-          repoType: repoType,
+        const reloadOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          targetVersion,
+          tags,
+          content,
+          targetKinds,
+          formatKind,
+          flavor,
+          workingDirectory,
+          zipurl,
+          repoType,
         };
 
-        const reloadOfferingResult = catalogManagementService.reloadOffering(params);
+        const reloadOfferingResult = catalogManagementService.reloadOffering(reloadOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(reloadOfferingResult);
@@ -1844,8 +3695,11 @@ describe('CatalogManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.tags).toEqual(tags);
-        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
         expect(mockRequestOptions.body.content).toEqual(content);
+        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
+        expect(mockRequestOptions.body.format_kind).toEqual(formatKind);
+        expect(mockRequestOptions.body.flavor).toEqual(flavor);
+        expect(mockRequestOptions.body.working_directory).toEqual(workingDirectory);
         expect(mockRequestOptions.qs.targetVersion).toEqual(targetVersion);
         expect(mockRequestOptions.qs.zipurl).toEqual(zipurl);
         expect(mockRequestOptions.qs.repoType).toEqual(repoType);
@@ -1875,7 +3729,7 @@ describe('CatalogManagementV1', () => {
         const targetVersion = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const reloadOfferingParams = {
           catalogIdentifier,
           offeringId,
           targetVersion,
@@ -1885,7 +3739,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.reloadOffering(params);
+        catalogManagementService.reloadOffering(reloadOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1914,6 +3768,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getOffering', () => {
     describe('positive tests', () => {
       function __getOfferingTest() {
@@ -1922,14 +3777,14 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const type = 'testString';
         const digest = true;
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          type: type,
-          digest: digest,
+        const getOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          type,
+          digest,
         };
 
-        const getOfferingResult = catalogManagementService.getOffering(params);
+        const getOfferingResult = catalogManagementService.getOffering(getOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingResult);
@@ -1970,7 +3825,7 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingParams = {
           catalogIdentifier,
           offeringId,
           headers: {
@@ -1979,7 +3834,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOffering(params);
+        catalogManagementService.getOffering(getOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2008,6 +3863,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('replaceOffering', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -2023,7 +3879,38 @@ describe('CatalogManagementV1', () => {
       // Feature
       const featureModel = {
         title: 'testString',
+        title_i18n: { 'key1': 'testString' },
         description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+      };
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
+      // RenderTypeAssociationsParametersItem
+      const renderTypeAssociationsParametersItemModel = {
+        name: 'testString',
+        optionsRefresh: true,
+      };
+
+      // RenderTypeAssociations
+      const renderTypeAssociationsModel = {
+        parameters: [renderTypeAssociationsParametersItemModel],
+      };
+
+      // RenderType
+      const renderTypeModel = {
+        type: 'testString',
+        grouping: 'testString',
+        original_grouping: 'testString',
+        grouping_index: 38,
+        config_constraints: { anyKey: 'anyValue' },
+        associations: renderTypeAssociationsModel,
       };
 
       // Configuration
@@ -2031,11 +3918,34 @@ describe('CatalogManagementV1', () => {
         key: 'testString',
         type: 'testString',
         default_value: 'testString',
+        display_name: 'testString',
         value_constraint: 'testString',
         description: 'testString',
         required: true,
         options: ['testString'],
         hidden: true,
+        custom_config: renderTypeModel,
+        type_metadata: 'testString',
+      };
+
+      // Output
+      const outputModel = {
+        key: 'testString',
+        description: 'testString',
+      };
+
+      // IAMResource
+      const iamResourceModel = {
+        name: 'testString',
+        description: 'testString',
+        role_crns: ['testString'],
+      };
+
+      // IAMPermission
+      const iamPermissionModel = {
+        service_name: 'testString',
+        role_crns: ['testString'],
+        resources: [iamResourceModel],
       };
 
       // Validation
@@ -2044,7 +3954,8 @@ describe('CatalogManagementV1', () => {
         requested: '2019-01-01T12:00:00.000Z',
         state: 'testString',
         last_operation: 'testString',
-        target: { 'key1': 'testString' },
+        target: { anyKey: 'anyValue' },
+        message: 'testString',
       };
 
       // Resource
@@ -2053,13 +3964,29 @@ describe('CatalogManagementV1', () => {
         value: 'testString',
       };
 
+      // SchematicsEnvValues
+      const schematicsEnvValuesModel = {
+        value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
+        sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+      };
+
       // Script
       const scriptModel = {
         instructions: 'testString',
+        instructions_i18n: { 'key1': 'testString' },
         script: 'testString',
         script_permission: 'testString',
         delete_script: 'testString',
         scope: 'testString',
+      };
+
+      // ScriptRef
+      const scriptRefModel = {
+        short_description: 'testString',
+        type: 'ansible',
+        path: 'scripts/validate-post-ansible-playbook.yaml',
+        stage: 'pre',
+        action: 'validate',
       };
 
       // VersionEntitlement
@@ -2089,12 +4016,214 @@ describe('CatalogManagementV1', () => {
         previous: 'testString',
       };
 
+      // DeprecatePending
+      const deprecatePendingModel = {
+        deprecate_date: '2019-01-01T12:00:00.000Z',
+        deprecate_state: 'testString',
+        description: 'testString',
+      };
+
+      // URLProxy
+      const urlProxyModel = {
+        url: 'testString',
+        sha: 'testString',
+      };
+
+      // MediaItem
+      const mediaItemModel = {
+        url: 'testString',
+        api_url: 'testString',
+        url_proxy: urlProxyModel,
+        caption: 'testString',
+        caption_i18n: { 'key1': 'testString' },
+        type: 'testString',
+        thumbnail_url: 'testString',
+      };
+
+      // ArchitectureDiagram
+      const architectureDiagramModel = {
+        diagram: mediaItemModel,
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+      };
+
+      // CostComponent
+      const costComponentModel = {
+        name: 'testString',
+        unit: 'testString',
+        hourlyQuantity: 'testString',
+        monthlyQuantity: 'testString',
+        price: 'testString',
+        hourlyCost: 'testString',
+        monthlyCost: 'testString',
+      };
+
+      // CostResource
+      const costResourceModel = {
+        name: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        hourlyCost: 'testString',
+        monthlyCost: 'testString',
+        costComponents: [costComponentModel],
+      };
+
+      // CostBreakdown
+      const costBreakdownModel = {
+        totalHourlyCost: 'testString',
+        totalMonthlyCost: 'testString',
+        resources: [costResourceModel],
+      };
+
+      // CostSummary
+      const costSummaryModel = {
+        totalDetectedResources: 38,
+        totalSupportedResources: 38,
+        totalUnsupportedResources: 38,
+        totalUsageBasedResources: 38,
+        totalNoPriceResources: 38,
+        unsupportedResourceCounts: { 'key1': 38 },
+        noPriceResourceCounts: { 'key1': 38 },
+      };
+
+      // Project
+      const projectModel = {
+        name: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        pastBreakdown: costBreakdownModel,
+        breakdown: costBreakdownModel,
+        diff: costBreakdownModel,
+        summary: costSummaryModel,
+      };
+
+      // CostEstimate
+      const costEstimateModel = {
+        version: 'testString',
+        currency: 'testString',
+        projects: [projectModel],
+        summary: costSummaryModel,
+        totalHourlyCost: 'testString',
+        totalMonthlyCost: 'testString',
+        pastTotalHourlyCost: 'testString',
+        pastTotalMonthlyCost: 'testString',
+        diffTotalHourlyCost: 'testString',
+        diffTotalMonthlyCost: 'testString',
+        timeGenerated: '2019-01-01T12:00:00.000Z',
+      };
+
+      // OfferingReference
+      const offeringReferenceModel = {
+        catalog_id: 'testString',
+        id: 'testString',
+        name: 'testString',
+        kind: 'testString',
+        version: 'testString',
+        flavors: ['testString'],
+      };
+
+      // SolutionInfo
+      const solutionInfoModel = {
+        architecture_diagrams: [architectureDiagramModel],
+        features: [featureModel],
+        cost_estimate: costEstimateModel,
+        dependencies: [offeringReferenceModel],
+        install_type: 'testString',
+      };
+
+      // SCCProfile
+      const sccProfileModel = {
+        id: 'testString',
+        name: 'testString',
+        version: 'testString',
+        description: 'testString',
+        type: 'testString',
+        ui_href: 'testString',
+      };
+
+      // ClaimedControl
+      const claimedControlModel = {
+        profile: sccProfileModel,
+        names: ['testString'],
+      };
+
+      // Claims
+      const claimsModel = {
+        profiles: [sccProfileModel],
+        controls: [claimedControlModel],
+      };
+
+      // Result
+      const resultModel = {
+        failure_count: 38,
+        scan_time: '2019-01-01T12:00:00.000Z',
+        error_message: 'testString',
+        complete_scan: true,
+        unscanned_resources: ['testString'],
+      };
+
+      // SCCAssessment
+      const sccAssessmentModel = {
+        id: 'testString',
+        description: 'testString',
+        version: 'testString',
+        type: 'testString',
+        method: 'testString',
+        ui_href: 'testString',
+      };
+
+      // SCCSpecification
+      const sccSpecificationModel = {
+        id: 'testString',
+        description: 'testString',
+        component_name: 'testString',
+        assessments: [sccAssessmentModel],
+        ui_href: 'testString',
+      };
+
+      // SCCControl
+      const sccControlModel = {
+        id: 'testString',
+        name: 'testString',
+        version: 'testString',
+        description: 'testString',
+        profile: sccProfileModel,
+        parent_name: 'testString',
+        specifications: [sccSpecificationModel],
+        ui_href: 'testString',
+      };
+
+      // EvaluatedControl
+      const evaluatedControlModel = {
+        id: 'testString',
+        name: 'testString',
+        description: 'testString',
+        specifications: [sccSpecificationModel],
+        failure_count: 38,
+        pass_count: 38,
+        parent: sccControlModel,
+        ui_href: 'testString',
+      };
+
+      // Evaluation
+      const evaluationModel = {
+        scan_id: 'testString',
+        account_id: 'testString',
+        profile: sccProfileModel,
+        result: resultModel,
+        controls: [evaluatedControlModel],
+      };
+
+      // Compliance
+      const complianceModel = {
+        authority: 'testString',
+        claims: claimsModel,
+        evaluations: [evaluationModel],
+      };
+
       // Version
       const versionModel = {
-        id: 'testString',
-        _rev: 'testString',
         crn: 'testString',
         version: 'testString',
+        flavor: flavorModel,
         sha: 'testString',
         created: '2019-01-01T12:00:00.000Z',
         updated: '2019-01-01T12:00:00.000Z',
@@ -2106,12 +4235,16 @@ describe('CatalogManagementV1', () => {
         source_url: 'testString',
         tgz_url: 'testString',
         configuration: [configurationModel],
-        metadata: { 'key1': 'testString' },
+        outputs: [outputModel],
+        iam_permissions: [iamPermissionModel],
+        metadata: { anyKey: 'anyValue' },
         validation: validationModel,
         required_resources: [resourceModel],
         single_instance: true,
+        schematics_env_values: schematicsEnvValuesModel,
         install: scriptModel,
         pre_install: [scriptModel],
+        scripts: { 'key1': scriptRefModel },
         entitlement: versionEntitlementModel,
         licenses: [licenseModel],
         image_manifest_url: 'testString',
@@ -2119,52 +4252,44 @@ describe('CatalogManagementV1', () => {
         package_version: 'testString',
         state: stateModel,
         version_locator: 'testString',
-        console_url: 'testString',
         long_description: 'testString',
+        long_description_i18n: { 'key1': 'testString' },
         whitelisted_accounts: ['testString'],
-      };
-
-      // Deployment
-      const deploymentModel = {
-        id: 'testString',
-        label: 'testString',
-        name: 'testString',
-        short_description: 'testString',
-        long_description: 'testString',
-        metadata: { 'key1': 'testString' },
-        tags: ['testString'],
-        created: '2019-01-01T12:00:00.000Z',
-        updated: '2019-01-01T12:00:00.000Z',
-      };
-
-      // Plan
-      const planModel = {
-        id: 'testString',
-        label: 'testString',
-        name: 'testString',
-        short_description: 'testString',
-        long_description: 'testString',
-        metadata: { 'key1': 'testString' },
-        tags: ['testString'],
-        additional_features: [featureModel],
-        created: '2019-01-01T12:00:00.000Z',
-        updated: '2019-01-01T12:00:00.000Z',
-        deployments: [deploymentModel],
+        image_pull_key_name: 'testString',
+        deprecate_pending: deprecatePendingModel,
+        solution_info: solutionInfoModel,
+        is_consumable: true,
+        compliance_v3: complianceModel,
       };
 
       // Kind
       const kindModel = {
         id: 'testString',
         format_kind: 'testString',
+        install_kind: 'testString',
         target_kind: 'testString',
-        metadata: { 'key1': 'testString' },
-        install_description: 'testString',
+        metadata: { anyKey: 'anyValue' },
         tags: ['testString'],
         additional_features: [featureModel],
         created: '2019-01-01T12:00:00.000Z',
         updated: '2019-01-01T12:00:00.000Z',
         versions: [versionModel],
-        plans: [planModel],
+      };
+
+      // PublishObject
+      const publishObjectModel = {
+        pc_managed: true,
+        approval_type: 'testString',
+        publish_approved: true,
+        share_with_all: true,
+        share_with_ibm: true,
+        share_enabled: true,
+        original_crn: 'testString',
+        public_crn: 'testString',
+        approval_record: { anyKey: 'anyValue' },
+        permit_ibm_public_publish: true,
+        ibm_approved: true,
+        public_approved: true,
       };
 
       // ProviderInfo
@@ -2179,19 +4304,83 @@ describe('CatalogManagementV1', () => {
         type: 'testString',
       };
 
+      // ImagePullKey
+      const imagePullKeyModel = {
+        name: 'testString',
+        value: 'testString',
+        description: 'testString',
+      };
+
+      // SupportWaitTime
+      const supportWaitTimeModel = {
+        value: 38,
+        type: 'testString',
+      };
+
+      // SupportTime
+      const supportTimeModel = {
+        day: 38,
+        start_time: 'testString',
+        end_time: 'testString',
+      };
+
+      // SupportAvailability
+      const supportAvailabilityModel = {
+        times: [supportTimeModel],
+        timezone: 'testString',
+        always_available: true,
+      };
+
+      // SupportDetail
+      const supportDetailModel = {
+        type: 'testString',
+        contact: 'testString',
+        response_wait_time: supportWaitTimeModel,
+        availability: supportAvailabilityModel,
+      };
+
+      // SupportEscalation
+      const supportEscalationModel = {
+        escalation_wait_time: supportWaitTimeModel,
+        response_wait_time: supportWaitTimeModel,
+        contact: 'testString',
+      };
+
       // Support
       const supportModel = {
         url: 'testString',
         process: 'testString',
+        process_i18n: { 'key1': 'testString' },
         locations: ['testString'],
+        support_details: [supportDetailModel],
+        support_escalation: supportEscalationModel,
+        support_type: 'testString',
       };
 
-      // MediaItem
-      const mediaItemModel = {
-        url: 'testString',
-        caption: 'testString',
+      // LearnMoreLinks
+      const learnMoreLinksModel = {
+        first_party: 'testString',
+        third_party: 'testString',
+      };
+
+      // Constraint
+      const constraintModel = {
         type: 'testString',
-        thumbnail_url: 'testString',
+        rule: 'testString',
+      };
+
+      // Badge
+      const badgeModel = {
+        id: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+        icon: 'testString',
+        authority: 'testString',
+        tag: 'testString',
+        learn_more_links: learnMoreLinksModel,
+        constraints: [constraintModel],
       };
 
       function __replaceOfferingTest() {
@@ -2203,6 +4392,7 @@ describe('CatalogManagementV1', () => {
         const url = 'testString';
         const crn = 'testString';
         const label = 'testString';
+        const labelI18n = { 'key1': 'testString' };
         const name = 'testString';
         const offeringIconUrl = 'testString';
         const offeringDocsUrl = 'testString';
@@ -2213,9 +4403,17 @@ describe('CatalogManagementV1', () => {
         const created = '2019-01-01T12:00:00.000Z';
         const updated = '2019-01-01T12:00:00.000Z';
         const shortDescription = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
         const longDescription = 'testString';
+        const longDescriptionI18n = { 'key1': 'testString' };
         const features = [featureModel];
         const kinds = [kindModel];
+        const publish = publishObjectModel;
+        const pcManaged = true;
+        const publishApproved = true;
+        const shareWithAll = true;
+        const shareWithIbm = true;
+        const shareEnabled = true;
         const permitRequestIbmPublicPublish = true;
         const ibmPublishApproved = true;
         const publicPublishApproved = true;
@@ -2225,55 +4423,72 @@ describe('CatalogManagementV1', () => {
         const portalUiUrl = 'testString';
         const catalogId = 'testString';
         const catalogName = 'testString';
-        const metadata = { 'key1': 'testString' };
+        const metadata = { anyKey: 'anyValue' };
         const disclaimer = 'testString';
         const hidden = true;
         const provider = 'testString';
         const providerInfo = providerInfoModel;
         const repoInfo = repoInfoModel;
+        const imagePullKeys = [imagePullKeyModel];
         const support = supportModel;
         const media = [mediaItemModel];
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          id: id,
-          rev: rev,
-          url: url,
-          crn: crn,
-          label: label,
-          name: name,
-          offeringIconUrl: offeringIconUrl,
-          offeringDocsUrl: offeringDocsUrl,
-          offeringSupportUrl: offeringSupportUrl,
-          tags: tags,
-          keywords: keywords,
-          rating: rating,
-          created: created,
-          updated: updated,
-          shortDescription: shortDescription,
-          longDescription: longDescription,
-          features: features,
-          kinds: kinds,
-          permitRequestIbmPublicPublish: permitRequestIbmPublicPublish,
-          ibmPublishApproved: ibmPublishApproved,
-          publicPublishApproved: publicPublishApproved,
-          publicOriginalCrn: publicOriginalCrn,
-          publishPublicCrn: publishPublicCrn,
-          portalApprovalRecord: portalApprovalRecord,
-          portalUiUrl: portalUiUrl,
-          catalogId: catalogId,
-          catalogName: catalogName,
-          metadata: metadata,
-          disclaimer: disclaimer,
-          hidden: hidden,
-          provider: provider,
-          providerInfo: providerInfo,
-          repoInfo: repoInfo,
-          support: support,
-          media: media,
+        const deprecatePending = deprecatePendingModel;
+        const productKind = 'testString';
+        const badges = [badgeModel];
+        const replaceOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          id,
+          rev,
+          url,
+          crn,
+          label,
+          labelI18n,
+          name,
+          offeringIconUrl,
+          offeringDocsUrl,
+          offeringSupportUrl,
+          tags,
+          keywords,
+          rating,
+          created,
+          updated,
+          shortDescription,
+          shortDescriptionI18n,
+          longDescription,
+          longDescriptionI18n,
+          features,
+          kinds,
+          publish,
+          pcManaged,
+          publishApproved,
+          shareWithAll,
+          shareWithIbm,
+          shareEnabled,
+          permitRequestIbmPublicPublish,
+          ibmPublishApproved,
+          publicPublishApproved,
+          publicOriginalCrn,
+          publishPublicCrn,
+          portalApprovalRecord,
+          portalUiUrl,
+          catalogId,
+          catalogName,
+          metadata,
+          disclaimer,
+          hidden,
+          provider,
+          providerInfo,
+          repoInfo,
+          imagePullKeys,
+          support,
+          media,
+          deprecatePending,
+          productKind,
+          badges,
         };
 
-        const replaceOfferingResult = catalogManagementService.replaceOffering(params);
+        const replaceOfferingResult = catalogManagementService.replaceOffering(replaceOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceOfferingResult);
@@ -2292,6 +4507,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.url).toEqual(url);
         expect(mockRequestOptions.body.crn).toEqual(crn);
         expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.label_i18n).toEqual(labelI18n);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.offering_icon_url).toEqual(offeringIconUrl);
         expect(mockRequestOptions.body.offering_docs_url).toEqual(offeringDocsUrl);
@@ -2302,9 +4518,17 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.created).toEqual(created);
         expect(mockRequestOptions.body.updated).toEqual(updated);
         expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.short_description_i18n).toEqual(shortDescriptionI18n);
         expect(mockRequestOptions.body.long_description).toEqual(longDescription);
+        expect(mockRequestOptions.body.long_description_i18n).toEqual(longDescriptionI18n);
         expect(mockRequestOptions.body.features).toEqual(features);
         expect(mockRequestOptions.body.kinds).toEqual(kinds);
+        expect(mockRequestOptions.body.publish).toEqual(publish);
+        expect(mockRequestOptions.body.pc_managed).toEqual(pcManaged);
+        expect(mockRequestOptions.body.publish_approved).toEqual(publishApproved);
+        expect(mockRequestOptions.body.share_with_all).toEqual(shareWithAll);
+        expect(mockRequestOptions.body.share_with_ibm).toEqual(shareWithIbm);
+        expect(mockRequestOptions.body.share_enabled).toEqual(shareEnabled);
         expect(mockRequestOptions.body.permit_request_ibm_public_publish).toEqual(permitRequestIbmPublicPublish);
         expect(mockRequestOptions.body.ibm_publish_approved).toEqual(ibmPublishApproved);
         expect(mockRequestOptions.body.public_publish_approved).toEqual(publicPublishApproved);
@@ -2320,8 +4544,12 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.provider).toEqual(provider);
         expect(mockRequestOptions.body.provider_info).toEqual(providerInfo);
         expect(mockRequestOptions.body.repo_info).toEqual(repoInfo);
+        expect(mockRequestOptions.body.image_pull_keys).toEqual(imagePullKeys);
         expect(mockRequestOptions.body.support).toEqual(support);
         expect(mockRequestOptions.body.media).toEqual(media);
+        expect(mockRequestOptions.body.deprecate_pending).toEqual(deprecatePending);
+        expect(mockRequestOptions.body.product_kind).toEqual(productKind);
+        expect(mockRequestOptions.body.badges).toEqual(badges);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
       }
@@ -2347,7 +4575,7 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceOfferingParams = {
           catalogIdentifier,
           offeringId,
           headers: {
@@ -2356,7 +4584,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.replaceOffering(params);
+        catalogManagementService.replaceOffering(replaceOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2385,6 +4613,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('updateOffering', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -2393,8 +4622,8 @@ describe('CatalogManagementV1', () => {
       const jsonPatchOperationModel = {
         op: 'add',
         path: 'testString',
-        from: 'testString',
         value: 'testString',
+        from: 'testString',
       };
 
       function __updateOfferingTest() {
@@ -2403,14 +4632,14 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const ifMatch = 'testString';
         const updates = [jsonPatchOperationModel];
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          ifMatch: ifMatch,
-          updates: updates,
+        const updateOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          ifMatch,
+          updates,
         };
 
-        const updateOfferingResult = catalogManagementService.updateOffering(params);
+        const updateOfferingResult = catalogManagementService.updateOffering(updateOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(updateOfferingResult);
@@ -2452,7 +4681,7 @@ describe('CatalogManagementV1', () => {
         const ifMatch = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateOfferingParams = {
           catalogIdentifier,
           offeringId,
           ifMatch,
@@ -2462,7 +4691,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.updateOffering(params);
+        catalogManagementService.updateOffering(updateOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2491,18 +4720,19 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deleteOffering', () => {
     describe('positive tests', () => {
       function __deleteOfferingTest() {
         // Construct the params object for operation deleteOffering
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
+        const deleteOfferingParams = {
+          catalogIdentifier,
+          offeringId,
         };
 
-        const deleteOfferingResult = catalogManagementService.deleteOffering(params);
+        const deleteOfferingResult = catalogManagementService.deleteOffering(deleteOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteOfferingResult);
@@ -2541,7 +4771,7 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteOfferingParams = {
           catalogIdentifier,
           offeringId,
           headers: {
@@ -2550,7 +4780,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deleteOffering(params);
+        catalogManagementService.deleteOffering(deleteOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2579,18 +4809,175 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('listOfferingAudits', () => {
+    describe('positive tests', () => {
+      function __listOfferingAuditsTest() {
+        // Construct the params object for operation listOfferingAudits
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const start = 'testString';
+        const limit = 100;
+        const lookupnames = true;
+        const listOfferingAuditsParams = {
+          catalogIdentifier,
+          offeringId,
+          start,
+          limit,
+          lookupnames,
+        };
+
+        const listOfferingAuditsResult = catalogManagementService.listOfferingAudits(listOfferingAuditsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listOfferingAuditsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/audits', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listOfferingAuditsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __listOfferingAuditsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __listOfferingAuditsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listOfferingAuditsParams = {
+          catalogIdentifier,
+          offeringId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.listOfferingAudits(listOfferingAuditsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.listOfferingAudits({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.listOfferingAudits();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('OfferingAuditsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/offerings/testString/audits';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          offeringId: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.OfferingAuditsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          offeringId: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const pager = new CatalogManagementV1.OfferingAuditsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
   describe('getOfferingAudit', () => {
     describe('positive tests', () => {
       function __getOfferingAuditTest() {
         // Construct the params object for operation getOfferingAudit
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
+        const auditlogIdentifier = 'testString';
+        const lookupnames = true;
+        const getOfferingAuditParams = {
+          catalogIdentifier,
+          offeringId,
+          auditlogIdentifier,
+          lookupnames,
         };
 
-        const getOfferingAuditResult = catalogManagementService.getOfferingAudit(params);
+        const getOfferingAuditResult = catalogManagementService.getOfferingAudit(getOfferingAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingAuditResult);
@@ -2600,12 +4987,14 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/audit', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+        expect(mockRequestOptions.path.auditlog_identifier).toEqual(auditlogIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -2627,18 +5016,20 @@ describe('CatalogManagementV1', () => {
         // parameters
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
+        const auditlogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingAuditParams = {
           catalogIdentifier,
           offeringId,
+          auditlogIdentifier,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getOfferingAudit(params);
+        catalogManagementService.getOfferingAudit(getOfferingAuditParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2667,118 +5058,34 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('replaceOfferingIcon', () => {
+
+  describe('setOfferingPublish', () => {
     describe('positive tests', () => {
-      function __replaceOfferingIconTest() {
-        // Construct the params object for operation replaceOfferingIcon
-        const catalogIdentifier = 'testString';
-        const offeringId = 'testString';
-        const fileName = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          fileName: fileName,
-        };
-
-        const replaceOfferingIconResult = catalogManagementService.replaceOfferingIcon(params);
-
-        // all methods should return a Promise
-        expectToBePromise(replaceOfferingIconResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/icon/{file_name}', 'PUT');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
-        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
-        expect(mockRequestOptions.path.file_name).toEqual(fileName);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __replaceOfferingIconTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.enableRetries();
-        __replaceOfferingIconTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.disableRetries();
-        __replaceOfferingIconTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const catalogIdentifier = 'testString';
-        const offeringId = 'testString';
-        const fileName = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          catalogIdentifier,
-          offeringId,
-          fileName,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        catalogManagementService.replaceOfferingIcon(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await catalogManagementService.replaceOfferingIcon({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await catalogManagementService.replaceOfferingIcon();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('updateOfferingIbm', () => {
-    describe('positive tests', () => {
-      function __updateOfferingIbmTest() {
-        // Construct the params object for operation updateOfferingIbm
+      function __setOfferingPublishTest() {
+        // Construct the params object for operation setOfferingPublish
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
         const approvalType = 'pc_managed';
         const approved = 'true';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          approvalType: approvalType,
-          approved: approved,
+        const portalRecord = 'testString';
+        const portalUrl = 'testString';
+        const xApproverToken = 'testString';
+        const xAuthToken = 'testString';
+        const setOfferingPublishParams = {
+          catalogIdentifier,
+          offeringId,
+          approvalType,
+          approved,
+          portalRecord,
+          portalUrl,
+          xApproverToken,
+          xAuthToken,
         };
 
-        const updateOfferingIbmResult = catalogManagementService.updateOfferingIbm(params);
+        const setOfferingPublishResult = catalogManagementService.setOfferingPublish(setOfferingPublishParams);
 
         // all methods should return a Promise
-        expectToBePromise(updateOfferingIbmResult);
+        expectToBePromise(setOfferingPublishResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -2789,6 +5096,10 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Approver-Token', xApproverToken);
+        checkUserHeader(createRequestMock, 'X-Auth-Token', xAuthToken);
+        expect(mockRequestOptions.qs.portal_record).toEqual(portalRecord);
+        expect(mockRequestOptions.qs.portal_url).toEqual(portalUrl);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
         expect(mockRequestOptions.path.approval_type).toEqual(approvalType);
@@ -2797,17 +5108,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __updateOfferingIbmTest();
+        __setOfferingPublishTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __updateOfferingIbmTest();
+        __setOfferingPublishTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __updateOfferingIbmTest();
+        __setOfferingPublishTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2818,7 +5129,7 @@ describe('CatalogManagementV1', () => {
         const approved = 'true';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const setOfferingPublishParams = {
           catalogIdentifier,
           offeringId,
           approvalType,
@@ -2829,7 +5140,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.updateOfferingIbm(params);
+        catalogManagementService.setOfferingPublish(setOfferingPublishParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2838,7 +5149,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.updateOfferingIbm({});
+          await catalogManagementService.setOfferingPublish({});
         } catch (e) {
           err = e;
         }
@@ -2849,7 +5160,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.updateOfferingIbm();
+          await catalogManagementService.setOfferingPublish();
         } catch (e) {
           err = e;
         }
@@ -2858,6 +5169,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deprecateOffering', () => {
     describe('positive tests', () => {
       function __deprecateOfferingTest() {
@@ -2867,15 +5179,15 @@ describe('CatalogManagementV1', () => {
         const setting = 'true';
         const description = 'testString';
         const daysUntilDeprecate = 38;
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          setting: setting,
-          description: description,
-          daysUntilDeprecate: daysUntilDeprecate,
+        const deprecateOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          setting,
+          description,
+          daysUntilDeprecate,
         };
 
-        const deprecateOfferingResult = catalogManagementService.deprecateOffering(params);
+        const deprecateOfferingResult = catalogManagementService.deprecateOffering(deprecateOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(deprecateOfferingResult);
@@ -2918,7 +5230,7 @@ describe('CatalogManagementV1', () => {
         const setting = 'true';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deprecateOfferingParams = {
           catalogIdentifier,
           offeringId,
           setting,
@@ -2928,7 +5240,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deprecateOffering(params);
+        catalogManagementService.deprecateOffering(deprecateOfferingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2957,6 +5269,534 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('shareOffering', () => {
+    describe('positive tests', () => {
+      function __shareOfferingTest() {
+        // Construct the params object for operation shareOffering
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const ibm = true;
+        const _public = true;
+        const enabled = true;
+        const shareOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          ibm,
+          _public,
+          enabled,
+        };
+
+        const shareOfferingResult = catalogManagementService.shareOffering(shareOfferingParams);
+
+        // all methods should return a Promise
+        expectToBePromise(shareOfferingResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/share', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.ibm).toEqual(ibm);
+        expect(mockRequestOptions.body.public).toEqual(_public);
+        expect(mockRequestOptions.body.enabled).toEqual(enabled);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __shareOfferingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __shareOfferingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __shareOfferingTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const shareOfferingParams = {
+          catalogIdentifier,
+          offeringId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.shareOffering(shareOfferingParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.shareOffering({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.shareOffering();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getOfferingAccess', () => {
+    describe('positive tests', () => {
+      function __getOfferingAccessTest() {
+        // Construct the params object for operation getOfferingAccess
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accessIdentifier = 'testString';
+        const getOfferingAccessParams = {
+          catalogIdentifier,
+          offeringId,
+          accessIdentifier,
+        };
+
+        const getOfferingAccessResult = catalogManagementService.getOfferingAccess(getOfferingAccessParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getOfferingAccessResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access/{access_identifier}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+        expect(mockRequestOptions.path.access_identifier).toEqual(accessIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOfferingAccessTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getOfferingAccessTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getOfferingAccessTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accessIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getOfferingAccessParams = {
+          catalogIdentifier,
+          offeringId,
+          accessIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getOfferingAccess(getOfferingAccessParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingAccess({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingAccess();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getOfferingAccessList', () => {
+    describe('positive tests', () => {
+      function __getOfferingAccessListTest() {
+        // Construct the params object for operation getOfferingAccessList
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const start = 'testString';
+        const limit = 100;
+        const getOfferingAccessListParams = {
+          catalogIdentifier,
+          offeringId,
+          start,
+          limit,
+        };
+
+        const getOfferingAccessListResult = catalogManagementService.getOfferingAccessList(getOfferingAccessListParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getOfferingAccessListResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOfferingAccessListTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getOfferingAccessListTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getOfferingAccessListTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getOfferingAccessListParams = {
+          catalogIdentifier,
+          offeringId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getOfferingAccessList(getOfferingAccessListParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingAccessList({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingAccessList();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('GetOfferingAccessListPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/offerings/testString/access';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          offeringId: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          offeringId: 'testString',
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('deleteOfferingAccessList', () => {
+    describe('positive tests', () => {
+      function __deleteOfferingAccessListTest() {
+        // Construct the params object for operation deleteOfferingAccessList
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accesses = ['testString'];
+        const deleteOfferingAccessListParams = {
+          catalogIdentifier,
+          offeringId,
+          accesses,
+        };
+
+        const deleteOfferingAccessListResult = catalogManagementService.deleteOfferingAccessList(deleteOfferingAccessListParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteOfferingAccessListResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access', 'DELETE');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(accesses);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteOfferingAccessListTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __deleteOfferingAccessListTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __deleteOfferingAccessListTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accesses = ['testString'];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteOfferingAccessListParams = {
+          catalogIdentifier,
+          offeringId,
+          accesses,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.deleteOfferingAccessList(deleteOfferingAccessListParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.deleteOfferingAccessList({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.deleteOfferingAccessList();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('addOfferingAccessList', () => {
+    describe('positive tests', () => {
+      function __addOfferingAccessListTest() {
+        // Construct the params object for operation addOfferingAccessList
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accesses = ['testString'];
+        const addOfferingAccessListParams = {
+          catalogIdentifier,
+          offeringId,
+          accesses,
+        };
+
+        const addOfferingAccessListResult = catalogManagementService.addOfferingAccessList(addOfferingAccessListParams);
+
+        // all methods should return a Promise
+        expectToBePromise(addOfferingAccessListResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(accesses);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addOfferingAccessListTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __addOfferingAccessListTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __addOfferingAccessListTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accesses = ['testString'];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const addOfferingAccessListParams = {
+          catalogIdentifier,
+          offeringId,
+          accesses,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.addOfferingAccessList(addOfferingAccessListParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.addOfferingAccessList({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.addOfferingAccessList();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getOfferingUpdates', () => {
     describe('positive tests', () => {
       function __getOfferingUpdatesTest() {
@@ -2975,24 +5815,28 @@ describe('CatalogManagementV1', () => {
         const channel = 'testString';
         const namespaces = ['testString'];
         const allNamespaces = true;
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          offeringId: offeringId,
-          kind: kind,
-          xAuthRefreshToken: xAuthRefreshToken,
-          target: target,
-          version: version,
-          clusterId: clusterId,
-          region: region,
-          resourceGroupId: resourceGroupId,
-          namespace: namespace,
-          sha: sha,
-          channel: channel,
-          namespaces: namespaces,
-          allNamespaces: allNamespaces,
+        const flavor = 'testString';
+        const installType = 'testString';
+        const getOfferingUpdatesParams = {
+          catalogIdentifier,
+          offeringId,
+          kind,
+          xAuthRefreshToken,
+          target,
+          version,
+          clusterId,
+          region,
+          resourceGroupId,
+          namespace,
+          sha,
+          channel,
+          namespaces,
+          allNamespaces,
+          flavor,
+          installType,
         };
 
-        const getOfferingUpdatesResult = catalogManagementService.getOfferingUpdates(params);
+        const getOfferingUpdatesResult = catalogManagementService.getOfferingUpdates(getOfferingUpdatesParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingUpdatesResult);
@@ -3018,6 +5862,8 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.qs.channel).toEqual(channel);
         expect(mockRequestOptions.qs.namespaces).toEqual(namespaces);
         expect(mockRequestOptions.qs.all_namespaces).toEqual(allNamespaces);
+        expect(mockRequestOptions.qs.flavor).toEqual(flavor);
+        expect(mockRequestOptions.qs.install_type).toEqual(installType);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
       }
@@ -3045,7 +5891,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingUpdatesParams = {
           catalogIdentifier,
           offeringId,
           kind,
@@ -3056,7 +5902,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingUpdates(params);
+        catalogManagementService.getOfferingUpdates(getOfferingUpdatesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3085,6 +5931,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getOfferingSource', () => {
     describe('positive tests', () => {
       function __getOfferingSourceTest() {
@@ -3096,17 +5943,23 @@ describe('CatalogManagementV1', () => {
         const id = 'testString';
         const kind = 'testString';
         const channel = 'testString';
-        const params = {
-          version: version,
-          accept: accept,
-          catalogId: catalogId,
-          name: name,
-          id: id,
-          kind: kind,
-          channel: channel,
+        const flavor = 'testString';
+        const asIs = true;
+        const installType = 'testString';
+        const getOfferingSourceParams = {
+          version,
+          accept,
+          catalogId,
+          name,
+          id,
+          kind,
+          channel,
+          flavor,
+          asIs,
+          installType,
         };
 
-        const getOfferingSourceResult = catalogManagementService.getOfferingSource(params);
+        const getOfferingSourceResult = catalogManagementService.getOfferingSource(getOfferingSourceParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingSourceResult);
@@ -3127,6 +5980,9 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.qs.id).toEqual(id);
         expect(mockRequestOptions.qs.kind).toEqual(kind);
         expect(mockRequestOptions.qs.channel).toEqual(channel);
+        expect(mockRequestOptions.qs.flavor).toEqual(flavor);
+        expect(mockRequestOptions.qs.asIs).toEqual(asIs);
+        expect(mockRequestOptions.qs.installType).toEqual(installType);
         expect(mockRequestOptions.responseType).toBe('stream');
       }
 
@@ -3150,7 +6006,7 @@ describe('CatalogManagementV1', () => {
         const version = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingSourceParams = {
           version,
           headers: {
             Accept: userAccept,
@@ -3158,7 +6014,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingSource(params);
+        catalogManagementService.getOfferingSource(getOfferingSourceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3187,16 +6043,226 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('getOfferingSourceArchive', () => {
+    describe('positive tests', () => {
+      function __getOfferingSourceArchiveTest() {
+        // Construct the params object for operation getOfferingSourceArchive
+        const version = 'testString';
+        const accept = 'application/yaml';
+        const catalogId = 'testString';
+        const name = 'testString';
+        const id = 'testString';
+        const kind = 'testString';
+        const channel = 'testString';
+        const flavor = 'testString';
+        const asIs = true;
+        const installType = 'testString';
+        const getOfferingSourceArchiveParams = {
+          version,
+          accept,
+          catalogId,
+          name,
+          id,
+          kind,
+          channel,
+          flavor,
+          asIs,
+          installType,
+        };
+
+        const getOfferingSourceArchiveResult = catalogManagementService.getOfferingSourceArchive(getOfferingSourceArchiveParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getOfferingSourceArchiveResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/offering/source/archive', 'GET');
+        const expectedAccept = accept;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept', accept);
+        expect(mockRequestOptions.qs.version).toEqual(version);
+        expect(mockRequestOptions.qs.catalogID).toEqual(catalogId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.id).toEqual(id);
+        expect(mockRequestOptions.qs.kind).toEqual(kind);
+        expect(mockRequestOptions.qs.channel).toEqual(channel);
+        expect(mockRequestOptions.qs.flavor).toEqual(flavor);
+        expect(mockRequestOptions.qs.asIs).toEqual(asIs);
+        expect(mockRequestOptions.qs.installType).toEqual(installType);
+        expect(mockRequestOptions.responseType).toBe('stream');
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOfferingSourceArchiveTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getOfferingSourceArchiveTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getOfferingSourceArchiveTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const version = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getOfferingSourceArchiveParams = {
+          version,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getOfferingSourceArchive(getOfferingSourceArchiveParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingSourceArchive({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingSourceArchive();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getOfferingSourceUrl', () => {
+    describe('positive tests', () => {
+      function __getOfferingSourceUrlTest() {
+        // Construct the params object for operation getOfferingSourceUrl
+        const keyIdentifier = 'testString';
+        const accept = 'application/yaml';
+        const catalogId = 'testString';
+        const name = 'testString';
+        const id = 'testString';
+        const getOfferingSourceUrlParams = {
+          keyIdentifier,
+          accept,
+          catalogId,
+          name,
+          id,
+        };
+
+        const getOfferingSourceUrlResult = catalogManagementService.getOfferingSourceUrl(getOfferingSourceUrlParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getOfferingSourceUrlResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/offering/source/url/{key_identifier}', 'GET');
+        const expectedAccept = accept;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept', accept);
+        expect(mockRequestOptions.qs.catalogID).toEqual(catalogId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.id).toEqual(id);
+        expect(mockRequestOptions.path.key_identifier).toEqual(keyIdentifier);
+        expect(mockRequestOptions.responseType).toBe('stream');
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOfferingSourceUrlTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getOfferingSourceUrlTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getOfferingSourceUrlTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const keyIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getOfferingSourceUrlParams = {
+          keyIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getOfferingSourceUrl(getOfferingSourceUrlParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingSourceUrl({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingSourceUrl();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getOfferingAbout', () => {
     describe('positive tests', () => {
       function __getOfferingAboutTest() {
         // Construct the params object for operation getOfferingAbout
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const getOfferingAboutParams = {
+          versionLocId,
         };
 
-        const getOfferingAboutResult = catalogManagementService.getOfferingAbout(params);
+        const getOfferingAboutResult = catalogManagementService.getOfferingAbout(getOfferingAboutParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingAboutResult);
@@ -3233,7 +6299,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingAboutParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3241,7 +6307,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingAbout(params);
+        catalogManagementService.getOfferingAbout(getOfferingAboutParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3270,18 +6336,19 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getOfferingLicense', () => {
     describe('positive tests', () => {
       function __getOfferingLicenseTest() {
         // Construct the params object for operation getOfferingLicense
         const versionLocId = 'testString';
         const licenseId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-          licenseId: licenseId,
+        const getOfferingLicenseParams = {
+          versionLocId,
+          licenseId,
         };
 
-        const getOfferingLicenseResult = catalogManagementService.getOfferingLicense(params);
+        const getOfferingLicenseResult = catalogManagementService.getOfferingLicense(getOfferingLicenseParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingLicenseResult);
@@ -3320,7 +6387,7 @@ describe('CatalogManagementV1', () => {
         const licenseId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingLicenseParams = {
           versionLocId,
           licenseId,
           headers: {
@@ -3329,7 +6396,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingLicense(params);
+        catalogManagementService.getOfferingLicense(getOfferingLicenseParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3358,16 +6425,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getOfferingContainerImages', () => {
     describe('positive tests', () => {
       function __getOfferingContainerImagesTest() {
         // Construct the params object for operation getOfferingContainerImages
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const getOfferingContainerImagesParams = {
+          versionLocId,
         };
 
-        const getOfferingContainerImagesResult = catalogManagementService.getOfferingContainerImages(params);
+        const getOfferingContainerImagesResult = catalogManagementService.getOfferingContainerImages(getOfferingContainerImagesParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingContainerImagesResult);
@@ -3404,7 +6472,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingContainerImagesParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3412,7 +6480,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingContainerImages(params);
+        catalogManagementService.getOfferingContainerImages(getOfferingContainerImagesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3441,26 +6509,27 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('deprecateVersion', () => {
+
+  describe('archiveVersion', () => {
     describe('positive tests', () => {
-      function __deprecateVersionTest() {
-        // Construct the params object for operation deprecateVersion
+      function __archiveVersionTest() {
+        // Construct the params object for operation archiveVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const archiveVersionParams = {
+          versionLocId,
         };
 
-        const deprecateVersionResult = catalogManagementService.deprecateVersion(params);
+        const archiveVersionResult = catalogManagementService.archiveVersion(archiveVersionParams);
 
         // all methods should return a Promise
-        expectToBePromise(deprecateVersionResult);
+        expectToBePromise(archiveVersionResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/deprecate', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/archive', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3469,17 +6538,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __deprecateVersionTest();
+        __archiveVersionTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __deprecateVersionTest();
+        __archiveVersionTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __deprecateVersionTest();
+        __archiveVersionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3487,7 +6556,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const archiveVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3495,7 +6564,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deprecateVersion(params);
+        catalogManagementService.archiveVersion(archiveVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3504,7 +6573,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.deprecateVersion({});
+          await catalogManagementService.archiveVersion({});
         } catch (e) {
           err = e;
         }
@@ -3515,7 +6584,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.deprecateVersion();
+          await catalogManagementService.archiveVersion();
         } catch (e) {
           err = e;
         }
@@ -3524,6 +6593,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('setDeprecateVersion', () => {
     describe('positive tests', () => {
       function __setDeprecateVersionTest() {
@@ -3532,14 +6602,14 @@ describe('CatalogManagementV1', () => {
         const setting = 'true';
         const description = 'testString';
         const daysUntilDeprecate = 38;
-        const params = {
-          versionLocId: versionLocId,
-          setting: setting,
-          description: description,
-          daysUntilDeprecate: daysUntilDeprecate,
+        const setDeprecateVersionParams = {
+          versionLocId,
+          setting,
+          description,
+          daysUntilDeprecate,
         };
 
-        const setDeprecateVersionResult = catalogManagementService.setDeprecateVersion(params);
+        const setDeprecateVersionResult = catalogManagementService.setDeprecateVersion(setDeprecateVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(setDeprecateVersionResult);
@@ -3580,7 +6650,7 @@ describe('CatalogManagementV1', () => {
         const setting = 'true';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const setDeprecateVersionParams = {
           versionLocId,
           setting,
           headers: {
@@ -3589,7 +6659,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.setDeprecateVersion(params);
+        catalogManagementService.setDeprecateVersion(setDeprecateVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3618,26 +6688,27 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('accountPublishVersion', () => {
+
+  describe('consumableVersion', () => {
     describe('positive tests', () => {
-      function __accountPublishVersionTest() {
-        // Construct the params object for operation accountPublishVersion
+      function __consumableVersionTest() {
+        // Construct the params object for operation consumableVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const consumableVersionParams = {
+          versionLocId,
         };
 
-        const accountPublishVersionResult = catalogManagementService.accountPublishVersion(params);
+        const consumableVersionResult = catalogManagementService.consumableVersion(consumableVersionParams);
 
         // all methods should return a Promise
-        expectToBePromise(accountPublishVersionResult);
+        expectToBePromise(consumableVersionResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/account-publish', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/consume-publish', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3646,17 +6717,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __accountPublishVersionTest();
+        __consumableVersionTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __accountPublishVersionTest();
+        __consumableVersionTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __accountPublishVersionTest();
+        __consumableVersionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3664,7 +6735,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const consumableVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3672,7 +6743,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.accountPublishVersion(params);
+        catalogManagementService.consumableVersion(consumableVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3681,7 +6752,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.accountPublishVersion({});
+          await catalogManagementService.consumableVersion({});
         } catch (e) {
           err = e;
         }
@@ -3692,7 +6763,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.accountPublishVersion();
+          await catalogManagementService.consumableVersion();
         } catch (e) {
           err = e;
         }
@@ -3701,26 +6772,27 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('ibmPublishVersion', () => {
+
+  describe('prereleaseVersion', () => {
     describe('positive tests', () => {
-      function __ibmPublishVersionTest() {
-        // Construct the params object for operation ibmPublishVersion
+      function __prereleaseVersionTest() {
+        // Construct the params object for operation prereleaseVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const prereleaseVersionParams = {
+          versionLocId,
         };
 
-        const ibmPublishVersionResult = catalogManagementService.ibmPublishVersion(params);
+        const prereleaseVersionResult = catalogManagementService.prereleaseVersion(prereleaseVersionParams);
 
         // all methods should return a Promise
-        expectToBePromise(ibmPublishVersionResult);
+        expectToBePromise(prereleaseVersionResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/ibm-publish', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/prerelease-publish', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3729,17 +6801,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __ibmPublishVersionTest();
+        __prereleaseVersionTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __ibmPublishVersionTest();
+        __prereleaseVersionTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __ibmPublishVersionTest();
+        __prereleaseVersionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3747,7 +6819,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const prereleaseVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3755,7 +6827,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.ibmPublishVersion(params);
+        catalogManagementService.prereleaseVersion(prereleaseVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3764,7 +6836,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.ibmPublishVersion({});
+          await catalogManagementService.prereleaseVersion({});
         } catch (e) {
           err = e;
         }
@@ -3775,7 +6847,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.ibmPublishVersion();
+          await catalogManagementService.prereleaseVersion();
         } catch (e) {
           err = e;
         }
@@ -3784,26 +6856,27 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('publicPublishVersion', () => {
+
+  describe('suspendVersion', () => {
     describe('positive tests', () => {
-      function __publicPublishVersionTest() {
-        // Construct the params object for operation publicPublishVersion
+      function __suspendVersionTest() {
+        // Construct the params object for operation suspendVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const suspendVersionParams = {
+          versionLocId,
         };
 
-        const publicPublishVersionResult = catalogManagementService.publicPublishVersion(params);
+        const suspendVersionResult = catalogManagementService.suspendVersion(suspendVersionParams);
 
         // all methods should return a Promise
-        expectToBePromise(publicPublishVersionResult);
+        expectToBePromise(suspendVersionResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/public-publish', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/suspend', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3812,17 +6885,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __publicPublishVersionTest();
+        __suspendVersionTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __publicPublishVersionTest();
+        __suspendVersionTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __publicPublishVersionTest();
+        __suspendVersionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3830,7 +6903,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const suspendVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3838,7 +6911,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.publicPublishVersion(params);
+        catalogManagementService.suspendVersion(suspendVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3847,7 +6920,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.publicPublishVersion({});
+          await catalogManagementService.suspendVersion({});
         } catch (e) {
           err = e;
         }
@@ -3858,7 +6931,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.publicPublishVersion();
+          await catalogManagementService.suspendVersion();
         } catch (e) {
           err = e;
         }
@@ -3867,16 +6940,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('commitVersion', () => {
     describe('positive tests', () => {
       function __commitVersionTest() {
         // Construct the params object for operation commitVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const commitVersionParams = {
+          versionLocId,
         };
 
-        const commitVersionResult = catalogManagementService.commitVersion(params);
+        const commitVersionResult = catalogManagementService.commitVersion(commitVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(commitVersionResult);
@@ -3913,7 +6987,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const commitVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -3921,7 +6995,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.commitVersion(params);
+        catalogManagementService.commitVersion(commitVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3950,22 +7024,39 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('copyVersion', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
       function __copyVersionTest() {
         // Construct the params object for operation copyVersion
         const versionLocId = 'testString';
         const tags = ['testString'];
-        const targetKinds = ['testString'];
         const content = 'This is a mock byte array value.';
-        const params = {
-          versionLocId: versionLocId,
-          tags: tags,
-          targetKinds: targetKinds,
-          content: content,
+        const targetKinds = ['testString'];
+        const formatKind = 'testString';
+        const flavor = flavorModel;
+        const workingDirectory = 'testString';
+        const copyVersionParams = {
+          versionLocId,
+          tags,
+          content,
+          targetKinds,
+          formatKind,
+          flavor,
+          workingDirectory,
         };
 
-        const copyVersionResult = catalogManagementService.copyVersion(params);
+        const copyVersionResult = catalogManagementService.copyVersion(copyVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(copyVersionResult);
@@ -3980,8 +7071,11 @@ describe('CatalogManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.tags).toEqual(tags);
-        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
         expect(mockRequestOptions.body.content).toEqual(content);
+        expect(mockRequestOptions.body.target_kinds).toEqual(targetKinds);
+        expect(mockRequestOptions.body.format_kind).toEqual(formatKind);
+        expect(mockRequestOptions.body.flavor).toEqual(flavor);
+        expect(mockRequestOptions.body.working_directory).toEqual(workingDirectory);
         expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
       }
 
@@ -4005,7 +7099,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const copyVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -4013,7 +7107,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.copyVersion(params);
+        catalogManagementService.copyVersion(copyVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4042,16 +7136,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getOfferingWorkingCopy', () => {
     describe('positive tests', () => {
       function __getOfferingWorkingCopyTest() {
         // Construct the params object for operation getOfferingWorkingCopy
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const getOfferingWorkingCopyParams = {
+          versionLocId,
         };
 
-        const getOfferingWorkingCopyResult = catalogManagementService.getOfferingWorkingCopy(params);
+        const getOfferingWorkingCopyResult = catalogManagementService.getOfferingWorkingCopy(getOfferingWorkingCopyParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingWorkingCopyResult);
@@ -4088,7 +7183,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingWorkingCopyParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -4096,7 +7191,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingWorkingCopy(params);
+        catalogManagementService.getOfferingWorkingCopy(getOfferingWorkingCopyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4125,16 +7220,111 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('copyFromPreviousVersion', () => {
+    describe('positive tests', () => {
+      function __copyFromPreviousVersionTest() {
+        // Construct the params object for operation copyFromPreviousVersion
+        const versionLocId = 'testString';
+        const type = 'testString';
+        const versionLocIdToCopyFrom = 'testString';
+        const copyFromPreviousVersionParams = {
+          versionLocId,
+          type,
+          versionLocIdToCopyFrom,
+        };
+
+        const copyFromPreviousVersionResult = catalogManagementService.copyFromPreviousVersion(copyFromPreviousVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(copyFromPreviousVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/copy/{type}/{version_loc_id_to_copy_from}', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+        expect(mockRequestOptions.path.type).toEqual(type);
+        expect(mockRequestOptions.path.version_loc_id_to_copy_from).toEqual(versionLocIdToCopyFrom);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __copyFromPreviousVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __copyFromPreviousVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __copyFromPreviousVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const type = 'testString';
+        const versionLocIdToCopyFrom = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const copyFromPreviousVersionParams = {
+          versionLocId,
+          type,
+          versionLocIdToCopyFrom,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.copyFromPreviousVersion(copyFromPreviousVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.copyFromPreviousVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.copyFromPreviousVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getVersion', () => {
     describe('positive tests', () => {
       function __getVersionTest() {
         // Construct the params object for operation getVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const getVersionParams = {
+          versionLocId,
         };
 
-        const getVersionResult = catalogManagementService.getVersion(params);
+        const getVersionResult = catalogManagementService.getVersion(getVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(getVersionResult);
@@ -4171,7 +7361,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -4179,7 +7369,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getVersion(params);
+        catalogManagementService.getVersion(getVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4208,16 +7398,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deleteVersion', () => {
     describe('positive tests', () => {
       function __deleteVersionTest() {
         // Construct the params object for operation deleteVersion
         const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
+        const deleteVersionParams = {
+          versionLocId,
         };
 
-        const deleteVersionResult = catalogManagementService.deleteVersion(params);
+        const deleteVersionResult = catalogManagementService.deleteVersion(deleteVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteVersionResult);
@@ -4254,7 +7445,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVersionParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -4262,7 +7453,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deleteVersion(params);
+        catalogManagementService.deleteVersion(deleteVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4291,6 +7482,91 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('deprecateVersion', () => {
+    describe('positive tests', () => {
+      function __deprecateVersionTest() {
+        // Construct the params object for operation deprecateVersion
+        const versionLocId = 'testString';
+        const deprecateVersionParams = {
+          versionLocId,
+        };
+
+        const deprecateVersionResult = catalogManagementService.deprecateVersion(deprecateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deprecateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/deprecate', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deprecateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __deprecateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __deprecateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deprecateVersionParams = {
+          versionLocId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.deprecateVersion(deprecateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.deprecateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.deprecateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getCluster', () => {
     describe('positive tests', () => {
       function __getClusterTest() {
@@ -4298,13 +7574,13 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const xAuthRefreshToken = 'testString';
-        const params = {
-          clusterId: clusterId,
-          region: region,
-          xAuthRefreshToken: xAuthRefreshToken,
+        const getClusterParams = {
+          clusterId,
+          region,
+          xAuthRefreshToken,
         };
 
-        const getClusterResult = catalogManagementService.getCluster(params);
+        const getClusterResult = catalogManagementService.getCluster(getClusterParams);
 
         // all methods should return a Promise
         expectToBePromise(getClusterResult);
@@ -4345,7 +7621,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getClusterParams = {
           clusterId,
           region,
           xAuthRefreshToken,
@@ -4355,7 +7631,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getCluster(params);
+        catalogManagementService.getCluster(getClusterParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4384,6 +7660,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getNamespaces', () => {
     describe('positive tests', () => {
       function __getNamespacesTest() {
@@ -4391,17 +7668,17 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const xAuthRefreshToken = 'testString';
-        const limit = 1000;
-        const offset = 38;
-        const params = {
-          clusterId: clusterId,
-          region: region,
-          xAuthRefreshToken: xAuthRefreshToken,
-          limit: limit,
-          offset: offset,
+        const limit = 100;
+        const offset = 0;
+        const getNamespacesParams = {
+          clusterId,
+          region,
+          xAuthRefreshToken,
+          limit,
+          offset,
         };
 
-        const getNamespacesResult = catalogManagementService.getNamespaces(params);
+        const getNamespacesResult = catalogManagementService.getNamespaces(getNamespacesParams);
 
         // all methods should return a Promise
         expectToBePromise(getNamespacesResult);
@@ -4444,7 +7721,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getNamespacesParams = {
           clusterId,
           region,
           xAuthRefreshToken,
@@ -4454,7 +7731,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getNamespaces(params);
+        catalogManagementService.getNamespaces(getNamespacesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4482,7 +7759,62 @@ describe('CatalogManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('GetNamespacesPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/deploy/kubernetes/clusters/testString/namespaces';
+      const mockPagerResponse1 =
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":["resources"]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":["resources"]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          clusterId: 'testString',
+          region: 'testString',
+          xAuthRefreshToken: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetNamespacesPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          clusterId: 'testString',
+          region: 'testString',
+          xAuthRefreshToken: 'testString',
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetNamespacesPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('deployOperators', () => {
     describe('positive tests', () => {
       function __deployOperatorsTest() {
@@ -4493,16 +7825,20 @@ describe('CatalogManagementV1', () => {
         const namespaces = ['testString'];
         const allNamespaces = true;
         const versionLocatorId = 'testString';
-        const params = {
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          namespaces: namespaces,
-          allNamespaces: allNamespaces,
-          versionLocatorId: versionLocatorId,
+        const channel = 'testString';
+        const installPlan = 'testString';
+        const deployOperatorsParams = {
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          namespaces,
+          allNamespaces,
+          versionLocatorId,
+          channel,
+          installPlan,
         };
 
-        const deployOperatorsResult = catalogManagementService.deployOperators(params);
+        const deployOperatorsResult = catalogManagementService.deployOperators(deployOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(deployOperatorsResult);
@@ -4522,6 +7858,8 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.namespaces).toEqual(namespaces);
         expect(mockRequestOptions.body.all_namespaces).toEqual(allNamespaces);
         expect(mockRequestOptions.body.version_locator_id).toEqual(versionLocatorId);
+        expect(mockRequestOptions.body.channel).toEqual(channel);
+        expect(mockRequestOptions.body.install_plan).toEqual(installPlan);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -4544,7 +7882,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deployOperatorsParams = {
           xAuthRefreshToken,
           headers: {
             Accept: userAccept,
@@ -4552,7 +7890,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deployOperators(params);
+        catalogManagementService.deployOperators(deployOperatorsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4581,6 +7919,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('listOperators', () => {
     describe('positive tests', () => {
       function __listOperatorsTest() {
@@ -4589,14 +7928,14 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const versionLocatorId = 'testString';
-        const params = {
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          versionLocatorId: versionLocatorId,
+        const listOperatorsParams = {
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          versionLocatorId,
         };
 
-        const listOperatorsResult = catalogManagementService.listOperators(params);
+        const listOperatorsResult = catalogManagementService.listOperators(listOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(listOperatorsResult);
@@ -4639,7 +7978,7 @@ describe('CatalogManagementV1', () => {
         const versionLocatorId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listOperatorsParams = {
           xAuthRefreshToken,
           clusterId,
           region,
@@ -4650,7 +7989,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.listOperators(params);
+        catalogManagementService.listOperators(listOperatorsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4679,6 +8018,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('replaceOperators', () => {
     describe('positive tests', () => {
       function __replaceOperatorsTest() {
@@ -4689,16 +8029,20 @@ describe('CatalogManagementV1', () => {
         const namespaces = ['testString'];
         const allNamespaces = true;
         const versionLocatorId = 'testString';
-        const params = {
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          namespaces: namespaces,
-          allNamespaces: allNamespaces,
-          versionLocatorId: versionLocatorId,
+        const channel = 'testString';
+        const installPlan = 'testString';
+        const replaceOperatorsParams = {
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          namespaces,
+          allNamespaces,
+          versionLocatorId,
+          channel,
+          installPlan,
         };
 
-        const replaceOperatorsResult = catalogManagementService.replaceOperators(params);
+        const replaceOperatorsResult = catalogManagementService.replaceOperators(replaceOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceOperatorsResult);
@@ -4718,6 +8062,8 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.namespaces).toEqual(namespaces);
         expect(mockRequestOptions.body.all_namespaces).toEqual(allNamespaces);
         expect(mockRequestOptions.body.version_locator_id).toEqual(versionLocatorId);
+        expect(mockRequestOptions.body.channel).toEqual(channel);
+        expect(mockRequestOptions.body.install_plan).toEqual(installPlan);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -4740,7 +8086,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceOperatorsParams = {
           xAuthRefreshToken,
           headers: {
             Accept: userAccept,
@@ -4748,7 +8094,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.replaceOperators(params);
+        catalogManagementService.replaceOperators(replaceOperatorsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4777,6 +8123,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deleteOperators', () => {
     describe('positive tests', () => {
       function __deleteOperatorsTest() {
@@ -4785,14 +8132,14 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const versionLocatorId = 'testString';
-        const params = {
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          versionLocatorId: versionLocatorId,
+        const deleteOperatorsParams = {
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          versionLocatorId,
         };
 
-        const deleteOperatorsResult = catalogManagementService.deleteOperators(params);
+        const deleteOperatorsResult = catalogManagementService.deleteOperators(deleteOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteOperatorsResult);
@@ -4835,7 +8182,7 @@ describe('CatalogManagementV1', () => {
         const versionLocatorId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteOperatorsParams = {
           xAuthRefreshToken,
           clusterId,
           region,
@@ -4846,7 +8193,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deleteOperators(params);
+        catalogManagementService.deleteOperators(deleteOperatorsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4875,9 +8222,30 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('installVersion', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
+
+      // DeployRequestBodyOverrideValues
+      const deployRequestBodyOverrideValuesModel = {
+        vsi_instance_name: 'testString',
+        vpc_profile: 'testString',
+        subnet_id: 'testString',
+        vpc_id: 'testString',
+        subnet_zone: 'testString',
+        ssh_key_id: 'testString',
+        vpc_region: 'testString',
+        foo: 'testString',
+      };
+
+      // DeployRequestBodyEnvironmentVariablesItem
+      const deployRequestBodyEnvironmentVariablesItemModel = {
+        name: 'testString',
+        value: 'testString',
+        secure: true,
+        hidden: true,
+      };
 
       // DeployRequestBodySchematics
       const deployRequestBodySchematicsModel = {
@@ -4885,6 +8253,8 @@ describe('CatalogManagementV1', () => {
         description: 'testString',
         tags: ['testString'],
         resource_group_id: 'testString',
+        terraform_version: 'testString',
+        region: 'testString',
       };
 
       function __installVersionTest() {
@@ -4894,37 +8264,39 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const namespace = 'testString';
-        const overrideValues = { 'key1': 'testString' };
+        const overrideValues = deployRequestBodyOverrideValuesModel;
+        const environmentVariables = [deployRequestBodyEnvironmentVariablesItemModel];
         const entitlementApikey = 'testString';
         const schematics = deployRequestBodySchematicsModel;
         const script = 'testString';
         const scriptId = 'testString';
         const versionLocatorId = 'testString';
         const vcenterId = 'testString';
+        const vcenterLocation = 'testString';
         const vcenterUser = 'testString';
         const vcenterPassword = 'testString';
-        const vcenterLocation = 'testString';
         const vcenterDatastore = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          namespace: namespace,
-          overrideValues: overrideValues,
-          entitlementApikey: entitlementApikey,
-          schematics: schematics,
-          script: script,
-          scriptId: scriptId,
-          versionLocatorId: versionLocatorId,
-          vcenterId: vcenterId,
-          vcenterUser: vcenterUser,
-          vcenterPassword: vcenterPassword,
-          vcenterLocation: vcenterLocation,
-          vcenterDatastore: vcenterDatastore,
+        const installVersionParams = {
+          versionLocId,
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          namespace,
+          overrideValues,
+          environmentVariables,
+          entitlementApikey,
+          schematics,
+          script,
+          scriptId,
+          versionLocatorId,
+          vcenterId,
+          vcenterLocation,
+          vcenterUser,
+          vcenterPassword,
+          vcenterDatastore,
         };
 
-        const installVersionResult = catalogManagementService.installVersion(params);
+        const installVersionResult = catalogManagementService.installVersion(installVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(installVersionResult);
@@ -4943,15 +8315,16 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.region).toEqual(region);
         expect(mockRequestOptions.body.namespace).toEqual(namespace);
         expect(mockRequestOptions.body.override_values).toEqual(overrideValues);
+        expect(mockRequestOptions.body.environment_variables).toEqual(environmentVariables);
         expect(mockRequestOptions.body.entitlement_apikey).toEqual(entitlementApikey);
         expect(mockRequestOptions.body.schematics).toEqual(schematics);
         expect(mockRequestOptions.body.script).toEqual(script);
         expect(mockRequestOptions.body.script_id).toEqual(scriptId);
         expect(mockRequestOptions.body.version_locator_id).toEqual(versionLocatorId);
         expect(mockRequestOptions.body.vcenter_id).toEqual(vcenterId);
+        expect(mockRequestOptions.body.vcenter_location).toEqual(vcenterLocation);
         expect(mockRequestOptions.body.vcenter_user).toEqual(vcenterUser);
         expect(mockRequestOptions.body.vcenter_password).toEqual(vcenterPassword);
-        expect(mockRequestOptions.body.vcenter_location).toEqual(vcenterLocation);
         expect(mockRequestOptions.body.vcenter_datastore).toEqual(vcenterDatastore);
         expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
       }
@@ -4977,7 +8350,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const installVersionParams = {
           versionLocId,
           xAuthRefreshToken,
           headers: {
@@ -4986,7 +8359,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.installVersion(params);
+        catalogManagementService.installVersion(installVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5015,9 +8388,30 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('preinstallVersion', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
+
+      // DeployRequestBodyOverrideValues
+      const deployRequestBodyOverrideValuesModel = {
+        vsi_instance_name: 'testString',
+        vpc_profile: 'testString',
+        subnet_id: 'testString',
+        vpc_id: 'testString',
+        subnet_zone: 'testString',
+        ssh_key_id: 'testString',
+        vpc_region: 'testString',
+        foo: 'testString',
+      };
+
+      // DeployRequestBodyEnvironmentVariablesItem
+      const deployRequestBodyEnvironmentVariablesItemModel = {
+        name: 'testString',
+        value: 'testString',
+        secure: true,
+        hidden: true,
+      };
 
       // DeployRequestBodySchematics
       const deployRequestBodySchematicsModel = {
@@ -5025,6 +8419,8 @@ describe('CatalogManagementV1', () => {
         description: 'testString',
         tags: ['testString'],
         resource_group_id: 'testString',
+        terraform_version: 'testString',
+        region: 'testString',
       };
 
       function __preinstallVersionTest() {
@@ -5034,37 +8430,39 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const namespace = 'testString';
-        const overrideValues = { 'key1': 'testString' };
+        const overrideValues = deployRequestBodyOverrideValuesModel;
+        const environmentVariables = [deployRequestBodyEnvironmentVariablesItemModel];
         const entitlementApikey = 'testString';
         const schematics = deployRequestBodySchematicsModel;
         const script = 'testString';
         const scriptId = 'testString';
         const versionLocatorId = 'testString';
         const vcenterId = 'testString';
+        const vcenterLocation = 'testString';
         const vcenterUser = 'testString';
         const vcenterPassword = 'testString';
-        const vcenterLocation = 'testString';
         const vcenterDatastore = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          namespace: namespace,
-          overrideValues: overrideValues,
-          entitlementApikey: entitlementApikey,
-          schematics: schematics,
-          script: script,
-          scriptId: scriptId,
-          versionLocatorId: versionLocatorId,
-          vcenterId: vcenterId,
-          vcenterUser: vcenterUser,
-          vcenterPassword: vcenterPassword,
-          vcenterLocation: vcenterLocation,
-          vcenterDatastore: vcenterDatastore,
+        const preinstallVersionParams = {
+          versionLocId,
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          namespace,
+          overrideValues,
+          environmentVariables,
+          entitlementApikey,
+          schematics,
+          script,
+          scriptId,
+          versionLocatorId,
+          vcenterId,
+          vcenterLocation,
+          vcenterUser,
+          vcenterPassword,
+          vcenterDatastore,
         };
 
-        const preinstallVersionResult = catalogManagementService.preinstallVersion(params);
+        const preinstallVersionResult = catalogManagementService.preinstallVersion(preinstallVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(preinstallVersionResult);
@@ -5083,15 +8481,16 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.region).toEqual(region);
         expect(mockRequestOptions.body.namespace).toEqual(namespace);
         expect(mockRequestOptions.body.override_values).toEqual(overrideValues);
+        expect(mockRequestOptions.body.environment_variables).toEqual(environmentVariables);
         expect(mockRequestOptions.body.entitlement_apikey).toEqual(entitlementApikey);
         expect(mockRequestOptions.body.schematics).toEqual(schematics);
         expect(mockRequestOptions.body.script).toEqual(script);
         expect(mockRequestOptions.body.script_id).toEqual(scriptId);
         expect(mockRequestOptions.body.version_locator_id).toEqual(versionLocatorId);
         expect(mockRequestOptions.body.vcenter_id).toEqual(vcenterId);
+        expect(mockRequestOptions.body.vcenter_location).toEqual(vcenterLocation);
         expect(mockRequestOptions.body.vcenter_user).toEqual(vcenterUser);
         expect(mockRequestOptions.body.vcenter_password).toEqual(vcenterPassword);
-        expect(mockRequestOptions.body.vcenter_location).toEqual(vcenterLocation);
         expect(mockRequestOptions.body.vcenter_datastore).toEqual(vcenterDatastore);
         expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
       }
@@ -5117,7 +8516,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const preinstallVersionParams = {
           versionLocId,
           xAuthRefreshToken,
           headers: {
@@ -5126,7 +8525,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.preinstallVersion(params);
+        catalogManagementService.preinstallVersion(preinstallVersionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5155,6 +8554,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getPreinstall', () => {
     describe('positive tests', () => {
       function __getPreinstallTest() {
@@ -5164,15 +8564,15 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const namespace = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          namespace: namespace,
+        const getPreinstallParams = {
+          versionLocId,
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          namespace,
         };
 
-        const getPreinstallResult = catalogManagementService.getPreinstall(params);
+        const getPreinstallResult = catalogManagementService.getPreinstall(getPreinstallParams);
 
         // all methods should return a Promise
         expectToBePromise(getPreinstallResult);
@@ -5214,7 +8614,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getPreinstallParams = {
           versionLocId,
           xAuthRefreshToken,
           headers: {
@@ -5223,7 +8623,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getPreinstall(params);
+        catalogManagementService.getPreinstall(getPreinstallParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5252,9 +8652,30 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('validateInstall', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
+
+      // DeployRequestBodyOverrideValues
+      const deployRequestBodyOverrideValuesModel = {
+        vsi_instance_name: 'testString',
+        vpc_profile: 'testString',
+        subnet_id: 'testString',
+        vpc_id: 'testString',
+        subnet_zone: 'testString',
+        ssh_key_id: 'testString',
+        vpc_region: 'testString',
+        foo: 'testString',
+      };
+
+      // DeployRequestBodyEnvironmentVariablesItem
+      const deployRequestBodyEnvironmentVariablesItemModel = {
+        name: 'testString',
+        value: 'testString',
+        secure: true,
+        hidden: true,
+      };
 
       // DeployRequestBodySchematics
       const deployRequestBodySchematicsModel = {
@@ -5262,6 +8683,8 @@ describe('CatalogManagementV1', () => {
         description: 'testString',
         tags: ['testString'],
         resource_group_id: 'testString',
+        terraform_version: 'testString',
+        region: 'testString',
       };
 
       function __validateInstallTest() {
@@ -5271,37 +8694,41 @@ describe('CatalogManagementV1', () => {
         const clusterId = 'testString';
         const region = 'testString';
         const namespace = 'testString';
-        const overrideValues = { 'key1': 'testString' };
+        const overrideValues = deployRequestBodyOverrideValuesModel;
+        const environmentVariables = [deployRequestBodyEnvironmentVariablesItemModel];
         const entitlementApikey = 'testString';
         const schematics = deployRequestBodySchematicsModel;
         const script = 'testString';
         const scriptId = 'testString';
         const versionLocatorId = 'testString';
         const vcenterId = 'testString';
+        const vcenterLocation = 'testString';
         const vcenterUser = 'testString';
         const vcenterPassword = 'testString';
-        const vcenterLocation = 'testString';
         const vcenterDatastore = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-          xAuthRefreshToken: xAuthRefreshToken,
-          clusterId: clusterId,
-          region: region,
-          namespace: namespace,
-          overrideValues: overrideValues,
-          entitlementApikey: entitlementApikey,
-          schematics: schematics,
-          script: script,
-          scriptId: scriptId,
-          versionLocatorId: versionLocatorId,
-          vcenterId: vcenterId,
-          vcenterUser: vcenterUser,
-          vcenterPassword: vcenterPassword,
-          vcenterLocation: vcenterLocation,
-          vcenterDatastore: vcenterDatastore,
+        const targetContextName = 'testString';
+        const validateInstallParams = {
+          versionLocId,
+          xAuthRefreshToken,
+          clusterId,
+          region,
+          namespace,
+          overrideValues,
+          environmentVariables,
+          entitlementApikey,
+          schematics,
+          script,
+          scriptId,
+          versionLocatorId,
+          vcenterId,
+          vcenterLocation,
+          vcenterUser,
+          vcenterPassword,
+          vcenterDatastore,
+          targetContextName,
         };
 
-        const validateInstallResult = catalogManagementService.validateInstall(params);
+        const validateInstallResult = catalogManagementService.validateInstall(validateInstallParams);
 
         // all methods should return a Promise
         expectToBePromise(validateInstallResult);
@@ -5320,16 +8747,18 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.region).toEqual(region);
         expect(mockRequestOptions.body.namespace).toEqual(namespace);
         expect(mockRequestOptions.body.override_values).toEqual(overrideValues);
+        expect(mockRequestOptions.body.environment_variables).toEqual(environmentVariables);
         expect(mockRequestOptions.body.entitlement_apikey).toEqual(entitlementApikey);
         expect(mockRequestOptions.body.schematics).toEqual(schematics);
         expect(mockRequestOptions.body.script).toEqual(script);
         expect(mockRequestOptions.body.script_id).toEqual(scriptId);
         expect(mockRequestOptions.body.version_locator_id).toEqual(versionLocatorId);
         expect(mockRequestOptions.body.vcenter_id).toEqual(vcenterId);
+        expect(mockRequestOptions.body.vcenter_location).toEqual(vcenterLocation);
         expect(mockRequestOptions.body.vcenter_user).toEqual(vcenterUser);
         expect(mockRequestOptions.body.vcenter_password).toEqual(vcenterPassword);
-        expect(mockRequestOptions.body.vcenter_location).toEqual(vcenterLocation);
         expect(mockRequestOptions.body.vcenter_datastore).toEqual(vcenterDatastore);
+        expect(mockRequestOptions.qs.targetContextName).toEqual(targetContextName);
         expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
       }
 
@@ -5354,7 +8783,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const validateInstallParams = {
           versionLocId,
           xAuthRefreshToken,
           headers: {
@@ -5363,7 +8792,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.validateInstall(params);
+        catalogManagementService.validateInstall(validateInstallParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5392,18 +8821,21 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getValidationStatus', () => {
     describe('positive tests', () => {
       function __getValidationStatusTest() {
         // Construct the params object for operation getValidationStatus
         const versionLocId = 'testString';
         const xAuthRefreshToken = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-          xAuthRefreshToken: xAuthRefreshToken,
+        const targetContextName = 'testString';
+        const getValidationStatusParams = {
+          versionLocId,
+          xAuthRefreshToken,
+          targetContextName,
         };
 
-        const getValidationStatusResult = catalogManagementService.getValidationStatus(params);
+        const getValidationStatusResult = catalogManagementService.getValidationStatus(getValidationStatusParams);
 
         // all methods should return a Promise
         expectToBePromise(getValidationStatusResult);
@@ -5418,6 +8850,7 @@ describe('CatalogManagementV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'X-Auth-Refresh-Token', xAuthRefreshToken);
+        expect(mockRequestOptions.qs.targetContextName).toEqual(targetContextName);
         expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
       }
 
@@ -5442,7 +8875,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getValidationStatusParams = {
           versionLocId,
           xAuthRefreshToken,
           headers: {
@@ -5451,7 +8884,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getValidationStatus(params);
+        catalogManagementService.getValidationStatus(getValidationStatusParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5480,107 +8913,27 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('getOverrideValues', () => {
-    describe('positive tests', () => {
-      function __getOverrideValuesTest() {
-        // Construct the params object for operation getOverrideValues
-        const versionLocId = 'testString';
-        const params = {
-          versionLocId: versionLocId,
-        };
 
-        const getOverrideValuesResult = catalogManagementService.getOverrideValues(params);
-
-        // all methods should return a Promise
-        expectToBePromise(getOverrideValuesResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/validation/overridevalues', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __getOverrideValuesTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.enableRetries();
-        __getOverrideValuesTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.disableRetries();
-        __getOverrideValuesTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const versionLocId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          versionLocId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        catalogManagementService.getOverrideValues(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await catalogManagementService.getOverrideValues({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await catalogManagementService.getOverrideValues();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
   describe('searchObjects', () => {
     describe('positive tests', () => {
       function __searchObjectsTest() {
         // Construct the params object for operation searchObjects
         const query = 'testString';
-        const limit = 1000;
-        const offset = 38;
+        const kind = 'vpe';
+        const limit = 100;
+        const offset = 0;
         const collapse = true;
         const digest = true;
-        const params = {
-          query: query,
-          limit: limit,
-          offset: offset,
-          collapse: collapse,
-          digest: digest,
+        const searchObjectsParams = {
+          query,
+          kind,
+          limit,
+          offset,
+          collapse,
+          digest,
         };
 
-        const searchObjectsResult = catalogManagementService.searchObjects(params);
+        const searchObjectsResult = catalogManagementService.searchObjects(searchObjectsParams);
 
         // all methods should return a Promise
         expectToBePromise(searchObjectsResult);
@@ -5595,6 +8948,7 @@ describe('CatalogManagementV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.query).toEqual(query);
+        expect(mockRequestOptions.qs.kind).toEqual(kind);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.offset).toEqual(offset);
         expect(mockRequestOptions.qs.collapse).toEqual(collapse);
@@ -5621,7 +8975,7 @@ describe('CatalogManagementV1', () => {
         const query = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const searchObjectsParams = {
           query,
           headers: {
             Accept: userAccept,
@@ -5629,7 +8983,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.searchObjects(params);
+        catalogManagementService.searchObjects(searchObjectsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5657,25 +9011,82 @@ describe('CatalogManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('SearchObjectsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/objects';
+      const mockPagerResponse1 =
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","name":"name","crn":"crn","url":"url","parent_id":"parent_id","label_i18n":{"mapKey":"inner"},"label":"label","tags":["tags"],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"kind":"kind","publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"catalog_id":"catalog_id","catalog_name":"catalog_name","data":{"anyKey":"anyValue"}}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","name":"name","crn":"crn","url":"url","parent_id":"parent_id","label_i18n":{"mapKey":"inner"},"label":"label","tags":["tags"],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"kind":"kind","publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"catalog_id":"catalog_id","catalog_name":"catalog_name","data":{"anyKey":"anyValue"}}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          query: 'testString',
+          kind: 'vpe',
+          limit: 10,
+          collapse: true,
+          digest: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.SearchObjectsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          query: 'testString',
+          kind: 'vpe',
+          limit: 10,
+          collapse: true,
+          digest: true,
+        };
+        const pager = new CatalogManagementV1.SearchObjectsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('listObjects', () => {
     describe('positive tests', () => {
       function __listObjectsTest() {
         // Construct the params object for operation listObjects
         const catalogIdentifier = 'testString';
-        const limit = 1000;
-        const offset = 38;
+        const limit = 100;
+        const offset = 0;
         const name = 'testString';
         const sort = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          limit: limit,
-          offset: offset,
-          name: name,
-          sort: sort,
+        const listObjectsParams = {
+          catalogIdentifier,
+          limit,
+          offset,
+          name,
+          sort,
         };
 
-        const listObjectsResult = catalogManagementService.listObjects(params);
+        const listObjectsResult = catalogManagementService.listObjects(listObjectsParams);
 
         // all methods should return a Promise
         expectToBePromise(listObjectsResult);
@@ -5716,7 +9127,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listObjectsParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -5724,7 +9135,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.listObjects(params);
+        catalogManagementService.listObjects(listObjectsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5752,18 +9163,80 @@ describe('CatalogManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('ObjectsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/objects';
+      const mockPagerResponse1 =
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","name":"name","crn":"crn","url":"url","parent_id":"parent_id","label_i18n":{"mapKey":"inner"},"label":"label","tags":["tags"],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"kind":"kind","publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"catalog_id":"catalog_id","catalog_name":"catalog_name","data":{"anyKey":"anyValue"}}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","name":"name","crn":"crn","url":"url","parent_id":"parent_id","label_i18n":{"mapKey":"inner"},"label":"label","tags":["tags"],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"kind":"kind","publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"catalog_id":"catalog_id","catalog_name":"catalog_name","data":{"anyKey":"anyValue"}}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          limit: 10,
+          name: 'testString',
+          sort: 'testString',
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.ObjectsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          limit: 10,
+          name: 'testString',
+          sort: 'testString',
+        };
+        const pager = new CatalogManagementV1.ObjectsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('createObject', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
       // PublishObject
       const publishObjectModel = {
+        pc_managed: true,
+        approval_type: 'testString',
+        publish_approved: true,
+        share_with_all: true,
+        share_with_ibm: true,
+        share_enabled: true,
+        original_crn: 'testString',
+        public_crn: 'testString',
+        approval_record: { anyKey: 'anyValue' },
         permit_ibm_public_publish: true,
         ibm_approved: true,
         public_approved: true,
-        portal_approval_record: 'testString',
-        portal_url: 'testString',
       };
 
       // State
@@ -5778,49 +9251,45 @@ describe('CatalogManagementV1', () => {
       function __createObjectTest() {
         // Construct the params object for operation createObject
         const catalogIdentifier = 'testString';
-        const id = 'testString';
         const name = 'testString';
-        const rev = 'testString';
         const crn = 'testString';
         const url = 'testString';
         const parentId = 'testString';
-        const labelI18n = 'testString';
+        const labelI18n = { 'key1': 'testString' };
         const label = 'testString';
         const tags = ['testString'];
         const created = '2019-01-01T12:00:00.000Z';
         const updated = '2019-01-01T12:00:00.000Z';
         const shortDescription = 'testString';
-        const shortDescriptionI18n = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
         const kind = 'testString';
         const publish = publishObjectModel;
         const state = stateModel;
         const catalogId = 'testString';
         const catalogName = 'testString';
-        const data = { 'key1': 'testString' };
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          id: id,
-          name: name,
-          rev: rev,
-          crn: crn,
-          url: url,
-          parentId: parentId,
-          labelI18n: labelI18n,
-          label: label,
-          tags: tags,
-          created: created,
-          updated: updated,
-          shortDescription: shortDescription,
-          shortDescriptionI18n: shortDescriptionI18n,
-          kind: kind,
-          publish: publish,
-          state: state,
-          catalogId: catalogId,
-          catalogName: catalogName,
-          data: data,
+        const data = { anyKey: 'anyValue' };
+        const createObjectParams = {
+          catalogIdentifier,
+          name,
+          crn,
+          url,
+          parentId,
+          labelI18n,
+          label,
+          tags,
+          created,
+          updated,
+          shortDescription,
+          shortDescriptionI18n,
+          kind,
+          publish,
+          state,
+          catalogId,
+          catalogName,
+          data,
         };
 
-        const createObjectResult = catalogManagementService.createObject(params);
+        const createObjectResult = catalogManagementService.createObject(createObjectParams);
 
         // all methods should return a Promise
         expectToBePromise(createObjectResult);
@@ -5834,9 +9303,7 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.id).toEqual(id);
         expect(mockRequestOptions.body.name).toEqual(name);
-        expect(mockRequestOptions.body._rev).toEqual(rev);
         expect(mockRequestOptions.body.crn).toEqual(crn);
         expect(mockRequestOptions.body.url).toEqual(url);
         expect(mockRequestOptions.body.parent_id).toEqual(parentId);
@@ -5876,7 +9343,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createObjectParams = {
           catalogIdentifier,
           headers: {
             Accept: userAccept,
@@ -5884,7 +9351,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.createObject(params);
+        catalogManagementService.createObject(createObjectParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5913,18 +9380,19 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getObject', () => {
     describe('positive tests', () => {
       function __getObjectTest() {
         // Construct the params object for operation getObject
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
+        const getObjectParams = {
+          catalogIdentifier,
+          objectIdentifier,
         };
 
-        const getObjectResult = catalogManagementService.getObject(params);
+        const getObjectResult = catalogManagementService.getObject(getObjectParams);
 
         // all methods should return a Promise
         expectToBePromise(getObjectResult);
@@ -5963,7 +9431,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getObjectParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -5972,7 +9440,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getObject(params);
+        catalogManagementService.getObject(getObjectParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6001,17 +9469,25 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('replaceObject', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
       // PublishObject
       const publishObjectModel = {
+        pc_managed: true,
+        approval_type: 'testString',
+        publish_approved: true,
+        share_with_all: true,
+        share_with_ibm: true,
+        share_enabled: true,
+        original_crn: 'testString',
+        public_crn: 'testString',
+        approval_record: { anyKey: 'anyValue' },
         permit_ibm_public_publish: true,
         ibm_approved: true,
         public_approved: true,
-        portal_approval_record: 'testString',
-        portal_url: 'testString',
       };
 
       // State
@@ -6028,49 +9504,49 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
         const id = 'testString';
-        const name = 'testString';
         const rev = 'testString';
+        const name = 'testString';
         const crn = 'testString';
         const url = 'testString';
         const parentId = 'testString';
-        const labelI18n = 'testString';
+        const labelI18n = { 'key1': 'testString' };
         const label = 'testString';
         const tags = ['testString'];
         const created = '2019-01-01T12:00:00.000Z';
         const updated = '2019-01-01T12:00:00.000Z';
         const shortDescription = 'testString';
-        const shortDescriptionI18n = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
         const kind = 'testString';
         const publish = publishObjectModel;
         const state = stateModel;
         const catalogId = 'testString';
         const catalogName = 'testString';
-        const data = { 'key1': 'testString' };
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          id: id,
-          name: name,
-          rev: rev,
-          crn: crn,
-          url: url,
-          parentId: parentId,
-          labelI18n: labelI18n,
-          label: label,
-          tags: tags,
-          created: created,
-          updated: updated,
-          shortDescription: shortDescription,
-          shortDescriptionI18n: shortDescriptionI18n,
-          kind: kind,
-          publish: publish,
-          state: state,
-          catalogId: catalogId,
-          catalogName: catalogName,
-          data: data,
+        const data = { anyKey: 'anyValue' };
+        const replaceObjectParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          id,
+          rev,
+          name,
+          crn,
+          url,
+          parentId,
+          labelI18n,
+          label,
+          tags,
+          created,
+          updated,
+          shortDescription,
+          shortDescriptionI18n,
+          kind,
+          publish,
+          state,
+          catalogId,
+          catalogName,
+          data,
         };
 
-        const replaceObjectResult = catalogManagementService.replaceObject(params);
+        const replaceObjectResult = catalogManagementService.replaceObject(replaceObjectParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceObjectResult);
@@ -6085,8 +9561,8 @@ describe('CatalogManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.id).toEqual(id);
-        expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body._rev).toEqual(rev);
+        expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.crn).toEqual(crn);
         expect(mockRequestOptions.body.url).toEqual(url);
         expect(mockRequestOptions.body.parent_id).toEqual(parentId);
@@ -6128,7 +9604,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceObjectParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -6137,7 +9613,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.replaceObject(params);
+        catalogManagementService.replaceObject(replaceObjectParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6166,18 +9642,19 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deleteObject', () => {
     describe('positive tests', () => {
       function __deleteObjectTest() {
         // Construct the params object for operation deleteObject
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
+        const deleteObjectParams = {
+          catalogIdentifier,
+          objectIdentifier,
         };
 
-        const deleteObjectResult = catalogManagementService.deleteObject(params);
+        const deleteObjectResult = catalogManagementService.deleteObject(deleteObjectParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteObjectResult);
@@ -6216,7 +9693,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteObjectParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -6225,7 +9702,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deleteObject(params);
+        catalogManagementService.deleteObject(deleteObjectParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6254,18 +9731,175 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('listObjectAudits', () => {
+    describe('positive tests', () => {
+      function __listObjectAuditsTest() {
+        // Construct the params object for operation listObjectAudits
+        const catalogIdentifier = 'testString';
+        const objectIdentifier = 'testString';
+        const start = 'testString';
+        const limit = 100;
+        const lookupnames = true;
+        const listObjectAuditsParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          start,
+          limit,
+          lookupnames,
+        };
+
+        const listObjectAuditsResult = catalogManagementService.listObjectAudits(listObjectAuditsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listObjectAuditsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/audits', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listObjectAuditsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __listObjectAuditsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __listObjectAuditsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const objectIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listObjectAuditsParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.listObjectAudits(listObjectAuditsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.listObjectAudits({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.listObjectAudits();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('ObjectAuditsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/objects/testString/audits';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          objectIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.ObjectAuditsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          objectIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const pager = new CatalogManagementV1.ObjectAuditsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
   describe('getObjectAudit', () => {
     describe('positive tests', () => {
       function __getObjectAuditTest() {
         // Construct the params object for operation getObjectAudit
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
+        const auditlogIdentifier = 'testString';
+        const lookupnames = true;
+        const getObjectAuditParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          auditlogIdentifier,
+          lookupnames,
         };
 
-        const getObjectAuditResult = catalogManagementService.getObjectAudit(params);
+        const getObjectAuditResult = catalogManagementService.getObjectAudit(getObjectAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getObjectAuditResult);
@@ -6275,12 +9909,14 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/audit', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
+        expect(mockRequestOptions.path.auditlog_identifier).toEqual(auditlogIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -6302,18 +9938,20 @@ describe('CatalogManagementV1', () => {
         // parameters
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
+        const auditlogIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getObjectAuditParams = {
           catalogIdentifier,
           objectIdentifier,
+          auditlogIdentifier,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getObjectAudit(params);
+        catalogManagementService.getObjectAudit(getObjectAuditParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6342,28 +9980,29 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('accountPublishObject', () => {
+
+  describe('consumableShareObject', () => {
     describe('positive tests', () => {
-      function __accountPublishObjectTest() {
-        // Construct the params object for operation accountPublishObject
+      function __consumableShareObjectTest() {
+        // Construct the params object for operation consumableShareObject
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
+        const consumableShareObjectParams = {
+          catalogIdentifier,
+          objectIdentifier,
         };
 
-        const accountPublishObjectResult = catalogManagementService.accountPublishObject(params);
+        const consumableShareObjectResult = catalogManagementService.consumableShareObject(consumableShareObjectParams);
 
         // all methods should return a Promise
-        expectToBePromise(accountPublishObjectResult);
+        expectToBePromise(consumableShareObjectResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/account-publish', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/consume-publish', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6373,17 +10012,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __accountPublishObjectTest();
+        __consumableShareObjectTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __accountPublishObjectTest();
+        __consumableShareObjectTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __accountPublishObjectTest();
+        __consumableShareObjectTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6392,7 +10031,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const consumableShareObjectParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -6401,7 +10040,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.accountPublishObject(params);
+        catalogManagementService.consumableShareObject(consumableShareObjectParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6410,7 +10049,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.accountPublishObject({});
+          await catalogManagementService.consumableShareObject({});
         } catch (e) {
           err = e;
         }
@@ -6421,7 +10060,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.accountPublishObject();
+          await catalogManagementService.consumableShareObject();
         } catch (e) {
           err = e;
         }
@@ -6430,48 +10069,58 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('sharedPublishObject', () => {
+
+  describe('shareObject', () => {
     describe('positive tests', () => {
-      function __sharedPublishObjectTest() {
-        // Construct the params object for operation sharedPublishObject
+      function __shareObjectTest() {
+        // Construct the params object for operation shareObject
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
+        const ibm = true;
+        const _public = true;
+        const enabled = true;
+        const shareObjectParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          ibm,
+          _public,
+          enabled,
         };
 
-        const sharedPublishObjectResult = catalogManagementService.sharedPublishObject(params);
+        const shareObjectResult = catalogManagementService.shareObject(shareObjectParams);
 
         // all methods should return a Promise
-        expectToBePromise(sharedPublishObjectResult);
+        expectToBePromise(shareObjectResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/shared-publish', 'POST');
-        const expectedAccept = undefined;
-        const expectedContentType = undefined;
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/share', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.ibm).toEqual(ibm);
+        expect(mockRequestOptions.body.public).toEqual(_public);
+        expect(mockRequestOptions.body.enabled).toEqual(enabled);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __sharedPublishObjectTest();
+        __shareObjectTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __sharedPublishObjectTest();
+        __shareObjectTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __sharedPublishObjectTest();
+        __shareObjectTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6480,7 +10129,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const shareObjectParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -6489,7 +10138,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.sharedPublishObject(params);
+        catalogManagementService.shareObject(shareObjectParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6498,7 +10147,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.sharedPublishObject({});
+          await catalogManagementService.shareObject({});
         } catch (e) {
           err = e;
         }
@@ -6509,7 +10158,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.sharedPublishObject();
+          await catalogManagementService.shareObject();
         } catch (e) {
           err = e;
         }
@@ -6518,48 +10167,55 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('ibmPublishObject', () => {
+
+  describe('getObjectAccessList', () => {
     describe('positive tests', () => {
-      function __ibmPublishObjectTest() {
-        // Construct the params object for operation ibmPublishObject
+      function __getObjectAccessListTest() {
+        // Construct the params object for operation getObjectAccessList
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
+        const start = 'testString';
+        const limit = 100;
+        const getObjectAccessListParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          start,
+          limit,
         };
 
-        const ibmPublishObjectResult = catalogManagementService.ibmPublishObject(params);
+        const getObjectAccessListResult = catalogManagementService.getObjectAccessList(getObjectAccessListParams);
 
         // all methods should return a Promise
-        expectToBePromise(ibmPublishObjectResult);
+        expectToBePromise(getObjectAccessListResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/ibm-publish', 'POST');
-        const expectedAccept = undefined;
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/accessv1', 'GET');
+        const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __ibmPublishObjectTest();
+        __getObjectAccessListTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __ibmPublishObjectTest();
+        __getObjectAccessListTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __ibmPublishObjectTest();
+        __getObjectAccessListTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6568,7 +10224,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getObjectAccessListParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -6577,7 +10233,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.ibmPublishObject(params);
+        catalogManagementService.getObjectAccessList(getObjectAccessListParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6586,7 +10242,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.ibmPublishObject({});
+          await catalogManagementService.getObjectAccessList({});
         } catch (e) {
           err = e;
         }
@@ -6597,210 +10253,82 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.ibmPublishObject();
+          await catalogManagementService.getObjectAccessList();
         } catch (e) {
           err = e;
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('GetObjectAccessListPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/objects/testString/accessv1';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          objectIdentifier: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetObjectAccessListPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          objectIdentifier: 'testString',
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetObjectAccessListPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
-  describe('publicPublishObject', () => {
-    describe('positive tests', () => {
-      function __publicPublishObjectTest() {
-        // Construct the params object for operation publicPublishObject
-        const catalogIdentifier = 'testString';
-        const objectIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-        };
 
-        const publicPublishObjectResult = catalogManagementService.publicPublishObject(params);
-
-        // all methods should return a Promise
-        expectToBePromise(publicPublishObjectResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/public-publish', 'POST');
-        const expectedAccept = undefined;
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
-        expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __publicPublishObjectTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.enableRetries();
-        __publicPublishObjectTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.disableRetries();
-        __publicPublishObjectTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const catalogIdentifier = 'testString';
-        const objectIdentifier = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          catalogIdentifier,
-          objectIdentifier,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        catalogManagementService.publicPublishObject(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await catalogManagementService.publicPublishObject({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await catalogManagementService.publicPublishObject();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('createObjectAccess', () => {
-    describe('positive tests', () => {
-      function __createObjectAccessTest() {
-        // Construct the params object for operation createObjectAccess
-        const catalogIdentifier = 'testString';
-        const objectIdentifier = 'testString';
-        const accountIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          accountIdentifier: accountIdentifier,
-        };
-
-        const createObjectAccessResult = catalogManagementService.createObjectAccess(params);
-
-        // all methods should return a Promise
-        expectToBePromise(createObjectAccessResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{account_identifier}', 'POST');
-        const expectedAccept = undefined;
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
-        expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
-        expect(mockRequestOptions.path.account_identifier).toEqual(accountIdentifier);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __createObjectAccessTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.enableRetries();
-        __createObjectAccessTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        catalogManagementService.disableRetries();
-        __createObjectAccessTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const catalogIdentifier = 'testString';
-        const objectIdentifier = 'testString';
-        const accountIdentifier = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          catalogIdentifier,
-          objectIdentifier,
-          accountIdentifier,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        catalogManagementService.createObjectAccess(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await catalogManagementService.createObjectAccess({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await catalogManagementService.createObjectAccess();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
   describe('getObjectAccess', () => {
     describe('positive tests', () => {
       function __getObjectAccessTest() {
         // Construct the params object for operation getObjectAccess
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accountIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          accountIdentifier: accountIdentifier,
+        const accessIdentifier = 'testString';
+        const getObjectAccessParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          accessIdentifier,
         };
 
-        const getObjectAccessResult = catalogManagementService.getObjectAccess(params);
+        const getObjectAccessResult = catalogManagementService.getObjectAccess(getObjectAccessParams);
 
         // all methods should return a Promise
         expectToBePromise(getObjectAccessResult);
@@ -6810,13 +10338,13 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{account_identifier}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
-        expect(mockRequestOptions.path.account_identifier).toEqual(accountIdentifier);
+        expect(mockRequestOptions.path.access_identifier).toEqual(accessIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -6838,20 +10366,20 @@ describe('CatalogManagementV1', () => {
         // parameters
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accountIdentifier = 'testString';
+        const accessIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getObjectAccessParams = {
           catalogIdentifier,
           objectIdentifier,
-          accountIdentifier,
+          accessIdentifier,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getObjectAccess(params);
+        catalogManagementService.getObjectAccess(getObjectAccessParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6880,20 +10408,115 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
+  describe('createObjectAccess', () => {
+    describe('positive tests', () => {
+      function __createObjectAccessTest() {
+        // Construct the params object for operation createObjectAccess
+        const catalogIdentifier = 'testString';
+        const objectIdentifier = 'testString';
+        const accessIdentifier = 'testString';
+        const createObjectAccessParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          accessIdentifier,
+        };
+
+        const createObjectAccessResult = catalogManagementService.createObjectAccess(createObjectAccessParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createObjectAccessResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
+        expect(mockRequestOptions.path.access_identifier).toEqual(accessIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createObjectAccessTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __createObjectAccessTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __createObjectAccessTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const objectIdentifier = 'testString';
+        const accessIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createObjectAccessParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          accessIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.createObjectAccess(createObjectAccessParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.createObjectAccess({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.createObjectAccess();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('deleteObjectAccess', () => {
     describe('positive tests', () => {
       function __deleteObjectAccessTest() {
         // Construct the params object for operation deleteObjectAccess
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accountIdentifier = 'testString';
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          accountIdentifier: accountIdentifier,
+        const accessIdentifier = 'testString';
+        const deleteObjectAccessParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          accessIdentifier,
         };
 
-        const deleteObjectAccessResult = catalogManagementService.deleteObjectAccess(params);
+        const deleteObjectAccessResult = catalogManagementService.deleteObjectAccess(deleteObjectAccessParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteObjectAccessResult);
@@ -6903,13 +10526,13 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{account_identifier}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
-        expect(mockRequestOptions.path.account_identifier).toEqual(accountIdentifier);
+        expect(mockRequestOptions.path.access_identifier).toEqual(accessIdentifier);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -6931,20 +10554,20 @@ describe('CatalogManagementV1', () => {
         // parameters
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accountIdentifier = 'testString';
+        const accessIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteObjectAccessParams = {
           catalogIdentifier,
           objectIdentifier,
-          accountIdentifier,
+          accessIdentifier,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.deleteObjectAccess(params);
+        catalogManagementService.deleteObjectAccess(deleteObjectAccessParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6973,25 +10596,26 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
-  describe('getObjectAccessList', () => {
+
+  describe('getObjectAccessListDeprecated', () => {
     describe('positive tests', () => {
-      function __getObjectAccessListTest() {
-        // Construct the params object for operation getObjectAccessList
+      function __getObjectAccessListDeprecatedTest() {
+        // Construct the params object for operation getObjectAccessListDeprecated
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const limit = 1000;
-        const offset = 38;
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          limit: limit,
-          offset: offset,
+        const limit = 100;
+        const offset = 0;
+        const getObjectAccessListDeprecatedParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          limit,
+          offset,
         };
 
-        const getObjectAccessListResult = catalogManagementService.getObjectAccessList(params);
+        const getObjectAccessListDeprecatedResult = catalogManagementService.getObjectAccessListDeprecated(getObjectAccessListDeprecatedParams);
 
         // all methods should return a Promise
-        expectToBePromise(getObjectAccessListResult);
+        expectToBePromise(getObjectAccessListDeprecatedResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -7010,17 +10634,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __getObjectAccessListTest();
+        __getObjectAccessListDeprecatedTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __getObjectAccessListTest();
+        __getObjectAccessListDeprecatedTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __getObjectAccessListTest();
+        __getObjectAccessListDeprecatedTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7029,7 +10653,7 @@ describe('CatalogManagementV1', () => {
         const objectIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getObjectAccessListDeprecatedParams = {
           catalogIdentifier,
           objectIdentifier,
           headers: {
@@ -7038,7 +10662,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getObjectAccessList(params);
+        catalogManagementService.getObjectAccessListDeprecated(getObjectAccessListDeprecatedParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7047,7 +10671,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.getObjectAccessList({});
+          await catalogManagementService.getObjectAccessListDeprecated({});
         } catch (e) {
           err = e;
         }
@@ -7058,7 +10682,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.getObjectAccessList();
+          await catalogManagementService.getObjectAccessListDeprecated();
         } catch (e) {
           err = e;
         }
@@ -7066,21 +10690,74 @@ describe('CatalogManagementV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
     });
+
+    describe('GetObjectAccessListDeprecatedPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/objects/testString/access';
+      const mockPagerResponse1 =
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          objectIdentifier: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          objectIdentifier: 'testString',
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
   });
+
   describe('deleteObjectAccessList', () => {
     describe('positive tests', () => {
       function __deleteObjectAccessListTest() {
         // Construct the params object for operation deleteObjectAccessList
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accounts = ['testString'];
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          accounts: accounts,
+        const accesses = ['testString'];
+        const deleteObjectAccessListParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          accesses,
         };
 
-        const deleteObjectAccessListResult = catalogManagementService.deleteObjectAccessList(params);
+        const deleteObjectAccessListResult = catalogManagementService.deleteObjectAccessList(deleteObjectAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteObjectAccessListResult);
@@ -7094,7 +10771,7 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body).toEqual(accounts);
+        expect(mockRequestOptions.body).toEqual(accesses);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
       }
@@ -7118,20 +10795,20 @@ describe('CatalogManagementV1', () => {
         // parameters
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accounts = ['testString'];
+        const accesses = ['testString'];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteObjectAccessListParams = {
           catalogIdentifier,
           objectIdentifier,
-          accounts,
+          accesses,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.deleteObjectAccessList(params);
+        catalogManagementService.deleteObjectAccessList(deleteObjectAccessListParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7160,20 +10837,21 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('addObjectAccessList', () => {
     describe('positive tests', () => {
       function __addObjectAccessListTest() {
         // Construct the params object for operation addObjectAccessList
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accounts = ['testString'];
-        const params = {
-          catalogIdentifier: catalogIdentifier,
-          objectIdentifier: objectIdentifier,
-          accounts: accounts,
+        const accesses = ['testString'];
+        const addObjectAccessListParams = {
+          catalogIdentifier,
+          objectIdentifier,
+          accesses,
         };
 
-        const addObjectAccessListResult = catalogManagementService.addObjectAccessList(params);
+        const addObjectAccessListResult = catalogManagementService.addObjectAccessList(addObjectAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(addObjectAccessListResult);
@@ -7187,7 +10865,7 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body).toEqual(accounts);
+        expect(mockRequestOptions.body).toEqual(accesses);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.object_identifier).toEqual(objectIdentifier);
       }
@@ -7211,20 +10889,20 @@ describe('CatalogManagementV1', () => {
         // parameters
         const catalogIdentifier = 'testString';
         const objectIdentifier = 'testString';
-        const accounts = ['testString'];
+        const accesses = ['testString'];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addObjectAccessListParams = {
           catalogIdentifier,
           objectIdentifier,
-          accounts,
+          accesses,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.addObjectAccessList(params);
+        catalogManagementService.addObjectAccessList(addObjectAccessListParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7253,6 +10931,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('createOfferingInstance', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -7263,7 +10942,8 @@ describe('CatalogManagementV1', () => {
         state: 'testString',
         message: 'testString',
         transaction_id: 'testString',
-        updated: 'testString',
+        updated: '2019-01-01T12:00:00.000Z',
+        code: 'testString',
       };
 
       function __createOfferingInstanceTest() {
@@ -7278,40 +10958,56 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const kindFormat = 'testString';
         const version = 'testString';
+        const versionId = 'testString';
         const clusterId = 'testString';
         const clusterRegion = 'testString';
         const clusterNamespaces = ['testString'];
         const clusterAllNamespaces = true;
         const schematicsWorkspaceId = 'testString';
-        const resourceGroupId = 'testString';
         const installPlan = 'testString';
         const channel = 'testString';
-        const metadata = { 'key1': 'testString' };
+        const created = '2019-01-01T12:00:00.000Z';
+        const updated = '2019-01-01T12:00:00.000Z';
+        const metadata = { anyKey: 'anyValue' };
+        const resourceGroupId = 'testString';
+        const location = 'testString';
+        const disabled = true;
+        const account = 'testString';
         const lastOperation = offeringInstanceLastOperationModel;
-        const params = {
-          xAuthRefreshToken: xAuthRefreshToken,
-          id: id,
-          rev: rev,
-          url: url,
-          crn: crn,
-          label: label,
-          catalogId: catalogId,
-          offeringId: offeringId,
-          kindFormat: kindFormat,
-          version: version,
-          clusterId: clusterId,
-          clusterRegion: clusterRegion,
-          clusterNamespaces: clusterNamespaces,
-          clusterAllNamespaces: clusterAllNamespaces,
-          schematicsWorkspaceId: schematicsWorkspaceId,
-          resourceGroupId: resourceGroupId,
-          installPlan: installPlan,
-          channel: channel,
-          metadata: metadata,
-          lastOperation: lastOperation,
+        const kindTarget = 'testString';
+        const sha = 'testString';
+        const createOfferingInstanceParams = {
+          xAuthRefreshToken,
+          id,
+          rev,
+          url,
+          crn,
+          label,
+          catalogId,
+          offeringId,
+          kindFormat,
+          version,
+          versionId,
+          clusterId,
+          clusterRegion,
+          clusterNamespaces,
+          clusterAllNamespaces,
+          schematicsWorkspaceId,
+          installPlan,
+          channel,
+          created,
+          updated,
+          metadata,
+          resourceGroupId,
+          location,
+          disabled,
+          account,
+          lastOperation,
+          kindTarget,
+          sha,
         };
 
-        const createOfferingInstanceResult = catalogManagementService.createOfferingInstance(params);
+        const createOfferingInstanceResult = catalogManagementService.createOfferingInstance(createOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(createOfferingInstanceResult);
@@ -7335,16 +11031,24 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.offering_id).toEqual(offeringId);
         expect(mockRequestOptions.body.kind_format).toEqual(kindFormat);
         expect(mockRequestOptions.body.version).toEqual(version);
+        expect(mockRequestOptions.body.version_id).toEqual(versionId);
         expect(mockRequestOptions.body.cluster_id).toEqual(clusterId);
         expect(mockRequestOptions.body.cluster_region).toEqual(clusterRegion);
         expect(mockRequestOptions.body.cluster_namespaces).toEqual(clusterNamespaces);
         expect(mockRequestOptions.body.cluster_all_namespaces).toEqual(clusterAllNamespaces);
         expect(mockRequestOptions.body.schematics_workspace_id).toEqual(schematicsWorkspaceId);
-        expect(mockRequestOptions.body.resource_group_id).toEqual(resourceGroupId);
         expect(mockRequestOptions.body.install_plan).toEqual(installPlan);
         expect(mockRequestOptions.body.channel).toEqual(channel);
+        expect(mockRequestOptions.body.created).toEqual(created);
+        expect(mockRequestOptions.body.updated).toEqual(updated);
         expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.resource_group_id).toEqual(resourceGroupId);
+        expect(mockRequestOptions.body.location).toEqual(location);
+        expect(mockRequestOptions.body.disabled).toEqual(disabled);
+        expect(mockRequestOptions.body.account).toEqual(account);
         expect(mockRequestOptions.body.last_operation).toEqual(lastOperation);
+        expect(mockRequestOptions.body.kind_target).toEqual(kindTarget);
+        expect(mockRequestOptions.body.sha).toEqual(sha);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -7367,7 +11071,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createOfferingInstanceParams = {
           xAuthRefreshToken,
           headers: {
             Accept: userAccept,
@@ -7375,7 +11079,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.createOfferingInstance(params);
+        catalogManagementService.createOfferingInstance(createOfferingInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7404,16 +11108,17 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('getOfferingInstance', () => {
     describe('positive tests', () => {
       function __getOfferingInstanceTest() {
         // Construct the params object for operation getOfferingInstance
         const instanceIdentifier = 'testString';
-        const params = {
-          instanceIdentifier: instanceIdentifier,
+        const getOfferingInstanceParams = {
+          instanceIdentifier,
         };
 
-        const getOfferingInstanceResult = catalogManagementService.getOfferingInstance(params);
+        const getOfferingInstanceResult = catalogManagementService.getOfferingInstance(getOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingInstanceResult);
@@ -7450,7 +11155,7 @@ describe('CatalogManagementV1', () => {
         const instanceIdentifier = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOfferingInstanceParams = {
           instanceIdentifier,
           headers: {
             Accept: userAccept,
@@ -7458,7 +11163,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.getOfferingInstance(params);
+        catalogManagementService.getOfferingInstance(getOfferingInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7487,6 +11192,7 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('putOfferingInstance', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -7497,7 +11203,8 @@ describe('CatalogManagementV1', () => {
         state: 'testString',
         message: 'testString',
         transaction_id: 'testString',
-        updated: 'testString',
+        updated: '2019-01-01T12:00:00.000Z',
+        code: 'testString',
       };
 
       function __putOfferingInstanceTest() {
@@ -7513,41 +11220,57 @@ describe('CatalogManagementV1', () => {
         const offeringId = 'testString';
         const kindFormat = 'testString';
         const version = 'testString';
+        const versionId = 'testString';
         const clusterId = 'testString';
         const clusterRegion = 'testString';
         const clusterNamespaces = ['testString'];
         const clusterAllNamespaces = true;
         const schematicsWorkspaceId = 'testString';
-        const resourceGroupId = 'testString';
         const installPlan = 'testString';
         const channel = 'testString';
-        const metadata = { 'key1': 'testString' };
+        const created = '2019-01-01T12:00:00.000Z';
+        const updated = '2019-01-01T12:00:00.000Z';
+        const metadata = { anyKey: 'anyValue' };
+        const resourceGroupId = 'testString';
+        const location = 'testString';
+        const disabled = true;
+        const account = 'testString';
         const lastOperation = offeringInstanceLastOperationModel;
-        const params = {
-          instanceIdentifier: instanceIdentifier,
-          xAuthRefreshToken: xAuthRefreshToken,
-          id: id,
-          rev: rev,
-          url: url,
-          crn: crn,
-          label: label,
-          catalogId: catalogId,
-          offeringId: offeringId,
-          kindFormat: kindFormat,
-          version: version,
-          clusterId: clusterId,
-          clusterRegion: clusterRegion,
-          clusterNamespaces: clusterNamespaces,
-          clusterAllNamespaces: clusterAllNamespaces,
-          schematicsWorkspaceId: schematicsWorkspaceId,
-          resourceGroupId: resourceGroupId,
-          installPlan: installPlan,
-          channel: channel,
-          metadata: metadata,
-          lastOperation: lastOperation,
+        const kindTarget = 'testString';
+        const sha = 'testString';
+        const putOfferingInstanceParams = {
+          instanceIdentifier,
+          xAuthRefreshToken,
+          id,
+          rev,
+          url,
+          crn,
+          label,
+          catalogId,
+          offeringId,
+          kindFormat,
+          version,
+          versionId,
+          clusterId,
+          clusterRegion,
+          clusterNamespaces,
+          clusterAllNamespaces,
+          schematicsWorkspaceId,
+          installPlan,
+          channel,
+          created,
+          updated,
+          metadata,
+          resourceGroupId,
+          location,
+          disabled,
+          account,
+          lastOperation,
+          kindTarget,
+          sha,
         };
 
-        const putOfferingInstanceResult = catalogManagementService.putOfferingInstance(params);
+        const putOfferingInstanceResult = catalogManagementService.putOfferingInstance(putOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(putOfferingInstanceResult);
@@ -7571,16 +11294,24 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.offering_id).toEqual(offeringId);
         expect(mockRequestOptions.body.kind_format).toEqual(kindFormat);
         expect(mockRequestOptions.body.version).toEqual(version);
+        expect(mockRequestOptions.body.version_id).toEqual(versionId);
         expect(mockRequestOptions.body.cluster_id).toEqual(clusterId);
         expect(mockRequestOptions.body.cluster_region).toEqual(clusterRegion);
         expect(mockRequestOptions.body.cluster_namespaces).toEqual(clusterNamespaces);
         expect(mockRequestOptions.body.cluster_all_namespaces).toEqual(clusterAllNamespaces);
         expect(mockRequestOptions.body.schematics_workspace_id).toEqual(schematicsWorkspaceId);
-        expect(mockRequestOptions.body.resource_group_id).toEqual(resourceGroupId);
         expect(mockRequestOptions.body.install_plan).toEqual(installPlan);
         expect(mockRequestOptions.body.channel).toEqual(channel);
+        expect(mockRequestOptions.body.created).toEqual(created);
+        expect(mockRequestOptions.body.updated).toEqual(updated);
         expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.resource_group_id).toEqual(resourceGroupId);
+        expect(mockRequestOptions.body.location).toEqual(location);
+        expect(mockRequestOptions.body.disabled).toEqual(disabled);
+        expect(mockRequestOptions.body.account).toEqual(account);
         expect(mockRequestOptions.body.last_operation).toEqual(lastOperation);
+        expect(mockRequestOptions.body.kind_target).toEqual(kindTarget);
+        expect(mockRequestOptions.body.sha).toEqual(sha);
         expect(mockRequestOptions.path.instance_identifier).toEqual(instanceIdentifier);
       }
 
@@ -7605,7 +11336,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const putOfferingInstanceParams = {
           instanceIdentifier,
           xAuthRefreshToken,
           headers: {
@@ -7614,7 +11345,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.putOfferingInstance(params);
+        catalogManagementService.putOfferingInstance(putOfferingInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7643,18 +11374,19 @@ describe('CatalogManagementV1', () => {
       });
     });
   });
+
   describe('deleteOfferingInstance', () => {
     describe('positive tests', () => {
       function __deleteOfferingInstanceTest() {
         // Construct the params object for operation deleteOfferingInstance
         const instanceIdentifier = 'testString';
         const xAuthRefreshToken = 'testString';
-        const params = {
-          instanceIdentifier: instanceIdentifier,
-          xAuthRefreshToken: xAuthRefreshToken,
+        const deleteOfferingInstanceParams = {
+          instanceIdentifier,
+          xAuthRefreshToken,
         };
 
-        const deleteOfferingInstanceResult = catalogManagementService.deleteOfferingInstance(params);
+        const deleteOfferingInstanceResult = catalogManagementService.deleteOfferingInstance(deleteOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteOfferingInstanceResult);
@@ -7693,7 +11425,7 @@ describe('CatalogManagementV1', () => {
         const xAuthRefreshToken = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteOfferingInstanceParams = {
           instanceIdentifier,
           xAuthRefreshToken,
           headers: {
@@ -7702,7 +11434,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.deleteOfferingInstance(params);
+        catalogManagementService.deleteOfferingInstance(deleteOfferingInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7723,6 +11455,243 @@ describe('CatalogManagementV1', () => {
         let err;
         try {
           await catalogManagementService.deleteOfferingInstance();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listOfferingInstanceAudits', () => {
+    describe('positive tests', () => {
+      function __listOfferingInstanceAuditsTest() {
+        // Construct the params object for operation listOfferingInstanceAudits
+        const instanceIdentifier = 'testString';
+        const start = 'testString';
+        const limit = 100;
+        const lookupnames = true;
+        const listOfferingInstanceAuditsParams = {
+          instanceIdentifier,
+          start,
+          limit,
+          lookupnames,
+        };
+
+        const listOfferingInstanceAuditsResult = catalogManagementService.listOfferingInstanceAudits(listOfferingInstanceAuditsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listOfferingInstanceAuditsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/instances/offerings/{instance_identifier}/audits', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.instance_identifier).toEqual(instanceIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listOfferingInstanceAuditsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __listOfferingInstanceAuditsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __listOfferingInstanceAuditsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listOfferingInstanceAuditsParams = {
+          instanceIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.listOfferingInstanceAudits(listOfferingInstanceAuditsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.listOfferingInstanceAudits({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.listOfferingInstanceAudits();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('OfferingInstanceAuditsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/instances/offerings/testString/audits';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"audits":[{"id":"id","_rev":"_rev","created":"2019-01-01T12:00:00.000Z","change_type":"change_type","target_type":"target_type","target_id":"target_id","who_email":"who_email","who_delegate_email":"who_delegate_email","message":"message"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          instanceIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          instanceIdentifier: 'testString',
+          limit: 10,
+          lookupnames: true,
+        };
+        const pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getOfferingInstanceAudit', () => {
+    describe('positive tests', () => {
+      function __getOfferingInstanceAuditTest() {
+        // Construct the params object for operation getOfferingInstanceAudit
+        const instanceIdentifier = 'testString';
+        const auditlogIdentifier = 'testString';
+        const lookupnames = true;
+        const getOfferingInstanceAuditParams = {
+          instanceIdentifier,
+          auditlogIdentifier,
+          lookupnames,
+        };
+
+        const getOfferingInstanceAuditResult = catalogManagementService.getOfferingInstanceAudit(getOfferingInstanceAuditParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getOfferingInstanceAuditResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/instances/offerings/{instance_identifier}/audits/{auditlog_identifier}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.lookupnames).toEqual(lookupnames);
+        expect(mockRequestOptions.path.instance_identifier).toEqual(instanceIdentifier);
+        expect(mockRequestOptions.path.auditlog_identifier).toEqual(auditlogIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOfferingInstanceAuditTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getOfferingInstanceAuditTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getOfferingInstanceAuditTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceIdentifier = 'testString';
+        const auditlogIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getOfferingInstanceAuditParams = {
+          instanceIdentifier,
+          auditlogIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getOfferingInstanceAudit(getOfferingInstanceAuditParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingInstanceAudit({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getOfferingInstanceAudit();
         } catch (e) {
           err = e;
         }
