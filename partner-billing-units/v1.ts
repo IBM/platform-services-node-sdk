@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.75.0-726bc7e3-20230713-221716
+ * IBM OpenAPI SDK Code Generator Version: 3.85.0-75c38f8f-20240206-210220
  */
 
 import * as extend from 'extend';
@@ -23,9 +23,9 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
+  UserOptions,
   getAuthenticatorFromEnvironment,
   validateParams,
-  UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -50,7 +50,7 @@ class PartnerBillingUnitsV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {PartnerBillingUnitsV1}
    */
 
@@ -75,7 +75,7 @@ class PartnerBillingUnitsV1 extends BaseService {
    * Construct a PartnerBillingUnitsV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -307,7 +307,7 @@ namespace PartnerBillingUnitsV1 {
     /** Account ID of the customer. */
     customer_id?: string;
     /** The customer type. The valid values are `ENTERPRISE`, `ACCOUNT`, and `ACCOUNT_GROUP`. */
-    customer_type?: string;
+    customer_type?: BillingOption.Constants.CustomerType | string;
     /** A user-defined name for the customer. */
     customer_name?: string;
     /** ID of the reseller in the heirarchy of the requested customer. */
@@ -319,15 +319,15 @@ namespace PartnerBillingUnitsV1 {
     /** Errors in the billing. */
     errors?: JsonObject[];
     /** The type of billing option. The valid values are `SUBSCRIPTION` and `OFFER`. */
-    type?: string;
+    type?: BillingOption.Constants.Type | string;
     /** The start date of billing option. */
     start_date?: string;
     /** The end date of billing option. */
     end_date?: string;
     /** The state of the billing option. The valid values include `ACTIVE, `SUSPENDED`, and `CANCELED`. */
-    state?: string;
+    state?: BillingOption.Constants.State | string;
     /** The category of the billing option. The valid values are `PLATFORM`, `SERVICE`, and `SUPPORT`. */
-    category?: string;
+    category?: BillingOption.Constants.Category | string;
     /** The payment method for support. */
     payment_instrument?: JsonObject;
     /** Part number of the offering. */
@@ -350,6 +350,33 @@ namespace PartnerBillingUnitsV1 {
     country_code?: string;
     /** The currency code of the billing unit. */
     currency_code?: string;
+  }
+  export namespace BillingOption {
+    export namespace Constants {
+      /** The customer type. The valid values are `ENTERPRISE`, `ACCOUNT`, and `ACCOUNT_GROUP`. */
+      export enum CustomerType {
+        ENTERPRISE = 'ENTERPRISE',
+        ACCOUNT = 'ACCOUNT',
+        ACCOUNT_GROUP = 'ACCOUNT_GROUP',
+      }
+      /** The type of billing option. The valid values are `SUBSCRIPTION` and `OFFER`. */
+      export enum Type {
+        SUBSCRIPTION = 'SUBSCRIPTION',
+        OFFER = 'OFFER',
+      }
+      /** The state of the billing option. The valid values include `ACTIVE, `SUSPENDED`, and `CANCELED`. */
+      export enum State {
+        ACTIVE = 'ACTIVE',
+        SUSPENDED = 'SUSPENDED',
+        CANCELED = 'CANCELED',
+      }
+      /** The category of the billing option. The valid values are `PLATFORM`, `SERVICE`, and `SUPPORT`. */
+      export enum Category {
+        PLATFORM = 'PLATFORM',
+        SERVICE = 'SERVICE',
+        SUPPORT = 'SUPPORT',
+      }
+    }
   }
 
   /** The billing options report for the customer. */
@@ -381,13 +408,13 @@ namespace PartnerBillingUnitsV1 {
   /** Aggregated subscription burn-down report for the end customers. */
   export interface CreditPoolsReport {
     /** The category of the billing option. The valid values are `PLATFORM`, `SERVICE` and `SUPPORT`. */
-    type?: string;
+    type?: CreditPoolsReport.Constants.Type | string;
     /** The ID of the billing unit that's associated with the billing option. */
     billing_unit_id?: string;
     /** Account ID of the customer. */
     customer_id?: string;
     /** The customer type. The valid values are `ENTERPRISE`, `ACCOUNT`, and `ACCOUNT_GROUP`. */
-    customer_type?: string;
+    customer_type?: CreditPoolsReport.Constants.CustomerType | string;
     /** A user-defined name for the customer. */
     customer_name?: string;
     /** ID of the reseller in the heirarchy of the requested customer. */
@@ -402,6 +429,22 @@ namespace PartnerBillingUnitsV1 {
     term_credits?: TermCredits[];
     /** Overage that was generated on the credit pool. */
     overage?: Overage;
+  }
+  export namespace CreditPoolsReport {
+    export namespace Constants {
+      /** The category of the billing option. The valid values are `PLATFORM`, `SERVICE` and `SUPPORT`. */
+      export enum Type {
+        PLATFORM = 'PLATFORM',
+        SERVICE = 'SERVICE',
+        SUPPORT = 'SUPPORT',
+      }
+      /** The customer type. The valid values are `ENTERPRISE`, `ACCOUNT`, and `ACCOUNT_GROUP`. */
+      export enum CustomerType {
+        ENTERPRISE = 'ENTERPRISE',
+        ACCOUNT = 'ACCOUNT',
+        ACCOUNT_GROUP = 'ACCOUNT_GROUP',
+      }
+    }
   }
 
   /** The aggregated credit pools report. */
@@ -431,7 +474,7 @@ namespace PartnerBillingUnitsV1 {
     /** Billing option model. */
     billing_option_model?: string;
     /** The category of the billing option. The valid values are `PLATFORM`, `SERVICE`, and `SUPPORT`. */
-    category?: string;
+    category?: TermCredits.Constants.Category | string;
     /** The start date of the term in ISO format. */
     start_date?: string;
     /** The end date of the term in ISO format. */
@@ -446,6 +489,16 @@ namespace PartnerBillingUnitsV1 {
     current_balance?: number;
     /** A list of resources that used credit during the month. */
     resources?: JsonObject[];
+  }
+  export namespace TermCredits {
+    export namespace Constants {
+      /** The category of the billing option. The valid values are `PLATFORM`, `SERVICE`, and `SUPPORT`. */
+      export enum Category {
+        PLATFORM = 'PLATFORM',
+        SERVICE = 'SERVICE',
+        SUPPORT = 'SUPPORT',
+      }
+    }
   }
 }
 

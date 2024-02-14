@@ -18,7 +18,6 @@
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-
 const PartnerBillingUnitsV1 = require('../../dist/partner-billing-units/v1');
 
 const {
@@ -48,7 +47,6 @@ const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnv
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('PartnerBillingUnitsV1', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -59,7 +57,7 @@ describe('PartnerBillingUnitsV1', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = PartnerBillingUnitsV1.newInstance();
