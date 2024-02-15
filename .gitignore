@@ -20,6 +20,7 @@ iam-identity/*.js
 iam-policy-management/*.js
 ibm-cloud-shell/*.js
 open-service-broker/*.js
+partner-billing-units/*.js
 resource-manager/*.js
 resource-controller/*.js
 usage-metering/*.js
