@@ -1,3 +1,10 @@
+# [0.51.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.50.0...v0.51.0) (2024-02-15)
+
+
+### Features
+
+* **Partner Billing Units:** add new service to project ([#241](https://github.com/IBM/platform-services-node-sdk/issues/241)) ([8d154ae](https://github.com/IBM/platform-services-node-sdk/commit/8d154ae53ada11226f723346fcdb5ea194d510ab))
+
 # [0.50.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.49.1...v0.50.0) (2024-02-13)
 
 
