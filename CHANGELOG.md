@@ -1,3 +1,10 @@
+# [0.52.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.51.0...v0.52.0) (2024-02-19)
+
+
+### Features
+
+* **Partner Usage Reports:** add new service to project ([#243](https://github.com/IBM/platform-services-node-sdk/issues/243)) ([7a76765](https://github.com/IBM/platform-services-node-sdk/commit/7a76765839d7f742ca04415345f81a0ddd0bb9c7))
+
 # [0.51.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.50.0...v0.51.0) (2024-02-15)
 
 
