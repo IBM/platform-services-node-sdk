@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.84.1-55f6d880-20240110-194020
+ * IBM OpenAPI SDK Code Generator Version: 3.85.0-75c38f8f-20240206-210220
  */
 
 import * as extend from 'extend';
@@ -142,20 +142,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = [
-      'accountId',
-      'acceptLanguage',
-      'iamId',
-      'accessGroupId',
-      'type',
-      'serviceType',
-      'tagName',
-      'tagValue',
-      'sort',
-      'format',
-      'state',
-      'headers',
-    ];
+    const _validParams = ['accountId', 'acceptLanguage', 'iamId', 'accessGroupId', 'type', 'serviceType', 'tagName', 'tagValue', 'sort', 'format', 'state', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -174,11 +161,7 @@ class IamPolicyManagementV1 extends BaseService {
       'state': _params.state,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listPolicies'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicies');
 
     const parameters = {
       options: {
@@ -275,15 +258,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['type', 'subjects', 'roles', 'resources'];
-    const _validParams = [
-      'type',
-      'subjects',
-      'roles',
-      'resources',
-      'description',
-      'acceptLanguage',
-      'headers',
-    ];
+    const _validParams = ['type', 'subjects', 'roles', 'resources', 'description', 'acceptLanguage', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -297,11 +272,7 @@ class IamPolicyManagementV1 extends BaseService {
       'description': _params.description,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicy');
 
     const parameters = {
       options: {
@@ -341,87 +312,7 @@ class IamPolicyManagementV1 extends BaseService {
    * actions](/docs/account?topic=account-iam-service-roles-actions). Use only the resource attributes supported by the
    * service. To view a service's or the platform's supported attributes, check the [documentation](/docs?tab=all-docs).
    * The policy resource must include either the **`serviceType`**, **`serviceName`**,  or **`resourceGroupId`**
-   * attribute and the **`accountId`** attribute.`
-   *
-   * In the rule field, you can specify a single condition by using **`key`**, **`value`**, and condition
-   * **`operator`**, or a set of **`conditions`** with a combination **`operator`**. The possible combination operators
-   * are **`and`** and **`or`**.
-   *
-   * Currently, we support two types of patterns:
-   *
-   * 1. `time-based`: Used to specify a time-based restriction
-   *
-   * Combine conditions to specify a time-based restriction (e.g., access only during business hours, during the
-   * Monday-Friday work week). For example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following
-   * rule:
-   * ```json
-   *   "rule": {
-   *     "operator": "and",
-   *     "conditions": [{
-   *       "key": "{{environment.attributes.day_of_week}}",
-   *       "operator": "dayOfWeekAnyOf",
-   *       "value": ["1+00:00", "2+00:00", "3+00:00", "4+00:00", "5+00:00"]
-   *     },
-   *       "key": "{{environment.attributes.current_time}}",
-   *       "operator": "timeGreaterThanOrEquals",
-   *       "value": "09:00:00+00:00"
-   *     },
-   *       "key": "{{environment.attributes.current_time}}",
-   *       "operator": "timeLessThanOrEquals",
-   *       "value": "17:00:00+00:00"
-   *     }]
-   *   }
-   * ``` You can use the following operators in the **`key`** and **`value`** pair:
-   * ```
-   *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
-   *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
-   *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
-   * ``` The pattern field that matches the rule is required when rule is provided. For the business hour rule example
-   * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
-   * operators](/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties) and
-   * [Limiting access with time-based conditions](/docs/account?topic=account-iam-time-based&interface=ui). If the
-   * subject is a locked service-id, the request will fail.
-   *
-   * 2. `attribute-based`: Used to specify a combination of OR/AND based conditions applied on resource attributes.
-   *
-   * Combine conditions to specify an attribute-based condition using AN/OR-based operators.
-   *
-   * For example, a policy can grant access based on multiple conditions applied on the resource attributes below:
-   * ```json
-   *   "pattern": "attribute-based-condition:resource:literal-and-wildcard"
-   *   "rule": {
-   *       "operator": "or",
-   *       "conditions": [
-   *         {
-   *           "operator": "and",
-   *           "conditions": [
-   *             {
-   *               "key": "{{resource.attributes.prefix}}",
-   *               "operator": "stringEquals",
-   *               "value": "home/test"
-   *             },
-   *             {
-   *               "key": "{{environment.attributes.delimiter}}",
-   *               "operator": "stringEquals",
-   *               "value": "/"
-   *             }
-   *           ]
-   *         },
-   *         {
-   *           "key": "{{resource.attributes.path}}",
-   *           "operator": "stringMatch",
-   *           "value": "home/David/_*"
-   *         }
-   *       ]
-   *   }
-   * ```
-   *
-   * In addition to satisfying the `resources` section, the policy grants permission only if either the `path` begins
-   * with `home/David/` **OR**  the `prefix` is `home/test` and the `delimiter` is `/`. This mechanism helps you
-   * consolidate multiple policies in to a single policy,  making policies easier to administer and stay within the
-   * policy limit for an account. View the list of operators that can be used in the condition
-   * [here](/docs/account?topic=account-wildcard#string-comparisons).
-   *
+   * attribute and the **`accountId`** attribute.` If the subject is a locked service-id, the request will fail.
    *
    * ### Authorization
    *
@@ -466,16 +357,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources'];
-    const _validParams = [
-      'policyId',
-      'ifMatch',
-      'type',
-      'subjects',
-      'roles',
-      'resources',
-      'description',
-      'headers',
-    ];
+    const _validParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources', 'description', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -493,11 +375,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replacePolicy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replacePolicy');
 
     const parameters = {
       options: {
@@ -597,11 +475,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deletePolicy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicy');
 
     const parameters = {
       options: {
@@ -610,7 +484,13 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -651,11 +531,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updatePolicyState'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePolicyState');
 
     const parameters = {
       options: {
@@ -719,15 +595,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'acceptLanguage',
-      'accountId',
-      'serviceName',
-      'sourceServiceName',
-      'policyType',
-      'serviceGroupId',
-      'headers',
-    ];
+    const _validParams = ['acceptLanguage', 'accountId', 'serviceName', 'sourceServiceName', 'policyType', 'serviceGroupId', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -802,16 +670,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
     const _requiredParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName'];
-    const _validParams = [
-      'displayName',
-      'actions',
-      'name',
-      'accountId',
-      'serviceName',
-      'description',
-      'acceptLanguage',
-      'headers',
-    ];
+    const _validParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName', 'description', 'acceptLanguage', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -826,11 +685,7 @@ class IamPolicyManagementV1 extends BaseService {
       'description': _params.description,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createRole'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createRole');
 
     const parameters = {
       options: {
@@ -894,11 +749,7 @@ class IamPolicyManagementV1 extends BaseService {
       'role_id': _params.roleId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceRole'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceRole');
 
     const parameters = {
       options: {
@@ -997,11 +848,7 @@ class IamPolicyManagementV1 extends BaseService {
       'role_id': _params.roleId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteRole'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteRole');
 
     const parameters = {
       options: {
@@ -1010,7 +857,13 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -1079,20 +932,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = [
-      'accountId',
-      'acceptLanguage',
-      'iamId',
-      'accessGroupId',
-      'type',
-      'serviceType',
-      'serviceName',
-      'serviceGroupId',
-      'sort',
-      'format',
-      'state',
-      'headers',
-    ];
+    const _validParams = ['accountId', 'acceptLanguage', 'iamId', 'accessGroupId', 'type', 'serviceType', 'serviceName', 'serviceGroupId', 'sort', 'format', 'state', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1111,11 +951,7 @@ class IamPolicyManagementV1 extends BaseService {
       'state': _params.state,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listV2Policies'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listV2Policies');
 
     const parameters = {
       options: {
@@ -1157,9 +993,15 @@ class IamPolicyManagementV1 extends BaseService {
    * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
    * **`service_group_id`** attribute and the **`accountId`** attribute. In the rule field, you can specify a single
    * condition by using **`key`**, **`value`**, and condition **`operator`**, or a set of **`conditions`** with a
-   * combination **`operator`**. The possible combination operators are **`and`** and **`or`**. Combine conditions to
-   * specify a time-based restriction (e.g., access only during business hours, during the Monday-Friday work week). For
-   * example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
+   * combination **`operator`**. The possible combination operators are **`and`** and **`or`**.
+   *
+   * Currently, we support two types of patterns:
+   *
+   * 1. `time-based`: Used to specify a time-based restriction
+   *
+   * Combine conditions to specify a time-based restriction (e.g., access only during business hours, during the
+   * Monday-Friday work week). For example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following
+   * rule:
    * ```json
    *   "rule": {
    *     "operator": "and",
@@ -1180,17 +1022,54 @@ class IamPolicyManagementV1 extends BaseService {
    * ``` You can use the following operators in the **`key`** and **`value`** pair:
    * ```
    *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
+   *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
-   *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
+   *   'dayOfWeekEquals', 'dayOfWeekAnyOf'
+   * ``` The pattern field that matches the rule is required when rule is provided. For the business hour rule example
+   * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
+   * operators](/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties) and
+   * [Limiting access with time-based conditions](/docs/account?topic=account-iam-time-based&interface=ui). If the
+   * subject is a locked service-id, the request will fail.
+   *
+   * 2. `attribute-based`: Used to specify a combination of OR/AND based conditions applied on resource attributes.
+   *
+   * Combine conditions to specify an attribute-based condition using AND/OR-based operators.
+   *
+   * For example, a policy can grant access based on multiple conditions applied on the resource attributes below:
+   * ```json
+   *   "pattern": "attribute-based-condition:resource:literal-and-wildcard"
+   *   "rule": {
+   *       "operator": "or",
+   *       "conditions": [
+   *         {
+   *           "operator": "and",
+   *           "conditions": [
+   *             {
+   *               "key": "{{resource.attributes.prefix}}",
+   *               "operator": "stringEquals",
+   *               "value": "home/test"
+   *             },
+   *             {
+   *               "key": "{{environment.attributes.delimiter}}",
+   *               "operator": "stringEquals",
+   *               "value": "/"
+   *             }
+   *           ]
+   *         },
+   *         {
+   *           "key": "{{resource.attributes.path}}",
+   *           "operator": "stringMatch",
+   *           "value": "home/David/_*"
+   *         }
+   *       ]
+   *   }
    * ```
    *
-   * The pattern field that matches the rule is required when rule is provided. For the business hour rule example
-   * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
-   * operators](https://cloud.ibm.com/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties)
-   * and
-   * [Limiting access with time-based
-   * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui). If the subject is a
-   * locked service-id, the request will fail.
+   * In addition to satisfying the `resources` section, the policy grants permission only if either the `path` begins
+   * with `home/David/` **OR**  the `prefix` is `home/test` and the `delimiter` is `/`. This mechanism helps you
+   * consolidate multiple policies in to a single policy,  making policies easier to administer and stay within the
+   * policy limit for an account. View the list of operators that can be used in the condition
+   * [here](/docs/account?topic=account-wildcard#string-comparisons).
    *
    * ### Authorization
    *
@@ -1247,17 +1126,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
     const _requiredParams = ['control', 'type'];
-    const _validParams = [
-      'control',
-      'type',
-      'description',
-      'subject',
-      'resource',
-      'pattern',
-      'rule',
-      'acceptLanguage',
-      'headers',
-    ];
+    const _validParams = ['control', 'type', 'description', 'subject', 'resource', 'pattern', 'rule', 'acceptLanguage', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1273,11 +1142,7 @@ class IamPolicyManagementV1 extends BaseService {
       'rule': _params.rule,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createV2Policy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createV2Policy');
 
     const parameters = {
       options: {
@@ -1319,9 +1184,15 @@ class IamPolicyManagementV1 extends BaseService {
    * The policy resource must include either the **`serviceType`**, **`serviceName`**, **`resourceGroupId`** or
    * **`service_group_id`** attribute and the **`accountId`** attribute. In the rule field, you can specify a single
    * condition by using **`key`**, **`value`**, and condition **`operator`**, or a set of **`conditions`** with a
-   * combination **`operator`**. The possible combination operators are **`and`** and **`or`**. Combine conditions to
-   * specify a time-based restriction (e.g., access only during business hours, during the Monday-Friday work week). For
-   * example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following rule:
+   * combination **`operator`**. The possible combination operators are **`and`** and **`or`**.
+   *
+   * Currently, we support two types of patterns:
+   *
+   * 1. `time-based`: Used to specify a time-based restriction
+   *
+   * Combine conditions to specify a time-based restriction (e.g., access only during business hours, during the
+   * Monday-Friday work week). For example, a policy can grant access Monday-Friday, 9:00am-5:00pm using the following
+   * rule:
    * ```json
    *   "rule": {
    *     "operator": "and",
@@ -1339,17 +1210,57 @@ class IamPolicyManagementV1 extends BaseService {
    *       "value": "17:00:00+00:00"
    *     }]
    *   }
-   * ``` You can use the following operators in the **`key`**, **`value`** pair:
+   * ``` You can use the following operators in the **`key`** and **`value`** pair:
    * ```
    *   'timeLessThan', 'timeLessThanOrEquals', 'timeGreaterThan', 'timeGreaterThanOrEquals',
+   *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
-   *   'dayOfWeekEquals', 'dayOfWeekAnyOf',
+   *   'dayOfWeekEquals', 'dayOfWeekAnyOf'
    * ``` The pattern field that matches the rule is required when rule is provided. For the business hour rule example
    * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
-   * operators](https://cloud.ibm.com/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties)
-   * and
-   * [Limiting access with time-based
-   * conditions](https://cloud.ibm.com/docs/account?topic=account-iam-time-based&interface=ui).
+   * operators](/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties) and
+   * [Limiting access with time-based conditions](/docs/account?topic=account-iam-time-based&interface=ui). If the
+   * subject is a locked service-id, the request will fail.
+   *
+   * 2. `attribute-based`: Used to specify a combination of OR/AND based conditions applied on resource attributes.
+   *
+   * Combine conditions to specify an attribute-based condition using AND/OR-based operators.
+   *
+   * For example, a policy can grant access based on multiple conditions applied on the resource attributes below:
+   * ```json
+   *   "pattern": "attribute-based-condition:resource:literal-and-wildcard"
+   *   "rule": {
+   *       "operator": "or",
+   *       "conditions": [
+   *         {
+   *           "operator": "and",
+   *           "conditions": [
+   *             {
+   *               "key": "{{resource.attributes.prefix}}",
+   *               "operator": "stringEquals",
+   *               "value": "home/test"
+   *             },
+   *             {
+   *               "key": "{{environment.attributes.delimiter}}",
+   *               "operator": "stringEquals",
+   *               "value": "/"
+   *             }
+   *           ]
+   *         },
+   *         {
+   *           "key": "{{resource.attributes.path}}",
+   *           "operator": "stringMatch",
+   *           "value": "home/David/_*"
+   *         }
+   *       ]
+   *   }
+   * ```
+   *
+   * In addition to satisfying the `resources` section, the policy grants permission only if either the `path` begins
+   * with `home/David/` **OR**  the `prefix` is `home/test` and the `delimiter` is `/`. This mechanism helps you
+   * consolidate multiple policies in to a single policy,  making policies easier to administer and stay within the
+   * policy limit for an account. View the list of operators that can be used in the condition
+   * [here](/docs/account?topic=account-wildcard#string-comparisons).
    *
    * ### Authorization
    *
@@ -1397,18 +1308,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'ifMatch', 'control', 'type'];
-    const _validParams = [
-      'id',
-      'ifMatch',
-      'control',
-      'type',
-      'description',
-      'subject',
-      'resource',
-      'pattern',
-      'rule',
-      'headers',
-    ];
+    const _validParams = ['id', 'ifMatch', 'control', 'type', 'description', 'subject', 'resource', 'pattern', 'rule', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1428,11 +1328,7 @@ class IamPolicyManagementV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceV2Policy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceV2Policy');
 
     const parameters = {
       options: {
@@ -1492,11 +1388,7 @@ class IamPolicyManagementV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getV2Policy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getV2Policy');
 
     const parameters = {
       options: {
@@ -1546,11 +1438,7 @@ class IamPolicyManagementV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteV2Policy'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteV2Policy');
 
     const parameters = {
       options: {
@@ -1559,7 +1447,13 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -1612,11 +1506,7 @@ class IamPolicyManagementV1 extends BaseService {
       'state': _params.state,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listPolicyTemplates'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicyTemplates');
 
     const parameters = {
       options: {
@@ -1674,15 +1564,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>> {
     const _params = { ...params };
     const _requiredParams = ['name', 'accountId', 'policy'];
-    const _validParams = [
-      'name',
-      'accountId',
-      'policy',
-      'description',
-      'committed',
-      'acceptLanguage',
-      'headers',
-    ];
+    const _validParams = ['name', 'accountId', 'policy', 'description', 'committed', 'acceptLanguage', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1696,11 +1578,7 @@ class IamPolicyManagementV1 extends BaseService {
       'committed': _params.committed,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createPolicyTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicyTemplate');
 
     const parameters = {
       options: {
@@ -1755,11 +1633,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getPolicyTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicyTemplate');
 
     const parameters = {
       options: {
@@ -1810,11 +1684,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deletePolicyTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicyTemplate');
 
     const parameters = {
       options: {
@@ -1823,7 +1693,13 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -1852,14 +1728,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'policy'];
-    const _validParams = [
-      'policyTemplateId',
-      'policy',
-      'name',
-      'description',
-      'committed',
-      'headers',
-    ];
+    const _validParams = ['policyTemplateId', 'policy', 'name', 'description', 'committed', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1876,11 +1745,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createPolicyTemplateVersion'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicyTemplateVersion');
 
     const parameters = {
       options: {
@@ -1918,9 +1783,7 @@ class IamPolicyManagementV1 extends BaseService {
    */
   public listPolicyTemplateVersions(
     params: IamPolicyManagementV1.ListPolicyTemplateVersionsParams
-  ): Promise<
-    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>
-  > {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
     const _validParams = ['policyTemplateId', 'state', 'headers'];
@@ -1937,11 +1800,7 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listPolicyTemplateVersions'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicyTemplateVersions');
 
     const parameters = {
       options: {
@@ -1990,16 +1849,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'version', 'ifMatch', 'policy'];
-    const _validParams = [
-      'policyTemplateId',
-      'version',
-      'ifMatch',
-      'policy',
-      'name',
-      'description',
-      'committed',
-      'headers',
-    ];
+    const _validParams = ['policyTemplateId', 'version', 'ifMatch', 'policy', 'name', 'description', 'committed', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2017,11 +1867,7 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replacePolicyTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replacePolicyTemplate');
 
     const parameters = {
       options: {
@@ -2076,11 +1922,7 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deletePolicyTemplateVersion'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicyTemplateVersion');
 
     const parameters = {
       options: {
@@ -2089,7 +1931,13 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -2123,11 +1971,7 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getPolicyTemplateVersion'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicyTemplateVersion');
 
     const parameters = {
       options: {
@@ -2178,11 +2022,7 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'commitPolicyTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'commitPolicyTemplate');
 
     const parameters = {
       options: {
@@ -2191,7 +2031,13 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -2231,18 +2077,10 @@ class IamPolicyManagementV1 extends BaseService {
    */
   public listPolicyAssignments(
     params: IamPolicyManagementV1.ListPolicyAssignmentsParams
-  ): Promise<
-    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>
-  > {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = [
-      'accountId',
-      'acceptLanguage',
-      'templateId',
-      'templateVersion',
-      'headers',
-    ];
+    const _validParams = ['accountId', 'acceptLanguage', 'templateId', 'templateVersion', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2254,11 +2092,7 @@ class IamPolicyManagementV1 extends BaseService {
       'template_version': _params.templateVersion,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listPolicyAssignments'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicyAssignments');
 
     const parameters = {
       options: {
@@ -2307,11 +2141,7 @@ class IamPolicyManagementV1 extends BaseService {
       'assignment_id': _params.assignmentId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getPolicyAssignment'
-    );
+    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicyAssignment');
 
     const parameters = {
       options: {
@@ -3055,7 +2885,8 @@ namespace IamPolicyManagementV1 {
   }
 
   /** ControlResponse. */
-  export interface ControlResponse {}
+  export interface ControlResponse {
+  }
 
   /** An additional set of properties associated with a role. */
   export interface CustomRole {
@@ -3180,7 +3011,8 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Condition that specifies additional conditions or RuleAttribute to grant access. */
-  export interface NestedCondition {}
+  export interface NestedCondition {
+  }
 
   /** The core set of properties associated with a policy. */
   export interface Policy {
@@ -3568,10 +3400,19 @@ namespace IamPolicyManagementV1 {
     export namespace Constants {
       /** The operator of an attribute. */
       export enum Operator {
+        STRINGEQUALS = 'stringEquals',
+        STRINGEXISTS = 'stringExists',
+        STRINGEQUALSANYOF = 'stringEqualsAnyOf',
+        STRINGMATCHANYOF = 'stringMatchAnyOf',
+        STRINGMATCH = 'stringMatch',
         TIMELESSTHAN = 'timeLessThan',
         TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
         TIMEGREATERTHAN = 'timeGreaterThan',
         TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATELESSTHAN = 'dateLessThan',
+        DATELESSTHANOREQUALS = 'dateLessThanOrEquals',
+        DATEGREATERTHAN = 'dateGreaterThan',
+        DATEGREATERTHANOREQUALS = 'dateGreaterThanOrEquals',
         DATETIMELESSTHAN = 'dateTimeLessThan',
         DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
         DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
@@ -3726,6 +3567,8 @@ namespace IamPolicyManagementV1 {
         STRINGEQUALS = 'stringEquals',
         STRINGEXISTS = 'stringExists',
         STRINGMATCH = 'stringMatch',
+        STRINGEQUALSANYOF = 'stringEqualsAnyOf',
+        STRINGMATCHANYOF = 'stringMatchAnyOf',
       }
     }
   }
@@ -3750,7 +3593,8 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Additional access conditions associated with the policy. */
-  export interface V2PolicyRule {}
+  export interface V2PolicyRule {
+  }
 
   /** The subject attributes for whom the policy grants access. */
   export interface V2PolicySubject {
@@ -3774,6 +3618,7 @@ namespace IamPolicyManagementV1 {
       /** The operator of an attribute. */
       export enum Operator {
         STRINGEQUALS = 'stringEquals',
+        STRINGEXISTS = 'stringExists',
       }
     }
   }
@@ -3863,10 +3708,19 @@ namespace IamPolicyManagementV1 {
     export namespace Constants {
       /** The operator of an attribute. */
       export enum Operator {
+        STRINGEQUALS = 'stringEquals',
+        STRINGEXISTS = 'stringExists',
+        STRINGEQUALSANYOF = 'stringEqualsAnyOf',
+        STRINGMATCHANYOF = 'stringMatchAnyOf',
+        STRINGMATCH = 'stringMatch',
         TIMELESSTHAN = 'timeLessThan',
         TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
         TIMEGREATERTHAN = 'timeGreaterThan',
         TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATELESSTHAN = 'dateLessThan',
+        DATELESSTHANOREQUALS = 'dateLessThanOrEquals',
+        DATEGREATERTHAN = 'dateGreaterThan',
+        DATEGREATERTHANOREQUALS = 'dateGreaterThanOrEquals',
         DATETIMELESSTHAN = 'dateTimeLessThan',
         DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
         DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
@@ -3911,10 +3765,19 @@ namespace IamPolicyManagementV1 {
     export namespace Constants {
       /** The operator of an attribute. */
       export enum Operator {
+        STRINGEQUALS = 'stringEquals',
+        STRINGEXISTS = 'stringExists',
+        STRINGEQUALSANYOF = 'stringEqualsAnyOf',
+        STRINGMATCHANYOF = 'stringMatchAnyOf',
+        STRINGMATCH = 'stringMatch',
         TIMELESSTHAN = 'timeLessThan',
         TIMELESSTHANOREQUALS = 'timeLessThanOrEquals',
         TIMEGREATERTHAN = 'timeGreaterThan',
         TIMEGREATERTHANOREQUALS = 'timeGreaterThanOrEquals',
+        DATELESSTHAN = 'dateLessThan',
+        DATELESSTHANOREQUALS = 'dateLessThanOrEquals',
+        DATEGREATERTHAN = 'dateGreaterThan',
+        DATEGREATERTHANOREQUALS = 'dateGreaterThanOrEquals',
         DATETIMELESSTHAN = 'dateTimeLessThan',
         DATETIMELESSTHANOREQUALS = 'dateTimeLessThanOrEquals',
         DATETIMEGREATERTHAN = 'dateTimeGreaterThan',
