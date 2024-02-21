@@ -142,7 +142,20 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'acceptLanguage', 'iamId', 'accessGroupId', 'type', 'serviceType', 'tagName', 'tagValue', 'sort', 'format', 'state', 'headers'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'iamId',
+      'accessGroupId',
+      'type',
+      'serviceType',
+      'tagName',
+      'tagValue',
+      'sort',
+      'format',
+      'state',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -161,7 +174,11 @@ class IamPolicyManagementV1 extends BaseService {
       'state': _params.state,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicies');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicies'
+    );
 
     const parameters = {
       options: {
@@ -258,7 +275,15 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['type', 'subjects', 'roles', 'resources'];
-    const _validParams = ['type', 'subjects', 'roles', 'resources', 'description', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'type',
+      'subjects',
+      'roles',
+      'resources',
+      'description',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -272,7 +297,11 @@ class IamPolicyManagementV1 extends BaseService {
       'description': _params.description,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicy'
+    );
 
     const parameters = {
       options: {
@@ -357,7 +386,16 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources'];
-    const _validParams = ['policyId', 'ifMatch', 'type', 'subjects', 'roles', 'resources', 'description', 'headers'];
+    const _validParams = [
+      'policyId',
+      'ifMatch',
+      'type',
+      'subjects',
+      'roles',
+      'resources',
+      'description',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -375,7 +413,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replacePolicy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replacePolicy'
+    );
 
     const parameters = {
       options: {
@@ -475,7 +517,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicy'
+    );
 
     const parameters = {
       options: {
@@ -484,13 +530,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -531,7 +571,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePolicyState');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updatePolicyState'
+    );
 
     const parameters = {
       options: {
@@ -595,7 +639,15 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['acceptLanguage', 'accountId', 'serviceName', 'sourceServiceName', 'policyType', 'serviceGroupId', 'headers'];
+    const _validParams = [
+      'acceptLanguage',
+      'accountId',
+      'serviceName',
+      'sourceServiceName',
+      'policyType',
+      'serviceGroupId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -670,7 +722,16 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
     const _requiredParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName'];
-    const _validParams = ['displayName', 'actions', 'name', 'accountId', 'serviceName', 'description', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'displayName',
+      'actions',
+      'name',
+      'accountId',
+      'serviceName',
+      'description',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -685,7 +746,11 @@ class IamPolicyManagementV1 extends BaseService {
       'description': _params.description,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createRole');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createRole'
+    );
 
     const parameters = {
       options: {
@@ -749,7 +814,11 @@ class IamPolicyManagementV1 extends BaseService {
       'role_id': _params.roleId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceRole');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceRole'
+    );
 
     const parameters = {
       options: {
@@ -848,7 +917,11 @@ class IamPolicyManagementV1 extends BaseService {
       'role_id': _params.roleId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteRole');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteRole'
+    );
 
     const parameters = {
       options: {
@@ -857,13 +930,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -932,7 +999,20 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'acceptLanguage', 'iamId', 'accessGroupId', 'type', 'serviceType', 'serviceName', 'serviceGroupId', 'sort', 'format', 'state', 'headers'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'iamId',
+      'accessGroupId',
+      'type',
+      'serviceType',
+      'serviceName',
+      'serviceGroupId',
+      'sort',
+      'format',
+      'state',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -951,7 +1031,11 @@ class IamPolicyManagementV1 extends BaseService {
       'state': _params.state,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listV2Policies');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listV2Policies'
+    );
 
     const parameters = {
       options: {
@@ -1126,7 +1210,17 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
     const _requiredParams = ['control', 'type'];
-    const _validParams = ['control', 'type', 'description', 'subject', 'resource', 'pattern', 'rule', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'control',
+      'type',
+      'description',
+      'subject',
+      'resource',
+      'pattern',
+      'rule',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1142,7 +1236,11 @@ class IamPolicyManagementV1 extends BaseService {
       'rule': _params.rule,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createV2Policy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createV2Policy'
+    );
 
     const parameters = {
       options: {
@@ -1308,7 +1406,18 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2Policy>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'ifMatch', 'control', 'type'];
-    const _validParams = ['id', 'ifMatch', 'control', 'type', 'description', 'subject', 'resource', 'pattern', 'rule', 'headers'];
+    const _validParams = [
+      'id',
+      'ifMatch',
+      'control',
+      'type',
+      'description',
+      'subject',
+      'resource',
+      'pattern',
+      'rule',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1328,7 +1437,11 @@ class IamPolicyManagementV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceV2Policy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceV2Policy'
+    );
 
     const parameters = {
       options: {
@@ -1388,7 +1501,11 @@ class IamPolicyManagementV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getV2Policy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getV2Policy'
+    );
 
     const parameters = {
       options: {
@@ -1438,7 +1555,11 @@ class IamPolicyManagementV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteV2Policy');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteV2Policy'
+    );
 
     const parameters = {
       options: {
@@ -1447,13 +1568,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -1506,7 +1621,11 @@ class IamPolicyManagementV1 extends BaseService {
       'state': _params.state,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicyTemplates');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicyTemplates'
+    );
 
     const parameters = {
       options: {
@@ -1564,7 +1683,15 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>> {
     const _params = { ...params };
     const _requiredParams = ['name', 'accountId', 'policy'];
-    const _validParams = ['name', 'accountId', 'policy', 'description', 'committed', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'name',
+      'accountId',
+      'policy',
+      'description',
+      'committed',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1578,7 +1705,11 @@ class IamPolicyManagementV1 extends BaseService {
       'committed': _params.committed,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicyTemplate');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicyTemplate'
+    );
 
     const parameters = {
       options: {
@@ -1633,7 +1764,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicyTemplate');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPolicyTemplate'
+    );
 
     const parameters = {
       options: {
@@ -1684,7 +1819,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicyTemplate');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicyTemplate'
+    );
 
     const parameters = {
       options: {
@@ -1693,13 +1832,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -1728,7 +1861,14 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateLimitData>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'policy'];
-    const _validParams = ['policyTemplateId', 'policy', 'name', 'description', 'committed', 'headers'];
+    const _validParams = [
+      'policyTemplateId',
+      'policy',
+      'name',
+      'description',
+      'committed',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1745,7 +1885,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'createPolicyTemplateVersion');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicyTemplateVersion'
+    );
 
     const parameters = {
       options: {
@@ -1783,7 +1927,9 @@ class IamPolicyManagementV1 extends BaseService {
    */
   public listPolicyTemplateVersions(
     params: IamPolicyManagementV1.ListPolicyTemplateVersionsParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>> {
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>
+  > {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
     const _validParams = ['policyTemplateId', 'state', 'headers'];
@@ -1800,7 +1946,11 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_template_id': _params.policyTemplateId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicyTemplateVersions');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicyTemplateVersions'
+    );
 
     const parameters = {
       options: {
@@ -1849,7 +1999,16 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'version', 'ifMatch', 'policy'];
-    const _validParams = ['policyTemplateId', 'version', 'ifMatch', 'policy', 'name', 'description', 'committed', 'headers'];
+    const _validParams = [
+      'policyTemplateId',
+      'version',
+      'ifMatch',
+      'policy',
+      'name',
+      'description',
+      'committed',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1867,7 +2026,11 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'replacePolicyTemplate');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replacePolicyTemplate'
+    );
 
     const parameters = {
       options: {
@@ -1922,7 +2085,11 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePolicyTemplateVersion');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicyTemplateVersion'
+    );
 
     const parameters = {
       options: {
@@ -1931,13 +2098,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -1971,7 +2132,11 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicyTemplateVersion');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPolicyTemplateVersion'
+    );
 
     const parameters = {
       options: {
@@ -2022,7 +2187,11 @@ class IamPolicyManagementV1 extends BaseService {
       'version': _params.version,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'commitPolicyTemplate');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitPolicyTemplate'
+    );
 
     const parameters = {
       options: {
@@ -2031,13 +2200,7 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2077,10 +2240,18 @@ class IamPolicyManagementV1 extends BaseService {
    */
   public listPolicyAssignments(
     params: IamPolicyManagementV1.ListPolicyAssignmentsParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>> {
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>
+  > {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'acceptLanguage', 'templateId', 'templateVersion', 'headers'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'templateId',
+      'templateVersion',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2092,7 +2263,11 @@ class IamPolicyManagementV1 extends BaseService {
       'template_version': _params.templateVersion,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listPolicyAssignments');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPolicyAssignments'
+    );
 
     const parameters = {
       options: {
@@ -2141,7 +2316,11 @@ class IamPolicyManagementV1 extends BaseService {
       'assignment_id': _params.assignmentId,
     };
 
-    const sdkHeaders = getSdkHeaders(IamPolicyManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPolicyAssignment');
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPolicyAssignment'
+    );
 
     const parameters = {
       options: {
@@ -2885,8 +3064,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** ControlResponse. */
-  export interface ControlResponse {
-  }
+  export interface ControlResponse {}
 
   /** An additional set of properties associated with a role. */
   export interface CustomRole {
@@ -3011,8 +3189,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Condition that specifies additional conditions or RuleAttribute to grant access. */
-  export interface NestedCondition {
-  }
+  export interface NestedCondition {}
 
   /** The core set of properties associated with a policy. */
   export interface Policy {
@@ -3593,8 +3770,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Additional access conditions associated with the policy. */
-  export interface V2PolicyRule {
-  }
+  export interface V2PolicyRule {}
 
   /** The subject attributes for whom the policy grants access. */
   export interface V2PolicySubject {
