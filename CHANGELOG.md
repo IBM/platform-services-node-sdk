@@ -1,3 +1,10 @@
+## [0.52.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.52.0...v0.52.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** regenerate based on minor API update to operator ([#244](https://github.com/IBM/platform-services-node-sdk/issues/244)) ([8f11f50](https://github.com/IBM/platform-services-node-sdk/commit/8f11f50a4adeddb3aebe2aa8d61f16c8ea01ae47))
+
 # [0.52.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.51.0...v0.52.0) (2024-02-19)
 
 
