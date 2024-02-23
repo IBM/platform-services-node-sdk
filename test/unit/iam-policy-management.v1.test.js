@@ -1405,7 +1405,7 @@ describe('IamPolicyManagementV1', () => {
       // V2PolicyRuleRuleAttribute
       const v2PolicyRuleModel = {
         key: 'testString',
-        operator: 'timeLessThan',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
@@ -1568,7 +1568,7 @@ describe('IamPolicyManagementV1', () => {
       // V2PolicyRuleRuleAttribute
       const v2PolicyRuleModel = {
         key: 'testString',
-        operator: 'timeLessThan',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
@@ -1972,7 +1972,7 @@ describe('IamPolicyManagementV1', () => {
       // V2PolicyRuleRuleAttribute
       const v2PolicyRuleModel = {
         key: 'testString',
-        operator: 'timeLessThan',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
@@ -2300,7 +2300,7 @@ describe('IamPolicyManagementV1', () => {
       // V2PolicyRuleRuleAttribute
       const v2PolicyRuleModel = {
         key: 'testString',
-        operator: 'timeLessThan',
+        operator: 'stringEquals',
         value: 'testString',
       };
 
@@ -2539,7 +2539,7 @@ describe('IamPolicyManagementV1', () => {
       // V2PolicyRuleRuleAttribute
       const v2PolicyRuleModel = {
         key: 'testString',
-        operator: 'timeLessThan',
+        operator: 'stringEquals',
         value: 'testString',
       };
 

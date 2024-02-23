@@ -791,17 +791,16 @@ describe('IamPolicyManagementV1', () => {
       policy: templatePolicyModel,
     };
 
-    let res;
     try {
-      res = await iamPolicyManagementService.createPolicyTemplate(params);
+      const res = await iamPolicyManagementService.createPolicyTemplate(params);
+      exampleTemplateId = res.result.id;
+      exampleTemplateVersion = res.result.version;
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-create_policy_template
-    exampleTemplateId = res.result.id;
-    exampleTemplateVersion = res.result.version;
   });
   test('getPolicyTemplate request example', async () => {
     expect(exampleTemplateId).not.toBeNull();
@@ -824,13 +823,13 @@ describe('IamPolicyManagementV1', () => {
     let res;
     try {
       res = await iamPolicyManagementService.getPolicyTemplate(params);
+      exampleTemplateEtag = res.headers.etag;
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-get_policy_template
-    exampleTemplateEtag = res.headers.etag;
   });
   test('replacePolicyTemplate request example', async () => {
     expect(exampleTemplateId).not.toBeNull();
@@ -1017,13 +1016,13 @@ describe('IamPolicyManagementV1', () => {
     let res;
     try {
       res = await iamPolicyManagementService.getPolicyTemplateVersion(params);
+      exampleTemplateEtag = res.headers.etag;
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-get_policy_template_version
-    exampleTemplateEtag = res.headers.etag;
   });
   test('commitPolicyTemplate request example', async () => {
     expect(exampleTemplateId).not.toBeNull();
@@ -1145,7 +1144,7 @@ describe('IamPolicyManagementV1', () => {
     });
 
     originalLog('listPolicyAssignments() result:');
-    // begin-list_Policy Assignments
+    // begin-list_policy_assignments
 
     const params = {
       accountId: exampleAccountId,
@@ -1154,13 +1153,13 @@ describe('IamPolicyManagementV1', () => {
     let res;
     try {
       res = await iamPolicyManagementService.listPolicyAssignments(params);
+      exampleAssignmentId = res.result.assignments[0].id
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-list_Policy Assignments
-    exampleAssignmentId = res.result.assignments[0].id
+    // end-list_policy_assignments
   });
   test('getPolicyAssignment request example', async () => {
     expect(exampleAssignmentId).not.toBeNull();
