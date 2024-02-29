@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.82.1-2082d402-20231115-195014
+ * IBM OpenAPI SDK Code Generator Version: 3.86.0-bc6f14b3-20240221-193958
  */
 
 import * as extend from 'extend';
@@ -55,7 +55,7 @@ class GlobalTaggingV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {GlobalTaggingV1}
    */
 
@@ -80,7 +80,7 @@ class GlobalTaggingV1 extends BaseService {
    * Construct a GlobalTaggingV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -151,22 +151,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'accountId',
-      'tagType',
-      'fullData',
-      'providers',
-      'attachedTo',
-      'offset',
-      'limit',
-      'timeout',
-      'orderByName',
-      'attachedOnly',
-      'headers',
-    ];
+    const _validParams = ['xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'fullData', 'providers', 'attachedTo', 'offset', 'limit', 'timeout', 'orderByName', 'attachedOnly', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -243,15 +228,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagNames'];
-    const _validParams = [
-      'tagNames',
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['tagNames', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -326,15 +303,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagsResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'providers',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['xRequestId', 'xCorrelationId', 'transactionId', 'providers', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -406,16 +375,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagName'];
-    const _validParams = [
-      'tagName',
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'providers',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['tagName', 'xRequestId', 'xCorrelationId', 'transactionId', 'providers', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -485,6 +445,8 @@ class GlobalTaggingV1 extends BaseService {
    * parameter if `tag_type` is set to `service`. Otherwise, it is inferred from the authorization IAM token.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
    * `service` and `access` are not supported for IMS resources.
+   * @param {boolean} [params.replace] - Flag to request replacement of all attached tags. Set 'true' if you want to
+   * replace all the list of tags attached to the resource. Default value is false.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>>}
    */
@@ -493,17 +455,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = ['resources'];
-    const _validParams = [
-      'resources',
-      'tagName',
-      'tagNames',
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['resources', 'tagName', 'tagNames', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'replace', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -518,6 +470,7 @@ class GlobalTaggingV1 extends BaseService {
     const query = {
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
+      'replace': _params.replace,
     };
 
     const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'attachTag');
@@ -582,17 +535,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = ['resources'];
-    const _validParams = [
-      'resources',
-      'tagName',
-      'tagNames',
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'accountId',
-      'tagType',
-      'headers',
-    ];
+    const _validParams = ['resources', 'tagName', 'tagNames', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -920,6 +863,10 @@ namespace GlobalTaggingV1 {
      *  supported for IMS resources.
      */
     tagType?: AttachTagConstants.TagType | string;
+    /** Flag to request replacement of all attached tags. Set 'true' if you want to replace all the list of tags
+     *  attached to the resource. Default value is false.
+     */
+    replace?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 

@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.82.1-2082d402-20231115-195014
+ * IBM OpenAPI SDK Code Generator Version: 3.86.0-bc6f14b3-20240221-193958
  */
 
 import * as extend from 'extend';
@@ -56,7 +56,7 @@ class GlobalSearchV2 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {GlobalSearchV2}
    */
 
@@ -81,7 +81,7 @@ class GlobalSearchV2 extends BaseService {
    * Construct a GlobalSearchV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -116,13 +116,18 @@ class GlobalSearchV2 extends BaseService {
    *
    * You must use `/v3/resources/search` when you need to fetch more than `10000` resource items. On the first call, the
    * operation returns a live cursor on the data that you must use on all the subsequent calls to get the next batch of
-   * results until you get the empty result set. By default, the fields that are returned for every resource are "crn",
-   * "name", "family", "type", and "account_id". You can specify the subset of the fields you want in your request.
+   * results until you get the empty result set.
+   *
+   * By default, the fields that are returned for every resource are `crn`, `name`,
+   * `family`, `type`, and `account_id`. You can specify the subset of the fields you want in your request using the
+   * `fields` request body attribute. Set `"fields": ["*"]` to discover the set of fields which are available to
+   * request.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.query] - The Lucene-formatted query string. Default to '*' if not set.
    * @param {string[]} [params.fields] - The list of the fields returned by the search. By default, the returned fields
-   * are the `account_id`, `name`, `type`, `family`, and `crn`. For all queries, `crn` is always returned.
+   * are the `account_id`, `name`, `type`, `family`, and `crn`. For all queries, `crn` is always returned. You may set
+   * `"fields": ["*"]` to discover the set of fields available to request.
    * @param {string} [params.searchCursor] - An opaque cursor that is returned on each call and that must be set on the
    * subsequent call to get the next batch of items. If the search returns no items, then the search_cursor is not
    * present in the response.
@@ -170,24 +175,7 @@ class GlobalSearchV2 extends BaseService {
   ): Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'query',
-      'fields',
-      'searchCursor',
-      'xRequestId',
-      'xCorrelationId',
-      'transactionId',
-      'accountId',
-      'limit',
-      'timeout',
-      'sort',
-      'isDeleted',
-      'isReclaimed',
-      'isPublic',
-      'impersonateUser',
-      'canTag',
-      'headers',
-    ];
+    const _validParams = ['query', 'fields', 'searchCursor', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'limit', 'timeout', 'sort', 'isDeleted', 'isReclaimed', 'isPublic', 'impersonateUser', 'canTag', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -273,7 +261,8 @@ namespace GlobalSearchV2 {
     /** The Lucene-formatted query string. Default to '*' if not set. */
     query?: string;
     /** The list of the fields returned by the search. By default, the returned fields are the `account_id`, `name`,
-     *  `type`, `family`, and `crn`. For all queries, `crn` is always returned.
+     *  `type`, `family`, and `crn`. For all queries, `crn` is always returned. You may set `"fields": ["*"]` to
+     *  discover the set of fields available to request.
      */
     fields?: string[];
     /** An opaque cursor that is returned on each call and that must be set on the subsequent call to get the next
@@ -383,8 +372,10 @@ namespace GlobalSearchV2 {
     search_cursor?: string;
     /** Value of the limit parameter specified by the user. */
     limit: number;
-    /** The array of results. Each item represents a resource. An empty array signals the end of the result set,
-     *  which means there are no more results to fetch.
+    /** The array of results. Each item represents a resource. For each resource, the requested `fields` are
+     *  returned. If you did not set the `fields` request body parameter, then the `account_id`, `name`, `type`,
+     *  `family`, and `crn` are returned. An empty array signals the end of the result set, which means there are no
+     *  more results to fetch.
      */
     items: ResultItem[];
   }
