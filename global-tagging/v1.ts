@@ -151,7 +151,22 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'fullData', 'providers', 'attachedTo', 'offset', 'limit', 'timeout', 'orderByName', 'attachedOnly', 'headers'];
+    const _validParams = [
+      'xRequestId',
+      'xCorrelationId',
+      'transactionId',
+      'accountId',
+      'tagType',
+      'fullData',
+      'providers',
+      'attachedTo',
+      'offset',
+      'limit',
+      'timeout',
+      'orderByName',
+      'attachedOnly',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -228,7 +243,15 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagNames'];
-    const _validParams = ['tagNames', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'headers'];
+    const _validParams = [
+      'tagNames',
+      'xRequestId',
+      'xCorrelationId',
+      'transactionId',
+      'accountId',
+      'tagType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -303,7 +326,15 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagsResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['xRequestId', 'xCorrelationId', 'transactionId', 'providers', 'accountId', 'tagType', 'headers'];
+    const _validParams = [
+      'xRequestId',
+      'xCorrelationId',
+      'transactionId',
+      'providers',
+      'accountId',
+      'tagType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -375,7 +406,16 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagName'];
-    const _validParams = ['tagName', 'xRequestId', 'xCorrelationId', 'transactionId', 'providers', 'accountId', 'tagType', 'headers'];
+    const _validParams = [
+      'tagName',
+      'xRequestId',
+      'xCorrelationId',
+      'transactionId',
+      'providers',
+      'accountId',
+      'tagType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -455,7 +495,18 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = ['resources'];
-    const _validParams = ['resources', 'tagName', 'tagNames', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'replace', 'headers'];
+    const _validParams = [
+      'resources',
+      'tagName',
+      'tagNames',
+      'xRequestId',
+      'xCorrelationId',
+      'transactionId',
+      'accountId',
+      'tagType',
+      'replace',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -535,7 +586,17 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = ['resources'];
-    const _validParams = ['resources', 'tagName', 'tagNames', 'xRequestId', 'xCorrelationId', 'transactionId', 'accountId', 'tagType', 'headers'];
+    const _validParams = [
+      'resources',
+      'tagName',
+      'tagNames',
+      'xRequestId',
+      'xCorrelationId',
+      'transactionId',
+      'accountId',
+      'tagType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
