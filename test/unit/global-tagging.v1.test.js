@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -511,6 +511,7 @@ describe('GlobalTaggingV1', () => {
         const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
+        const replace = false;
         const attachTagParams = {
           resources,
           tagName,
@@ -520,6 +521,7 @@ describe('GlobalTaggingV1', () => {
           transactionId,
           accountId,
           tagType,
+          replace,
         };
 
         const attachTagResult = globalTaggingService.attachTag(attachTagParams);
@@ -544,6 +546,7 @@ describe('GlobalTaggingV1', () => {
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
+        expect(mockRequestOptions.qs.replace).toEqual(replace);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
