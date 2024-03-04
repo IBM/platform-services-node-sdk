@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -367,6 +367,19 @@ describe('ContextBasedRestrictionsV1_integration', () => {
     ).rejects.toMatchObject({
       status: 400,
     });
+  });
+
+  test('getServicerefTarget()', async () => {
+    const params = {
+      serviceName: serviceName,
+      xCorrelationId: 'testString',
+      transactionId: 'testString',
+    };
+
+    const res = await contextBasedRestrictionsService.getServicerefTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
   test('createRule() - Create a rule', async () => {
