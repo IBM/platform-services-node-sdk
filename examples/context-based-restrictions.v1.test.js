@@ -290,10 +290,11 @@ describe('ContextBasedRestrictionsV1', () => {
     });
 
     originalLog('getServicerefTarget() result:');
+    exampleServiceName = "containers-kubernetes" 
     // begin-get_serviceref_target
 
     const params = {
-      serviceName: serviceName,
+      serviceName: exampleServiceName,
     };
 
     let res;

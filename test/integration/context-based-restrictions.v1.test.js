@@ -371,7 +371,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
 
   test('getServicerefTarget()', async () => {
     const params = {
-      serviceName: serviceName,
+      serviceName: 'containers-kubernetes',
       xCorrelationId: 'testString',
       transactionId: 'testString',
     };

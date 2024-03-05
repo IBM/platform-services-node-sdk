@@ -127,7 +127,16 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['name', 'accountId', 'addresses', 'description', 'excluded', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = [
+      'name',
+      'accountId',
+      'addresses',
+      'description',
+      'excluded',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -141,7 +150,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'excluded': _params.excluded,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'createZone');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createZone'
+    );
 
     const parameters = {
       options: {
@@ -193,7 +206,14 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ZoneList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'name', 'sort', 'headers'];
+    const _validParams = [
+      'accountId',
+      'xCorrelationId',
+      'transactionId',
+      'name',
+      'sort',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -205,7 +225,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'sort': _params.sort,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listZones');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listZones'
+    );
 
     const parameters = {
       options: {
@@ -263,7 +287,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'zone_id': _params.zoneId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getZone');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getZone'
+    );
 
     const parameters = {
       options: {
@@ -296,8 +324,8 @@ class ContextBasedRestrictionsV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.zoneId - The ID of a zone.
-   * @param {string} params.ifMatch - The ETag of the resource to replace. You can find the ETag in the response header
-   * for Create/Get/Update requests.
+   * @param {string} params.ifMatch - The current revision of the resource being updated. This can be found in the
+   * Create/Get/Update resource response ETag header.
    * @param {string} [params.name] - The name of the zone.
    * @param {string} [params.accountId] - The id of the account owning this zone.
    * @param {Address[]} [params.addresses] - The list of addresses in the zone.
@@ -320,7 +348,18 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const _requiredParams = ['zoneId', 'ifMatch'];
-    const _validParams = ['zoneId', 'ifMatch', 'name', 'accountId', 'addresses', 'description', 'excluded', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = [
+      'zoneId',
+      'ifMatch',
+      'name',
+      'accountId',
+      'addresses',
+      'description',
+      'excluded',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -338,7 +377,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'zone_id': _params.zoneId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceZone');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceZone'
+    );
 
     const parameters = {
       options: {
@@ -399,7 +442,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'zone_id': _params.zoneId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteZone');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteZone'
+    );
 
     const parameters = {
       options: {
@@ -456,7 +503,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'type': _params.type,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listAvailableServicerefTargets');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAvailableServicerefTargets'
+    );
 
     const parameters = {
       options: {
@@ -514,7 +565,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'service_name': _params.serviceName,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getServicerefTarget');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getServicerefTarget'
+    );
 
     const parameters = {
       options: {
@@ -572,7 +627,16 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['contexts', 'resources', 'description', 'operations', 'enforcementMode', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = [
+      'contexts',
+      'resources',
+      'description',
+      'operations',
+      'enforcementMode',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -586,7 +650,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'enforcement_mode': _params.enforcementMode,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'createRule');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createRule'
+    );
 
     const parameters = {
       options: {
@@ -646,7 +714,22 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.RuleList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'region', 'resource', 'resourceType', 'serviceInstance', 'serviceName', 'serviceType', 'serviceGroupId', 'zoneId', 'sort', 'enforcementMode', 'headers'];
+    const _validParams = [
+      'accountId',
+      'xCorrelationId',
+      'transactionId',
+      'region',
+      'resource',
+      'resourceType',
+      'serviceInstance',
+      'serviceName',
+      'serviceType',
+      'serviceGroupId',
+      'zoneId',
+      'sort',
+      'enforcementMode',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -666,7 +749,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'enforcement_mode': _params.enforcementMode,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listRules');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listRules'
+    );
 
     const parameters = {
       options: {
@@ -724,7 +811,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'rule_id': _params.ruleId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getRule');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getRule'
+    );
 
     const parameters = {
       options: {
@@ -757,8 +848,8 @@ class ContextBasedRestrictionsV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.ruleId - The ID of a rule.
-   * @param {string} params.ifMatch - The ETag of the resource to replace. You can find the ETag in the response header
-   * for Create/Get/Update requests.
+   * @param {string} params.ifMatch - The current revision of the resource being updated. This can be found in the
+   * Create/Get/Update resource response ETag header.
    * @param {RuleContext[]} [params.contexts] - The contexts this rule applies to.
    * @param {Resource[]} [params.resources] - The resources this rule apply to.
    * @param {string} [params.description] - The description of the rule.
@@ -783,7 +874,18 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const _requiredParams = ['ruleId', 'ifMatch'];
-    const _validParams = ['ruleId', 'ifMatch', 'contexts', 'resources', 'description', 'operations', 'enforcementMode', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = [
+      'ruleId',
+      'ifMatch',
+      'contexts',
+      'resources',
+      'description',
+      'operations',
+      'enforcementMode',
+      'xCorrelationId',
+      'transactionId',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -801,7 +903,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'rule_id': _params.ruleId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceRule');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceRule'
+    );
 
     const parameters = {
       options: {
@@ -862,7 +968,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'rule_id': _params.ruleId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteRule');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteRule'
+    );
 
     const parameters = {
       options: {
@@ -922,7 +1032,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'account_id': _params.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountSettings');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAccountSettings'
+    );
 
     const parameters = {
       options: {
@@ -975,7 +1089,14 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OperationsList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['xCorrelationId', 'transactionId', 'serviceName', 'serviceGroupId', 'resourceType', 'headers'];
+    const _validParams = [
+      'xCorrelationId',
+      'transactionId',
+      'serviceName',
+      'serviceGroupId',
+      'resourceType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -987,7 +1108,11 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'resource_type': _params.resourceType,
     };
 
-    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listAvailableServiceOperations');
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listAvailableServiceOperations'
+    );
 
     const parameters = {
       options: {
@@ -1115,8 +1240,8 @@ namespace ContextBasedRestrictionsV1 {
   export interface ReplaceZoneParams {
     /** The ID of a zone. */
     zoneId: string;
-    /** The ETag of the resource to replace. You can find the ETag in the response header for Create/Get/Update
-     *  requests.
+    /** The current revision of the resource being updated. This can be found in the Create/Get/Update resource
+     *  response ETag header.
      */
     ifMatch: string;
     /** The name of the zone. */
@@ -1320,8 +1445,8 @@ namespace ContextBasedRestrictionsV1 {
   export interface ReplaceRuleParams {
     /** The ID of a rule. */
     ruleId: string;
-    /** The ETag of the resource to replace. You can find the ETag in the response header for Create/Get/Update
-     *  requests.
+    /** The current revision of the resource being updated. This can be found in the Create/Get/Update resource
+     *  response ETag header.
      */
     ifMatch: string;
     /** The contexts this rule applies to. */
