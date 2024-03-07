@@ -389,11 +389,11 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       transactionId: 'testString',
     };
 
-    await expect(
-      contextBasedRestrictionsService.getServicerefTarget(params)
-    ).rejects.toMatchObject({
-      status: 404,
-    });
+    await expect(contextBasedRestrictionsService.getServicerefTarget(params)).rejects.toMatchObject(
+      {
+        status: 404,
+      }
+    );
   });
 
   test('createRule() - Create a rule', async () => {
