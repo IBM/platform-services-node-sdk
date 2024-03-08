@@ -1,3 +1,10 @@
+# [0.53.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.52.2...v0.53.0) (2024-03-08)
+
+
+### Features
+
+* **Context-Based Restrictions:** add Service Ref Target ([#247](https://github.com/IBM/platform-services-node-sdk/issues/247)) ([41d9709](https://github.com/IBM/platform-services-node-sdk/commit/41d9709b35475499dc7de8e7e1724620a06f49b7))
+
 ## [0.52.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.52.1...v0.52.2) (2024-03-01)
 
 
