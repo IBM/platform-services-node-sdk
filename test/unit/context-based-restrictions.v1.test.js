@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -661,6 +661,96 @@ describe('ContextBasedRestrictionsV1', () => {
         // invoke the method with no parameters
         contextBasedRestrictionsService.listAvailableServicerefTargets({});
         checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+
+  describe('getServicerefTarget', () => {
+    describe('positive tests', () => {
+      function __getServicerefTargetTest() {
+        // Construct the params object for operation getServicerefTarget
+        const serviceName = 'testString';
+        const xCorrelationId = 'testString';
+        const transactionId = 'testString';
+        const getServicerefTargetParams = {
+          serviceName,
+          xCorrelationId,
+          transactionId,
+        };
+
+        const getServicerefTargetResult = contextBasedRestrictionsService.getServicerefTarget(getServicerefTargetParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getServicerefTargetResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/zones/serviceref_targets/{service_name}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Correlation-Id', xCorrelationId);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(mockRequestOptions.path.service_name).toEqual(serviceName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getServicerefTargetTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        contextBasedRestrictionsService.enableRetries();
+        __getServicerefTargetTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        contextBasedRestrictionsService.disableRetries();
+        __getServicerefTargetTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const serviceName = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getServicerefTargetParams = {
+          serviceName,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        contextBasedRestrictionsService.getServicerefTarget(getServicerefTargetParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.getServicerefTarget({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await contextBasedRestrictionsService.getServicerefTarget();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
