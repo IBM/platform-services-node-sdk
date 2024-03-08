@@ -279,6 +279,35 @@ describe('ContextBasedRestrictionsV1', () => {
     // end-list_available_serviceref_targets
   });
 
+  test('getServicerefTarget request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getServicerefTarget() result:');
+    exampleServiceName = "containers-kubernetes" 
+    // begin-get_serviceref_target
+
+    const params = {
+      serviceName: exampleServiceName,
+    };
+
+    let res;
+    try {
+      res = await contextBasedRestrictionsService.getServicerefTarget(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_serviceref_target
+  });
+
   test('createRule request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);

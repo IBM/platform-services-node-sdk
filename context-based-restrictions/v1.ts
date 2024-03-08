@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.81.0-c73a091c-20231026-215706
+ * IBM OpenAPI SDK Code Generator Version: 3.86.0-bc6f14b3-20240221-193958
  */
 
 import * as extend from 'extend';
@@ -53,7 +53,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {ContextBasedRestrictionsV1}
    */
 
@@ -78,7 +78,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * Construct a ContextBasedRestrictionsV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -514,6 +514,68 @@ class ContextBasedRestrictionsV1 extends BaseService {
         url: '/v1/zones/serviceref_targets',
         method: 'GET',
         qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'X-Correlation-Id': _params.xCorrelationId,
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get service reference target for a specified service name.
+   *
+   * This operation gets the service reference target for a specified service name.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.serviceName - The name of a service.
+   * @param {string} [params.xCorrelationId] - The supplied or generated value of this header is logged for a request
+   * and repeated in a response header for the corresponding response. The same value is used for downstream requests
+   * and retries of those requests. If a value of this headers is not supplied in a request, the service generates a
+   * random (version 4) UUID.
+   * @param {string} [params.transactionId] - Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id`
+   * header. It is supported for backward compatibility with other IBM platform services that support the
+   * `Transaction-Id` header only. If both `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has
+   * the precedence over `Transaction-Id`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTarget>>}
+   */
+  public getServicerefTarget(
+    params: ContextBasedRestrictionsV1.GetServicerefTargetParams
+  ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTarget>> {
+    const _params = { ...params };
+    const _requiredParams = ['serviceName'];
+    const _validParams = ['serviceName', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'service_name': _params.serviceName,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getServicerefTarget'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/zones/serviceref_targets/{service_name}',
+        method: 'GET',
+        path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(
@@ -1253,6 +1315,24 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
+  /** Parameters for the `getServicerefTarget` operation. */
+  export interface GetServicerefTargetParams {
+    /** The name of a service. */
+    serviceName: string;
+    /** The supplied or generated value of this header is logged for a request and repeated in a response header for
+     *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
+     *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
+     */
+    xCorrelationId?: string;
+    /** Deprecated: The `Transaction-Id` header behaves as the `X-Correlation-Id` header. It is supported for
+     *  backward compatibility with other IBM platform services that support the `Transaction-Id` header only. If both
+     *  `X-Correlation-Id` and `Transaction-Id` are provided, `X-Correlation-Id` has the precedence over
+     *  `Transaction-Id`.
+     */
+    transactionId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `createRule` operation. */
   export interface CreateRuleParams {
     /** The contexts this rule applies to. */
@@ -1495,10 +1575,14 @@ namespace ContextBasedRestrictionsV1 {
     rule_count_limit: number;
     /** the max number of zones allowed for the account. */
     zone_count_limit: number;
+    /** the max number of rules with tags allowed for the account. */
+    tags_rule_count_limit?: number;
     /** the current number of rules used by the account. */
     current_rule_count: number;
     /** the current number of zones used by the account. */
     current_zone_count: number;
+    /** the current number of rules with tags used by the account. */
+    current_tags_rule_count?: number;
     /** The href link to the resource. */
     href: string;
     /** The time the resource was created. */
@@ -1666,6 +1750,10 @@ namespace ContextBasedRestrictionsV1 {
 
   /** ServiceRefTargetLocationsItem. */
   export interface ServiceRefTargetLocationsItem {
+    /** The location display name. */
+    display_name?: string;
+    /** The location kind. */
+    kind?: string;
     /** The location name. */
     name: string;
   }
