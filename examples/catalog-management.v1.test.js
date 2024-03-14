@@ -79,6 +79,7 @@ describe('CatalogManagementV1', () => {
   let versionRevLink;
 
   let zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
+  let zipurlSolution = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.0.0.tar.gz';
   let objectName = genRandonString(15);
 
   // To access additional configuration values, uncomment this line and extract the values from config
@@ -300,6 +301,39 @@ describe('CatalogManagementV1', () => {
     versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
     versionIdLink = responseBody.kinds[0].versions[0].version_locator;
     versionRevLink = responseBody.kinds[0].versions[0]._rev;
+  });
+
+  test('importOffering solution request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('importOffering() result:');
+    // begin-import_offering
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      zipurl: zipurlSolution,
+      productKind: 'solution',
+      installType: 'fullstack',
+      flavor: {
+        label: 'Quickstart',
+        name: 'quickstart',
+      }
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.importOffering(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
   });
 
   test('getOffering request example', async () => {
