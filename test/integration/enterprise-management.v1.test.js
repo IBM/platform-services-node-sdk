@@ -170,14 +170,26 @@ describe('EnterpriseManagementV1_integration', () => {
   });
   test('createAccount()', async () => {
     const parentCrn = `crn:v1:bluemix:public:enterprise::a/${enterpriseAccountId}::account-group:${accountGroupId}`;
+    const createAccountRequestTraitsModel = {
+      mfa: '',
+      enterprise_iam_managed: true,
+    };
+
+    // CreateAccountRequestOptions
+    const createAccountRequestOptionsModel = {
+      create_iam_service_id_with_apikey_and_owner_policies: true,
+    };
     const params = {
       parent: parentCrn,
       name: 'Example Account',
       ownerIamId: enterpriseAccountIamId,
+      traits: createAccountRequestTraitsModel,
+      options: createAccountRequestOptionsModel,
     };
 
     const res = await enterpriseManagementService.createAccount(params);
     expect(res).toBeDefined();
+    expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
 
     accountId = res.result.account_id;
