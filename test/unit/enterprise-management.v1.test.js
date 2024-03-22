@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-// need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+/* eslint-disable no-await-in-loop */
 
-const { NoAuthAuthenticator, unitTestUtils } = core;
-
-const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
 const nock = require('nock');
 
-/* eslint-disable no-await-in-loop */
+// need to import the whole package to mock getAuthenticatorFromEnvironment
+const sdkCorePackage = require('ibm-cloud-sdk-core');
+
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
+const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
 
 const {
   getOptions,
@@ -54,11 +54,10 @@ function unmock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('EnterpriseManagementV1', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -297,16 +296,16 @@ describe('EnterpriseManagementV1', () => {
       const serviceUrl = enterpriseManagementServiceOptions.url;
       const path = '/enterprises';
       const mockPagerResponse1 =
-        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?next_docid=1","resources":[{"url":"url","id":"id","enterprise_account_id":"enterprise_account_id","crn":"crn","name":"name","domain":"domain","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?next_docid=1","resources":[{"url":"url","id":"id","enterprise_account_id":"enterprise_account_id","crn":"crn","name":"name","domain":"domain","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","source_account_id":"source_account_id","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"url":"url","id":"id","enterprise_account_id":"enterprise_account_id","crn":"crn","name":"name","domain":"domain","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
+        '{"total_count":2,"limit":1,"resources":[{"url":"url","id":"id","enterprise_account_id":"enterprise_account_id","crn":"crn","name":"name","domain":"domain","state":"state","primary_contact_iam_id":"primary_contact_iam_id","primary_contact_email":"primary_contact_email","source_account_id":"source_account_id","created_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_at":"2019-01-01T12:00:00.000Z","updated_by":"updated_by"}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -630,17 +629,24 @@ describe('EnterpriseManagementV1', () => {
         enterprise_iam_managed: true,
       };
 
+      // CreateAccountRequestOptions
+      const createAccountRequestOptionsModel = {
+        create_iam_service_id_with_apikey_and_owner_policies: true,
+      };
+
       function __createAccountTest() {
         // Construct the params object for operation createAccount
         const parent = 'testString';
         const name = 'testString';
         const ownerIamId = 'testString';
         const traits = createAccountRequestTraitsModel;
+        const options = createAccountRequestOptionsModel;
         const createAccountParams = {
           parent,
           name,
           ownerIamId,
           traits,
+          options,
         };
 
         const createAccountResult = enterpriseManagementService.createAccount(createAccountParams);
@@ -661,6 +667,7 @@ describe('EnterpriseManagementV1', () => {
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.owner_iam_id).toEqual(ownerIamId);
         expect(mockRequestOptions.body.traits).toEqual(traits);
+        expect(mockRequestOptions.body.options).toEqual(options);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -814,9 +821,9 @@ describe('EnterpriseManagementV1', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -1300,9 +1307,9 @@ describe('EnterpriseManagementV1', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 

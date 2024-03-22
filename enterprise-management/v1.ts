@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.64.1-cee95189-20230124-211647
+ * IBM OpenAPI SDK Code Generator Version: 3.87.0-91c7c775-20240320-213027
  */
 
 /* eslint-disable max-classes-per-file */
@@ -26,10 +26,10 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
-  getAuthenticatorFromEnvironment,
-  validateParams,
   UserOptions,
+  getAuthenticatorFromEnvironment,
   getQueryParam,
+  validateParams,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -55,7 +55,7 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {EnterpriseManagementV1}
    */
 
@@ -80,7 +80,7 @@ class EnterpriseManagementV1 extends BaseService {
    * Construct a EnterpriseManagementV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -449,8 +449,11 @@ class EnterpriseManagementV1 extends BaseService {
    * @param {string} params.ownerIamId - The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must
    * already exist.
    * @param {CreateAccountRequestTraits} [params.traits] - The traits object can be used to set properties on child
-   * accounts of an enterprise. You can pass a field to opt-out of Multi-Factor Authentication setting or setup
-   * enterprise IAM settings when creating a child account in the enterprise. This is an optional field.
+   * accounts of an enterprise. You can pass a field to opt-out of the default multi-factor authentication setting or
+   * enable enterprise-managed IAM when creating a child account in the enterprise. This is an optional field.
+   * @param {CreateAccountRequestOptions} [params.options] - The options object can be used to set properties on child
+   * accounts of an enterprise. You can pass a field to to create IAM service id with IAM api key when creating a child
+   * account in the enterprise. This is an optional field.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>>}
    */
@@ -459,7 +462,7 @@ class EnterpriseManagementV1 extends BaseService {
   ): Promise<EnterpriseManagementV1.Response<EnterpriseManagementV1.CreateAccountResponse>> {
     const _params = { ...params };
     const _requiredParams = ['parent', 'name', 'ownerIamId'];
-    const _validParams = ['parent', 'name', 'ownerIamId', 'traits', 'headers'];
+    const _validParams = ['parent', 'name', 'ownerIamId', 'traits', 'options', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -470,6 +473,7 @@ class EnterpriseManagementV1 extends BaseService {
       'name': _params.name,
       'owner_iam_id': _params.ownerIamId,
       'traits': _params.traits,
+      'options': _params.options,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1159,10 +1163,15 @@ namespace EnterpriseManagementV1 {
     /** The IAM ID of the account owner, such as `IBMid-0123ABC`. The IAM ID must already exist. */
     ownerIamId: string;
     /** The traits object can be used to set properties on child accounts of an enterprise. You can pass a field to
-     *  opt-out of Multi-Factor Authentication setting or setup enterprise IAM settings when creating a child account in
-     *  the enterprise. This is an optional field.
+     *  opt-out of the default multi-factor authentication setting or enable enterprise-managed IAM when creating a
+     *  child account in the enterprise. This is an optional field.
      */
     traits?: CreateAccountRequestTraits;
+    /** The options object can be used to set properties on child accounts of an enterprise. You can pass a field to
+     *  to create IAM service id with IAM api key when creating a child account in the enterprise. This is an optional
+     *  field.
+     */
+    options?: CreateAccountRequestOptions;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1353,14 +1362,26 @@ namespace EnterpriseManagementV1 {
     account_group_id?: string;
   }
 
-  /** The traits object can be used to set properties on child accounts of an enterprise. You can pass a field to opt-out of Multi-Factor Authentication setting or setup enterprise IAM settings when creating a child account in the enterprise. This is an optional field. */
+  /** The options object can be used to set properties on child accounts of an enterprise. You can pass a field to to create IAM service id with IAM api key when creating a child account in the enterprise. This is an optional field. */
+  export interface CreateAccountRequestOptions {
+    /** By default create_iam_service_id_with_apikey_and_owner_policies is turned off for a newly created child
+     *  account. You can enable this property by passing 'true' in this boolean field. IAM service id has account owner
+     *  IAM policies and the API key associated with it can generate a token and setup resources in the account. This is
+     *  an optional field.
+     */
+    create_iam_service_id_with_apikey_and_owner_policies?: boolean;
+  }
+
+  /** The traits object can be used to set properties on child accounts of an enterprise. You can pass a field to opt-out of the default multi-factor authentication setting or enable enterprise-managed IAM when creating a child account in the enterprise. This is an optional field. */
   export interface CreateAccountRequestTraits {
-    /** By default MFA will be enabled on a child account. To opt out, pass the traits object with the mfa field set
-     *  to empty string. This is an optional field.
+    /** By default MFA is set to `NONE_NO_ROPC` on a child account, which disables CLI logins with only a password.
+     *  To opt out, pass the traits object with the mfa field set to empty string. This is an optional field.
      */
     mfa?: string;
-    /** The Enterprise IAM settings property will be turned off for a newly created child account by default. You
-     *  can enable this property by passing 'true' in this boolean field. This is an optional field.
+    /** By default enterprise-managed IAM is turned off for a newly created child account. You can enable this
+     *  property by passing 'true' in this boolean field. Enabling enterprise-managed IAM allows the enterprise account
+     *  to assign IAM resources, like access groups, trusted profiles, and account settings, to the child account. This
+     *  is an optional field.
      */
     enterprise_iam_managed?: boolean;
   }
@@ -1401,6 +1422,8 @@ namespace EnterpriseManagementV1 {
     primary_contact_iam_id?: string;
     /** The email of the primary contact of the enterprise. */
     primary_contact_email?: string;
+    /** The ID of the account that is used to create the enterprise. */
+    source_account_id?: string;
     /** The time stamp at which the enterprise was created. */
     created_at?: string;
     /** The IAM ID of the user or service that created the enterprise. */
@@ -1502,7 +1525,7 @@ namespace EnterpriseManagementV1 {
       const response = await this.client.listEnterprises(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'next_docid');
       }
@@ -1547,10 +1570,7 @@ namespace EnterpriseManagementV1 {
      * @constructor
      * @returns {AccountsPager}
      */
-    constructor(
-      client: EnterpriseManagementV1,
-      params?: EnterpriseManagementV1.ListAccountsParams
-    ) {
+    constructor(client: EnterpriseManagementV1, params?: EnterpriseManagementV1.ListAccountsParams) {
       if (params && params.nextDocid) {
         throw new Error(`the params.nextDocid field should not be set`);
       }
@@ -1584,7 +1604,7 @@ namespace EnterpriseManagementV1 {
       const response = await this.client.listAccounts(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'next_docid');
       }
@@ -1666,7 +1686,7 @@ namespace EnterpriseManagementV1 {
       const response = await this.client.listAccountGroups(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'next_docid');
       }
