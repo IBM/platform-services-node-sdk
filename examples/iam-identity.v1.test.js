@@ -55,7 +55,7 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('IamIdentityV1', () => {
-  jest.setTimeout(300000);
+  jest.setTimeout(600000);
 
   // begin-common
 
@@ -310,6 +310,60 @@ test('createApiKey request example', async () => {
     }
 
     // end-unlock_api_key
+  });
+  test('disableApiKey request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(apikeyId).not.toBeNull();
+
+    // begin-disable_api_key
+
+    const params = {
+      id: apikeyId,
+    };
+
+    try {
+      await iamIdentityService.disableApiKey(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-disable_api_key
+  });
+  test('enableApiKey request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(apikeyId).not.toBeNull();
+
+    // begin-enable_api_key
+
+    const params = {
+      id: apikeyId,
+    };
+
+    try {
+      await iamIdentityService.enableApiKey(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-enable_api_key
   });
   test('deleteApiKey request example', async () => {
 
@@ -1722,6 +1776,31 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
     // end-update_trusted_profile_assignment
+    await waitUntilTrustedProfileAssignmentFinishedEx(profileTemplateAssignmentId);
+    await deleteProfileTemplateVersionEx();
+  }
+
+  async function deleteProfileTemplateVersionEx() {
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteProfileTemplateVersion() result:');
+    // begin-delete_profile_template_version
+    const params = {
+      templateId: profileTemplateId,
+      version: 1,
+    }
+    try {
+      const res = await iamIdentityService.deleteProfileTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_profile_template_version
 
     await deleteProfileTemplateAssignmentEx();
   }
@@ -1750,31 +1829,6 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
   // end-delete_trusted_profile_assignment
-
-    await deleteProfileTemplateVersionEx();
-  }
-
-  async function deleteProfileTemplateVersionEx() {
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('deleteProfileTemplateVersion() result:');
-    // begin-delete_profile_template_version
-    const params = {
-      templateId: profileTemplateId,
-      version: 1,
-    }
-    try {
-      const res = await iamIdentityService.deleteProfileTemplateVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-    // end-delete_profile_template_version
 
     await testDeleteProfileTemplateEx();
   }
@@ -2138,6 +2192,32 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
     // end-update_account_settings_assignment
+    await waitUntilAccountSettingsAssignmentFinishedEx(accountSettingsTemplateAssignmentId);
+    await deleteAccountSettingsTemplateVersionEx();
+  }
+
+  async function deleteAccountSettingsTemplateVersionEx() {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteAccountSettingsTemplateVersion() result:');
+    // begin-delete_account_settings_template_version
+    const params = {
+      templateId: accountSettingsTemplateId,
+      version: 1,
+    }
+    try {
+      const res = await iamIdentityService.deleteAccountSettingsTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_account_settings_template_version
 
     await deleteAccountSettingsTemplateAssignmentEx();
   }
@@ -2166,32 +2246,7 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
     // end-delete_account_settings_assignment
-
-    await deleteAccountSettingsTemplateVersionEx();
-  }
-
-  async function deleteAccountSettingsTemplateVersionEx() {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('deleteAccountSettingsTemplateVersion() result:');
-    // begin-delete_account_settings_template_version
-    const params = {
-      templateId: accountSettingsTemplateId,
-      version: 1,
-    }
-    try {
-      const res = await iamIdentityService.deleteAccountSettingsTemplateVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-    // end-delete_account_settings_template_version
+    await waitUntilAccountSettingsAssignmentFinishedEx(accountSettingsTemplateAssignmentId);
 
     await testDeleteAccountSettingsTemplateEx();
   }
@@ -2207,8 +2262,7 @@ test('createApiKey request example', async () => {
     });
 
     originalLog('testDeleteAccountSettingsTemplate() result:');
-    await waitUntilAccountSettingsAssignmentFinishedEx(accountSettingsTemplateAssignmentId);
-
+    
     // begin-delete_all_versions_of_account_settings_template
     const params = {
       templateId: accountSettingsTemplateId,

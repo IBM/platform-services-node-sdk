@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-
 const IamIdentityV1 = require('../../dist/iam-identity/v1');
 
 const {
@@ -50,7 +49,6 @@ const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnv
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('IamIdentityV1', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -61,7 +59,7 @@ describe('IamIdentityV1', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = IamIdentityV1.newInstance();
@@ -211,7 +209,10 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const apikey = 'testString';
         const storeValue = true;
+        const supportSessions = true;
+        const actionWhenLeaked = 'testString';
         const entityLock = 'false';
+        const entityDisable = 'false';
         const createApiKeyParams = {
           name,
           iamId,
@@ -219,7 +220,10 @@ describe('IamIdentityV1', () => {
           accountId,
           apikey,
           storeValue,
+          supportSessions,
+          actionWhenLeaked,
           entityLock,
+          entityDisable,
         };
 
         const createApiKeyResult = iamIdentityService.createApiKey(createApiKeyParams);
@@ -237,12 +241,15 @@ describe('IamIdentityV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Entity-Lock', entityLock);
+        checkUserHeader(createRequestMock, 'Entity-Disable', entityDisable);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.iam_id).toEqual(iamId);
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.account_id).toEqual(accountId);
         expect(mockRequestOptions.body.apikey).toEqual(apikey);
         expect(mockRequestOptions.body.store_value).toEqual(storeValue);
+        expect(mockRequestOptions.body.support_sessions).toEqual(supportSessions);
+        expect(mockRequestOptions.body.action_when_leaked).toEqual(actionWhenLeaked);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -470,11 +477,15 @@ describe('IamIdentityV1', () => {
         const ifMatch = 'testString';
         const name = 'testString';
         const description = 'testString';
+        const supportSessions = true;
+        const actionWhenLeaked = 'testString';
         const updateApiKeyParams = {
           id,
           ifMatch,
           name,
           description,
+          supportSessions,
+          actionWhenLeaked,
         };
 
         const updateApiKeyResult = iamIdentityService.updateApiKey(updateApiKeyParams);
@@ -494,6 +505,8 @@ describe('IamIdentityV1', () => {
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.support_sessions).toEqual(supportSessions);
+        expect(mockRequestOptions.body.action_when_leaked).toEqual(actionWhenLeaked);
         expect(mockRequestOptions.path.id).toEqual(id);
       }
 
@@ -800,6 +813,174 @@ describe('IamIdentityV1', () => {
         let err;
         try {
           await iamIdentityService.unlockApiKey();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('disableApiKey', () => {
+    describe('positive tests', () => {
+      function __disableApiKeyTest() {
+        // Construct the params object for operation disableApiKey
+        const id = 'testString';
+        const disableApiKeyParams = {
+          id,
+        };
+
+        const disableApiKeyResult = iamIdentityService.disableApiKey(disableApiKeyParams);
+
+        // all methods should return a Promise
+        expectToBePromise(disableApiKeyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/apikeys/{id}/disable', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __disableApiKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __disableApiKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __disableApiKeyTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const disableApiKeyParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.disableApiKey(disableApiKeyParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.disableApiKey({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.disableApiKey();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('enableApiKey', () => {
+    describe('positive tests', () => {
+      function __enableApiKeyTest() {
+        // Construct the params object for operation enableApiKey
+        const id = 'testString';
+        const enableApiKeyParams = {
+          id,
+        };
+
+        const enableApiKeyResult = iamIdentityService.enableApiKey(enableApiKeyParams);
+
+        // all methods should return a Promise
+        expectToBePromise(enableApiKeyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/apikeys/{id}/disable', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __enableApiKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __enableApiKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __enableApiKeyTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const enableApiKeyParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.enableApiKey(enableApiKeyParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.enableApiKey({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.enableApiKey();
         } catch (e) {
           err = e;
         }
