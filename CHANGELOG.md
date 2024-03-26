@@ -1,3 +1,10 @@
+# [0.54.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.53.0...v0.54.0) (2024-03-14)
+
+
+### Features
+
+* **Catalog Management:** add missed fields from api definition ([#248](https://github.com/IBM/platform-services-node-sdk/issues/248)) ([86e5e8b](https://github.com/IBM/platform-services-node-sdk/commit/86e5e8be7d9849c3eab9ccfe8ebaaff37875a8b5))
+
 # [0.53.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.52.2...v0.53.0) (2024-03-08)
 
 

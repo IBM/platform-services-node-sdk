@@ -764,7 +764,6 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.resourceGroupId] - Resource group id the catalog is owned by.
    * @param {string} [params.owningAccount] - Account that owns catalog.
    * @param {Filters} [params.catalogFilters] - Filters for account and catalog filters.
-   * @param {SyndicationResource} [params.syndicationSettings] - Feature information.
    * @param {string} [params.kind] - Kind of catalog. Supported kinds are offering and vpe.
    * @param {JsonObject} [params.metadata] - Catalog specific metadata.
    * @param {TargetAccountContext[]} [params.targetAccountContexts] - List of target accounts contexts on this catalog.
@@ -789,7 +788,6 @@ class CatalogManagementV1 extends BaseService {
       'resourceGroupId',
       'owningAccount',
       'catalogFilters',
-      'syndicationSettings',
       'kind',
       'metadata',
       'targetAccountContexts',
@@ -813,7 +811,6 @@ class CatalogManagementV1 extends BaseService {
       'resource_group_id': _params.resourceGroupId,
       'owning_account': _params.owningAccount,
       'catalog_filters': _params.catalogFilters,
-      'syndication_settings': _params.syndicationSettings,
       'kind': _params.kind,
       'metadata': _params.metadata,
       'target_account_contexts': _params.targetAccountContexts,
@@ -916,7 +913,6 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.resourceGroupId] - Resource group id the catalog is owned by.
    * @param {string} [params.owningAccount] - Account that owns catalog.
    * @param {Filters} [params.catalogFilters] - Filters for account and catalog filters.
-   * @param {SyndicationResource} [params.syndicationSettings] - Feature information.
    * @param {string} [params.kind] - Kind of catalog. Supported kinds are offering and vpe.
    * @param {JsonObject} [params.metadata] - Catalog specific metadata.
    * @param {TargetAccountContext[]} [params.targetAccountContexts] - List of target accounts contexts on this catalog.
@@ -944,7 +940,6 @@ class CatalogManagementV1 extends BaseService {
       'resourceGroupId',
       'owningAccount',
       'catalogFilters',
-      'syndicationSettings',
       'kind',
       'metadata',
       'targetAccountContexts',
@@ -970,7 +965,6 @@ class CatalogManagementV1 extends BaseService {
       'resource_group_id': _params.resourceGroupId,
       'owning_account': _params.owningAccount,
       'catalog_filters': _params.catalogFilters,
-      'syndication_settings': _params.syndicationSettings,
       'kind': _params.kind,
       'metadata': _params.metadata,
       'target_account_contexts': _params.targetAccountContexts,
@@ -1688,6 +1682,8 @@ class CatalogManagementV1 extends BaseService {
    * server image for VPC.
    * @param {string} [params.productKind] - Optional product kind for the software being onboarded.  Valid values are
    * software, module, or solution.  Default value is software.
+   * @param {string} [params.productKindLabel] - Display value for optional product kind for the software being
+   * onboarded.
    * @param {string} [params.sha] - SHA256 fingerprint of the image file. Required for virtual server image for VPC.
    * @param {string} [params.version] - Semantic version of the software being onboarded. Required for virtual server
    * image for VPC.
@@ -1696,6 +1692,7 @@ class CatalogManagementV1 extends BaseService {
    * Required for virtual server image for VPC.
    * @param {string} [params.workingDirectory] - Optional - The sub-folder within the specified tgz file that contains
    * the software being onboarded.
+   * @param {string} [params.installType] - The install type of the variation.  Specify extension or fullstack.
    * @param {string} [params.zipurl] - URL path to zip location.  If not specified, must provide content in the body of
    * this call.
    * @param {string} [params.targetVersion] - The semver value for this new version, if not found in the zip url package
@@ -1725,11 +1722,13 @@ class CatalogManagementV1 extends BaseService {
       'targetKinds',
       'formatKind',
       'productKind',
+      'productKindLabel',
       'sha',
       'version',
       'flavor',
       'metadata',
       'workingDirectory',
+      'installType',
       'zipurl',
       'targetVersion',
       'includeConfig',
@@ -1752,11 +1751,13 @@ class CatalogManagementV1 extends BaseService {
       'target_kinds': _params.targetKinds,
       'format_kind': _params.formatKind,
       'product_kind': _params.productKind,
+      'product_kind_label': _params.productKindLabel,
       'sha': _params.sha,
       'version': _params.version,
       'flavor': _params.flavor,
       'metadata': _params.metadata,
       'working_directory': _params.workingDirectory,
+      'install_type': _params.installType,
     };
 
     const query = {
@@ -1822,6 +1823,8 @@ class CatalogManagementV1 extends BaseService {
    * server image for VPC.
    * @param {string} [params.productKind] - Optional product kind for the software being onboarded.  Valid values are
    * software, module, or solution.  Default value is software.
+   * @param {string} [params.productKindLabel] - Display value for optional product kind for the software being
+   * onboarded.
    * @param {string} [params.sha] - SHA256 fingerprint of the image file. Required for virtual server image for VPC.
    * @param {string} [params.version] - Semantic version of the software being onboarded. Required for virtual server
    * image for VPC.
@@ -1830,6 +1833,7 @@ class CatalogManagementV1 extends BaseService {
    * Required for virtual server image for VPC.
    * @param {string} [params.workingDirectory] - Optional - The sub-folder within the specified tgz file that contains
    * the software being onboarded.
+   * @param {string} [params.installType] - The install type of the variation.  Specify extension or fullstack.
    * @param {string} [params.zipurl] - URL path to zip location.  If not specified, must provide content in this post
    * body.
    * @param {string} [params.offeringId] - Re-use the specified offeringID during import.
@@ -1858,11 +1862,13 @@ class CatalogManagementV1 extends BaseService {
       'targetKinds',
       'formatKind',
       'productKind',
+      'productKindLabel',
       'sha',
       'version',
       'flavor',
       'metadata',
       'workingDirectory',
+      'installType',
       'zipurl',
       'offeringId',
       'targetVersion',
@@ -1886,11 +1892,13 @@ class CatalogManagementV1 extends BaseService {
       'target_kinds': _params.targetKinds,
       'format_kind': _params.formatKind,
       'product_kind': _params.productKind,
+      'product_kind_label': _params.productKindLabel,
       'sha': _params.sha,
       'version': _params.version,
       'flavor': _params.flavor,
       'metadata': _params.metadata,
       'working_directory': _params.workingDirectory,
+      'install_type': _params.installType,
     };
 
     const query = {
@@ -6151,6 +6159,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.catalogId] - Catalog ID this instance was created from.
    * @param {string} [params.offeringId] - Offering ID this instance was created from.
    * @param {string} [params.kindFormat] - the format this instance has (helm, operator, ova...).
+   * @param {string} [params.kindFormatLabel] - Display value for the format this instance has (helm, operator, ova...).
    * @param {string} [params.version] - The version this instance was installed from (semver - not version id).
    * @param {string} [params.versionId] - The version id this instance was installed from (version id - not semver).
    * @param {string} [params.clusterId] - Cluster ID.
@@ -6172,6 +6181,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.account] - The account this instance is owned by.
    * @param {OfferingInstanceLastOperation} [params.lastOperation] - the last operation performed and status.
    * @param {string} [params.kindTarget] - The target kind for the installed software version.
+   * @param {string} [params.kindTargetLabel] - Display value for the target kind for the installed software version.
    * @param {string} [params.sha] - The digest value of the installed software version.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
@@ -6191,6 +6201,7 @@ class CatalogManagementV1 extends BaseService {
       'catalogId',
       'offeringId',
       'kindFormat',
+      'kindFormatLabel',
       'version',
       'versionId',
       'clusterId',
@@ -6209,6 +6220,7 @@ class CatalogManagementV1 extends BaseService {
       'account',
       'lastOperation',
       'kindTarget',
+      'kindTargetLabel',
       'sha',
       'headers',
     ];
@@ -6226,6 +6238,7 @@ class CatalogManagementV1 extends BaseService {
       'catalog_id': _params.catalogId,
       'offering_id': _params.offeringId,
       'kind_format': _params.kindFormat,
+      'kind_format_label': _params.kindFormatLabel,
       'version': _params.version,
       'version_id': _params.versionId,
       'cluster_id': _params.clusterId,
@@ -6244,6 +6257,7 @@ class CatalogManagementV1 extends BaseService {
       'account': _params.account,
       'last_operation': _params.lastOperation,
       'kind_target': _params.kindTarget,
+      'kind_target_label': _params.kindTargetLabel,
       'sha': _params.sha,
     };
 
@@ -6344,6 +6358,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.catalogId] - Catalog ID this instance was created from.
    * @param {string} [params.offeringId] - Offering ID this instance was created from.
    * @param {string} [params.kindFormat] - the format this instance has (helm, operator, ova...).
+   * @param {string} [params.kindFormatLabel] - Display value for the format this instance has (helm, operator, ova...).
    * @param {string} [params.version] - The version this instance was installed from (semver - not version id).
    * @param {string} [params.versionId] - The version id this instance was installed from (version id - not semver).
    * @param {string} [params.clusterId] - Cluster ID.
@@ -6365,6 +6380,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.account] - The account this instance is owned by.
    * @param {OfferingInstanceLastOperation} [params.lastOperation] - the last operation performed and status.
    * @param {string} [params.kindTarget] - The target kind for the installed software version.
+   * @param {string} [params.kindTargetLabel] - Display value for the target kind for the installed software version.
    * @param {string} [params.sha] - The digest value of the installed software version.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
@@ -6385,6 +6401,7 @@ class CatalogManagementV1 extends BaseService {
       'catalogId',
       'offeringId',
       'kindFormat',
+      'kindFormatLabel',
       'version',
       'versionId',
       'clusterId',
@@ -6403,6 +6420,7 @@ class CatalogManagementV1 extends BaseService {
       'account',
       'lastOperation',
       'kindTarget',
+      'kindTargetLabel',
       'sha',
       'headers',
     ];
@@ -6420,6 +6438,7 @@ class CatalogManagementV1 extends BaseService {
       'catalog_id': _params.catalogId,
       'offering_id': _params.offeringId,
       'kind_format': _params.kindFormat,
+      'kind_format_label': _params.kindFormatLabel,
       'version': _params.version,
       'version_id': _params.versionId,
       'cluster_id': _params.clusterId,
@@ -6438,6 +6457,7 @@ class CatalogManagementV1 extends BaseService {
       'account': _params.account,
       'last_operation': _params.lastOperation,
       'kind_target': _params.kindTarget,
+      'kind_target_label': _params.kindTargetLabel,
       'sha': _params.sha,
     };
 
@@ -6885,8 +6905,6 @@ namespace CatalogManagementV1 {
     owningAccount?: string;
     /** Filters for account and catalog filters. */
     catalogFilters?: Filters;
-    /** Feature information. */
-    syndicationSettings?: SyndicationResource;
     /** Kind of catalog. Supported kinds are offering and vpe. */
     kind?: string;
     /** Catalog specific metadata. */
@@ -6935,8 +6953,6 @@ namespace CatalogManagementV1 {
     owningAccount?: string;
     /** Filters for account and catalog filters. */
     catalogFilters?: Filters;
-    /** Feature information. */
-    syndicationSettings?: SyndicationResource;
     /** Kind of catalog. Supported kinds are offering and vpe. */
     kind?: string;
     /** Catalog specific metadata. */
@@ -7189,6 +7205,8 @@ namespace CatalogManagementV1 {
      *  Default value is software.
      */
     productKind?: string;
+    /** Display value for optional product kind for the software being onboarded. */
+    productKindLabel?: string;
     /** SHA256 fingerprint of the image file. Required for virtual server image for VPC. */
     sha?: string;
     /** Semantic version of the software being onboarded. Required for virtual server image for VPC. */
@@ -7199,6 +7217,8 @@ namespace CatalogManagementV1 {
     metadata?: ImportOfferingBodyMetadata;
     /** Optional - The sub-folder within the specified tgz file that contains the software being onboarded. */
     workingDirectory?: string;
+    /** The install type of the variation.  Specify extension or fullstack. */
+    installType?: string;
     /** URL path to zip location.  If not specified, must provide content in the body of this call. */
     zipurl?: string;
     /** The semver value for this new version, if not found in the zip url package content. */
@@ -7238,6 +7258,8 @@ namespace CatalogManagementV1 {
      *  Default value is software.
      */
     productKind?: string;
+    /** Display value for optional product kind for the software being onboarded. */
+    productKindLabel?: string;
     /** SHA256 fingerprint of the image file. Required for virtual server image for VPC. */
     sha?: string;
     /** Semantic version of the software being onboarded. Required for virtual server image for VPC. */
@@ -7248,6 +7270,8 @@ namespace CatalogManagementV1 {
     metadata?: ImportOfferingBodyMetadata;
     /** Optional - The sub-folder within the specified tgz file that contains the software being onboarded. */
     workingDirectory?: string;
+    /** The install type of the variation.  Specify extension or fullstack. */
+    installType?: string;
     /** URL path to zip location.  If not specified, must provide content in this post body. */
     zipurl?: string;
     /** Re-use the specified offeringID during import. */
@@ -8420,6 +8444,8 @@ namespace CatalogManagementV1 {
     offeringId?: string;
     /** the format this instance has (helm, operator, ova...). */
     kindFormat?: string;
+    /** Display value for the format this instance has (helm, operator, ova...). */
+    kindFormatLabel?: string;
     /** The version this instance was installed from (semver - not version id). */
     version?: string;
     /** The version id this instance was installed from (version id - not semver). */
@@ -8459,6 +8485,8 @@ namespace CatalogManagementV1 {
     lastOperation?: OfferingInstanceLastOperation;
     /** The target kind for the installed software version. */
     kindTarget?: string;
+    /** Display value for the target kind for the installed software version. */
+    kindTargetLabel?: string;
     /** The digest value of the installed software version. */
     sha?: string;
     headers?: OutgoingHttpHeaders;
@@ -8493,6 +8521,8 @@ namespace CatalogManagementV1 {
     offeringId?: string;
     /** the format this instance has (helm, operator, ova...). */
     kindFormat?: string;
+    /** Display value for the format this instance has (helm, operator, ova...). */
+    kindFormatLabel?: string;
     /** The version this instance was installed from (semver - not version id). */
     version?: string;
     /** The version id this instance was installed from (version id - not semver). */
@@ -8532,6 +8562,8 @@ namespace CatalogManagementV1 {
     lastOperation?: OfferingInstanceLastOperation;
     /** The target kind for the installed software version. */
     kindTarget?: string;
+    /** Display value for the target kind for the installed software version. */
+    kindTargetLabel?: string;
     /** The digest value of the installed software version. */
     sha?: string;
     headers?: OutgoingHttpHeaders;
@@ -8842,8 +8874,6 @@ namespace CatalogManagementV1 {
     owning_account?: string;
     /** Filters for account and catalog filters. */
     catalog_filters?: Filters;
-    /** Feature information. */
-    syndication_settings?: SyndicationResource;
     /** Kind of catalog. Supported kinds are offering and vpe. */
     kind?: string;
     /** Catalog specific metadata. */
@@ -9398,10 +9428,16 @@ namespace CatalogManagementV1 {
     id?: string;
     /** content kind, e.g., helm, vm image. */
     format_kind?: string;
+    /** display value for content kind, e.g., helm, vm image. */
+    format_kind_label?: string;
     /** install kind, e.g., helm, operator, terraform. */
     install_kind?: string;
+    /** display value for install kind, e.g., helm, operator, terraform. */
+    install_kind_label?: string;
     /** target cloud to install, e.g., iks, open_shift_iks. */
     target_kind?: string;
+    /** display value for target cloud to install, e.g., iks, open_shift_iks. */
+    target_kind_label?: string;
     /** Open ended metadata information. */
     metadata?: JsonObject;
     /** List of tags associated with this catalog. */
@@ -9664,6 +9700,8 @@ namespace CatalogManagementV1 {
     offering_id?: string;
     /** the format this instance has (helm, operator, ova...). */
     kind_format?: string;
+    /** Display value for the format this instance has (helm, operator, ova...). */
+    kind_format_label?: string;
     /** The version this instance was installed from (semver - not version id). */
     version?: string;
     /** The version id this instance was installed from (version id - not semver). */
@@ -9703,6 +9741,8 @@ namespace CatalogManagementV1 {
     last_operation?: OfferingInstanceLastOperation;
     /** The target kind for the installed software version. */
     kind_target?: string;
+    /** Display value for the target kind for the installed software version. */
+    kind_target_label?: string;
     /** The digest value of the installed software version. */
     sha?: string;
   }
@@ -9905,7 +9945,9 @@ namespace CatalogManagementV1 {
   export interface Resource {
     /** Type of requirement. */
     type?: Resource.Constants.Type | string;
-    /** mem, disk, cores, and nodes can be parsed as an int.  targetVersion will be a semver range value. */
+    /** mem, disk, cores, and nodes can be parsed as an int.  targetVersion and terraformVersion will be a semver
+     *  range value.
+     */
     value?: any;
   }
   export namespace Resource {
@@ -9917,6 +9959,7 @@ namespace CatalogManagementV1 {
         CORES = 'cores',
         TARGETVERSION = 'targetVersion',
         NODES = 'nodes',
+        TERRAFORMVERSION = 'terraformVersion',
       }
     }
   }
@@ -10207,54 +10250,6 @@ namespace CatalogManagementV1 {
     value?: number;
     /** Valid values are hour or day. */
     type?: string;
-  }
-
-  /** Feature information. */
-  export interface SyndicationAuthorization {
-    /** Array of syndicated namespaces. */
-    token?: string;
-    /** Date and time last updated. */
-    last_run?: string;
-  }
-
-  /** Feature information. */
-  export interface SyndicationCluster {
-    /** Cluster region. */
-    region?: string;
-    /** Cluster ID. */
-    id?: string;
-    /** Cluster name. */
-    name?: string;
-    /** Resource group ID. */
-    resource_group_name?: string;
-    /** Syndication type. */
-    type?: string;
-    /** Syndicated namespaces. */
-    namespaces?: string[];
-    /** Syndicated to all namespaces on cluster. */
-    all_namespaces?: boolean;
-  }
-
-  /** Feature information. */
-  export interface SyndicationHistory {
-    /** Array of syndicated namespaces. */
-    namespaces?: string[];
-    /** Array of syndicated namespaces. */
-    clusters?: SyndicationCluster[];
-    /** Date and time last syndicated. */
-    last_run?: string;
-  }
-
-  /** Feature information. */
-  export interface SyndicationResource {
-    /** Remove related components. */
-    remove_related_components?: boolean;
-    /** Syndication clusters. */
-    clusters?: SyndicationCluster[];
-    /** Feature information. */
-    history?: SyndicationHistory;
-    /** Feature information. */
-    authorization?: SyndicationAuthorization;
   }
 
   /** Target account context. */
