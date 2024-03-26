@@ -1,3 +1,10 @@
+# [0.55.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.54.0...v0.55.0) (2024-03-26)
+
+
+### Features
+
+* **IAM Identity:** add disable_api_key and enable_api_key operations ([d5d928b](https://github.com/IBM/platform-services-node-sdk/commit/d5d928b6769b84d8531a5cc417ba85dceb2a1f2d))
+
 # [0.54.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.53.0...v0.54.0) (2024-03-14)
 
 
