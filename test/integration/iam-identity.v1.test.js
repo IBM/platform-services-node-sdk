@@ -21,7 +21,7 @@ const IamIdentityV1 = require('../../dist/iam-identity/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
-const timeout = 300000;
+const timeout = 600000;
 
 // Location of our config file.
 const configFile = 'iam_identity.env';
@@ -207,7 +207,10 @@ describe('IamIdentityV1_integration', () => {
         expect(result.created_by).toEqual(iamId);
         expect(result.created_at).not.toBeNull();
         expect(result.locked).toEqual(false);
+        expect(result.disabled).toEqual(false);
         expect(result.crn).not.toBeNull();
+        expect(result.support_sessions).toEqual(false);
+        expect(result.action_when_leaked).not.toBeNull();
 
         apikeyEtag1 = result.entity_tag;
         expect(apikeyEtag1).not.toBeNull();
@@ -356,6 +359,54 @@ describe('IamIdentityV1_integration', () => {
 
         getApiKeyById(apikeyId2).then((apikey) => {
           expect(apikey.locked).toBe(false);
+          done();
+        });
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('disableApiKey()', (done) => {
+    expect(apikeyId2).toBeDefined();
+    expect(apikeyId2).not.toBeNull();
+    const params = {
+      id: apikeyId2,
+    };
+
+    iamIdentityService
+      .disableApiKey(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(204);
+
+        getApiKeyById(apikeyId2).then((apikey) => {
+          expect(apikey.disabled).toBe(true);
+          done();
+        });
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('enableApiKey()', (done) => {
+    expect(apikeyId2).toBeDefined();
+    expect(apikeyId2).not.toBeNull();
+    const params = {
+      id: apikeyId2,
+    };
+
+    iamIdentityService
+      .enableApiKey(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(204);
+
+        getApiKeyById(apikeyId2).then((apikey) => {
+          expect(apikey.disabled).toBe(false);
           done();
         });
       })
@@ -1840,6 +1891,8 @@ describe('IamIdentityV1_integration', () => {
 
   async function deleteProfileTemplateVersion() {
 
+    await waitUntilTrustedProfileAssignmentFinished(profileTemplateAssignmentId);
+
     const params = {
       templateId: profileTemplateId,
       version: 1,
@@ -2086,7 +2139,7 @@ describe('IamIdentityV1_integration', () => {
   }
 
   async function deleteAccountSettingsTemplateVersion() {
-
+    await waitUntilAccountSettingsAssignmentFinished(accountSettingsTemplateAssignmentId);
     const params = {
       templateId: accountSettingsTemplateId,
       version: 1,
