@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.80.0-29334a73-20230925-151553
+ * IBM OpenAPI SDK Code Generator Version: 3.86.2-8b8592a4-20240313-204553
  */
 
 import * as extend from 'extend';
@@ -50,7 +50,7 @@ class IamIdentityV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {IamIdentityV1}
    */
 
@@ -75,7 +75,7 @@ class IamIdentityV1 extends BaseService {
    * Construct a IamIdentityV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -195,15 +195,21 @@ class IamIdentityV1 extends BaseService {
    * @param {string} [params.description] - The optional description of the API key. The 'description' property is only
    * available if a description was provided during a create of an API key.
    * @param {string} [params.accountId] - The account ID of the API key.
-   * @param {string} [params.apikey] - You can optionally passthrough the API key value for this API key. If passed, NO
-   * validation of that apiKey value is done, i.e. the value can be non-URL safe. If omitted, the API key management
+   * @param {string} [params.apikey] - You can optionally passthrough the API key value for this API key. If passed, a
+   * minimum length validation of 32 characters for that apiKey value is done, i.e. the value can contain any characters
+   * and can even be non-URL safe, but the minimum length requirement must be met. If omitted, the API key management
    * will create an URL safe opaque API key value. The value of the API key is checked for uniqueness. Ensure enough
    * variations when passing in this value.
    * @param {boolean} [params.storeValue] - Send true or false to set whether the API key value is retrievable in the
    * future by using the Get details of an API key request. If you create an API key for a user, you must specify
    * `false` or omit the value. We don't allow storing of API keys for users.
+   * @param {boolean} [params.supportSessions] - Defines if the API key supports sessions. Sessions are only supported
+   * for user apikeys.
+   * @param {string} [params.actionWhenLeaked] - Defines the action to take when API key is leaked, valid values are
+   * 'none', 'disable' and 'delete'.
    * @param {string} [params.entityLock] - Indicates if the API key is locked for further write operations. False by
    * default.
+   * @param {string} [params.entityDisable] - Indicates if the API key is disabled. False by default.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>>}
    */
@@ -219,7 +225,10 @@ class IamIdentityV1 extends BaseService {
       'accountId',
       'apikey',
       'storeValue',
+      'supportSessions',
+      'actionWhenLeaked',
       'entityLock',
+      'entityDisable',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -234,6 +243,8 @@ class IamIdentityV1 extends BaseService {
       'account_id': _params.accountId,
       'apikey': _params.apikey,
       'store_value': _params.storeValue,
+      'support_sessions': _params.supportSessions,
+      'action_when_leaked': _params.actionWhenLeaked,
     };
 
     const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'createApiKey');
@@ -252,6 +263,7 @@ class IamIdentityV1 extends BaseService {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Entity-Lock': _params.entityLock,
+            'Entity-Disable': _params.entityDisable,
           },
           _params.headers
         ),
@@ -389,6 +401,10 @@ class IamIdentityV1 extends BaseService {
    * not be empty. The name is not checked for uniqueness. Failure to this will result in an Error condition.
    * @param {string} [params.description] - The description of the API key to update. If specified an empty description
    * will clear the description of the API key. If a non empty value is provided the API key will be updated.
+   * @param {boolean} [params.supportSessions] - Defines if the API key supports sessions. Sessions are only supported
+   * for user apikeys.
+   * @param {string} [params.actionWhenLeaked] - Defines the action to take when API key is leaked, valid values are
+   * 'none', 'disable' and 'delete'.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>>}
    */
@@ -397,7 +413,15 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'ifMatch'];
-    const _validParams = ['id', 'ifMatch', 'name', 'description', 'headers'];
+    const _validParams = [
+      'id',
+      'ifMatch',
+      'name',
+      'description',
+      'supportSessions',
+      'actionWhenLeaked',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -406,6 +430,8 @@ class IamIdentityV1 extends BaseService {
     const body = {
       'name': _params.name,
       'description': _params.description,
+      'support_sessions': _params.supportSessions,
+      'action_when_leaked': _params.actionWhenLeaked,
     };
 
     const path = {
@@ -555,6 +581,90 @@ class IamIdentityV1 extends BaseService {
     const parameters = {
       options: {
         url: '/v1/apikeys/{id}/lock',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * disable the API key.
+   *
+   * Disable an API key. Users can manage user API keys for themself, or service ID API keys for service IDs that are
+   * bound to an entity they have access to.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - Unique ID of the API key.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public disableApiKey(
+    params: IamIdentityV1.DisableApiKeyParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'disableApiKey');
+
+    const parameters = {
+      options: {
+        url: '/v1/apikeys/{id}/disable',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Enable the API key.
+   *
+   * Enable an API key. Users can manage user API keys for themself, or service ID API keys for service IDs that are
+   * bound to an entity they have access to.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - Unique ID of the API key.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public enableApiKey(
+    params: IamIdentityV1.EnableApiKeyParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'enableApiKey');
+
+    const parameters = {
+      options: {
+        url: '/v1/apikeys/{id}/disable',
         method: 'DELETE',
         path,
       },
@@ -2709,7 +2819,7 @@ class IamIdentityV1 extends BaseService {
    * when reading the assignment. This value  helps identifying parallel usage of this API. Pass * to indicate to update
    * any version available. This might result in stale updates.
    * @param {number} params.templateVersion - Template version to be applied to the assignment. To retry all failed
-   * assignemtns, provide the existing version. To migrate to a different version, provide the new version number.
+   * assignments, provide the existing version. To migrate to a different version, provide the new version number.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
    */
@@ -3772,7 +3882,7 @@ class IamIdentityV1 extends BaseService {
    * when reading the Assignment. This value  helps identifying parallel usage of this API. Pass * to indicate to update
    * any version available. This might result in stale updates.
    * @param {number} params.templateVersion - Template version to be applied to the assignment. To retry all failed
-   * assignemtns, provide the existing version. To migrate to a different version, provide the new version number.
+   * assignments, provide the existing version. To migrate to a different version, provide the new version number.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>>}
    */
@@ -4567,8 +4677,9 @@ namespace IamIdentityV1 {
     description?: string;
     /** The account ID of the API key. */
     accountId?: string;
-    /** You can optionally passthrough the API key value for this API key. If passed, NO validation of that apiKey
-     *  value is done, i.e. the value can be non-URL safe. If omitted, the API key management will create an URL safe
+    /** You can optionally passthrough the API key value for this API key. If passed, a minimum length validation of
+     *  32 characters for that apiKey value is done, i.e. the value can contain any characters and can even be non-URL
+     *  safe, but the minimum length requirement must be met. If omitted, the API key management will create an URL safe
      *  opaque API key value. The value of the API key is checked for uniqueness. Ensure enough variations when passing
      *  in this value.
      */
@@ -4578,8 +4689,14 @@ namespace IamIdentityV1 {
      *  allow storing of API keys for users.
      */
     storeValue?: boolean;
+    /** Defines if the API key supports sessions. Sessions are only supported for user apikeys. */
+    supportSessions?: boolean;
+    /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
+    actionWhenLeaked?: string;
     /** Indicates if the API key is locked for further write operations. False by default. */
     entityLock?: string;
+    /** Indicates if the API key is disabled. False by default. */
+    entityDisable?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -4622,6 +4739,10 @@ namespace IamIdentityV1 {
      *  the API key. If a non empty value is provided the API key will be updated.
      */
     description?: string;
+    /** Defines if the API key supports sessions. Sessions are only supported for user apikeys. */
+    supportSessions?: boolean;
+    /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
+    actionWhenLeaked?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -4641,6 +4762,20 @@ namespace IamIdentityV1 {
 
   /** Parameters for the `unlockApiKey` operation. */
   export interface UnlockApiKeyParams {
+    /** Unique ID of the API key. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `disableApiKey` operation. */
+  export interface DisableApiKeyParams {
+    /** Unique ID of the API key. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `enableApiKey` operation. */
+  export interface EnableApiKeyParams {
     /** Unique ID of the API key. */
     id: string;
     headers?: OutgoingHttpHeaders;
@@ -5287,7 +5422,7 @@ namespace IamIdentityV1 {
      *  This might result in stale updates.
      */
     ifMatch: string;
-    /** Template version to be applied to the assignment. To retry all failed assignemtns, provide the existing
+    /** Template version to be applied to the assignment. To retry all failed assignments, provide the existing
      *  version. To migrate to a different version, provide the new version number.
      */
     templateVersion: number;
@@ -5566,7 +5701,7 @@ namespace IamIdentityV1 {
      *  This might result in stale updates.
      */
     ifMatch: string;
-    /** Template version to be applied to the assignment. To retry all failed assignemtns, provide the existing
+    /** Template version to be applied to the assignment. To retry all failed assignments, provide the existing
      *  version. To migrate to a different version, provide the new version number.
      */
     templateVersion: number;
@@ -5768,13 +5903,17 @@ namespace IamIdentityV1 {
      *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
-    restrict_create_service_id?: string;
+    restrict_create_service_id?:
+      | AccountSettingsComponent.Constants.RestrictCreateServiceId
+      | string;
     /** Defines whether or not creating platform API keys is access controlled. Valid values:
      *    * RESTRICTED - to apply access control
      *    * NOT_RESTRICTED - to remove access control
      *    * NOT_SET - to 'unset' a previous set value.
      */
-    restrict_create_platform_apikey?: string;
+    restrict_create_platform_apikey?:
+      | AccountSettingsComponent.Constants.RestrictCreatePlatformApikey
+      | string;
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses?: string;
     /** Defines the MFA trait for the account. Valid values:
@@ -5786,7 +5925,7 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    mfa?: string;
+    mfa?: AccountSettingsComponent.Constants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
     user_mfa?: AccountSettingsUserMFA[];
     /** Defines the session expiration in seconds for the account. Valid values:
@@ -5816,6 +5955,32 @@ namespace IamIdentityV1 {
      */
     system_refresh_token_expiration_in_seconds?: string;
   }
+  export namespace AccountSettingsComponent {
+    export namespace Constants {
+      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictCreateServiceId {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictCreatePlatformApikey {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum Mfa {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+    }
+  }
 
   /** Response body format for Account Settings REST requests. */
   export interface AccountSettingsResponse {
@@ -5829,13 +5994,15 @@ namespace IamIdentityV1 {
      *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
-    restrict_create_service_id: string;
+    restrict_create_service_id: AccountSettingsResponse.Constants.RestrictCreateServiceId | string;
     /** Defines whether or not creating platform API keys is access controlled. Valid values:
      *    * RESTRICTED - to apply access control
      *    * NOT_RESTRICTED - to remove access control
      *    * NOT_SET - to 'unset' a previous set value.
      */
-    restrict_create_platform_apikey: string;
+    restrict_create_platform_apikey:
+      | AccountSettingsResponse.Constants.RestrictCreatePlatformApikey
+      | string;
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses: string;
     /** Version of the account settings. */
@@ -5849,7 +6016,7 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    mfa: string;
+    mfa: AccountSettingsResponse.Constants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
     user_mfa: AccountSettingsUserMFA[];
     /** History of the Account Settings. */
@@ -5880,6 +6047,32 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds: string;
+  }
+  export namespace AccountSettingsResponse {
+    export namespace Constants {
+      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictCreateServiceId {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictCreatePlatformApikey {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum Mfa {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+    }
   }
 
   /** AccountSettingsTemplateList. */
@@ -5949,7 +6142,21 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    mfa: string;
+    mfa: AccountSettingsUserMFA.Constants.Mfa | string;
+  }
+  export namespace AccountSettingsUserMFA {
+    export namespace Constants {
+      /** Defines the MFA requirement for the user. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum Mfa {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+    }
   }
 
   /** Activity. */
@@ -5976,6 +6183,8 @@ namespace IamIdentityV1 {
     crn: string;
     /** The API key cannot be changed if set to true. */
     locked: boolean;
+    /** Defines if API key is disabled, API key cannot be used if 'disabled' is set to true. */
+    disabled?: boolean;
     /** If set contains a date time string of the creation date in ISO format. */
     created_at?: string;
     /** IAM ID of the user or service which created the API key. */
@@ -5986,6 +6195,10 @@ namespace IamIdentityV1 {
      *  can exist. Access is done via the UUID of the API key.
      */
     name: string;
+    /** Defines if the API key supports sessions. Sessions are only supported for user apikeys. */
+    support_sessions?: boolean;
+    /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
+    action_when_leaked?: string;
     /** The optional description of the API key. The 'description' property is only available if a description was
      *  provided during a create of an API key.
      */
@@ -6015,10 +6228,11 @@ namespace IamIdentityV1 {
      *  provided during a create of an API key.
      */
     description?: string;
-    /** You can optionally passthrough the API key value for this API key. If passed, NO validation of that apiKey
-     *  value is done, i.e. the value can be non-URL safe. If omitted, the API key management will create an URL safe
-     *  opaque API key value. The value of the API key is checked for uniqueness. Please ensure enough variations when
-     *  passing in this value.
+    /** You can optionally passthrough the API key value for this API key. If passed, a minimum length validation of
+     *  32 characters for that apiKey value is done, i.e. the value can contain any characters and can even be non-URL
+     *  safe, but the minimum length requirement must be met. If omitted, the API key management will create an URL safe
+     *  opaque API key value. The value of the API key is checked for uniqueness. Ensure enough variations when passing
+     *  in this value.
      */
     apikey?: string;
     /** Send true or false to set whether the API key value is retrievable in the future by using the Get details of
@@ -6160,7 +6374,7 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    trait_account_default: string;
+    trait_account_default: IdBasedMfaEnrollment.Constants.TraitAccountDefault | string;
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
@@ -6170,7 +6384,7 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    trait_user_specific?: string;
+    trait_user_specific?: IdBasedMfaEnrollment.Constants.TraitUserSpecific | string;
     /** Defines the MFA trait for the account. Valid values:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
@@ -6180,7 +6394,7 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    trait_effective: string;
+    trait_effective: IdBasedMfaEnrollment.Constants.TraitEffective | string;
     /** The enrollment complies to the effective requirement. */
     complies: boolean;
     /** Defines comply state for the account. Valid values:
@@ -6189,7 +6403,47 @@ namespace IamIdentityV1 {
      *  memberships.
      *    * CROSS_ACCOUNT - User complies in the given account and across all other account memberships.
      */
-    comply_state?: string;
+    comply_state?: IdBasedMfaEnrollment.Constants.ComplyState | string;
+  }
+  export namespace IdBasedMfaEnrollment {
+    export namespace Constants {
+      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum TraitAccountDefault {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum TraitUserSpecific {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum TraitEffective {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+      /** Defines comply state for the account. Valid values: * NO - User does not comply in the given account. * ACCOUNT- User complies in the given account, but does not comply in at least one of the other account memberships. * CROSS_ACCOUNT - User complies in the given account and across all other account memberships. */
+      export enum ComplyState {
+        NO = 'NO',
+        ACCOUNT = 'ACCOUNT',
+        CROSS_ACCOUNT = 'CROSS_ACCOUNT',
+      }
+    }
   }
 
   /** MfaEnrollmentTypeStatus. */
@@ -6278,7 +6532,7 @@ namespace IamIdentityV1 {
      */
     identifier: string;
     /** Type of the identity. */
-    type: string;
+    type: ProfileIdentityRequest.Constants.Type | string;
     /** Only valid for the type user. Accounts from which a user can assume the trusted profile. */
     accounts?: string[];
     /** Description of the identity that can assume the trusted profile. This is optional field for all the types of
@@ -6287,6 +6541,16 @@ namespace IamIdentityV1 {
      *  project'.
      */
     description?: string;
+  }
+  export namespace ProfileIdentityRequest {
+    export namespace Constants {
+      /** Type of the identity. */
+      export enum Type {
+        USER = 'user',
+        SERVICEID = 'serviceid',
+        CRN = 'crn',
+      }
+    }
   }
 
   /** ProfileIdentityResponse. */
@@ -6299,7 +6563,7 @@ namespace IamIdentityV1 {
      */
     identifier: string;
     /** Type of the identity. */
-    type: string;
+    type: ProfileIdentityResponse.Constants.Type | string;
     /** Only valid for the type user. Accounts from which a user can assume the trusted profile. */
     accounts?: string[];
     /** Description of the identity that can assume the trusted profile. This is optional field for all the types of
@@ -6308,6 +6572,16 @@ namespace IamIdentityV1 {
      *  project'.
      */
     description?: string;
+  }
+  export namespace ProfileIdentityResponse {
+    export namespace Constants {
+      /** Type of the identity. */
+      export enum Type {
+        USER = 'user',
+        SERVICEID = 'serviceid',
+        CRN = 'crn',
+      }
+    }
   }
 
   /** Link details. */
@@ -6657,7 +6931,7 @@ namespace IamIdentityV1 {
     /** Name of the claim rule to be created or updated. */
     name?: string;
     /** Type of the claim rule. */
-    type: string;
+    type: TrustedProfileTemplateClaimRule.Constants.Type | string;
     /** The realm name of the Idp this claim rule applies to. This field is required only if the type is specified
      *  as 'Profile-SAML'.
      */
@@ -6666,6 +6940,14 @@ namespace IamIdentityV1 {
     expiration?: number;
     /** Conditions of this claim rule. */
     conditions: ProfileClaimRuleConditions[];
+  }
+  export namespace TrustedProfileTemplateClaimRule {
+    export namespace Constants {
+      /** Type of the claim rule. */
+      export enum Type {
+        PROFILE_SAML = 'Profile-SAML',
+      }
+    }
   }
 
   /** TrustedProfileTemplateList. */
