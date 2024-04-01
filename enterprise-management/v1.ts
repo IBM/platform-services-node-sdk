@@ -1570,7 +1570,10 @@ namespace EnterpriseManagementV1 {
      * @constructor
      * @returns {AccountsPager}
      */
-    constructor(client: EnterpriseManagementV1, params?: EnterpriseManagementV1.ListAccountsParams) {
+    constructor(
+      client: EnterpriseManagementV1,
+      params?: EnterpriseManagementV1.ListAccountsParams
+    ) {
       if (params && params.nextDocid) {
         throw new Error(`the params.nextDocid field should not be set`);
       }
