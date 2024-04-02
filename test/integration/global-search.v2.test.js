@@ -28,8 +28,6 @@ const configFile = 'global_search.env';
 
 const describe = authHelper.prepareTests(configFile);
 
-const transactionId = uuidv4();
-
 describe('GlobalSearchV2_integration', () => {
   jest.setTimeout(timeout);
 
