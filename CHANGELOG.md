@@ -1,3 +1,10 @@
+## [0.55.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.0...v0.55.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* **Enterprise Management:** add options property to create_account payload ([#250](https://github.com/IBM/platform-services-node-sdk/issues/250)) ([dc95270](https://github.com/IBM/platform-services-node-sdk/commit/dc95270f86216963de2f0c58952afbf0f6b0648e))
+
 # [0.55.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.54.0...v0.55.0) (2024-03-26)
 
 
