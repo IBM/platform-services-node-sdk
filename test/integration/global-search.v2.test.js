@@ -16,7 +16,6 @@
  */
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
-const { v4: uuidv4 } = require('uuid');
 const GlobalSearchV2 = require('../../dist/global-search/v2');
 const authHelper = require('../resources/auth-helper.js');
 
