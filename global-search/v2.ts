@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.86.0-bc6f14b3-20240221-193958
+ * IBM OpenAPI SDK Code Generator Version: 3.87.0-91c7c775-20240320-213027
  */
 
 import * as extend from 'extend';
@@ -33,10 +33,10 @@ import { getSdkHeaders } from '../lib/common';
  * Search for resources with the global and shared resource properties repository that is integrated in the IBM Cloud
  * platform. The search repository stores and searches cloud resources attributes, which categorize or classify
  * resources. A resource is a physical or logical component that can be created or reserved for an application or
- * service instance. They are owned by resource providers, such as Cloud Foundry, IBM Kubernetes Service, or resource
- * controller in IBM Cloud. Resources are uniquely identified by a Cloud Resource Name (CRN) or by an IMS ID. The
- * properties of a resource include tags and system properties. Both properties are defined in an IBM Cloud billing
- * account, and span across many regions.
+ * service instance. They are owned by resource providers, such as IBM Kubernetes Service, or resource controller in IBM
+ * Cloud. Resources are uniquely identified by a Cloud Resource Name (CRN) or by an IMS ID. The properties of a resource
+ * include tags and system properties. Both properties are defined in an IBM Cloud billing account, and span across many
+ * regions.
  *
  * API Version: 2.0.1
  */
@@ -105,8 +105,8 @@ class GlobalSearchV2 extends BaseService {
   /**
    * Find instances of resources (v3).
    *
-   * Find Cloud Foundry resources, IAM-enabled resources, or storage and network resources that run on classic
-   * infrastructure in a specific account ID. You can apply query strings if necessary.
+   * Find IAM-enabled resources or storage and network resources that run on classic infrastructure in a specific
+   * account ID. You can apply query strings if necessary.
    *
    * To filter results, you can insert a string by using the Lucene syntax and the query string is parsed into a series
    * of terms and operators. A term can be a single word or a phrase, in which case the search is performed for all the
@@ -142,8 +142,6 @@ class GlobalSearchV2 extends BaseService {
    * and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that value includes
    * any other character or is longer than 1024 bytes or is fewer than 8 characters. If not specified or invalid, it is
    * automatically replaced by a random (version 4) UUID.
-   * @param {string} [params.transactionId] - Deprecated: An alphanumeric string that can be used to trace a request
-   * across services. If not specified, it automatically generated with the prefix "gst-".
    * @param {string} [params.accountId] - The account ID to filter resources.
    * @param {number} [params.limit] - The maximum number of hits to return. Defaults to 10.
    * @param {number} [params.timeout] - A search timeout in milliseconds, bounding the search request to run within the
@@ -181,7 +179,6 @@ class GlobalSearchV2 extends BaseService {
       'searchCursor',
       'xRequestId',
       'xCorrelationId',
-      'transactionId',
       'accountId',
       'limit',
       'timeout',
@@ -234,7 +231,6 @@ class GlobalSearchV2 extends BaseService {
             'Content-Type': 'application/json',
             'x-request-id': _params.xRequestId,
             'x-correlation-id': _params.xCorrelationId,
-            'transaction-id': _params.transactionId,
           },
           _params.headers
         ),
@@ -301,10 +297,6 @@ namespace GlobalSearchV2 {
      *  by a random (version 4) UUID.
      */
     xCorrelationId?: string;
-    /** Deprecated: An alphanumeric string that can be used to trace a request across services. If not specified, it
-     *  automatically generated with the prefix "gst-".
-     */
-    transactionId?: string;
     /** The account ID to filter resources. */
     accountId?: string;
     /** The maximum number of hits to return. Defaults to 10. */

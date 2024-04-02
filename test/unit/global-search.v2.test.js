@@ -120,7 +120,6 @@ describe('GlobalSearchV2', () => {
         const searchCursor = 'testString';
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const accountId = 'testString';
         const limit = 10;
         const timeout = 0;
@@ -136,7 +135,6 @@ describe('GlobalSearchV2', () => {
           searchCursor,
           xRequestId,
           xCorrelationId,
-          transactionId,
           accountId,
           limit,
           timeout,
@@ -164,7 +162,6 @@ describe('GlobalSearchV2', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.query).toEqual(query);
         expect(mockRequestOptions.body.fields).toEqual(fields);
         expect(mockRequestOptions.body.search_cursor).toEqual(searchCursor);
