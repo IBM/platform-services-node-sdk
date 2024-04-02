@@ -117,7 +117,6 @@ describe('GlobalTaggingV1', () => {
         // Construct the params object for operation listTags
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const fullData = false;
@@ -131,7 +130,6 @@ describe('GlobalTaggingV1', () => {
         const listTagsParams = {
           xRequestId,
           xCorrelationId,
-          transactionId,
           accountId,
           tagType,
           fullData,
@@ -160,7 +158,6 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
         expect(mockRequestOptions.qs.full_data).toEqual(fullData);
@@ -218,14 +215,12 @@ describe('GlobalTaggingV1', () => {
         const tagNames = ['testString'];
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'access';
         const createTagParams = {
           tagNames,
           xRequestId,
           xCorrelationId,
-          transactionId,
           accountId,
           tagType,
         };
@@ -246,7 +241,6 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
@@ -316,14 +310,12 @@ describe('GlobalTaggingV1', () => {
         // Construct the params object for operation deleteTagAll
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const providers = 'ghost';
         const accountId = 'testString';
         const tagType = 'user';
         const deleteTagAllParams = {
           xRequestId,
           xCorrelationId,
-          transactionId,
           providers,
           accountId,
           tagType,
@@ -345,7 +337,6 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.providers).toEqual(providers);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
@@ -396,7 +387,6 @@ describe('GlobalTaggingV1', () => {
         const tagName = 'testString';
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const providers = ['ghost'];
         const accountId = 'testString';
         const tagType = 'user';
@@ -404,7 +394,6 @@ describe('GlobalTaggingV1', () => {
           tagName,
           xRequestId,
           xCorrelationId,
-          transactionId,
           providers,
           accountId,
           tagType,
@@ -426,7 +415,6 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.qs.providers).toEqual(providers);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
@@ -508,7 +496,6 @@ describe('GlobalTaggingV1', () => {
         const tagNames = ['testString'];
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const replace = false;
@@ -518,7 +505,6 @@ describe('GlobalTaggingV1', () => {
           tagNames,
           xRequestId,
           xCorrelationId,
-          transactionId,
           accountId,
           tagType,
           replace,
@@ -540,7 +526,6 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
@@ -624,7 +609,6 @@ describe('GlobalTaggingV1', () => {
         const tagNames = ['testString'];
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
-        const transactionId = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const detachTagParams = {
@@ -633,7 +617,6 @@ describe('GlobalTaggingV1', () => {
           tagNames,
           xRequestId,
           xCorrelationId,
-          transactionId,
           accountId,
           tagType,
         };
@@ -654,7 +637,6 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        checkUserHeader(createRequestMock, 'transaction-id', transactionId);
         expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
