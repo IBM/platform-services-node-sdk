@@ -1,3 +1,10 @@
+## [0.55.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.1...v0.55.2) (2024-04-02)
+
+
+### Bug Fixes
+
+* **Global Search & Tagging:** re-gen services with latest API definition ([#251](https://github.com/IBM/platform-services-node-sdk/issues/251)) ([c150877](https://github.com/IBM/platform-services-node-sdk/commit/c150877d275b9b67772f622434fb97caff4cc6b6))
+
 ## [0.55.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.0...v0.55.1) (2024-04-02)
 
 
