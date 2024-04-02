@@ -52,7 +52,6 @@ describe('GlobalSearchV2_integration', () => {
       const params = {
         query: 'GST-sdk-*',
         fields: ['*'],
-        transactionId,
         searchCursor,
         limit: 1,
       };
