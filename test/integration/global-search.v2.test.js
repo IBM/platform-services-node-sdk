@@ -16,7 +16,6 @@
  */
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
-const { v4: uuidv4 } = require('uuid');
 const GlobalSearchV2 = require('../../dist/global-search/v2');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -27,8 +26,6 @@ const timeout = 120000;
 const configFile = 'global_search.env';
 
 const describe = authHelper.prepareTests(configFile);
-
-const transactionId = uuidv4();
 
 describe('GlobalSearchV2_integration', () => {
   jest.setTimeout(timeout);
@@ -52,7 +49,6 @@ describe('GlobalSearchV2_integration', () => {
       const params = {
         query: 'GST-sdk-*',
         fields: ['*'],
-        transactionId,
         searchCursor,
         limit: 1,
       };
