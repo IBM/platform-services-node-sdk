@@ -1,6 +1,6 @@
 {
   "name": "@ibm-cloud/platform-services",
-  "version": "0.55.2",
+  "version": "0.55.3",
   "description": "Node.js client library for IBM Cloud Platform Services",
   "repository": {
     "type": "git",
@@ -39,8 +39,8 @@
   },
   "dependencies": {
     "@types/node": "^12.0.8",
-    "extend": "^3.0.2",
-    "ibm-cloud-sdk-core": "^4.2.4"
+    "extend": "3.0.2",
+    "ibm-cloud-sdk-core": "^4.2.5"
   },
   "devDependencies": {
     "@masterodin/publisher": "^0.10.0",

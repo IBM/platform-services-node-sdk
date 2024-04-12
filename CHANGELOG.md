@@ -1,3 +1,10 @@
+## [0.55.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.2...v0.55.3) (2024-04-10)
+
+
+### Bug Fixes
+
+* bump dependencies to avoid CVE-2024-28849 ([#252](https://github.com/IBM/platform-services-node-sdk/issues/252)) ([0c2bb95](https://github.com/IBM/platform-services-node-sdk/commit/0c2bb95c46ac9057de7e5592fe52e14f07b27266))
+
 ## [0.55.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.1...v0.55.2) (2024-04-02)
 
 
