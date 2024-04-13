@@ -59,9 +59,12 @@ describe('IamPolicyManagementV1', () => {
   let exampleCustomRoleEtag;
   let exampleTemplateId;
   let exampleTemplateVersion;
+  let exampleTemplateBaseVersion;
   let exampleTemplateEtag;
   let exampleAssignmentId;
   let exampleAssignmentPolicyId;
+  let exampleTargetAccountId;
+  let exampleAssignmentETag;
   const exampleCustomRoleDipslayName = 'IAM Groups read access';
   const exampleUserId = 'IBMid-user1';
   const exampleServiceName = 'iam-groups';
@@ -77,7 +80,9 @@ describe('IamPolicyManagementV1', () => {
   expect(iamPolicyManagementService).not.toBeNull();
   expect(config).not.toBeNull();
   expect(config).toHaveProperty('testAccountId');
+  expect(config).toHaveProperty('testTargetAccountId');
   exampleAccountId = config.testAccountId;
+  exampleTargetAccountId = config.testTargetAccountId;
 
   test('createPolicy request example', async () => {
     expect(exampleAccountId).not.toBeNull();
@@ -735,7 +740,7 @@ describe('IamPolicyManagementV1', () => {
 
     // end-delete_role
   });
-  test('createPolicyTemplate request example', async () => {
+  test('createPolicyS2STemplate request example', async () => {
     expect(exampleAccountId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -746,16 +751,16 @@ describe('IamPolicyManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('createPolicyTemplate() result:');
+    originalLog('createPolicyS2STemplate() result:');
     // begin-create_policy_template
 
     // Request models needed by this operation.
 
     // V2PolicyResourceAttribute
     const v2PolicyResourceAttributeModel = {
-      key: 'serviceType',
+      key: 'serviceName',
       operator: 'stringEquals',
-      value: 'service',
+      value: 'cloud-object-storage',
     };
 
     // V2PolicyResource
@@ -763,9 +768,16 @@ describe('IamPolicyManagementV1', () => {
       attributes: [v2PolicyResourceAttributeModel],
     };
 
+    // V2PolicySubjectAttribute
+    const v2PolicySubjectAttributeModel = {
+      key: 'serviceName',
+      operator: 'stringEquals',
+      value: 'compliance',
+    };
+
     // Roles
     const rolesModel = {
-      role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+      role_id: 'crn:v1:bluemix:public:iam::::serviceRole:Writer',
     };
 
     // Grant
@@ -780,9 +792,10 @@ describe('IamPolicyManagementV1', () => {
 
     // TemplatePolicy
     const templatePolicyModel = {
-      type: 'access',
+      type: 'authorization',
       resource: v2PolicyResourceModel,
       control: controlModel,
+      subject: {attributes: [ v2PolicySubjectAttributeModel ]},
     };
 
     const params = {
@@ -794,7 +807,7 @@ describe('IamPolicyManagementV1', () => {
     try {
       const res = await iamPolicyManagementService.createPolicyTemplate(params);
       exampleTemplateId = res.result.id;
-      exampleTemplateVersion = res.result.version;
+      exampleTemplateBaseVersion = res.result.version;
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -833,7 +846,7 @@ describe('IamPolicyManagementV1', () => {
   });
   test('replacePolicyTemplate request example', async () => {
     expect(exampleTemplateId).not.toBeNull();
-    expect(exampleTemplateVersion).not.toBeNull();
+    expect(exampleTemplateBaseVersion).not.toBeNull();
     expect(exampleTemplateEtag).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -851,9 +864,9 @@ describe('IamPolicyManagementV1', () => {
 
     // V2PolicyResourceAttribute
     const v2PolicyResourceAttributeModel = {
-      key: 'serviceType',
+      key: 'serviceName',
       operator: 'stringEquals',
-      value: 'service',
+      value: 'kms',
     };
 
     // V2PolicyResource
@@ -861,9 +874,16 @@ describe('IamPolicyManagementV1', () => {
       attributes: [v2PolicyResourceAttributeModel],
     };
 
+    // V2PolicySubjectAttribute
+    const v2PolicySubjectAttributeModel = {
+      key: 'serviceName',
+      operator: 'stringEquals',
+      value: 'compliance',
+    };
+
     // Roles
     const rolesModel = {
-      role_id: 'crn:v1:bluemix:public:iam::::role:Editor',
+      role_id: 'crn:v1:bluemix:public:iam::::serviceRole:Reader',
     };
 
     // Grant
@@ -878,16 +898,18 @@ describe('IamPolicyManagementV1', () => {
 
     // TemplatePolicy
     const templatePolicyModel = {
-      type: 'access',
+      type: 'authorization',
       resource: v2PolicyResourceModel,
       control: controlModel,
+      subject: {attributes: [ v2PolicySubjectAttributeModel ]},
     };
 
     const params = {
       policyTemplateId: exampleTemplateId,
-      version: exampleTemplateVersion,
+      version: exampleTemplateBaseVersion,
       ifMatch: exampleTemplateEtag,
       policy: templatePolicyModel,
+      committed: true,
     };
 
     let res;
@@ -946,9 +968,9 @@ describe('IamPolicyManagementV1', () => {
 
     // V2PolicyResourceAttribute
     const v2PolicyResourceAttributeModel = {
-      key: 'serviceType',
+      key: 'serviceName',
       operator: 'stringEquals',
-      value: 'service',
+      value: 'appid',
     };
 
     // V2PolicyResource
@@ -958,7 +980,7 @@ describe('IamPolicyManagementV1', () => {
 
     // Roles
     const rolesModel = {
-      role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+      role_id: 'crn:v1:bluemix:public:iam::::serviceRole:Reader',
     };
 
     // Grant
@@ -971,11 +993,19 @@ describe('IamPolicyManagementV1', () => {
       grant: grantModel,
     };
 
+     // V2PolicySubjectAttribute
+     const v2PolicySubjectAttributeModel = {
+      key: 'serviceName',
+      operator: 'stringEquals',
+      value: 'compliance',
+    };
+
     // TemplatePolicy
     const templatePolicyModel = {
-      type: 'access',
+      type: 'authorization',
       resource: v2PolicyResourceModel,
       control: controlModel,
+      subject: {attributes: [ v2PolicySubjectAttributeModel ]},
     };
 
     const params = {
@@ -987,6 +1017,7 @@ describe('IamPolicyManagementV1', () => {
     try {
       res = await iamPolicyManagementService.createPolicyTemplateVersion(params);
       console.log(JSON.stringify(res.result, null, 2));
+      exampleTemplateVersion = res.result.version;
     } catch (err) {
       console.warn(err);
     }
@@ -1052,33 +1083,6 @@ describe('IamPolicyManagementV1', () => {
 
     // end-commit_policy_template
   });
-  test('deletePolicyTemplateVersion request example', async () => {
-    expect(exampleTemplateId).not.toBeNull();
-    expect(exampleTemplateVersion).not.toBeNull();
-    consoleLogMock.mockImplementation((output) => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
-      originalWarn(output);
-      expect(true).toBeFalsy();
-    });
-
-    // begin-delete_policy_template_version
-
-    const params = {
-      policyTemplateId: exampleTemplateId,
-      version: exampleTemplateVersion,
-    };
-
-    try {
-      await iamPolicyManagementService.deletePolicyTemplateVersion(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_policy_template_version
-  });
   test('listPolicyTemplateVersions request example', async () => {
     expect(exampleTemplateId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
@@ -1107,8 +1111,8 @@ describe('IamPolicyManagementV1', () => {
 
     // end-list_policy_template_versions
   });
-  test('deletePolicyTemplate request example', async () => {
-    expect(exampleTemplateId).not.toBeNull();
+  test('createPolicyTemplateAssignment request example', async () => {
+    expect(exampleTargetAccountId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1118,19 +1122,67 @@ describe('IamPolicyManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    // begin-delete_policy_template
+    originalLog('createPolicyTemplateAssignment() result:');
+    // begin-create_policy_template_assignment
+
+    // Request models needed by this operation.
 
     const params = {
-      policyTemplateId: exampleTemplateId,
+      acceptLanguage: 'default',
+      version: '1.0',
+      target: {
+        id: exampleTargetAccountId,
+        type: 'Account',
+      },
+      templates: [
+        {
+          id: exampleTemplateId,
+          version: exampleTemplateBaseVersion,
+        },
+      ],
+      options: {
+        root: {
+          requester_id: 'testing-sdk',
+        },
+      },
     };
 
     try {
-      await iamPolicyManagementService.deletePolicyTemplate(params);
+      const res = await iamPolicyManagementService.createPolicyTemplateAssignment(params);
+      exampleAssignmentId = res.result.assignments[0].id;
+      exampleAssignmentETag = res.headers.etag;
+      exampleAssignmentPolicyId = res.result.assignments[0].resources[0].policy.resource_created.id;
+      console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-delete_policy_template
+    // end-create_policy_template_assignment
+  });
+  test('updatePolicyAssignment request example', async () => {
+    expect(exampleAssignmentId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+    originalLog('updatePolicyAssignment() result:');
+    // begin-update_policy_assignment
+    const params = {
+      assignmentId: exampleAssignmentId,
+      version: '1.0',
+      templateVersion: exampleTemplateVersion,
+      ifMatch: exampleAssignmentETag,
+    };
+    try {
+    const response = await iamPolicyManagementService.updatePolicyAssignment(params);
+    } catch (err){
+      console.warn(err);
+    }
+    // end-update_policy_assignment
   });
   test('listPolicyAssignments request example', async () => {
     expect(exampleAccountId).not.toBeNull();
@@ -1148,12 +1200,12 @@ describe('IamPolicyManagementV1', () => {
 
     const params = {
       accountId: exampleAccountId,
+      version: '1.0',
     };
 
     let res;
     try {
       res = await iamPolicyManagementService.listPolicyAssignments(params);
-      exampleAssignmentId = res.result.assignments[0].id
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -1177,6 +1229,7 @@ describe('IamPolicyManagementV1', () => {
 
     const params = {
       assignmentId: exampleAssignmentId,
+      version: '1.0',
     };
 
     let res;
@@ -1218,5 +1271,80 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-get_v2_policy
+  });
+  test('deletePolicyAssignment request example', async () => {
+    expect(exampleAssignmentId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_policy_assignment
+
+    const params = {
+      assignmentId: exampleAssignmentId,
+    };
+
+    try {
+      await iamPolicyManagementService.deletePolicyAssignment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_policy_assignment
+  });
+  test('deletePolicyTemplateVersion request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    expect(exampleTemplateVersion).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_policy_template_version
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+      version: exampleTemplateVersion,
+    };
+
+    try {
+      await iamPolicyManagementService.deletePolicyTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_policy_template_version
+  });
+  test('deletePolicyTemplate request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_policy_template
+
+    const params = {
+      policyTemplateId: exampleTemplateId,
+    };
+
+    try {
+      await iamPolicyManagementService.deletePolicyTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_policy_template
   });
 });
