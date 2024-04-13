@@ -39,6 +39,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testV2PolicyETag;
   let testV2PolicyId;
   let testAssignmentPolicyId;
+  let testTargetAccountId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -142,6 +143,10 @@ describe('IamPolicyManagementV1_integration', () => {
   let testTemplateId;
   let testTemplateVersion;
   let testTemplateETag;
+  let testS2STemplateId;
+  let testS2STemplateBaseVersion;
+  let testS2STemplateVersion;
+  let testAssignmentETag;
   const TEST_TEMPLATE_PREFIX = 'SDKNode';
   const testTemplateName = TEST_TEMPLATE_PREFIX + testUniqueId;
   const testTemplatePolicy = {
@@ -163,6 +168,43 @@ describe('IamPolicyManagementV1_integration', () => {
     },
   };
 
+  const testS2STemplate = {
+    name: 'S2STest',
+    description: 'Grant SCC access to monitor and enforce service rules',
+    policy: {
+      type: 'authorization',
+      description: 'Grant Editor Role on SERVICE_NAME',
+      subject: {
+        attributes: [
+          {
+            key: 'serviceName',
+            operator: 'stringEquals',
+            value: 'compliance',
+          },
+        ],
+      },
+      control: {
+        grant: {
+          roles: [
+            {
+              role_id: 'crn:v1:bluemix:public:iam::::serviceRole:Writer',
+            },
+          ],
+        },
+      },
+      resource: {
+        attributes: [
+          {
+            key: 'serviceName',
+            operator: 'stringEquals',
+            value: 'cloud-object-storage',
+          },
+        ],
+      },
+    },
+    'committed': true,
+  };
+
   let testAssignmentId;
 
   test('should successfully complete initialization', (done) => {
@@ -175,9 +217,11 @@ describe('IamPolicyManagementV1_integration', () => {
     expect(service).not.toBeNull();
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
+    expect(config).toHaveProperty('testTargetAccountId');
 
-    // Retrieve the test account id to be used with the tests.
+    // Retrieve the test account id and target account_id to be used with the tests.
     testAccountId = config.testAccountId;
+    testTargetAccountId = config.testTargetAccountId;
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
@@ -801,6 +845,20 @@ describe('IamPolicyManagementV1_integration', () => {
       testTemplateId = result.id;
       testTemplateVersion = result.version;
     });
+    test('Create a S2S policy template', async () => {
+      const response = await service.createPolicyTemplate({
+        ...testS2STemplate,
+        accountId: testAccountId,
+      });
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.policy).toEqual(testS2STemplate.policy);
+      expect(result.state).toEqual('active');
+      testS2STemplateId = result.id;
+      testS2STemplateBaseVersion = result.version;
+    });
     test('Get a policy template by id', async () => {
       expect(testTemplateId).toBeDefined();
       const params = {
@@ -878,6 +936,48 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(Number(result.version)).toBeGreaterThan(Number(testTemplateVersion));
       expect(result.state).toEqual('active');
     });
+    test('Create a S2S policy template version', async () => {
+      expect(testS2STemplateId).toBeDefined();
+      expect(testS2STemplateBaseVersion).toBeDefined();
+
+      const testTemplateDescription = 'New version of SDK Test S2S template';
+      const params = {
+        policyTemplateId: testS2STemplateId,
+        policy: {
+          ...testS2STemplate.policy,
+          control: {
+            grant: {
+              roles: [
+                {
+                  role_id: 'crn:v1:bluemix:public:iam::::serviceRole:Reader',
+                },
+              ],
+            },
+          },
+          resource: {
+            attributes: [
+              {
+                key: 'serviceName',
+                operator: 'stringEquals',
+                value: 'kms',
+              },
+            ],
+          },
+        },
+        description: testTemplateDescription,
+        committed: true,
+      };
+
+      const response = await service.createPolicyTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(Number(result.version)).toBeGreaterThan(Number(testS2STemplateBaseVersion));
+      expect(result.state).toEqual('active');
+      testS2STemplateVersion = result.version;
+    });
+
     test('Get a policy template version', async () => {
       expect(testTemplateId).toBeDefined();
       expect(testTemplateVersion).toBeDefined();
@@ -1008,28 +1108,72 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Policy Assignment tests', () => {
+    test('Create policy assignments', async () => {
+      const params = {
+        acceptLanguage: 'default',
+        version: '1.0',
+        target: {
+          id: testTargetAccountId,
+          type: 'Account',
+        },
+        templates: [
+          {
+            id: testS2STemplateId,
+            version: testS2STemplateBaseVersion,
+          },
+        ],
+        options: {
+          root: {
+            requester_id: 'testing-sdk',
+          },
+        },
+      };
+      const response = await service.createPolicyTemplateAssignment(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      testAssignmentId = result.assignments[0].id;
+      testAssignmentETag = response.headers.etag;
+      testAssignmentPolicyId = result.assignments[0].resources[0].policy.resource_created.id;
+    });
+    test('Update policy assignment by id', async () => {
+      expect(testAssignmentId).toBeDefined();
+      const params = {
+        assignmentId: testAssignmentId,
+        version: '1.0',
+        templateVersion: testS2STemplateVersion,
+        ifMatch: testAssignmentETag,
+      };
+      const response = await service.updatePolicyAssignment(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(response.result.resources[0].policy.resource_created.id).toEqual(
+        testAssignmentPolicyId
+      );
+    });
     test('List policy assignments', async () => {
       const params = {
         accountId: testAccountId,
         acceptLanguage: 'default',
+        version: '1.0',
       };
       const response = await service.listPolicyAssignments(params);
       expect(response).toBeDefined();
       expect(response.status).toBe(200);
       const { result } = response || {};
       expect(result).toBeDefined();
-      testAssignmentId = result.assignments[0].id;
     });
     test('Get policy assignment by id', async () => {
       expect(testAssignmentId).toBeDefined();
       const params = {
         assignmentId: testAssignmentId,
+        version: '1.0',
       };
       const response = await service.getPolicyAssignment(params);
       expect(response).toBeDefined();
       expect(response.status).toBe(200);
       expect(response.result).toBeDefined();
-      testAssignmentPolicyId = response.result.resources[0].policy.resource_created.id;
     });
     test('GetPolicyV2 - Retrieve Policy Template MetaData created from assignment', async () => {
       expect(testPolicyId).toBeDefined();
@@ -1050,8 +1194,31 @@ describe('IamPolicyManagementV1_integration', () => {
       const { result } = response || {};
       expect(result).toBeDefined();
       expect(result.id).toEqual(testAssignmentPolicyId);
-      expect(result.type).toEqual(policyType);
+      expect(result.type).toEqual('authorization');
       expect(result.template).toBeDefined();
+    });
+    test('Delete policy assignment by id', async () => {
+      expect(testAssignmentId).toBeDefined();
+      const params = {
+        assignmentId: testAssignmentId,
+      };
+      const response = await service.deletePolicyAssignment(params);
+      expect(response.status).toBe(204);
+    });
+    test('Delete policy templates', async () => {
+      const params = {
+        policyTemplateId: testS2STemplateId,
+      };
+
+      let response;
+      try {
+        response = await service.deletePolicyTemplate(params);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(204);
     });
   });
 });
