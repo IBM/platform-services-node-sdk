@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-await-in-loop */
+
+const nock = require('nock');
+
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-
 const UsageReportsV4 = require('../../dist/usage-reports/v4');
-const nock = require('nock');
-
-/* eslint-disable no-await-in-loop */
 
 const {
   getOptions,
@@ -58,7 +58,6 @@ const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnv
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('UsageReportsV4', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -69,7 +68,7 @@ describe('UsageReportsV4', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = UsageReportsV4.newInstance();
@@ -412,8 +411,9 @@ describe('UsageReportsV4', () => {
         const accountId = 'testString';
         const billingmonth = 'testString';
         const names = true;
+        const tags = true;
         const acceptLanguage = 'testString';
-        const limit = 1;
+        const limit = 30;
         const start = 'testString';
         const resourceGroupId = 'testString';
         const organizationId = 'testString';
@@ -425,6 +425,7 @@ describe('UsageReportsV4', () => {
           accountId,
           billingmonth,
           names,
+          tags,
           acceptLanguage,
           limit,
           start,
@@ -452,6 +453,7 @@ describe('UsageReportsV4', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
         expect(mockRequestOptions.qs._names).toEqual(names);
+        expect(mockRequestOptions.qs._tags).toEqual(tags);
         expect(mockRequestOptions.qs._limit).toEqual(limit);
         expect(mockRequestOptions.qs._start).toEqual(start);
         expect(mockRequestOptions.qs.resource_group_id).toEqual(resourceGroupId);
@@ -527,16 +529,16 @@ describe('UsageReportsV4', () => {
       const serviceUrl = usageReportsServiceOptions.url;
       const path = '/v4/accounts/testString/resource_instances/usage/testString';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"plan_id":"plan_id","plan_name":"plan_name","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716}]}';
+        '{"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","catalog_id":"catalog_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"parent_resource_instance_id":"parent_resource_instance_id","plan_id":"plan_id","plan_name":"plan_name","pricing_plan_id":"pricing_plan_id","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716,"tags":["anyValue"],"service_tags":["anyValue"]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"plan_id":"plan_id","plan_name":"plan_name","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716}]}';
+        '{"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","catalog_id":"catalog_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"parent_resource_instance_id":"parent_resource_instance_id","plan_id":"plan_id","plan_name":"plan_name","pricing_plan_id":"pricing_plan_id","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716,"tags":["anyValue"],"service_tags":["anyValue"]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -550,8 +552,9 @@ describe('UsageReportsV4', () => {
           accountId: 'testString',
           billingmonth: 'testString',
           names: true,
+          tags: true,
           acceptLanguage: 'testString',
-          limit: 1,
+          limit: 30,
           resourceGroupId: 'testString',
           organizationId: 'testString',
           resourceInstanceId: 'testString',
@@ -575,8 +578,9 @@ describe('UsageReportsV4', () => {
           accountId: 'testString',
           billingmonth: 'testString',
           names: true,
+          tags: true,
           acceptLanguage: 'testString',
-          limit: 1,
+          limit: 30,
           resourceGroupId: 'testString',
           organizationId: 'testString',
           resourceInstanceId: 'testString',
@@ -600,8 +604,9 @@ describe('UsageReportsV4', () => {
         const resourceGroupId = 'testString';
         const billingmonth = 'testString';
         const names = true;
+        const tags = true;
         const acceptLanguage = 'testString';
-        const limit = 1;
+        const limit = 30;
         const start = 'testString';
         const resourceInstanceId = 'testString';
         const resourceId = 'testString';
@@ -612,6 +617,7 @@ describe('UsageReportsV4', () => {
           resourceGroupId,
           billingmonth,
           names,
+          tags,
           acceptLanguage,
           limit,
           start,
@@ -637,6 +643,7 @@ describe('UsageReportsV4', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
         expect(mockRequestOptions.qs._names).toEqual(names);
+        expect(mockRequestOptions.qs._tags).toEqual(tags);
         expect(mockRequestOptions.qs._limit).toEqual(limit);
         expect(mockRequestOptions.qs._start).toEqual(start);
         expect(mockRequestOptions.qs.resource_instance_id).toEqual(resourceInstanceId);
@@ -713,16 +720,16 @@ describe('UsageReportsV4', () => {
       const serviceUrl = usageReportsServiceOptions.url;
       const path = '/v4/accounts/testString/resource_groups/testString/resource_instances/usage/testString';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"plan_id":"plan_id","plan_name":"plan_name","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716}]}';
+        '{"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","catalog_id":"catalog_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"parent_resource_instance_id":"parent_resource_instance_id","plan_id":"plan_id","plan_name":"plan_name","pricing_plan_id":"pricing_plan_id","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716,"tags":["anyValue"],"service_tags":["anyValue"]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"plan_id":"plan_id","plan_name":"plan_name","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716}]}';
+        '{"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","catalog_id":"catalog_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"parent_resource_instance_id":"parent_resource_instance_id","plan_id":"plan_id","plan_name":"plan_name","pricing_plan_id":"pricing_plan_id","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716,"tags":["anyValue"],"service_tags":["anyValue"]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -737,8 +744,9 @@ describe('UsageReportsV4', () => {
           resourceGroupId: 'testString',
           billingmonth: 'testString',
           names: true,
+          tags: true,
           acceptLanguage: 'testString',
-          limit: 1,
+          limit: 30,
           resourceInstanceId: 'testString',
           resourceId: 'testString',
           planId: 'testString',
@@ -761,8 +769,9 @@ describe('UsageReportsV4', () => {
           resourceGroupId: 'testString',
           billingmonth: 'testString',
           names: true,
+          tags: true,
           acceptLanguage: 'testString',
-          limit: 1,
+          limit: 30,
           resourceInstanceId: 'testString',
           resourceId: 'testString',
           planId: 'testString',
@@ -784,8 +793,9 @@ describe('UsageReportsV4', () => {
         const organizationId = 'testString';
         const billingmonth = 'testString';
         const names = true;
+        const tags = true;
         const acceptLanguage = 'testString';
-        const limit = 1;
+        const limit = 30;
         const start = 'testString';
         const resourceInstanceId = 'testString';
         const resourceId = 'testString';
@@ -796,6 +806,7 @@ describe('UsageReportsV4', () => {
           organizationId,
           billingmonth,
           names,
+          tags,
           acceptLanguage,
           limit,
           start,
@@ -821,6 +832,7 @@ describe('UsageReportsV4', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
         expect(mockRequestOptions.qs._names).toEqual(names);
+        expect(mockRequestOptions.qs._tags).toEqual(tags);
         expect(mockRequestOptions.qs._limit).toEqual(limit);
         expect(mockRequestOptions.qs._start).toEqual(start);
         expect(mockRequestOptions.qs.resource_instance_id).toEqual(resourceInstanceId);
@@ -897,16 +909,16 @@ describe('UsageReportsV4', () => {
       const serviceUrl = usageReportsServiceOptions.url;
       const path = '/v4/accounts/testString/organizations/testString/resource_instances/usage/testString';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"plan_id":"plan_id","plan_name":"plan_name","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716}]}';
+        '{"next":{"href":"https://myhost.com/somePath?_start=1"},"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","catalog_id":"catalog_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"parent_resource_instance_id":"parent_resource_instance_id","plan_id":"plan_id","plan_name":"plan_name","pricing_plan_id":"pricing_plan_id","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716,"tags":["anyValue"],"service_tags":["anyValue"]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"plan_id":"plan_id","plan_name":"plan_name","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716}]}';
+        '{"total_count":2,"limit":1,"resources":[{"account_id":"account_id","resource_instance_id":"resource_instance_id","resource_instance_name":"resource_instance_name","resource_id":"resource_id","catalog_id":"catalog_id","resource_name":"resource_name","resource_group_id":"resource_group_id","resource_group_name":"resource_group_name","organization_id":"organization_id","organization_name":"organization_name","space_id":"space_id","space_name":"space_name","consumer_id":"consumer_id","region":"region","pricing_region":"pricing_region","pricing_country":"USA","currency_code":"USD","billable":true,"parent_resource_instance_id":"parent_resource_instance_id","plan_id":"plan_id","plan_name":"plan_name","pricing_plan_id":"pricing_plan_id","month":"2017-08","usage":[{"metric":"UP-TIME","metric_name":"UP-TIME","quantity":711.11,"rateable_quantity":700,"cost":123.45,"rated_cost":130.0,"price":["anyValue"],"unit":"HOURS","unit_name":"HOURS","non_chargeable":true,"discounts":[{"ref":"Discount-d27beddb-111b-4bbf-8cb1-b770f531c1a9","name":"platform-discount","display_name":"Platform Service Discount","discount":5}]}],"pending":true,"currency_rate":10.8716,"tags":["anyValue"],"service_tags":["anyValue"]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -921,8 +933,9 @@ describe('UsageReportsV4', () => {
           organizationId: 'testString',
           billingmonth: 'testString',
           names: true,
+          tags: true,
           acceptLanguage: 'testString',
-          limit: 1,
+          limit: 30,
           resourceInstanceId: 'testString',
           resourceId: 'testString',
           planId: 'testString',
@@ -945,8 +958,9 @@ describe('UsageReportsV4', () => {
           organizationId: 'testString',
           billingmonth: 'testString',
           names: true,
+          tags: true,
           acceptLanguage: 'testString',
-          limit: 1,
+          limit: 30,
           resourceInstanceId: 'testString',
           resourceId: 'testString',
           planId: 'testString',
@@ -1651,9 +1665,9 @@ describe('UsageReportsV4', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 

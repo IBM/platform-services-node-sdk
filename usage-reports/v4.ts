@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.75.0-726bc7e3-20230713-221716
+ * IBM OpenAPI SDK Code Generator Version: 3.87.0-91c7c775-20240320-213027
  */
 
 /* eslint-disable max-classes-per-file */
@@ -26,10 +26,10 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
-  getAuthenticatorFromEnvironment,
-  validateParams,
   UserOptions,
+  getAuthenticatorFromEnvironment,
   getQueryParam,
+  validateParams,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -54,7 +54,7 @@ class UsageReportsV4 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {UsageReportsV4}
    */
 
@@ -79,7 +79,7 @@ class UsageReportsV4 extends BaseService {
    * Construct a UsageReportsV4 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -308,6 +308,8 @@ class UsageReportsV4 extends BaseService {
    * yyyy-mm.
    * @param {boolean} [params.names] - Include the name of every resource, plan, resource instance, organization, and
    * resource group.
+   * @param {boolean} [params.tags] - Include the tags associated with every resource instance. By default it is always
+   * `true`.
    * @param {string} [params.acceptLanguage] - Prioritize the names returned in the order of the specified languages.
    * Language will default to English.
    * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
@@ -331,6 +333,7 @@ class UsageReportsV4 extends BaseService {
       'accountId',
       'billingmonth',
       'names',
+      'tags',
       'acceptLanguage',
       'limit',
       'start',
@@ -349,6 +352,7 @@ class UsageReportsV4 extends BaseService {
 
     const query = {
       '_names': _params.names,
+      '_tags': _params.tags,
       '_limit': _params.limit,
       '_start': _params.start,
       'resource_group_id': _params.resourceGroupId,
@@ -406,6 +410,8 @@ class UsageReportsV4 extends BaseService {
    * yyyy-mm.
    * @param {boolean} [params.names] - Include the name of every resource, plan, resource instance, organization, and
    * resource group.
+   * @param {boolean} [params.tags] - Include the tags associated with every resource instance. By default it is always
+   * `true`.
    * @param {string} [params.acceptLanguage] - Prioritize the names returned in the order of the specified languages.
    * Language will default to English.
    * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
@@ -428,6 +434,7 @@ class UsageReportsV4 extends BaseService {
       'resourceGroupId',
       'billingmonth',
       'names',
+      'tags',
       'acceptLanguage',
       'limit',
       'start',
@@ -444,6 +451,7 @@ class UsageReportsV4 extends BaseService {
 
     const query = {
       '_names': _params.names,
+      '_tags': _params.tags,
       '_limit': _params.limit,
       '_start': _params.start,
       'resource_instance_id': _params.resourceInstanceId,
@@ -500,6 +508,8 @@ class UsageReportsV4 extends BaseService {
    * yyyy-mm.
    * @param {boolean} [params.names] - Include the name of every resource, plan, resource instance, organization, and
    * resource group.
+   * @param {boolean} [params.tags] - Include the tags associated with every resource instance. By default it is always
+   * `true`.
    * @param {string} [params.acceptLanguage] - Prioritize the names returned in the order of the specified languages.
    * Language will default to English.
    * @param {number} [params.limit] - Number of usage records returned. The default value is 30. Maximum value is 200.
@@ -522,6 +532,7 @@ class UsageReportsV4 extends BaseService {
       'organizationId',
       'billingmonth',
       'names',
+      'tags',
       'acceptLanguage',
       'limit',
       'start',
@@ -538,6 +549,7 @@ class UsageReportsV4 extends BaseService {
 
     const query = {
       '_names': _params.names,
+      '_tags': _params.tags,
       '_limit': _params.limit,
       '_start': _params.start,
       'resource_instance_id': _params.resourceInstanceId,
@@ -1124,6 +1136,8 @@ namespace UsageReportsV4 {
     billingmonth: string;
     /** Include the name of every resource, plan, resource instance, organization, and resource group. */
     names?: boolean;
+    /** Include the tags associated with every resource instance. By default it is always `true`. */
+    tags?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
     /** Number of usage records returned. The default value is 30. Maximum value is 200. */
@@ -1155,6 +1169,8 @@ namespace UsageReportsV4 {
     billingmonth: string;
     /** Include the name of every resource, plan, resource instance, organization, and resource group. */
     names?: boolean;
+    /** Include the tags associated with every resource instance. By default it is always `true`. */
+    tags?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
     /** Number of usage records returned. The default value is 30. Maximum value is 200. */
@@ -1182,6 +1198,8 @@ namespace UsageReportsV4 {
     billingmonth: string;
     /** Include the name of every resource, plan, resource instance, organization, and resource group. */
     names?: boolean;
+    /** Include the tags associated with every resource instance. By default it is always `true`. */
+    tags?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
     /** Number of usage records returned. The default value is 30. Maximum value is 200. */
@@ -1231,7 +1249,7 @@ namespace UsageReportsV4 {
     /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    reportTypes?: CreateReportsSnapshotConfigConstants.ReportTypes | string[];
+    reportTypes?: CreateReportsSnapshotConfigConstants.ReportTypes[] | string[];
     /** A new version of report is created or the existing report version is overwritten with every update. Defaults
      *  to "new".
      */
@@ -1280,7 +1298,7 @@ namespace UsageReportsV4 {
     /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    reportTypes?: UpdateReportsSnapshotConfigConstants.ReportTypes | string[];
+    reportTypes?: UpdateReportsSnapshotConfigConstants.ReportTypes[] | string[];
     /** A new version of report is created or the existing report version is overwritten with every update. */
     versioning?: UpdateReportsSnapshotConfigConstants.Versioning | string;
     headers?: OutgoingHttpHeaders;
@@ -1439,6 +1457,8 @@ namespace UsageReportsV4 {
     resource_instance_name?: string;
     /** The ID of the resource. */
     resource_id: string;
+    /** The catalog ID of the resource. */
+    catalog_id?: string;
     /** The name of the resource. */
     resource_name?: string;
     /** The ID of the resource group. */
@@ -1465,10 +1485,14 @@ namespace UsageReportsV4 {
     currency_code: string;
     /** Is the cost charged to the account. */
     billable: boolean;
+    /** The resource instance id of the parent resource associated with this instance. */
+    parent_resource_instance_id?: string;
     /** The ID of the plan where the instance was provisioned and rated. */
     plan_id: string;
     /** The name of the plan where the instance was provisioned and rated. */
     plan_name?: string;
+    /** The ID of the pricing plan used to rate the usage. */
+    pricing_plan_id?: string;
     /** The month. */
     month: string;
     /** All the resource used in the account. */
@@ -1477,6 +1501,10 @@ namespace UsageReportsV4 {
     pending?: boolean;
     /** The value of the account's currency in USD. */
     currency_rate?: number;
+    /** The user tags associated with a resource instance. */
+    tags?: any[];
+    /** The service tags associated with a resource instance. */
+    service_tags?: any[];
   }
 
   /** The link to the first page of the search query. */
@@ -1589,6 +1617,7 @@ namespace UsageReportsV4 {
     plan_name?: string;
     /** The pricing region for the plan. */
     pricing_region?: string;
+    /** The ID of the pricing plan used to rate the usage. */
     pricing_plan_id?: string;
     /** Indicates if the plan charges are billed to the customer. */
     billable: boolean;
@@ -1608,6 +1637,8 @@ namespace UsageReportsV4 {
   export interface Resource {
     /** The ID of the resource. */
     resource_id: string;
+    /** The catalog ID of the resource. */
+    catalog_id?: string;
     /** The name of the resource. */
     resource_name?: string;
     /** The billable charges for the account. */
@@ -1663,17 +1694,17 @@ namespace UsageReportsV4 {
     /** Account ID for which billing report snapshot is configured. */
     account_id?: string;
     /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
-    state?: string;
+    state?: SnapshotConfigHistoryItem.Constants.State | string;
     /** Type of account. Possible values [enterprise, account]. */
-    account_type?: string;
+    account_type?: SnapshotConfigHistoryItem.Constants.AccountType | string;
     /** Frequency of taking the snapshot of the billing reports. */
-    interval?: string;
+    interval?: SnapshotConfigHistoryItem.Constants.Interval | string;
     /** A new version of report is created or the existing report version is overwritten with every update. */
-    versioning?: string;
+    versioning?: SnapshotConfigHistoryItem.Constants.Versioning | string;
     /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    report_types?: string[];
+    report_types?: SnapshotConfigHistoryItem.Constants.ReportTypes[] | string[];
     /** Compression format of the snapshot report. */
     compression?: string;
     /** Type of content stored in snapshot report. */
@@ -1688,6 +1719,35 @@ namespace UsageReportsV4 {
     cos_location?: string;
     /** The endpoint of the COS instance. */
     cos_endpoint?: string;
+  }
+  export namespace SnapshotConfigHistoryItem {
+    export namespace Constants {
+      /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
+      export enum State {
+        ENABLED = 'enabled',
+        DISABLED = 'disabled',
+      }
+      /** Type of account. Possible values [enterprise, account]. */
+      export enum AccountType {
+        ACCOUNT = 'account',
+        ENTERPRISE = 'enterprise',
+      }
+      /** Frequency of taking the snapshot of the billing reports. */
+      export enum Interval {
+        DAILY = 'daily',
+      }
+      /** A new version of report is created or the existing report version is overwritten with every update. */
+      export enum Versioning {
+        NEW = 'new',
+        OVERWRITE = 'overwrite',
+      }
+      /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary, account_resource_instance_usage]. */
+      export enum ReportTypes {
+        ACCOUNT_SUMMARY = 'account_summary',
+        ENTERPRISE_SUMMARY = 'enterprise_summary',
+        ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
+      }
+    }
   }
 
   /** List of billing reports snapshots. */
@@ -1720,11 +1780,11 @@ namespace UsageReportsV4 {
     /** Month of captured snapshot. */
     month?: string;
     /** Type of account. Possible values are [enterprise, account]. */
-    account_type?: string;
+    account_type?: SnapshotListSnapshotsItem.Constants.AccountType | string;
     /** Timestamp of snapshot processed. */
     expected_processed_at?: number;
     /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
-    state?: string;
+    state?: SnapshotListSnapshotsItem.Constants.State | string;
     /** Period of billing in snapshot. */
     billing_period?: SnapshotListSnapshotsItemBillingPeriod;
     /** Id of the snapshot captured. */
@@ -1748,6 +1808,20 @@ namespace UsageReportsV4 {
     /** Timestamp at which snapshot is captured. */
     processed_at?: number;
   }
+  export namespace SnapshotListSnapshotsItem {
+    export namespace Constants {
+      /** Type of account. Possible values are [enterprise, account]. */
+      export enum AccountType {
+        ACCOUNT = 'account',
+        ENTERPRISE = 'enterprise',
+      }
+      /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
+      export enum State {
+        ENABLED = 'enabled',
+        DISABLED = 'disabled',
+      }
+    }
+  }
 
   /** Period of billing in snapshot. */
   export interface SnapshotListSnapshotsItemBillingPeriod {
@@ -1762,11 +1836,21 @@ namespace UsageReportsV4 {
     /** The type of billing report stored. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    report_types?: string;
+    report_types?: SnapshotListSnapshotsItemFilesItem.Constants.ReportTypes | string;
     /** Absolute path of the billing report in the COS instance. */
     location?: string;
     /** Account ID for which billing report is captured. */
     account_id?: string;
+  }
+  export namespace SnapshotListSnapshotsItemFilesItem {
+    export namespace Constants {
+      /** The type of billing report stored. Possible values are [account_summary, enterprise_summary, account_resource_instance_usage]. */
+      export enum ReportTypes {
+        ACCOUNT_SUMMARY = 'account_summary',
+        ENTERPRISE_SUMMARY = 'enterprise_summary',
+        ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
+      }
+    }
   }
 
   /** SnapshotListSnapshotsItemReportTypesItem. */
@@ -1774,9 +1858,19 @@ namespace UsageReportsV4 {
     /** The type of billing report of the snapshot. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    type?: string;
+    type?: SnapshotListSnapshotsItemReportTypesItem.Constants.Type | string;
     /** Version of the snapshot. */
     version?: string;
+  }
+  export namespace SnapshotListSnapshotsItemReportTypesItem {
+    export namespace Constants {
+      /** The type of billing report of the snapshot. Possible values are [account_summary, enterprise_summary, account_resource_instance_usage]. */
+      export enum Type {
+        ACCOUNT_SUMMARY = 'account_summary',
+        ENTERPRISE_SUMMARY = 'enterprise_summary',
+        ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
+      }
+    }
   }
 
   /** Billing reports snapshot configuration. */
@@ -1784,17 +1878,17 @@ namespace UsageReportsV4 {
     /** Account ID for which billing report snapshot is configured. */
     account_id?: string;
     /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
-    state?: string;
+    state?: SnapshotConfig.Constants.State | string;
     /** Type of account. Possible values are [enterprise, account]. */
-    account_type?: string;
+    account_type?: SnapshotConfig.Constants.AccountType | string;
     /** Frequency of taking the snapshot of the billing reports. */
-    interval?: string;
+    interval?: SnapshotConfig.Constants.Interval | string;
     /** A new version of report is created or the existing report version is overwritten with every update. */
-    versioning?: string;
+    versioning?: SnapshotConfig.Constants.Versioning | string;
     /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    report_types?: string[];
+    report_types?: SnapshotConfig.Constants.ReportTypes[] | string[];
     /** Compression format of the snapshot report. */
     compression?: string;
     /** Type of content stored in snapshot report. */
@@ -1825,6 +1919,35 @@ namespace UsageReportsV4 {
     cos_bucket?: string;
     /** Region of the COS instance. */
     cos_location?: string;
+  }
+  export namespace SnapshotConfig {
+    export namespace Constants {
+      /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
+      export enum State {
+        ENABLED = 'enabled',
+        DISABLED = 'disabled',
+      }
+      /** Type of account. Possible values are [enterprise, account]. */
+      export enum AccountType {
+        ACCOUNT = 'account',
+        ENTERPRISE = 'enterprise',
+      }
+      /** Frequency of taking the snapshot of the billing reports. */
+      export enum Interval {
+        DAILY = 'daily',
+      }
+      /** A new version of report is created or the existing report version is overwritten with every update. */
+      export enum Versioning {
+        NEW = 'new',
+        OVERWRITE = 'overwrite',
+      }
+      /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary, account_resource_instance_usage]. */
+      export enum ReportTypes {
+        ACCOUNT_SUMMARY = 'account_summary',
+        ENTERPRISE_SUMMARY = 'enterprise_summary',
+        ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
+      }
+    }
   }
 
   /** Subscription. */
@@ -1945,7 +2068,7 @@ namespace UsageReportsV4 {
       const response = await this.client.getResourceUsageAccount(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, '_start');
@@ -2029,7 +2152,7 @@ namespace UsageReportsV4 {
       const response = await this.client.getResourceUsageResourceGroup(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, '_start');
@@ -2110,7 +2233,7 @@ namespace UsageReportsV4 {
       const response = await this.client.getResourceUsageOrg(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, '_start');
@@ -2191,7 +2314,7 @@ namespace UsageReportsV4 {
       const response = await this.client.getReportsSnapshot(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, '_start');
