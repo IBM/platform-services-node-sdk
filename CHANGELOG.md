@@ -1,3 +1,10 @@
+## [0.56.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.56.0...v0.56.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* **Usage Reports:** re-gen service after recent API changes ([f350c6b](https://github.com/IBM/platform-services-node-sdk/commit/f350c6bb89378bd232ed8b0919762c383936889d))
+
 # [0.56.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.3...v0.56.0) (2024-04-13)
 
 
