@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.85.0-75c38f8f-20240206-210220
+ * IBM OpenAPI SDK Code Generator Version: 3.88.0-b0b4c159-20240402-205910
  */
 
 import * as extend from 'extend';
@@ -1582,10 +1582,11 @@ class IamPolicyManagementV1 extends BaseService {
    * List policy templates by attributes.
    *
    * List policy templates and filter by attributes by using query parameters. The following attributes are supported:
-   * `account_id`.
-   * `account_id` is a required query parameter. Only policy templates that have the specified attributes and that the
-   * caller has read access to are returned. If the caller does not have read access to any policy templates an empty
-   * array is returned.
+   * `account_id`, `policy_service_name`, `policy_service_type`, `policy_service_group_id` and `policy_type`.
+   * `account_id` is a required query parameter. These attributes `policy_service_name`, `policy_service_type` and
+   * `policy_service_group_id` are mutually exclusive. Only policy templates that have the specified attributes and that
+   * the caller has read access to are returned. If the caller does not have read access to any policy templates an
+   * empty array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID that the policy templates belong to.
@@ -1602,6 +1603,11 @@ class IamPolicyManagementV1 extends BaseService {
    * * `zh-cn` - Chinese (Simplified, PRC)
    * * `zh-tw` - (Chinese, Taiwan).
    * @param {string} [params.state] - The policy template state.
+   * @param {string} [params.name] - The policy template name.
+   * @param {string} [params.policyServiceType] - Service type, Optional.
+   * @param {string} [params.policyServiceName] - Service name, Optional.
+   * @param {string} [params.policyServiceGroupId] - Service group id, Optional.
+   * @param {string} [params.policyType] - Policy type, Optional.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>>}
    */
@@ -1610,7 +1616,17 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'acceptLanguage', 'state', 'headers'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'state',
+      'name',
+      'policyServiceType',
+      'policyServiceName',
+      'policyServiceGroupId',
+      'policyType',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1619,6 +1635,11 @@ class IamPolicyManagementV1 extends BaseService {
     const query = {
       'account_id': _params.accountId,
       'state': _params.state,
+      'name': _params.name,
+      'policy_service_type': _params.policyServiceType,
+      'policy_service_name': _params.policyServiceName,
+      'policy_service_group_id': _params.policyServiceGroupId,
+      'policy_type': _params.policyType,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -2220,6 +2241,7 @@ class IamPolicyManagementV1 extends BaseService {
    * assignments an empty array is returned.
    *
    * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.version - specify version of response body format.
    * @param {string} params.accountId - The account GUID in which the policies belong to.
    * @param {string} [params.acceptLanguage] - Language code for translations
    * * `default` - English
@@ -2244,8 +2266,9 @@ class IamPolicyManagementV1 extends BaseService {
     IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>
   > {
     const _params = { ...params };
-    const _requiredParams = ['accountId'];
+    const _requiredParams = ['version', 'accountId'];
     const _validParams = [
+      'version',
       'accountId',
       'acceptLanguage',
       'templateId',
@@ -2258,6 +2281,7 @@ class IamPolicyManagementV1 extends BaseService {
     }
 
     const query = {
+      'version': _params.version,
       'account_id': _params.accountId,
       'template_id': _params.templateId,
       'template_version': _params.templateVersion,
@@ -2292,25 +2316,107 @@ class IamPolicyManagementV1 extends BaseService {
   }
 
   /**
+   * Create a policy authorization template assignment.
+   *
+   * Assign a policy template to child accounts and account groups. This creates the policy in the accounts and account
+   * groups that you specify.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.version - specify version of response body format.
+   * @param {AssignmentTargetDetails} params.target - assignment target account and type.
+   * @param {PolicyAssignmentV1Options} params.options - The set of properties required for a policy assignment.
+   * @param {AssignmentTemplateDetails[]} params.templates - List of template details for policy assignment.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1Collection>>}
+   */
+  public createPolicyTemplateAssignment(
+    params: IamPolicyManagementV1.CreatePolicyTemplateAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1Collection>> {
+    const _params = { ...params };
+    const _requiredParams = ['version', 'target', 'options', 'templates'];
+    const _validParams = ['version', 'target', 'options', 'templates', 'acceptLanguage', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'target': _params.target,
+      'options': _params.options,
+      'templates': _params.templates,
+    };
+
+    const query = {
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPolicyTemplateAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_assignments',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Retrieve a policy assignment.
    *
    * Retrieve a policy template assignment by providing a policy assignment ID.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.assignmentId - The policy template assignment ID.
+   * @param {string} params.version - specify version of response body format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignment>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.GetPolicyAssignmentResponse>>}
    */
   public getPolicyAssignment(
     params: IamPolicyManagementV1.GetPolicyAssignmentParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignment>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.GetPolicyAssignmentResponse>> {
     const _params = { ...params };
-    const _requiredParams = ['assignmentId'];
-    const _validParams = ['assignmentId', 'headers'];
+    const _requiredParams = ['assignmentId', 'version'];
+    const _validParams = ['assignmentId', 'version', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
+
+    const query = {
+      'version': _params.version,
+    };
 
     const path = {
       'assignment_id': _params.assignmentId,
@@ -2326,6 +2432,7 @@ class IamPolicyManagementV1 extends BaseService {
       options: {
         url: '/v1/policy_assignments/{assignment_id}',
         method: 'GET',
+        qs: query,
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
@@ -2337,6 +2444,121 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a policy authorization type assignment.
+   *
+   * Update a policy assignment by providing a policy assignment ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - The policy template assignment ID.
+   * @param {string} params.version - specify version of response body format.
+   * @param {string} params.ifMatch - The revision number for updating a policy assignment and must match the ETag value
+   * of the existing policy assignment. The Etag can be retrieved using the GET /v1/policy_assignments/{assignment_id}
+   * API and looking at the ETag response header.
+   * @param {string} params.templateVersion - The policy template version to update to.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1>>}
+   */
+  public updatePolicyAssignment(
+    params: IamPolicyManagementV1.UpdatePolicyAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId', 'version', 'ifMatch', 'templateVersion'];
+    const _validParams = ['assignmentId', 'version', 'ifMatch', 'templateVersion', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_version': _params.templateVersion,
+    };
+
+    const query = {
+      'version': _params.version,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updatePolicyAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_assignments/{assignment_id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove a policy assignment.
+   *
+   * Remove a policy template assignment by providing a policy assignment ID. You can't delete a policy assignment if
+   * the status is "in_progress".
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - The policy template assignment ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deletePolicyAssignment(
+    params: IamPolicyManagementV1.DeletePolicyAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePolicyAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/policy_assignments/{assignment_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -2845,6 +3067,16 @@ namespace IamPolicyManagementV1 {
     acceptLanguage?: string;
     /** The policy template state. */
     state?: ListPolicyTemplatesConstants.State | string;
+    /** The policy template name. */
+    name?: string;
+    /** Service type, Optional. */
+    policyServiceType?: ListPolicyTemplatesConstants.PolicyServiceType | string;
+    /** Service name, Optional. */
+    policyServiceName?: string;
+    /** Service group id, Optional. */
+    policyServiceGroupId?: string;
+    /** Policy type, Optional. */
+    policyType?: ListPolicyTemplatesConstants.PolicyType | string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2854,6 +3086,16 @@ namespace IamPolicyManagementV1 {
     export enum State {
       ACTIVE = 'active',
       DELETED = 'deleted',
+    }
+    /** Service type, Optional. */
+    export enum PolicyServiceType {
+      SERVICE = 'service',
+      PLATFORM_SERVICE = 'platform_service',
+    }
+    /** Policy type, Optional. */
+    export enum PolicyType {
+      ACCESS = 'access',
+      AUTHORIZATION = 'authorization',
     }
   }
 
@@ -3007,6 +3249,8 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `listPolicyAssignments` operation. */
   export interface ListPolicyAssignmentsParams {
+    /** specify version of response body format. */
+    version: string;
     /** The account GUID in which the policies belong to. */
     accountId: string;
     /** Language code for translations
@@ -3030,8 +3274,60 @@ namespace IamPolicyManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `createPolicyTemplateAssignment` operation. */
+  export interface CreatePolicyTemplateAssignmentParams {
+    /** specify version of response body format. */
+    version: string;
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** The set of properties required for a policy assignment. */
+    options: PolicyAssignmentV1Options;
+    /** List of template details for policy assignment. */
+    templates: AssignmentTemplateDetails[];
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `getPolicyAssignment` operation. */
   export interface GetPolicyAssignmentParams {
+    /** The policy template assignment ID. */
+    assignmentId: string;
+    /** specify version of response body format. */
+    version: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updatePolicyAssignment` operation. */
+  export interface UpdatePolicyAssignmentParams {
+    /** The policy template assignment ID. */
+    assignmentId: string;
+    /** specify version of response body format. */
+    version: string;
+    /** The revision number for updating a policy assignment and must match the ETag value of the existing policy
+     *  assignment. The Etag can be retrieved using the GET /v1/policy_assignments/{assignment_id} API and looking at
+     *  the ETag response header.
+     */
+    ifMatch: string;
+    /** The policy template version to update to. */
+    templateVersion: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deletePolicyAssignment` operation. */
+  export interface DeletePolicyAssignmentParams {
     /** The policy template assignment ID. */
     assignmentId: string;
     headers?: OutgoingHttpHeaders;
@@ -3045,6 +3341,30 @@ namespace IamPolicyManagementV1 {
   export interface AssignmentResourceCreated {
     /** policy id. */
     id?: string;
+  }
+
+  /** assignment target account and type. */
+  export interface AssignmentTargetDetails {
+    /** Assignment target type. */
+    type?: AssignmentTargetDetails.Constants.Type | string;
+    /** ID of the target account. */
+    id?: string;
+  }
+  export namespace AssignmentTargetDetails {
+    export namespace Constants {
+      /** Assignment target type. */
+      export enum Type {
+        ACCOUNT = 'Account',
+      }
+    }
+  }
+
+  /** policy template details. */
+  export interface AssignmentTemplateDetails {
+    /** policy template id. */
+    id?: string;
+    /** policy template version. */
+    version?: string;
   }
 
   /** Details of conflicting resource. */
@@ -3168,6 +3488,24 @@ namespace IamPolicyManagementV1 {
     status_code?: number;
   }
 
+  /** GetPolicyAssignmentResponse. */
+  export interface GetPolicyAssignmentResponse {}
+
+  /** subject details of access type assignment. */
+  export interface GetPolicyAssignmentResponsePolicyAssignmentV1Subject {
+    id?: string;
+    type?: GetPolicyAssignmentResponsePolicyAssignmentV1Subject.Constants.Type | string;
+  }
+  export namespace GetPolicyAssignmentResponsePolicyAssignmentV1Subject {
+    export namespace Constants {
+      /** Type */
+      export enum Type {
+        IAM_ID = 'iam_id',
+        ACCESS_GROUP_ID = 'access_group_id',
+      }
+    }
+  }
+
   /** Permission granted by the policy. */
   export interface Grant {
     /** A set of role cloud resource names (CRNs) granted by the policy. */
@@ -3228,55 +3566,6 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The set of properties associated with the policy template assignment. */
-  export interface PolicyAssignment {
-    /** policy template id. */
-    template_id: string;
-    /** policy template version. */
-    template_version: string;
-    /** Passed in value to correlate with other assignments. */
-    assignment_id: string;
-    /** Assignment target type. */
-    target_type: PolicyAssignment.Constants.TargetType | string;
-    /** ID of the target account. */
-    target: string;
-    /** List of objects with required properties for a policy assignment. */
-    options: PolicyAssignmentOptions[];
-    /** Policy assignment ID. */
-    id?: string;
-    /** The account GUID that the policies assignments belong to.. */
-    account_id?: string;
-    /** The href URL that links to the policies assignments API by policy assignment ID. */
-    href?: string;
-    /** The UTC timestamp when the policy assignment was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the policy assignment. */
-    created_by_id?: string;
-    /** The UTC timestamp when the policy assignment was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy assignment. */
-    last_modified_by_id?: string;
-    /** Object for each account assigned. */
-    resources?: PolicyAssignmentResources[];
-    /** The policy assignment status. */
-    status: PolicyAssignment.Constants.Status | string;
-  }
-  export namespace PolicyAssignment {
-    export namespace Constants {
-      /** Assignment target type. */
-      export enum TargetType {
-        ACCOUNT = 'Account',
-      }
-      /** The policy assignment status. */
-      export enum Status {
-        IN_PROGRESS = 'in_progress',
-        SUCCEEDED = 'succeeded',
-        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
-        FAILED = 'failed',
-      }
-    }
-  }
-
   /** The set of properties required for a policy assignment. */
   export interface PolicyAssignmentOptions {
     /** The policy subject type; either 'iam_id' or 'access_group_id'. */
@@ -3316,6 +3605,97 @@ namespace IamPolicyManagementV1 {
     target?: string;
     /** Set of properties for the assigned resource. */
     policy?: PolicyAssignmentResourcePolicy;
+  }
+
+  /** The set of properties associated with the policy template assignment. */
+  export interface PolicyAssignmentV1 {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** The set of properties required for a policy assignment. */
+    options: PolicyAssignmentV1Options;
+    /** Policy assignment ID. */
+    id?: string;
+    /** The account GUID that the policies assignments belong to.. */
+    account_id?: string;
+    /** The href URL that links to the policies assignments API by policy assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the policy assignment was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy assignment was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy assignment. */
+    last_modified_by_id?: string;
+    /** Object for each account assigned. */
+    resources: PolicyAssignmentV1Resources[];
+    /** subject details of access type assignment. */
+    subject?: PolicyAssignmentV1Subject;
+    /** policy template details. */
+    template: AssignmentTemplateDetails;
+    /** The policy assignment status. */
+    status: PolicyAssignmentV1.Constants.Status | string;
+  }
+  export namespace PolicyAssignmentV1 {
+    export namespace Constants {
+      /** The policy assignment status. */
+      export enum Status {
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
+        FAILED = 'failed',
+      }
+    }
+  }
+
+  /** Policy assignment response. */
+  export interface PolicyAssignmentV1Collection {
+    /** Response of policy assignments. */
+    assignments?: PolicyAssignmentV1[];
+  }
+
+  /** The set of properties required for a policy assignment. */
+  export interface PolicyAssignmentV1Options {
+    root: PolicyAssignmentV1OptionsRoot;
+  }
+
+  /** PolicyAssignmentV1OptionsRoot. */
+  export interface PolicyAssignmentV1OptionsRoot {
+    requester_id?: string;
+    /** Passed in value to correlate with other assignments. */
+    assignment_id?: string;
+    template?: PolicyAssignmentV1OptionsRootTemplate;
+  }
+
+  /** PolicyAssignmentV1OptionsRootTemplate. */
+  export interface PolicyAssignmentV1OptionsRootTemplate {
+    /** The template id where this policy is being assigned from. */
+    id?: string;
+    /** The template version where this policy is being assigned from. */
+    version?: string;
+  }
+
+  /** The policy assignment resources. */
+  export interface PolicyAssignmentV1Resources {
+    /** policy template details. */
+    target?: AssignmentTemplateDetails;
+    /** Set of properties for the assigned resource. */
+    policy?: PolicyAssignmentResourcePolicy;
+  }
+
+  /** subject details of access type assignment. */
+  export interface PolicyAssignmentV1Subject {
+    id?: string;
+    type?: PolicyAssignmentV1Subject.Constants.Type | string;
+  }
+  export namespace PolicyAssignmentV1Subject {
+    export namespace Constants {
+      /** Type */
+      export enum Type {
+        IAM_ID = 'iam_id',
+        ACCESS_GROUP_ID = 'access_group_id',
+      }
+    }
   }
 
   /** A collection of policies. */
@@ -3396,8 +3776,11 @@ namespace IamPolicyManagementV1 {
   /** A collection of policies assignments. */
   export interface PolicyTemplateAssignmentCollection {
     /** List of policy assignments. */
-    assignments?: PolicyAssignment[];
+    assignments?: PolicyTemplateAssignmentItems[];
   }
+
+  /** PolicyTemplateAssignmentItems. */
+  export interface PolicyTemplateAssignmentItems {}
 
   /** A collection of policy Templates. */
   export interface PolicyTemplateCollection {
@@ -3639,7 +4022,9 @@ namespace IamPolicyManagementV1 {
      */
     description?: string;
     /** The resource attributes to which the policy grants access. */
-    resource?: V2PolicyResource;
+    resource: V2PolicyResource;
+    /** The subject attributes for whom the policy grants access. */
+    subject?: V2PolicySubject;
     /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
      *  'time-based-conditions:weekly:custom-hours'.
      */
@@ -3869,6 +4254,97 @@ namespace IamPolicyManagementV1 {
     grant: GrantWithEnrichedRoles;
   }
 
+  /** The set of properties associated with the policy template assignment. */
+  export interface GetPolicyAssignmentResponsePolicyAssignment extends GetPolicyAssignmentResponse {
+    /** policy template id. */
+    template_id?: string;
+    /** policy template version. */
+    template_version?: string;
+    /** Passed in value to correlate with other assignments. */
+    assignment_id?: string;
+    /** Assignment target type. */
+    target_type?: GetPolicyAssignmentResponsePolicyAssignment.Constants.TargetType | string;
+    /** ID of the target account. */
+    target?: string;
+    /** List of objects with required properties for a policy assignment. */
+    options?: PolicyAssignmentOptions[];
+    /** Policy assignment ID. */
+    id?: string;
+    /** The account GUID that the policies assignments belong to.. */
+    account_id?: string;
+    /** The href URL that links to the policies assignments API by policy assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the policy assignment was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy assignment was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy assignment. */
+    last_modified_by_id?: string;
+    /** Object for each account assigned. */
+    resources?: PolicyAssignmentResources[];
+    /** The policy assignment status. */
+    status?: GetPolicyAssignmentResponsePolicyAssignment.Constants.Status | string;
+  }
+  export namespace GetPolicyAssignmentResponsePolicyAssignment {
+    export namespace Constants {
+      /** Assignment target type. */
+      export enum TargetType {
+        ACCOUNT = 'Account',
+      }
+      /** The policy assignment status. */
+      export enum Status {
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
+        FAILED = 'failed',
+      }
+    }
+  }
+
+  /** The set of properties associated with the policy template assignment. */
+  export interface GetPolicyAssignmentResponsePolicyAssignmentV1
+    extends GetPolicyAssignmentResponse {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** The set of properties required for a policy assignment. */
+    options: PolicyAssignmentV1Options;
+    /** Policy assignment ID. */
+    id?: string;
+    /** The account GUID that the policies assignments belong to.. */
+    account_id?: string;
+    /** The href URL that links to the policies assignments API by policy assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the policy assignment was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy assignment was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy assignment. */
+    last_modified_by_id?: string;
+    /** Object for each account assigned. */
+    resources: PolicyAssignmentV1Resources[];
+    /** subject details of access type assignment. */
+    subject?: GetPolicyAssignmentResponsePolicyAssignmentV1Subject;
+    /** policy template details. */
+    template: AssignmentTemplateDetails;
+    /** The policy assignment status. */
+    status: GetPolicyAssignmentResponsePolicyAssignmentV1.Constants.Status | string;
+  }
+  export namespace GetPolicyAssignmentResponsePolicyAssignmentV1 {
+    export namespace Constants {
+      /** The policy assignment status. */
+      export enum Status {
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
+        FAILED = 'failed',
+      }
+    }
+  }
+
   /** Rule that specifies additional access granted (e.g., time-based condition). */
   export interface NestedConditionRuleAttribute extends NestedCondition {
     /** The name of an attribute. */
@@ -3922,6 +4398,98 @@ namespace IamPolicyManagementV1 {
       export enum Operator {
         AND = 'and',
         OR = 'or',
+      }
+    }
+  }
+
+  /** The set of properties associated with the policy template assignment. */
+  export interface PolicyTemplateAssignmentItemsPolicyAssignment
+    extends PolicyTemplateAssignmentItems {
+    /** policy template id. */
+    template_id?: string;
+    /** policy template version. */
+    template_version?: string;
+    /** Passed in value to correlate with other assignments. */
+    assignment_id?: string;
+    /** Assignment target type. */
+    target_type?: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.TargetType | string;
+    /** ID of the target account. */
+    target?: string;
+    /** List of objects with required properties for a policy assignment. */
+    options?: PolicyAssignmentOptions[];
+    /** Policy assignment ID. */
+    id?: string;
+    /** The account GUID that the policies assignments belong to.. */
+    account_id?: string;
+    /** The href URL that links to the policies assignments API by policy assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the policy assignment was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy assignment was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy assignment. */
+    last_modified_by_id?: string;
+    /** Object for each account assigned. */
+    resources?: PolicyAssignmentResources[];
+    /** The policy assignment status. */
+    status?: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.Status | string;
+  }
+  export namespace PolicyTemplateAssignmentItemsPolicyAssignment {
+    export namespace Constants {
+      /** Assignment target type. */
+      export enum TargetType {
+        ACCOUNT = 'Account',
+      }
+      /** The policy assignment status. */
+      export enum Status {
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
+        FAILED = 'failed',
+      }
+    }
+  }
+
+  /** The set of properties associated with the policy template assignment. */
+  export interface PolicyTemplateAssignmentItemsPolicyAssignmentV1
+    extends PolicyTemplateAssignmentItems {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** The set of properties required for a policy assignment. */
+    options: PolicyAssignmentV1Options;
+    /** Policy assignment ID. */
+    id?: string;
+    /** The account GUID that the policies assignments belong to.. */
+    account_id?: string;
+    /** The href URL that links to the policies assignments API by policy assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the policy assignment was created. */
+    created_at?: string;
+    /** The iam ID of the entity that created the policy assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the policy assignment was last modified. */
+    last_modified_at?: string;
+    /** The iam ID of the entity that last modified the policy assignment. */
+    last_modified_by_id?: string;
+    /** Object for each account assigned. */
+    resources: PolicyAssignmentV1Resources[];
+    /** subject details of access type assignment. */
+    subject?: PolicyAssignmentV1Subject;
+    /** policy template details. */
+    template: AssignmentTemplateDetails;
+    /** The policy assignment status. */
+    status: PolicyTemplateAssignmentItemsPolicyAssignmentV1.Constants.Status | string;
+  }
+  export namespace PolicyTemplateAssignmentItemsPolicyAssignmentV1 {
+    export namespace Constants {
+      /** The policy assignment status. */
+      export enum Status {
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
+        FAILED = 'failed',
       }
     }
   }

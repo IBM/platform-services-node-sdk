@@ -1,3 +1,10 @@
+# [0.56.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.3...v0.56.0) (2024-04-13)
+
+
+### Features
+
+* **IAM Policy Management:** S2S support for enterprise accounts ([#254](https://github.com/IBM/platform-services-node-sdk/issues/254)) ([378181c](https://github.com/IBM/platform-services-node-sdk/commit/378181c346685d16ec8098571b1148b57f006c91))
+
 ## [0.55.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.55.2...v0.55.3) (2024-04-10)
 
 
