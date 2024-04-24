@@ -1,3 +1,10 @@
+## [0.56.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.56.1...v0.56.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* **Enterprise Management:** update create_account response payload ([#255](https://github.com/IBM/platform-services-node-sdk/issues/255)) ([af7e0c9](https://github.com/IBM/platform-services-node-sdk/commit/af7e0c96b81fe5edb25627222d95335106d1ba1c))
+
 ## [0.56.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.56.0...v0.56.1) (2024-04-15)
 
 
