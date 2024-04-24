@@ -1390,6 +1390,12 @@ namespace EnterpriseManagementV1 {
   export interface CreateAccountResponse {
     /** The ID of the account entity that was created. */
     account_id?: string;
+    /** The iam_service_id of the account entity that was created. */
+    iam_service_id?: string;
+    /** The iam_apikey_id of the account entity that was created. */
+    iam_apikey_id?: string;
+    /** The iam_apikey of the account entity with owner iam policies that was created. */
+    iam_apikey?: string;
   }
 
   /** The response from calling create enterprise. */
