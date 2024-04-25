@@ -1,3 +1,10 @@
+## [0.56.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.56.2...v0.56.3) (2024-04-25)
+
+
+### Bug Fixes
+
+* **Enterprise Management:** re-gen service after recent create_account api response changes ([#256](https://github.com/IBM/platform-services-node-sdk/issues/256)) ([1d46b9d](https://github.com/IBM/platform-services-node-sdk/commit/1d46b9df4ad44f3f516acf9ed2300be464a1cadd))
+
 ## [0.56.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.56.1...v0.56.2) (2024-04-24)
 
 
