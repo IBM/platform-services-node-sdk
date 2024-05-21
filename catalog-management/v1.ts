@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.84.2-a032c73d-20240125-175315
+ * IBM OpenAPI SDK Code Generator Version: 3.90.1-64fd3296-20240515-180710
  */
 
 /* eslint-disable max-classes-per-file */
@@ -1492,12 +1492,6 @@ class CatalogManagementV1 extends BaseService {
    * true.
    * @param {boolean} [params.shareEnabled] - Denotes sharing including access list availability of an Offering is
    * enabled.
-   * @param {boolean} [params.permitRequestIbmPublicPublish] - Deprecated: Is it permitted to request publishing to IBM
-   * or Public.
-   * @param {boolean} [params.ibmPublishApproved] - Deprecated: Indicates if this offering has been approved for use by
-   * all IBMers.
-   * @param {boolean} [params.publicPublishApproved] - Deprecated: Indicates if this offering has been approved for use
-   * by all IBM Cloud users.
    * @param {string} [params.publicOriginalCrn] - The original offering CRN that this publish entry came from.
    * @param {string} [params.publishPublicCrn] - The crn of the public catalog entry of this offering.
    * @param {string} [params.portalApprovalRecord] - The portal's approval record ID.
@@ -1517,6 +1511,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {DeprecatePending} [params.deprecatePending] - Deprecation information for an Offering.
    * @param {string} [params.productKind] - The product kind.  Valid values are module, solution, or empty string.
    * @param {Badge[]} [params.badges] - A list of badges for this offering.
+   * @param {Plan[]} [params.plans] - A list of plans for this offering.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
@@ -1552,9 +1547,6 @@ class CatalogManagementV1 extends BaseService {
       'shareWithAll',
       'shareWithIbm',
       'shareEnabled',
-      'permitRequestIbmPublicPublish',
-      'ibmPublishApproved',
-      'publicPublishApproved',
       'publicOriginalCrn',
       'publishPublicCrn',
       'portalApprovalRecord',
@@ -1573,6 +1565,7 @@ class CatalogManagementV1 extends BaseService {
       'deprecatePending',
       'productKind',
       'badges',
+      'plans',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1606,9 +1599,6 @@ class CatalogManagementV1 extends BaseService {
       'share_with_all': _params.shareWithAll,
       'share_with_ibm': _params.shareWithIbm,
       'share_enabled': _params.shareEnabled,
-      'permit_request_ibm_public_publish': _params.permitRequestIbmPublicPublish,
-      'ibm_publish_approved': _params.ibmPublishApproved,
-      'public_publish_approved': _params.publicPublishApproved,
       'public_original_crn': _params.publicOriginalCrn,
       'publish_public_crn': _params.publishPublicCrn,
       'portal_approval_record': _params.portalApprovalRecord,
@@ -1627,6 +1617,7 @@ class CatalogManagementV1 extends BaseService {
       'deprecate_pending': _params.deprecatePending,
       'product_kind': _params.productKind,
       'badges': _params.badges,
+      'plans': _params.plans,
     };
 
     const path = {
@@ -2142,12 +2133,6 @@ class CatalogManagementV1 extends BaseService {
    * true.
    * @param {boolean} [params.shareEnabled] - Denotes sharing including access list availability of an Offering is
    * enabled.
-   * @param {boolean} [params.permitRequestIbmPublicPublish] - Deprecated: Is it permitted to request publishing to IBM
-   * or Public.
-   * @param {boolean} [params.ibmPublishApproved] - Deprecated: Indicates if this offering has been approved for use by
-   * all IBMers.
-   * @param {boolean} [params.publicPublishApproved] - Deprecated: Indicates if this offering has been approved for use
-   * by all IBM Cloud users.
    * @param {string} [params.publicOriginalCrn] - The original offering CRN that this publish entry came from.
    * @param {string} [params.publishPublicCrn] - The crn of the public catalog entry of this offering.
    * @param {string} [params.portalApprovalRecord] - The portal's approval record ID.
@@ -2167,6 +2152,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {DeprecatePending} [params.deprecatePending] - Deprecation information for an Offering.
    * @param {string} [params.productKind] - The product kind.  Valid values are module, solution, or empty string.
    * @param {Badge[]} [params.badges] - A list of badges for this offering.
+   * @param {Plan[]} [params.plans] - A list of plans for this offering.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
    */
@@ -2205,9 +2191,6 @@ class CatalogManagementV1 extends BaseService {
       'shareWithAll',
       'shareWithIbm',
       'shareEnabled',
-      'permitRequestIbmPublicPublish',
-      'ibmPublishApproved',
-      'publicPublishApproved',
       'publicOriginalCrn',
       'publishPublicCrn',
       'portalApprovalRecord',
@@ -2226,6 +2209,7 @@ class CatalogManagementV1 extends BaseService {
       'deprecatePending',
       'productKind',
       'badges',
+      'plans',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2261,9 +2245,6 @@ class CatalogManagementV1 extends BaseService {
       'share_with_all': _params.shareWithAll,
       'share_with_ibm': _params.shareWithIbm,
       'share_enabled': _params.shareEnabled,
-      'permit_request_ibm_public_publish': _params.permitRequestIbmPublicPublish,
-      'ibm_publish_approved': _params.ibmPublishApproved,
-      'public_publish_approved': _params.publicPublishApproved,
       'public_original_crn': _params.publicOriginalCrn,
       'publish_public_crn': _params.publishPublicCrn,
       'portal_approval_record': _params.portalApprovalRecord,
@@ -2282,6 +2263,7 @@ class CatalogManagementV1 extends BaseService {
       'deprecate_pending': _params.deprecatePending,
       'product_kind': _params.productKind,
       'badges': _params.badges,
+      'plans': _params.plans,
     };
 
     const path = {
@@ -2419,6 +2401,60 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get offering statistics.
+   *
+   * Get the usage statistics for the specified offering.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.catalogIdentifier - Catalog identifier.
+   * @param {string} params.offeringId - Offering identification.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.MetricStats>>}
+   */
+  public getOfferingStats(
+    params: CatalogManagementV1.GetOfferingStatsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.MetricStats>> {
+    const _params = { ...params };
+    const _requiredParams = ['catalogIdentifier', 'offeringId'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'catalog_identifier': _params.catalogIdentifier,
+      'offering_id': _params.offeringId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingStats'
+    );
+
+    const parameters = {
+      options: {
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/stats',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -2567,16 +2603,17 @@ class CatalogManagementV1 extends BaseService {
   /**
    * Set offering publish approval settings.
    *
-   * Approve or disapprove the offering to be allowed to publish to the IBM Public Catalog. This is used only by Partner
-   * Center. Only users with Approval IAM authority can use this. Approvers should use the catalog and offering id from
-   * the public catalog since they wouldn't have access to the private offering.
+   * Approve or disapprove the offering to be allowed to publish to a particular public catalog based on the approval
+   * type.  Approvers should use the catalog and offering id from the public catalog since they wouldn't have access to
+   * the private offering.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.catalogIdentifier - Catalog identifier.
    * @param {string} params.offeringId - Offering identification.
    * @param {string} params.approvalType - Type of approval.
    *  * `pc_managed` - Partner Center is managing this offering
-   *  * `ibm_module_repo` - Offering is from an approved repository can be published into the public catalog.
+   *  * `ibm_module_repo` -  Offering is from an approved repository can be published into the module registry.
+   *  * `ibm_community` - Offering is from an approved repository can be published into the Community registry.
    *  * `publish_approved` - Publishing approved, offering owners can now set who sees the offering in public catalog
    *  * `approval_required` - Offering will be removed from public catalog when this flag is set to true, regardless of
    * the approval and visibility settings.
@@ -2587,7 +2624,7 @@ class CatalogManagementV1 extends BaseService {
    * the private catalog offering. When accessing the public offering Partner Center only needs to use their token in
    * the authorization header.
    * @param {string} [params.xAuthToken] - Authentication token used to verify if user is a collaborator of a repository
-   * as part of the checks to set the approval type as `ibm_module_repo`.
+   * as part of the checks to set the approval type as `ibm_module_repo` or `ibm_community`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ApprovalResult>>}
    */
@@ -3143,6 +3180,85 @@ class CatalogManagementV1 extends BaseService {
   }
 
   /**
+   * Get version change notices.
+   *
+   * Get change notices for the specified version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.catalogIdentifier - Catalog identifier.
+   * @param {string} params.offeringId - Offering identification.
+   * @param {string} params.kind - The kind of offering (e.g, helm, ova, terraform ...).
+   * @param {string} [params.target] - The target kind of the currently installed version (e.g. iks, roks, etc).
+   * @param {string} [params.version] - optionaly provide an existing version to check updates for if one is not given,
+   * all version will be returned.
+   * @param {string} [params.flavor] - The programmatic flavor name of the version that was installed.
+   * @param {string} [params.versions] - optionaly specify if change notices should be returned for all versions of this
+   * kind and flavor, or for all versions that are newer than the specified version, including the specified version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.ChangeNoticesResponse>>}
+   */
+  public getOfferingChangeNotices(
+    params: CatalogManagementV1.GetOfferingChangeNoticesParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ChangeNoticesResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['catalogIdentifier', 'offeringId', 'kind'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'kind',
+      'target',
+      'version',
+      'flavor',
+      'versions',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'kind': _params.kind,
+      'target': _params.target,
+      'version': _params.version,
+      'flavor': _params.flavor,
+      'versions': _params.versions,
+    };
+
+    const path = {
+      'catalog_identifier': _params.catalogIdentifier,
+      'offering_id': _params.offeringId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOfferingChangeNotices'
+    );
+
+    const parameters = {
+      options: {
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/changeNotices',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Get offering source.
    *
    * Get an offering's source.  This request requires authorization for private offerings.
@@ -3423,6 +3539,58 @@ class CatalogManagementV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'text/markdown',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Check the required IAM permissions for this version with the specified user context.
+   *
+   * Check the required IAM permissions for this version with the specified user context.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.CheckedIAMPermission[]>>}
+   */
+  public checkIamPermissions(
+    params: CatalogManagementV1.CheckIamPermissionsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CheckedIAMPermission[]>> {
+    const _params = { ...params };
+    const _requiredParams = ['versionLocId'];
+    const _validParams = ['versionLocId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'version_loc_id': _params.versionLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'checkIamPermissions'
+    );
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}/checkIAMPermissions',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -4570,6 +4738,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.clusterId] - Cluster ID.
    * @param {string} [params.region] - Cluster region.
    * @param {string} [params.namespace] - Kube namespace.
+   * @param {string[]} [params.namespaces] - Kube namespaces.
+   * @param {boolean} [params.allNamespaces] - Used when installing an operator, to indicate that it should be made
+   * avaiable in all namespaces on the target cluster.
    * @param {DeployRequestBodyOverrideValues} [params.overrideValues] - Validation override values. Required for virtual
    * server image for VPC.
    * @param {DeployRequestBodyEnvironmentVariablesItem[]} [params.environmentVariables] - Schematics environment
@@ -4584,6 +4755,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.vcenterUser] - VCenter User.
    * @param {string} [params.vcenterPassword] - VCenter Password.
    * @param {string} [params.vcenterDatastore] - VCenter Datastore.
+   * @param {string} [params.planId] - Software plan ID.
+   * @param {string} [params.channel] - Used when installing an operator, to indicate which channel to use.
+   * @param {string} [params.installPlan] - Used when installing an operator, to indicate which install plan to use.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
    */
@@ -4598,6 +4772,8 @@ class CatalogManagementV1 extends BaseService {
       'clusterId',
       'region',
       'namespace',
+      'namespaces',
+      'allNamespaces',
       'overrideValues',
       'environmentVariables',
       'entitlementApikey',
@@ -4610,6 +4786,9 @@ class CatalogManagementV1 extends BaseService {
       'vcenterUser',
       'vcenterPassword',
       'vcenterDatastore',
+      'planId',
+      'channel',
+      'installPlan',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4621,6 +4800,8 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
       'region': _params.region,
       'namespace': _params.namespace,
+      'namespaces': _params.namespaces,
+      'all_namespaces': _params.allNamespaces,
       'override_values': _params.overrideValues,
       'environment_variables': _params.environmentVariables,
       'entitlement_apikey': _params.entitlementApikey,
@@ -4633,6 +4814,9 @@ class CatalogManagementV1 extends BaseService {
       'vcenter_user': _params.vcenterUser,
       'vcenter_password': _params.vcenterPassword,
       'vcenter_datastore': _params.vcenterDatastore,
+      'plan_id': _params.planId,
+      'channel': _params.channel,
+      'install_plan': _params.installPlan,
     };
 
     const path = {
@@ -4679,6 +4863,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.clusterId] - Cluster ID.
    * @param {string} [params.region] - Cluster region.
    * @param {string} [params.namespace] - Kube namespace.
+   * @param {string[]} [params.namespaces] - Kube namespaces.
+   * @param {boolean} [params.allNamespaces] - Used when installing an operator, to indicate that it should be made
+   * avaiable in all namespaces on the target cluster.
    * @param {DeployRequestBodyOverrideValues} [params.overrideValues] - Validation override values. Required for virtual
    * server image for VPC.
    * @param {DeployRequestBodyEnvironmentVariablesItem[]} [params.environmentVariables] - Schematics environment
@@ -4693,6 +4880,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.vcenterUser] - VCenter User.
    * @param {string} [params.vcenterPassword] - VCenter Password.
    * @param {string} [params.vcenterDatastore] - VCenter Datastore.
+   * @param {string} [params.planId] - Software plan ID.
+   * @param {string} [params.channel] - Used when installing an operator, to indicate which channel to use.
+   * @param {string} [params.installPlan] - Used when installing an operator, to indicate which install plan to use.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
    */
@@ -4707,6 +4897,8 @@ class CatalogManagementV1 extends BaseService {
       'clusterId',
       'region',
       'namespace',
+      'namespaces',
+      'allNamespaces',
       'overrideValues',
       'environmentVariables',
       'entitlementApikey',
@@ -4719,6 +4911,9 @@ class CatalogManagementV1 extends BaseService {
       'vcenterUser',
       'vcenterPassword',
       'vcenterDatastore',
+      'planId',
+      'channel',
+      'installPlan',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4730,6 +4925,8 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
       'region': _params.region,
       'namespace': _params.namespace,
+      'namespaces': _params.namespaces,
+      'all_namespaces': _params.allNamespaces,
       'override_values': _params.overrideValues,
       'environment_variables': _params.environmentVariables,
       'entitlement_apikey': _params.entitlementApikey,
@@ -4742,6 +4939,9 @@ class CatalogManagementV1 extends BaseService {
       'vcenter_user': _params.vcenterUser,
       'vcenter_password': _params.vcenterPassword,
       'vcenter_datastore': _params.vcenterDatastore,
+      'plan_id': _params.planId,
+      'channel': _params.channel,
+      'install_plan': _params.installPlan,
     };
 
     const path = {
@@ -4859,6 +5059,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.clusterId] - Cluster ID.
    * @param {string} [params.region] - Cluster region.
    * @param {string} [params.namespace] - Kube namespace.
+   * @param {string[]} [params.namespaces] - Kube namespaces.
+   * @param {boolean} [params.allNamespaces] - Used when installing an operator, to indicate that it should be made
+   * avaiable in all namespaces on the target cluster.
    * @param {DeployRequestBodyOverrideValues} [params.overrideValues] - Validation override values. Required for virtual
    * server image for VPC.
    * @param {DeployRequestBodyEnvironmentVariablesItem[]} [params.environmentVariables] - Schematics environment
@@ -4873,6 +5076,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.vcenterUser] - VCenter User.
    * @param {string} [params.vcenterPassword] - VCenter Password.
    * @param {string} [params.vcenterDatastore] - VCenter Datastore.
+   * @param {string} [params.planId] - Software plan ID.
+   * @param {string} [params.channel] - Used when installing an operator, to indicate which channel to use.
+   * @param {string} [params.installPlan] - Used when installing an operator, to indicate which install plan to use.
    * @param {string} [params.targetContextName] - The name of a target account context on a catalog.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
@@ -4888,6 +5094,8 @@ class CatalogManagementV1 extends BaseService {
       'clusterId',
       'region',
       'namespace',
+      'namespaces',
+      'allNamespaces',
       'overrideValues',
       'environmentVariables',
       'entitlementApikey',
@@ -4900,6 +5108,9 @@ class CatalogManagementV1 extends BaseService {
       'vcenterUser',
       'vcenterPassword',
       'vcenterDatastore',
+      'planId',
+      'channel',
+      'installPlan',
       'targetContextName',
       'headers',
     ];
@@ -4912,6 +5123,8 @@ class CatalogManagementV1 extends BaseService {
       'cluster_id': _params.clusterId,
       'region': _params.region,
       'namespace': _params.namespace,
+      'namespaces': _params.namespaces,
+      'all_namespaces': _params.allNamespaces,
       'override_values': _params.overrideValues,
       'environment_variables': _params.environmentVariables,
       'entitlement_apikey': _params.entitlementApikey,
@@ -4924,6 +5137,9 @@ class CatalogManagementV1 extends BaseService {
       'vcenter_user': _params.vcenterUser,
       'vcenter_password': _params.vcenterPassword,
       'vcenter_datastore': _params.vcenterDatastore,
+      'plan_id': _params.planId,
+      'channel': _params.channel,
+      'install_plan': _params.installPlan,
     };
 
     const query = {
@@ -6183,6 +6399,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.kindTarget] - The target kind for the installed software version.
    * @param {string} [params.kindTargetLabel] - Display value for the target kind for the installed software version.
    * @param {string} [params.sha] - The digest value of the installed software version.
+   * @param {string} [params.planId] - The software plan ID used when creating this software instance.
+   * @param {string} [params.parentCrn] - The CRN of the resource that is considered a parent of this software instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
@@ -6222,6 +6440,8 @@ class CatalogManagementV1 extends BaseService {
       'kindTarget',
       'kindTargetLabel',
       'sha',
+      'planId',
+      'parentCrn',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6259,6 +6479,8 @@ class CatalogManagementV1 extends BaseService {
       'kind_target': _params.kindTarget,
       'kind_target_label': _params.kindTargetLabel,
       'sha': _params.sha,
+      'plan_id': _params.planId,
+      'parent_crn': _params.parentCrn,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -6382,6 +6604,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.kindTarget] - The target kind for the installed software version.
    * @param {string} [params.kindTargetLabel] - Display value for the target kind for the installed software version.
    * @param {string} [params.sha] - The digest value of the installed software version.
+   * @param {string} [params.planId] - The software plan ID used when creating this software instance.
+   * @param {string} [params.parentCrn] - The CRN of the resource that is considered a parent of this software instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
@@ -6422,6 +6646,8 @@ class CatalogManagementV1 extends BaseService {
       'kindTarget',
       'kindTargetLabel',
       'sha',
+      'planId',
+      'parentCrn',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6459,6 +6685,8 @@ class CatalogManagementV1 extends BaseService {
       'kind_target': _params.kindTarget,
       'kind_target_label': _params.kindTargetLabel,
       'sha': _params.sha,
+      'plan_id': _params.planId,
+      'parent_crn': _params.parentCrn,
     };
 
     const path = {
@@ -6661,6 +6889,207 @@ class CatalogManagementV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * plans
+   ************************/
+
+  /**
+   * Get offering/plan 'branch'.
+   *
+   * Get the Offering/Plan 'branch' for the specified locator ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.planLocId - A dotted value of `sw`.`catalogID`.`resourceID`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
+   */
+  public getPlan(
+    params: CatalogManagementV1.GetPlanParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
+    const _requiredParams = ['planLocId'];
+    const _validParams = ['planLocId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'plan_loc_id': _params.planLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getPlan');
+
+    const parameters = {
+      options: {
+        url: '/plans/{plan_loc_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete plan.
+   *
+   * Delete the specified plan.  A plan cannot be deleted if it published.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.planLocId - A dotted value of `sw`.`catalogID`.`resourceID`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
+   */
+  public deletePlan(
+    params: CatalogManagementV1.DeletePlanParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['planLocId'];
+    const _validParams = ['planLocId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'plan_loc_id': _params.planLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePlan');
+
+    const parameters = {
+      options: {
+        url: '/plans/{plan_loc_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Make plan consumable for sharing.
+   *
+   * Set the plan as consumable in order to inherit the offering sharing permissions.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.planLocId - A dotted value of `sw`.`catalogID`.`resourceID`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
+   */
+  public consumablePlan(
+    params: CatalogManagementV1.ConsumablePlanParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['planLocId'];
+    const _validParams = ['planLocId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'plan_loc_id': _params.planLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'consumablePlan'
+    );
+
+    const parameters = {
+      options: {
+        url: '/plans/{plan_loc_id}/consume-publish',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Sets plan to be deprecated in a certain time period.
+   *
+   * Set or cancel the plan to be deprecated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.planLocId - A dotted value of `sw`.`catalogID`.`resourceID`.
+   * @param {string} params.setting - Set deprecation (true) or cancel deprecation (false).
+   * @param {string} [params.description] - Additional information that users can provide to be displayed in deprecation
+   * notification.
+   * @param {number} [params.daysUntilDeprecate] - Specifies the amount of days until product is not available in
+   * catalog.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
+   */
+  public setDeprecatePlan(
+    params: CatalogManagementV1.SetDeprecatePlanParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['planLocId', 'setting'];
+    const _validParams = ['planLocId', 'setting', 'description', 'daysUntilDeprecate', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'description': _params.description,
+      'days_until_deprecate': _params.daysUntilDeprecate,
+    };
+
+    const path = {
+      'plan_loc_id': _params.planLocId,
+      'setting': _params.setting,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setDeprecatePlan'
+    );
+
+    const parameters = {
+      options: {
+        url: '/plans/{plan_loc_id}/deprecate/{setting}',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
           },
           _params.headers
         ),
@@ -7134,12 +7563,6 @@ namespace CatalogManagementV1 {
     shareWithIbm?: boolean;
     /** Denotes sharing including access list availability of an Offering is enabled. */
     shareEnabled?: boolean;
-    /** Deprecated: Is it permitted to request publishing to IBM or Public. */
-    permitRequestIbmPublicPublish?: boolean;
-    /** Deprecated: Indicates if this offering has been approved for use by all IBMers. */
-    ibmPublishApproved?: boolean;
-    /** Deprecated: Indicates if this offering has been approved for use by all IBM Cloud users. */
-    publicPublishApproved?: boolean;
     /** The original offering CRN that this publish entry came from. */
     publicOriginalCrn?: string;
     /** The crn of the public catalog entry of this offering. */
@@ -7176,6 +7599,8 @@ namespace CatalogManagementV1 {
     productKind?: string;
     /** A list of badges for this offering. */
     badges?: Badge[];
+    /** A list of plans for this offering. */
+    plans?: Plan[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -7391,12 +7816,6 @@ namespace CatalogManagementV1 {
     shareWithIbm?: boolean;
     /** Denotes sharing including access list availability of an Offering is enabled. */
     shareEnabled?: boolean;
-    /** Deprecated: Is it permitted to request publishing to IBM or Public. */
-    permitRequestIbmPublicPublish?: boolean;
-    /** Deprecated: Indicates if this offering has been approved for use by all IBMers. */
-    ibmPublishApproved?: boolean;
-    /** Deprecated: Indicates if this offering has been approved for use by all IBM Cloud users. */
-    publicPublishApproved?: boolean;
     /** The original offering CRN that this publish entry came from. */
     publicOriginalCrn?: string;
     /** The crn of the public catalog entry of this offering. */
@@ -7433,6 +7852,8 @@ namespace CatalogManagementV1 {
     productKind?: string;
     /** A list of badges for this offering. */
     badges?: Badge[];
+    /** A list of plans for this offering. */
+    plans?: Plan[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -7450,6 +7871,15 @@ namespace CatalogManagementV1 {
 
   /** Parameters for the `deleteOffering` operation. */
   export interface DeleteOfferingParams {
+    /** Catalog identifier. */
+    catalogIdentifier: string;
+    /** Offering identification. */
+    offeringId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getOfferingStats` operation. */
+  export interface GetOfferingStatsParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -7493,7 +7923,8 @@ namespace CatalogManagementV1 {
     offeringId: string;
     /** Type of approval.
      *   * `pc_managed` - Partner Center is managing this offering
-     *   * `ibm_module_repo` - Offering is from an approved repository can be published into the public catalog.
+     *   * `ibm_module_repo` -  Offering is from an approved repository can be published into the module registry.
+     *   * `ibm_community` - Offering is from an approved repository can be published into the Community registry.
      *   * `publish_approved` - Publishing approved, offering owners can now set who sees the offering in public catalog
      *   * `approval_required` - Offering will be removed from public catalog when this flag is set to true, regardless
      *  of the approval and visibility settings.
@@ -7510,7 +7941,7 @@ namespace CatalogManagementV1 {
      */
     xApproverToken?: string;
     /** Authentication token used to verify if user is a collaborator of a repository as part of the checks to set
-     *  the approval type as `ibm_module_repo`.
+     *  the approval type as `ibm_module_repo` or `ibm_community`.
      */
     xAuthToken?: string;
     headers?: OutgoingHttpHeaders;
@@ -7518,11 +7949,12 @@ namespace CatalogManagementV1 {
 
   /** Constants for the `setOfferingPublish` operation. */
   export namespace SetOfferingPublishConstants {
-    /** Type of approval. * `pc_managed` - Partner Center is managing this offering * `ibm_module_repo` - Offering is from an approved repository can be published into the public catalog. * `publish_approved` - Publishing approved, offering owners can now set who sees the offering in public catalog * `approval_required` - Offering will be removed from public catalog when this flag is set to true, regardless of the approval and visibility settings. */
+    /** Type of approval. * `pc_managed` - Partner Center is managing this offering * `ibm_module_repo` -  Offering is from an approved repository can be published into the module registry. * `ibm_community` - Offering is from an approved repository can be published into the Community registry. * `publish_approved` - Publishing approved, offering owners can now set who sees the offering in public catalog * `approval_required` - Offering will be removed from public catalog when this flag is set to true, regardless of the approval and visibility settings. */
     export enum ApprovalType {
       PC_MANAGED = 'pc_managed',
       PUBLISH_APPROVED = 'publish_approved',
       IBM_MODULE_REPO = 'ibm_module_repo',
+      IBM_COMMUNITY = 'ibm_community',
       APPROVAL_REQUIRED = 'approval_required',
     }
     /** Approve (true) or disapprove (false). */
@@ -7658,6 +8090,38 @@ namespace CatalogManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `getOfferingChangeNotices` operation. */
+  export interface GetOfferingChangeNoticesParams {
+    /** Catalog identifier. */
+    catalogIdentifier: string;
+    /** Offering identification. */
+    offeringId: string;
+    /** The kind of offering (e.g, helm, ova, terraform ...). */
+    kind: string;
+    /** The target kind of the currently installed version (e.g. iks, roks, etc). */
+    target?: string;
+    /** optionaly provide an existing version to check updates for if one is not given, all version will be
+     *  returned.
+     */
+    version?: string;
+    /** The programmatic flavor name of the version that was installed. */
+    flavor?: string;
+    /** optionaly specify if change notices should be returned for all versions of this kind and flavor, or for all
+     *  versions that are newer than the specified version, including the specified version.
+     */
+    versions?: GetOfferingChangeNoticesConstants.Versions | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `getOfferingChangeNotices` operation. */
+  export namespace GetOfferingChangeNoticesConstants {
+    /** optionaly specify if change notices should be returned for all versions of this kind and flavor, or for all versions that are newer than the specified version, including the specified version. */
+    export enum Versions {
+      LATEST = 'latest',
+      ALL = 'all',
+    }
+  }
+
   /** Parameters for the `getOfferingSource` operation. */
   export interface GetOfferingSourceParams {
     /** The version being requested. */
@@ -7759,6 +8223,13 @@ namespace CatalogManagementV1 {
 
   /** Parameters for the `getOfferingAbout` operation. */
   export interface GetOfferingAboutParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `checkIamPermissions` operation. */
+  export interface CheckIamPermissionsParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     headers?: OutgoingHttpHeaders;
@@ -8003,6 +8474,12 @@ namespace CatalogManagementV1 {
     region?: string;
     /** Kube namespace. */
     namespace?: string;
+    /** Kube namespaces. */
+    namespaces?: string[];
+    /** Used when installing an operator, to indicate that it should be made avaiable in all namespaces on the
+     *  target cluster.
+     */
+    allNamespaces?: boolean;
     /** Validation override values. Required for virtual server image for VPC. */
     overrideValues?: DeployRequestBodyOverrideValues;
     /** Schematics environment variables to use with this workspace. */
@@ -8027,6 +8504,12 @@ namespace CatalogManagementV1 {
     vcenterPassword?: string;
     /** VCenter Datastore. */
     vcenterDatastore?: string;
+    /** Software plan ID. */
+    planId?: string;
+    /** Used when installing an operator, to indicate which channel to use. */
+    channel?: string;
+    /** Used when installing an operator, to indicate which install plan to use. */
+    installPlan?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -8042,6 +8525,12 @@ namespace CatalogManagementV1 {
     region?: string;
     /** Kube namespace. */
     namespace?: string;
+    /** Kube namespaces. */
+    namespaces?: string[];
+    /** Used when installing an operator, to indicate that it should be made avaiable in all namespaces on the
+     *  target cluster.
+     */
+    allNamespaces?: boolean;
     /** Validation override values. Required for virtual server image for VPC. */
     overrideValues?: DeployRequestBodyOverrideValues;
     /** Schematics environment variables to use with this workspace. */
@@ -8066,6 +8555,12 @@ namespace CatalogManagementV1 {
     vcenterPassword?: string;
     /** VCenter Datastore. */
     vcenterDatastore?: string;
+    /** Software plan ID. */
+    planId?: string;
+    /** Used when installing an operator, to indicate which channel to use. */
+    channel?: string;
+    /** Used when installing an operator, to indicate which install plan to use. */
+    installPlan?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -8096,6 +8591,12 @@ namespace CatalogManagementV1 {
     region?: string;
     /** Kube namespace. */
     namespace?: string;
+    /** Kube namespaces. */
+    namespaces?: string[];
+    /** Used when installing an operator, to indicate that it should be made avaiable in all namespaces on the
+     *  target cluster.
+     */
+    allNamespaces?: boolean;
     /** Validation override values. Required for virtual server image for VPC. */
     overrideValues?: DeployRequestBodyOverrideValues;
     /** Schematics environment variables to use with this workspace. */
@@ -8120,6 +8621,12 @@ namespace CatalogManagementV1 {
     vcenterPassword?: string;
     /** VCenter Datastore. */
     vcenterDatastore?: string;
+    /** Software plan ID. */
+    planId?: string;
+    /** Used when installing an operator, to indicate which channel to use. */
+    channel?: string;
+    /** Used when installing an operator, to indicate which install plan to use. */
+    installPlan?: string;
     /** The name of a target account context on a catalog. */
     targetContextName?: string;
     headers?: OutgoingHttpHeaders;
@@ -8489,6 +8996,10 @@ namespace CatalogManagementV1 {
     kindTargetLabel?: string;
     /** The digest value of the installed software version. */
     sha?: string;
+    /** The software plan ID used when creating this software instance. */
+    planId?: string;
+    /** The CRN of the resource that is considered a parent of this software instance. */
+    parentCrn?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -8566,6 +9077,10 @@ namespace CatalogManagementV1 {
     kindTargetLabel?: string;
     /** The digest value of the installed software version. */
     sha?: string;
+    /** The software plan ID used when creating this software instance. */
+    planId?: string;
+    /** The CRN of the resource that is considered a parent of this software instance. */
+    parentCrn?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -8600,6 +9115,49 @@ namespace CatalogManagementV1 {
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPlan` operation. */
+  export interface GetPlanParams {
+    /** A dotted value of `sw`.`catalogID`.`resourceID`. */
+    planLocId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deletePlan` operation. */
+  export interface DeletePlanParams {
+    /** A dotted value of `sw`.`catalogID`.`resourceID`. */
+    planLocId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `consumablePlan` operation. */
+  export interface ConsumablePlanParams {
+    /** A dotted value of `sw`.`catalogID`.`resourceID`. */
+    planLocId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `setDeprecatePlan` operation. */
+  export interface SetDeprecatePlanParams {
+    /** A dotted value of `sw`.`catalogID`.`resourceID`. */
+    planLocId: string;
+    /** Set deprecation (true) or cancel deprecation (false). */
+    setting: SetDeprecatePlanConstants.Setting | string;
+    /** Additional information that users can provide to be displayed in deprecation notification. */
+    description?: string;
+    /** Specifies the amount of days until product is not available in catalog. */
+    daysUntilDeprecate?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `setDeprecatePlan` operation. */
+  export namespace SetDeprecatePlanConstants {
+    /** Set deprecation (true) or cancel deprecation (false). */
+    export enum Setting {
+      TRUE = 'true',
+      FALSE = 'false',
+    }
   }
 
   /*************************
@@ -8938,6 +9496,68 @@ namespace CatalogManagementV1 {
     include?: boolean;
     /** Offering filter terms. */
     filter?: FilterTerms;
+  }
+
+  /** Change notices for a version. */
+  export interface ChangeNotices {
+    /** Breaking changes for this version. */
+    breaking?: Feature[];
+    /** New changes for this version. */
+    new?: Feature[];
+    /** Updates for this version. */
+    update?: Feature[];
+  }
+
+  /** Change notices response. */
+  export interface ChangeNoticesResponse {
+    /** Set to true if any of the included change notices contain a breaking change. */
+    has_breaking?: boolean;
+    /** Set to true if any of the included change notices contain a new change. */
+    has_new?: boolean;
+    /** Set to true if any of the included change notices contain an update. */
+    has_update?: boolean;
+    /** All changes notices for the requested versions. */
+    change_notices?: ChangeNoticesResponseChangeNoticesItem[];
+  }
+
+  /** Change notices for the specified version. */
+  export interface ChangeNoticesResponseChangeNoticesItem {
+    /** A dotted value of `catalogID`.`versionID`. */
+    version_locator?: string;
+    /** the version number of this version. */
+    version?: string;
+    /** Version Flavor Information.  Only supported for Product kind Solution. */
+    flavor?: Flavor;
+    /** Breaking changes for this version. */
+    breaking?: Feature[];
+    /** New changes for this version. */
+    new?: Feature[];
+    /** Updates for this version. */
+    update?: Feature[];
+  }
+
+  /** Checked IAM Permission for the current user context. */
+  export interface CheckedIAMPermission {
+    /** Service name. */
+    service_name?: string;
+    /** Service display name. */
+    service_display_name?: string;
+    /** Checked Role CRNs for this permission. */
+    role_crns?: CheckedRoleCRN[];
+    /** Resources for this permission. */
+    resources?: IAMResource[];
+  }
+
+  /** Checked IAM role permission for the current user context. */
+  export interface CheckedRoleCRN {
+    /** Role id. */
+    id?: string;
+    /** Role display name. */
+    display_name?: string;
+    /** Role description. */
+    description?: string;
+    /** Checked permission. */
+    has_permissions?: boolean;
   }
 
   /** Claimed control. */
@@ -9492,6 +10112,20 @@ namespace CatalogManagementV1 {
     thumbnail_url?: string;
   }
 
+  /** Accumulated statistics for the specified target.  Statistics are accumulated on a weekly basis for at most a year. */
+  export interface MetricStats {
+    /** What these statistics are for (i.e. Offering, Object, Plan, etc). */
+    target_type?: string;
+    /** Target ID. */
+    id?: string;
+    /** Statistics array.  Sorted on YearWeekIdx.  This array may have at most 52 entries, but may contain fewer if
+     *  there are no statistics in a particular week.
+     */
+    stats?: WeeklyMetricBucket[];
+    /** Statistics for a given week. */
+    totals?: WeeklyMetricBucket;
+  }
+
   /** Paginated list of namespace search results. */
   export interface NamespaceSearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
@@ -9638,12 +10272,6 @@ namespace CatalogManagementV1 {
     share_with_ibm?: boolean;
     /** Denotes sharing including access list availability of an Offering is enabled. */
     share_enabled?: boolean;
-    /** Deprecated: Is it permitted to request publishing to IBM or Public. */
-    permit_request_ibm_public_publish?: boolean;
-    /** Deprecated: Indicates if this offering has been approved for use by all IBMers. */
-    ibm_publish_approved?: boolean;
-    /** Deprecated: Indicates if this offering has been approved for use by all IBM Cloud users. */
-    public_publish_approved?: boolean;
     /** The original offering CRN that this publish entry came from. */
     public_original_crn?: string;
     /** The crn of the public catalog entry of this offering. */
@@ -9680,6 +10308,8 @@ namespace CatalogManagementV1 {
     product_kind?: string;
     /** A list of badges for this offering. */
     badges?: Badge[];
+    /** A list of plans for this offering. */
+    plans?: Plan[];
   }
 
   /** A offering instance resource (provision instance of a catalog offering). */
@@ -9745,6 +10375,10 @@ namespace CatalogManagementV1 {
     kind_target_label?: string;
     /** The digest value of the installed software version. */
     sha?: string;
+    /** The software plan ID used when creating this software instance. */
+    plan_id?: string;
+    /** The CRN of the resource that is considered a parent of this software instance. */
+    parent_crn?: string;
   }
 
   /** the last operation performed and status. */
@@ -9837,6 +10471,50 @@ namespace CatalogManagementV1 {
     start?: string;
   }
 
+  /** Plan information. */
+  export interface Plan {
+    /** Unique ID. */
+    id?: string;
+    /** Cloudant revision. */
+    _rev?: string;
+    /** The url for this specific plan. */
+    url?: string;
+    /** Plans's CRN. */
+    crn?: string;
+    /** The date and time this plan was created. */
+    created?: string;
+    /** The date and time this plan was last updated. */
+    updated?: string;
+    /** Offering ID. */
+    offering_id?: string;
+    /** Catalog ID. */
+    catalog_id?: string;
+    /** Display name for the current plan. */
+    label?: string;
+    /** A map of translated strings, by language code. */
+    label_i18n?: JsonObject;
+    /** Programmatic name for the current plan. */
+    name?: string;
+    /** Description of the current plan. */
+    short_description?: string;
+    /** A map of translated strings, by language code. */
+    short_description_i18n?: JsonObject;
+    /** Tags array. */
+    pricing_tags?: string[];
+    /** Version range information. */
+    version_range?: VersionRange;
+    /** List of features associated with this catalog. */
+    features?: Feature[];
+    /** Offering state. */
+    state?: State;
+    /** Deprecation information for an Offering. */
+    deprecate_pending?: DeprecatePending;
+    /** Map of metadata values for this plan. */
+    metadata?: JsonObject;
+    /** Plan has been approved to publish for other users. */
+    publish_approved?: boolean;
+  }
+
   /** Cost estimate project definition. */
   export interface Project {
     /** Project name. */
@@ -9865,8 +10543,8 @@ namespace CatalogManagementV1 {
   export interface PublishObject {
     /** Offering is managed by Partner Center. */
     pc_managed?: boolean;
-    /** Determines how the offering gets approved into the public catalog. The only value supported at the moment is
-     *  `ibm_module_repo`.
+    /** Determines how the offering gets approved into the public catalog. The values supported right now are
+     *  `pc_managed`, `ibm_module_repo`, and `ibm_community`.
      */
     approval_type?: string;
     /** Offering has been approved to publish to permitted to IBM or Public Catalog. */
@@ -10388,6 +11066,12 @@ namespace CatalogManagementV1 {
     is_consumable?: boolean;
     /** Compliance info for a version. */
     compliance_v3?: Compliance;
+    /** Change notices for a version. */
+    change_notices?: ChangeNotices;
+    /** A list of plan ids that are applicable for this version. */
+    plan_ids?: string[];
+    /** Optional. Stack definition that was used to create this version. */
+    stack?: JsonObject;
   }
 
   /** Entitlement license info. */
@@ -10402,6 +11086,16 @@ namespace CatalogManagementV1 {
     part_numbers?: string[];
     /** Image repository name. */
     image_repo_name?: string;
+  }
+
+  /** Version range information. */
+  export interface VersionRange {
+    /** Format kinds that this plan applies to in the current offering.  If empty, applies to all kinds. */
+    kinds?: string[];
+    /** Semantic version range that this plan applies to.  If empty, applies to all versions. */
+    version?: string;
+    /** List of applicable flavors in the specified range.  If empty, or not specified, applies to all flavors. */
+    flavors?: string[];
   }
 
   /** Indicates if the current version can be upgraded to the version identified by the descriptor. */
@@ -10426,6 +11120,20 @@ namespace CatalogManagementV1 {
      *  Possible keys include nodes, cores, mem, disk, targetVersion, and install-permission-check.
      */
     messages?: JsonObject;
+  }
+
+  /** Statistics for a given week. */
+  export interface WeeklyMetricBucket {
+    /** ISO based YearWeek index yyyyww,  e.g., 202303 for third week in 2003. */
+    year_week_idx?: number;
+    /** Number of times the resource was downloaded. */
+    download?: number;
+    /** Number of times the resource was updated. */
+    update?: number;
+    /** Number of times the resource was accessed. */
+    get?: number;
+    /** Number of times the customization bundle was downloaded for this resource. */
+    bundle_download?: number;
   }
 
   /*************************
