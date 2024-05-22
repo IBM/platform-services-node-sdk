@@ -64,6 +64,9 @@ function genRandonString(length) {
 describe('CatalogManagementV1', () => {
   // Service instance
   let catalogManagementService;
+  let catalogManagementAdminService;
+  let approverToken;
+  let token;
 
   // Variables to hold link values
   let accountRevLink;
@@ -77,6 +80,7 @@ describe('CatalogManagementV1', () => {
   let versionIdLink;
   let versionLocatorLink;
   let versionRevLink;
+  let planID;
 
   let zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
   let zipurlSolution = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.0.0.tar.gz';
@@ -89,6 +93,19 @@ describe('CatalogManagementV1', () => {
     // begin-common
 
     catalogManagementService = CatalogManagementV1.newInstance();
+    catalogManagementAdminService = CatalogManagementV1.newInstance({
+      serviceName: "CATALOG_MANAGEMENT_APPROVER",
+    })
+
+    let auth = catalogManagementService.getAuthenticator();
+    let tokenManager = auth.tokenManager;
+    let requestToken = await tokenManager.requestToken();
+    token = requestToken.result.access_token;
+
+    let adminAuth = catalogManagementAdminService.getAuthenticator();
+    let adminTokenManager = adminAuth.tokenManager;
+    let adminRequestToken = await adminTokenManager.requestToken();
+    approverToken = adminRequestToken.result.access_token;
 
     // end-common
   });
@@ -303,6 +320,328 @@ describe('CatalogManagementV1', () => {
     versionRevLink = responseBody.kinds[0].versions[0]._rev;
   });
 
+  // Set allow publish offering
+  test('setAllowPublishOffering request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('setAllowPublishOffering() result:');
+    // begin-set_allow_publish_offering
+
+    const headers = {
+      'X-Approver-Token': approverToken
+    }
+
+    try {
+      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/publish/publish_approved/true`, {
+        method: "POST",
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      });
+      const resp = await response.json();
+      console.log(JSON.stringify(resp, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-set_allow_publish_offering
+  });
+
+  // add plan
+  test('addPlan 1 request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('addPlan() result:');
+    // begin-add_plan
+
+    const planBody = {
+      label: 'testString',
+      name: 'testString',
+      short_description: 'testString',
+      pricing_tags: ['free'],
+      version_range: {
+        kinds: ['terraform'],
+        version: '>=0.0.1',
+      },
+      features: [{
+        title: 'testString',
+        description: 'testString',
+      }],
+      metadata: { 'anyKey': 'anyValue' }
+    }
+
+    const headers = {
+      'X-Approver-Token': approverToken
+    }
+
+    let plan;
+    try {
+      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`, {
+        method: "POST",
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+        body: JSON.stringify(planBody),
+      });
+      plan = await response.json();
+      console.log(JSON.stringify(plan, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-add_plan
+
+    planID = plan.id;
+  });
+
+  // delete plan
+  test('deletePlan request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deletePlan() result:');
+    // begin-delete_plan
+
+    const params = {
+      planLocId: planID,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.deletePlan(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_plan
+  });
+
+  // add plan
+  test('addPlan 2 request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('addPlan() result:');
+    // begin-add_plan_2
+
+    const planBody = {
+      label: 'testString',
+      name: 'testString',
+      short_description: 'testString',
+      pricing_tags: ['free'],
+      version_range: {
+        kinds: ['terraform'],
+        version: '>=0.0.1',
+      },
+      features: [{
+        title: 'testString',
+        description: 'testString',
+      }],
+      metadata: { 'anyKey': 'anyValue' }
+    }
+
+    const headers = {
+      'X-Approver-Token': approverToken
+    }
+
+    let plan;
+    try {
+      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`, {
+        method: "POST",
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+        body: JSON.stringify(planBody),
+      });
+      plan = await response.json();
+      console.log(JSON.stringify(plan, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-add_plan_2
+
+    planID = plan.id;
+  });
+
+  // set validate plan
+  test('setValidatePlan request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('setValidatePlan() result:');
+    // begin-set_validate_plan
+
+    const headers = {
+      'X-Approver-Token': approverToken
+    }
+
+    try {
+      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/validate/true`, {
+        method: "POST",
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      });
+      const resp = await response.json();
+      console.log(JSON.stringify(resp, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-set_validate_plan
+  });
+
+  // set allow publish plan
+  test('setAllowPublishPlan request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('setAllowPublishPlan() result:');
+    // begin-set_allow_publish_plan
+
+    const headers = {
+      'X-Approver-Token': approverToken
+    }
+
+    try {
+      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/publish/publish_approved/true`, {
+        method: "POST",
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      });
+      const resp = await response.json();
+      console.log(JSON.stringify(resp, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-set_allow_publish_plan
+  });
+
+  // get plan
+  test('getPlan request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getPlan() result:');
+    // begin-get_plan
+
+    const params = {
+      planLocId: planID,
+    };
+
+    try {
+      plan = await catalogManagementService.getPlan(params);
+      console.log(JSON.stringify(plan.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-get_plan
+  });
+
+  // consumable plan
+  test('consumablePlan request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('consumablePlan() result:');
+    // begin-consumable_plan
+
+    const params = {
+      planLocId: planID,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.consumablePlan(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-consumable_plan
+  });
+
+  // set deprecate plan
+  test('setDeprecatePlan request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('setDeprecatePlan() result:');
+    // begin-set_deprecate_plan
+
+    const params = {
+      planLocId: planID,
+      setting: true,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.setDeprecatePlan(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-set_deprecate_plan
+  });
+
   test('importOffering solution request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -334,6 +673,68 @@ describe('CatalogManagementV1', () => {
     } catch (err) {
       console.warn(err);
     }
+  });
+
+  test('getOfferingStats request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getOfferingStats() result:');
+    // begin-get_offering_stats
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getOfferingStats(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_offering_stats
+  });
+
+  test('getOfferingChangeNotices request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getOfferingChangeNotices() result:');
+    // begin-get_offering_change_notices
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      kind: 'terraform',
+      target: 'terraform',
+      version: '1.0.0',
+      versions: 'latest',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getOfferingChangeNotices(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_offering_change_notices
   });
 
   test('getOffering request example', async () => {
@@ -894,6 +1295,34 @@ describe('CatalogManagementV1', () => {
     }
 
     // end-get_version
+  });
+
+  test('getIamPermissions request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getIamPermissions() result:');
+    // begin-get_iam_permissions
+
+    const params = {
+      versionLocId: versionLocatorLink,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getIamPermissions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_iam_permissions
   });
 
   test('searchObjects request example', async () => {

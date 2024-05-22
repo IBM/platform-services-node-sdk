@@ -44,6 +44,9 @@ describe('CatalogManagementV1_integration', () => {
 
   // Service instance
   let catalogManagementService;
+  let catalogManagementAdminService;
+  let approverToken;
+  let token;
 
   // Variables to hold link values
   let catalogIdLink;
@@ -52,6 +55,7 @@ describe('CatalogManagementV1_integration', () => {
   let offeringIdLink;
   let offeringRevLink;
   let versionLocatorLink;
+  let planID;
 
   const zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
   const zipurlSolution =
@@ -60,8 +64,24 @@ describe('CatalogManagementV1_integration', () => {
 
   test('Initialize service', async () => {
     catalogManagementService = CatalogManagementV1.newInstance();
+    catalogManagementAdminService = CatalogManagementV1.newInstance({
+      serviceName: 'CATALOG_MANAGEMENT_APPROVER',
+    });
+
+    const auth = catalogManagementService.getAuthenticator();
+    const { tokenManager } = auth;
+    const requestToken = await tokenManager.requestToken();
+    token = requestToken.result.access_token;
+
+    const adminAuth = catalogManagementAdminService.getAuthenticator();
+    const adminTokenManager = adminAuth.tokenManager;
+    const adminRequestToken = await adminTokenManager.requestToken();
+    approverToken = adminRequestToken.result.access_token;
 
     expect(catalogManagementService).not.toBeNull();
+    expect(catalogManagementAdminService).not.toBeNull();
+    expect(token).not.toBeNull();
+    expect(approverToken).not.toBeNull();
 
     const config = readExternalSources(CatalogManagementV1.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
@@ -137,6 +157,202 @@ describe('CatalogManagementV1_integration', () => {
     offeringRevLink = res.result._rev;
   });
 
+  // Set allow publish offering
+  test('setAllowPublishOffering request example', async () => {
+    const headers = {
+      'X-Approver-Token': approverToken,
+    };
+
+    const response = await fetch(
+      `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/publish/publish_approved/true`,
+      {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      }
+    );
+    const res = await response.json();
+    expect(res).toBeDefined();
+    expect(response.status).toBe(200);
+  });
+
+  // add plan
+  test('addPlan 1 request example', async () => {
+    const planBody = {
+      label: 'testString',
+      name: 'testString',
+      short_description: 'testString',
+      pricing_tags: ['free'],
+      version_range: {
+        kinds: ['terraform'],
+        version: '>=0.0.1',
+      },
+      features: [
+        {
+          title: 'testString',
+          description: 'testString',
+        },
+      ],
+      metadata: { 'anyKey': 'anyValue' },
+    };
+
+    const headers = {
+      'X-Approver-Token': approverToken,
+    };
+
+    const response = await fetch(
+      `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`,
+      {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+        body: JSON.stringify(planBody),
+      }
+    );
+    const res = await response.json();
+    expect(res).toBeDefined();
+    expect(response.status).toBe(201);
+
+    planID = res.id;
+  });
+
+  // delete plan
+  test('deletePlan request example', async () => {
+    const params = {
+      planLocId: planID,
+    };
+
+    const res = await catalogManagementService.deletePlan(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  // add plan 2
+  test('addPlan 2 request example', async () => {
+    const planBody = {
+      label: 'testString',
+      name: 'testString',
+      short_description: 'testString',
+      pricing_tags: ['free'],
+      version_range: {
+        kinds: ['terraform'],
+        version: '>=0.0.1',
+      },
+      features: [
+        {
+          title: 'testString',
+          description: 'testString',
+        },
+      ],
+      metadata: { 'anyKey': 'anyValue' },
+    };
+
+    const headers = {
+      'X-Approver-Token': approverToken,
+    };
+
+    const response = await fetch(
+      `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`,
+      {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+        body: JSON.stringify(planBody),
+      }
+    );
+    const res = await response.json();
+    expect(res).toBeDefined();
+    expect(response.status).toBe(201);
+
+    planID = res.id;
+  });
+
+  // set validate plan
+  test('setValidatePlan request example', async () => {
+    const headers = {
+      'X-Approver-Token': approverToken,
+    };
+
+    const response = await fetch(
+      `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/validate/true`,
+      {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      }
+    );
+    const res = await response.json();
+    expect(res).toBeDefined();
+    expect(response.status).toBe(202);
+  });
+
+  // set allow publish plan
+  test('setAllowPublishPlan request example', async () => {
+    const headers = {
+      'X-Approver-Token': approverToken,
+    };
+
+    const response = await fetch(
+      `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/publish/publish_approved/true`,
+      {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      }
+    );
+    const res = await response.json();
+    expect(res).toBeDefined();
+    expect(response.status).toBe(200);
+  });
+
+  // get plan
+  test('getPlan request example', async () => {
+    const params = {
+      planLocId: planID,
+    };
+
+    const res = await catalogManagementService.getPlan(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  // consumable plan
+  test('consumablePlan request example', async () => {
+    const params = {
+      planLocId: planID,
+    };
+
+    const res = await catalogManagementService.consumablePlan(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  // set deprecate plan
+  test('setDeprecatePlan request example', async () => {
+    const params = {
+      planLocId: planID,
+      setting: true,
+    };
+
+    const res = await catalogManagementService.setDeprecatePlan(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
   test('importOfferingAsSolution()', async () => {
     // Request models needed by this operation.
 
@@ -154,6 +370,34 @@ describe('CatalogManagementV1_integration', () => {
     const res = await catalogManagementService.importOffering(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingStats()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+    };
+
+    const res = await catalogManagementService.getOfferingStats(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingChangeNotices()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      kind: 'terraform',
+      target: 'terraform',
+      version: '1.0.0',
+      versions: 'latest',
+    };
+
+    const res = await catalogManagementService.getOfferingChangeNotices(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
@@ -459,6 +703,17 @@ describe('CatalogManagementV1_integration', () => {
     };
 
     const res = await catalogManagementService.getVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getIamPermissions()', async () => {
+    const params = {
+      versionLocId: versionLocatorLink,
+    };
+
+    const res = await catalogManagementService.getIamPermissions(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
