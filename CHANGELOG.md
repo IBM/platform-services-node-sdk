@@ -1,3 +1,10 @@
+# [0.58.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.57.0...v0.58.0) (2024-05-22)
+
+
+### Features
+
+* **build:** bump min supported version of node to 16 ([#259](https://github.com/IBM/platform-services-node-sdk/issues/259)) ([0a53612](https://github.com/IBM/platform-services-node-sdk/commit/0a536120a4d143ade0702185949333d74646d699))
+
 # [0.57.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.56.4...v0.57.0) (2024-05-22)
 
 
