@@ -4741,9 +4741,11 @@ describe('CatalogManagementV1', () => {
         // Construct the params object for operation deleteOffering
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
+        const xApproverToken = 'testString';
         const deleteOfferingParams = {
           catalogIdentifier,
           offeringId,
+          xApproverToken,
         };
 
         const deleteOfferingResult = catalogManagementService.deleteOffering(deleteOfferingParams);
@@ -4760,6 +4762,7 @@ describe('CatalogManagementV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'X-Approver-Token', xApproverToken);
         expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
         expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
       }
@@ -6546,26 +6549,26 @@ describe('CatalogManagementV1', () => {
     });
   });
 
-  describe('checkIamPermissions', () => {
+  describe('getIamPermissions', () => {
     describe('positive tests', () => {
-      function __checkIamPermissionsTest() {
-        // Construct the params object for operation checkIamPermissions
+      function __getIamPermissionsTest() {
+        // Construct the params object for operation getIamPermissions
         const versionLocId = 'testString';
-        const checkIamPermissionsParams = {
+        const getIamPermissionsParams = {
           versionLocId,
         };
 
-        const checkIamPermissionsResult = catalogManagementService.checkIamPermissions(checkIamPermissionsParams);
+        const getIamPermissionsResult = catalogManagementService.getIamPermissions(getIamPermissionsParams);
 
         // all methods should return a Promise
-        expectToBePromise(checkIamPermissionsResult);
+        expectToBePromise(getIamPermissionsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/checkIAMPermissions', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/iamPermissions', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6574,17 +6577,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __checkIamPermissionsTest();
+        __getIamPermissionsTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __checkIamPermissionsTest();
+        __getIamPermissionsTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __checkIamPermissionsTest();
+        __getIamPermissionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6592,7 +6595,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const checkIamPermissionsParams = {
+        const getIamPermissionsParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -6600,7 +6603,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.checkIamPermissions(checkIamPermissionsParams);
+        catalogManagementService.getIamPermissions(getIamPermissionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6609,7 +6612,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.checkIamPermissions({});
+          await catalogManagementService.getIamPermissions({});
         } catch (e) {
           err = e;
         }
@@ -6620,7 +6623,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.checkIamPermissions();
+          await catalogManagementService.getIamPermissions();
         } catch (e) {
           err = e;
         }

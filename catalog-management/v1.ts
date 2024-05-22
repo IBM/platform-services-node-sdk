@@ -2368,6 +2368,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.catalogIdentifier - Catalog identifier.
    * @param {string} params.offeringId - Offering identification.
+   * @param {string} [params.xApproverToken] - IAM token of partner center. Only needed when Partner Center accessing
+   * the private catalog offering. When accessing the public offering Partner Center only needs to use their token in
+   * the authorization header.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
    */
@@ -2376,7 +2379,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'xApproverToken', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2400,7 +2403,14 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'X-Approver-Token': _params.xApproverToken,
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -3549,17 +3559,17 @@ class CatalogManagementV1 extends BaseService {
   }
 
   /**
-   * Check the required IAM permissions for this version with the specified user context.
+   * Get the required IAM permissions for this version with the specified user context.
    *
-   * Check the required IAM permissions for this version with the specified user context.
+   * Get the required IAM permissions for this version with the specified user context.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.CheckedIAMPermission[]>>}
    */
-  public checkIamPermissions(
-    params: CatalogManagementV1.CheckIamPermissionsParams
+  public getIamPermissions(
+    params: CatalogManagementV1.GetIamPermissionsParams
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CheckedIAMPermission[]>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
@@ -3576,12 +3586,12 @@ class CatalogManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       CatalogManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'checkIamPermissions'
+      'getIamPermissions'
     );
 
     const parameters = {
       options: {
-        url: '/versions/{version_loc_id}/checkIAMPermissions',
+        url: '/versions/{version_loc_id}/iamPermissions',
         method: 'GET',
         path,
       },
@@ -7875,6 +7885,10 @@ namespace CatalogManagementV1 {
     catalogIdentifier: string;
     /** Offering identification. */
     offeringId: string;
+    /** IAM token of partner center. Only needed when Partner Center accessing the private catalog offering. When
+     *  accessing the public offering Partner Center only needs to use their token in the authorization header.
+     */
+    xApproverToken?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -8228,8 +8242,8 @@ namespace CatalogManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `checkIamPermissions` operation. */
-  export interface CheckIamPermissionsParams {
+  /** Parameters for the `getIamPermissions` operation. */
+  export interface GetIamPermissionsParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     headers?: OutgoingHttpHeaders;

@@ -373,6 +373,34 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
+  test('getOfferingStats()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+    };
+
+    const res = await catalogManagementService.getOfferingStats(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getOfferingChangeNotices()', async () => {
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      kind: 'terraform',
+      target: 'terraform',
+      version: '1.0.0',
+      versions: 'latest',
+    };
+
+    const res = await catalogManagementService.getOfferingChangeNotices(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('getOffering()', async () => {
     const params = {
       catalogIdentifier: catalogIdLink,
@@ -675,6 +703,17 @@ describe('CatalogManagementV1_integration', () => {
     };
 
     const res = await catalogManagementService.getVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getIamPermissions()', async () => {
+    const params = {
+      versionLocId: versionLocatorLink,
+    };
+
+    const res = await catalogManagementService.getIamPermissions(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();

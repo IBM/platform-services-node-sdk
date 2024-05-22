@@ -1297,7 +1297,7 @@ describe('CatalogManagementV1', () => {
     // end-get_version
   });
 
-  test('checkIamPermissions request example', async () => {
+  test('getIamPermissions request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1307,8 +1307,8 @@ describe('CatalogManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('checkIamPermissions() result:');
-    // begin-check_iam_permissions
+    originalLog('getIamPermissions() result:');
+    // begin-get_iam_permissions
 
     const params = {
       versionLocId: versionLocatorLink,
@@ -1316,13 +1316,13 @@ describe('CatalogManagementV1', () => {
 
     let res;
     try {
-      res = await catalogManagementService.checkIamPermissions(params);
+      res = await catalogManagementService.getIamPermissions(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-check_iam_permissions
+    // end-get_iam_permissions
   });
 
   test('searchObjects request example', async () => {
