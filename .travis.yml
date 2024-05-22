@@ -3,15 +3,15 @@ dist: jammy
 language: node_js
 
 node_js:
-- 14
 - 16
 - 18
+- 20
 
 cache:
   npm: false
 
 before_install:
-  - npm i -g npm@8
+  - node --version
   - npm --version
 
 script:
@@ -25,5 +25,5 @@ deploy:
   skip_cleanup: true
   script: npx semantic-release
   on:
-    node: 18
+    node: 20
     branch: main
