@@ -1,3 +1,10 @@
+## [0.58.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.58.0...v0.58.1) (2024-05-23)
+
+
+### Bug Fixes
+
+* **build:** bump micromatch/braces to avoid CVE ([#260](https://github.com/IBM/platform-services-node-sdk/issues/260)) ([24bee1e](https://github.com/IBM/platform-services-node-sdk/commit/24bee1e7faa16ceeff227fe40284ad7bfb1ce145))
+
 # [0.58.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.57.0...v0.58.0) (2024-05-22)
 
 
