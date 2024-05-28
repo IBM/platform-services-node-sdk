@@ -1,3 +1,10 @@
+## [0.58.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.58.1...v0.58.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* **Global Search:** add support for is_project_resource query param ([a2c42b5](https://github.com/IBM/platform-services-node-sdk/commit/a2c42b526481c51d4c4315da34f2cb85994f4a4c))
+
 ## [0.58.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.58.0...v0.58.1) (2024-05-23)
 
 
