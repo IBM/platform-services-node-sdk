@@ -129,6 +129,7 @@ describe('GlobalSearchV2', () => {
         const isPublic = 'false';
         const impersonateUser = 'testString';
         const canTag = 'false';
+        const isProjectResource = 'false';
         const searchParams = {
           query,
           fields,
@@ -144,6 +145,7 @@ describe('GlobalSearchV2', () => {
           isPublic,
           impersonateUser,
           canTag,
+          isProjectResource,
         };
 
         const searchResult = globalSearchService.search(searchParams);
@@ -174,6 +176,7 @@ describe('GlobalSearchV2', () => {
         expect(mockRequestOptions.qs.is_public).toEqual(isPublic);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.can_tag).toEqual(canTag);
+        expect(mockRequestOptions.qs.is_project_resource).toEqual(isProjectResource);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
