@@ -165,6 +165,10 @@ class GlobalSearchV2 extends BaseService {
    * the resources that the user can view (only a GhoST admin can use this parameter). If false (default), only
    * resources user can view are returned; if true, only resources that user has permissions for tagging are returned
    * (_for administrators only_).
+   * @param {string} [params.isProjectResource] - Determines if documents belonging to Project family should be included
+   * in result set or not. Possible values are false (default), true or any. If false, documents belonging to all
+   * families except Project are returned; if true, only documents belonging to Project family are returned; if any,
+   * documents of any family are returned. Only authorized ServiceIds can use this query parameter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>>}
    */
@@ -188,6 +192,7 @@ class GlobalSearchV2 extends BaseService {
       'isPublic',
       'impersonateUser',
       'canTag',
+      'isProjectResource',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -211,6 +216,7 @@ class GlobalSearchV2 extends BaseService {
       'is_public': _params.isPublic,
       'impersonate_user': _params.impersonateUser,
       'can_tag': _params.canTag,
+      'is_project_resource': _params.isProjectResource,
     };
 
     const sdkHeaders = getSdkHeaders(GlobalSearchV2.DEFAULT_SERVICE_NAME, 'v2', 'search');
@@ -333,6 +339,12 @@ namespace GlobalSearchV2 {
      *  only_).
      */
     canTag?: SearchConstants.CanTag | string;
+    /** Determines if documents belonging to Project family should be included in result set or not. Possible values
+     *  are false (default), true or any. If false, documents belonging to all families except Project are returned; if
+     *  true, only documents belonging to Project family are returned; if any, documents of any family are returned.
+     *  Only authorized ServiceIds can use this query parameter.
+     */
+    isProjectResource?: SearchConstants.IsProjectResource | string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -360,6 +372,12 @@ namespace GlobalSearchV2 {
     export enum CanTag {
       TRUE = 'true',
       FALSE = 'false',
+    }
+    /** Determines if documents belonging to Project family should be included in result set or not. Possible values are false (default), true or any. If false, documents belonging to all families except Project are returned; if true, only documents belonging to Project family are returned; if any, documents of any family are returned. Only authorized ServiceIds can use this query parameter. */
+    export enum IsProjectResource {
+      TRUE = 'true',
+      FALSE = 'false',
+      ANY = 'any',
     }
   }
 
