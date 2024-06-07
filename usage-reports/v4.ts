@@ -1561,6 +1561,12 @@ namespace UsageReportsV4 {
     non_chargeable?: boolean;
     /** All the discounts applicable to the metric. */
     discounts: Discount[];
+    /** This percentage reflects the reduction to the original cost that you receive under a volume based pricing
+     *  structure.
+     */
+    volume_discount?: number;
+    /** The original cost adjusted for volume based discounts that are applied at the account level. */
+    volume_cost?: number;
   }
 
   /** Information about an individual offer. */
