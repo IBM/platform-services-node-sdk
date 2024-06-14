@@ -21,7 +21,7 @@ const nock = require('nock');
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
+const { NoAuthAuthenticator } = sdkCorePackage;
 const EnterpriseManagementV1 = require('../../dist/enterprise-management/v1');
 
 const {
@@ -30,7 +30,7 @@ const {
   checkMediaHeaders,
   expectToBePromise,
   checkForSuccessfulExecution,
-} = unitTestUtils;
+} = require('@ibm-cloud/sdk-test-utilities');
 
 const enterpriseManagementServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
