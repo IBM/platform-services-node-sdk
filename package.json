@@ -44,6 +44,7 @@
     "ibm-cloud-sdk-core": "^4.3.1"
   },
   "devDependencies": {
+    "@ibm-cloud/sdk-test-utilities": "^1.0.0",
     "@masterodin/publisher": "^0.10.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
