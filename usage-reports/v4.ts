@@ -129,7 +129,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getAccountSummary');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getAccountSummary'
+    );
 
     const parameters = {
       options: {
@@ -240,7 +244,14 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.ResourceGroupUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
-    const _validParams = ['accountId', 'resourceGroupId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'accountId',
+      'resourceGroupId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -256,7 +267,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getResourceGroupUsage');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getResourceGroupUsage'
+    );
 
     const parameters = {
       options: {
@@ -314,7 +329,22 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'billingmonth'];
-    const _validParams = ['accountId', 'billingmonth', 'names', 'tags', 'acceptLanguage', 'limit', 'start', 'resourceGroupId', 'organizationId', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validParams = [
+      'accountId',
+      'billingmonth',
+      'names',
+      'tags',
+      'acceptLanguage',
+      'limit',
+      'start',
+      'resourceGroupId',
+      'organizationId',
+      'resourceInstanceId',
+      'resourceId',
+      'planId',
+      'region',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -338,7 +368,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getResourceUsageAccount');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getResourceUsageAccount'
+    );
 
     const parameters = {
       options: {
@@ -395,7 +429,21 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'resourceGroupId', 'billingmonth'];
-    const _validParams = ['accountId', 'resourceGroupId', 'billingmonth', 'names', 'tags', 'acceptLanguage', 'limit', 'start', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validParams = [
+      'accountId',
+      'resourceGroupId',
+      'billingmonth',
+      'names',
+      'tags',
+      'acceptLanguage',
+      'limit',
+      'start',
+      'resourceInstanceId',
+      'resourceId',
+      'planId',
+      'region',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -418,7 +466,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getResourceUsageResourceGroup');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getResourceUsageResourceGroup'
+    );
 
     const parameters = {
       options: {
@@ -475,7 +527,21 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.InstancesUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'organizationId', 'billingmonth'];
-    const _validParams = ['accountId', 'organizationId', 'billingmonth', 'names', 'tags', 'acceptLanguage', 'limit', 'start', 'resourceInstanceId', 'resourceId', 'planId', 'region', 'headers'];
+    const _validParams = [
+      'accountId',
+      'organizationId',
+      'billingmonth',
+      'names',
+      'tags',
+      'acceptLanguage',
+      'limit',
+      'start',
+      'resourceInstanceId',
+      'resourceId',
+      'planId',
+      'region',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -498,7 +564,11 @@ class UsageReportsV4 extends BaseService {
       'billingmonth': _params.billingmonth,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getResourceUsageOrg');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getResourceUsageOrg'
+    );
 
     const parameters = {
       options: {
@@ -549,7 +619,14 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.OrgUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'organizationId', 'billingmonth'];
-    const _validParams = ['accountId', 'organizationId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'accountId',
+      'organizationId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -618,7 +695,16 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'interval', 'cosBucket', 'cosLocation'];
-    const _validParams = ['accountId', 'interval', 'cosBucket', 'cosLocation', 'cosReportsFolder', 'reportTypes', 'versioning', 'headers'];
+    const _validParams = [
+      'accountId',
+      'interval',
+      'cosBucket',
+      'cosLocation',
+      'cosReportsFolder',
+      'reportTypes',
+      'versioning',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -634,7 +720,11 @@ class UsageReportsV4 extends BaseService {
       'versioning': _params.versioning,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'createReportsSnapshotConfig');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'createReportsSnapshotConfig'
+    );
 
     const parameters = {
       options: {
@@ -683,7 +773,11 @@ class UsageReportsV4 extends BaseService {
       'account_id': _params.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getReportsSnapshotConfig');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getReportsSnapshotConfig'
+    );
 
     const parameters = {
       options: {
@@ -729,7 +823,16 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'interval', 'cosBucket', 'cosLocation', 'cosReportsFolder', 'reportTypes', 'versioning', 'headers'];
+    const _validParams = [
+      'accountId',
+      'interval',
+      'cosBucket',
+      'cosLocation',
+      'cosReportsFolder',
+      'reportTypes',
+      'versioning',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -745,7 +848,11 @@ class UsageReportsV4 extends BaseService {
       'versioning': _params.versioning,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'updateReportsSnapshotConfig');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'updateReportsSnapshotConfig'
+    );
 
     const parameters = {
       options: {
@@ -794,7 +901,11 @@ class UsageReportsV4 extends BaseService {
       'account_id': _params.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'deleteReportsSnapshotConfig');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'deleteReportsSnapshotConfig'
+    );
 
     const parameters = {
       options: {
@@ -803,13 +914,7 @@ class UsageReportsV4 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-          },
-          _params.headers
-        ),
+        headers: extend(true, sdkHeaders, {}, _params.headers),
       }),
     };
 
@@ -841,7 +946,16 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfigValidateResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'interval', 'cosBucket', 'cosLocation', 'cosReportsFolder', 'reportTypes', 'versioning', 'headers'];
+    const _validParams = [
+      'accountId',
+      'interval',
+      'cosBucket',
+      'cosLocation',
+      'cosReportsFolder',
+      'reportTypes',
+      'versioning',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -857,7 +971,11 @@ class UsageReportsV4 extends BaseService {
       'versioning': _params.versioning,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'validateReportsSnapshotConfig');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'validateReportsSnapshotConfig'
+    );
 
     const parameters = {
       options: {
@@ -917,7 +1035,11 @@ class UsageReportsV4 extends BaseService {
       '_start': _params.start,
     };
 
-    const sdkHeaders = getSdkHeaders(UsageReportsV4.DEFAULT_SERVICE_NAME, 'v4', 'getReportsSnapshot');
+    const sdkHeaders = getSdkHeaders(
+      UsageReportsV4.DEFAULT_SERVICE_NAME,
+      'v4',
+      'getReportsSnapshot'
+    );
 
     const parameters = {
       options: {
@@ -1999,7 +2121,10 @@ namespace UsageReportsV4 {
      * @constructor
      * @returns {GetResourceUsageResourceGroupPager}
      */
-    constructor(client: UsageReportsV4, params: UsageReportsV4.GetResourceUsageResourceGroupParams) {
+    constructor(
+      client: UsageReportsV4,
+      params: UsageReportsV4.GetResourceUsageResourceGroupParams
+    ) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
