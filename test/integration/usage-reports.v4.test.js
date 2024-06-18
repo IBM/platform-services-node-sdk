@@ -69,34 +69,25 @@ describe('UsageReportsV4_integration', () => {
     // console.log('Finished setup.');
   });
 
-  test('getAccountSummary()', (done) => {
+  test('getAccountSummary()', async () => {
     const params = {
       accountId,
       billingmonth: billingMonth,
     };
 
-    usageReportsService
-      .getAccountSummary(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
-
-        const { result } = res;
-        expect(result).toBeDefined();
-        // console.log('getAccountSummary() result: ', result);
-
-        expect(result.account_id).toEqual(accountId);
-        expect(result.month).toEqual(billingMonth);
-        expect(result.offers).not.toBeNull();
-        expect(result.subscription).not.toBeNull();
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    const res = await usageReportsService.getAccountSummary(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    const { result } = res;
+    expect(result).toBeDefined();
+    expect(result.account_id).toEqual(accountId);
+    expect(result.month).toEqual(billingMonth);
+    expect(result.offers).not.toBeNull();
+    expect(result.subscription).not.toBeNull();
   });
-  test('getAccountUsage()', (done) => {
+
+  test('getAccountUsage()', async () => {
     const params = {
       accountId,
       billingmonth: billingMonth,
@@ -104,27 +95,20 @@ describe('UsageReportsV4_integration', () => {
       acceptLanguage: 'English',
     };
 
-    usageReportsService
-      .getAccountUsage(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
+    const res = await usageReportsService.getAccountUsage(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
 
-        const { result } = res;
-        expect(result).toBeDefined();
-        // console.log('getAccountUsage() result: ', result);
+    const { result } = res;
+    expect(result).toBeDefined();
+    // console.log('getAccountUsage() result: ', result);
 
-        expect(result.account_id).toEqual(accountId);
-        expect(result.month).toEqual(billingMonth);
-        expect(result.resources).not.toBeNull();
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    expect(result.account_id).toEqual(accountId);
+    expect(result.month).toEqual(billingMonth);
+    expect(result.resources).not.toBeNull();
   });
-  test('getResourceGroupUsage()', (done) => {
+
+  test('getResourceGroupUsage()', async () => {
     const params = {
       accountId,
       resourceGroupId,
@@ -132,25 +116,17 @@ describe('UsageReportsV4_integration', () => {
       names: true,
     };
 
-    usageReportsService
-      .getResourceGroupUsage(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(200);
+    const res = await usageReportsService.getResourceGroupUsage(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
 
-        const { result } = res;
-        expect(result).toBeDefined();
-        // console.log('getResourceGroupUsage() result: ', result);
+    const { result } = res;
+    expect(result).toBeDefined();
+    // console.log('getResourceGroupUsage() result: ', result);
 
-        expect(result.account_id).toEqual(accountId);
-        expect(result.month).toEqual(billingMonth);
-        expect(result.resources).not.toBeNull();
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
+    expect(result.account_id).toEqual(accountId);
+    expect(result.month).toEqual(billingMonth);
+    expect(result.resources).not.toBeNull();
   });
   test('getOrgUsage()', (done) => {
     const params = {
@@ -221,6 +197,33 @@ describe('UsageReportsV4_integration', () => {
     // console.log(`getResourceUsageAccount() response contained ${numResources} total resources`);
     expect(numResources).toBeGreaterThan(0);
   });
+
+  test('getResourceUsageAccount() via GetResourceUsageAccountPager', async () => {
+    const params = {
+      accountId,
+      billingmonth: billingMonth,
+      names: true,
+      limit: 50,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new UsageReportsV4.GetResourceUsageAccountPager(usageReportsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new UsageReportsV4.GetResourceUsageAccountPager(usageReportsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
   test('getResourceUsageResourceGroup()', async () => {
     const resources = [];
     let offset = null;
@@ -263,6 +266,34 @@ describe('UsageReportsV4_integration', () => {
     // console.log(`getResourceUsageResourceGroup() response contained ${numResources} total resources`);
     expect(numResources).toBeGreaterThan(0);
   });
+
+  test('getResourceUsageResourceGroup() via GetResourceUsageResourceGroupPager', async () => {
+    const params = {
+      accountId,
+      resourceGroupId,
+      billingmonth: billingMonth,
+      names: true,
+      limit: 50,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new UsageReportsV4.GetResourceUsageResourceGroupPager(usageReportsService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new UsageReportsV4.GetResourceUsageResourceGroupPager(usageReportsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
   test('getResourceUsageOrg()', async () => {
     const resources = [];
     let offset = null;
@@ -341,7 +372,7 @@ describe('UsageReportsV4_integration', () => {
       cosBucket,
       cosLocation,
       cosReportsFolder: 'IBMCloud-Billing-Reports',
-      reportTypes: ['account_summary', 'enterprise_summary'],
+      reportTypes: ['account_summary', 'enterprise_summary', 'account_resource_instance_usage'],
       versioning: 'new',
     };
 

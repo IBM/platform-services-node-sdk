@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.87.0-91c7c775-20240320-213027
+ * IBM OpenAPI SDK Code Generator Version: 3.89.0-f33c767b-20240410-144451
  */
 
 /* eslint-disable max-classes-per-file */
@@ -1347,7 +1347,7 @@ namespace UsageReportsV4 {
     /** The type of billing reports to take snapshot of. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
      */
-    reportTypes?: ValidateReportsSnapshotConfigConstants.ReportTypes | string[];
+    reportTypes?: ValidateReportsSnapshotConfigConstants.ReportTypes[] | string[];
     /** A new version of report is created or the existing report version is overwritten with every update. Defaults
      *  to "new".
      */
@@ -1561,6 +1561,12 @@ namespace UsageReportsV4 {
     non_chargeable?: boolean;
     /** All the discounts applicable to the metric. */
     discounts: Discount[];
+    /** This percentage reflects the reduction to the original cost that you receive under a volume based pricing
+     *  structure.
+     */
+    volume_discount?: number;
+    /** The original cost adjusted for volume based discounts that are applied at the account level. */
+    volume_cost?: number;
   }
 
   /** Information about an individual offer. */
@@ -1910,16 +1916,6 @@ namespace UsageReportsV4 {
     /** List of previous versions of the snapshot configurations. */
     history?: SnapshotConfigHistoryItem[];
   }
-
-  /** Validated billing service to COS bucket authorization. */
-  export interface SnapshotConfigValidateResponse {
-    /** Account ID for which billing report snapshot is configured. */
-    account_id?: string;
-    /** The name of the COS bucket to store the snapshot of the billing reports. */
-    cos_bucket?: string;
-    /** Region of the COS instance. */
-    cos_location?: string;
-  }
   export namespace SnapshotConfig {
     export namespace Constants {
       /** Status of the billing snapshot configuration. Possible values are [enabled, disabled]. */
@@ -1948,6 +1944,16 @@ namespace UsageReportsV4 {
         ACCOUNT_RESOURCE_INSTANCE_USAGE = 'account_resource_instance_usage',
       }
     }
+  }
+
+  /** Validated billing service to COS bucket authorization. */
+  export interface SnapshotConfigValidateResponse {
+    /** Account ID for which billing report snapshot is configured. */
+    account_id?: string;
+    /** The name of the COS bucket to store the snapshot of the billing reports. */
+    cos_bucket?: string;
+    /** Region of the COS instance. */
+    cos_location?: string;
   }
 
   /** Subscription. */
