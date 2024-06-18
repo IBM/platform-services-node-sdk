@@ -1,3 +1,10 @@
+# [0.59.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.58.2...v0.59.0) (2024-06-18)
+
+
+### Features
+
+* **Usage Reports:** re-gen service to pickup changes to Instance Reports  ([#263](https://github.com/IBM/platform-services-node-sdk/issues/263)) ([f6ee748](https://github.com/IBM/platform-services-node-sdk/commit/f6ee74892e348632eb089a1fd8a2c2884d3cdfb2))
+
 ## [0.58.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.58.1...v0.58.2) (2024-05-28)
 
 
