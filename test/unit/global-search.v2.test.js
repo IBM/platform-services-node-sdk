@@ -17,7 +17,7 @@
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
-const { NoAuthAuthenticator } = sdkCorePackage;
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
 const GlobalSearchV2 = require('../../dist/global-search/v2');
 
 const {
@@ -27,7 +27,7 @@ const {
   expectToBePromise,
   checkUserHeader,
   checkForSuccessfulExecution,
-} = require('@ibm-cloud/sdk-test-utilities');
+} = unitTestUtils;
 
 const globalSearchServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
