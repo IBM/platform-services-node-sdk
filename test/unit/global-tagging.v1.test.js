@@ -16,10 +16,6 @@
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
-
-const { NoAuthAuthenticator } = sdkCorePackage;
-const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
-
 const {
   getOptions,
   checkUrlAndMethod,
@@ -28,6 +24,9 @@ const {
   checkUserHeader,
   checkForSuccessfulExecution,
 } = require('@ibm-cloud/sdk-test-utilities');
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
+const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
+
 
 const globalTaggingServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
@@ -499,6 +498,7 @@ describe('GlobalTaggingV1', () => {
         const accountId = 'testString';
         const tagType = 'user';
         const replace = false;
+        const update = false;
         const attachTagParams = {
           resources,
           tagName,
@@ -508,6 +508,7 @@ describe('GlobalTaggingV1', () => {
           accountId,
           tagType,
           replace,
+          update,
         };
 
         const attachTagResult = globalTaggingService.attachTag(attachTagParams);
@@ -532,6 +533,7 @@ describe('GlobalTaggingV1', () => {
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
         expect(mockRequestOptions.qs.replace).toEqual(replace);
+        expect(mockRequestOptions.qs.update).toEqual(update);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {

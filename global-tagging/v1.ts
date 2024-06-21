@@ -35,7 +35,9 @@ import { getSdkHeaders } from '../lib/common';
  * two formats: `key:value` or `label`. The tagging API supports three types of tag: `user` `service`, and `access`
  * tags. `service` tags cannot be attached to IMS resources. `service` tags must be in the form
  * `service_prefix:tag_label` where `service_prefix` identifies the Service owning the tag. `access` tags cannot be
- * attached to IMS and Cloud Foundry resources. They must be in the form `key:value`.
+ * attached to IMS and Cloud Foundry resources. They must be in the form `key:value`. You can replace all resource's
+ * tags using the `replace` query parameter in the attach operation. You can update the `value` of a resource's tag in
+ * the format `key:value`, using the `update` query parameter in the attach operation.
  *
  * API Version: 1.2.0
  */
@@ -467,8 +469,14 @@ class GlobalTaggingV1 extends BaseService {
    * parameter if `tag_type` is set to `service`. Otherwise, it is inferred from the authorization IAM token.
    * @param {string} [params.tagType] - The type of the tag. Supported values are `user`, `service` and `access`.
    * `service` and `access` are not supported for IMS resources.
-   * @param {boolean} [params.replace] - Flag to request replacement of all attached tags. Set 'true' if you want to
-   * replace all the list of tags attached to the resource. Default value is false.
+   * @param {boolean} [params.replace] - Flag to request replacement of all attached tags. Set `true` if you want to
+   * replace all tags attached to the resource with the current ones. Default value is false.
+   * @param {boolean} [params.update] - Flag to request update of attached tags in the format `key:value`. Here's how it
+   * works for each tag in the request body: If the tag to attach is in the format `key:value`, the System will
+   * atomically detach all existing tags starting with `key:` and attach the new `key:value` tag. If no such tags exist,
+   * a new `key:value` tag will be attached. If the tag is not in the `key:value` format (e.g., a simple label), the
+   * System will attach the label as usual. The update query parameter is available for user and access management tags,
+   * but not for service tags.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>>}
    */
@@ -486,6 +494,7 @@ class GlobalTaggingV1 extends BaseService {
       'accountId',
       'tagType',
       'replace',
+      'update',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -503,6 +512,7 @@ class GlobalTaggingV1 extends BaseService {
       'account_id': _params.accountId,
       'tag_type': _params.tagType,
       'replace': _params.replace,
+      'update': _params.update,
     };
 
     const sdkHeaders = getSdkHeaders(GlobalTaggingV1.DEFAULT_SERVICE_NAME, 'v1', 'attachTag');
@@ -880,10 +890,18 @@ namespace GlobalTaggingV1 {
      *  supported for IMS resources.
      */
     tagType?: AttachTagConstants.TagType | string;
-    /** Flag to request replacement of all attached tags. Set 'true' if you want to replace all the list of tags
-     *  attached to the resource. Default value is false.
+    /** Flag to request replacement of all attached tags. Set `true` if you want to replace all tags attached to the
+     *  resource with the current ones. Default value is false.
      */
     replace?: boolean;
+    /** Flag to request update of attached tags in the format `key:value`. Here's how it works for each tag in the
+     *  request body: If the tag to attach is in the format `key:value`, the System will atomically detach all existing
+     *  tags starting with `key:` and attach the new `key:value` tag. If no such tags exist, a new `key:value` tag will
+     *  be attached. If the tag is not in the `key:value` format (e.g., a simple label), the System will attach the
+     *  label as usual. The update query parameter is available for user and access management tags, but not for service
+     *  tags.
+     */
+    update?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
