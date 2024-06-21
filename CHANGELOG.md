@@ -1,3 +1,10 @@
+# [0.60.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.59.0...v0.60.0) (2024-06-21)
+
+
+### Features
+
+* bump node core to 5.0.0 ([#267](https://github.com/IBM/platform-services-node-sdk/issues/267)) ([0529428](https://github.com/IBM/platform-services-node-sdk/commit/05294289f9a2146307bfba19558b47f4ff7effc9))
+
 # [0.59.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.58.2...v0.59.0) (2024-06-18)
 
 
