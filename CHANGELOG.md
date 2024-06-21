@@ -1,3 +1,10 @@
+## [0.60.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.60.0...v0.60.1) (2024-06-21)
+
+
+### Bug Fixes
+
+* **Global Tagging:** add 'update' option to attach_tag operation ([#266](https://github.com/IBM/platform-services-node-sdk/issues/266)) ([800c3e7](https://github.com/IBM/platform-services-node-sdk/commit/800c3e72a0a7129b44f204a966e30537d6ca5206))
+
 # [0.60.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.59.0...v0.60.0) (2024-06-21)
 
 
