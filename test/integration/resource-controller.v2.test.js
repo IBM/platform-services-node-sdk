@@ -175,6 +175,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.locked).toBeFalsy();
     expect(result.last_operation.type).toEqual('create');
     expect(result.last_operation.async).toBeFalsy();
+    expect(result.onetime_credentials).toBeDefined();
     expect(result.last_operation.state).toEqual('succeeded');
   });
 
@@ -963,6 +964,7 @@ describe('ResourceControllerV2_integration', () => {
     expect(result.resource_group_id).toEqual(testResourceGroupGuid);
     expect(result.source_crn).toEqual(testInstanceCrn);
     expect(result.state).toEqual('active');
+    expect(result.onetime_credentials).toBeDefined();
   });
 
   test('20 - Update A Resource Key', async () => {
