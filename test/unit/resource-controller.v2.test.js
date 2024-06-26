@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-// need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
+/* eslint-disable no-await-in-loop */
 
-const { NoAuthAuthenticator } = core;
-
-const ResourceControllerV2 = require('../../dist/resource-controller/v2');
 const nock = require('nock');
 
-/* eslint-disable no-await-in-loop */
+// need to import the whole package to mock getAuthenticatorFromEnvironment
+const sdkCorePackage = require('ibm-cloud-sdk-core');
+
+const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
+const ResourceControllerV2 = require('../../dist/resource-controller/v2');
 
 const {
   getOptions,
@@ -31,7 +31,7 @@ const {
   expectToBePromise,
   checkUserHeader,
   checkForSuccessfulExecution,
-} = require('@ibm-cloud/sdk-test-utilities');
+}  = require('@ibm-cloud/sdk-test-utilities');
 
 const resourceControllerServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
@@ -55,11 +55,10 @@ function unmock_createRequest() {
 }
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
 describe('ResourceControllerV2', () => {
-
   beforeEach(() => {
     mock_createRequest();
   });
@@ -70,7 +69,7 @@ describe('ResourceControllerV2', () => {
     }
     getAuthenticatorMock.mockClear();
   });
-  
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = ResourceControllerV2.newInstance();
@@ -222,16 +221,16 @@ describe('ResourceControllerV2', () => {
       const serviceUrl = resourceControllerServiceOptions.url;
       const path = '/v2/resource_instances';
       const mockPagerResponse1 =
-        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","scheduled_reclaim_at":"2019-01-01T12:00:00.000Z","restored_at":"2019-01-01T12:00:00.000Z","restored_by":"restored_by","scheduled_reclaim_by":"scheduled_reclaim_by","name":"name","region_id":"region_id","account_id":"account_id","reseller_channel_id":"reseller_channel_id","resource_plan_id":"resource_plan_id","resource_group_id":"resource_group_id","resource_group_crn":"resource_group_crn","target_crn":"target_crn","parameters":{"anyKey":"anyValue"},"allow_cleanup":false,"crn":"crn","state":"active","type":"type","sub_type":"sub_type","resource_id":"resource_id","dashboard_url":"dashboard_url","last_operation":{"type":"type","state":"in progress","sub_type":"sub_type","async":false,"description":"description","reason_code":"reason_code","poll_after":10,"cancelable":true,"poll":true},"resource_aliases_url":"resource_aliases_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url","plan_history":[{"resource_plan_id":"resource_plan_id","start_date":"2019-01-01T12:00:00.000Z","requestor_id":"requestor_id"}],"migrated":true,"extensions":{"anyKey":"anyValue"},"controlled_by":"controlled_by","locked":true}]}';
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","scheduled_reclaim_at":"2019-01-01T12:00:00.000Z","restored_at":"2019-01-01T12:00:00.000Z","restored_by":"restored_by","scheduled_reclaim_by":"scheduled_reclaim_by","name":"name","region_id":"region_id","account_id":"account_id","reseller_channel_id":"reseller_channel_id","resource_plan_id":"resource_plan_id","resource_group_id":"resource_group_id","resource_group_crn":"resource_group_crn","target_crn":"target_crn","onetime_credentials":false,"parameters":{"anyKey":"anyValue"},"allow_cleanup":false,"crn":"crn","state":"active","type":"type","sub_type":"sub_type","resource_id":"resource_id","dashboard_url":"dashboard_url","last_operation":{"type":"type","state":"in progress","sub_type":"sub_type","async":false,"description":"description","reason_code":"reason_code","poll_after":10,"cancelable":true,"poll":true},"resource_aliases_url":"resource_aliases_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url","plan_history":[{"resource_plan_id":"resource_plan_id","start_date":"2019-01-01T12:00:00.000Z","requestor_id":"requestor_id"}],"migrated":true,"extensions":{"anyKey":"anyValue"},"controlled_by":"controlled_by","locked":true}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","scheduled_reclaim_at":"2019-01-01T12:00:00.000Z","restored_at":"2019-01-01T12:00:00.000Z","restored_by":"restored_by","scheduled_reclaim_by":"scheduled_reclaim_by","name":"name","region_id":"region_id","account_id":"account_id","reseller_channel_id":"reseller_channel_id","resource_plan_id":"resource_plan_id","resource_group_id":"resource_group_id","resource_group_crn":"resource_group_crn","target_crn":"target_crn","parameters":{"anyKey":"anyValue"},"allow_cleanup":false,"crn":"crn","state":"active","type":"type","sub_type":"sub_type","resource_id":"resource_id","dashboard_url":"dashboard_url","last_operation":{"type":"type","state":"in progress","sub_type":"sub_type","async":false,"description":"description","reason_code":"reason_code","poll_after":10,"cancelable":true,"poll":true},"resource_aliases_url":"resource_aliases_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url","plan_history":[{"resource_plan_id":"resource_plan_id","start_date":"2019-01-01T12:00:00.000Z","requestor_id":"requestor_id"}],"migrated":true,"extensions":{"anyKey":"anyValue"},"controlled_by":"controlled_by","locked":true}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","scheduled_reclaim_at":"2019-01-01T12:00:00.000Z","restored_at":"2019-01-01T12:00:00.000Z","restored_by":"restored_by","scheduled_reclaim_by":"scheduled_reclaim_by","name":"name","region_id":"region_id","account_id":"account_id","reseller_channel_id":"reseller_channel_id","resource_plan_id":"resource_plan_id","resource_group_id":"resource_group_id","resource_group_crn":"resource_group_crn","target_crn":"target_crn","onetime_credentials":false,"parameters":{"anyKey":"anyValue"},"allow_cleanup":false,"crn":"crn","state":"active","type":"type","sub_type":"sub_type","resource_id":"resource_id","dashboard_url":"dashboard_url","last_operation":{"type":"type","state":"in progress","sub_type":"sub_type","async":false,"description":"description","reason_code":"reason_code","poll_after":10,"cancelable":true,"poll":true},"resource_aliases_url":"resource_aliases_url","resource_bindings_url":"resource_bindings_url","resource_keys_url":"resource_keys_url","plan_history":[{"resource_plan_id":"resource_plan_id","start_date":"2019-01-01T12:00:00.000Z","requestor_id":"requestor_id"}],"migrated":true,"extensions":{"anyKey":"anyValue"},"controlled_by":"controlled_by","locked":true}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -297,7 +296,7 @@ describe('ResourceControllerV2', () => {
         const resourcePlanId = 'a10e4960-3685-11e9-b210-d663bd873d93';
         const tags = ['testString'];
         const allowCleanup = false;
-        const parameters = { foo: 'bar' };
+        const parameters = { anyKey: 'anyValue' };
         const entityLock = false;
         const createResourceInstanceParams = {
           name,
@@ -575,7 +574,7 @@ describe('ResourceControllerV2', () => {
         // Construct the params object for operation updateResourceInstance
         const id = 'testString';
         const name = 'UpdatedExampleResourceInstance';
-        const parameters = { foo: 'bar' };
+        const parameters = { exampleProperty: 'exampleValue' };
         const resourcePlanId = 'testString';
         const allowCleanup = true;
         const updateResourceInstanceParams = {
@@ -765,9 +764,9 @@ describe('ResourceControllerV2', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -898,16 +897,16 @@ describe('ResourceControllerV2', () => {
       const serviceUrl = resourceControllerServiceOptions.url;
       const path = '/v2/resource_instances/testString/resource_keys';
       const mockPagerResponse1 =
-        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","onetime_credentials":false,"credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","onetime_credentials":false,"credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -1285,16 +1284,16 @@ describe('ResourceControllerV2', () => {
       const serviceUrl = resourceControllerServiceOptions.url;
       const path = '/v2/resource_keys';
       const mockPagerResponse1 =
-        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+        '{"total_count":2,"limit":1,"next_url":"https://myhost.com/somePath?start=1","resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","onetime_credentials":false,"credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","guid":"guid","url":"url","created_at":"2019-01-01T12:00:00.000Z","updated_at":"2019-01-01T12:00:00.000Z","deleted_at":"2019-01-01T12:00:00.000Z","created_by":"created_by","updated_by":"updated_by","deleted_by":"deleted_by","source_crn":"source_crn","name":"name","crn":"crn","state":"state","account_id":"account_id","resource_group_id":"resource_group_id","resource_id":"resource_id","onetime_credentials":false,"credentials":{"REDACTED":"REDACTED","apikey":"apikey","iam_apikey_description":"iam_apikey_description","iam_apikey_name":"iam_apikey_name","iam_role_crn":"iam_role_crn","iam_serviceid_crn":"iam_serviceid_crn"},"iam_compatible":true,"migrated":true,"resource_instance_url":"resource_instance_url","resource_alias_url":"resource_alias_url"}]}';
 
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -1800,9 +1799,9 @@ describe('ResourceControllerV2', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -2316,9 +2315,9 @@ describe('ResourceControllerV2', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -2824,9 +2823,9 @@ describe('ResourceControllerV2', () => {
       beforeEach(() => {
         unmock_createRequest();
         const scope = nock(serviceUrl)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse1)
-          .get(uri => uri.includes(path))
+          .get((uri) => uri.includes(path))
           .reply(200, mockPagerResponse2);
       });
 
@@ -2870,9 +2869,11 @@ describe('ResourceControllerV2', () => {
         // Construct the params object for operation listReclamations
         const accountId = 'testString';
         const resourceInstanceId = 'testString';
+        const resourceGroupId = 'testString';
         const listReclamationsParams = {
           accountId,
           resourceInstanceId,
+          resourceGroupId,
         };
 
         const listReclamationsResult = resourceControllerService.listReclamations(listReclamationsParams);
@@ -2891,6 +2892,7 @@ describe('ResourceControllerV2', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.resource_instance_id).toEqual(resourceInstanceId);
+        expect(mockRequestOptions.qs.resource_group_id).toEqual(resourceGroupId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
