@@ -3103,24 +3103,6 @@ describe('IamPolicyManagementV1', () => {
         id: 'testString',
       };
 
-      // PolicyAssignmentV1OptionsRootTemplate
-      const policyAssignmentV1OptionsRootTemplateModel = {
-        id: 'testString',
-        version: 'testString',
-      };
-
-      // PolicyAssignmentV1OptionsRoot
-      const policyAssignmentV1OptionsRootModel = {
-        requester_id: 'testString',
-        assignment_id: 'testString',
-        template: policyAssignmentV1OptionsRootTemplateModel,
-      };
-
-      // PolicyAssignmentV1Options
-      const policyAssignmentV1OptionsModel = {
-        root: policyAssignmentV1OptionsRootModel,
-      };
-
       // AssignmentTemplateDetails
       const assignmentTemplateDetailsModel = {
         id: 'testString',
@@ -3131,13 +3113,11 @@ describe('IamPolicyManagementV1', () => {
         // Construct the params object for operation createPolicyTemplateAssignment
         const version = '1.0';
         const target = assignmentTargetDetailsModel;
-        const options = policyAssignmentV1OptionsModel;
         const templates = [assignmentTemplateDetailsModel];
         const acceptLanguage = 'default';
         const createPolicyTemplateAssignmentParams = {
           version,
           target,
-          options,
           templates,
           acceptLanguage,
         };
@@ -3158,7 +3138,6 @@ describe('IamPolicyManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
         expect(mockRequestOptions.body.target).toEqual(target);
-        expect(mockRequestOptions.body.options).toEqual(options);
         expect(mockRequestOptions.body.templates).toEqual(templates);
         expect(mockRequestOptions.qs.version).toEqual(version);
       }
@@ -3182,14 +3161,12 @@ describe('IamPolicyManagementV1', () => {
         // parameters
         const version = '1.0';
         const target = assignmentTargetDetailsModel;
-        const options = policyAssignmentV1OptionsModel;
         const templates = [assignmentTemplateDetailsModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const createPolicyTemplateAssignmentParams = {
           version,
           target,
-          options,
           templates,
           headers: {
             Accept: userAccept,

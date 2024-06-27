@@ -1122,11 +1122,6 @@ describe('IamPolicyManagementV1_integration', () => {
             version: testS2STemplateBaseVersion,
           },
         ],
-        options: {
-          root: {
-            requester_id: 'testing-sdk',
-          },
-        },
       };
       const response = await service.createPolicyTemplateAssignment(params);
       expect(response).toBeDefined();
