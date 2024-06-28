@@ -40,6 +40,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testV2PolicyId;
   let testAssignmentPolicyId;
   let testTargetAccountId;
+  let testTargetEnterpriseAccountId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -213,15 +214,16 @@ describe('IamPolicyManagementV1_integration', () => {
 
     // Grab our test-specific config properties.
     config = readExternalSources(IamPolicyManagementV1.DEFAULT_SERVICE_NAME);
-
     expect(service).not.toBeNull();
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
     expect(config).toHaveProperty('testTargetAccountId');
+    expect(config).toHaveProperty('testTargetEnterpriseAccountId');
 
     // Retrieve the test account id and target account_id to be used with the tests.
     testAccountId = config.testAccountId;
     testTargetAccountId = config.testTargetAccountId;
+    testTargetEnterpriseAccountId = config.testTargetEnterpriseAccountId;
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
@@ -1108,6 +1110,34 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Policy Assignment tests', () => {
+    test('Create policy assignments test', async () => {
+      const params = {
+        acceptLanguage: 'default',
+        version: '1.0',
+        target: {
+          id: testTargetEnterpriseAccountId,
+          type: 'Enterprise',
+        },
+        templates: [
+          {
+            id: testS2STemplateId,
+            version: testS2STemplateBaseVersion,
+          },
+        ],
+      };
+
+      try {
+        await service.createPolicyTemplateAssignment(params);
+      } catch (error) {
+        expect(error).toBeTruthy(); // This assertion ensures that the test passes when an error occurs
+        expect(error.status).toBe(400);
+        expect(error.statusText).toBe('Bad Request');
+        expect(error.body).toContain(
+          'Invalid body format. Check the input parameters. instance.target.type is not one of enum values: Account'
+        );
+      }
+    });
+
     test('Create policy assignments', async () => {
       const params = {
         acceptLanguage: 'default',
