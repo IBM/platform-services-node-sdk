@@ -1110,7 +1110,7 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Policy Assignment tests', () => {
-    test('Create policy assignments test', async () => {
+    test('Create policy assignments error out check the input parameters target type is not one of enum values', async () => {
       const params = {
         acceptLanguage: 'default',
         version: '1.0',
