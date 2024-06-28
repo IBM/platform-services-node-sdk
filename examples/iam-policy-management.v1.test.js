@@ -1139,12 +1139,7 @@ describe('IamPolicyManagementV1', () => {
           id: exampleTemplateId,
           version: exampleTemplateBaseVersion,
         },
-      ],
-      options: {
-        root: {
-          requester_id: 'testing-sdk',
-        },
-      },
+      ]
     };
 
     try {
