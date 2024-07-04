@@ -227,6 +227,7 @@ describe('IamPolicyManagementV1_integration', () => {
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
+    expect(testTargetEnterpriseAccountId).not.toBeNull();
     done();
   });
 
@@ -1128,11 +1129,11 @@ describe('IamPolicyManagementV1_integration', () => {
 
       try {
         await service.createPolicyTemplateAssignment(params);
-      } catch (error) {
-        expect(error).toBeTruthy(); // This assertion ensures that the test passes when an error occurs
-        expect(error.status).toBe(400);
-        expect(error.statusText).toBe('Bad Request');
-        expect(error.body).toContain(
+      } catch (err) {
+        expect(err).toBeTruthy(); // This assertion ensures that the test passes when an error occurs
+        expect(err.status).toBe(400);
+        expect(err.statusText).toBe('Bad Request');
+        expect(err.body).toContain(
           'Invalid body format. Check the input parameters. instance.target.type is not one of enum values: Account'
         );
       }
