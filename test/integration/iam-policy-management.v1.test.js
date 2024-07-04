@@ -227,6 +227,7 @@ describe('IamPolicyManagementV1_integration', () => {
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
+    expect(testTargetAccountId).not.toBeNull();
     expect(testTargetEnterpriseAccountId).not.toBeNull();
     done();
   });
