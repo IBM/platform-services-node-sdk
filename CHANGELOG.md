@@ -1,3 +1,10 @@
+## [0.60.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.60.1...v0.60.2) (2024-07-05)
+
+
+### Bug Fixes
+
+* **IAM Policy Management:** remove `options` property from PolicyAssignment ([#269](https://github.com/IBM/platform-services-node-sdk/issues/269)) ([368ae39](https://github.com/IBM/platform-services-node-sdk/commit/368ae39c1fb0a7656858eced1aba405ea148ac9f))
+
 ## [0.60.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.60.0...v0.60.1) (2024-06-21)
 
 
