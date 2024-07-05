@@ -40,6 +40,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testV2PolicyId;
   let testAssignmentPolicyId;
   let testTargetAccountId;
+  let testTargetEnterpriseAccountId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -213,18 +214,21 @@ describe('IamPolicyManagementV1_integration', () => {
 
     // Grab our test-specific config properties.
     config = readExternalSources(IamPolicyManagementV1.DEFAULT_SERVICE_NAME);
-
     expect(service).not.toBeNull();
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
     expect(config).toHaveProperty('testTargetAccountId');
+    expect(config).toHaveProperty('testTargetEnterpriseAccountId');
 
     // Retrieve the test account id and target account_id to be used with the tests.
     testAccountId = config.testAccountId;
     testTargetAccountId = config.testTargetAccountId;
+    testTargetEnterpriseAccountId = config.testTargetEnterpriseAccountId;
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
+    expect(testTargetAccountId).not.toBeNull();
+    expect(testTargetEnterpriseAccountId).not.toBeNull();
     done();
   });
 
@@ -1108,6 +1112,34 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Policy Assignment tests', () => {
+    test('Create policy assignments error out check the input parameters target type is not one of enum values', async () => {
+      const params = {
+        acceptLanguage: 'default',
+        version: '1.0',
+        target: {
+          id: testTargetEnterpriseAccountId,
+          type: 'Enterprise',
+        },
+        templates: [
+          {
+            id: testS2STemplateId,
+            version: testS2STemplateBaseVersion,
+          },
+        ],
+      };
+
+      try {
+        await service.createPolicyTemplateAssignment(params);
+      } catch (err) {
+        expect(err).toBeTruthy(); // This assertion ensures that the test passes when an error occurs
+        expect(err.status).toBe(400);
+        expect(err.statusText).toBe('Bad Request');
+        expect(err.body).toContain(
+          'Invalid body format. Check the input parameters. instance.target.type is not one of enum values: Account'
+        );
+      }
+    });
+
     test('Create policy assignments', async () => {
       const params = {
         acceptLanguage: 'default',
@@ -1122,11 +1154,6 @@ describe('IamPolicyManagementV1_integration', () => {
             version: testS2STemplateBaseVersion,
           },
         ],
-        options: {
-          root: {
-            requester_id: 'testing-sdk',
-          },
-        },
       };
       const response = await service.createPolicyTemplateAssignment(params);
       expect(response).toBeDefined();

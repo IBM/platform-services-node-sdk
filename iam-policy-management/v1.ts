@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.88.0-b0b4c159-20240402-205910
+ * IBM OpenAPI SDK Code Generator Version: 3.90.1-64fd3296-20240515-180710
  */
 
 import * as extend from 'extend';
@@ -2324,7 +2324,6 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.version - specify version of response body format.
    * @param {AssignmentTargetDetails} params.target - assignment target account and type.
-   * @param {PolicyAssignmentV1Options} params.options - The set of properties required for a policy assignment.
    * @param {AssignmentTemplateDetails[]} params.templates - List of template details for policy assignment.
    * @param {string} [params.acceptLanguage] - Language code for translations
    * * `default` - English
@@ -2345,8 +2344,8 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.CreatePolicyTemplateAssignmentParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1Collection>> {
     const _params = { ...params };
-    const _requiredParams = ['version', 'target', 'options', 'templates'];
-    const _validParams = ['version', 'target', 'options', 'templates', 'acceptLanguage', 'headers'];
+    const _requiredParams = ['version', 'target', 'templates'];
+    const _validParams = ['version', 'target', 'templates', 'acceptLanguage', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2354,7 +2353,6 @@ class IamPolicyManagementV1 extends BaseService {
 
     const body = {
       'target': _params.target,
-      'options': _params.options,
       'templates': _params.templates,
     };
 
@@ -3280,8 +3278,6 @@ namespace IamPolicyManagementV1 {
     version: string;
     /** assignment target account and type. */
     target: AssignmentTargetDetails;
-    /** The set of properties required for a policy assignment. */
-    options: PolicyAssignmentV1Options;
     /** List of template details for policy assignment. */
     templates: AssignmentTemplateDetails[];
     /** Language code for translations
@@ -3566,29 +3562,6 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The set of properties required for a policy assignment. */
-  export interface PolicyAssignmentOptions {
-    /** The policy subject type; either 'iam_id' or 'access_group_id'. */
-    subject_type: PolicyAssignmentOptions.Constants.SubjectType | string;
-    /** The policy subject id. */
-    subject_id: string;
-    /** The policy assignment requester id. */
-    root_requester_id: string;
-    /** The template id where this policy is being assigned from. */
-    root_template_id?: string;
-    /** The template version where this policy is being assigned from. */
-    root_template_version?: string;
-  }
-  export namespace PolicyAssignmentOptions {
-    export namespace Constants {
-      /** The policy subject type; either 'iam_id' or 'access_group_id'. */
-      export enum SubjectType {
-        IAM_ID = 'iam_id',
-        ACCESS_GROUP_ID = 'access_group_id',
-      }
-    }
-  }
-
   /** Set of properties for the assigned resource. */
   export interface PolicyAssignmentResourcePolicy {
     /** On success, includes the  policy assigned. */
@@ -3611,8 +3584,6 @@ namespace IamPolicyManagementV1 {
   export interface PolicyAssignmentV1 {
     /** assignment target account and type. */
     target: AssignmentTargetDetails;
-    /** The set of properties required for a policy assignment. */
-    options: PolicyAssignmentV1Options;
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
@@ -3654,31 +3625,10 @@ namespace IamPolicyManagementV1 {
     assignments?: PolicyAssignmentV1[];
   }
 
-  /** The set of properties required for a policy assignment. */
-  export interface PolicyAssignmentV1Options {
-    root: PolicyAssignmentV1OptionsRoot;
-  }
-
-  /** PolicyAssignmentV1OptionsRoot. */
-  export interface PolicyAssignmentV1OptionsRoot {
-    requester_id?: string;
-    /** Passed in value to correlate with other assignments. */
-    assignment_id?: string;
-    template?: PolicyAssignmentV1OptionsRootTemplate;
-  }
-
-  /** PolicyAssignmentV1OptionsRootTemplate. */
-  export interface PolicyAssignmentV1OptionsRootTemplate {
-    /** The template id where this policy is being assigned from. */
-    id?: string;
-    /** The template version where this policy is being assigned from. */
-    version?: string;
-  }
-
   /** The policy assignment resources. */
   export interface PolicyAssignmentV1Resources {
-    /** policy template details. */
-    target?: AssignmentTemplateDetails;
+    /** assignment target account and type. */
+    target?: AssignmentTargetDetails;
     /** Set of properties for the assigned resource. */
     policy?: PolicyAssignmentResourcePolicy;
   }
@@ -4022,7 +3972,7 @@ namespace IamPolicyManagementV1 {
      */
     description?: string;
     /** The resource attributes to which the policy grants access. */
-    resource: V2PolicyResource;
+    resource?: V2PolicyResource;
     /** The subject attributes for whom the policy grants access. */
     subject?: V2PolicySubject;
     /** Indicates pattern of rule, either 'time-based-conditions:once', 'time-based-conditions:weekly:all-day', or
@@ -4032,7 +3982,7 @@ namespace IamPolicyManagementV1 {
     /** Additional access conditions associated with the policy. */
     rule?: V2PolicyRule;
     /** Specifies the type of access granted by the policy. */
-    control: Control;
+    control?: Control;
   }
   export namespace TemplatePolicy {
     export namespace Constants {
@@ -4266,8 +4216,6 @@ namespace IamPolicyManagementV1 {
     target_type?: GetPolicyAssignmentResponsePolicyAssignment.Constants.TargetType | string;
     /** ID of the target account. */
     target?: string;
-    /** List of objects with required properties for a policy assignment. */
-    options?: PolicyAssignmentOptions[];
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
@@ -4308,8 +4256,6 @@ namespace IamPolicyManagementV1 {
     extends GetPolicyAssignmentResponse {
     /** assignment target account and type. */
     target: AssignmentTargetDetails;
-    /** The set of properties required for a policy assignment. */
-    options: PolicyAssignmentV1Options;
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
@@ -4415,8 +4361,6 @@ namespace IamPolicyManagementV1 {
     target_type?: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.TargetType | string;
     /** ID of the target account. */
     target?: string;
-    /** List of objects with required properties for a policy assignment. */
-    options?: PolicyAssignmentOptions[];
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
@@ -4457,8 +4401,6 @@ namespace IamPolicyManagementV1 {
     extends PolicyTemplateAssignmentItems {
     /** assignment target account and type. */
     target: AssignmentTargetDetails;
-    /** The set of properties required for a policy assignment. */
-    options: PolicyAssignmentV1Options;
     /** Policy assignment ID. */
     id?: string;
     /** The account GUID that the policies assignments belong to.. */
