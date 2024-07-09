@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.90.1-64fd3296-20240515-180710
+ * IBM OpenAPI SDK Code Generator Version: 3.92.1-44330004-20240620-143510
  */
 
 /* eslint-disable max-classes-per-file */
@@ -161,6 +161,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.rev] - Cloudant revision.
    * @param {boolean} [params.hideIbmCloudCatalog] - Hide the public catalog in this account.
    * @param {Filters} [params.accountFilters] - Filters for account and catalog filters.
+   * @param {string[]} [params.regionFilters] -
+   * @param {string[]} [params.filteredRegions] -
+   * @param {boolean} [params.filterRegions] -
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>>}
    */
@@ -169,7 +172,16 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['id', 'rev', 'hideIbmCloudCatalog', 'accountFilters', 'headers'];
+    const _validParams = [
+      'id',
+      'rev',
+      'hideIbmCloudCatalog',
+      'accountFilters',
+      'regionFilters',
+      'filteredRegions',
+      'filterRegions',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -180,6 +192,9 @@ class CatalogManagementV1 extends BaseService {
       '_rev': _params.rev,
       'hide_IBM_cloud_catalog': _params.hideIbmCloudCatalog,
       'account_filters': _params.accountFilters,
+      'region_filters': _params.regionFilters,
+      'filtered_regions': _params.filteredRegions,
+      'filter_regions': _params.filterRegions,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1955,6 +1970,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {Flavor} [params.flavor] - Version Flavor Information.  Only supported for Product kind Solution.
    * @param {string} [params.workingDirectory] - Optional - The sub-folder within the specified tgz file that contains
    * the software being onboarded.
+   * @param {string} [params.installType] - The install type of the current software being onboarded.
    * @param {string} [params.zipurl] - URL path to zip location.  If not specified, must provide content in this post
    * body.
    * @param {string} [params.repoType] - The type of repository containing this version.  Valid values are 'public_git'
@@ -1977,6 +1993,7 @@ class CatalogManagementV1 extends BaseService {
       'formatKind',
       'flavor',
       'workingDirectory',
+      'installType',
       'zipurl',
       'repoType',
       'headers',
@@ -1993,6 +2010,7 @@ class CatalogManagementV1 extends BaseService {
       'format_kind': _params.formatKind,
       'flavor': _params.flavor,
       'working_directory': _params.workingDirectory,
+      'install_type': _params.installType,
     };
 
     const query = {
@@ -4030,6 +4048,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {Flavor} [params.flavor] - Version Flavor Information.  Only supported for Product kind Solution.
    * @param {string} [params.workingDirectory] - Optional - The sub-folder within the specified tgz file that contains
    * the software being onboarded.
+   * @param {string} [params.installType] - The install type of the current software being onboarded.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
    */
@@ -4046,6 +4065,7 @@ class CatalogManagementV1 extends BaseService {
       'formatKind',
       'flavor',
       'workingDirectory',
+      'installType',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4060,6 +4080,7 @@ class CatalogManagementV1 extends BaseService {
       'format_kind': _params.formatKind,
       'flavor': _params.flavor,
       'working_directory': _params.workingDirectory,
+      'install_type': _params.installType,
     };
 
     const path = {
@@ -4186,6 +4207,67 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Validates deployment input variables.
+   *
+   * Validates deployment input variables.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {string} [params.input1] - A deployment variable to validate.
+   * @param {string} [params.input2] - Another deployment variable to validate.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionInputValidationResponse>>}
+   */
+  public validatesInputs(
+    params: CatalogManagementV1.ValidatesInputsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionInputValidationResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['versionLocId'];
+    const _validParams = ['versionLocId', 'input1', 'input2', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'input1': _params.input1,
+      'input2': _params.input2,
+    };
+
+    const path = {
+      'version_loc_id': _params.versionLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'validatesInputs'
+    );
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}/validateInputs',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -7108,6 +7190,121 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * regions
+   ************************/
+
+  /**
+   * Returns available locations based on supplied filter.
+   *
+   * Returns available locations based on supplied filter.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.filter] - Filter to apply for search.
+   * @param {boolean} [params.getInactive] - Returns inactive locations when true.
+   * @param {number} [params.limit] - The maximum number of results to return.
+   * @param {number} [params.offset] - The number of results to skip before returning values.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>>}
+   */
+  public previewRegions(
+    params?: CatalogManagementV1.PreviewRegionsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['filter', 'getInactive', 'limit', 'offset', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'filter': _params.filter,
+      'get_inactive': _params.getInactive,
+      'limit': _params.limit,
+      'offset': _params.offset,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'previewRegions'
+    );
+
+    const parameters = {
+      options: {
+        url: '/regions',
+        method: 'POST',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Returns available locations based on filter set on the account and supplied filter.
+   *
+   * Returns available locations based on filter set on the account and supplied filter.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.filter] - Filter to apply for search.
+   * @param {boolean} [params.getInactive] - Returns inactive locations when true.
+   * @param {number} [params.limit] - The maximum number of results to return.
+   * @param {number} [params.offset] - The number of results to skip before returning values.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>>}
+   */
+  public getRegions(
+    params?: CatalogManagementV1.GetRegionsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['filter', 'getInactive', 'limit', 'offset', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'filter': _params.filter,
+      'get_inactive': _params.getInactive,
+      'limit': _params.limit,
+      'offset': _params.offset,
+    };
+
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegions');
+
+    const parameters = {
+      options: {
+        url: '/regions',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -7153,6 +7350,9 @@ namespace CatalogManagementV1 {
     hideIbmCloudCatalog?: boolean;
     /** Filters for account and catalog filters. */
     accountFilters?: Filters;
+    regionFilters?: string[];
+    filteredRegions?: string[];
+    filterRegions?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -7744,6 +7944,8 @@ namespace CatalogManagementV1 {
     flavor?: Flavor;
     /** Optional - The sub-folder within the specified tgz file that contains the software being onboarded. */
     workingDirectory?: string;
+    /** The install type of the current software being onboarded. */
+    installType?: string;
     /** URL path to zip location.  If not specified, must provide content in this post body. */
     zipurl?: string;
     /** The type of repository containing this version.  Valid values are 'public_git' or 'enterprise_git'. */
@@ -8338,6 +8540,8 @@ namespace CatalogManagementV1 {
     flavor?: Flavor;
     /** Optional - The sub-folder within the specified tgz file that contains the software being onboarded. */
     workingDirectory?: string;
+    /** The install type of the current software being onboarded. */
+    installType?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -8358,6 +8562,17 @@ namespace CatalogManagementV1 {
     type: string;
     /** The version locator id of the version you wish to copy data from. */
     versionLocIdToCopyFrom: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `validatesInputs` operation. */
+  export interface ValidatesInputsParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
+    /** A deployment variable to validate. */
+    input1?: string;
+    /** Another deployment variable to validate. */
+    input2?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -9174,6 +9389,32 @@ namespace CatalogManagementV1 {
     }
   }
 
+  /** Parameters for the `previewRegions` operation. */
+  export interface PreviewRegionsParams {
+    /** Filter to apply for search. */
+    filter?: string;
+    /** Returns inactive locations when true. */
+    getInactive?: boolean;
+    /** The maximum number of results to return. */
+    limit?: number;
+    /** The number of results to skip before returning values. */
+    offset?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getRegions` operation. */
+  export interface GetRegionsParams {
+    /** Filter to apply for search. */
+    filter?: string;
+    /** Returns inactive locations when true. */
+    getInactive?: boolean;
+    /** The maximum number of results to return. */
+    limit?: number;
+    /** The number of results to skip before returning values. */
+    offset?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
@@ -9240,6 +9481,9 @@ namespace CatalogManagementV1 {
     hide_IBM_cloud_catalog?: boolean;
     /** Filters for account and catalog filters. */
     account_filters?: Filters;
+    region_filters?: string[];
+    filtered_regions?: string[];
+    filter_regions?: boolean;
   }
 
   /** The accumulated filters for an account. This will return the account filters plus a filter for each catalog the user has access to. */
@@ -9250,6 +9494,9 @@ namespace CatalogManagementV1 {
     account_filters?: Filters[];
     /** The filters for all of the accessible catalogs. */
     catalog_filters?: AccumulatedFiltersCatalogFiltersItem[];
+    region_filters?: string[];
+    filtered_regions?: string[];
+    filter_regions?: boolean;
   }
 
   /** AccumulatedFiltersCatalogFiltersItem. */
@@ -10595,6 +10842,64 @@ namespace CatalogManagementV1 {
     four_star_count?: number;
   }
 
+  /** Region information. */
+  export interface Region {
+    id?: string;
+    name?: string;
+    catalog_crn?: string;
+    kind?: string;
+    public?: string;
+    ui?: RegionUi;
+    icon?: string;
+    parent_id?: string;
+    metro_id?: string;
+    country_id?: string;
+    geo_id?: string;
+    authority?: RegionAuthority;
+    tags?: string[];
+    capabilities?: string;
+    created?: string;
+    updated?: string;
+    active?: string;
+    visibility?: JsonObject;
+  }
+
+  /** RegionAuthority. */
+  export interface RegionAuthority {
+    url?: string;
+    crn?: string;
+    provider?: string;
+  }
+
+  /** RegionUi. */
+  export interface RegionUi {
+    _language_?: RegionUiLanguage;
+  }
+
+  /** RegionUiLanguage. */
+  export interface RegionUiLanguage {
+    description?: string;
+    display_name?: string;
+  }
+
+  /** Paginated location search result. */
+  export interface RegionsSearchResult {
+    /** The offset (origin 0) of the first resource in this page of search results. */
+    offset: number;
+    /** The maximum number of resources returned in each page of search results. */
+    limit: number;
+    /** The overall total number of resources in the search result set. */
+    total_count?: number;
+    /** The number of resources returned in this page of search results. */
+    resource_count?: number;
+    /** A URL for retrieving the first page of search results. */
+    first?: string;
+    /** A URL for retrieving the last page of search results. */
+    last?: string;
+    /** Resulting objects. */
+    regions?: Region[];
+  }
+
   /** Render type. */
   export interface RenderType {
     /** ID of the widget type. */
@@ -11100,6 +11405,25 @@ namespace CatalogManagementV1 {
     part_numbers?: string[];
     /** Image repository name. */
     image_repo_name?: string;
+  }
+
+  /** Validate deployment variables. */
+  export interface VersionInputValidationResponse {
+    /** Failure message. */
+    message?: string;
+    /** Response code. */
+    code?: string;
+    /** Transaction ID. */
+    global_transaction_id?: string;
+    /** Transaction ID. */
+    errors?: VersionInputValidationResponseErrorsItem[];
+  }
+
+  /** VersionInputValidationResponseErrorsItem. */
+  export interface VersionInputValidationResponseErrorsItem {
+    message?: string;
+    entity?: string;
+    error_code?: string;
   }
 
   /** Version range information. */

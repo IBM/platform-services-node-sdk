@@ -1396,6 +1396,62 @@ describe('CatalogManagementV1', () => {
     // end-list_objects
   });
 
+  test('getRegions request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getRegions() result:');
+    // begin-get_regions
+
+    const params = {
+      filter: '',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getRegions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_regions
+  });
+
+  test('previewRegions request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('previewRegions() result:');
+    // begin-preview_regions
+
+    const params = {
+      filter: '',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.previewRegions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-preview_regions
+  });
+
   test('deleteObject request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);

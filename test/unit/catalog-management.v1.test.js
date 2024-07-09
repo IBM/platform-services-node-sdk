@@ -215,11 +215,17 @@ describe('CatalogManagementV1', () => {
         const rev = 'testString';
         const hideIbmCloudCatalog = true;
         const accountFilters = filtersModel;
+        const regionFilters = ['testString'];
+        const filteredRegions = ['testString'];
+        const filterRegions = true;
         const updateCatalogAccountParams = {
           id,
           rev,
           hideIbmCloudCatalog,
           accountFilters,
+          regionFilters,
+          filteredRegions,
+          filterRegions,
         };
 
         const updateCatalogAccountResult = catalogManagementService.updateCatalogAccount(updateCatalogAccountParams);
@@ -240,6 +246,9 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body._rev).toEqual(rev);
         expect(mockRequestOptions.body.hide_IBM_cloud_catalog).toEqual(hideIbmCloudCatalog);
         expect(mockRequestOptions.body.account_filters).toEqual(accountFilters);
+        expect(mockRequestOptions.body.region_filters).toEqual(regionFilters);
+        expect(mockRequestOptions.body.filtered_regions).toEqual(filteredRegions);
+        expect(mockRequestOptions.body.filter_regions).toEqual(filterRegions);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -3642,6 +3651,7 @@ describe('CatalogManagementV1', () => {
         const formatKind = 'testString';
         const flavor = flavorModel;
         const workingDirectory = 'testString';
+        const installType = 'testString';
         const zipurl = 'testString';
         const repoType = 'testString';
         const reloadOfferingParams = {
@@ -3654,6 +3664,7 @@ describe('CatalogManagementV1', () => {
           formatKind,
           flavor,
           workingDirectory,
+          installType,
           zipurl,
           repoType,
         };
@@ -3678,6 +3689,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.format_kind).toEqual(formatKind);
         expect(mockRequestOptions.body.flavor).toEqual(flavor);
         expect(mockRequestOptions.body.working_directory).toEqual(workingDirectory);
+        expect(mockRequestOptions.body.install_type).toEqual(installType);
         expect(mockRequestOptions.qs.targetVersion).toEqual(targetVersion);
         expect(mockRequestOptions.qs.zipurl).toEqual(zipurl);
         expect(mockRequestOptions.qs.repoType).toEqual(repoType);
@@ -7342,6 +7354,7 @@ describe('CatalogManagementV1', () => {
         const formatKind = 'testString';
         const flavor = flavorModel;
         const workingDirectory = 'testString';
+        const installType = 'testString';
         const copyVersionParams = {
           versionLocId,
           tags,
@@ -7350,6 +7363,7 @@ describe('CatalogManagementV1', () => {
           formatKind,
           flavor,
           workingDirectory,
+          installType,
         };
 
         const copyVersionResult = catalogManagementService.copyVersion(copyVersionParams);
@@ -7372,6 +7386,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.format_kind).toEqual(formatKind);
         expect(mockRequestOptions.body.flavor).toEqual(flavor);
         expect(mockRequestOptions.body.working_directory).toEqual(workingDirectory);
+        expect(mockRequestOptions.body.install_type).toEqual(installType);
         expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
       }
 
@@ -7602,6 +7617,96 @@ describe('CatalogManagementV1', () => {
         let err;
         try {
           await catalogManagementService.copyFromPreviousVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('validatesInputs', () => {
+    describe('positive tests', () => {
+      function __validatesInputsTest() {
+        // Construct the params object for operation validatesInputs
+        const versionLocId = 'testString';
+        const input1 = 'testString';
+        const input2 = 'testString';
+        const validatesInputsParams = {
+          versionLocId,
+          input1,
+          input2,
+        };
+
+        const validatesInputsResult = catalogManagementService.validatesInputs(validatesInputsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(validatesInputsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/validateInputs', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.input1).toEqual(input1);
+        expect(mockRequestOptions.body.input2).toEqual(input2);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __validatesInputsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __validatesInputsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __validatesInputsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const validatesInputsParams = {
+          versionLocId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.validatesInputs(validatesInputsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.validatesInputs({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.validatesInputs();
         } catch (e) {
           err = e;
         }
@@ -12409,6 +12514,152 @@ describe('CatalogManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('previewRegions', () => {
+    describe('positive tests', () => {
+      function __previewRegionsTest() {
+        // Construct the params object for operation previewRegions
+        const filter = 'testString';
+        const getInactive = true;
+        const limit = 100;
+        const offset = 0;
+        const previewRegionsParams = {
+          filter,
+          getInactive,
+          limit,
+          offset,
+        };
+
+        const previewRegionsResult = catalogManagementService.previewRegions(previewRegionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(previewRegionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/regions', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.filter).toEqual(filter);
+        expect(mockRequestOptions.qs.get_inactive).toEqual(getInactive);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __previewRegionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __previewRegionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __previewRegionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const previewRegionsParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.previewRegions(previewRegionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        catalogManagementService.previewRegions({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+
+  describe('getRegions', () => {
+    describe('positive tests', () => {
+      function __getRegionsTest() {
+        // Construct the params object for operation getRegions
+        const filter = 'testString';
+        const getInactive = true;
+        const limit = 100;
+        const offset = 0;
+        const getRegionsParams = {
+          filter,
+          getInactive,
+          limit,
+          offset,
+        };
+
+        const getRegionsResult = catalogManagementService.getRegions(getRegionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getRegionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/regions', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.filter).toEqual(filter);
+        expect(mockRequestOptions.qs.get_inactive).toEqual(getInactive);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.offset).toEqual(offset);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRegionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getRegionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getRegionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getRegionsParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getRegions(getRegionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        catalogManagementService.getRegions({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
