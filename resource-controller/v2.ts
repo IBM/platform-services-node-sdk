@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-f381b8c9-20221101-115055
+ * IBM OpenAPI SDK Code Generator Version: 3.91.0-d9755c53-20240605-153412
  */
 
 /* eslint-disable max-classes-per-file */
@@ -26,10 +26,10 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
-  getAuthenticatorFromEnvironment,
-  validateParams,
   UserOptions,
+  getAuthenticatorFromEnvironment,
   getQueryParam,
+  validateParams,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -56,7 +56,7 @@ class ResourceControllerV2 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {ResourceControllerV2}
    */
 
@@ -81,7 +81,7 @@ class ResourceControllerV2 extends BaseService {
    * Construct a ResourceControllerV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -215,7 +215,9 @@ class ResourceControllerV2 extends BaseService {
    * @param {boolean} [params.allowCleanup] - A boolean that dictates if the resource instance should be deleted
    * (cleaned up) during the processing of a region instance delete call.
    * @param {JsonObject} [params.parameters] - Configuration options represented as key-value pairs that are passed
-   * through to the target resource brokers.
+   * through to the target resource brokers. Set the `onetime_credentials` property to specify whether newly created
+   * resource key credentials can be retrieved by using get resource key or get a list of all of the resource keys
+   * requests.
    * @param {boolean} [params.entityLock] - Indicates if the resource instance is locked for further update or delete
    * operations. It does not affect actions performed on child resources like aliases, bindings or keys. False by
    * default.
@@ -397,7 +399,9 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} params.id - The resource instance URL-encoded CRN or GUID.
    * @param {string} [params.name] - The new name of the instance. Must be 180 characters or less and cannot include any
    * special characters other than `(space) - . _ :`.
-   * @param {JsonObject} [params.parameters] - The new configuration options for the instance.
+   * @param {JsonObject} [params.parameters] - The new configuration options for the instance. Set the
+   * `onetime_credentials` property to specify whether newly created resource key credentials can be retrieved by using
+   * get resource key or get a list of all of the resource keys requests.
    * @param {string} [params.resourcePlanId] - The unique ID of the plan associated with the offering. This value is
    * provided by and stored in the global catalog.
    * @param {boolean} [params.allowCleanup] - A boolean that dictates if the resource instance should be deleted
@@ -1743,6 +1747,7 @@ class ResourceControllerV2 extends BaseService {
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.accountId] - An alpha-numeric value identifying the account ID.
    * @param {string} [params.resourceInstanceId] - The GUID of the resource instance.
+   * @param {string} [params.resourceGroupId] - The ID of the resource group.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>>}
    */
@@ -1751,7 +1756,7 @@ class ResourceControllerV2 extends BaseService {
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ReclamationsList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['accountId', 'resourceInstanceId', 'headers'];
+    const _validParams = ['accountId', 'resourceInstanceId', 'resourceGroupId', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1760,6 +1765,7 @@ class ResourceControllerV2 extends BaseService {
     const query = {
       'account_id': _params.accountId,
       'resource_instance_id': _params.resourceInstanceId,
+      'resource_group_id': _params.resourceGroupId,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1953,7 +1959,10 @@ namespace ResourceControllerV2 {
      *  region instance delete call.
      */
     allowCleanup?: boolean;
-    /** Configuration options represented as key-value pairs that are passed through to the target resource brokers. */
+    /** Configuration options represented as key-value pairs that are passed through to the target resource brokers.
+     *  Set the `onetime_credentials` property to specify whether newly created resource key credentials can be
+     *  retrieved by using get resource key or get a list of all of the resource keys requests.
+     */
     parameters?: JsonObject;
     /** Indicates if the resource instance is locked for further update or delete operations. It does not affect
      *  actions performed on child resources like aliases, bindings or keys. False by default.
@@ -1986,7 +1995,10 @@ namespace ResourceControllerV2 {
      *  than `(space) - . _ :`.
      */
     name?: string;
-    /** The new configuration options for the instance. */
+    /** The new configuration options for the instance. Set the `onetime_credentials` property to specify whether
+     *  newly created resource key credentials can be retrieved by using get resource key or get a list of all of the
+     *  resource keys requests.
+     */
     parameters?: JsonObject;
     /** The unique ID of the plan associated with the offering. This value is provided by and stored in the global
      *  catalog.
@@ -2278,6 +2290,8 @@ namespace ResourceControllerV2 {
     accountId?: string;
     /** The GUID of the resource instance. */
     resourceInstanceId?: string;
+    /** The ID of the resource group. */
+    resourceGroupId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2305,7 +2319,7 @@ namespace ResourceControllerV2 {
      *  information, see [viewing a
      *  credential](https://cloud.ibm.com/docs/account?topic=account-service_credentials&interface=ui#viewing-credentials-ui).
      */
-    REDACTED?: string;
+    REDACTED?: Credentials.Constants.Redacted | string;
     /** The API key for the credentials. */
     apikey?: string;
     /** The optional description of the API key. */
@@ -2318,6 +2332,15 @@ namespace ResourceControllerV2 {
     iam_serviceid_crn?: string;
     /** Credentials accepts additional properties. */
     [propName: string]: any;
+  }
+  export namespace Credentials {
+    export namespace Constants {
+      /** If present, the user doesn't have the correct access to view the credentials and the details are redacted.  The string value identifies the level of access that's required to view the credential. For additional information, see [viewing a credential](https://cloud.ibm.com/docs/account?topic=account-service_credentials&interface=ui#viewing-credentials-ui). */
+      export enum Redacted {
+        REDACTED = 'REDACTED',
+        REDACTED_EXPLICIT = 'REDACTED_EXPLICIT',
+      }
+    }
   }
 
   /** An element of the plan history of the instance. */
@@ -2564,6 +2587,10 @@ namespace ResourceControllerV2 {
      *  location where the instance is provisioned.
      */
     target_crn?: string;
+    /** Whether newly created resource key credentials can be retrieved by using get resource key or get a list of
+     *  all of the resource keys requests.
+     */
+    onetime_credentials?: boolean;
     /** The current configuration parameters of the instance. */
     parameters?: JsonObject;
     /** A boolean that dictates if the resource instance should be deleted (cleaned up) during the processing of a
@@ -2575,7 +2602,7 @@ namespace ResourceControllerV2 {
      */
     crn?: string;
     /** The current state of the instance. For example, if the instance is deleted, it will return removed. */
-    state?: string;
+    state?: ResourceInstance.Constants.State | string;
     /** The type of the instance, for example, `service_instance`. */
     type?: string;
     /** The sub-type of instance, for example, `cfaas`. */
@@ -2605,6 +2632,21 @@ namespace ResourceControllerV2 {
     /** A boolean that dictates if the resource instance is locked or not. */
     locked?: boolean;
   }
+  export namespace ResourceInstance {
+    export namespace Constants {
+      /** The current state of the instance. For example, if the instance is deleted, it will return removed. */
+      export enum State {
+        ACTIVE = 'active',
+        INACTIVE = 'inactive',
+        REMOVED = 'removed',
+        PENDING_REMOVAL = 'pending_removal',
+        PENDING_RECLAMATION = 'pending_reclamation',
+        FAILED = 'failed',
+        PROVISIONING = 'provisioning',
+        PRE_PROVISIONING = 'pre_provisioning',
+      }
+    }
+  }
 
   /** The status of the last operation requested on the instance. */
   export interface ResourceInstanceLastOperation {
@@ -2613,7 +2655,7 @@ namespace ResourceControllerV2 {
     /** The last operation state of the resoure instance. This indicates if the resource's last operation is in
      *  progress, succeeded or failed.
      */
-    state: string;
+    state: ResourceInstanceLastOperation.Constants.State | string;
     /** The last operation sub type of the resoure instance. */
     sub_type?: string;
     /** A boolean that indicates if the resource is provisioned asynchronously or not. */
@@ -2630,6 +2672,16 @@ namespace ResourceControllerV2 {
     poll: boolean;
     /** ResourceInstanceLastOperation accepts additional properties. */
     [propName: string]: any;
+  }
+  export namespace ResourceInstanceLastOperation {
+    export namespace Constants {
+      /** The last operation state of the resoure instance. This indicates if the resource's last operation is in progress, succeeded or failed. */
+      export enum State {
+        IN_PROGRESS = 'in progress',
+        SUCCEEDED = 'succeeded',
+        FAILED = 'failed',
+      }
+    }
   }
 
   /** A list of resource instances. */
@@ -2678,6 +2730,10 @@ namespace ResourceControllerV2 {
     resource_group_id?: string;
     /** The unique ID of the offering. This value is provided by and stored in the global catalog. */
     resource_id?: string;
+    /** Whether newly created resource key credentials can be retrieved by using get resource key or get a list of
+     *  all of the resource keys requests.
+     */
+    onetime_credentials?: boolean;
     /** The credentials for the key. Additional key-value pairs are passed through from the resource brokers. After
      *  a credential is created for a service, it can be viewed at any time for users that need the API key value.
      *  However, all users must have the correct level of access to see the details of a credential that includes the
@@ -2775,7 +2831,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceInstances(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
@@ -2857,7 +2913,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceAliasesForInstance(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
@@ -2939,7 +2995,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceKeysForInstance(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
@@ -3021,7 +3077,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceKeys(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
@@ -3103,7 +3159,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceBindings(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
@@ -3185,7 +3241,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceAliases(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
@@ -3267,7 +3323,7 @@ namespace ResourceControllerV2 {
       const response = await this.client.listResourceBindingsForAlias(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next_url) {
         next = getQueryParam(result.next_url, 'start');
       }
