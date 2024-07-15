@@ -1,3 +1,10 @@
+# [0.61.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.60.2...v0.61.0) (2024-07-11)
+
+
+### Features
+
+* **Resource Controller:** add "onetime_credentials" property in ResourceInstance and ResourceKey schemas ([#268](https://github.com/IBM/platform-services-node-sdk/issues/268)) ([aec7d08](https://github.com/IBM/platform-services-node-sdk/commit/aec7d08273d14837304c83bf3c23d713ad001b9d))
+
 ## [0.60.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.60.1...v0.60.2) (2024-07-05)
 
 
