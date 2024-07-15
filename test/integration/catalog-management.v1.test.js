@@ -157,6 +157,21 @@ describe('CatalogManagementV1_integration', () => {
     offeringRevLink = res.result._rev;
   });
 
+  test('validateInputs()', async () => {
+    // Request models needed by this operation.
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      input1: 'name',
+      input2: '',
+    };
+
+    const res = await catalogManagementService.validateInputs(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   // Set allow publish offering
   test('setAllowPublishOffering request example', async () => {
     const headers = {
@@ -799,6 +814,28 @@ describe('CatalogManagementV1_integration', () => {
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
+  test('listRegions()', async () => {
+    const params = {
+      filter: '',
+    };
+
+    const res = await catalogManagementService.listRegions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('previewRegions()', async () => {
+    const params = {
+      filter: '',
+    };
+
+    const res = await catalogManagementService.previewRegions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('deleteVersion()', async () => {
     const params = {
       versionLocId: versionLocatorLink,
@@ -808,6 +845,27 @@ describe('CatalogManagementV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
+  });
+
+  // unset pc managed on this offering so we can delete it
+  test('setAllowPublishOffering unset pc_managed request example', async () => {
+    const headers = {
+      'X-Approver-Token': approverToken,
+    };
+
+    const response = await fetch(
+      `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/publish/pc_managed/false`,
+      {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Authorization': `bearer ${token}`,
+        },
+      }
+    );
+    const res = await response.json();
+    expect(res).toBeDefined();
+    expect(response.status).toBe(200);
   });
 
   test('deleteOffering()', async () => {
