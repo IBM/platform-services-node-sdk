@@ -149,9 +149,17 @@ describe('CatalogManagementV1', () => {
     originalLog('updateCatalogAccount() result:');
     // begin-update_catalog_account
 
+    const params = {
+      rev: accountRevLink,
+      accountFilters: {
+        include_all: true,
+        id_filters: {},
+      }
+    }
+
     let res;
     try {
-      res = await catalogManagementService.updateCatalogAccount({ rev: accountRevLink });
+      res = await catalogManagementService.updateCatalogAccount(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -318,6 +326,36 @@ describe('CatalogManagementV1', () => {
     versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
     versionIdLink = responseBody.kinds[0].versions[0].version_locator;
     versionRevLink = responseBody.kinds[0].versions[0]._rev;
+  });
+
+  test('validateInputs request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('validateInputs() result:');
+    // begin-validate_inputs
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      input1: 'name',
+      input2: '',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.validateInputs(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-validate_inputs
   });
 
   // Set allow publish offering
@@ -1394,6 +1432,62 @@ describe('CatalogManagementV1', () => {
     }
 
     // end-list_objects
+  });
+
+  test('listRegions request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listRegions() result:');
+    // begin-list_regions
+
+    const params = {
+      filter: '',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.listRegions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_regions
+  });
+
+  test('previewRegions request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('previewRegions() result:');
+    // begin-preview_regions
+
+    const params = {
+      filter: '',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.previewRegions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-preview_regions
   });
 
   test('deleteObject request example', async () => {
