@@ -7626,23 +7626,23 @@ describe('CatalogManagementV1', () => {
     });
   });
 
-  describe('validatesInputs', () => {
+  describe('validateInputs', () => {
     describe('positive tests', () => {
-      function __validatesInputsTest() {
-        // Construct the params object for operation validatesInputs
+      function __validateInputsTest() {
+        // Construct the params object for operation validateInputs
         const versionLocId = 'testString';
         const input1 = 'testString';
         const input2 = 'testString';
-        const validatesInputsParams = {
+        const validateInputsParams = {
           versionLocId,
           input1,
           input2,
         };
 
-        const validatesInputsResult = catalogManagementService.validatesInputs(validatesInputsParams);
+        const validateInputsResult = catalogManagementService.validateInputs(validateInputsParams);
 
         // all methods should return a Promise
-        expectToBePromise(validatesInputsResult);
+        expectToBePromise(validateInputsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -7660,17 +7660,17 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __validatesInputsTest();
+        __validateInputsTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __validatesInputsTest();
+        __validateInputsTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __validatesInputsTest();
+        __validateInputsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7678,7 +7678,7 @@ describe('CatalogManagementV1', () => {
         const versionLocId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const validatesInputsParams = {
+        const validateInputsParams = {
           versionLocId,
           headers: {
             Accept: userAccept,
@@ -7686,7 +7686,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.validatesInputs(validatesInputsParams);
+        catalogManagementService.validateInputs(validateInputsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7695,7 +7695,7 @@ describe('CatalogManagementV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await catalogManagementService.validatesInputs({});
+          await catalogManagementService.validateInputs({});
         } catch (e) {
           err = e;
         }
@@ -7706,7 +7706,7 @@ describe('CatalogManagementV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await catalogManagementService.validatesInputs();
+          await catalogManagementService.validateInputs();
         } catch (e) {
           err = e;
         }
@@ -12591,25 +12591,25 @@ describe('CatalogManagementV1', () => {
     });
   });
 
-  describe('getRegions', () => {
+  describe('listRegions', () => {
     describe('positive tests', () => {
-      function __getRegionsTest() {
-        // Construct the params object for operation getRegions
+      function __listRegionsTest() {
+        // Construct the params object for operation listRegions
         const filter = 'testString';
         const getInactive = true;
         const limit = 100;
         const offset = 0;
-        const getRegionsParams = {
+        const listRegionsParams = {
           filter,
           getInactive,
           limit,
           offset,
         };
 
-        const getRegionsResult = catalogManagementService.getRegions(getRegionsParams);
+        const listRegionsResult = catalogManagementService.listRegions(listRegionsParams);
 
         // all methods should return a Promise
-        expectToBePromise(getRegionsResult);
+        expectToBePromise(listRegionsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -12628,37 +12628,37 @@ describe('CatalogManagementV1', () => {
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
         // baseline test
-        __getRegionsTest();
+        __listRegionsTest();
 
         // enable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.enableRetries();
-        __getRegionsTest();
+        __listRegionsTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
         catalogManagementService.disableRetries();
-        __getRegionsTest();
+        __listRegionsTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const getRegionsParams = {
+        const listRegionsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        catalogManagementService.getRegions(getRegionsParams);
+        catalogManagementService.listRegions(listRegionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
       test('should not have any problems when no parameters are passed in', () => {
         // invoke the method with no parameters
-        catalogManagementService.getRegions({});
+        catalogManagementService.listRegions({});
         checkForSuccessfulExecution(createRequestMock);
       });
     });

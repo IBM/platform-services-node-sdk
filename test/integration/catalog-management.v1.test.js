@@ -157,7 +157,7 @@ describe('CatalogManagementV1_integration', () => {
     offeringRevLink = res.result._rev;
   });
 
-  test('validatesInputs()', async () => {
+  test('validateInputs()', async () => {
     // Request models needed by this operation.
 
     const params = {
@@ -166,7 +166,7 @@ describe('CatalogManagementV1_integration', () => {
       input2: '',
     };
 
-    const res = await catalogManagementService.validatesInputs(params);
+    const res = await catalogManagementService.validateInputs(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -814,12 +814,12 @@ describe('CatalogManagementV1_integration', () => {
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('getRegions()', async () => {
+  test('listRegions()', async () => {
     const params = {
       filter: '',
     };
 
-    const res = await catalogManagementService.getRegions(params);
+    const res = await catalogManagementService.listRegions(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();

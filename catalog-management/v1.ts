@@ -4225,8 +4225,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionInputValidationResponse>>}
    */
-  public validatesInputs(
-    params: CatalogManagementV1.ValidatesInputsParams
+  public validateInputs(
+    params: CatalogManagementV1.ValidateInputsParams
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionInputValidationResponse>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
@@ -4248,7 +4248,7 @@ class CatalogManagementV1 extends BaseService {
     const sdkHeaders = getSdkHeaders(
       CatalogManagementV1.DEFAULT_SERVICE_NAME,
       'v1',
-      'validatesInputs'
+      'validateInputs'
     );
 
     const parameters = {
@@ -7265,8 +7265,8 @@ class CatalogManagementV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>>}
    */
-  public getRegions(
-    params?: CatalogManagementV1.GetRegionsParams
+  public listRegions(
+    params?: CatalogManagementV1.ListRegionsParams
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>> {
     const _params = { ...params };
     const _requiredParams = [];
@@ -7283,7 +7283,7 @@ class CatalogManagementV1 extends BaseService {
       'offset': _params.offset,
     };
 
-    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegions');
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegions');
 
     const parameters = {
       options: {
@@ -8565,8 +8565,8 @@ namespace CatalogManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `validatesInputs` operation. */
-  export interface ValidatesInputsParams {
+  /** Parameters for the `validateInputs` operation. */
+  export interface ValidateInputsParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** A deployment variable to validate. */
@@ -9402,8 +9402,8 @@ namespace CatalogManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getRegions` operation. */
-  export interface GetRegionsParams {
+  /** Parameters for the `listRegions` operation. */
+  export interface ListRegionsParams {
     /** Filter to apply for search. */
     filter?: string;
     /** Returns inactive locations when true. */

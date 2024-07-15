@@ -328,7 +328,7 @@ describe('CatalogManagementV1', () => {
     versionRevLink = responseBody.kinds[0].versions[0]._rev;
   });
 
-  test('validatesInputs request example', async () => {
+  test('validateInputs request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -338,8 +338,8 @@ describe('CatalogManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('validatesInputs() result:');
-    // begin-import_offering_version
+    originalLog('validateInputs() result:');
+    // begin-validate_inputs
 
     const params = {
       versionLocId: versionLocatorLink,
@@ -349,13 +349,13 @@ describe('CatalogManagementV1', () => {
 
     let res;
     try {
-      res = await catalogManagementService.validatesInputs(params);
+      res = await catalogManagementService.validateInputs(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-import_offering_version
+    // end-validate_inputs
   });
 
   // Set allow publish offering
@@ -1434,7 +1434,7 @@ describe('CatalogManagementV1', () => {
     // end-list_objects
   });
 
-  test('getRegions request example', async () => {
+  test('listRegions request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1444,8 +1444,8 @@ describe('CatalogManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('getRegions() result:');
-    // begin-get_regions
+    originalLog('listRegions() result:');
+    // begin-list_regions
 
     const params = {
       filter: '',
@@ -1453,13 +1453,13 @@ describe('CatalogManagementV1', () => {
 
     let res;
     try {
-      res = await catalogManagementService.getRegions(params);
+      res = await catalogManagementService.listRegions(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
-    // end-get_regions
+    // end-list_regions
   });
 
   test('previewRegions request example', async () => {
