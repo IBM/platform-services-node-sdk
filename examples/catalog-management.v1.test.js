@@ -149,9 +149,17 @@ describe('CatalogManagementV1', () => {
     originalLog('updateCatalogAccount() result:');
     // begin-update_catalog_account
 
+    const params = {
+      rev: accountRevLink,
+      accountFilters: {
+        include_all: true,
+        id_filters: {},
+      }
+    }
+
     let res;
     try {
-      res = await catalogManagementService.updateCatalogAccount({ rev: accountRevLink });
+      res = await catalogManagementService.updateCatalogAccount(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -318,6 +326,36 @@ describe('CatalogManagementV1', () => {
     versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
     versionIdLink = responseBody.kinds[0].versions[0].version_locator;
     versionRevLink = responseBody.kinds[0].versions[0]._rev;
+  });
+
+  test('validatesInputs request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('validatesInputs() result:');
+    // begin-import_offering_version
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      input1: 'name',
+      input2: '',
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.validatesInputs(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-import_offering_version
   });
 
   // Set allow publish offering

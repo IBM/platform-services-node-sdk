@@ -157,6 +157,21 @@ describe('CatalogManagementV1_integration', () => {
     offeringRevLink = res.result._rev;
   });
 
+  test('validatesInputs()', async () => {
+    // Request models needed by this operation.
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      input1: 'name',
+      input2: '',
+    };
+
+    const res = await catalogManagementService.validatesInputs(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   // Set allow publish offering
   test('setAllowPublishOffering request example', async () => {
     const headers = {
