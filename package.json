@@ -29,7 +29,8 @@
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
     "check-packages": "installed-check -e -d -v",
-    "all": "npm run test-unit && npm run lint"
+    "all": "npm run test-unit && npm run lint",
+    "semantic-release": "semantic-release"
   },
   "license": "Apache-2.0",
   "publishConfig": {
