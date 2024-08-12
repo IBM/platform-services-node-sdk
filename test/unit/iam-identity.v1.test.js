@@ -5541,6 +5541,96 @@ describe('IamIdentityV1', () => {
     });
   });
 
+  describe('getEffectiveAccountSettings', () => {
+    describe('positive tests', () => {
+      function __getEffectiveAccountSettingsTest() {
+        // Construct the params object for operation getEffectiveAccountSettings
+        const accountId = 'testString';
+        const includeHistory = false;
+        const resolveUserMfa = false;
+        const getEffectiveAccountSettingsParams = {
+          accountId,
+          includeHistory,
+          resolveUserMfa,
+        };
+
+        const getEffectiveAccountSettingsResult = iamIdentityService.getEffectiveAccountSettings(getEffectiveAccountSettingsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getEffectiveAccountSettingsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/accounts/{account_id}/effective_settings/identity', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.include_history).toEqual(includeHistory);
+        expect(mockRequestOptions.qs.resolve_user_mfa).toEqual(resolveUserMfa);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getEffectiveAccountSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __getEffectiveAccountSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __getEffectiveAccountSettingsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getEffectiveAccountSettingsParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.getEffectiveAccountSettings(getEffectiveAccountSettingsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.getEffectiveAccountSettings({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.getEffectiveAccountSettings();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('listTrustedProfileAssignments', () => {
     describe('positive tests', () => {
       function __listTrustedProfileAssignmentsTest() {
@@ -6117,6 +6207,31 @@ describe('IamIdentityV1', () => {
         version: 'testString',
       };
 
+      // ActionControlsIdentities
+      const actionControlsIdentitiesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControlsRules
+      const actionControlsRulesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControlsPolicies
+      const actionControlsPoliciesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControls
+      const actionControlsModel = {
+        identities: actionControlsIdentitiesModel,
+        rules: actionControlsRulesModel,
+        policies: actionControlsPoliciesModel,
+      };
+
       function __createProfileTemplateTest() {
         // Construct the params object for operation createProfileTemplate
         const accountId = 'testString';
@@ -6124,12 +6239,14 @@ describe('IamIdentityV1', () => {
         const description = 'testString';
         const profile = templateProfileComponentRequestModel;
         const policyTemplateReferences = [policyTemplateReferenceModel];
+        const actionControls = actionControlsModel;
         const createProfileTemplateParams = {
           accountId,
           name,
           description,
           profile,
           policyTemplateReferences,
+          actionControls,
         };
 
         const createProfileTemplateResult = iamIdentityService.createProfileTemplate(createProfileTemplateParams);
@@ -6151,6 +6268,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.profile).toEqual(profile);
         expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
+        expect(mockRequestOptions.body.action_controls).toEqual(actionControls);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -6503,6 +6621,31 @@ describe('IamIdentityV1', () => {
         version: 'testString',
       };
 
+      // ActionControlsIdentities
+      const actionControlsIdentitiesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControlsRules
+      const actionControlsRulesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControlsPolicies
+      const actionControlsPoliciesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControls
+      const actionControlsModel = {
+        identities: actionControlsIdentitiesModel,
+        rules: actionControlsRulesModel,
+        policies: actionControlsPoliciesModel,
+      };
+
       function __createProfileTemplateVersionTest() {
         // Construct the params object for operation createProfileTemplateVersion
         const templateId = 'testString';
@@ -6511,6 +6654,7 @@ describe('IamIdentityV1', () => {
         const description = 'testString';
         const profile = templateProfileComponentRequestModel;
         const policyTemplateReferences = [policyTemplateReferenceModel];
+        const actionControls = actionControlsModel;
         const createProfileTemplateVersionParams = {
           templateId,
           accountId,
@@ -6518,6 +6662,7 @@ describe('IamIdentityV1', () => {
           description,
           profile,
           policyTemplateReferences,
+          actionControls,
         };
 
         const createProfileTemplateVersionResult = iamIdentityService.createProfileTemplateVersion(createProfileTemplateVersionParams);
@@ -6539,6 +6684,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.profile).toEqual(profile);
         expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
+        expect(mockRequestOptions.body.action_controls).toEqual(actionControls);
         expect(mockRequestOptions.path.template_id).toEqual(templateId);
       }
 
@@ -6734,6 +6880,31 @@ describe('IamIdentityV1', () => {
         version: 'testString',
       };
 
+      // ActionControlsIdentities
+      const actionControlsIdentitiesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControlsRules
+      const actionControlsRulesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControlsPolicies
+      const actionControlsPoliciesModel = {
+        add: true,
+        remove: true,
+      };
+
+      // ActionControls
+      const actionControlsModel = {
+        identities: actionControlsIdentitiesModel,
+        rules: actionControlsRulesModel,
+        policies: actionControlsPoliciesModel,
+      };
+
       function __updateProfileTemplateVersionTest() {
         // Construct the params object for operation updateProfileTemplateVersion
         const ifMatch = 'testString';
@@ -6744,6 +6915,7 @@ describe('IamIdentityV1', () => {
         const description = 'testString';
         const profile = templateProfileComponentRequestModel;
         const policyTemplateReferences = [policyTemplateReferenceModel];
+        const actionControls = actionControlsModel;
         const updateProfileTemplateVersionParams = {
           ifMatch,
           templateId,
@@ -6753,6 +6925,7 @@ describe('IamIdentityV1', () => {
           description,
           profile,
           policyTemplateReferences,
+          actionControls,
         };
 
         const updateProfileTemplateVersionResult = iamIdentityService.updateProfileTemplateVersion(updateProfileTemplateVersionParams);
@@ -6775,6 +6948,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.profile).toEqual(profile);
         expect(mockRequestOptions.body.policy_template_references).toEqual(policyTemplateReferences);
+        expect(mockRequestOptions.body.action_controls).toEqual(actionControls);
         expect(mockRequestOptions.path.template_id).toEqual(templateId);
         expect(mockRequestOptions.path.version).toEqual(version);
       }
