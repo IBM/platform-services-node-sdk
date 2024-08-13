@@ -1,3 +1,10 @@
+# [0.63.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.62.0...v0.63.0) (2024-08-13)
+
+
+### Features
+
+* **IAM Identity:** adding effective account settings ([#272](https://github.com/IBM/platform-services-node-sdk/issues/272)) ([81745ff](https://github.com/IBM/platform-services-node-sdk/commit/81745fffbb39de0e3f38a7e1bd1890b7d928ec2d))
+
 # [0.62.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.61.0...v0.62.0) (2024-07-15)
 
 
