@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 /**
- * (C) Copyright IBM Corp. 2020, 2021.
+ * (C) Copyright IBM Corp. 2020, 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1266,6 +1266,34 @@ test('createApiKey request example', async () => {
     }
 
     // end-updateAccountSettings
+  });
+  test('getEffectiveAccountSettings request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+
+    originalLog('getEffectiveAccountSettings() result:');
+    // begin-getEffectiveAccountSettings
+
+    const params = {
+      accountId: accountId,
+    };
+
+    try {
+      const res = await iamIdentityService.getEffectiveAccountSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+
+    // end-getEffectiveAccountSettings
   });
   test('createReport request example', async () => {
 
