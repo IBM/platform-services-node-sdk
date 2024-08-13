@@ -1511,6 +1511,34 @@ describe('IamIdentityV1_integration', () => {
         done(err);
       });
   });
+  test('getEffectiveAccountSettings()', (done) => {
+    const params = {
+      accountId,
+      includeHistory: false,
+    };
+
+    iamIdentityService
+      .getEffectiveAccountSettings(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+        expect(res).toBeDefined();
+
+        const { result } = res;
+        expect(result).toBeDefined();
+
+        // console.log('getEffectiveAccountSettings() result: ', result);
+        expect(result.account_id).toEqual(accountId);
+        expect(result.effective).toBeDefined();
+        expect(result.account).toBeDefined();
+        
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('createReport()', (done) => {
     const params = {
       accountId,
