@@ -1,3 +1,10 @@
+## [0.63.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.63.0...v0.63.1) (2024-08-14)
+
+
+### Bug Fixes
+
+* **deps:** bump node core to avoid axios vulnerability ([#273](https://github.com/IBM/platform-services-node-sdk/issues/273)) ([2890ed2](https://github.com/IBM/platform-services-node-sdk/commit/2890ed210c29605f4765506335908bf39720d926))
+
 # [0.63.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.62.0...v0.63.0) (2024-08-13)
 
 
