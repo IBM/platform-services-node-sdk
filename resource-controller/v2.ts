@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.91.0-d9755c53-20240605-153412
+ * IBM OpenAPI SDK Code Generator Version: 3.94.1-71478489-20240820-161623
  */
 
 /* eslint-disable max-classes-per-file */
@@ -26,8 +26,10 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
+  SDKLogger,
   UserOptions,
   getAuthenticatorFromEnvironment,
+  getNewLogger,
   getQueryParam,
   validateParams,
 } from 'ibm-cloud-sdk-core';
@@ -42,6 +44,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class ResourceControllerV2 extends BaseService {
+  static _logger: SDKLogger = getNewLogger('ResourceControllerV2');
+
   static DEFAULT_SERVICE_URL: string = 'https://resource-controller.cloud.ibm.com';
 
   static DEFAULT_SERVICE_NAME: string = 'resource_controller';
@@ -474,10 +478,14 @@ class ResourceControllerV2 extends BaseService {
    * operation response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public listResourceAliasesForInstance(
     params: ResourceControllerV2.ListResourceAliasesForInstanceParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: listResourceAliasesForInstance'
+    );
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'limit', 'start', 'headers'];
@@ -1073,10 +1081,14 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public listResourceBindings(
     params?: ResourceControllerV2.ListResourceBindingsParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: listResourceBindings'
+    );
     const _params = { ...params };
     const _requiredParams = [];
     const _validParams = [
@@ -1153,10 +1165,14 @@ class ResourceControllerV2 extends BaseService {
    * custom role CRN. Refer to service’s documentation for supported roles.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public createResourceBinding(
     params: ResourceControllerV2.CreateResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: createResourceBinding'
+    );
     const _params = { ...params };
     const _requiredParams = ['source', 'target'];
     const _validParams = ['source', 'target', 'name', 'parameters', 'role', 'headers'];
@@ -1211,10 +1227,14 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} params.id - The resource binding URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public getResourceBinding(
     params: ResourceControllerV2.GetResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: getResourceBinding'
+    );
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -1263,10 +1283,14 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} params.id - The resource binding URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public deleteResourceBinding(
     params: ResourceControllerV2.DeleteResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: deleteResourceBinding'
+    );
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -1310,10 +1334,14 @@ class ResourceControllerV2 extends BaseService {
    * special characters other than `(space) - . _ :`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public updateResourceBinding(
     params: ResourceControllerV2.UpdateResourceBindingParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBinding>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: updateResourceBinding'
+    );
     const _params = { ...params };
     const _requiredParams = ['id', 'name'];
     const _validParams = ['id', 'name', 'headers'];
@@ -1385,10 +1413,14 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} [params.updatedTo] - End date inclusive filter.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public listResourceAliases(
     params?: ResourceControllerV2.ListResourceAliasesParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAliasesList>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: listResourceAliases'
+    );
     const _params = { ...params };
     const _requiredParams = [];
     const _validParams = [
@@ -1462,10 +1494,14 @@ class ResourceControllerV2 extends BaseService {
    * Dallas YP, CFEE instance etc.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public createResourceAlias(
     params: ResourceControllerV2.CreateResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: createResourceAlias'
+    );
     const _params = { ...params };
     const _requiredParams = ['name', 'source', 'target'];
     const _validParams = ['name', 'source', 'target', 'headers'];
@@ -1518,10 +1554,12 @@ class ResourceControllerV2 extends BaseService {
    * @param {string} params.id - The resource alias URL-encoded CRN or GUID.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public getResourceAlias(
     params: ResourceControllerV2.GetResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
+    ResourceControllerV2._logger.warn('A deprecated operation has been invoked: getResourceAlias');
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -1572,10 +1610,14 @@ class ResourceControllerV2 extends BaseService {
    * @param {boolean} [params.recursive] - Deletes the resource bindings and keys associated with the alias.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public deleteResourceAlias(
     params: ResourceControllerV2.DeleteResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.EmptyObject>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: deleteResourceAlias'
+    );
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'recursive', 'headers'];
@@ -1624,10 +1666,14 @@ class ResourceControllerV2 extends BaseService {
    * special characters other than `(space) - . _ :`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public updateResourceAlias(
     params: ResourceControllerV2.UpdateResourceAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceAlias>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: updateResourceAlias'
+    );
     const _params = { ...params };
     const _requiredParams = ['id', 'name'];
     const _validParams = ['id', 'name', 'headers'];
@@ -1687,10 +1733,14 @@ class ResourceControllerV2 extends BaseService {
    * operation response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public listResourceBindingsForAlias(
     params: ResourceControllerV2.ListResourceBindingsForAliasParams
   ): Promise<ResourceControllerV2.Response<ResourceControllerV2.ResourceBindingsList>> {
+    ResourceControllerV2._logger.warn(
+      'A deprecated operation has been invoked: listResourceBindingsForAlias'
+    );
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'limit', 'start', 'headers'];
@@ -2312,7 +2362,11 @@ namespace ResourceControllerV2 {
    * model interfaces
    ************************/
 
-  /** The credentials for a resource. */
+  /**
+   * The credentials for a resource.
+   *
+   * This type supports additional properties of type any. Additional key-value pairs from the resource broker.
+   */
   export interface Credentials {
     /** If present, the user doesn't have the correct access to view the credentials and the details are redacted.
      *  The string value identifies the level of access that's required to view the credential. For additional
@@ -2330,7 +2384,10 @@ namespace ResourceControllerV2 {
     iam_role_crn?: string;
     /** The Cloud Resource Name for the service ID of the credentials. */
     iam_serviceid_crn?: string;
-    /** Credentials accepts additional properties. */
+
+    /**
+     * Credentials accepts additional properties of type any. Additional key-value pairs from the resource broker.
+     */
     [propName: string]: any;
   }
   export namespace Credentials {
@@ -2343,7 +2400,9 @@ namespace ResourceControllerV2 {
     }
   }
 
-  /** An element of the plan history of the instance. */
+  /**
+   * An element of the plan history of the instance.
+   */
   export interface PlanHistoryItem {
     /** The unique ID of the plan associated with the offering. This value is provided by and stored in the global
      *  catalog.
@@ -2355,7 +2414,9 @@ namespace ResourceControllerV2 {
     requestor_id?: string;
   }
 
-  /** A reclamation. */
+  /**
+   * A reclamation.
+   */
   export interface Reclamation {
     /** The ID associated with the reclamation. */
     id?: string;
@@ -2391,13 +2452,17 @@ namespace ResourceControllerV2 {
     updated_by?: string;
   }
 
-  /** A list of reclamations. */
+  /**
+   * A list of reclamations.
+   */
   export interface ReclamationsList {
     /** A list of reclamations. */
     resources?: Reclamation[];
   }
 
-  /** A resource alias. */
+  /**
+   * A resource alias.
+   */
   export interface ResourceAlias {
     /** The ID associated with the alias. */
     id?: string;
@@ -2451,7 +2516,9 @@ namespace ResourceControllerV2 {
     resource_keys_url?: string;
   }
 
-  /** A list of resource aliases. */
+  /**
+   * A list of resource aliases.
+   */
   export interface ResourceAliasesList {
     /** The number of resource aliases in `resources`. */
     rows_count: number;
@@ -2461,7 +2528,9 @@ namespace ResourceControllerV2 {
     resources: ResourceAlias[];
   }
 
-  /** A resource binding. */
+  /**
+   * A resource binding.
+   */
   export interface ResourceBinding {
     /** The ID associated with the binding. */
     id?: string;
@@ -2521,15 +2590,25 @@ namespace ResourceControllerV2 {
     resource_alias_url?: string;
   }
 
-  /** Configuration options represented as key-value pairs. Service defined options are passed through to the target resource brokers, whereas platform defined options are not. */
+  /**
+   * Configuration options represented as key-value pairs. Service defined options are passed through to the target
+   * resource brokers, whereas platform defined options are not.
+   *
+   * This type supports additional properties of type any.
+   */
   export interface ResourceBindingPostParameters {
     /** An optional platform defined option to reuse an existing IAM serviceId for the role assignment. */
     serviceid_crn?: string;
-    /** ResourceBindingPostParameters accepts additional properties. */
+
+    /**
+     * ResourceBindingPostParameters accepts additional properties of type any.
+     */
     [propName: string]: any;
   }
 
-  /** A list of resource bindings. */
+  /**
+   * A list of resource bindings.
+   */
   export interface ResourceBindingsList {
     /** The number of resource bindings in `resources`. */
     rows_count: number;
@@ -2539,7 +2618,9 @@ namespace ResourceControllerV2 {
     resources: ResourceBinding[];
   }
 
-  /** A resource instance. */
+  /**
+   * A resource instance.
+   */
   export interface ResourceInstance {
     /** The ID associated with the instance. */
     id?: string;
@@ -2613,9 +2694,9 @@ namespace ResourceControllerV2 {
     dashboard_url?: string;
     /** The status of the last operation requested on the instance. */
     last_operation?: ResourceInstanceLastOperation;
-    /** The relative path to the resource aliases for the instance. */
+    /** Deprecated: The relative path to the resource aliases for the instance. */
     resource_aliases_url?: string;
-    /** The relative path to the resource bindings for the instance. */
+    /** Deprecated: The relative path to the resource bindings for the instance. */
     resource_bindings_url?: string;
     /** The relative path to the resource keys for the instance. */
     resource_keys_url?: string;
@@ -2648,7 +2729,11 @@ namespace ResourceControllerV2 {
     }
   }
 
-  /** The status of the last operation requested on the instance. */
+  /**
+   * The status of the last operation requested on the instance.
+   *
+   * This type supports additional properties of type any.
+   */
   export interface ResourceInstanceLastOperation {
     /** The last operation type of the resource instance. */
     type: string;
@@ -2670,7 +2755,10 @@ namespace ResourceControllerV2 {
     cancelable: boolean;
     /** A boolean that indicates if the resource broker's last operation can be polled or not. */
     poll: boolean;
-    /** ResourceInstanceLastOperation accepts additional properties. */
+
+    /**
+     * ResourceInstanceLastOperation accepts additional properties of type any.
+     */
     [propName: string]: any;
   }
   export namespace ResourceInstanceLastOperation {
@@ -2684,7 +2772,9 @@ namespace ResourceControllerV2 {
     }
   }
 
-  /** A list of resource instances. */
+  /**
+   * A list of resource instances.
+   */
   export interface ResourceInstancesList {
     /** The number of resource instances in `resources`. */
     rows_count: number;
@@ -2694,7 +2784,9 @@ namespace ResourceControllerV2 {
     resources: ResourceInstance[];
   }
 
-  /** A resource key. */
+  /**
+   * A resource key.
+   */
   export interface ResourceKey {
     /** The ID associated with the key. */
     id?: string;
@@ -2752,15 +2844,25 @@ namespace ResourceControllerV2 {
     resource_alias_url?: string;
   }
 
-  /** Configuration options represented as key-value pairs. Service defined options are passed through to the target resource brokers, whereas platform defined options are not. */
+  /**
+   * Configuration options represented as key-value pairs. Service defined options are passed through to the target
+   * resource brokers, whereas platform defined options are not.
+   *
+   * This type supports additional properties of type any.
+   */
   export interface ResourceKeyPostParameters {
     /** An optional platform defined option to reuse an existing IAM serviceId for the role assignment. */
     serviceid_crn?: string;
-    /** ResourceKeyPostParameters accepts additional properties. */
+
+    /**
+     * ResourceKeyPostParameters accepts additional properties of type any.
+     */
     [propName: string]: any;
   }
 
-  /** A list of resource keys. */
+  /**
+   * A list of resource keys.
+   */
   export interface ResourceKeysList {
     /** The number of resource keys in `resources`. */
     rows_count: number;
