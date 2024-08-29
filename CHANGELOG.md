@@ -1,3 +1,10 @@
+# [0.64.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.63.1...v0.64.0) (2024-08-29)
+
+
+### Features
+
+* **Resource Controller:** Deprecating alias and bindings APIs and schema items ([#274](https://github.com/IBM/platform-services-node-sdk/issues/274)) ([cc904b5](https://github.com/IBM/platform-services-node-sdk/commit/cc904b5a56e22b4f41ef8f5d4a4642b95d034030))
+
 ## [0.63.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.63.0...v0.63.1) (2024-08-14)
 
 
