@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.92.1-44330004-20240620-143510
+ * IBM OpenAPI SDK Code Generator Version: 3.94.1-71478489-20240820-161623
  */
 
 /* eslint-disable max-classes-per-file */
@@ -1677,6 +1677,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} params.catalogIdentifier - Catalog identifier.
    * @param {string} params.offeringId - Offering identification.
    * @param {string[]} [params.tags] - Tags array.
+   * @param {string[]} [params.keywords] - Keywords array.
    * @param {string} [params.content] - Byte array representing the content to be imported. Only supported for OVA
    * images at this time.
    * @param {string} [params.name] - Name of version. Required for virtual server image for VPC.
@@ -1721,6 +1722,7 @@ class CatalogManagementV1 extends BaseService {
       'catalogIdentifier',
       'offeringId',
       'tags',
+      'keywords',
       'content',
       'name',
       'label',
@@ -1750,6 +1752,7 @@ class CatalogManagementV1 extends BaseService {
 
     const body = {
       'tags': _params.tags,
+      'keywords': _params.keywords,
       'content': _params.content,
       'name': _params.name,
       'label': _params.label,
@@ -1818,6 +1821,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.catalogIdentifier - Catalog identifier.
    * @param {string[]} [params.tags] - Tags array.
+   * @param {string[]} [params.keywords] - Keywords array.
    * @param {string} [params.content] - Byte array representing the content to be imported. Only supported for OVA
    * images at this time.
    * @param {string} [params.name] - Name of version. Required for virtual server image for VPC.
@@ -1861,6 +1865,7 @@ class CatalogManagementV1 extends BaseService {
     const _validParams = [
       'catalogIdentifier',
       'tags',
+      'keywords',
       'content',
       'name',
       'label',
@@ -1891,6 +1896,7 @@ class CatalogManagementV1 extends BaseService {
 
     const body = {
       'tags': _params.tags,
+      'keywords': _params.keywords,
       'content': _params.content,
       'name': _params.name,
       'label': _params.label,
@@ -3520,6 +3526,80 @@ class CatalogManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+
+  /**
+   * Get versions.
+   *
+   * Get the versions of the specified kind in the specified offering. This can be used by an unauthenticated user for
+   * publicly available offerings.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.catalogIdentifier - Catalog identifier.
+   * @param {string} params.offeringId - Offering identification.
+   * @param {string} params.kindId - Kind identification.
+   * @param {boolean} [params.digest] - Return the digest format of the specified offering.  Default is false.
+   * @param {boolean} [params.catalog] - Return consumable versions.  Default is false.
+   * @param {string} [params.start] - Start token for a query.
+   * @param {number} [params.limit] - number or results to return in the query.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionsResult>>}
+   */
+  public getVersions(
+    params: CatalogManagementV1.GetVersionsParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionsResult>> {
+    const _params = { ...params };
+    const _requiredParams = ['catalogIdentifier', 'offeringId', 'kindId'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'kindId',
+      'digest',
+      'catalog',
+      'start',
+      'limit',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'digest': _params.digest,
+      'catalog': _params.catalog,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'catalog_identifier': _params.catalogIdentifier,
+      'offering_id': _params.offeringId,
+      'kind_id': _params.kindId,
+    };
+
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'getVersions');
+
+    const parameters = {
+      options: {
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/kinds/{kind_id}/versions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * versions
    ************************/
@@ -4323,6 +4403,269 @@ class CatalogManagementV1 extends BaseService {
   }
 
   /**
+   * Update a version.
+   *
+   * Update the version for the specified locator ID using an offering 'branch'.  Note that any changes to the Offering
+   * and Kind in the provided Offering 'branch' are discarded.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {string} [params.id] - unique id.
+   * @param {string} [params.rev] - Cloudant revision.
+   * @param {string} [params.url] - The url for this specific offering.
+   * @param {string} [params.crn] - The crn for this specific offering.
+   * @param {string} [params.label] - Display Name in the requested language.
+   * @param {JsonObject} [params.labelI18n] - A map of translated strings, by language code.
+   * @param {string} [params.name] - The programmatic name of this offering.
+   * @param {string} [params.offeringIconUrl] - URL for an icon associated with this offering.
+   * @param {string} [params.offeringDocsUrl] - URL for an additional docs with this offering.
+   * @param {string} [params.offeringSupportUrl] - [deprecated] - Use offering.support instead.  URL to be displayed in
+   * the Consumption UI for getting support on this offering.
+   * @param {string[]} [params.tags] - List of tags associated with this catalog.
+   * @param {string[]} [params.keywords] - List of keywords associated with offering, typically used to search for it.
+   * @param {Rating} [params.rating] - Repository info for offerings.
+   * @param {string} [params.created] - The date and time this catalog was created.
+   * @param {string} [params.updated] - The date and time this catalog was last updated.
+   * @param {string} [params.shortDescription] - Short description in the requested language.
+   * @param {JsonObject} [params.shortDescriptionI18n] - A map of translated strings, by language code.
+   * @param {string} [params.longDescription] - Long description in the requested language.
+   * @param {JsonObject} [params.longDescriptionI18n] - A map of translated strings, by language code.
+   * @param {Feature[]} [params.features] - list of features associated with this offering.
+   * @param {Kind[]} [params.kinds] - Array of kind.
+   * @param {PublishObject} [params.publish] - Publish information.
+   * @param {boolean} [params.pcManaged] - Offering is managed by Partner Center.
+   * @param {boolean} [params.publishApproved] - Offering has been approved to publish to permitted to IBM or Public
+   * Catalog.
+   * @param {boolean} [params.shareWithAll] - Denotes public availability of an Offering.
+   * @param {boolean} [params.shareWithIbm] - Denotes IBM employee availability of an Offering - if share_enabled is
+   * true.
+   * @param {boolean} [params.shareEnabled] - Denotes sharing including access list availability of an Offering is
+   * enabled.
+   * @param {string} [params.publicOriginalCrn] - The original offering CRN that this publish entry came from.
+   * @param {string} [params.publishPublicCrn] - The crn of the public catalog entry of this offering.
+   * @param {string} [params.portalApprovalRecord] - The portal's approval record ID.
+   * @param {string} [params.portalUiUrl] - The portal UI URL.
+   * @param {string} [params.catalogId] - The id of the catalog containing this offering.
+   * @param {string} [params.catalogName] - The name of the catalog.
+   * @param {JsonObject} [params.metadata] - Map of metadata values for this offering.
+   * @param {string} [params.disclaimer] - A disclaimer for this offering.
+   * @param {boolean} [params.hidden] - Determine if this offering should be displayed in the Consumption UI.
+   * @param {string} [params.provider] - Deprecated: Deprecated - Provider of this offering.
+   * @param {ProviderInfo} [params.providerInfo] - Information on the provider for this offering, or omitted if no
+   * provider information is given.
+   * @param {RepoInfo} [params.repoInfo] - Repository info for offerings.
+   * @param {ImagePullKey[]} [params.imagePullKeys] - Image pull keys for this offering.
+   * @param {Support} [params.support] - Offering Support information.
+   * @param {MediaItem[]} [params.media] - A list of media items related to this offering.
+   * @param {DeprecatePending} [params.deprecatePending] - Deprecation information for an Offering.
+   * @param {string} [params.productKind] - The product kind.  Valid values are module, solution, or empty string.
+   * @param {Badge[]} [params.badges] - A list of badges for this offering.
+   * @param {Plan[]} [params.plans] - A list of plans for this offering.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
+   */
+  public updateVersion(
+    params: CatalogManagementV1.UpdateVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
+    const _requiredParams = ['versionLocId'];
+    const _validParams = [
+      'versionLocId',
+      'id',
+      'rev',
+      'url',
+      'crn',
+      'label',
+      'labelI18n',
+      'name',
+      'offeringIconUrl',
+      'offeringDocsUrl',
+      'offeringSupportUrl',
+      'tags',
+      'keywords',
+      'rating',
+      'created',
+      'updated',
+      'shortDescription',
+      'shortDescriptionI18n',
+      'longDescription',
+      'longDescriptionI18n',
+      'features',
+      'kinds',
+      'publish',
+      'pcManaged',
+      'publishApproved',
+      'shareWithAll',
+      'shareWithIbm',
+      'shareEnabled',
+      'publicOriginalCrn',
+      'publishPublicCrn',
+      'portalApprovalRecord',
+      'portalUiUrl',
+      'catalogId',
+      'catalogName',
+      'metadata',
+      'disclaimer',
+      'hidden',
+      'provider',
+      'providerInfo',
+      'repoInfo',
+      'imagePullKeys',
+      'support',
+      'media',
+      'deprecatePending',
+      'productKind',
+      'badges',
+      'plans',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'id': _params.id,
+      '_rev': _params.rev,
+      'url': _params.url,
+      'crn': _params.crn,
+      'label': _params.label,
+      'label_i18n': _params.labelI18n,
+      'name': _params.name,
+      'offering_icon_url': _params.offeringIconUrl,
+      'offering_docs_url': _params.offeringDocsUrl,
+      'offering_support_url': _params.offeringSupportUrl,
+      'tags': _params.tags,
+      'keywords': _params.keywords,
+      'rating': _params.rating,
+      'created': _params.created,
+      'updated': _params.updated,
+      'short_description': _params.shortDescription,
+      'short_description_i18n': _params.shortDescriptionI18n,
+      'long_description': _params.longDescription,
+      'long_description_i18n': _params.longDescriptionI18n,
+      'features': _params.features,
+      'kinds': _params.kinds,
+      'publish': _params.publish,
+      'pc_managed': _params.pcManaged,
+      'publish_approved': _params.publishApproved,
+      'share_with_all': _params.shareWithAll,
+      'share_with_ibm': _params.shareWithIbm,
+      'share_enabled': _params.shareEnabled,
+      'public_original_crn': _params.publicOriginalCrn,
+      'publish_public_crn': _params.publishPublicCrn,
+      'portal_approval_record': _params.portalApprovalRecord,
+      'portal_ui_url': _params.portalUiUrl,
+      'catalog_id': _params.catalogId,
+      'catalog_name': _params.catalogName,
+      'metadata': _params.metadata,
+      'disclaimer': _params.disclaimer,
+      'hidden': _params.hidden,
+      'provider': _params.provider,
+      'provider_info': _params.providerInfo,
+      'repo_info': _params.repoInfo,
+      'image_pull_keys': _params.imagePullKeys,
+      'support': _params.support,
+      'media': _params.media,
+      'deprecate_pending': _params.deprecatePending,
+      'product_kind': _params.productKind,
+      'badges': _params.badges,
+      'plans': _params.plans,
+    };
+
+    const path = {
+      'version_loc_id': _params.versionLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a version.
+   *
+   * Update a version using a JSONPatch document as defined by RFC 6902.  Note that the path must always reference
+   * '/kinds/0/versions/0/...'.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {string} params.ifMatch - Offering etag contained in quotes.
+   * @param {JsonPatchOperation[]} [params.updates] -
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>>}
+   */
+  public patchUpdateVersion(
+    params: CatalogManagementV1.PatchUpdateVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
+    const _params = { ...params };
+    const _requiredParams = ['versionLocId', 'ifMatch'];
+    const _validParams = ['versionLocId', 'ifMatch', 'updates', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.updates;
+    const path = {
+      'version_loc_id': _params.versionLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'patchUpdateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Delete version.
    *
    * Delete the specified version.  If the version is an active version with a working copy, the working copy will be
@@ -4362,6 +4705,58 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {}, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get offering/kind/version 'dependencies'.
+   *
+   * Get the latest version of all offerings/variations that depends on this version locator.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionDependant>>}
+   */
+  public getVersionDependencies(
+    params: CatalogManagementV1.GetVersionDependenciesParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionDependant>> {
+    const _params = { ...params };
+    const _requiredParams = ['versionLocId'];
+    const _validParams = ['versionLocId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'version_loc_id': _params.versionLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVersionDependencies'
+    );
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}/dependencies',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
@@ -4835,6 +5230,8 @@ class CatalogManagementV1 extends BaseService {
    * avaiable in all namespaces on the target cluster.
    * @param {DeployRequestBodyOverrideValues} [params.overrideValues] - Validation override values. Required for virtual
    * server image for VPC.
+   * @param {string[]} [params.dependencyConfigs] - Used when the product has required dependencies, to indicated
+   * existing dependencies to reuse during validation.
    * @param {DeployRequestBodyEnvironmentVariablesItem[]} [params.environmentVariables] - Schematics environment
    * variables to use with this workspace.
    * @param {string} [params.entitlementApikey] - Entitlement API Key for this offering.
@@ -4867,6 +5264,7 @@ class CatalogManagementV1 extends BaseService {
       'namespaces',
       'allNamespaces',
       'overrideValues',
+      'dependencyConfigs',
       'environmentVariables',
       'entitlementApikey',
       'schematics',
@@ -4895,6 +5293,7 @@ class CatalogManagementV1 extends BaseService {
       'namespaces': _params.namespaces,
       'all_namespaces': _params.allNamespaces,
       'override_values': _params.overrideValues,
+      'dependency_configs': _params.dependencyConfigs,
       'environment_variables': _params.environmentVariables,
       'entitlement_apikey': _params.entitlementApikey,
       'schematics': _params.schematics,
@@ -4960,6 +5359,8 @@ class CatalogManagementV1 extends BaseService {
    * avaiable in all namespaces on the target cluster.
    * @param {DeployRequestBodyOverrideValues} [params.overrideValues] - Validation override values. Required for virtual
    * server image for VPC.
+   * @param {string[]} [params.dependencyConfigs] - Used when the product has required dependencies, to indicated
+   * existing dependencies to reuse during validation.
    * @param {DeployRequestBodyEnvironmentVariablesItem[]} [params.environmentVariables] - Schematics environment
    * variables to use with this workspace.
    * @param {string} [params.entitlementApikey] - Entitlement API Key for this offering.
@@ -4992,6 +5393,7 @@ class CatalogManagementV1 extends BaseService {
       'namespaces',
       'allNamespaces',
       'overrideValues',
+      'dependencyConfigs',
       'environmentVariables',
       'entitlementApikey',
       'schematics',
@@ -5020,6 +5422,7 @@ class CatalogManagementV1 extends BaseService {
       'namespaces': _params.namespaces,
       'all_namespaces': _params.allNamespaces,
       'override_values': _params.overrideValues,
+      'dependency_configs': _params.dependencyConfigs,
       'environment_variables': _params.environmentVariables,
       'entitlement_apikey': _params.entitlementApikey,
       'schematics': _params.schematics,
@@ -5156,6 +5559,8 @@ class CatalogManagementV1 extends BaseService {
    * avaiable in all namespaces on the target cluster.
    * @param {DeployRequestBodyOverrideValues} [params.overrideValues] - Validation override values. Required for virtual
    * server image for VPC.
+   * @param {string[]} [params.dependencyConfigs] - Used when the product has required dependencies, to indicated
+   * existing dependencies to reuse during validation.
    * @param {DeployRequestBodyEnvironmentVariablesItem[]} [params.environmentVariables] - Schematics environment
    * variables to use with this workspace.
    * @param {string} [params.entitlementApikey] - Entitlement API Key for this offering.
@@ -5189,6 +5594,7 @@ class CatalogManagementV1 extends BaseService {
       'namespaces',
       'allNamespaces',
       'overrideValues',
+      'dependencyConfigs',
       'environmentVariables',
       'entitlementApikey',
       'schematics',
@@ -5218,6 +5624,7 @@ class CatalogManagementV1 extends BaseService {
       'namespaces': _params.namespaces,
       'all_namespaces': _params.allNamespaces,
       'override_values': _params.overrideValues,
+      'dependency_configs': _params.dependencyConfigs,
       'environment_variables': _params.environmentVariables,
       'entitlement_apikey': _params.entitlementApikey,
       'schematics': _params.schematics,
@@ -7822,6 +8229,8 @@ namespace CatalogManagementV1 {
     offeringId: string;
     /** Tags array. */
     tags?: string[];
+    /** Keywords array. */
+    keywords?: string[];
     /** Byte array representing the content to be imported. Only supported for OVA images at this time. */
     content?: string;
     /** Name of version. Required for virtual server image for VPC. */
@@ -7875,6 +8284,8 @@ namespace CatalogManagementV1 {
     catalogIdentifier: string;
     /** Tags array. */
     tags?: string[];
+    /** Keywords array. */
+    keywords?: string[];
     /** Byte array representing the content to be imported. Only supported for OVA images at this time. */
     content?: string;
     /** Name of version. Required for virtual server image for VPC. */
@@ -8437,6 +8848,25 @@ namespace CatalogManagementV1 {
     }
   }
 
+  /** Parameters for the `getVersions` operation. */
+  export interface GetVersionsParams {
+    /** Catalog identifier. */
+    catalogIdentifier: string;
+    /** Offering identification. */
+    offeringId: string;
+    /** Kind identification. */
+    kindId: string;
+    /** Return the digest format of the specified offering.  Default is false. */
+    digest?: boolean;
+    /** Return consumable versions.  Default is false. */
+    catalog?: boolean;
+    /** Start token for a query. */
+    start?: string;
+    /** number or results to return in the query. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `getOfferingAbout` operation. */
   export interface GetOfferingAboutParams {
     /** A dotted value of `catalogID`.`versionID`. */
@@ -8583,8 +9013,126 @@ namespace CatalogManagementV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `updateVersion` operation. */
+  export interface UpdateVersionParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
+    /** unique id. */
+    id?: string;
+    /** Cloudant revision. */
+    rev?: string;
+    /** The url for this specific offering. */
+    url?: string;
+    /** The crn for this specific offering. */
+    crn?: string;
+    /** Display Name in the requested language. */
+    label?: string;
+    /** A map of translated strings, by language code. */
+    labelI18n?: JsonObject;
+    /** The programmatic name of this offering. */
+    name?: string;
+    /** URL for an icon associated with this offering. */
+    offeringIconUrl?: string;
+    /** URL for an additional docs with this offering. */
+    offeringDocsUrl?: string;
+    /** [deprecated] - Use offering.support instead.  URL to be displayed in the Consumption UI for getting support
+     *  on this offering.
+     */
+    offeringSupportUrl?: string;
+    /** List of tags associated with this catalog. */
+    tags?: string[];
+    /** List of keywords associated with offering, typically used to search for it. */
+    keywords?: string[];
+    /** Repository info for offerings. */
+    rating?: Rating;
+    /** The date and time this catalog was created. */
+    created?: string;
+    /** The date and time this catalog was last updated. */
+    updated?: string;
+    /** Short description in the requested language. */
+    shortDescription?: string;
+    /** A map of translated strings, by language code. */
+    shortDescriptionI18n?: JsonObject;
+    /** Long description in the requested language. */
+    longDescription?: string;
+    /** A map of translated strings, by language code. */
+    longDescriptionI18n?: JsonObject;
+    /** list of features associated with this offering. */
+    features?: Feature[];
+    /** Array of kind. */
+    kinds?: Kind[];
+    /** Publish information. */
+    publish?: PublishObject;
+    /** Offering is managed by Partner Center. */
+    pcManaged?: boolean;
+    /** Offering has been approved to publish to permitted to IBM or Public Catalog. */
+    publishApproved?: boolean;
+    /** Denotes public availability of an Offering. */
+    shareWithAll?: boolean;
+    /** Denotes IBM employee availability of an Offering - if share_enabled is true. */
+    shareWithIbm?: boolean;
+    /** Denotes sharing including access list availability of an Offering is enabled. */
+    shareEnabled?: boolean;
+    /** The original offering CRN that this publish entry came from. */
+    publicOriginalCrn?: string;
+    /** The crn of the public catalog entry of this offering. */
+    publishPublicCrn?: string;
+    /** The portal's approval record ID. */
+    portalApprovalRecord?: string;
+    /** The portal UI URL. */
+    portalUiUrl?: string;
+    /** The id of the catalog containing this offering. */
+    catalogId?: string;
+    /** The name of the catalog. */
+    catalogName?: string;
+    /** Map of metadata values for this offering. */
+    metadata?: JsonObject;
+    /** A disclaimer for this offering. */
+    disclaimer?: string;
+    /** Determine if this offering should be displayed in the Consumption UI. */
+    hidden?: boolean;
+    /** Deprecated: Deprecated - Provider of this offering. */
+    provider?: string;
+    /** Information on the provider for this offering, or omitted if no provider information is given. */
+    providerInfo?: ProviderInfo;
+    /** Repository info for offerings. */
+    repoInfo?: RepoInfo;
+    /** Image pull keys for this offering. */
+    imagePullKeys?: ImagePullKey[];
+    /** Offering Support information. */
+    support?: Support;
+    /** A list of media items related to this offering. */
+    media?: MediaItem[];
+    /** Deprecation information for an Offering. */
+    deprecatePending?: DeprecatePending;
+    /** The product kind.  Valid values are module, solution, or empty string. */
+    productKind?: string;
+    /** A list of badges for this offering. */
+    badges?: Badge[];
+    /** A list of plans for this offering. */
+    plans?: Plan[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `patchUpdateVersion` operation. */
+  export interface PatchUpdateVersionParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
+    /** Offering etag contained in quotes. */
+    ifMatch: string;
+    updates?: JsonPatchOperation[];
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `deleteVersion` operation. */
   export interface DeleteVersionParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getVersionDependencies` operation. */
+  export interface GetVersionDependenciesParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     headers?: OutgoingHttpHeaders;
@@ -8711,6 +9259,10 @@ namespace CatalogManagementV1 {
     allNamespaces?: boolean;
     /** Validation override values. Required for virtual server image for VPC. */
     overrideValues?: DeployRequestBodyOverrideValues;
+    /** Used when the product has required dependencies, to indicated existing dependencies to reuse during
+     *  validation.
+     */
+    dependencyConfigs?: string[];
     /** Schematics environment variables to use with this workspace. */
     environmentVariables?: DeployRequestBodyEnvironmentVariablesItem[];
     /** Entitlement API Key for this offering. */
@@ -8762,6 +9314,10 @@ namespace CatalogManagementV1 {
     allNamespaces?: boolean;
     /** Validation override values. Required for virtual server image for VPC. */
     overrideValues?: DeployRequestBodyOverrideValues;
+    /** Used when the product has required dependencies, to indicated existing dependencies to reuse during
+     *  validation.
+     */
+    dependencyConfigs?: string[];
     /** Schematics environment variables to use with this workspace. */
     environmentVariables?: DeployRequestBodyEnvironmentVariablesItem[];
     /** Entitlement API Key for this offering. */
@@ -8828,6 +9384,10 @@ namespace CatalogManagementV1 {
     allNamespaces?: boolean;
     /** Validation override values. Required for virtual server image for VPC. */
     overrideValues?: DeployRequestBodyOverrideValues;
+    /** Used when the product has required dependencies, to indicated existing dependencies to reuse during
+     *  validation.
+     */
+    dependencyConfigs?: string[];
     /** Schematics environment variables to use with this workspace. */
     environmentVariables?: DeployRequestBodyEnvironmentVariablesItem[];
     /** Entitlement API Key for this offering. */
@@ -9419,7 +9979,9 @@ namespace CatalogManagementV1 {
    * model interfaces
    ************************/
 
-  /** access. */
+  /**
+   * access.
+   */
   export interface Access {
     /** unique id. */
     id?: string;
@@ -9441,13 +10003,17 @@ namespace CatalogManagementV1 {
     approval_state?: string;
   }
 
-  /** Access List Add/Remove result. */
+  /**
+   * Access List Add/Remove result.
+   */
   export interface AccessListBulkResponse {
     /** in the case of error on an account add/remove - account: error. */
     errors?: JsonObject;
   }
 
-  /** Paginated Offering search result. */
+  /**
+   * Paginated Offering search result.
+   */
   export interface AccessListResult {
     /** The start token used for this response. */
     start?: string;
@@ -9471,7 +10037,9 @@ namespace CatalogManagementV1 {
     resources: Access[];
   }
 
-  /** Account information. */
+  /**
+   * Account information.
+   */
   export interface Account {
     /** Account identification. */
     id?: string;
@@ -9486,7 +10054,10 @@ namespace CatalogManagementV1 {
     filter_regions?: boolean;
   }
 
-  /** The accumulated filters for an account. This will return the account filters plus a filter for each catalog the user has access to. */
+  /**
+   * The accumulated filters for an account. This will return the account filters plus a filter for each catalog the
+   * user has access to.
+   */
   export interface AccumulatedFilters {
     /** Hide the public catalog in this account. */
     hide_IBM_cloud_catalog?: boolean;
@@ -9499,7 +10070,9 @@ namespace CatalogManagementV1 {
     filter_regions?: boolean;
   }
 
-  /** AccumulatedFiltersCatalogFiltersItem. */
+  /**
+   * AccumulatedFiltersCatalogFiltersItem.
+   */
   export interface AccumulatedFiltersCatalogFiltersItem {
     /** Filters for catalog. */
     catalog?: AccumulatedFiltersCatalogFiltersItemCatalog;
@@ -9507,7 +10080,9 @@ namespace CatalogManagementV1 {
     filters?: Filters;
   }
 
-  /** Filters for catalog. */
+  /**
+   * Filters for catalog.
+   */
   export interface AccumulatedFiltersCatalogFiltersItemCatalog {
     /** The ID of the catalog. */
     id?: string;
@@ -9515,7 +10090,9 @@ namespace CatalogManagementV1 {
     name?: string;
   }
 
-  /** Result of approval. */
+  /**
+   * Result of approval.
+   */
   export interface ApprovalResult {
     /** Deprecated: Shared - object is shared using access list - not set when using PC Managed objects. */
     shared?: boolean;
@@ -9535,7 +10112,9 @@ namespace CatalogManagementV1 {
     changed?: boolean;
   }
 
-  /** An Architecture Diagram. */
+  /**
+   * An Architecture Diagram.
+   */
   export interface ArchitectureDiagram {
     /** Offering Media information. */
     diagram?: MediaItem;
@@ -9545,7 +10124,9 @@ namespace CatalogManagementV1 {
     description_i18n?: JsonObject;
   }
 
-  /** An audit log which describes a change made to a catalog or associated resource. */
+  /**
+   * An audit log which describes a change made to a catalog or associated resource.
+   */
   export interface AuditLog {
     /** The identifier of the audit record. */
     id?: string;
@@ -9581,7 +10162,9 @@ namespace CatalogManagementV1 {
     data?: any;
   }
 
-  /** An reduced audit log which describes a change made to a catalog or associated resource. */
+  /**
+   * An reduced audit log which describes a change made to a catalog or associated resource.
+   */
   export interface AuditLogDigest {
     /** The identifier of the audit record. */
     id?: string;
@@ -9605,7 +10188,9 @@ namespace CatalogManagementV1 {
     message?: string;
   }
 
-  /** A collection of audit records. */
+  /**
+   * A collection of audit records.
+   */
   export interface AuditLogs {
     /** The start token used for this response. */
     start?: string;
@@ -9629,7 +10214,9 @@ namespace CatalogManagementV1 {
     audits: AuditLogDigest[];
   }
 
-  /** Badge information. */
+  /**
+   * Badge information.
+   */
   export interface Badge {
     /** ID of the current badge. */
     id?: string;
@@ -9653,7 +10240,9 @@ namespace CatalogManagementV1 {
     constraints?: Constraint[];
   }
 
-  /** Catalog information. */
+  /**
+   * Catalog information.
+   */
   export interface Catalog {
     /** Unique ID. */
     id?: string;
@@ -9701,7 +10290,9 @@ namespace CatalogManagementV1 {
     target_account_contexts?: TargetAccountContext[];
   }
 
-  /** object information. */
+  /**
+   * object information.
+   */
   export interface CatalogObject {
     /** unique id. */
     id?: string;
@@ -9743,7 +10334,9 @@ namespace CatalogManagementV1 {
     data?: JsonObject;
   }
 
-  /** Paginated catalog search result. */
+  /**
+   * Paginated catalog search result.
+   */
   export interface CatalogSearchResult {
     /** The overall total number of resources in the search result set. */
     total_count?: number;
@@ -9751,7 +10344,9 @@ namespace CatalogManagementV1 {
     resources?: Catalog[];
   }
 
-  /** Filter on a category. The filter will match against the values of the given category with include or exclude. */
+  /**
+   * Filter on a category. The filter will match against the values of the given category with include or exclude.
+   */
   export interface CategoryFilter {
     /** -> true - This is an include filter, false - this is an exclude filter. */
     include?: boolean;
@@ -9759,7 +10354,9 @@ namespace CatalogManagementV1 {
     filter?: FilterTerms;
   }
 
-  /** Change notices for a version. */
+  /**
+   * Change notices for a version.
+   */
   export interface ChangeNotices {
     /** Breaking changes for this version. */
     breaking?: Feature[];
@@ -9769,7 +10366,9 @@ namespace CatalogManagementV1 {
     update?: Feature[];
   }
 
-  /** Change notices response. */
+  /**
+   * Change notices response.
+   */
   export interface ChangeNoticesResponse {
     /** Set to true if any of the included change notices contain a breaking change. */
     has_breaking?: boolean;
@@ -9781,7 +10380,9 @@ namespace CatalogManagementV1 {
     change_notices?: ChangeNoticesResponseChangeNoticesItem[];
   }
 
-  /** Change notices for the specified version. */
+  /**
+   * Change notices for the specified version.
+   */
   export interface ChangeNoticesResponseChangeNoticesItem {
     /** A dotted value of `catalogID`.`versionID`. */
     version_locator?: string;
@@ -9797,7 +10398,9 @@ namespace CatalogManagementV1 {
     update?: Feature[];
   }
 
-  /** Checked IAM Permission for the current user context. */
+  /**
+   * Checked IAM Permission for the current user context.
+   */
   export interface CheckedIAMPermission {
     /** Service name. */
     service_name?: string;
@@ -9809,7 +10412,9 @@ namespace CatalogManagementV1 {
     resources?: IAMResource[];
   }
 
-  /** Checked IAM role permission for the current user context. */
+  /**
+   * Checked IAM role permission for the current user context.
+   */
   export interface CheckedRoleCRN {
     /** Role id. */
     id?: string;
@@ -9821,7 +10426,9 @@ namespace CatalogManagementV1 {
     has_permissions?: boolean;
   }
 
-  /** Claimed control. */
+  /**
+   * Claimed control.
+   */
   export interface ClaimedControl {
     /** SCC Profile. */
     profile?: SCCProfile;
@@ -9829,7 +10436,9 @@ namespace CatalogManagementV1 {
     names?: string[];
   }
 
-  /** SCC Claims. */
+  /**
+   * SCC Claims.
+   */
   export interface Claims {
     /** Profiles. */
     profiles?: SCCProfile[];
@@ -9837,7 +10446,9 @@ namespace CatalogManagementV1 {
     controls?: ClaimedControl[];
   }
 
-  /** Cluster information. */
+  /**
+   * Cluster information.
+   */
   export interface ClusterInfo {
     /** Resource Group ID. */
     resource_group_id?: string;
@@ -9857,7 +10468,9 @@ namespace CatalogManagementV1 {
     status?: string;
   }
 
-  /** Compliance info for a version. */
+  /**
+   * Compliance info for a version.
+   */
   export interface Compliance {
     /** Authority. */
     authority?: string;
@@ -9867,7 +10480,9 @@ namespace CatalogManagementV1 {
     evaluations?: Evaluation[];
   }
 
-  /** Configuration description. */
+  /**
+   * Configuration description.
+   */
   export interface Configuration {
     /** Configuration key. */
     key?: string;
@@ -9895,7 +10510,9 @@ namespace CatalogManagementV1 {
     type_metadata?: string;
   }
 
-  /** Constraint information. */
+  /**
+   * Constraint information.
+   */
   export interface Constraint {
     /** Type of the current constraint. */
     type?: string;
@@ -9903,7 +10520,9 @@ namespace CatalogManagementV1 {
     rule?: any;
   }
 
-  /** Cost breakdown definition. */
+  /**
+   * Cost breakdown definition.
+   */
   export interface CostBreakdown {
     /** Total hourly cost. */
     totalHourlyCost?: string;
@@ -9913,7 +10532,9 @@ namespace CatalogManagementV1 {
     resources?: CostResource[];
   }
 
-  /** Cost component definition. */
+  /**
+   * Cost component definition.
+   */
   export interface CostComponent {
     /** Cost component name. */
     name?: string;
@@ -9931,7 +10552,9 @@ namespace CatalogManagementV1 {
     monthlyCost?: string;
   }
 
-  /** Cost estimate definition. */
+  /**
+   * Cost estimate definition.
+   */
   export interface CostEstimate {
     /** Cost estimate version. */
     version?: string;
@@ -9957,7 +10580,9 @@ namespace CatalogManagementV1 {
     timeGenerated?: string;
   }
 
-  /** Cost resource definition. */
+  /**
+   * Cost resource definition.
+   */
   export interface CostResource {
     /** Resource name. */
     name?: string;
@@ -9971,7 +10596,9 @@ namespace CatalogManagementV1 {
     costComponents?: CostComponent[];
   }
 
-  /** Cost summary definition. */
+  /**
+   * Cost summary definition.
+   */
   export interface CostSummary {
     /** Total detected resources. */
     totalDetectedResources?: number;
@@ -9989,7 +10616,9 @@ namespace CatalogManagementV1 {
     noPriceResourceCounts?: JsonObject;
   }
 
-  /** DeployRequestBodyEnvironmentVariablesItem. */
+  /**
+   * DeployRequestBodyEnvironmentVariablesItem.
+   */
   export interface DeployRequestBodyEnvironmentVariablesItem {
     /** Variable name. */
     name?: string;
@@ -10001,7 +10630,11 @@ namespace CatalogManagementV1 {
     hidden?: boolean;
   }
 
-  /** Validation override values. Required for virtual server image for VPC. */
+  /**
+   * Validation override values. Required for virtual server image for VPC.
+   *
+   * This type supports additional properties of type any.
+   */
   export interface DeployRequestBodyOverrideValues {
     /** Name of virtual server image instance to create. Required for virtual server image for VPC. */
     vsi_instance_name?: string;
@@ -10017,11 +10650,16 @@ namespace CatalogManagementV1 {
     ssh_key_id?: string;
     /** Region virtual server image exists in. Required for virtual server image for VPC. */
     vpc_region?: string;
-    /** DeployRequestBodyOverrideValues accepts additional properties. */
+
+    /**
+     * DeployRequestBodyOverrideValues accepts additional properties of type any.
+     */
     [propName: string]: any;
   }
 
-  /** Schematics workspace configuration. */
+  /**
+   * Schematics workspace configuration.
+   */
   export interface DeployRequestBodySchematics {
     /** Schematics workspace name. */
     name?: string;
@@ -10037,7 +10675,9 @@ namespace CatalogManagementV1 {
     region?: string;
   }
 
-  /** Deprecation information for an Offering. */
+  /**
+   * Deprecation information for an Offering.
+   */
   export interface DeprecatePending {
     /** Date of deprecation. */
     deprecate_date?: string;
@@ -10046,7 +10686,9 @@ namespace CatalogManagementV1 {
     description?: string;
   }
 
-  /** Evaluated control. */
+  /**
+   * Evaluated control.
+   */
   export interface EvaluatedControl {
     /** ID. */
     id?: string;
@@ -10068,7 +10710,9 @@ namespace CatalogManagementV1 {
     ui_href?: string;
   }
 
-  /** Evaluation. */
+  /**
+   * Evaluation.
+   */
   export interface Evaluation {
     /** Scan ID. */
     scan_id?: string;
@@ -10082,7 +10726,9 @@ namespace CatalogManagementV1 {
     controls?: EvaluatedControl[];
   }
 
-  /** Feature information. */
+  /**
+   * Feature information.
+   */
   export interface Feature {
     /** Heading. */
     title?: string;
@@ -10094,7 +10740,9 @@ namespace CatalogManagementV1 {
     description_i18n?: JsonObject;
   }
 
-  /** Offering filter terms. */
+  /**
+   * Offering filter terms.
+   */
   export interface FilterTerms {
     /** List of values to match against. If include is true, then if the offering has one of the values then the
      *  offering is included. If include is false, then if the offering has one of the values then the offering is
@@ -10103,7 +10751,9 @@ namespace CatalogManagementV1 {
     filter_terms?: string[];
   }
 
-  /** Filters for account and catalog filters. */
+  /**
+   * Filters for account and catalog filters.
+   */
   export interface Filters {
     /** -> true - Include all of the public catalog when filtering. Further settings will specifically exclude some
      *  offerings. false - Exclude all of the public catalog when filtering. Further settings will specifically include
@@ -10116,7 +10766,9 @@ namespace CatalogManagementV1 {
     id_filters?: IDFilter;
   }
 
-  /** Version Flavor Information.  Only supported for Product kind Solution. */
+  /**
+   * Version Flavor Information.  Only supported for Product kind Solution.
+   */
   export interface Flavor {
     /** Programmatic name for this flavor. */
     name?: string;
@@ -10128,7 +10780,9 @@ namespace CatalogManagementV1 {
     index?: number;
   }
 
-  /** IAM Permission definition. */
+  /**
+   * IAM Permission definition.
+   */
   export interface IAMPermission {
     /** Service name. */
     service_name?: string;
@@ -10138,7 +10792,9 @@ namespace CatalogManagementV1 {
     resources?: IAMResource[];
   }
 
-  /** IAM Resource definition. */
+  /**
+   * IAM Resource definition.
+   */
   export interface IAMResource {
     /** Resource name. */
     name?: string;
@@ -10148,7 +10804,9 @@ namespace CatalogManagementV1 {
     role_crns?: string[];
   }
 
-  /** Filter on offering ID's. There is an include filter and an exclule filter. Both can be set. */
+  /**
+   * Filter on offering ID's. There is an include filter and an exclule filter. Both can be set.
+   */
   export interface IDFilter {
     /** Offering filter terms. */
     include?: FilterTerms;
@@ -10156,13 +10814,17 @@ namespace CatalogManagementV1 {
     exclude?: FilterTerms;
   }
 
-  /** Image. */
+  /**
+   * Image.
+   */
   export interface Image {
     /** Image. */
     image?: string;
   }
 
-  /** Image Manifest. */
+  /**
+   * Image Manifest.
+   */
   export interface ImageManifest {
     /** Image manifest description. */
     description?: string;
@@ -10170,7 +10832,9 @@ namespace CatalogManagementV1 {
     images?: Image[];
   }
 
-  /** Image pull keys for an offering. */
+  /**
+   * Image pull keys for an offering.
+   */
   export interface ImagePullKey {
     /** Key name. */
     name?: string;
@@ -10180,7 +10844,9 @@ namespace CatalogManagementV1 {
     description?: string;
   }
 
-  /** Generic data to be included with content being onboarded. Required for virtual server image for VPC. */
+  /**
+   * Generic data to be included with content being onboarded. Required for virtual server image for VPC.
+   */
   export interface ImportOfferingBodyMetadata {
     /** Operating system included in this image. Required for virtual server image for VPC. */
     operating_system?: ImportOfferingBodyMetadataOperatingSystem;
@@ -10194,13 +10860,17 @@ namespace CatalogManagementV1 {
     images?: ImportOfferingBodyMetadataImagesItem[];
   }
 
-  /** Details for the stored image file. Required for virtual server image for VPC. */
+  /**
+   * Details for the stored image file. Required for virtual server image for VPC.
+   */
   export interface ImportOfferingBodyMetadataFile {
     /** Size of the stored image file rounded up to the next gigabyte. Required for virtual server image for VPC. */
     size?: number;
   }
 
-  /** A list of details that identify a virtual server image. Required for virtual server image for VPC. */
+  /**
+   * A list of details that identify a virtual server image. Required for virtual server image for VPC.
+   */
   export interface ImportOfferingBodyMetadataImagesItem {
     /** Programmatic ID of virtual server image. Required for virtual server image for VPC. */
     id?: string;
@@ -10210,7 +10880,9 @@ namespace CatalogManagementV1 {
     region?: string;
   }
 
-  /** Operating system included in this image. Required for virtual server image for VPC. */
+  /**
+   * Operating system included in this image. Required for virtual server image for VPC.
+   */
   export interface ImportOfferingBodyMetadataOperatingSystem {
     /** Images with this operating system can only be used on dedicated hosts or dedicated host groups. Required for
      *  virtual server image for VPC.
@@ -10232,7 +10904,9 @@ namespace CatalogManagementV1 {
     architecture?: string;
   }
 
-  /** Installation status. */
+  /**
+   * Installation status.
+   */
   export interface InstallStatus {
     /** Installation status metadata. */
     metadata?: InstallStatusMetadata;
@@ -10242,7 +10916,9 @@ namespace CatalogManagementV1 {
     content_mgmt?: InstallStatusContentMgmt;
   }
 
-  /** Content management information. */
+  /**
+   * Content management information.
+   */
   export interface InstallStatusContentMgmt {
     /** Pods. */
     pods?: JsonObject[];
@@ -10250,7 +10926,9 @@ namespace CatalogManagementV1 {
     errors?: JsonObject[];
   }
 
-  /** Installation status metadata. */
+  /**
+   * Installation status metadata.
+   */
   export interface InstallStatusMetadata {
     /** Cluster ID. */
     cluster_id?: string;
@@ -10264,7 +10942,9 @@ namespace CatalogManagementV1 {
     workspace_name?: string;
   }
 
-  /** Release information. */
+  /**
+   * Release information.
+   */
   export interface InstallStatusRelease {
     /** Kube deployments. */
     deployments?: JsonObject[];
@@ -10278,7 +10958,9 @@ namespace CatalogManagementV1 {
     errors?: JsonObject[];
   }
 
-  /** A JSONPatch document as defined by RFC 6902. */
+  /**
+   * A JSONPatch document as defined by RFC 6902.
+   */
   export interface JsonPatchOperation {
     /** The operation to be performed. */
     op: JsonPatchOperation.Constants.Op | string;
@@ -10303,7 +10985,9 @@ namespace CatalogManagementV1 {
     }
   }
 
-  /** Offering kind. */
+  /**
+   * Offering kind.
+   */
   export interface Kind {
     /** Unique ID. */
     id?: string;
@@ -10331,9 +11015,23 @@ namespace CatalogManagementV1 {
     updated?: string;
     /** list of versions. */
     versions?: Version[];
+    /** URLs for paging through all versions within this kind. */
+    all_versions?: KindAllVersions;
   }
 
-  /** Learn more links for a badge. */
+  /**
+   * URLs for paging through all versions within this kind.
+   */
+  export interface KindAllVersions {
+    /** Link response on a token paginated query. */
+    first?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    next?: PaginationTokenLink;
+  }
+
+  /**
+   * Learn more links for a badge.
+   */
   export interface LearnMoreLinks {
     /** First party link. */
     first_party?: string;
@@ -10341,7 +11039,9 @@ namespace CatalogManagementV1 {
     third_party?: string;
   }
 
-  /** BSS license. */
+  /**
+   * BSS license.
+   */
   export interface License {
     /** License ID. */
     id?: string;
@@ -10355,7 +11055,9 @@ namespace CatalogManagementV1 {
     description?: string;
   }
 
-  /** Offering Media information. */
+  /**
+   * Offering Media information.
+   */
   export interface MediaItem {
     /** URL of the specified media item. */
     url?: string;
@@ -10373,7 +11075,9 @@ namespace CatalogManagementV1 {
     thumbnail_url?: string;
   }
 
-  /** Accumulated statistics for the specified target.  Statistics are accumulated on a weekly basis for at most a year. */
+  /**
+   * Accumulated statistics for the specified target.  Statistics are accumulated on a weekly basis for at most a year.
+   */
   export interface MetricStats {
     /** What these statistics are for (i.e. Offering, Object, Plan, etc). */
     target_type?: string;
@@ -10387,7 +11091,9 @@ namespace CatalogManagementV1 {
     totals?: WeeklyMetricBucket;
   }
 
-  /** Paginated list of namespace search results. */
+  /**
+   * Paginated list of namespace search results.
+   */
   export interface NamespaceSearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset: number;
@@ -10409,7 +11115,9 @@ namespace CatalogManagementV1 {
     resources?: string[];
   }
 
-  /** Paginated object search result. */
+  /**
+   * Paginated object search result.
+   */
   export interface ObjectAccessListResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset: number;
@@ -10431,7 +11139,9 @@ namespace CatalogManagementV1 {
     resources?: Access[];
   }
 
-  /** Paginated object search result. */
+  /**
+   * Paginated object search result.
+   */
   export interface ObjectListResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset: number;
@@ -10453,7 +11163,9 @@ namespace CatalogManagementV1 {
     resources?: CatalogObject[];
   }
 
-  /** Paginated object search result. */
+  /**
+   * Paginated object search result.
+   */
   export interface ObjectSearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset: number;
@@ -10475,7 +11187,9 @@ namespace CatalogManagementV1 {
     resources?: CatalogObject[];
   }
 
-  /** Offering information. */
+  /**
+   * Offering information.
+   */
   export interface Offering {
     /** unique id. */
     id?: string;
@@ -10573,7 +11287,9 @@ namespace CatalogManagementV1 {
     plans?: Plan[];
   }
 
-  /** A offering instance resource (provision instance of a catalog offering). */
+  /**
+   * A offering instance resource (provision instance of a catalog offering).
+   */
   export interface OfferingInstance {
     /** provisioned instance ID (part of the CRN). */
     id?: string;
@@ -10642,7 +11358,9 @@ namespace CatalogManagementV1 {
     parent_crn?: string;
   }
 
-  /** the last operation performed and status. */
+  /**
+   * the last operation performed and status.
+   */
   export interface OfferingInstanceLastOperation {
     /** last operation performed. */
     operation?: string;
@@ -10658,7 +11376,9 @@ namespace CatalogManagementV1 {
     code?: string;
   }
 
-  /** Offering reference definition. */
+  /**
+   * Offering reference definition.
+   */
   export interface OfferingReference {
     /** Optional - If not specified, assumes the Public Catalog. */
     catalog_id?: string;
@@ -10674,7 +11394,9 @@ namespace CatalogManagementV1 {
     flavors?: string[];
   }
 
-  /** Paginated offering search result. */
+  /**
+   * Paginated offering search result.
+   */
   export interface OfferingSearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset: number;
@@ -10696,7 +11418,9 @@ namespace CatalogManagementV1 {
     resources?: Offering[];
   }
 
-  /** Operator deploy result. */
+  /**
+   * Operator deploy result.
+   */
   export interface OperatorDeployResult {
     /** Status phase. */
     phase?: string;
@@ -10716,7 +11440,9 @@ namespace CatalogManagementV1 {
     catalog_id?: string;
   }
 
-  /** Outputs for a version. */
+  /**
+   * Outputs for a version.
+   */
   export interface Output {
     /** Output key. */
     key?: string;
@@ -10724,7 +11450,9 @@ namespace CatalogManagementV1 {
     description?: string;
   }
 
-  /** Link response on a token paginated query. */
+  /**
+   * Link response on a token paginated query.
+   */
   export interface PaginationTokenLink {
     /** The href to the linked response. */
     href: string;
@@ -10732,7 +11460,9 @@ namespace CatalogManagementV1 {
     start?: string;
   }
 
-  /** Plan information. */
+  /**
+   * Plan information.
+   */
   export interface Plan {
     /** Unique ID. */
     id?: string;
@@ -10776,7 +11506,9 @@ namespace CatalogManagementV1 {
     publish_approved?: boolean;
   }
 
-  /** Cost estimate project definition. */
+  /**
+   * Cost estimate project definition.
+   */
   export interface Project {
     /** Project name. */
     name?: string;
@@ -10792,7 +11524,9 @@ namespace CatalogManagementV1 {
     summary?: CostSummary;
   }
 
-  /** Information on the provider for this offering, or omitted if no provider information is given. */
+  /**
+   * Information on the provider for this offering, or omitted if no provider information is given.
+   */
   export interface ProviderInfo {
     /** The id of this provider. */
     id?: string;
@@ -10800,7 +11534,9 @@ namespace CatalogManagementV1 {
     name?: string;
   }
 
-  /** Publish information. */
+  /**
+   * Publish information.
+   */
   export interface PublishObject {
     /** Offering is managed by Partner Center. */
     pc_managed?: boolean;
@@ -10830,7 +11566,9 @@ namespace CatalogManagementV1 {
     public_approved?: boolean;
   }
 
-  /** Repository info for offerings. */
+  /**
+   * Repository info for offerings.
+   */
   export interface Rating {
     /** One start rating. */
     one_star_count?: number;
@@ -10842,13 +11580,15 @@ namespace CatalogManagementV1 {
     four_star_count?: number;
   }
 
-  /** Region information. */
+  /**
+   * Region information.
+   */
   export interface Region {
     id?: string;
     name?: string;
     catalog_crn?: string;
     kind?: string;
-    public?: string;
+    public?: boolean;
     ui?: RegionUi;
     icon?: string;
     parent_id?: string;
@@ -10860,29 +11600,37 @@ namespace CatalogManagementV1 {
     capabilities?: string;
     created?: string;
     updated?: string;
-    active?: string;
+    active?: boolean;
     visibility?: JsonObject;
   }
 
-  /** RegionAuthority. */
+  /**
+   * RegionAuthority.
+   */
   export interface RegionAuthority {
     url?: string;
     crn?: string;
     provider?: string;
   }
 
-  /** RegionUi. */
+  /**
+   * RegionUi.
+   */
   export interface RegionUi {
     _language_?: RegionUiLanguage;
   }
 
-  /** RegionUiLanguage. */
+  /**
+   * RegionUiLanguage.
+   */
   export interface RegionUiLanguage {
     description?: string;
     display_name?: string;
   }
 
-  /** Paginated location search result. */
+  /**
+   * Paginated location search result.
+   */
   export interface RegionsSearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset: number;
@@ -10892,15 +11640,17 @@ namespace CatalogManagementV1 {
     total_count?: number;
     /** The number of resources returned in this page of search results. */
     resource_count?: number;
-    /** A URL for retrieving the first page of search results. */
-    first?: string;
-    /** A URL for retrieving the last page of search results. */
-    last?: string;
+    /** Link response on a token paginated query. */
+    first?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    last?: PaginationTokenLink;
     /** Resulting objects. */
     regions?: Region[];
   }
 
-  /** Render type. */
+  /**
+   * Render type.
+   */
   export interface RenderType {
     /** ID of the widget type. */
     type?: string;
@@ -10916,13 +11666,17 @@ namespace CatalogManagementV1 {
     associations?: RenderTypeAssociations;
   }
 
-  /** List of parameters that are associated with this configuration. */
+  /**
+   * List of parameters that are associated with this configuration.
+   */
   export interface RenderTypeAssociations {
     /** Parameters for this association. */
     parameters?: RenderTypeAssociationsParametersItem[];
   }
 
-  /** RenderTypeAssociationsParametersItem. */
+  /**
+   * RenderTypeAssociationsParametersItem.
+   */
   export interface RenderTypeAssociationsParametersItem {
     /** Name of this parameter. */
     name?: string;
@@ -10930,7 +11684,9 @@ namespace CatalogManagementV1 {
     optionsRefresh?: boolean;
   }
 
-  /** Repository info for offerings. */
+  /**
+   * Repository info for offerings.
+   */
   export interface RepoInfo {
     /** Token for private repos. */
     token?: string;
@@ -10938,7 +11694,9 @@ namespace CatalogManagementV1 {
     type?: string;
   }
 
-  /** Resource requirements. */
+  /**
+   * Resource requirements.
+   */
   export interface Resource {
     /** Type of requirement. */
     type?: Resource.Constants.Type | string;
@@ -10961,7 +11719,9 @@ namespace CatalogManagementV1 {
     }
   }
 
-  /** Result. */
+  /**
+   * Result.
+   */
   export interface Result {
     /** Total (assessment) errors against claimed controls. */
     failure_count?: number;
@@ -10975,7 +11735,9 @@ namespace CatalogManagementV1 {
     unscanned_resources?: string[];
   }
 
-  /** SCC Assessment. */
+  /**
+   * SCC Assessment.
+   */
   export interface SCCAssessment {
     /** ID. */
     id?: string;
@@ -10991,7 +11753,9 @@ namespace CatalogManagementV1 {
     ui_href?: string;
   }
 
-  /** SCC Control. */
+  /**
+   * SCC Control.
+   */
   export interface SCCControl {
     /** ID. */
     id?: string;
@@ -11013,7 +11777,9 @@ namespace CatalogManagementV1 {
     ui_href?: string;
   }
 
-  /** SCC Profile. */
+  /**
+   * SCC Profile.
+   */
   export interface SCCProfile {
     /** ID. */
     id?: string;
@@ -11029,7 +11795,9 @@ namespace CatalogManagementV1 {
     ui_href?: string;
   }
 
-  /** SCC Specification. */
+  /**
+   * SCC Specification.
+   */
   export interface SCCSpecification {
     /** ID. */
     id?: string;
@@ -11043,7 +11811,9 @@ namespace CatalogManagementV1 {
     ui_href?: string;
   }
 
-  /** Environment values to be passed to Schematics Workspace on creation. */
+  /**
+   * Environment values to be passed to Schematics Workspace on creation.
+   */
   export interface SchematicsEnvValues {
     /** JSON string containing an array of values in Environment Variable format defined by the Schematics service. */
     value?: string;
@@ -11054,7 +11824,9 @@ namespace CatalogManagementV1 {
     sm_ref?: string;
   }
 
-  /** Script information. */
+  /**
+   * Script information.
+   */
   export interface Script {
     /** Instruction on step and by whom (role) that are needed to take place to prepare the target for installing
      *  this version.
@@ -11072,7 +11844,9 @@ namespace CatalogManagementV1 {
     scope?: string;
   }
 
-  /** A script to be run as part of a Project configuration, during the specified stage and action. */
+  /**
+   * A script to be run as part of a Project configuration, during the specified stage and action.
+   */
   export interface ScriptRef {
     /** The short description for this script. */
     short_description?: string;
@@ -11101,7 +11875,9 @@ namespace CatalogManagementV1 {
     }
   }
 
-  /** access for share approval. */
+  /**
+   * access for share approval.
+   */
   export interface ShareApprovalAccess {
     /** unique id. */
     id?: string;
@@ -11119,7 +11895,9 @@ namespace CatalogManagementV1 {
     approval_state?: string;
   }
 
-  /** Paginated search result for share approval requests. */
+  /**
+   * Paginated search result for share approval requests.
+   */
   export interface ShareApprovalListAccessResult {
     /** The start token used for this response. */
     start?: string;
@@ -11143,7 +11921,9 @@ namespace CatalogManagementV1 {
     resources: ShareApprovalAccess[];
   }
 
-  /** Share setting information. */
+  /**
+   * Share setting information.
+   */
   export interface ShareSetting {
     /** Visible to IBM employees. */
     ibm?: boolean;
@@ -11153,7 +11933,9 @@ namespace CatalogManagementV1 {
     enabled?: boolean;
   }
 
-  /** Version Solution Information.  Only supported for Product kind Solution. */
+  /**
+   * Version Solution Information.  Only supported for Product kind Solution.
+   */
   export interface SolutionInfo {
     /** Architecture diagrams for this solution. */
     architecture_diagrams?: ArchitectureDiagram[];
@@ -11167,7 +11949,9 @@ namespace CatalogManagementV1 {
     install_type?: string;
   }
 
-  /** Offering state. */
+  /**
+   * Offering state.
+   */
   export interface State {
     /** one of: new, validated, consumable. */
     current?: string;
@@ -11181,7 +11965,9 @@ namespace CatalogManagementV1 {
     previous?: string;
   }
 
-  /** Offering Support information. */
+  /**
+   * Offering Support information.
+   */
   export interface Support {
     /** URL to be displayed in the Consumption UI for getting support on this offering. */
     url?: string;
@@ -11199,7 +11985,9 @@ namespace CatalogManagementV1 {
     support_type?: string;
   }
 
-  /** Times when support is available. */
+  /**
+   * Times when support is available.
+   */
   export interface SupportAvailability {
     /** A list of support times. */
     times?: SupportTime[];
@@ -11209,7 +11997,9 @@ namespace CatalogManagementV1 {
     always_available?: boolean;
   }
 
-  /** A support option. */
+  /**
+   * A support option.
+   */
   export interface SupportDetail {
     /** Type of the current support detail. */
     type?: string;
@@ -11221,7 +12011,9 @@ namespace CatalogManagementV1 {
     availability?: SupportAvailability;
   }
 
-  /** Support escalation policy. */
+  /**
+   * Support escalation policy.
+   */
   export interface SupportEscalation {
     /** Time descriptor. */
     escalation_wait_time?: SupportWaitTime;
@@ -11231,7 +12023,9 @@ namespace CatalogManagementV1 {
     contact?: string;
   }
 
-  /** Time range for support on a given day. */
+  /**
+   * Time range for support on a given day.
+   */
   export interface SupportTime {
     /** The day of the week, represented as an integer. */
     day?: number;
@@ -11241,7 +12035,9 @@ namespace CatalogManagementV1 {
     end_time?: string;
   }
 
-  /** Time descriptor. */
+  /**
+   * Time descriptor.
+   */
   export interface SupportWaitTime {
     /** Amount of time to wait in unit 'type'. */
     value?: number;
@@ -11249,7 +12045,9 @@ namespace CatalogManagementV1 {
     type?: string;
   }
 
-  /** Target account context. */
+  /**
+   * Target account context.
+   */
   export interface TargetAccountContext {
     /** API Key. */
     api_key?: string;
@@ -11263,7 +12061,9 @@ namespace CatalogManagementV1 {
     project_id?: string;
   }
 
-  /** Trusted profile info. */
+  /**
+   * Trusted profile info.
+   */
   export interface TrustedProfileInfo {
     /** Trusted profile ID. */
     trusted_profile_id?: string;
@@ -11275,7 +12075,9 @@ namespace CatalogManagementV1 {
     target_service_id?: string;
   }
 
-  /** Offering URL proxy information. */
+  /**
+   * Offering URL proxy information.
+   */
   export interface URLProxy {
     /** URL of the specified media item being proxied. */
     url?: string;
@@ -11283,7 +12085,9 @@ namespace CatalogManagementV1 {
     sha?: string;
   }
 
-  /** Validation response. */
+  /**
+   * Validation response.
+   */
   export interface Validation {
     /** Date and time of last successful validation. */
     validated?: string;
@@ -11299,7 +12103,9 @@ namespace CatalogManagementV1 {
     message?: string;
   }
 
-  /** Offering version information. */
+  /**
+   * Offering version information.
+   */
   export interface Version {
     /** Unique ID. */
     id?: string;
@@ -11393,7 +12199,54 @@ namespace CatalogManagementV1 {
     stack?: JsonObject;
   }
 
-  /** Entitlement license info. */
+  /**
+   * Version dependency on a VersionLocator.
+   */
+  export interface VersionDependant {
+    /** The start token used for this response. */
+    start?: string;
+    /** The limit that was applied to this response. It may be smaller than in the request because that was too
+     *  large.
+     */
+    limit: number;
+    /** The total count of resources in the system that matches the request. */
+    total_count?: number;
+    /** The number of resources returned in this response. */
+    resource_count: number;
+    version?: VersionDependantVersion;
+    /** Link response on a token paginated query. */
+    first: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    next?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    prev?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    last?: PaginationTokenLink;
+  }
+
+  /**
+   * VersionDependantVersion.
+   */
+  export interface VersionDependantVersion {
+    /** Dependant account. */
+    account_id?: string;
+    /** Dependant Catalog. */
+    catalog_id?: string;
+    /** Dependant Offering. */
+    offering_id?: string;
+    /** Dependant Version. */
+    version_id?: string;
+    /** Dependant (semver) version. */
+    version?: string;
+    /** Dependant variation. */
+    flavor?: string;
+    /** Dependencies semver range. */
+    semver?: string;
+  }
+
+  /**
+   * Entitlement license info.
+   */
   export interface VersionEntitlement {
     /** Provider name. */
     provider_name?: string;
@@ -11407,7 +12260,9 @@ namespace CatalogManagementV1 {
     image_repo_name?: string;
   }
 
-  /** Validate deployment variables. */
+  /**
+   * Validate deployment variables.
+   */
   export interface VersionInputValidationResponse {
     /** Failure message. */
     message?: string;
@@ -11419,14 +12274,18 @@ namespace CatalogManagementV1 {
     errors?: VersionInputValidationResponseErrorsItem[];
   }
 
-  /** VersionInputValidationResponseErrorsItem. */
+  /**
+   * VersionInputValidationResponseErrorsItem.
+   */
   export interface VersionInputValidationResponseErrorsItem {
     message?: string;
     entity?: string;
     error_code?: string;
   }
 
-  /** Version range information. */
+  /**
+   * Version range information.
+   */
   export interface VersionRange {
     /** Format kinds that this plan applies to in the current offering.  If empty, applies to all kinds. */
     kinds?: string[];
@@ -11436,7 +12295,9 @@ namespace CatalogManagementV1 {
     flavors?: string[];
   }
 
-  /** Indicates if the current version can be upgraded to the version identified by the descriptor. */
+  /**
+   * Indicates if the current version can be upgraded to the version identified by the descriptor.
+   */
   export interface VersionUpdateDescriptor {
     /** A dotted value of `catalogID`.`versionID`. */
     version_locator?: string;
@@ -11460,7 +12321,35 @@ namespace CatalogManagementV1 {
     messages?: JsonObject;
   }
 
-  /** Statistics for a given week. */
+  /**
+   * Paginated search result for Versions.
+   */
+  export interface VersionsResult {
+    /** The start token used for this response. */
+    start?: string;
+    /** The limit that was applied to this response. It may be smaller than in the request because that was too
+     *  large.
+     */
+    limit: number;
+    /** The total count of resources in the system that matches the request. */
+    total_count?: number;
+    /** The number of resources returned in this response. */
+    resource_count: number;
+    /** Link response on a token paginated query. */
+    first: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    next?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    prev?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    last?: PaginationTokenLink;
+    /** A list of versions. */
+    versions: Version[];
+  }
+
+  /**
+   * Statistics for a given week.
+   */
   export interface WeeklyMetricBucket {
     /** ISO based YearWeek index yyyyww,  e.g., 202303 for third week in 2003. */
     year_week_idx?: number;
@@ -12199,6 +13088,85 @@ namespace CatalogManagementV1 {
      */
     public async getAll(): Promise<CatalogManagementV1.Access[]> {
       const results: Access[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * GetVersionsPager can be used to simplify the use of getVersions().
+   */
+  export class GetVersionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: CatalogManagementV1;
+
+    protected params: CatalogManagementV1.GetVersionsParams;
+
+    /**
+     * Construct a GetVersionsPager object.
+     *
+     * @param {CatalogManagementV1}  client - The service client instance used to invoke getVersions()
+     * @param {Object} params - The parameters to be passed to getVersions()
+     * @constructor
+     * @returns {GetVersionsPager}
+     */
+    constructor(client: CatalogManagementV1, params: CatalogManagementV1.GetVersionsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking getVersions().
+     * @returns {Promise<CatalogManagementV1.Version[]>}
+     */
+    public async getNext(): Promise<CatalogManagementV1.Version[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.getVersions(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.versions;
+    }
+
+    /**
+     * Returns all results by invoking getVersions() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<CatalogManagementV1.Version[]>}
+     */
+    public async getAll(): Promise<CatalogManagementV1.Version[]> {
+      const results: Version[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
