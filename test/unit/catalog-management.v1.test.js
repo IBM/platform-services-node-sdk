@@ -2254,9 +2254,9 @@ describe('CatalogManagementV1', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
       const path = '/offerings';
       const mockPagerResponse1 =
-        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2412,9 +2412,9 @@ describe('CatalogManagementV1', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
       const path = '/catalogs/testString/offerings';
       const mockPagerResponse1 =
-        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}]}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2875,6 +2875,18 @@ describe('CatalogManagementV1', () => {
         stack: { anyKey: 'anyValue' },
       };
 
+      // PaginationTokenLink
+      const paginationTokenLinkModel = {
+        href: 'testString',
+        start: 'testString',
+      };
+
+      // KindAllVersions
+      const kindAllVersionsModel = {
+        first: paginationTokenLinkModel,
+        next: paginationTokenLinkModel,
+      };
+
       // Kind
       const kindModel = {
         id: 'testString',
@@ -2890,6 +2902,7 @@ describe('CatalogManagementV1', () => {
         created: '2019-01-01T12:00:00.000Z',
         updated: '2019-01-01T12:00:00.000Z',
         versions: [versionModel],
+        all_versions: kindAllVersionsModel,
       };
 
       // PublishObject
@@ -3291,6 +3304,7 @@ describe('CatalogManagementV1', () => {
         const catalogIdentifier = 'testString';
         const offeringId = 'testString';
         const tags = ['testString'];
+        const keywords = ['testString'];
         const content = 'VGhpcyBpcyBhIG1vY2sgYnl0ZSBhcnJheSB2YWx1ZS4=';
         const name = 'testString';
         const label = 'testString';
@@ -3315,6 +3329,7 @@ describe('CatalogManagementV1', () => {
           catalogIdentifier,
           offeringId,
           tags,
+          keywords,
           content,
           name,
           label,
@@ -3353,6 +3368,7 @@ describe('CatalogManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'X-Auth-Token', xAuthToken);
         expect(mockRequestOptions.body.tags).toEqual(tags);
+        expect(mockRequestOptions.body.keywords).toEqual(keywords);
         expect(mockRequestOptions.body.content).toEqual(content);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.label).toEqual(label);
@@ -3484,6 +3500,7 @@ describe('CatalogManagementV1', () => {
         // Construct the params object for operation importOffering
         const catalogIdentifier = 'testString';
         const tags = ['testString'];
+        const keywords = ['testString'];
         const content = 'VGhpcyBpcyBhIG1vY2sgYnl0ZSBhcnJheSB2YWx1ZS4=';
         const name = 'testString';
         const label = 'testString';
@@ -3508,6 +3525,7 @@ describe('CatalogManagementV1', () => {
         const importOfferingParams = {
           catalogIdentifier,
           tags,
+          keywords,
           content,
           name,
           label,
@@ -3547,6 +3565,7 @@ describe('CatalogManagementV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'X-Auth-Token', xAuthToken);
         expect(mockRequestOptions.body.tags).toEqual(tags);
+        expect(mockRequestOptions.body.keywords).toEqual(keywords);
         expect(mockRequestOptions.body.content).toEqual(content);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.label).toEqual(label);
@@ -4262,6 +4281,18 @@ describe('CatalogManagementV1', () => {
         stack: { anyKey: 'anyValue' },
       };
 
+      // PaginationTokenLink
+      const paginationTokenLinkModel = {
+        href: 'testString',
+        start: 'testString',
+      };
+
+      // KindAllVersions
+      const kindAllVersionsModel = {
+        first: paginationTokenLinkModel,
+        next: paginationTokenLinkModel,
+      };
+
       // Kind
       const kindModel = {
         id: 'testString',
@@ -4277,6 +4308,7 @@ describe('CatalogManagementV1', () => {
         created: '2019-01-01T12:00:00.000Z',
         updated: '2019-01-01T12:00:00.000Z',
         versions: [versionModel],
+        all_versions: kindAllVersionsModel,
       };
 
       // PublishObject
@@ -6477,6 +6509,170 @@ describe('CatalogManagementV1', () => {
     });
   });
 
+  describe('getVersions', () => {
+    describe('positive tests', () => {
+      function __getVersionsTest() {
+        // Construct the params object for operation getVersions
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const kindId = 'testString';
+        const digest = true;
+        const catalog = true;
+        const start = 'testString';
+        const limit = 150;
+        const getVersionsParams = {
+          catalogIdentifier,
+          offeringId,
+          kindId,
+          digest,
+          catalog,
+          start,
+          limit,
+        };
+
+        const getVersionsResult = catalogManagementService.getVersions(getVersionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getVersionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/kinds/{kind_id}/versions', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.digest).toEqual(digest);
+        expect(mockRequestOptions.qs.catalog).toEqual(catalog);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+        expect(mockRequestOptions.path.kind_id).toEqual(kindId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVersionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getVersionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getVersionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const kindId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVersionsParams = {
+          catalogIdentifier,
+          offeringId,
+          kindId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getVersions(getVersionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getVersions({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getVersions();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('GetVersionsPager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/catalogs/testString/offerings/testString/kinds/testString/versions';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"}}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          offeringId: 'testString',
+          kindId: 'testString',
+          digest: true,
+          catalog: true,
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.GetVersionsPager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          catalogIdentifier: 'testString',
+          offeringId: 'testString',
+          kindId: 'testString',
+          digest: true,
+          catalog: true,
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.GetVersionsPager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
   describe('getOfferingAbout', () => {
     describe('positive tests', () => {
       function __getOfferingAboutTest() {
@@ -7800,6 +7996,902 @@ describe('CatalogManagementV1', () => {
     });
   });
 
+  describe('updateVersion', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // Rating
+      const ratingModel = {
+        one_star_count: 38,
+        two_star_count: 38,
+        three_star_count: 38,
+        four_star_count: 38,
+      };
+
+      // Feature
+      const featureModel = {
+        title: 'testString',
+        title_i18n: { 'key1': 'testString' },
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+      };
+
+      // Flavor
+      const flavorModel = {
+        name: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        index: 38,
+      };
+
+      // RenderTypeAssociationsParametersItem
+      const renderTypeAssociationsParametersItemModel = {
+        name: 'testString',
+        optionsRefresh: true,
+      };
+
+      // RenderTypeAssociations
+      const renderTypeAssociationsModel = {
+        parameters: [renderTypeAssociationsParametersItemModel],
+      };
+
+      // RenderType
+      const renderTypeModel = {
+        type: 'testString',
+        grouping: 'testString',
+        original_grouping: 'testString',
+        grouping_index: 38,
+        config_constraints: { anyKey: 'anyValue' },
+        associations: renderTypeAssociationsModel,
+      };
+
+      // Configuration
+      const configurationModel = {
+        key: 'testString',
+        type: 'testString',
+        default_value: 'testString',
+        display_name: 'testString',
+        value_constraint: 'testString',
+        description: 'testString',
+        required: true,
+        options: ['testString'],
+        hidden: true,
+        custom_config: renderTypeModel,
+        type_metadata: 'testString',
+      };
+
+      // Output
+      const outputModel = {
+        key: 'testString',
+        description: 'testString',
+      };
+
+      // IAMResource
+      const iamResourceModel = {
+        name: 'testString',
+        description: 'testString',
+        role_crns: ['testString'],
+      };
+
+      // IAMPermission
+      const iamPermissionModel = {
+        service_name: 'testString',
+        role_crns: ['testString'],
+        resources: [iamResourceModel],
+      };
+
+      // Validation
+      const validationModel = {
+        validated: '2019-01-01T12:00:00.000Z',
+        requested: '2019-01-01T12:00:00.000Z',
+        state: 'testString',
+        last_operation: 'testString',
+        target: { anyKey: 'anyValue' },
+        message: 'testString',
+      };
+
+      // Resource
+      const resourceModel = {
+        type: 'mem',
+        value: 'testString',
+      };
+
+      // SchematicsEnvValues
+      const schematicsEnvValuesModel = {
+        value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
+        sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+      };
+
+      // Script
+      const scriptModel = {
+        instructions: 'testString',
+        instructions_i18n: { 'key1': 'testString' },
+        script: 'testString',
+        script_permission: 'testString',
+        delete_script: 'testString',
+        scope: 'testString',
+      };
+
+      // ScriptRef
+      const scriptRefModel = {
+        short_description: 'testString',
+        type: 'ansible',
+        path: 'scripts/validate-post-ansible-playbook.yaml',
+        stage: 'pre',
+        action: 'validate',
+      };
+
+      // VersionEntitlement
+      const versionEntitlementModel = {
+        provider_name: 'testString',
+        provider_id: 'testString',
+        product_id: 'testString',
+        part_numbers: ['testString'],
+        image_repo_name: 'testString',
+      };
+
+      // License
+      const licenseModel = {
+        id: 'testString',
+        name: 'testString',
+        type: 'testString',
+        url: 'testString',
+        description: 'testString',
+      };
+
+      // State
+      const stateModel = {
+        current: 'testString',
+        current_entered: '2019-01-01T12:00:00.000Z',
+        pending: 'testString',
+        pending_requested: '2019-01-01T12:00:00.000Z',
+        previous: 'testString',
+      };
+
+      // DeprecatePending
+      const deprecatePendingModel = {
+        deprecate_date: '2019-01-01T12:00:00.000Z',
+        deprecate_state: 'testString',
+        description: 'testString',
+      };
+
+      // URLProxy
+      const urlProxyModel = {
+        url: 'testString',
+        sha: 'testString',
+      };
+
+      // MediaItem
+      const mediaItemModel = {
+        url: 'testString',
+        api_url: 'testString',
+        url_proxy: urlProxyModel,
+        caption: 'testString',
+        caption_i18n: { 'key1': 'testString' },
+        type: 'testString',
+        thumbnail_url: 'testString',
+      };
+
+      // ArchitectureDiagram
+      const architectureDiagramModel = {
+        diagram: mediaItemModel,
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+      };
+
+      // CostComponent
+      const costComponentModel = {
+        name: 'testString',
+        unit: 'testString',
+        hourlyQuantity: 'testString',
+        monthlyQuantity: 'testString',
+        price: 'testString',
+        hourlyCost: 'testString',
+        monthlyCost: 'testString',
+      };
+
+      // CostResource
+      const costResourceModel = {
+        name: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        hourlyCost: 'testString',
+        monthlyCost: 'testString',
+        costComponents: [costComponentModel],
+      };
+
+      // CostBreakdown
+      const costBreakdownModel = {
+        totalHourlyCost: 'testString',
+        totalMonthlyCost: 'testString',
+        resources: [costResourceModel],
+      };
+
+      // CostSummary
+      const costSummaryModel = {
+        totalDetectedResources: 38,
+        totalSupportedResources: 38,
+        totalUnsupportedResources: 38,
+        totalUsageBasedResources: 38,
+        totalNoPriceResources: 38,
+        unsupportedResourceCounts: { 'key1': 38 },
+        noPriceResourceCounts: { 'key1': 38 },
+      };
+
+      // Project
+      const projectModel = {
+        name: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        pastBreakdown: costBreakdownModel,
+        breakdown: costBreakdownModel,
+        diff: costBreakdownModel,
+        summary: costSummaryModel,
+      };
+
+      // CostEstimate
+      const costEstimateModel = {
+        version: 'testString',
+        currency: 'testString',
+        projects: [projectModel],
+        summary: costSummaryModel,
+        totalHourlyCost: 'testString',
+        totalMonthlyCost: 'testString',
+        pastTotalHourlyCost: 'testString',
+        pastTotalMonthlyCost: 'testString',
+        diffTotalHourlyCost: 'testString',
+        diffTotalMonthlyCost: 'testString',
+        timeGenerated: '2019-01-01T12:00:00.000Z',
+      };
+
+      // OfferingReference
+      const offeringReferenceModel = {
+        catalog_id: 'testString',
+        id: 'testString',
+        name: 'testString',
+        kind: 'testString',
+        version: 'testString',
+        flavors: ['testString'],
+      };
+
+      // SolutionInfo
+      const solutionInfoModel = {
+        architecture_diagrams: [architectureDiagramModel],
+        features: [featureModel],
+        cost_estimate: costEstimateModel,
+        dependencies: [offeringReferenceModel],
+        install_type: 'testString',
+      };
+
+      // SCCProfile
+      const sccProfileModel = {
+        id: 'testString',
+        name: 'testString',
+        version: 'testString',
+        description: 'testString',
+        type: 'testString',
+        ui_href: 'testString',
+      };
+
+      // ClaimedControl
+      const claimedControlModel = {
+        profile: sccProfileModel,
+        names: ['testString'],
+      };
+
+      // Claims
+      const claimsModel = {
+        profiles: [sccProfileModel],
+        controls: [claimedControlModel],
+      };
+
+      // Result
+      const resultModel = {
+        failure_count: 38,
+        scan_time: '2019-01-01T12:00:00.000Z',
+        error_message: 'testString',
+        complete_scan: true,
+        unscanned_resources: ['testString'],
+      };
+
+      // SCCAssessment
+      const sccAssessmentModel = {
+        id: 'testString',
+        description: 'testString',
+        version: 'testString',
+        type: 'testString',
+        method: 'testString',
+        ui_href: 'testString',
+      };
+
+      // SCCSpecification
+      const sccSpecificationModel = {
+        id: 'testString',
+        description: 'testString',
+        component_name: 'testString',
+        assessments: [sccAssessmentModel],
+        ui_href: 'testString',
+      };
+
+      // SCCControl
+      const sccControlModel = {
+        id: 'testString',
+        name: 'testString',
+        version: 'testString',
+        description: 'testString',
+        profile: sccProfileModel,
+        parent_name: 'testString',
+        specifications: [sccSpecificationModel],
+        ui_href: 'testString',
+      };
+
+      // EvaluatedControl
+      const evaluatedControlModel = {
+        id: 'testString',
+        name: 'testString',
+        description: 'testString',
+        specifications: [sccSpecificationModel],
+        failure_count: 38,
+        pass_count: 38,
+        parent: sccControlModel,
+        ui_href: 'testString',
+      };
+
+      // Evaluation
+      const evaluationModel = {
+        scan_id: 'testString',
+        account_id: 'testString',
+        profile: sccProfileModel,
+        result: resultModel,
+        controls: [evaluatedControlModel],
+      };
+
+      // Compliance
+      const complianceModel = {
+        authority: 'testString',
+        claims: claimsModel,
+        evaluations: [evaluationModel],
+      };
+
+      // ChangeNotices
+      const changeNoticesModel = {
+        breaking: [featureModel],
+        new: [featureModel],
+        update: [featureModel],
+      };
+
+      // Version
+      const versionModel = {
+        crn: 'testString',
+        version: 'testString',
+        flavor: flavorModel,
+        sha: 'testString',
+        created: '2019-01-01T12:00:00.000Z',
+        updated: '2019-01-01T12:00:00.000Z',
+        offering_id: 'testString',
+        catalog_id: 'testString',
+        kind_id: 'testString',
+        tags: ['testString'],
+        repo_url: 'testString',
+        source_url: 'testString',
+        tgz_url: 'testString',
+        configuration: [configurationModel],
+        outputs: [outputModel],
+        iam_permissions: [iamPermissionModel],
+        metadata: { anyKey: 'anyValue' },
+        validation: validationModel,
+        required_resources: [resourceModel],
+        single_instance: true,
+        schematics_env_values: schematicsEnvValuesModel,
+        install: scriptModel,
+        pre_install: [scriptModel],
+        scripts: { 'key1': scriptRefModel },
+        entitlement: versionEntitlementModel,
+        licenses: [licenseModel],
+        image_manifest_url: 'testString',
+        deprecated: true,
+        package_version: 'testString',
+        state: stateModel,
+        version_locator: 'testString',
+        long_description: 'testString',
+        long_description_i18n: { 'key1': 'testString' },
+        whitelisted_accounts: ['testString'],
+        image_pull_key_name: 'testString',
+        deprecate_pending: deprecatePendingModel,
+        solution_info: solutionInfoModel,
+        is_consumable: true,
+        compliance_v3: complianceModel,
+        change_notices: changeNoticesModel,
+        plan_ids: ['testString'],
+        stack: { anyKey: 'anyValue' },
+      };
+
+      // PaginationTokenLink
+      const paginationTokenLinkModel = {
+        href: 'testString',
+        start: 'testString',
+      };
+
+      // KindAllVersions
+      const kindAllVersionsModel = {
+        first: paginationTokenLinkModel,
+        next: paginationTokenLinkModel,
+      };
+
+      // Kind
+      const kindModel = {
+        id: 'testString',
+        format_kind: 'testString',
+        format_kind_label: 'testString',
+        install_kind: 'testString',
+        install_kind_label: 'testString',
+        target_kind: 'testString',
+        target_kind_label: 'testString',
+        metadata: { anyKey: 'anyValue' },
+        tags: ['testString'],
+        additional_features: [featureModel],
+        created: '2019-01-01T12:00:00.000Z',
+        updated: '2019-01-01T12:00:00.000Z',
+        versions: [versionModel],
+        all_versions: kindAllVersionsModel,
+      };
+
+      // PublishObject
+      const publishObjectModel = {
+        pc_managed: true,
+        approval_type: 'testString',
+        publish_approved: true,
+        share_with_all: true,
+        share_with_ibm: true,
+        share_enabled: true,
+        original_crn: 'testString',
+        public_crn: 'testString',
+        approval_record: { anyKey: 'anyValue' },
+        permit_ibm_public_publish: true,
+        ibm_approved: true,
+        public_approved: true,
+      };
+
+      // ProviderInfo
+      const providerInfoModel = {
+        id: 'testString',
+        name: 'testString',
+      };
+
+      // RepoInfo
+      const repoInfoModel = {
+        token: 'testString',
+        type: 'testString',
+      };
+
+      // ImagePullKey
+      const imagePullKeyModel = {
+        name: 'testString',
+        value: 'testString',
+        description: 'testString',
+      };
+
+      // SupportWaitTime
+      const supportWaitTimeModel = {
+        value: 38,
+        type: 'testString',
+      };
+
+      // SupportTime
+      const supportTimeModel = {
+        day: 38,
+        start_time: 'testString',
+        end_time: 'testString',
+      };
+
+      // SupportAvailability
+      const supportAvailabilityModel = {
+        times: [supportTimeModel],
+        timezone: 'testString',
+        always_available: true,
+      };
+
+      // SupportDetail
+      const supportDetailModel = {
+        type: 'testString',
+        contact: 'testString',
+        response_wait_time: supportWaitTimeModel,
+        availability: supportAvailabilityModel,
+      };
+
+      // SupportEscalation
+      const supportEscalationModel = {
+        escalation_wait_time: supportWaitTimeModel,
+        response_wait_time: supportWaitTimeModel,
+        contact: 'testString',
+      };
+
+      // Support
+      const supportModel = {
+        url: 'testString',
+        process: 'testString',
+        process_i18n: { 'key1': 'testString' },
+        locations: ['testString'],
+        support_details: [supportDetailModel],
+        support_escalation: supportEscalationModel,
+        support_type: 'testString',
+      };
+
+      // LearnMoreLinks
+      const learnMoreLinksModel = {
+        first_party: 'testString',
+        third_party: 'testString',
+      };
+
+      // Constraint
+      const constraintModel = {
+        type: 'testString',
+        rule: 'testString',
+      };
+
+      // Badge
+      const badgeModel = {
+        id: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        description: 'testString',
+        description_i18n: { 'key1': 'testString' },
+        icon: 'testString',
+        authority: 'testString',
+        tag: 'testString',
+        learn_more_links: learnMoreLinksModel,
+        constraints: [constraintModel],
+      };
+
+      // VersionRange
+      const versionRangeModel = {
+        kinds: ['testString'],
+        version: 'testString',
+        flavors: ['testString'],
+      };
+
+      // Plan
+      const planModel = {
+        url: 'testString',
+        crn: 'testString',
+        created: '2019-01-01T12:00:00.000Z',
+        updated: '2019-01-01T12:00:00.000Z',
+        offering_id: 'testString',
+        catalog_id: 'testString',
+        label: 'testString',
+        label_i18n: { 'key1': 'testString' },
+        name: 'testString',
+        short_description: 'testString',
+        short_description_i18n: { 'key1': 'testString' },
+        pricing_tags: ['testString'],
+        version_range: versionRangeModel,
+        features: [featureModel],
+        state: stateModel,
+        deprecate_pending: deprecatePendingModel,
+        metadata: { anyKey: 'anyValue' },
+        publish_approved: true,
+      };
+
+      function __updateVersionTest() {
+        // Construct the params object for operation updateVersion
+        const versionLocId = 'testString';
+        const id = 'testString';
+        const rev = 'testString';
+        const url = 'testString';
+        const crn = 'testString';
+        const label = 'testString';
+        const labelI18n = { 'key1': 'testString' };
+        const name = 'testString';
+        const offeringIconUrl = 'testString';
+        const offeringDocsUrl = 'testString';
+        const offeringSupportUrl = 'testString';
+        const tags = ['testString'];
+        const keywords = ['testString'];
+        const rating = ratingModel;
+        const created = '2019-01-01T12:00:00.000Z';
+        const updated = '2019-01-01T12:00:00.000Z';
+        const shortDescription = 'testString';
+        const shortDescriptionI18n = { 'key1': 'testString' };
+        const longDescription = 'testString';
+        const longDescriptionI18n = { 'key1': 'testString' };
+        const features = [featureModel];
+        const kinds = [kindModel];
+        const publish = publishObjectModel;
+        const pcManaged = true;
+        const publishApproved = true;
+        const shareWithAll = true;
+        const shareWithIbm = true;
+        const shareEnabled = true;
+        const publicOriginalCrn = 'testString';
+        const publishPublicCrn = 'testString';
+        const portalApprovalRecord = 'testString';
+        const portalUiUrl = 'testString';
+        const catalogId = 'testString';
+        const catalogName = 'testString';
+        const metadata = { anyKey: 'anyValue' };
+        const disclaimer = 'testString';
+        const hidden = true;
+        const provider = 'testString';
+        const providerInfo = providerInfoModel;
+        const repoInfo = repoInfoModel;
+        const imagePullKeys = [imagePullKeyModel];
+        const support = supportModel;
+        const media = [mediaItemModel];
+        const deprecatePending = deprecatePendingModel;
+        const productKind = 'testString';
+        const badges = [badgeModel];
+        const plans = [planModel];
+        const updateVersionParams = {
+          versionLocId,
+          id,
+          rev,
+          url,
+          crn,
+          label,
+          labelI18n,
+          name,
+          offeringIconUrl,
+          offeringDocsUrl,
+          offeringSupportUrl,
+          tags,
+          keywords,
+          rating,
+          created,
+          updated,
+          shortDescription,
+          shortDescriptionI18n,
+          longDescription,
+          longDescriptionI18n,
+          features,
+          kinds,
+          publish,
+          pcManaged,
+          publishApproved,
+          shareWithAll,
+          shareWithIbm,
+          shareEnabled,
+          publicOriginalCrn,
+          publishPublicCrn,
+          portalApprovalRecord,
+          portalUiUrl,
+          catalogId,
+          catalogName,
+          metadata,
+          disclaimer,
+          hidden,
+          provider,
+          providerInfo,
+          repoInfo,
+          imagePullKeys,
+          support,
+          media,
+          deprecatePending,
+          productKind,
+          badges,
+          plans,
+        };
+
+        const updateVersionResult = catalogManagementService.updateVersion(updateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body._rev).toEqual(rev);
+        expect(mockRequestOptions.body.url).toEqual(url);
+        expect(mockRequestOptions.body.crn).toEqual(crn);
+        expect(mockRequestOptions.body.label).toEqual(label);
+        expect(mockRequestOptions.body.label_i18n).toEqual(labelI18n);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.offering_icon_url).toEqual(offeringIconUrl);
+        expect(mockRequestOptions.body.offering_docs_url).toEqual(offeringDocsUrl);
+        expect(mockRequestOptions.body.offering_support_url).toEqual(offeringSupportUrl);
+        expect(mockRequestOptions.body.tags).toEqual(tags);
+        expect(mockRequestOptions.body.keywords).toEqual(keywords);
+        expect(mockRequestOptions.body.rating).toEqual(rating);
+        expect(mockRequestOptions.body.created).toEqual(created);
+        expect(mockRequestOptions.body.updated).toEqual(updated);
+        expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.short_description_i18n).toEqual(shortDescriptionI18n);
+        expect(mockRequestOptions.body.long_description).toEqual(longDescription);
+        expect(mockRequestOptions.body.long_description_i18n).toEqual(longDescriptionI18n);
+        expect(mockRequestOptions.body.features).toEqual(features);
+        expect(mockRequestOptions.body.kinds).toEqual(kinds);
+        expect(mockRequestOptions.body.publish).toEqual(publish);
+        expect(mockRequestOptions.body.pc_managed).toEqual(pcManaged);
+        expect(mockRequestOptions.body.publish_approved).toEqual(publishApproved);
+        expect(mockRequestOptions.body.share_with_all).toEqual(shareWithAll);
+        expect(mockRequestOptions.body.share_with_ibm).toEqual(shareWithIbm);
+        expect(mockRequestOptions.body.share_enabled).toEqual(shareEnabled);
+        expect(mockRequestOptions.body.public_original_crn).toEqual(publicOriginalCrn);
+        expect(mockRequestOptions.body.publish_public_crn).toEqual(publishPublicCrn);
+        expect(mockRequestOptions.body.portal_approval_record).toEqual(portalApprovalRecord);
+        expect(mockRequestOptions.body.portal_ui_url).toEqual(portalUiUrl);
+        expect(mockRequestOptions.body.catalog_id).toEqual(catalogId);
+        expect(mockRequestOptions.body.catalog_name).toEqual(catalogName);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.body.disclaimer).toEqual(disclaimer);
+        expect(mockRequestOptions.body.hidden).toEqual(hidden);
+        expect(mockRequestOptions.body.provider).toEqual(provider);
+        expect(mockRequestOptions.body.provider_info).toEqual(providerInfo);
+        expect(mockRequestOptions.body.repo_info).toEqual(repoInfo);
+        expect(mockRequestOptions.body.image_pull_keys).toEqual(imagePullKeys);
+        expect(mockRequestOptions.body.support).toEqual(support);
+        expect(mockRequestOptions.body.media).toEqual(media);
+        expect(mockRequestOptions.body.deprecate_pending).toEqual(deprecatePending);
+        expect(mockRequestOptions.body.product_kind).toEqual(productKind);
+        expect(mockRequestOptions.body.badges).toEqual(badges);
+        expect(mockRequestOptions.body.plans).toEqual(plans);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __updateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __updateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateVersionParams = {
+          versionLocId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.updateVersion(updateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.updateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.updateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('patchUpdateVersion', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // JsonPatchOperation
+      const jsonPatchOperationModel = {
+        op: 'add',
+        path: 'testString',
+        value: 'testString',
+        from: 'testString',
+      };
+
+      function __patchUpdateVersionTest() {
+        // Construct the params object for operation patchUpdateVersion
+        const versionLocId = 'testString';
+        const ifMatch = 'testString';
+        const updates = [jsonPatchOperationModel];
+        const patchUpdateVersionParams = {
+          versionLocId,
+          ifMatch,
+          updates,
+        };
+
+        const patchUpdateVersionResult = catalogManagementService.patchUpdateVersion(patchUpdateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(patchUpdateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body).toEqual(updates);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __patchUpdateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __patchUpdateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __patchUpdateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const patchUpdateVersionParams = {
+          versionLocId,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.patchUpdateVersion(patchUpdateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.patchUpdateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.patchUpdateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('deleteVersion', () => {
     describe('positive tests', () => {
       function __deleteVersionTest() {
@@ -7875,6 +8967,90 @@ describe('CatalogManagementV1', () => {
         let err;
         try {
           await catalogManagementService.deleteVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getVersionDependencies', () => {
+    describe('positive tests', () => {
+      function __getVersionDependenciesTest() {
+        // Construct the params object for operation getVersionDependencies
+        const versionLocId = 'testString';
+        const getVersionDependenciesParams = {
+          versionLocId,
+        };
+
+        const getVersionDependenciesResult = catalogManagementService.getVersionDependencies(getVersionDependenciesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getVersionDependenciesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/dependencies', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVersionDependenciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __getVersionDependenciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __getVersionDependenciesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVersionDependenciesParams = {
+          versionLocId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.getVersionDependencies(getVersionDependenciesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.getVersionDependencies({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.getVersionDependencies();
         } catch (e) {
           err = e;
         }
@@ -8668,6 +9844,7 @@ describe('CatalogManagementV1', () => {
         const namespaces = ['testString'];
         const allNamespaces = true;
         const overrideValues = deployRequestBodyOverrideValuesModel;
+        const dependencyConfigs = ['testString'];
         const environmentVariables = [deployRequestBodyEnvironmentVariablesItemModel];
         const entitlementApikey = 'testString';
         const schematics = deployRequestBodySchematicsModel;
@@ -8691,6 +9868,7 @@ describe('CatalogManagementV1', () => {
           namespaces,
           allNamespaces,
           overrideValues,
+          dependencyConfigs,
           environmentVariables,
           entitlementApikey,
           schematics,
@@ -8728,6 +9906,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.namespaces).toEqual(namespaces);
         expect(mockRequestOptions.body.all_namespaces).toEqual(allNamespaces);
         expect(mockRequestOptions.body.override_values).toEqual(overrideValues);
+        expect(mockRequestOptions.body.dependency_configs).toEqual(dependencyConfigs);
         expect(mockRequestOptions.body.environment_variables).toEqual(environmentVariables);
         expect(mockRequestOptions.body.entitlement_apikey).toEqual(entitlementApikey);
         expect(mockRequestOptions.body.schematics).toEqual(schematics);
@@ -8849,6 +10028,7 @@ describe('CatalogManagementV1', () => {
         const namespaces = ['testString'];
         const allNamespaces = true;
         const overrideValues = deployRequestBodyOverrideValuesModel;
+        const dependencyConfigs = ['testString'];
         const environmentVariables = [deployRequestBodyEnvironmentVariablesItemModel];
         const entitlementApikey = 'testString';
         const schematics = deployRequestBodySchematicsModel;
@@ -8872,6 +10052,7 @@ describe('CatalogManagementV1', () => {
           namespaces,
           allNamespaces,
           overrideValues,
+          dependencyConfigs,
           environmentVariables,
           entitlementApikey,
           schematics,
@@ -8909,6 +10090,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.namespaces).toEqual(namespaces);
         expect(mockRequestOptions.body.all_namespaces).toEqual(allNamespaces);
         expect(mockRequestOptions.body.override_values).toEqual(overrideValues);
+        expect(mockRequestOptions.body.dependency_configs).toEqual(dependencyConfigs);
         expect(mockRequestOptions.body.environment_variables).toEqual(environmentVariables);
         expect(mockRequestOptions.body.entitlement_apikey).toEqual(entitlementApikey);
         expect(mockRequestOptions.body.schematics).toEqual(schematics);
@@ -9128,6 +10310,7 @@ describe('CatalogManagementV1', () => {
         const namespaces = ['testString'];
         const allNamespaces = true;
         const overrideValues = deployRequestBodyOverrideValuesModel;
+        const dependencyConfigs = ['testString'];
         const environmentVariables = [deployRequestBodyEnvironmentVariablesItemModel];
         const entitlementApikey = 'testString';
         const schematics = deployRequestBodySchematicsModel;
@@ -9152,6 +10335,7 @@ describe('CatalogManagementV1', () => {
           namespaces,
           allNamespaces,
           overrideValues,
+          dependencyConfigs,
           environmentVariables,
           entitlementApikey,
           schematics,
@@ -9190,6 +10374,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.namespaces).toEqual(namespaces);
         expect(mockRequestOptions.body.all_namespaces).toEqual(allNamespaces);
         expect(mockRequestOptions.body.override_values).toEqual(overrideValues);
+        expect(mockRequestOptions.body.dependency_configs).toEqual(dependencyConfigs);
         expect(mockRequestOptions.body.environment_variables).toEqual(environmentVariables);
         expect(mockRequestOptions.body.entitlement_apikey).toEqual(entitlementApikey);
         expect(mockRequestOptions.body.schematics).toEqual(schematics);

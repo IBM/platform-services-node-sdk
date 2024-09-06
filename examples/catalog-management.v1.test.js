@@ -80,7 +80,9 @@ describe('CatalogManagementV1', () => {
   let versionIdLink;
   let versionLocatorLink;
   let versionRevLink;
+  let kindIdLink;
   let planID;
+  let offeringVersion;
 
   let zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
   let zipurlSolution = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.0.0.tar.gz';
@@ -289,6 +291,7 @@ describe('CatalogManagementV1', () => {
     offeringRevLink = responseBody._rev;
     offeringIdLink = responseBody.id;
     versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
+    kindIdLink = responseBody.kinds[0].id;
   });
 
   test('importOfferingVersion request example', async () => {
@@ -326,6 +329,64 @@ describe('CatalogManagementV1', () => {
     versionLocatorLink = responseBody.kinds[0].versions[0].version_locator;
     versionIdLink = responseBody.kinds[0].versions[0].version_locator;
     versionRevLink = responseBody.kinds[0].versions[0]._rev;
+  });
+
+  test('getVersions request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getVersions() result:');
+    // begin-get_versions
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      kindId: kindIdLink,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getVersions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_versions
+  });
+
+  test('getVersionDependencies request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getVersionDependencies() result:');
+    // begin-get_version_dependencies
+
+    const params = {
+      versionLocId: versionLocatorLink,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.getVersionDependencies(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_version_dependencies
   });
 
   test('validateInputs request example', async () => {
@@ -1333,6 +1394,78 @@ describe('CatalogManagementV1', () => {
     }
 
     // end-get_version
+    const responseBody = res.result;
+    offeringVersion = responseBody;
+  });
+
+  test('updateVersion request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateVersion() result:');
+    // begin-update_version
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      id: offeringVersion.id,
+      catalogId: offeringVersion.catalog_id,
+      kinds: offeringVersion.kinds,
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.updateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_version
+    const responseBody = res.result;
+    offeringVersion = responseBody;
+  });
+
+  test('patchUpdateVersion request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('patchUpdateVersion() result:');
+    // begin-patch_update_version
+
+    // JsonPatchOperation
+    const jsonPatchOperationModel = {
+      op: 'replace',
+      path: '/kinds/0/versions/0/long_description',
+      value: 'testString',
+    };
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      ifMatch: `"${offeringVersion._rev}"`,
+      updates: [jsonPatchOperationModel],
+    };
+
+    let res;
+    try {
+      res = await catalogManagementService.patchUpdateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-patch_update_version
   });
 
   test('getIamPermissions request example', async () => {
