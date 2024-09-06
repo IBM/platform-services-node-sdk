@@ -55,7 +55,9 @@ describe('CatalogManagementV1_integration', () => {
   let offeringIdLink;
   let offeringRevLink;
   let versionLocatorLink;
+  let kindIdLink;
   let planID;
+  let offeringVersion;
 
   const zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
   const zipurlSolution =
@@ -137,6 +139,7 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.result).toBeDefined();
     offeringIdLink = res.result.id;
     versionLocatorLink = res.result.kinds[0].versions[0].version_locator;
+    kindIdLink = res.result.kinds[0].id;
   });
 
   test('importOfferingVersion()', async () => {
@@ -155,6 +158,34 @@ describe('CatalogManagementV1_integration', () => {
     expect(res.result).toBeDefined();
     offeringIdLink = res.result.id;
     offeringRevLink = res.result._rev;
+  });
+
+  test('getVersions()', async () => {
+    // Request models needed by this operation.
+
+    const params = {
+      catalogIdentifier: catalogIdLink,
+      offeringId: offeringIdLink,
+      kindId: kindIdLink,
+    };
+
+    const res = await catalogManagementService.getVersions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getVersionDependencies()', async () => {
+    // Request models needed by this operation.
+
+    const params = {
+      versionLocId: versionLocatorLink,
+    };
+
+    const res = await catalogManagementService.getVersionDependencies(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 
   test('validateInputs()', async () => {
@@ -447,11 +478,8 @@ describe('CatalogManagementV1_integration', () => {
       updates: [jsonPatchOperationModel],
     };
 
-    console.log('params: ', JSON.stringify(params));
-
     const res = await catalogManagementService.updateOffering(params);
 
-    console.log('res: ', JSON.stringify(res.result));
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -718,6 +746,43 @@ describe('CatalogManagementV1_integration', () => {
     };
 
     const res = await catalogManagementService.getVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    offeringVersion = res.result;
+    versionLocatorLink = offeringVersion.kinds[0].versions[0].version_locator;
+  });
+
+  test('updateVersion()', async () => {
+    const params = {
+      versionLocId: versionLocatorLink,
+      id: offeringVersion.id,
+      catalogId: offeringVersion.catalog_id,
+      kinds: offeringVersion.kinds,
+    };
+
+    const res = await catalogManagementService.updateVersion(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    offeringVersion = res.result;
+  });
+
+  test('patchUpdateVersion()', async () => {
+    // JsonPatchOperation
+    const jsonPatchOperationModel = {
+      op: 'replace',
+      path: '/kinds/0/versions/0/long_description',
+      value: 'testString',
+    };
+
+    const params = {
+      versionLocId: versionLocatorLink,
+      ifMatch: `"${offeringVersion._rev}"`,
+      updates: [jsonPatchOperationModel],
+    };
+
+    const res = await catalogManagementService.patchUpdateVersion(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
