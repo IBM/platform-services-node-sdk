@@ -1579,6 +1579,8 @@ namespace UsageReportsV4 {
     offer_template: string;
     /** The date from which the offer is valid. */
     valid_from: string;
+    /** The offer's creator's email id. */
+    created_by_email_id: string;
     /** The date until the offer is valid. */
     expires_on: string;
     /** Credit information related to an offer. */
