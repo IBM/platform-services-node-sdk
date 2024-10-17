@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.89.0-f33c767b-20240410-144451
+ * IBM OpenAPI SDK Code Generator Version: 3.96.0-d6dec9d7-20241008-212902
  */
 
 /* eslint-disable max-classes-per-file */
@@ -1395,7 +1395,9 @@ namespace UsageReportsV4 {
    * model interfaces
    ************************/
 
-  /** A summary of charges and credits for an account. */
+  /**
+   * A summary of charges and credits for an account.
+   */
   export interface AccountSummary {
     /** The ID of the account. */
     account_id: string;
@@ -1419,7 +1421,9 @@ namespace UsageReportsV4 {
     subscription: SubscriptionSummary;
   }
 
-  /** The aggregated usage and charges for all the plans in the account. */
+  /**
+   * The aggregated usage and charges for all the plans in the account.
+   */
   export interface AccountUsage {
     /** The ID of the account. */
     account_id: string;
@@ -1435,7 +1439,9 @@ namespace UsageReportsV4 {
     currency_rate?: number;
   }
 
-  /** Information about a discount that is associated with a metric. */
+  /**
+   * Information about a discount that is associated with a metric.
+   */
   export interface Discount {
     /** The reference ID of the discount. */
     ref: string;
@@ -1447,7 +1453,9 @@ namespace UsageReportsV4 {
     discount: number;
   }
 
-  /** The aggregated usage and charges for an instance. */
+  /**
+   * The aggregated usage and charges for an instance.
+   */
   export interface InstanceUsage {
     /** The ID of the account. */
     account_id: string;
@@ -1507,13 +1515,17 @@ namespace UsageReportsV4 {
     service_tags?: any[];
   }
 
-  /** The link to the first page of the search query. */
+  /**
+   * The link to the first page of the search query.
+   */
   export interface InstancesUsageFirst {
     /** A link to a page of query results. */
     href?: string;
   }
 
-  /** The link to the next page of the search query. */
+  /**
+   * The link to the next page of the search query.
+   */
   export interface InstancesUsageNext {
     /** A link to a page of query results. */
     href?: string;
@@ -1521,7 +1533,9 @@ namespace UsageReportsV4 {
     offset?: string;
   }
 
-  /** The list of instance usage reports. */
+  /**
+   * The list of instance usage reports.
+   */
   export interface InstancesUsage {
     /** The max number of reports in the response. */
     limit?: number;
@@ -1535,7 +1549,9 @@ namespace UsageReportsV4 {
     resources?: InstanceUsage[];
   }
 
-  /** Information about a metric. */
+  /**
+   * Information about a metric.
+   */
   export interface Metric {
     /** The ID of the metric. */
     metric: string;
@@ -1569,7 +1585,9 @@ namespace UsageReportsV4 {
     volume_cost?: number;
   }
 
-  /** Information about an individual offer. */
+  /**
+   * Information about an individual offer.
+   */
   export interface Offer {
     /** The ID of the offer. */
     offer_id: string;
@@ -1579,13 +1597,17 @@ namespace UsageReportsV4 {
     offer_template: string;
     /** The date from which the offer is valid. */
     valid_from: string;
+    /** The offer's creator's email id. */
+    created_by_email_id: string;
     /** The date until the offer is valid. */
     expires_on: string;
     /** Credit information related to an offer. */
     credits: OfferCredits;
   }
 
-  /** Credit information related to an offer. */
+  /**
+   * Credit information related to an offer.
+   */
   export interface OfferCredits {
     /** The available credits in the offer at the beginning of the month. */
     starting_balance: number;
@@ -1595,7 +1617,9 @@ namespace UsageReportsV4 {
     balance: number;
   }
 
-  /** The aggregated usage and charges for all the plans in the org. */
+  /**
+   * The aggregated usage and charges for all the plans in the org.
+   */
   export interface OrgUsage {
     /** The ID of the account. */
     account_id: string;
@@ -1615,7 +1639,9 @@ namespace UsageReportsV4 {
     currency_rate?: number;
   }
 
-  /** The aggregated values for the plan. */
+  /**
+   * The aggregated values for the plan.
+   */
   export interface Plan {
     /** The ID of the plan. */
     plan_id: string;
@@ -1639,7 +1665,9 @@ namespace UsageReportsV4 {
     pending?: boolean;
   }
 
-  /** The container for all the plans in the resource. */
+  /**
+   * The container for all the plans in the resource.
+   */
   export interface Resource {
     /** The ID of the resource. */
     resource_id: string;
@@ -1661,7 +1689,9 @@ namespace UsageReportsV4 {
     discounts: Discount[];
   }
 
-  /** The aggregated usage and charges for all the plans in the resource group. */
+  /**
+   * The aggregated usage and charges for all the plans in the resource group.
+   */
   export interface ResourceGroupUsage {
     /** The ID of the account. */
     account_id: string;
@@ -1681,7 +1711,9 @@ namespace UsageReportsV4 {
     currency_rate?: number;
   }
 
-  /** Charges related to cloud resources. */
+  /**
+   * Charges related to cloud resources.
+   */
   export interface ResourcesSummary {
     /** The billable charges for all cloud resources used in the account. */
     billable_cost: number;
@@ -1689,7 +1721,9 @@ namespace UsageReportsV4 {
     non_billable_cost: number;
   }
 
-  /** SnapshotConfigHistoryItem. */
+  /**
+   * SnapshotConfigHistoryItem.
+   */
   export interface SnapshotConfigHistoryItem {
     /** Timestamp in milliseconds when the snapshot configuration was created. */
     start_time?: number;
@@ -1756,7 +1790,9 @@ namespace UsageReportsV4 {
     }
   }
 
-  /** List of billing reports snapshots. */
+  /**
+   * List of billing reports snapshots.
+   */
   export interface SnapshotList {
     /** Number of total snapshots. */
     count?: number;
@@ -1767,19 +1803,25 @@ namespace UsageReportsV4 {
     snapshots?: SnapshotListSnapshotsItem[];
   }
 
-  /** Reference to the first page of the search query. */
+  /**
+   * Reference to the first page of the search query.
+   */
   export interface SnapshotListFirst {
     href?: string;
   }
 
-  /** Reference to the next page of the search query if any. */
+  /**
+   * Reference to the next page of the search query if any.
+   */
   export interface SnapshotListNext {
     href?: string;
     /** The value of the `_start` query parameter to fetch the next page. */
     offset?: string;
   }
 
-  /** Snapshot Schema. */
+  /**
+   * Snapshot Schema.
+   */
   export interface SnapshotListSnapshotsItem {
     /** Account ID for which billing report snapshot is configured. */
     account_id?: string;
@@ -1829,7 +1871,9 @@ namespace UsageReportsV4 {
     }
   }
 
-  /** Period of billing in snapshot. */
+  /**
+   * Period of billing in snapshot.
+   */
   export interface SnapshotListSnapshotsItemBillingPeriod {
     /** Date and time of start of billing in the respective snapshot. */
     start?: string;
@@ -1837,7 +1881,9 @@ namespace UsageReportsV4 {
     end?: string;
   }
 
-  /** SnapshotListSnapshotsItemFilesItem. */
+  /**
+   * SnapshotListSnapshotsItemFilesItem.
+   */
   export interface SnapshotListSnapshotsItemFilesItem {
     /** The type of billing report stored. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
@@ -1859,7 +1905,9 @@ namespace UsageReportsV4 {
     }
   }
 
-  /** SnapshotListSnapshotsItemReportTypesItem. */
+  /**
+   * SnapshotListSnapshotsItemReportTypesItem.
+   */
   export interface SnapshotListSnapshotsItemReportTypesItem {
     /** The type of billing report of the snapshot. Possible values are [account_summary, enterprise_summary,
      *  account_resource_instance_usage].
@@ -1879,7 +1927,9 @@ namespace UsageReportsV4 {
     }
   }
 
-  /** Billing reports snapshot configuration. */
+  /**
+   * Billing reports snapshot configuration.
+   */
   export interface SnapshotConfig {
     /** Account ID for which billing report snapshot is configured. */
     account_id?: string;
@@ -1946,7 +1996,9 @@ namespace UsageReportsV4 {
     }
   }
 
-  /** Validated billing service to COS bucket authorization. */
+  /**
+   * Validated billing service to COS bucket authorization.
+   */
   export interface SnapshotConfigValidateResponse {
     /** Account ID for which billing report snapshot is configured. */
     account_id?: string;
@@ -1956,7 +2008,9 @@ namespace UsageReportsV4 {
     cos_location?: string;
   }
 
-  /** Subscription. */
+  /**
+   * Subscription.
+   */
   export interface Subscription {
     /** The ID of the subscription. */
     subscription_id: string;
@@ -1976,7 +2030,9 @@ namespace UsageReportsV4 {
     terms: SubscriptionTerm[];
   }
 
-  /** A summary of charges and credits related to a subscription. */
+  /**
+   * A summary of charges and credits related to a subscription.
+   */
   export interface SubscriptionSummary {
     /** The charges after exhausting subscription credits and offers credits. */
     overage?: number;
@@ -1984,7 +2040,9 @@ namespace UsageReportsV4 {
     subscriptions?: Subscription[];
   }
 
-  /** SubscriptionTerm. */
+  /**
+   * SubscriptionTerm.
+   */
   export interface SubscriptionTerm {
     /** The start date of the term. */
     start: string;
@@ -1994,7 +2052,9 @@ namespace UsageReportsV4 {
     credits: SubscriptionTermCredits;
   }
 
-  /** Information about credits related to a subscription. */
+  /**
+   * Information about credits related to a subscription.
+   */
   export interface SubscriptionTermCredits {
     /** The total credits available for the term. */
     total: number;
@@ -2006,7 +2066,9 @@ namespace UsageReportsV4 {
     balance: number;
   }
 
-  /** SupportSummary. */
+  /**
+   * SupportSummary.
+   */
   export interface SupportSummary {
     /** The monthly support cost. */
     cost: number;
