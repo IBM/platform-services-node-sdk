@@ -22,7 +22,7 @@ const nock = require('nock');
 const sdkCorePackage = require('ibm-cloud-sdk-core');
 
 const { NoAuthAuthenticator } = sdkCorePackage;
-const PartnerUsageReportsV1 = require('../../dist/partner-usage-reports/v1');
+const PartnerManagementV1 = require('../../dist/partner-management/v1');
 
 const {
   getOptions,
@@ -31,17 +31,17 @@ const {
   expectToBePromise,
 } = require('@ibm-cloud/sdk-test-utilities');
 
-const partnerUsageReportsServiceOptions = {
+const partnerManagementServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://partner.cloud.ibm.com',
 };
 
-const partnerUsageReportsService = new PartnerUsageReportsV1(partnerUsageReportsServiceOptions);
+const partnerManagementService = new PartnerManagementV1(partnerManagementServiceOptions);
 
 let createRequestMock = null;
 function mock_createRequest() {
   if (!createRequestMock) {
-    createRequestMock = jest.spyOn(partnerUsageReportsService, 'createRequest');
+    createRequestMock = jest.spyOn(partnerManagementService, 'createRequest');
     createRequestMock.mockImplementation(() => Promise.resolve());
   }
 }
@@ -56,7 +56,7 @@ function unmock_createRequest() {
 const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-describe('PartnerUsageReportsV1', () => {
+describe('PartnerManagementV1', () => {
   beforeEach(() => {
     mock_createRequest();
   });
@@ -70,13 +70,13 @@ describe('PartnerUsageReportsV1', () => {
 
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
-      const testInstance = PartnerUsageReportsV1.newInstance();
+      const testInstance = PartnerManagementV1.newInstance();
 
       expect(getAuthenticatorMock).toHaveBeenCalled();
       expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
-      expect(testInstance.baseOptions.serviceName).toBe(PartnerUsageReportsV1.DEFAULT_SERVICE_NAME);
-      expect(testInstance.baseOptions.serviceUrl).toBe(PartnerUsageReportsV1.DEFAULT_SERVICE_URL);
-      expect(testInstance).toBeInstanceOf(PartnerUsageReportsV1);
+      expect(testInstance.baseOptions.serviceName).toBe(PartnerManagementV1.DEFAULT_SERVICE_NAME);
+      expect(testInstance.baseOptions.serviceUrl).toBe(PartnerManagementV1.DEFAULT_SERVICE_URL);
+      expect(testInstance).toBeInstanceOf(PartnerManagementV1);
     });
 
     test('should set serviceName, serviceUrl, and authenticator when provided', () => {
@@ -86,13 +86,13 @@ describe('PartnerUsageReportsV1', () => {
         serviceName: 'my-service',
       };
 
-      const testInstance = PartnerUsageReportsV1.newInstance(options);
+      const testInstance = PartnerManagementV1.newInstance(options);
 
       expect(getAuthenticatorMock).not.toHaveBeenCalled();
       expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
       expect(testInstance.baseOptions.serviceUrl).toBe('custom.com');
       expect(testInstance.baseOptions.serviceName).toBe('my-service');
-      expect(testInstance).toBeInstanceOf(PartnerUsageReportsV1);
+      expect(testInstance).toBeInstanceOf(PartnerManagementV1);
     });
   });
 
@@ -103,7 +103,7 @@ describe('PartnerUsageReportsV1', () => {
         serviceUrl: 'custom.com',
       };
 
-      const testInstance = new PartnerUsageReportsV1(options);
+      const testInstance = new PartnerManagementV1(options);
 
       expect(testInstance.baseOptions.serviceUrl).toBe('custom.com');
     });
@@ -113,9 +113,9 @@ describe('PartnerUsageReportsV1', () => {
         authenticator: new NoAuthAuthenticator(),
       };
 
-      const testInstance = new PartnerUsageReportsV1(options);
+      const testInstance = new PartnerManagementV1(options);
 
-      expect(testInstance.baseOptions.serviceUrl).toBe(PartnerUsageReportsV1.DEFAULT_SERVICE_URL);
+      expect(testInstance.baseOptions.serviceUrl).toBe(PartnerManagementV1.DEFAULT_SERVICE_URL);
     });
   });
 
@@ -144,7 +144,7 @@ describe('PartnerUsageReportsV1', () => {
           offset,
         };
 
-        const getResourceUsageReportResult = partnerUsageReportsService.getResourceUsageReport(getResourceUsageReportParams);
+        const getResourceUsageReportResult = partnerManagementService.getResourceUsageReport(getResourceUsageReportParams);
 
         // all methods should return a Promise
         expectToBePromise(getResourceUsageReportResult);
@@ -175,12 +175,12 @@ describe('PartnerUsageReportsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        partnerUsageReportsService.enableRetries();
+        partnerManagementService.enableRetries();
         __getResourceUsageReportTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        partnerUsageReportsService.disableRetries();
+        partnerManagementService.disableRetries();
         __getResourceUsageReportTest();
       });
 
@@ -197,7 +197,7 @@ describe('PartnerUsageReportsV1', () => {
           },
         };
 
-        partnerUsageReportsService.getResourceUsageReport(getResourceUsageReportParams);
+        partnerManagementService.getResourceUsageReport(getResourceUsageReportParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -206,7 +206,7 @@ describe('PartnerUsageReportsV1', () => {
       test('should enforce required parameters', async () => {
         let err;
         try {
-          await partnerUsageReportsService.getResourceUsageReport({});
+          await partnerManagementService.getResourceUsageReport({});
         } catch (e) {
           err = e;
         }
@@ -217,7 +217,7 @@ describe('PartnerUsageReportsV1', () => {
       test('should reject promise when required params are not given', async () => {
         let err;
         try {
-          await partnerUsageReportsService.getResourceUsageReport();
+          await partnerManagementService.getResourceUsageReport();
         } catch (e) {
           err = e;
         }
@@ -227,12 +227,12 @@ describe('PartnerUsageReportsV1', () => {
     });
 
     describe('GetResourceUsageReportPager tests', () => {
-      const serviceUrl = partnerUsageReportsServiceOptions.url;
+      const serviceUrl = partnerManagementServiceOptions.url;
       const path = '/v1/resource-usage-reports';
       const mockPagerResponse1 =
-        '{"next":{"offset":"1"},"reports":[{"entity_id":"<distributor_enterprise_id>","entity_type":"enterprise","entity_crn":"crn:v1:bluemix:public:enterprise::a/fa359b76ff2c41eda727aad47b7e4063::enterprise:33a7eb04e7d547cd9489e90c99d476a5","entity_name":"Arrow","entity_partner_type":"DISTRIBUTOR","viewpoint":"DISTRIBUTOR","month":"2024-01","currency_code":"EUR","country_code":"FRA","billable_cost":2331828.33275813,"billable_rated_cost":3817593.35186263,"non_billable_cost":0,"non_billable_rated_cost":0,"resources":[{"resource_id":"cloudant","resource_name":"Cloudant","billable_cost":75,"billable_rated_cost":75,"non_billable_cost":0,"non_billable_rated_cost":0,"plans":[{"plan_id":"cloudant-standard","pricing_region":"Standard","pricing_plan_id":"billable:v4:cloudant-standard::1552694400000:","billable":true,"cost":75,"rated_cost":75,"usage":[{"metric":"GB_STORAGE_ACCRUED_PER_MONTH","unit":"GIGABYTE_MONTHS","quantity":10,"rateable_quantity":10,"cost":10,"rated_cost":10,"price":[{"anyKey":"anyValue"}]}]}]}]}],"total_count":2,"limit":1}';
+        '{"next":{"offset":"1"},"reports":[{"entity_id":"<distributor_enterprise_id>","entity_type":"enterprise","entity_crn":"crn:v1:bluemix:public:enterprise::a/fa359b76ff2c41eda727aad47b7e4063::enterprise:33a7eb04e7d547cd9489e90c99d476a5","entity_name":"Company","entity_partner_type":"DISTRIBUTOR","viewpoint":"DISTRIBUTOR","month":"2024-01","currency_code":"EUR","country_code":"FRA","billable_cost":2331828.33275813,"billable_rated_cost":3817593.35186263,"non_billable_cost":0,"non_billable_rated_cost":0,"resources":[{"resource_id":"cloudant","resource_name":"Cloudant","billable_cost":75,"billable_rated_cost":75,"non_billable_cost":0,"non_billable_rated_cost":0,"plans":[{"plan_id":"cloudant-standard","pricing_region":"Standard","pricing_plan_id":"billable:v4:cloudant-standard::1552694400000:","billable":true,"cost":75,"rated_cost":75,"usage":[{"metric":"GB_STORAGE_ACCRUED_PER_MONTH","unit":"GIGABYTE_MONTHS","quantity":10,"rateable_quantity":10,"cost":10,"rated_cost":10,"price":[{"anyKey":"anyValue"}]}]}]}]}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"reports":[{"entity_id":"<distributor_enterprise_id>","entity_type":"enterprise","entity_crn":"crn:v1:bluemix:public:enterprise::a/fa359b76ff2c41eda727aad47b7e4063::enterprise:33a7eb04e7d547cd9489e90c99d476a5","entity_name":"Arrow","entity_partner_type":"DISTRIBUTOR","viewpoint":"DISTRIBUTOR","month":"2024-01","currency_code":"EUR","country_code":"FRA","billable_cost":2331828.33275813,"billable_rated_cost":3817593.35186263,"non_billable_cost":0,"non_billable_rated_cost":0,"resources":[{"resource_id":"cloudant","resource_name":"Cloudant","billable_cost":75,"billable_rated_cost":75,"non_billable_cost":0,"non_billable_rated_cost":0,"plans":[{"plan_id":"cloudant-standard","pricing_region":"Standard","pricing_plan_id":"billable:v4:cloudant-standard::1552694400000:","billable":true,"cost":75,"rated_cost":75,"usage":[{"metric":"GB_STORAGE_ACCRUED_PER_MONTH","unit":"GIGABYTE_MONTHS","quantity":10,"rateable_quantity":10,"cost":10,"rated_cost":10,"price":[{"anyKey":"anyValue"}]}]}]}]}],"total_count":2,"limit":1}';
+        '{"reports":[{"entity_id":"<distributor_enterprise_id>","entity_type":"enterprise","entity_crn":"crn:v1:bluemix:public:enterprise::a/fa359b76ff2c41eda727aad47b7e4063::enterprise:33a7eb04e7d547cd9489e90c99d476a5","entity_name":"Company","entity_partner_type":"DISTRIBUTOR","viewpoint":"DISTRIBUTOR","month":"2024-01","currency_code":"EUR","country_code":"FRA","billable_cost":2331828.33275813,"billable_rated_cost":3817593.35186263,"non_billable_cost":0,"non_billable_rated_cost":0,"resources":[{"resource_id":"cloudant","resource_name":"Cloudant","billable_cost":75,"billable_rated_cost":75,"non_billable_cost":0,"non_billable_rated_cost":0,"plans":[{"plan_id":"cloudant-standard","pricing_region":"Standard","pricing_plan_id":"billable:v4:cloudant-standard::1552694400000:","billable":true,"cost":75,"rated_cost":75,"usage":[{"metric":"GB_STORAGE_ACCRUED_PER_MONTH","unit":"GIGABYTE_MONTHS","quantity":10,"rateable_quantity":10,"cost":10,"rated_cost":10,"price":[{"anyKey":"anyValue"}]}]}]}]}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -260,7 +260,7 @@ describe('PartnerUsageReportsV1', () => {
           limit: 10,
         };
         const allResults = [];
-        const pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(partnerUsageReportsService, params);
+        const pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -281,10 +281,202 @@ describe('PartnerUsageReportsV1', () => {
           recurse: false,
           limit: 10,
         };
-        const pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(partnerUsageReportsService, params);
+        const pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getBillingOptions', () => {
+    describe('positive tests', () => {
+      function __getBillingOptionsTest() {
+        // Construct the params object for operation getBillingOptions
+        const partnerId = 'testString';
+        const customerId = 'testString';
+        const resellerId = 'testString';
+        const date = '2024-01';
+        const limit = 200;
+        const getBillingOptionsParams = {
+          partnerId,
+          customerId,
+          resellerId,
+          date,
+          limit,
+        };
+
+        const getBillingOptionsResult = partnerManagementService.getBillingOptions(getBillingOptionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getBillingOptionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/billing-options', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.partner_id).toEqual(partnerId);
+        expect(mockRequestOptions.qs.customer_id).toEqual(customerId);
+        expect(mockRequestOptions.qs.reseller_id).toEqual(resellerId);
+        expect(mockRequestOptions.qs.date).toEqual(date);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBillingOptionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        partnerManagementService.enableRetries();
+        __getBillingOptionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        partnerManagementService.disableRetries();
+        __getBillingOptionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const partnerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBillingOptionsParams = {
+          partnerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        partnerManagementService.getBillingOptions(getBillingOptionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await partnerManagementService.getBillingOptions({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await partnerManagementService.getBillingOptions();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getCreditPoolsReport', () => {
+    describe('positive tests', () => {
+      function __getCreditPoolsReportTest() {
+        // Construct the params object for operation getCreditPoolsReport
+        const partnerId = 'testString';
+        const customerId = 'testString';
+        const resellerId = 'testString';
+        const date = '2024-01';
+        const limit = 30;
+        const getCreditPoolsReportParams = {
+          partnerId,
+          customerId,
+          resellerId,
+          date,
+          limit,
+        };
+
+        const getCreditPoolsReportResult = partnerManagementService.getCreditPoolsReport(getCreditPoolsReportParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getCreditPoolsReportResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/credit-pools', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.partner_id).toEqual(partnerId);
+        expect(mockRequestOptions.qs.customer_id).toEqual(customerId);
+        expect(mockRequestOptions.qs.reseller_id).toEqual(resellerId);
+        expect(mockRequestOptions.qs.date).toEqual(date);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getCreditPoolsReportTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        partnerManagementService.enableRetries();
+        __getCreditPoolsReportTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        partnerManagementService.disableRetries();
+        __getCreditPoolsReportTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const partnerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getCreditPoolsReportParams = {
+          partnerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        partnerManagementService.getCreditPoolsReport(getCreditPoolsReportParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await partnerManagementService.getCreditPoolsReport({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await partnerManagementService.getCreditPoolsReport();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
