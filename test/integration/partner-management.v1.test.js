@@ -18,22 +18,22 @@
 /* eslint-disable no-await-in-loop */
 
 const { readExternalSources } = require('ibm-cloud-sdk-core');
-const PartnerUsageReportsV1 = require('../../dist/partner-usage-reports/v1');
+const PartnerManagementV1 = require('../../dist/partner-management/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
 const timeout = 200000;
 
 // Location of our config file.
-const configFile = 'partner_usage_reports_v1.env';
+const configFile = 'partner_management_v1.env';
 
 const describe = authHelper.prepareTests(configFile);
 
-describe('PartnerUsageReportsV1_integration', () => {
+describe('PartnerManagementV1_integration', () => {
   jest.setTimeout(timeout);
 
   // Service instance
-  let partnerUsageReportsService;
+  let partnerManagementService;
   let partnerId;
   let resellerId;
   let customerId;
@@ -41,11 +41,11 @@ describe('PartnerUsageReportsV1_integration', () => {
   let viewpoint;
 
   test('Initialize service', async () => {
-    partnerUsageReportsService = PartnerUsageReportsV1.newInstance();
+    partnerManagementService = PartnerManagementV1.newInstance();
 
-    expect(partnerUsageReportsService).not.toBeNull();
+    expect(partnerManagementService).not.toBeNull();
 
-    const config = readExternalSources(PartnerUsageReportsV1.DEFAULT_SERVICE_NAME);
+    const config = readExternalSources(PartnerManagementV1.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
 
     partnerId = config.partnerId;
@@ -59,7 +59,7 @@ describe('PartnerUsageReportsV1_integration', () => {
     expect(billingMonth).not.toBeNull();
     expect(viewpoint).not.toBeNull();
 
-    partnerUsageReportsService.enableRetries();
+    partnerManagementService.enableRetries();
   });
 
   test('getResourceUsageReport() - Get rolled up usage report across all end customers and resellers', async () => {
@@ -69,7 +69,7 @@ describe('PartnerUsageReportsV1_integration', () => {
       limit: 30,
     };
 
-    const res = await partnerUsageReportsService.getResourceUsageReport(params);
+    const res = await partnerManagementService.getResourceUsageReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -85,8 +85,8 @@ describe('PartnerUsageReportsV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
+    let pager = new PartnerManagementV1.GetResourceUsageReportPager(
+      partnerManagementService,
       params
     );
     while (pager.hasNext()) {
@@ -96,15 +96,13 @@ describe('PartnerUsageReportsV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
-      params
-    );
+    pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
+
   test('getResourceUsageReport() - Get rolled up usage reports by reseller for partner', async () => {
     const params = {
       partnerId,
@@ -113,7 +111,7 @@ describe('PartnerUsageReportsV1_integration', () => {
       limit: 30,
     };
 
-    const res = await partnerUsageReportsService.getResourceUsageReport(params);
+    const res = await partnerManagementService.getResourceUsageReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -130,8 +128,8 @@ describe('PartnerUsageReportsV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
+    let pager = new PartnerManagementV1.GetResourceUsageReportPager(
+      partnerManagementService,
       params
     );
     while (pager.hasNext()) {
@@ -141,15 +139,13 @@ describe('PartnerUsageReportsV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
-      params
-    );
+    pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
+
   test('getResourceUsageReport() - Get usage report of a specific reseller for partner', async () => {
     const params = {
       partnerId,
@@ -158,7 +154,7 @@ describe('PartnerUsageReportsV1_integration', () => {
       limit: 30,
     };
 
-    const res = await partnerUsageReportsService.getResourceUsageReport(params);
+    const res = await partnerManagementService.getResourceUsageReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -175,8 +171,8 @@ describe('PartnerUsageReportsV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
+    let pager = new PartnerManagementV1.GetResourceUsageReportPager(
+      partnerManagementService,
       params
     );
     while (pager.hasNext()) {
@@ -186,15 +182,13 @@ describe('PartnerUsageReportsV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
-      params
-    );
+    pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
+
   test('getResourceUsageReport() - Get usage reports of a specific end_customer for partner', async () => {
     const params = {
       partnerId,
@@ -203,7 +197,7 @@ describe('PartnerUsageReportsV1_integration', () => {
       limit: 30,
     };
 
-    const res = await partnerUsageReportsService.getResourceUsageReport(params);
+    const res = await partnerManagementService.getResourceUsageReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -220,8 +214,8 @@ describe('PartnerUsageReportsV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
+    let pager = new PartnerManagementV1.GetResourceUsageReportPager(
+      partnerManagementService,
       params
     );
     while (pager.hasNext()) {
@@ -231,15 +225,13 @@ describe('PartnerUsageReportsV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
-      params
-    );
+    pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
+
   test('getResourceUsageReport() - Recursively GET usage reports for all end customers of a partner', async () => {
     const params = {
       partnerId,
@@ -248,7 +240,7 @@ describe('PartnerUsageReportsV1_integration', () => {
       limit: 30,
     };
 
-    const res = await partnerUsageReportsService.getResourceUsageReport(params);
+    const res = await partnerManagementService.getResourceUsageReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -265,8 +257,8 @@ describe('PartnerUsageReportsV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
+    let pager = new PartnerManagementV1.GetResourceUsageReportPager(
+      partnerManagementService,
       params
     );
     while (pager.hasNext()) {
@@ -276,15 +268,13 @@ describe('PartnerUsageReportsV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
-      params
-    );
+    pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
+
   test('getResourceUsageReport() - Get rolled up usage reports for partner by specified viewpoint', async () => {
     const params = {
       partnerId,
@@ -294,7 +284,7 @@ describe('PartnerUsageReportsV1_integration', () => {
       limit: 30,
     };
 
-    const res = await partnerUsageReportsService.getResourceUsageReport(params);
+    const res = await partnerManagementService.getResourceUsageReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -312,8 +302,8 @@ describe('PartnerUsageReportsV1_integration', () => {
     const allResults = [];
 
     // Test getNext().
-    let pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
+    let pager = new PartnerManagementV1.GetResourceUsageReportPager(
+      partnerManagementService,
       params
     );
     while (pager.hasNext()) {
@@ -323,13 +313,92 @@ describe('PartnerUsageReportsV1_integration', () => {
     }
 
     // Test getAll().
-    pager = new PartnerUsageReportsV1.GetResourceUsageReportPager(
-      partnerUsageReportsService,
-      params
-    );
+    pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getBillingOptions() - Get customers billing options of a partner', async () => {
+    const params = {
+      partnerId,
+      date: billingMonth,
+      limit: 30,
+    };
+
+    const res = await partnerManagementService.getBillingOptions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getBillingOptions() - Get customers billing options of a Reseller for a specific partner', async () => {
+    const params = {
+      partnerId,
+      resellerId,
+      date: billingMonth,
+      limit: 30,
+    };
+
+    const res = await partnerManagementService.getBillingOptions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getBillingOptions() - Get customers billing options of an end customer for a specific partner', async () => {
+    const params = {
+      partnerId,
+      customerId,
+      date: billingMonth,
+      limit: 30,
+    };
+
+    const res = await partnerManagementService.getBillingOptions(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getCreditPoolsReport() - Get subscription burn-down report of a partner', async () => {
+    const params = {
+      partnerId,
+      date: billingMonth,
+      limit: 30,
+    };
+
+    const res = await partnerManagementService.getCreditPoolsReport(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getCreditPoolsReport() - Get subscription burn-down report of a Reseller for a specific partner', async () => {
+    const params = {
+      partnerId,
+      resellerId,
+      date: billingMonth,
+      limit: 30,
+    };
+
+    const res = await partnerManagementService.getCreditPoolsReport(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getCreditPoolsReport() - Get subscription burn-down report of an end customer for a specific partner', async () => {
+    const params = {
+      partnerId,
+      customerId,
+      date: billingMonth,
+      limit: 30,
+    };
+
+    const res = await partnerManagementService.getCreditPoolsReport(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
   });
 });

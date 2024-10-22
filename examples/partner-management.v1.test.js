@@ -18,30 +18,31 @@
  */
 
 /* eslint-disable no-console */
+/* eslint-disable no-await-in-loop */
 
-const PartnerBillingUnitsV1 = require('../dist/partner-billing-units/v1');
+const PartnerManagementV1 = require('../dist/partner-management/v1');
 // eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
-// This file provides an example of how to use the Partner Billing Units service.
+// This file provides an example of how to use the Partner Management service.
 //
 // The following configuration properties are assumed to be defined:
-// PARTNER_BILLING_UNITS_URL=<service base url>
-// PARTNER_BILLING_UNITS_AUTH_TYPE=iam
-// PARTNER_BILLING_UNITS_APIKEY=<IAM apikey>
-// PARTNER_BILLING_UNITS_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
-// PARTNER_BILLING_UNITS_PARTNER_ID=<Enterprise ID of the distributor or reseller for which the report is requested>
-// PARTNER_BILLING_UNITS_CUSTOMER_ID=<Enterprise ID of the customer for which the report is requested>
-// PARTNER_BILLING_UNITS_RESELLER_ID=<Enterprise ID of the reseller for which the report is requested>
-// PARTNER_BILLING_UNITS_BILLING_MONTH=<The billing month (yyyy-mm) for which usage report will be retrieved>
+// PARTNER_MANAGEMENT_URL=<service base url>
+// PARTNER_MANAGEMENT_AUTH_TYPE=iam
+// PARTNER_MANAGEMENT_APIKEY=<IAM apikey>
+// PARTNER_MANAGEMENT_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// PARTNER_MANAGEMENT_PARTNER_ID=<Enterprise ID of the distributor or reseller for which the report is requested>
+// PARTNER_MANAGEMENT_CUSTOMER_ID=<Enterprise ID of the customer for which the report is requested>
+// PARTNER_MANAGEMENT_RESELLER_ID=<Enterprise ID of the reseller for which the report is requested>
+// PARTNER_MANAGEMENT_BILLING_MONTH=<The billing month (yyyy-mm) for which usage report will be retrieved>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const configFile = 'partner_billing_units_v1.env';
+const configFile = 'partner_management_v1.env';
 
 const describe = authHelper.prepareTests(configFile);
 
@@ -53,25 +54,56 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
-describe('PartnerBillingUnitsV1', () => {
+describe('PartnerManagementV1', () => {
   jest.setTimeout(30000);
   // Service instance
-  let partnerBillingUnitsService;
+  let partnerManagementService;
 
-  let partnerId;
-  let billingMonth;
+  const config = readExternalSources(PartnerManagementV1.DEFAULT_SERVICE_NAME);
+  const partnerId = config.partnerId;
+  const billingMonth = config.billingMonth;
 
   test('Initialize service', async () => {
     // begin-common
 
-    partnerBillingUnitsService = PartnerBillingUnitsV1.newInstance();
-
-    const config = readExternalSources(PartnerBillingUnitsV1.DEFAULT_SERVICE_NAME);
-
-    partnerId = config.partnerId;
-    billingMonth = config.billingMonth;
+    partnerManagementService = PartnerManagementV1.newInstance();
 
     // end-common
+  });
+
+  test('getResourceUsageReport request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getResourceUsageReport() result:');
+    // begin-get_resource_usage_report
+
+    const params = {
+      partnerId,
+      month: billingMonth,
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new PartnerManagementV1.GetResourceUsageReportPager(partnerManagementService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_resource_usage_report
   });
 
   test('getBillingOptions request example', async () => {
@@ -90,11 +122,12 @@ describe('PartnerBillingUnitsV1', () => {
     const params = {
       partnerId,
       date: billingMonth,
+      limit: 10,
     };
 
     let res;
     try {
-      res = await partnerBillingUnitsService.getBillingOptions(params);
+      res = await partnerManagementService.getBillingOptions(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -119,11 +152,12 @@ describe('PartnerBillingUnitsV1', () => {
     const params = {
       partnerId,
       date: billingMonth,
+      limit: 10,
     };
 
     let res;
     try {
-      res = await partnerBillingUnitsService.getCreditPoolsReport(params);
+      res = await partnerManagementService.getCreditPoolsReport(params);
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
