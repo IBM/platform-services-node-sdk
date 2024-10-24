@@ -84,8 +84,7 @@ Service Name | Import Path
 [IAM Policy Management](https://cloud.ibm.com/apidocs/iam-policy-management?code=node) | @ibm-cloud/platform-services/iam-policy-management/v1
 [IBM Cloud Shell](https://cloud.ibm.com/apidocs/cloudshell?code=node) | @ibm-cloud/platform-services/ibm-cloud-shell/v1
 [Open Service Broker](https://cloud.ibm.com/apidocs/resource-controller/ibm-cloud-osb-api?code=node) | @ibm-cloud/platform-services/open-service-broker/v1
-[Partner Billing Units](https://cloud.ibm.com/apidocs/partner-apis/billing-unit?code=node) | @ibm-cloud/platform-services/partner-billing-units/v1
-[Partner Usage Reports](https://cloud.ibm.com/apidocs/partner-apis/resource-usage-reports?code=node) | @ibm-cloud/platform-services/partner-usage-reports/v1
+[Partner Management APIs](https://cloud.ibm.com/apidocs/partner-apis/partner?code=node) | @ibm-cloud/platform-services/partner-management/v1
 [Resource Controller](https://cloud.ibm.com/apidocs/resource-controller/resource-controller?code=node) | @ibm-cloud/platform-services/resource-controller/v2
 [Resource Manager](https://cloud.ibm.com/apidocs/resource-controller/resource-manager?code=node) | @ibm-cloud/platform-services/resource-manager/v2
 [Usage Metering](https://cloud.ibm.com/apidocs/usage-metering?code=node) | @ibm-cloud/platform-services/usage-metering/v4
