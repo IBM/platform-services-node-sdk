@@ -1,3 +1,10 @@
+# [0.66.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.65.2...v0.66.0) (2024-10-24)
+
+
+### Features
+
+* **Partner Management APIs:** add new service to project ([#281](https://github.com/IBM/platform-services-node-sdk/issues/281)) ([f9fa516](https://github.com/IBM/platform-services-node-sdk/commit/f9fa516348c57e9a1678cb7ca75fcdfbd854cc81))
+
 ## [0.65.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.65.1...v0.65.2) (2024-10-16)
 
 
