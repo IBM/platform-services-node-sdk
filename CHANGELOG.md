@@ -1,3 +1,10 @@
+# [0.67.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.66.0...v0.67.0) (2024-10-28)
+
+
+### Features
+
+* **Usage Reports:** add "created_by_email_id" to Offer schema ([#276](https://github.com/IBM/platform-services-node-sdk/issues/276)) ([3bb6af9](https://github.com/IBM/platform-services-node-sdk/commit/3bb6af98ae9a6677e85c49a5fa16ea4a18d02020))
+
 # [0.66.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.65.2...v0.66.0) (2024-10-24)
 
 
