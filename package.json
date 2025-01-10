@@ -42,7 +42,7 @@
   "dependencies": {
     "@types/node": "^12.0.8",
     "extend": "3.0.2",
-    "ibm-cloud-sdk-core": "^5.1.0"
+    "ibm-cloud-sdk-core": "^5.1.1"
   },
   "devDependencies": {
     "@ibm-cloud/sdk-test-utilities": "^1.0.0",

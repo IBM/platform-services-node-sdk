@@ -1,4 +1,4 @@
-[![Build Status](https://app.travis-ci.com/IBM/platform-services-node-sdk.svg?branch=main)](https://app.travis-ci.com/IBM/platform-services-node-sdk)
+[![Build Status](https://github.com/IBM/platform-services-node-sdk/actions/workflows/build.yaml/badge.svg)](https://github.com/IBM/platform-services-node-sdk/actions/workflows/build.yaml)
 [![Release](https://img.shields.io/github/v/release/IBM/platform-services-node-sdk)](https://github.com/IBM/platform-services-node-sdk/releases/latest)
 [![npm](https://img.shields.io/npm/v/@ibm-cloud/platform-services)](https://www.npmjs.com/package/@ibm-cloud/platform-services)
 ![npm](https://img.shields.io/npm/dm/@ibm-cloud/platform-services)
