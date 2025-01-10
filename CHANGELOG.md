@@ -1,3 +1,10 @@
+## [0.67.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.0...v0.67.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* enable github workflows ([759f595](https://github.com/IBM/platform-services-node-sdk/commit/759f59541b7c983e7d0424ad7d82a0f5c5e8a479))
+
 # [0.67.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.66.0...v0.67.0) (2024-10-28)
 
 
