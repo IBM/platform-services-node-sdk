@@ -2320,10 +2320,10 @@ test('createApiKey request example', async () => {
     expect(iamIDForPreferences).not.toBeNull();
 
     originalLog('updatePreferenceOnScopeAccount() result:');
-    // begin-update_prefernce_on_scope_account
+    // begin-update_preference_on_scope_account
 
     const params = {
-      accountId:    accountID,
+      accountId:    accountId,
 			iamId:        iamIDForPreferences,
 			service:      service,
 			preferenceID: preferenceID1,
@@ -2337,7 +2337,7 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
 
-    // end-update_prefernce_on_scope_account
+    // end-update_preference_on_scope_account
   });
   test('getPreferencesOnScopeAccount request example', async () => {
 
@@ -2353,10 +2353,10 @@ test('createApiKey request example', async () => {
     expect(iamIDForPreferences).not.toBeNull();
 
     originalLog('getPreferencesOnScopeAccount() result:');
-    // begin-get_prefernces_on_scope_account
+    // begin-get_preferences_on_scope_account
 
     const params = {
-      accountId:    accountID,
+      accountId:    accountId,
 			iamId:        iamIDForPreferences,
 			service:      service,
 			preferenceID: preferenceID1,
@@ -2369,7 +2369,7 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
 
-    // end-get_prefernces_on_scope_account
+    // end-get_preferences_on_scope_account
   });
   test('getAllPreferencesOnScopeAccount request example', async () => {
 
@@ -2385,10 +2385,10 @@ test('createApiKey request example', async () => {
     expect(iamIDForPreferences).not.toBeNull();
 
     originalLog('getAllPreferencesOnScopeAccount() result:');
-    // begin-get_all_prefernces_on_scope_account
+    // begin-get_all_preferences_on_scope_account
 
     const params = {
-      accountId:    accountID,
+      accountId:    accountId,
 			iamId:        iamIDForPreferences,
     };
 
@@ -2399,7 +2399,7 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
 
-    // end-get_all_prefernces_on_scope_account
+    // end-get_all_preferences_on_scope_account
   });
   test('deletePreferencesOnScopeAccount request example', async () => {
 
@@ -2415,10 +2415,10 @@ test('createApiKey request example', async () => {
     expect(iamIDForPreferences).not.toBeNull();
 
     originalLog('deletePreferencesOnScopeAccount() result:');
-    // begin-delete_prefernces_on_scope_account
+    // begin-delete_preferences_on_scope_account
 
     const params = {
-      accountId:    accountID,
+      accountId:    accountId,
 			iamId:        iamIDForPreferences,
 			service:      service,
 			preferenceID: preferenceID1,
@@ -2430,7 +2430,7 @@ test('createApiKey request example', async () => {
       console.warn(err);
     }
 
-    // end-delete_prefernces_on_scope_account
+    // end-delete_preferences_on_scope_account
   });
 
   function isFinishedEx(status) {

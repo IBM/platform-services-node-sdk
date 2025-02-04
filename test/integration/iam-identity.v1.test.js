@@ -39,9 +39,9 @@ const invalidAccountId = 'invalid';
 const profileTemplateName = 'Node-SDK-IT-ProfileTemplate';
 const profileTemplateProfileName = 'Node-SDK-IT-Profile-FromTemplate';
 const accountSettingsTemplateName = 'Node-SDK-IT-AccountSettingsTemplate';
-const service = 'console'
-  const valueString = '/billing'
-  const preferenceID1 = 'landing_page'
+const service = 'console';
+const valueString = '/billing';
+const preferenceID1 = 'landing_page';
 
 let iamIdentityService;
 let accountId;
@@ -1679,18 +1679,18 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('updatePreferenceOnScopeAccount()', (done) => {
-    expect(accountID).not.toBeNull();
+    expect(accountId).not.toBeNull();
     expect(iamIDForPreferences).not.toBeNull();
     expect(service).not.toBeNull();
     expect(preferenceID1).not.toBeNull();
     expect(valueString).not.toBeNull();
 
     const params = {
-      accountId:    accountID,
+      accountId,
 			iamId:        iamIDForPreferences,
-			service:      service,
+			service,
 			preferenceID: preferenceID1,
-			valueString:  valueString,
+			valueString,
     };
 
     iamIdentityService
@@ -1711,16 +1711,16 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('getPreferencesOnScopeAccount()', (done) => {
-    expect(accountID).not.toBeNull();
+    expect(accountId).not.toBeNull();
     expect(iamIDForPreferences).not.toBeNull();
     expect(service).not.toBeNull();
     expect(preferenceID1).not.toBeNull();
     expect(valueString).not.toBeNull();
 
     const params = {
-      accountId:    accountID,
+      accountId,
 			iamId:        iamIDForPreferences,
-			service:      service,
+			service,
 			preferenceID: preferenceID1,
     };
 
@@ -1742,14 +1742,14 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('getAllPreferencesOnScopeAccount()', (done) => {
-    expect(accountID).not.toBeNull();
+    expect(accountId).not.toBeNull();
     expect(iamIDForPreferences).not.toBeNull();
     expect(service).not.toBeNull();
     expect(preferenceID1).not.toBeNull();
     expect(valueString).not.toBeNull();
 
     const params = {
-      accountId:    accountID,
+      accountId,
 			iamId:        iamIDForPreferences,
     };
 
@@ -1771,16 +1771,16 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('deletePreferencesOnScopeAccount()', (done) => {
-    expect(accountID).not.toBeNull();
+    expect(accountId).not.toBeNull();
     expect(iamIDForPreferences).not.toBeNull();
     expect(service).not.toBeNull();
     expect(preferenceID1).not.toBeNull();
     expect(valueString).not.toBeNull();
 
     const params = {
-      accountId:    accountID,
+      accountId,
 			iamId:        iamIDForPreferences,
-			service:      service,
+			service,
 			preferenceID: preferenceID1,
     };
 
