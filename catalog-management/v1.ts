@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.94.1-71478489-20240820-161623
+ * IBM OpenAPI SDK Code Generator Version: 3.99.1-daeb6e46-20250131-173156
  */
 
 /* eslint-disable max-classes-per-file */
@@ -140,6 +140,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -161,9 +162,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.rev] - Cloudant revision.
    * @param {boolean} [params.hideIbmCloudCatalog] - Hide the public catalog in this account.
    * @param {Filters} [params.accountFilters] - Filters for account and catalog filters.
-   * @param {string[]} [params.regionFilters] -
-   * @param {string[]} [params.filteredRegions] -
-   * @param {boolean} [params.filterRegions] -
+   * @param {string} [params.regionFilter] - Region filter string.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>>}
    */
@@ -177,9 +176,7 @@ class CatalogManagementV1 extends BaseService {
       'rev',
       'hideIbmCloudCatalog',
       'accountFilters',
-      'regionFilters',
-      'filteredRegions',
-      'filterRegions',
+      'regionFilter',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -192,9 +189,7 @@ class CatalogManagementV1 extends BaseService {
       '_rev': _params.rev,
       'hide_IBM_cloud_catalog': _params.hideIbmCloudCatalog,
       'account_filters': _params.accountFilters,
-      'region_filters': _params.regionFilters,
-      'filtered_regions': _params.filteredRegions,
-      'filter_regions': _params.filterRegions,
+      'region_filter': _params.regionFilter,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -213,6 +208,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -270,6 +266,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -328,6 +325,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -380,6 +378,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -440,6 +439,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -496,6 +496,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -552,6 +553,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -627,6 +629,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -699,6 +702,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -750,6 +754,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -847,6 +852,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -896,6 +902,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1006,6 +1013,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1056,7 +1064,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -1114,6 +1122,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1174,6 +1183,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1239,6 +1249,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1299,6 +1310,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1378,6 +1390,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1460,6 +1473,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1656,6 +1670,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1800,6 +1815,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1944,6 +1960,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2048,6 +2065,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2107,6 +2125,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -2312,6 +2331,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2371,6 +2391,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json-patch+json',
@@ -2430,6 +2451,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'X-Approver-Token': _params.xApproverToken,
           },
@@ -2484,6 +2506,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -2555,6 +2578,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -2623,6 +2647,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -2712,6 +2737,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Approver-Token': _params.xApproverToken,
@@ -2787,6 +2813,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
@@ -2858,6 +2885,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2916,6 +2944,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -2978,6 +3007,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -3036,6 +3066,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -3094,6 +3125,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -3201,6 +3233,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -3281,6 +3314,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -3365,6 +3399,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': _params.accept,
           },
@@ -3451,6 +3486,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': _params.accept,
           },
@@ -3516,6 +3552,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': _params.accept,
           },
@@ -3590,6 +3627,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -3645,6 +3683,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'text/markdown',
           },
@@ -3697,6 +3736,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -3752,6 +3792,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'text/plain',
           },
@@ -3805,6 +3846,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -3854,7 +3896,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -3920,6 +3962,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
@@ -3969,7 +4012,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4014,7 +4057,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4059,7 +4102,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4104,7 +4147,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4180,6 +4223,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
@@ -4232,6 +4276,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -4286,7 +4331,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4342,6 +4387,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -4391,6 +4437,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -4594,6 +4641,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -4652,6 +4700,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json-patch+json',
@@ -4704,7 +4753,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4752,6 +4801,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -4803,7 +4853,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -4857,6 +4907,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -4921,6 +4972,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -4997,6 +5049,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -5062,6 +5115,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -5138,6 +5192,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -5203,6 +5258,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
           },
@@ -5331,6 +5387,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -5460,6 +5517,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -5531,6 +5589,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -5667,6 +5726,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -5727,6 +5787,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
@@ -5795,6 +5856,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -5857,6 +5919,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -5967,6 +6030,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -6018,6 +6082,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -6137,6 +6202,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -6189,7 +6255,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -6256,6 +6322,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -6324,6 +6391,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -6375,7 +6443,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -6438,6 +6506,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -6501,6 +6570,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -6558,6 +6628,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -6614,7 +6685,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -6666,7 +6737,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -6728,6 +6799,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -6786,6 +6858,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -6844,6 +6917,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -6998,6 +7072,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -7052,6 +7127,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -7209,6 +7285,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -7264,6 +7341,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'X-Auth-Refresh-Token': _params.xAuthRefreshToken,
           },
@@ -7326,6 +7404,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -7386,6 +7465,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -7437,6 +7517,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -7482,7 +7563,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -7527,7 +7608,7 @@ class CatalogManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
       }),
     };
 
@@ -7587,6 +7668,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
@@ -7648,6 +7730,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -7702,6 +7785,7 @@ class CatalogManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -7757,9 +7841,8 @@ namespace CatalogManagementV1 {
     hideIbmCloudCatalog?: boolean;
     /** Filters for account and catalog filters. */
     accountFilters?: Filters;
-    regionFilters?: string[];
-    filteredRegions?: string[];
-    filterRegions?: boolean;
+    /** Region filter string. */
+    regionFilter?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -10049,9 +10132,8 @@ namespace CatalogManagementV1 {
     hide_IBM_cloud_catalog?: boolean;
     /** Filters for account and catalog filters. */
     account_filters?: Filters;
-    region_filters?: string[];
-    filtered_regions?: string[];
-    filter_regions?: boolean;
+    /** Region filter string. */
+    region_filter?: string;
   }
 
   /**
@@ -12197,6 +12279,8 @@ namespace CatalogManagementV1 {
     plan_ids?: string[];
     /** Optional. Stack definition that was used to create this version. */
     stack?: JsonObject;
+    /** The lowest version (semver) that can upgrade to this version. */
+    minimum_compatible_version?: string;
   }
 
   /**

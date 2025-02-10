@@ -58,6 +58,7 @@ describe('CatalogManagementV1_integration', () => {
   let kindIdLink;
   let planID;
   let offeringVersion;
+  let accountRevLink;
 
   const zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
   const zipurlSolution =
@@ -93,6 +94,24 @@ describe('CatalogManagementV1_integration', () => {
 
   test('getCatalogAccount()', async () => {
     const res = await catalogManagementService.getCatalogAccount();
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+
+    accountRevLink = res.result._rev;
+  });
+
+  test('updateCatalogAccount()', async () => {
+    const params = {
+      rev: accountRevLink,
+      accountFilters: {
+        include_all: true,
+        id_filters: {},
+      },
+      regionFilter: 'geo:na',
+    };
+
+    const res = await catalogManagementService.updateCatalogAccount(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
