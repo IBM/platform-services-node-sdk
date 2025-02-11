@@ -1,3 +1,10 @@
+## [0.67.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.1...v0.67.2) (2025-02-11)
+
+
+### Bug Fixes
+
+* **Catalog Management:** fix catalog account region filter fields ([#285](https://github.com/IBM/platform-services-node-sdk/issues/285)) ([339ce5f](https://github.com/IBM/platform-services-node-sdk/commit/339ce5fe06453656f5a93338f91ef07bb9dd4975))
+
 ## [0.67.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.0...v0.67.1) (2025-01-10)
 
 
