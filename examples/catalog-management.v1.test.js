@@ -85,7 +85,8 @@ describe('CatalogManagementV1', () => {
   let offeringVersion;
 
   let zipurl = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.1.0.tar.gz';
-  let zipurlSolution = 'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.0.0.tar.gz';
+  let zipurlSolution =
+    'https://github.com/IBM-Cloud/terraform-sample/archive/refs/tags/v1.0.0.tar.gz';
   let objectName = genRandonString(15);
 
   // To access additional configuration values, uncomment this line and extract the values from config
@@ -96,8 +97,8 @@ describe('CatalogManagementV1', () => {
 
     catalogManagementService = CatalogManagementV1.newInstance();
     catalogManagementAdminService = CatalogManagementV1.newInstance({
-      serviceName: "CATALOG_MANAGEMENT_APPROVER",
-    })
+      serviceName: 'CATALOG_MANAGEMENT_APPROVER',
+    });
 
     let auth = catalogManagementService.getAuthenticator();
     let tokenManager = auth.tokenManager;
@@ -156,8 +157,9 @@ describe('CatalogManagementV1', () => {
       accountFilters: {
         include_all: true,
         id_filters: {},
-      }
-    }
+      },
+      regionFilter: 'geo:na',
+    };
 
     let res;
     try {
@@ -434,17 +436,20 @@ describe('CatalogManagementV1', () => {
     // begin-set_allow_publish_offering
 
     const headers = {
-      'X-Approver-Token': approverToken
-    }
+      'X-Approver-Token': approverToken,
+    };
 
     try {
-      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/publish/publish_approved/true`, {
-        method: "POST",
-        headers: {
-          ...headers,
-          'Authorization': `bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/publish/publish_approved/true`,
+        {
+          method: 'POST',
+          headers: {
+            ...headers,
+            'Authorization': `bearer ${token}`,
+          },
+        }
+      );
       const resp = await response.json();
       console.log(JSON.stringify(resp, null, 2));
     } catch (err) {
@@ -476,27 +481,32 @@ describe('CatalogManagementV1', () => {
         kinds: ['terraform'],
         version: '>=0.0.1',
       },
-      features: [{
-        title: 'testString',
-        description: 'testString',
-      }],
-      metadata: { 'anyKey': 'anyValue' }
-    }
+      features: [
+        {
+          title: 'testString',
+          description: 'testString',
+        },
+      ],
+      metadata: { 'anyKey': 'anyValue' },
+    };
 
     const headers = {
-      'X-Approver-Token': approverToken
-    }
+      'X-Approver-Token': approverToken,
+    };
 
     let plan;
     try {
-      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`, {
-        method: "POST",
-        headers: {
-          ...headers,
-          'Authorization': `bearer ${token}`,
-        },
-        body: JSON.stringify(planBody),
-      });
+      const response = await fetch(
+        `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`,
+        {
+          method: 'POST',
+          headers: {
+            ...headers,
+            'Authorization': `bearer ${token}`,
+          },
+          body: JSON.stringify(planBody),
+        }
+      );
       plan = await response.json();
       console.log(JSON.stringify(plan, null, 2));
     } catch (err) {
@@ -558,27 +568,32 @@ describe('CatalogManagementV1', () => {
         kinds: ['terraform'],
         version: '>=0.0.1',
       },
-      features: [{
-        title: 'testString',
-        description: 'testString',
-      }],
-      metadata: { 'anyKey': 'anyValue' }
-    }
+      features: [
+        {
+          title: 'testString',
+          description: 'testString',
+        },
+      ],
+      metadata: { 'anyKey': 'anyValue' },
+    };
 
     const headers = {
-      'X-Approver-Token': approverToken
-    }
+      'X-Approver-Token': approverToken,
+    };
 
     let plan;
     try {
-      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`, {
-        method: "POST",
-        headers: {
-          ...headers,
-          'Authorization': `bearer ${token}`,
-        },
-        body: JSON.stringify(planBody),
-      });
+      const response = await fetch(
+        `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/catalogs/${catalogIdLink}/offerings/${offeringIdLink}/plans`,
+        {
+          method: 'POST',
+          headers: {
+            ...headers,
+            'Authorization': `bearer ${token}`,
+          },
+          body: JSON.stringify(planBody),
+        }
+      );
       plan = await response.json();
       console.log(JSON.stringify(plan, null, 2));
     } catch (err) {
@@ -604,17 +619,20 @@ describe('CatalogManagementV1', () => {
     // begin-set_validate_plan
 
     const headers = {
-      'X-Approver-Token': approverToken
-    }
+      'X-Approver-Token': approverToken,
+    };
 
     try {
-      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/validate/true`, {
-        method: "POST",
-        headers: {
-          ...headers,
-          'Authorization': `bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/validate/true`,
+        {
+          method: 'POST',
+          headers: {
+            ...headers,
+            'Authorization': `bearer ${token}`,
+          },
+        }
+      );
       const resp = await response.json();
       console.log(JSON.stringify(resp, null, 2));
     } catch (err) {
@@ -638,17 +656,20 @@ describe('CatalogManagementV1', () => {
     // begin-set_allow_publish_plan
 
     const headers = {
-      'X-Approver-Token': approverToken
-    }
+      'X-Approver-Token': approverToken,
+    };
 
     try {
-      const response = await fetch(`https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/publish/publish_approved/true`, {
-        method: "POST",
-        headers: {
-          ...headers,
-          'Authorization': `bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/plans/${planID}/publish/publish_approved/true`,
+        {
+          method: 'POST',
+          headers: {
+            ...headers,
+            'Authorization': `bearer ${token}`,
+          },
+        }
+      );
       const resp = await response.json();
       console.log(JSON.stringify(resp, null, 2));
     } catch (err) {
@@ -762,7 +783,7 @@ describe('CatalogManagementV1', () => {
       flavor: {
         label: 'Quickstart',
         name: 'quickstart',
-      }
+      },
     };
 
     let res;
@@ -948,11 +969,11 @@ describe('CatalogManagementV1', () => {
       ifMatch: `"${offeringRevLink}"`,
       updates: [
         {
-          "op": "replace",
-          "path": "/label",
-          "value": "testString"
-        }
-      ]
+          'op': 'replace',
+          'path': '/label',
+          'value': 'testString',
+        },
+      ],
     };
 
     let res;
@@ -1103,7 +1124,10 @@ describe('CatalogManagementV1', () => {
 
     const allResults = [];
     try {
-      const pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
+      const pager = new CatalogManagementV1.GetShareApprovalListPager(
+        catalogManagementService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
@@ -1196,7 +1220,10 @@ describe('CatalogManagementV1', () => {
 
     const allResults = [];
     try {
-      const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
+      const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(
+        catalogManagementService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
@@ -1317,7 +1344,10 @@ describe('CatalogManagementV1', () => {
 
     const allResults = [];
     try {
-      const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
+      const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(
+        catalogManagementService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
