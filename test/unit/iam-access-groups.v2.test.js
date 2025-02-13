@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -229,6 +229,7 @@ describe('IamAccessGroupsV2', () => {
         const sort = 'name';
         const showFederated = false;
         const hidePublicAccess = false;
+        const showCrn = false;
         const listAccessGroupsParams = {
           accountId,
           transactionId,
@@ -240,6 +241,7 @@ describe('IamAccessGroupsV2', () => {
           sort,
           showFederated,
           hidePublicAccess,
+          showCrn,
         };
 
         const listAccessGroupsResult = iamAccessGroupsService.listAccessGroups(listAccessGroupsParams);
@@ -266,6 +268,7 @@ describe('IamAccessGroupsV2', () => {
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.show_federated).toEqual(showFederated);
         expect(mockRequestOptions.qs.hide_public_access).toEqual(hidePublicAccess);
+        expect(mockRequestOptions.qs.show_crn).toEqual(showCrn);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -358,6 +361,7 @@ describe('IamAccessGroupsV2', () => {
           sort: 'name',
           showFederated: false,
           hidePublicAccess: false,
+          showCrn: false,
         };
         const allResults = [];
         const pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
@@ -381,6 +385,7 @@ describe('IamAccessGroupsV2', () => {
           sort: 'name',
           showFederated: false,
           hidePublicAccess: false,
+          showCrn: false,
         };
         const pager = new IamAccessGroupsV2.AccessGroupsPager(iamAccessGroupsService, params);
         const allResults = await pager.getAll();
@@ -397,10 +402,12 @@ describe('IamAccessGroupsV2', () => {
         const accessGroupId = 'testString';
         const transactionId = 'testString';
         const showFederated = false;
+        const showCrn = false;
         const getAccessGroupParams = {
           accessGroupId,
           transactionId,
           showFederated,
+          showCrn,
         };
 
         const getAccessGroupResult = iamAccessGroupsService.getAccessGroup(getAccessGroupParams);
@@ -419,6 +426,7 @@ describe('IamAccessGroupsV2', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(mockRequestOptions.qs.show_federated).toEqual(showFederated);
+        expect(mockRequestOptions.qs.show_crn).toEqual(showCrn);
         expect(mockRequestOptions.path.access_group_id).toEqual(accessGroupId);
       }
 
