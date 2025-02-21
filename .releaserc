@@ -3,17 +3,25 @@
   "branches": [
     "main"
   ],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
+  "verifyConditions": [
     "@semantic-release/changelog",
+    "@semantic-release/npm",
+    "@semantic-release/git"
+  ],
+  "prepare": [
+    "@semantic-release/changelog",
+    "@semantic-release/npm",
+    "@semantic-release/git"
+  ],
+  "publish": [
     [
       "@semantic-release/npm",
       {
         "pkgRoot": "dist"
       }
     ],
-    "@semantic-release/git",
-    "@semantic-release/github"
+    {
+      "path": "@semantic-release/github"
+    }
   ]
 }
