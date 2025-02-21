@@ -1,3 +1,10 @@
+# [0.68.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.3...v0.68.0) (2025-02-21)
+
+
+### Features
+
+* **IAM Identity:** add Identity Preference API ([#284](https://github.com/IBM/platform-services-node-sdk/issues/284)) ([6f7b19e](https://github.com/IBM/platform-services-node-sdk/commit/6f7b19e0fddc2a1d2764322a280b834e31f19dc0))
+
 ## [0.67.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.2...v0.67.3) (2025-02-21)
 
 
