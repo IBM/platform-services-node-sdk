@@ -39,6 +39,9 @@ const invalidAccountId = 'invalid';
 const profileTemplateName = 'Node-SDK-IT-ProfileTemplate';
 const profileTemplateProfileName = 'Node-SDK-IT-Profile-FromTemplate';
 const accountSettingsTemplateName = 'Node-SDK-IT-AccountSettingsTemplate';
+const service = 'console';
+const valueString = '/billing';
+const preferenceID1 = 'landing_page';
 
 let iamIdentityService;
 let accountId;
@@ -47,6 +50,7 @@ let iamIdMember;
 let iamApikey;
 let enterpriseAccountId;
 let enterpriseSubAccountId;
+let iamIDForPreferences;
 
 let apikeyId1;
 let apikeyEtag1;
@@ -104,6 +108,7 @@ describe('IamIdentityV1_integration', () => {
     iamApikey = config.apikey;
     enterpriseAccountId = config.enterpriseAccountId;
     enterpriseSubAccountId = config.enterpriseSubaccountId
+    iamIDForPreferences =config.iamIDForPreferences
     expect(accountId).not.toBeNull();
     expect(accountId).toBeDefined();
     expect(enterpriseAccountId).not.toBeNull();
@@ -116,6 +121,8 @@ describe('IamIdentityV1_integration', () => {
     expect(iamIdMember).toBeDefined();
     expect(iamApikey).not.toBeNull();
     expect(iamApikey).toBeDefined();
+    expect(iamIDForPreferences).not.toBeNull();
+    expect(iamIDForPreferences).toBeDefined();
 
     await cleanupResources();
 
@@ -1669,6 +1676,126 @@ describe('IamIdentityV1_integration', () => {
     const response = await iamIdentityService.getMfaStatus(params);
     expect(response).not.toBeNull();
     expect(response.iam_id).not.toBeNull();
+  });
+
+  test('updatePreferenceOnScopeAccount()', (done) => {
+    expect(accountId).not.toBeNull();
+    expect(iamIDForPreferences).not.toBeNull();
+    expect(service).not.toBeNull();
+    expect(preferenceID1).not.toBeNull();
+    expect(valueString).not.toBeNull();
+
+    const params = {
+      accountId,
+			iamId:        iamIDForPreferences,
+			service,
+			preferenceID: preferenceID1,
+			valueString,
+    };
+
+    iamIdentityService
+      .updatePreferenceOnScopeAccount(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('getPreferencesOnScopeAccount()', (done) => {
+    expect(accountId).not.toBeNull();
+    expect(iamIDForPreferences).not.toBeNull();
+    expect(service).not.toBeNull();
+    expect(preferenceID1).not.toBeNull();
+    expect(valueString).not.toBeNull();
+
+    const params = {
+      accountId,
+			iamId:        iamIDForPreferences,
+			service,
+			preferenceID: preferenceID1,
+    };
+
+    iamIdentityService
+      .getPreferencesOnScopeAccount(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('getAllPreferencesOnScopeAccount()', (done) => {
+    expect(accountId).not.toBeNull();
+    expect(iamIDForPreferences).not.toBeNull();
+    expect(service).not.toBeNull();
+    expect(preferenceID1).not.toBeNull();
+    expect(valueString).not.toBeNull();
+
+    const params = {
+      accountId,
+			iamId:        iamIDForPreferences,
+    };
+
+    iamIdentityService
+      .getAllPreferencesOnScopeAccount(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('deletePreferencesOnScopeAccount()', (done) => {
+    expect(accountId).not.toBeNull();
+    expect(iamIDForPreferences).not.toBeNull();
+    expect(service).not.toBeNull();
+    expect(preferenceID1).not.toBeNull();
+    expect(valueString).not.toBeNull();
+
+    const params = {
+      accountId,
+			iamId:        iamIDForPreferences,
+			service,
+			preferenceID: preferenceID1,
+    };
+
+    iamIdentityService
+      .deletePreferencesOnScopeAccount(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(204);
+
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
   });
 
   test('scenarioProfileTemplate()', async () => {
