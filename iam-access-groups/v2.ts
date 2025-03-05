@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.78.0-67aec9b7-20230818-174940
+ * IBM OpenAPI SDK Code Generator Version: 3.99.1-daeb6e46-20250131-173156
  */
 
 /* eslint-disable max-classes-per-file */
@@ -55,7 +55,7 @@ class IamAccessGroupsV2 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {IamAccessGroupsV2}
    */
 
@@ -80,7 +80,7 @@ class IamAccessGroupsV2 extends BaseService {
    * Construct a IamAccessGroupsV2 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -161,6 +161,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -206,6 +207,7 @@ class IamAccessGroupsV2 extends BaseService {
    * value that is set to true if rules exist for the group.
    * @param {boolean} [params.hidePublicAccess] - If hide_public_access is true, do not include the Public Access Group
    * in the results.
+   * @param {boolean} [params.showCrn] - If show_crn is true, group CRN will be included in the response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.GroupsList>>}
    */
@@ -225,6 +227,7 @@ class IamAccessGroupsV2 extends BaseService {
       'sort',
       'showFederated',
       'hidePublicAccess',
+      'showCrn',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -242,6 +245,7 @@ class IamAccessGroupsV2 extends BaseService {
       'sort': _params.sort,
       'show_federated': _params.showFederated,
       'hide_public_access': _params.hidePublicAccess,
+      'show_crn': _params.showCrn,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -260,6 +264,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -287,6 +292,7 @@ class IamAccessGroupsV2 extends BaseService {
    * generated.
    * @param {boolean} [params.showFederated] - If show_federated is true, the group will return an is_federated value
    * that is set to true if rules exist for the group.
+   * @param {boolean} [params.showCrn] - If show_crn is true, group CRN will be included in the response.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Group>>}
    */
@@ -295,7 +301,7 @@ class IamAccessGroupsV2 extends BaseService {
   ): Promise<IamAccessGroupsV2.Response<IamAccessGroupsV2.Group>> {
     const _params = { ...params };
     const _requiredParams = ['accessGroupId'];
-    const _validParams = ['accessGroupId', 'transactionId', 'showFederated', 'headers'];
+    const _validParams = ['accessGroupId', 'transactionId', 'showFederated', 'showCrn', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -303,6 +309,7 @@ class IamAccessGroupsV2 extends BaseService {
 
     const query = {
       'show_federated': _params.showFederated,
+      'show_crn': _params.showCrn,
     };
 
     const path = {
@@ -326,6 +333,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -403,6 +411,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -470,6 +479,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -533,6 +543,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -600,6 +611,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -690,6 +702,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -751,6 +764,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -817,6 +831,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -885,6 +900,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -960,6 +976,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1047,6 +1064,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1106,6 +1124,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -1166,6 +1185,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -1259,6 +1279,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1321,6 +1342,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -1382,6 +1404,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -1451,6 +1474,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1529,6 +1553,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1587,6 +1612,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -1663,6 +1689,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1725,6 +1752,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
@@ -1787,6 +1815,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -1869,6 +1898,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1927,6 +1957,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -1984,6 +2015,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
             'Transaction-Id': _params.transactionId,
@@ -2045,6 +2077,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -2100,6 +2133,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -2172,6 +2206,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2249,6 +2284,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -2306,6 +2342,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Transaction-Id': _params.transactionId,
@@ -2368,6 +2405,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2423,6 +2461,7 @@ class IamAccessGroupsV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Transaction-Id': _params.transactionId,
           },
@@ -2522,6 +2561,8 @@ namespace IamAccessGroupsV2 {
     showFederated?: boolean;
     /** If hide_public_access is true, do not include the Public Access Group in the results. */
     hidePublicAccess?: boolean;
+    /** If show_crn is true, group CRN will be included in the response. */
+    showCrn?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -2538,6 +2579,8 @@ namespace IamAccessGroupsV2 {
      *  for the group.
      */
     showFederated?: boolean;
+    /** If show_crn is true, group CRN will be included in the response. */
+    showCrn?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -3066,19 +3109,24 @@ namespace IamAccessGroupsV2 {
    * model interfaces
    ************************/
 
-  /** Control whether or not access group administrators in child accounts can add access policies to the enterprise-managed access group in their account. */
+  /**
+   * Control whether or not access group administrators in child accounts can add access policies to the
+   * enterprise-managed access group in their account.
+   */
   export interface AccessActionControls {
     /** Action control for adding access policies to an enterprise-managed access group in a child account. If an
      *  access group administrator in a child account adds a policy, they can always update or remove it. Note that if
      *  conflicts arise between an update to this control in a new version and polices added to the access group by an
      *  administrator in a child account, you must resolve those conflicts in the child account. This prevents breaking
      *  access in the child account. For more information, see [Working with
-     *  versions](https://test.cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-working-with-versions#new-version-scenarios).
+     *  versions](https://cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-working-with-versions#new-version-scenarios).
      */
     add?: boolean;
   }
 
-  /** Access Group Component. */
+  /**
+   * Access Group Component.
+   */
   export interface AccessGroupRequest {
     /** Give the access group a unique name that doesn't conflict with other templates access group name in the
      *  given account. This is shown in child accounts.
@@ -3096,7 +3144,9 @@ namespace IamAccessGroupsV2 {
     action_controls?: GroupActionControls;
   }
 
-  /** Access Group Component. */
+  /**
+   * Access Group Component.
+   */
   export interface AccessGroupResponse {
     /** Give the access group a unique name that doesn't conflict with other templates access group name in the
      *  given account. This is shown in child accounts.
@@ -3114,7 +3164,9 @@ namespace IamAccessGroupsV2 {
     action_controls?: GroupActionControls;
   }
 
-  /** The access groups settings for a specific account. */
+  /**
+   * The access groups settings for a specific account.
+   */
   export interface AccountSettings {
     /** The account id of the settings being shown. */
     account_id?: string;
@@ -3128,7 +3180,9 @@ namespace IamAccessGroupsV2 {
     public_access_enabled?: boolean;
   }
 
-  /** AddGroupMembersRequestMembersItem. */
+  /**
+   * AddGroupMembersRequestMembersItem.
+   */
   export interface AddGroupMembersRequestMembersItem {
     /** The IBMid, service ID or trusted profile ID of the member. */
     iam_id: string;
@@ -3136,13 +3190,17 @@ namespace IamAccessGroupsV2 {
     type: string;
   }
 
-  /** The members added to an access group. */
+  /**
+   * The members added to an access group.
+   */
   export interface AddGroupMembersResponse {
     /** The members added to an access group. */
     members?: AddGroupMembersResponseMembersItem[];
   }
 
-  /** AddGroupMembersResponseMembersItem. */
+  /**
+   * AddGroupMembersResponseMembersItem.
+   */
   export interface AddGroupMembersResponseMembersItem {
     /** The IBMid or Service Id of the member. */
     iam_id?: string;
@@ -3160,7 +3218,9 @@ namespace IamAccessGroupsV2 {
     errors?: Error[];
   }
 
-  /** The response from the add member to multiple access groups request. */
+  /**
+   * The response from the add member to multiple access groups request.
+   */
   export interface AddMembershipMultipleGroupsResponse {
     /** The iam_id of a member. */
     iam_id?: string;
@@ -3168,7 +3228,9 @@ namespace IamAccessGroupsV2 {
     groups?: AddMembershipMultipleGroupsResponseGroupsItem[];
   }
 
-  /** AddMembershipMultipleGroupsResponseGroupsItem. */
+  /**
+   * AddMembershipMultipleGroupsResponseGroupsItem.
+   */
   export interface AddMembershipMultipleGroupsResponseGroupsItem {
     /** The access group that the member is to be added to. */
     access_group_id?: string;
@@ -3180,7 +3242,9 @@ namespace IamAccessGroupsV2 {
     errors?: Error[];
   }
 
-  /** Assertions Input Component. */
+  /**
+   * Assertions Input Component.
+   */
   export interface Assertions {
     /** Dynamic rules to automatically add federated users to access groups based on specific identity attributes. */
     rules?: AssertionsRule[];
@@ -3191,7 +3255,11 @@ namespace IamAccessGroupsV2 {
     action_controls?: AssertionsActionControls;
   }
 
-  /** Control whether or not access group administrators in child accounts can add, remove, and update dynamic rules for the enterprise-managed access group in their account. The inner level RuleActionControls override these `remove` and `update` action controls. */
+  /**
+   * Control whether or not access group administrators in child accounts can add, remove, and update dynamic rules for
+   * the enterprise-managed access group in their account. The inner level RuleActionControls override these `remove`
+   * and `update` action controls.
+   */
   export interface AssertionsActionControls {
     /** Action control for adding dynamic rules to an enterprise-managed access group. If an access group
      *  administrator in a child account adds a dynamic rule, they can always update or remove it. Note that if
@@ -3207,7 +3275,9 @@ namespace IamAccessGroupsV2 {
     remove?: boolean;
   }
 
-  /** Rule Input component. */
+  /**
+   * Rule Input component.
+   */
   export interface AssertionsRule {
     /** Dynamic rule name. */
     name?: string;
@@ -3225,7 +3295,9 @@ namespace IamAccessGroupsV2 {
     action_controls?: RuleActionControls;
   }
 
-  /** Assignment Resource Access Group. */
+  /**
+   * Assignment Resource Access Group.
+   */
   export interface AssignmentResourceAccessGroup {
     /** Assignment resource entry. */
     group: AssignmentResourceEntry;
@@ -3235,7 +3307,9 @@ namespace IamAccessGroupsV2 {
     rules: AssignmentResourceEntry[];
   }
 
-  /** Assignment resource entry. */
+  /**
+   * Assignment resource entry.
+   */
   export interface AssignmentResourceEntry {
     /** Assignment Resource Entry Id. */
     id: string;
@@ -3253,7 +3327,9 @@ namespace IamAccessGroupsV2 {
     status: string;
   }
 
-  /** Condition Input component. */
+  /**
+   * Condition Input component.
+   */
   export interface Conditions {
     /** The key in the key:value pair. */
     claim?: string;
@@ -3263,7 +3339,9 @@ namespace IamAccessGroupsV2 {
     value?: string;
   }
 
-  /** The response from the delete member from access groups request. */
+  /**
+   * The response from the delete member from access groups request.
+   */
   export interface DeleteFromAllGroupsResponse {
     /** The `iam_id` of the member to removed from groups. */
     iam_id?: string;
@@ -3271,7 +3349,9 @@ namespace IamAccessGroupsV2 {
     groups?: DeleteFromAllGroupsResponseGroupsItem[];
   }
 
-  /** DeleteFromAllGroupsResponseGroupsItem. */
+  /**
+   * DeleteFromAllGroupsResponseGroupsItem.
+   */
   export interface DeleteFromAllGroupsResponseGroupsItem {
     /** The access group that the member is to be deleted from. */
     access_group_id?: string;
@@ -3283,7 +3363,9 @@ namespace IamAccessGroupsV2 {
     errors?: Error[];
   }
 
-  /** The access group id and the members removed from it. */
+  /**
+   * The access group id and the members removed from it.
+   */
   export interface DeleteGroupBulkMembersResponse {
     /** The access group id. */
     access_group_id?: string;
@@ -3291,7 +3373,9 @@ namespace IamAccessGroupsV2 {
     members?: DeleteGroupBulkMembersResponseMembersItem[];
   }
 
-  /** DeleteGroupBulkMembersResponseMembersItem. */
+  /**
+   * DeleteGroupBulkMembersResponseMembersItem.
+   */
   export interface DeleteGroupBulkMembersResponseMembersItem {
     /** The `iam_id` to be deleted. */
     iam_id?: string;
@@ -3303,7 +3387,11 @@ namespace IamAccessGroupsV2 {
     errors?: Error[];
   }
 
-  /** Error contains the code and message for an error returned to the user code is a string identifying the problem, examples "missing_field", "reserved_value" message is a string explaining the solution to the problem that was encountered. */
+  /**
+   * Error contains the code and message for an error returned to the user code is a string identifying the problem,
+   * examples "missing_field", "reserved_value" message is a string explaining the solution to the problem that was
+   * encountered.
+   */
   export interface Error {
     /** A human-readable error code represented by a snake case string. */
     code?: string;
@@ -3311,7 +3399,9 @@ namespace IamAccessGroupsV2 {
     message?: string;
   }
 
-  /** An IAM access group. */
+  /**
+   * An IAM access group.
+   */
   export interface Group {
     /** The group's access group ID. */
     id?: string;
@@ -3335,7 +3425,9 @@ namespace IamAccessGroupsV2 {
     is_federated?: boolean;
   }
 
-  /** Access group action controls component. */
+  /**
+   * Access group action controls component.
+   */
   export interface GroupActionControls {
     /** Control whether or not access group administrators in child accounts can add access policies to the
      *  enterprise-managed access group in their account.
@@ -3343,7 +3435,9 @@ namespace IamAccessGroupsV2 {
     access?: AccessActionControls;
   }
 
-  /** The members of a group. */
+  /**
+   * The members of a group.
+   */
   export interface GroupMembersList {
     /** Limit on how many items can be returned. */
     limit: number;
@@ -3363,7 +3457,9 @@ namespace IamAccessGroupsV2 {
     members?: ListGroupMembersResponseMember[];
   }
 
-  /** Response output for template. */
+  /**
+   * Response output for template.
+   */
   export interface GroupTemplate {
     /** The ID of the access group template. */
     id: string;
@@ -3393,7 +3489,9 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id: string;
   }
 
-  /** The list of access groups returned as part of a response. */
+  /**
+   * The list of access groups returned as part of a response.
+   */
   export interface GroupsList {
     /** Limit on how many items can be returned. */
     limit: number;
@@ -3413,13 +3511,17 @@ namespace IamAccessGroupsV2 {
     groups?: Group[];
   }
 
-  /** A link object. */
+  /**
+   * A link object.
+   */
   export interface HrefStruct {
     /** A string containing the link’s URL. */
     href?: string;
   }
 
-  /** A single member of an access group in a list. */
+  /**
+   * A single member of an access group in a list.
+   */
   export interface ListGroupMembersResponseMember {
     /** The IBMid or Service Id of the member. */
     iam_id?: string;
@@ -3441,7 +3543,9 @@ namespace IamAccessGroupsV2 {
     created_by_id?: string;
   }
 
-  /** Response object containing a list of template assignments. */
+  /**
+   * Response object containing a list of template assignments.
+   */
   export interface ListTemplateAssignmentResponse {
     /** Maximum number of items returned in the response. */
     limit: number;
@@ -3457,7 +3561,9 @@ namespace IamAccessGroupsV2 {
     assignments: TemplateAssignmentResponse[];
   }
 
-  /** Response object for a single access group template version. */
+  /**
+   * Response object for a single access group template version.
+   */
   export interface ListTemplateVersionResponse {
     /** The name of the template. */
     name: string;
@@ -3485,7 +3591,9 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id: string;
   }
 
-  /** Response object for listing template versions. */
+  /**
+   * Response object for listing template versions.
+   */
   export interface ListTemplateVersionsResponse {
     /** The maximum number of IAM resources to return. */
     limit: number;
@@ -3505,7 +3613,9 @@ namespace IamAccessGroupsV2 {
     group_template_versions: ListTemplateVersionResponse[];
   }
 
-  /** Response object for listing templates. */
+  /**
+   * Response object for listing templates.
+   */
   export interface ListTemplatesResponse {
     /** The maximum number of IAM resources to return. */
     limit: number;
@@ -3525,7 +3635,10 @@ namespace IamAccessGroupsV2 {
     group_templates: GroupTemplate[];
   }
 
-  /** Array of enterprise users to add to the template. All enterprise users that you add to the template must be invited to the child accounts where the template is assigned. */
+  /**
+   * Array of enterprise users to add to the template. All enterprise users that you add to the template must be invited
+   * to the child accounts where the template is assigned.
+   */
   export interface Members {
     /** Array of enterprise users to add to the template. All enterprise users that you add to the template must be
      *  invited to the child accounts where the template is assigned.
@@ -3539,14 +3652,17 @@ namespace IamAccessGroupsV2 {
     action_controls?: MembersActionControls;
   }
 
-  /** Control whether or not access group administrators in child accounts can add and remove members from the enterprise-managed access group in their account. */
+  /**
+   * Control whether or not access group administrators in child accounts can add and remove members from the
+   * enterprise-managed access group in their account.
+   */
   export interface MembersActionControls {
     /** Action control for adding child account members to an enterprise-managed access group. If an access group
      *  administrator in a child account adds a member, they can always remove them. Note that if conflicts arise
      *  between an update to this control in a new version and members added by an administrator in the child account,
      *  you must resolve those conflicts in the child account. This prevents breaking access in the child account. For
      *  more information, see [Working with versions]
-     *  (https://test.cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-working-with-versions#new-version-scenarios).
+     *  (https://cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-working-with-versions#new-version-scenarios).
      */
     add?: boolean;
     /** Action control for removing enterprise-managed members from an enterprise-managed access group. Note that if
@@ -3556,7 +3672,9 @@ namespace IamAccessGroupsV2 {
     remove?: boolean;
   }
 
-  /** Policy Templates Input component. */
+  /**
+   * Policy Templates Input component.
+   */
   export interface PolicyTemplates {
     /** Policy template ID. */
     id?: string;
@@ -3564,7 +3682,9 @@ namespace IamAccessGroupsV2 {
     version?: string;
   }
 
-  /** Object containing details of a resource list with target account ID. */
+  /**
+   * Object containing details of a resource list with target account ID.
+   */
   export interface ResourceListWithTargetAccountID {
     /** The ID of the entity that the resource list applies to. */
     target?: string;
@@ -3574,7 +3694,9 @@ namespace IamAccessGroupsV2 {
     policy_template_references?: AssignmentResourceEntry[];
   }
 
-  /** A dynamic rule of an access group. */
+  /**
+   * A dynamic rule of an access group.
+   */
   export interface Rule {
     /** The rule id. */
     id?: string;
@@ -3602,29 +3724,51 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id?: string;
   }
 
-  /** Control whether or not access group administrators in child accounts can update and remove this dynamic rule in the enterprise-managed access group in their account.This overrides outer level AssertionsActionControls. */
+  /**
+   * Control whether or not access group administrators in child accounts can update and remove this dynamic rule in the
+   * enterprise-managed access group in their account.This overrides outer level AssertionsActionControls.
+   */
   export interface RuleActionControls {
     /** Action control for removing this enterprise-managed dynamic rule. */
     remove?: boolean;
   }
 
-  /** The conditions of a dynamic rule. */
+  /**
+   * The conditions of a dynamic rule.
+   */
   export interface RuleConditions {
     /** The claim to evaluate against. This will be found in the `ext` claims of a user's login request. */
     claim: string;
     /** The operation to perform on the claim. */
-    operator: string;
+    operator: RuleConditions.Constants.Operator | string;
     /** The stringified JSON value that the claim is compared to using the operator. */
     value: string;
   }
+  export namespace RuleConditions {
+    export namespace Constants {
+      /** The operation to perform on the claim. */
+      export enum Operator {
+        EQUALS = 'EQUALS',
+        EQUALS_IGNORE_CASE = 'EQUALS_IGNORE_CASE',
+        IN = 'IN',
+        NOT_EQUALS_IGNORE_CASE = 'NOT_EQUALS_IGNORE_CASE',
+        NOT_EQUALS = 'NOT_EQUALS',
+        CONTAINS = 'CONTAINS',
+      }
+    }
+  }
 
-  /** A list of dynamic rules attached to the access group. */
+  /**
+   * A list of dynamic rules attached to the access group.
+   */
   export interface RulesList {
     /** A list of dynamic rules. */
     rules?: Rule[];
   }
 
-  /** Response object containing the details of a template assignment. */
+  /**
+   * Response object containing the details of a template assignment.
+   */
   export interface TemplateAssignmentResponse {
     /** The ID of the assignment. */
     id: string;
@@ -3635,13 +3779,13 @@ namespace IamAccessGroupsV2 {
     /** The version of the template that the assignment is based on. */
     template_version: string;
     /** The type of the entity that the assignment applies to. */
-    target_type: string;
+    target_type: TemplateAssignmentResponse.Constants.TargetType | string;
     /** The ID of the entity that the assignment applies to. */
     target: string;
     /** The operation that the assignment applies to (e.g. 'assign', 'update', 'remove'). */
-    operation: string;
+    operation: TemplateAssignmentResponse.Constants.Operation | string;
     /** The status of the assignment (e.g. 'accepted', 'in_progress', 'succeeded', 'failed', 'superseded'). */
-    status: string;
+    status: TemplateAssignmentResponse.Constants.Status | string;
     /** The URL of the assignment resource. */
     href: string;
     /** The date and time when the assignment was created. */
@@ -3653,8 +3797,33 @@ namespace IamAccessGroupsV2 {
     /** The user or system that last updated the assignment. */
     last_modified_by_id: string;
   }
+  export namespace TemplateAssignmentResponse {
+    export namespace Constants {
+      /** The type of the entity that the assignment applies to. */
+      export enum TargetType {
+        ACCOUNT = 'Account',
+        ACCOUNTGROUP = 'AccountGroup',
+      }
+      /** The operation that the assignment applies to (e.g. 'assign', 'update', 'remove'). */
+      export enum Operation {
+        ASSIGN = 'assign',
+        UPDATE = 'update',
+        REMOVE = 'remove',
+      }
+      /** The status of the assignment (e.g. 'accepted', 'in_progress', 'succeeded', 'failed', 'superseded'). */
+      export enum Status {
+        ACCEPTED = 'accepted',
+        IN_PROGRESS = 'in_progress',
+        SUCCEEDED = 'succeeded',
+        FAILED = 'failed',
+        SUPERSEDED = 'superseded',
+      }
+    }
+  }
 
-  /** Response object containing the details of a template assignment. */
+  /**
+   * Response object containing the details of a template assignment.
+   */
   export interface TemplateAssignmentVerboseResponse {
     /** The ID of the assignment. */
     id: string;
@@ -3686,7 +3855,9 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id: string;
   }
 
-  /** Response output for template. */
+  /**
+   * Response output for template.
+   */
   export interface TemplateResponse {
     /** The ID of the access group template. */
     id: string;
@@ -3718,7 +3889,9 @@ namespace IamAccessGroupsV2 {
     last_modified_by_id: string;
   }
 
-  /** Response output for template. */
+  /**
+   * Response output for template.
+   */
   export interface TemplateVersionResponse {
     /** The ID of the access group template. */
     id: string;
