@@ -1,3 +1,22 @@
+# [0.68.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.3...v0.68.0) (2025-02-21)
+
+
+### Features
+
+* **IAM Identity:** add Identity Preference API ([#284](https://github.com/IBM/platform-services-node-sdk/issues/284)) ([6f7b19e](https://github.com/IBM/platform-services-node-sdk/commit/6f7b19e0fddc2a1d2764322a280b834e31f19dc0))
+
+## [0.67.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.2...v0.67.3) (2025-02-21)
+
+
+### Bug Fixes
+
+* **build:** fix .releaserc file structure ([5bb3a1c](https://github.com/IBM/platform-services-node-sdk/commit/5bb3a1c543dad4edff19eb017c9fec24fe2bfc77))
+* **build:** remove comments from tsconfig.json ([5f54383](https://github.com/IBM/platform-services-node-sdk/commit/5f543839a0c1ee7b2d454e7af2997c8dffd18e29))
+* **build:** revert "fix .releaserc file structure" ([a5c3423](https://github.com/IBM/platform-services-node-sdk/commit/a5c34235eea3d96fd28ab58d05bf475651d23414))
+* **build:** revert "remove comments from tsconfig.json" ([4ad0edd](https://github.com/IBM/platform-services-node-sdk/commit/4ad0eddb9dbf64755e6fea855359b14858c53bb6))
+* **build:** revert "revert semantic-release version to avoid build error" ([bf5bc86](https://github.com/IBM/platform-services-node-sdk/commit/bf5bc8608d64089d14796b1dd6a7aac8e5a01b3e))
+* **build:** revert semantic-release version to avoid build error ([f2dbd4d](https://github.com/IBM/platform-services-node-sdk/commit/f2dbd4d713270ce2bc78b2da639f53175fa34153))
+
 ## [0.67.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.1...v0.67.2) (2025-02-11)
 
 

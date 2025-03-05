@@ -37,7 +37,7 @@ const { expectToBePromise } = require('ibm-cloud-sdk-core/lib/sdk-test-helpers')
 // IAM_IDENTITY_IAM_ID_MEMBER=<IAM ID of a user belonging to the account but different to the one above>
 // IAM_IDENTITY_ENTERPISE_ACCOUNT_ID=<AccountID of the enterprise account>
 // IAM_IDENTITY_ENTERPISE_SUBACCOUNT_ID=<AccountID of an account in the enterprise>
-//
+// IAM_IDENTITY_IAM_ID_FOR_PREFERENCES=IAM id of the profile to set preferences
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
@@ -67,6 +67,9 @@ describe('IamIdentityV1', () => {
   const apikeyName = 'Example-ApiKey';
   const serviceIdName = 'Example-ServiceId';
   const realmName = 'https://sdk.test.realm/1234';
+  const service = 'console'
+  const valueString = '/billing'
+  const preferenceID1 = 'landing_page'
 
   let accountId = config.accountId;
   let iamId = config.iamId;
@@ -74,6 +77,7 @@ describe('IamIdentityV1', () => {
   let iamApikey = config.apikey;
   let enterpriseAccountId = config.enterpriseAccountId;
   let enterpriseSubAccountId = config.enterpriseSubaccountId;
+  let iamIDForPreferences = config.iamIDForPreferences;
   
   let apikeyId = null;
   let apikeyEtag = null;
@@ -1280,7 +1284,7 @@ test('createApiKey request example', async () => {
 
 
     originalLog('getEffectiveAccountSettings() result:');
-    // begin-getEffectiveAccountSettings
+    // begin-get_effective_account_settings
 
     const params = {
       accountId: accountId,
@@ -1293,7 +1297,7 @@ test('createApiKey request example', async () => {
       console.warn(err)
     }
 
-    // end-getEffectiveAccountSettings
+    // end-get_effective_account_settings
   });
   test('createReport request example', async () => {
 
@@ -2302,6 +2306,132 @@ test('createApiKey request example', async () => {
     }
     // end-delete_all_versions_of_account_settings_template
   }
+  test('updatePreferenceOnScopeAccount request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(iamIDForPreferences).not.toBeNull();
+
+    originalLog('updatePreferenceOnScopeAccount() result:');
+    // begin-update_preference_on_scope_account
+
+    const params = {
+      accountId:    accountId,
+			iamId:        iamIDForPreferences,
+			service:      service,
+			preferenceID: preferenceID1,
+			valueString:  valueString,
+    };
+
+    try {
+      const res = await iamIdentityService.updatePreferenceOnScopeAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_preference_on_scope_account
+  });
+  test('getPreferencesOnScopeAccount request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(iamIDForPreferences).not.toBeNull();
+
+    originalLog('getPreferencesOnScopeAccount() result:');
+    // begin-get_preferences_on_scope_account
+
+    const params = {
+      accountId:    accountId,
+			iamId:        iamIDForPreferences,
+			service:      service,
+			preferenceID: preferenceID1,
+    };
+
+    try {
+      const res = await iamIdentityService.getPreferencesOnScopeAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_preferences_on_scope_account
+  });
+  test('getAllPreferencesOnScopeAccount request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(iamIDForPreferences).not.toBeNull();
+
+    originalLog('getAllPreferencesOnScopeAccount() result:');
+    // begin-get_all_preferences_on_scope_account
+
+    const params = {
+      accountId:    accountId,
+			iamId:        iamIDForPreferences,
+    };
+
+    try {
+      const res = await iamIdentityService.getAllPreferencesOnScopeAccount(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_all_preferences_on_scope_account
+  });
+  test('deletePreferencesOnScopeAccount request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(iamIDForPreferences).not.toBeNull();
+
+    originalLog('deletePreferencesOnScopeAccount() result:');
+    // begin-delete_preferences_on_scope_account
+
+    const params = {
+      accountId:    accountId,
+			iamId:        iamIDForPreferences,
+			service:      service,
+			preferenceID: preferenceID1,
+    };
+
+    try {
+      await iamIdentityService.deletePreferencesOnScopeAccount(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_preferences_on_scope_account
+  });
 
   function isFinishedEx(status) {
     return ("succeeded" === status.toLowerCase() || "failed" === status.toLowerCase());
