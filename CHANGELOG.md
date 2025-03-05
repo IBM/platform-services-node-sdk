@@ -1,3 +1,10 @@
+# [0.69.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.68.0...v0.69.0) (2025-03-05)
+
+
+### Features
+
+* **IAM Access Groups:** Add CRN filter ([#286](https://github.com/IBM/platform-services-node-sdk/issues/286)) ([23543e2](https://github.com/IBM/platform-services-node-sdk/commit/23543e200ec930afa15ad0f0a73ead6e6aa0dda4))
+
 # [0.68.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.67.3...v0.68.0) (2025-02-21)
 
 
