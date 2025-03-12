@@ -21,7 +21,10 @@
 const GlobalCatalogV1 = require('../dist/global-catalog/v1');
 const { readExternalSources, streamToPromise } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
-const { CreateCatalogEntryConstants, UpdateCatalogEntryConstants } = require('../dist/global-catalog/v1');
+const {
+  CreateCatalogEntryConstants,
+  UpdateCatalogEntryConstants,
+} = require('../dist/global-catalog/v1');
 const { v4: uuidv4 } = require('uuid');
 
 //
@@ -51,6 +54,8 @@ const originalWarn = console.warn;
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
+let catalogObject = {};
+
 describe('GlobalCatalogV1', () => {
   jest.setTimeout(timeout);
 
@@ -65,13 +70,11 @@ describe('GlobalCatalogV1', () => {
   // Global variables to hold values shared between testcases.
   let catalogEntryId;
 
-
   test('createCatalogEntry request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -82,7 +85,8 @@ describe('GlobalCatalogV1', () => {
     const overviewModelEN = {
       display_name: 'Example Web Starter',
       description: 'Use the Example service in your applications',
-      long_description: 'This is a starter that helps you use the Example service within your applications.',
+      long_description:
+        'This is a starter that helps you use the Example service within your applications.',
     };
     const overviewUIModel = {
       en: overviewModelEN,
@@ -129,11 +133,10 @@ describe('GlobalCatalogV1', () => {
     // end-create_catalog_entry
   });
   test('getCatalogEntry request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -151,6 +154,8 @@ describe('GlobalCatalogV1', () => {
 
     try {
       const res = await globalCatalogService.getCatalogEntry(params);
+      catalogObject = res.result;
+
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -159,11 +164,10 @@ describe('GlobalCatalogV1', () => {
     // end-get_catalog_entry
   });
   test('updateCatalogEntry request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -176,7 +180,8 @@ describe('GlobalCatalogV1', () => {
     const overviewModelEN = {
       display_name: 'Example Web Starter V2',
       description: 'Use the Example V2 service in your applications',
-      long_description: 'This is a starter that helps you use the Example V2 service within your applications.',
+      long_description:
+        'This is a starter that helps you use the Example V2 service within your applications.',
     };
     const overviewUIModel = {
       en: overviewModelEN,
@@ -209,6 +214,7 @@ describe('GlobalCatalogV1', () => {
       provider: providerModel,
       active: true,
       metadata: metadataModel,
+      url: catalogObject.url,
     };
 
     try {
@@ -221,11 +227,10 @@ describe('GlobalCatalogV1', () => {
     // end-update_catalog_entry
   });
   test('listCatalogEntries request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -249,11 +254,10 @@ describe('GlobalCatalogV1', () => {
     // end-list_catalog_entries
   });
   test('getChildObjects request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -282,11 +286,10 @@ describe('GlobalCatalogV1', () => {
     // end-get_child_objects
   });
   test('restoreCatalogEntry request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -309,11 +312,10 @@ describe('GlobalCatalogV1', () => {
     // end-restore_catalog_entry
   });
   test('getVisibility request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -338,11 +340,10 @@ describe('GlobalCatalogV1', () => {
     // end-get_visibility
   });
   test('updateVisibility request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -366,11 +367,10 @@ describe('GlobalCatalogV1', () => {
     // end-update_visibility
   });
   test('getPricing request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -395,11 +395,10 @@ describe('GlobalCatalogV1', () => {
     // end-get_pricing
   });
   test('getAuditLogs request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -426,11 +425,10 @@ describe('GlobalCatalogV1', () => {
     // end-get_audit_logs
   });
   test('uploadArtifact request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -455,11 +453,10 @@ describe('GlobalCatalogV1', () => {
     // end-upload_artifact
   });
   test('getArtifact request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -489,11 +486,10 @@ describe('GlobalCatalogV1', () => {
     // end-get_artifact
   });
   test('listArtifacts request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -518,11 +514,10 @@ describe('GlobalCatalogV1', () => {
     // end-list_artifacts
   });
   test('deleteArtifact request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
@@ -546,11 +541,10 @@ describe('GlobalCatalogV1', () => {
     // end-delete_artifact
   });
   test('deleteCatalogEntry request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       originalWarn(output);
       // when the test fails we need to print out the error message and stop execution right after it
       expect(true).toBeFalsy();
