@@ -1,3 +1,10 @@
+## [0.69.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.69.1...v0.69.2) (2025-03-13)
+
+
+### Bug Fixes
+
+* **Global Catalog:** fix price field capitalization ([#293](https://github.com/IBM/platform-services-node-sdk/issues/293)) ([11c745a](https://github.com/IBM/platform-services-node-sdk/commit/11c745ae541ed5c68d9f8f668f94b96241542af6))
+
 ## [0.69.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.69.0...v0.69.1) (2025-03-10)
 
 
