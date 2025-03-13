@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
-const core = require('ibm-cloud-sdk-core');
-const { NoAuthAuthenticator } = core;
+const sdkCorePackage = require('ibm-cloud-sdk-core');
 
+const { NoAuthAuthenticator } = sdkCorePackage;
 const GlobalCatalogV1 = require('../../dist/global-catalog/v1');
 
 const {
@@ -30,27 +29,37 @@ const {
   checkForSuccessfulExecution,
 } = require('@ibm-cloud/sdk-test-utilities');
 
-const service = {
+const globalCatalogServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://globalcatalog.cloud.ibm.com/api/v1',
 };
 
-const globalCatalogService = new GlobalCatalogV1(service);
+const globalCatalogService = new GlobalCatalogV1(globalCatalogServiceOptions);
 
-// dont actually create a request
-const createRequestMock = jest.spyOn(globalCatalogService, 'createRequest');
-createRequestMock.mockImplementation(() => Promise.resolve());
+let createRequestMock = null;
+function mock_createRequest() {
+  if (!createRequestMock) {
+    createRequestMock = jest.spyOn(globalCatalogService, 'createRequest');
+    createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
 
 // dont actually construct an authenticator
-const getAuthenticatorMock = jest.spyOn(core, 'getAuthenticatorFromEnvironment');
+const getAuthenticatorMock = jest.spyOn(sdkCorePackage, 'getAuthenticatorFromEnvironment');
 getAuthenticatorMock.mockImplementation(() => new NoAuthAuthenticator());
 
-afterEach(() => {
-  createRequestMock.mockClear();
-  getAuthenticatorMock.mockClear();
-});
-
 describe('GlobalCatalogV1', () => {
+  beforeEach(() => {
+    mock_createRequest();
+  });
+
+  afterEach(() => {
+    if (createRequestMock) {
+      createRequestMock.mockClear();
+    }
+    getAuthenticatorMock.mockClear();
+  });
+
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
       const testInstance = GlobalCatalogV1.newInstance();
@@ -78,6 +87,7 @@ describe('GlobalCatalogV1', () => {
       expect(testInstance).toBeInstanceOf(GlobalCatalogV1);
     });
   });
+
   describe('the constructor', () => {
     test('use user-given service url', () => {
       const options = {
@@ -100,9 +110,10 @@ describe('GlobalCatalogV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe(GlobalCatalogV1.DEFAULT_SERVICE_URL);
     });
   });
+
   describe('listCatalogEntries', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listCatalogEntriesTest() {
         // Construct the params object for operation listCatalogEntries
         const account = 'testString';
         const include = 'testString';
@@ -112,22 +123,23 @@ describe('GlobalCatalogV1', () => {
         const languages = 'testString';
         const catalog = true;
         const complete = true;
-        const offset = 38;
-        const limit = 200;
-        const params = {
-          account: account,
-          include: include,
-          q: q,
-          sortBy: sortBy,
-          descending: descending,
-          languages: languages,
-          catalog: catalog,
-          complete: complete,
-          offset: offset,
-          limit: limit,
+        const offset = 0;
+        const limit = 50;
+        const listCatalogEntriesParams = {
+          account,
+          include,
+          q,
+          sortBy,
+          descending,
+          languages,
+          catalog,
+          complete,
+          offset,
+          limit,
         };
 
-        const listCatalogEntriesResult = globalCatalogService.listCatalogEntries(params);
+        const listCatalogEntriesResult =
+          globalCatalogService.listCatalogEntries(listCatalogEntriesParams);
 
         // all methods should return a Promise
         expectToBePromise(listCatalogEntriesResult);
@@ -135,36 +147,51 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.qs['include']).toEqual(include);
-        expect(options.qs['q']).toEqual(q);
-        expect(options.qs['sort-by']).toEqual(sortBy);
-        expect(options.qs['descending']).toEqual(descending);
-        expect(options.qs['languages']).toEqual(languages);
-        expect(options.qs['catalog']).toEqual(catalog);
-        expect(options.qs['complete']).toEqual(complete);
-        expect(options.qs['_offset']).toEqual(offset);
-        expect(options.qs['_limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.include).toEqual(include);
+        expect(mockRequestOptions.qs.q).toEqual(q);
+        expect(mockRequestOptions.qs['sort-by']).toEqual(sortBy);
+        expect(mockRequestOptions.qs.descending).toEqual(descending);
+        expect(mockRequestOptions.qs.languages).toEqual(languages);
+        expect(mockRequestOptions.qs.catalog).toEqual(catalog);
+        expect(mockRequestOptions.qs.complete).toEqual(complete);
+        expect(mockRequestOptions.qs._offset).toEqual(offset);
+        expect(mockRequestOptions.qs._limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listCatalogEntriesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __listCatalogEntriesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __listCatalogEntriesTest();
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listCatalogEntriesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        globalCatalogService.listCatalogEntries(params);
+        globalCatalogService.listCatalogEntries(listCatalogEntriesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -175,6 +202,7 @@ describe('GlobalCatalogV1', () => {
       });
     });
   });
+
   describe('createCatalogEntry', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -270,13 +298,19 @@ describe('GlobalCatalogV1', () => {
         quantity: 38,
       };
 
+      // UIMediaSourceMetaData
+      const uiMediaSourceMetaDataModel = {
+        type: 'testString',
+        url: 'testString',
+      };
+
       // UIMetaMedia
       const uiMetaMediaModel = {
         caption: 'testString',
         thumbnail_url: 'testString',
         type: 'testString',
         URL: 'testString',
-        source: bulletsModel,
+        source: [uiMediaSourceMetaDataModel],
       };
 
       // Strings
@@ -333,8 +367,8 @@ describe('GlobalCatalogV1', () => {
       const slaMetaDataModel = {
         terms: 'testString',
         tenancy: 'testString',
-        provisioning: 'testString',
-        responsiveness: 'testString',
+        provisioning: 72.5,
+        responsiveness: 72.5,
         dr: drMetaDataModel,
       };
 
@@ -355,7 +389,7 @@ describe('GlobalCatalogV1', () => {
       // Price
       const priceModel = {
         quantity_tier: 38,
-        Price: 72.5,
+        price: 72.5,
       };
 
       // Amount
@@ -412,12 +446,12 @@ describe('GlobalCatalogV1', () => {
         callbacks: callbacksModel,
         original_name: 'testString',
         version: 'testString',
-        other: { 'key1': { foo: 'bar' } },
+        other: { anyKey: 'anyValue' },
         pricing: pricingSetModel,
         deployment: deploymentBaseModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createCatalogEntryTest() {
         // Construct the params object for operation createCatalogEntry
         const name = 'testString';
         const kind = 'service';
@@ -430,25 +464,28 @@ describe('GlobalCatalogV1', () => {
         const parentId = 'testString';
         const group = true;
         const active = true;
+        const url = 'testString';
         const metadata = objectMetadataSetModel;
         const account = 'testString';
-        const params = {
-          name: name,
-          kind: kind,
-          overviewUi: overviewUi,
-          images: images,
-          disabled: disabled,
-          tags: tags,
-          provider: provider,
-          id: id,
-          parentId: parentId,
-          group: group,
-          active: active,
-          metadata: metadata,
-          account: account,
+        const createCatalogEntryParams = {
+          name,
+          kind,
+          overviewUi,
+          images,
+          disabled,
+          tags,
+          provider,
+          id,
+          parentId,
+          group,
+          active,
+          url,
+          metadata,
+          account,
         };
 
-        const createCatalogEntryResult = globalCatalogService.createCatalogEntry(params);
+        const createCatalogEntryResult =
+          globalCatalogService.createCatalogEntry(createCatalogEntryParams);
 
         // all methods should return a Promise
         expectToBePromise(createCatalogEntryResult);
@@ -456,25 +493,41 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['kind']).toEqual(kind);
-        expect(options.body['overview_ui']).toEqual(overviewUi);
-        expect(options.body['images']).toEqual(images);
-        expect(options.body['disabled']).toEqual(disabled);
-        expect(options.body['tags']).toEqual(tags);
-        expect(options.body['provider']).toEqual(provider);
-        expect(options.body['id']).toEqual(id);
-        expect(options.body['parent_id']).toEqual(parentId);
-        expect(options.body['group']).toEqual(group);
-        expect(options.body['active']).toEqual(active);
-        expect(options.body['metadata']).toEqual(metadata);
-        expect(options.qs['account']).toEqual(account);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.overview_ui).toEqual(overviewUi);
+        expect(mockRequestOptions.body.images).toEqual(images);
+        expect(mockRequestOptions.body.disabled).toEqual(disabled);
+        expect(mockRequestOptions.body.tags).toEqual(tags);
+        expect(mockRequestOptions.body.provider).toEqual(provider);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body.parent_id).toEqual(parentId);
+        expect(mockRequestOptions.body.group).toEqual(group);
+        expect(mockRequestOptions.body.active).toEqual(active);
+        expect(mockRequestOptions.body.url).toEqual(url);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createCatalogEntryTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __createCatalogEntryTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __createCatalogEntryTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -489,7 +542,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createCatalogEntryParams = {
           name,
           kind,
           overviewUi,
@@ -504,7 +557,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.createCatalogEntry(params);
+        globalCatalogService.createCatalogEntry(createCatalogEntryParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -521,20 +574,22 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createCatalogEntryPromise = globalCatalogService.createCatalogEntry();
-        expectToBePromise(createCatalogEntryPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.createCatalogEntry();
+        } catch (e) {
+          err = e;
+        }
 
-        createCatalogEntryPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getCatalogEntry', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getCatalogEntryTest() {
         // Construct the params object for operation getCatalogEntry
         const id = 'testString';
         const account = 'testString';
@@ -542,16 +597,16 @@ describe('GlobalCatalogV1', () => {
         const languages = 'testString';
         const complete = true;
         const depth = 38;
-        const params = {
-          id: id,
-          account: account,
-          include: include,
-          languages: languages,
-          complete: complete,
-          depth: depth,
+        const getCatalogEntryParams = {
+          id,
+          account,
+          include,
+          languages,
+          complete,
+          depth,
         };
 
-        const getCatalogEntryResult = globalCatalogService.getCatalogEntry(params);
+        const getCatalogEntryResult = globalCatalogService.getCatalogEntry(getCatalogEntryParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogEntryResult);
@@ -559,18 +614,33 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.qs['include']).toEqual(include);
-        expect(options.qs['languages']).toEqual(languages);
-        expect(options.qs['complete']).toEqual(complete);
-        expect(options.qs['depth']).toEqual(depth);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.include).toEqual(include);
+        expect(mockRequestOptions.qs.languages).toEqual(languages);
+        expect(mockRequestOptions.qs.complete).toEqual(complete);
+        expect(mockRequestOptions.qs.depth).toEqual(depth);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getCatalogEntryTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getCatalogEntryTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getCatalogEntryTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -578,7 +648,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getCatalogEntryParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -586,7 +656,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.getCatalogEntry(params);
+        globalCatalogService.getCatalogEntry(getCatalogEntryParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -603,17 +673,19 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getCatalogEntryPromise = globalCatalogService.getCatalogEntry();
-        expectToBePromise(getCatalogEntryPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getCatalogEntry();
+        } catch (e) {
+          err = e;
+        }
 
-        getCatalogEntryPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateCatalogEntry', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -709,13 +781,19 @@ describe('GlobalCatalogV1', () => {
         quantity: 38,
       };
 
+      // UIMediaSourceMetaData
+      const uiMediaSourceMetaDataModel = {
+        type: 'testString',
+        url: 'testString',
+      };
+
       // UIMetaMedia
       const uiMetaMediaModel = {
         caption: 'testString',
         thumbnail_url: 'testString',
         type: 'testString',
         URL: 'testString',
-        source: bulletsModel,
+        source: [uiMediaSourceMetaDataModel],
       };
 
       // Strings
@@ -772,8 +850,8 @@ describe('GlobalCatalogV1', () => {
       const slaMetaDataModel = {
         terms: 'testString',
         tenancy: 'testString',
-        provisioning: 'testString',
-        responsiveness: 'testString',
+        provisioning: 72.5,
+        responsiveness: 72.5,
         dr: drMetaDataModel,
       };
 
@@ -794,7 +872,7 @@ describe('GlobalCatalogV1', () => {
       // Price
       const priceModel = {
         quantity_tier: 38,
-        Price: 72.5,
+        price: 72.5,
       };
 
       // Amount
@@ -851,12 +929,12 @@ describe('GlobalCatalogV1', () => {
         callbacks: callbacksModel,
         original_name: 'testString',
         version: 'testString',
-        other: { 'key1': { foo: 'bar' } },
+        other: { anyKey: 'anyValue' },
         pricing: pricingSetModel,
         deployment: deploymentBaseModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateCatalogEntryTest() {
         // Construct the params object for operation updateCatalogEntry
         const id = 'testString';
         const name = 'testString';
@@ -869,27 +947,30 @@ describe('GlobalCatalogV1', () => {
         const parentId = 'testString';
         const group = true;
         const active = true;
+        const url = 'testString';
         const metadata = objectMetadataSetModel;
         const account = 'testString';
         const move = 'testString';
-        const params = {
-          id: id,
-          name: name,
-          kind: kind,
-          overviewUi: overviewUi,
-          images: images,
-          disabled: disabled,
-          tags: tags,
-          provider: provider,
-          parentId: parentId,
-          group: group,
-          active: active,
-          metadata: metadata,
-          account: account,
-          move: move,
+        const updateCatalogEntryParams = {
+          id,
+          name,
+          kind,
+          overviewUi,
+          images,
+          disabled,
+          tags,
+          provider,
+          parentId,
+          group,
+          active,
+          url,
+          metadata,
+          account,
+          move,
         };
 
-        const updateCatalogEntryResult = globalCatalogService.updateCatalogEntry(params);
+        const updateCatalogEntryResult =
+          globalCatalogService.updateCatalogEntry(updateCatalogEntryParams);
 
         // all methods should return a Promise
         expectToBePromise(updateCatalogEntryResult);
@@ -897,26 +978,42 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/{id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['kind']).toEqual(kind);
-        expect(options.body['overview_ui']).toEqual(overviewUi);
-        expect(options.body['images']).toEqual(images);
-        expect(options.body['disabled']).toEqual(disabled);
-        expect(options.body['tags']).toEqual(tags);
-        expect(options.body['provider']).toEqual(provider);
-        expect(options.body['parent_id']).toEqual(parentId);
-        expect(options.body['group']).toEqual(group);
-        expect(options.body['active']).toEqual(active);
-        expect(options.body['metadata']).toEqual(metadata);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.qs['move']).toEqual(move);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.overview_ui).toEqual(overviewUi);
+        expect(mockRequestOptions.body.images).toEqual(images);
+        expect(mockRequestOptions.body.disabled).toEqual(disabled);
+        expect(mockRequestOptions.body.tags).toEqual(tags);
+        expect(mockRequestOptions.body.provider).toEqual(provider);
+        expect(mockRequestOptions.body.parent_id).toEqual(parentId);
+        expect(mockRequestOptions.body.group).toEqual(group);
+        expect(mockRequestOptions.body.active).toEqual(active);
+        expect(mockRequestOptions.body.url).toEqual(url);
+        expect(mockRequestOptions.body.metadata).toEqual(metadata);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.move).toEqual(move);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateCatalogEntryTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __updateCatalogEntryTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __updateCatalogEntryTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -931,7 +1028,7 @@ describe('GlobalCatalogV1', () => {
         const provider = providerModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateCatalogEntryParams = {
           id,
           name,
           kind,
@@ -946,7 +1043,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.updateCatalogEntry(params);
+        globalCatalogService.updateCatalogEntry(updateCatalogEntryParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -963,31 +1060,34 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateCatalogEntryPromise = globalCatalogService.updateCatalogEntry();
-        expectToBePromise(updateCatalogEntryPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.updateCatalogEntry();
+        } catch (e) {
+          err = e;
+        }
 
-        updateCatalogEntryPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteCatalogEntry', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteCatalogEntryTest() {
         // Construct the params object for operation deleteCatalogEntry
         const id = 'testString';
         const account = 'testString';
         const force = true;
-        const params = {
-          id: id,
-          account: account,
-          force: force,
+        const deleteCatalogEntryParams = {
+          id,
+          account,
+          force,
         };
 
-        const deleteCatalogEntryResult = globalCatalogService.deleteCatalogEntry(params);
+        const deleteCatalogEntryResult =
+          globalCatalogService.deleteCatalogEntry(deleteCatalogEntryParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteCatalogEntryResult);
@@ -995,15 +1095,30 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.qs['force']).toEqual(force);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.force).toEqual(force);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteCatalogEntryTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __deleteCatalogEntryTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __deleteCatalogEntryTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1011,7 +1126,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteCatalogEntryParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1019,7 +1134,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.deleteCatalogEntry(params);
+        globalCatalogService.deleteCatalogEntry(deleteCatalogEntryParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1036,20 +1151,22 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteCatalogEntryPromise = globalCatalogService.deleteCatalogEntry();
-        expectToBePromise(deleteCatalogEntryPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.deleteCatalogEntry();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteCatalogEntryPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getChildObjects', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getChildObjectsTest() {
         // Construct the params object for operation getChildObjects
         const id = 'testString';
         const kind = 'testString';
@@ -1060,23 +1177,23 @@ describe('GlobalCatalogV1', () => {
         const descending = 'testString';
         const languages = 'testString';
         const complete = true;
-        const offset = 38;
-        const limit = 200;
-        const params = {
-          id: id,
-          kind: kind,
-          account: account,
-          include: include,
-          q: q,
-          sortBy: sortBy,
-          descending: descending,
-          languages: languages,
-          complete: complete,
-          offset: offset,
-          limit: limit,
+        const offset = 0;
+        const limit = 50;
+        const getChildObjectsParams = {
+          id,
+          kind,
+          account,
+          include,
+          q,
+          sortBy,
+          descending,
+          languages,
+          complete,
+          offset,
+          limit,
         };
 
-        const getChildObjectsResult = globalCatalogService.getChildObjects(params);
+        const getChildObjectsResult = globalCatalogService.getChildObjects(getChildObjectsParams);
 
         // all methods should return a Promise
         expectToBePromise(getChildObjectsResult);
@@ -1084,23 +1201,38 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}/{kind}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{id}/{kind}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.qs['include']).toEqual(include);
-        expect(options.qs['q']).toEqual(q);
-        expect(options.qs['sort-by']).toEqual(sortBy);
-        expect(options.qs['descending']).toEqual(descending);
-        expect(options.qs['languages']).toEqual(languages);
-        expect(options.qs['complete']).toEqual(complete);
-        expect(options.qs['_offset']).toEqual(offset);
-        expect(options.qs['_limit']).toEqual(limit);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['kind']).toEqual(kind);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.include).toEqual(include);
+        expect(mockRequestOptions.qs.q).toEqual(q);
+        expect(mockRequestOptions.qs['sort-by']).toEqual(sortBy);
+        expect(mockRequestOptions.qs.descending).toEqual(descending);
+        expect(mockRequestOptions.qs.languages).toEqual(languages);
+        expect(mockRequestOptions.qs.complete).toEqual(complete);
+        expect(mockRequestOptions.qs._offset).toEqual(offset);
+        expect(mockRequestOptions.qs._limit).toEqual(limit);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.kind).toEqual(kind);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getChildObjectsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getChildObjectsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getChildObjectsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1109,7 +1241,7 @@ describe('GlobalCatalogV1', () => {
         const kind = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getChildObjectsParams = {
           id,
           kind,
           headers: {
@@ -1118,7 +1250,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.getChildObjects(params);
+        globalCatalogService.getChildObjects(getChildObjectsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1135,29 +1267,32 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getChildObjectsPromise = globalCatalogService.getChildObjects();
-        expectToBePromise(getChildObjectsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getChildObjects();
+        } catch (e) {
+          err = e;
+        }
 
-        getChildObjectsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('restoreCatalogEntry', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __restoreCatalogEntryTest() {
         // Construct the params object for operation restoreCatalogEntry
         const id = 'testString';
         const account = 'testString';
-        const params = {
-          id: id,
-          account: account,
+        const restoreCatalogEntryParams = {
+          id,
+          account,
         };
 
-        const restoreCatalogEntryResult = globalCatalogService.restoreCatalogEntry(params);
+        const restoreCatalogEntryResult =
+          globalCatalogService.restoreCatalogEntry(restoreCatalogEntryParams);
 
         // all methods should return a Promise
         expectToBePromise(restoreCatalogEntryResult);
@@ -1165,14 +1300,29 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}/restore', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/{id}/restore', 'PUT');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __restoreCatalogEntryTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __restoreCatalogEntryTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __restoreCatalogEntryTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1180,7 +1330,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const restoreCatalogEntryParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1188,7 +1338,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.restoreCatalogEntry(params);
+        globalCatalogService.restoreCatalogEntry(restoreCatalogEntryParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1205,29 +1355,31 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const restoreCatalogEntryPromise = globalCatalogService.restoreCatalogEntry();
-        expectToBePromise(restoreCatalogEntryPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.restoreCatalogEntry();
+        } catch (e) {
+          err = e;
+        }
 
-        restoreCatalogEntryPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getVisibility', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVisibilityTest() {
         // Construct the params object for operation getVisibility
         const id = 'testString';
         const account = 'testString';
-        const params = {
-          id: id,
-          account: account,
+        const getVisibilityParams = {
+          id,
+          account,
         };
 
-        const getVisibilityResult = globalCatalogService.getVisibility(params);
+        const getVisibilityResult = globalCatalogService.getVisibility(getVisibilityParams);
 
         // all methods should return a Promise
         expectToBePromise(getVisibilityResult);
@@ -1235,14 +1387,29 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}/visibility', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{id}/visibility', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVisibilityTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getVisibilityTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getVisibilityTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1250,7 +1417,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVisibilityParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1258,7 +1425,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.getVisibility(params);
+        globalCatalogService.getVisibility(getVisibilityParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1275,17 +1442,19 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVisibilityPromise = globalCatalogService.getVisibility();
-        expectToBePromise(getVisibilityPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getVisibility();
+        } catch (e) {
+          err = e;
+        }
 
-        getVisibilityPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('updateVisibility', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
@@ -1300,22 +1469,23 @@ describe('GlobalCatalogV1', () => {
         accounts: visibilityDetailAccountsModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateVisibilityTest() {
         // Construct the params object for operation updateVisibility
         const id = 'testString';
         const extendable = true;
         const include = visibilityDetailModel;
         const exclude = visibilityDetailModel;
         const account = 'testString';
-        const params = {
-          id: id,
-          extendable: extendable,
-          include: include,
-          exclude: exclude,
-          account: account,
+        const updateVisibilityParams = {
+          id,
+          extendable,
+          include,
+          exclude,
+          account,
         };
 
-        const updateVisibilityResult = globalCatalogService.updateVisibility(params);
+        const updateVisibilityResult =
+          globalCatalogService.updateVisibility(updateVisibilityParams);
 
         // all methods should return a Promise
         expectToBePromise(updateVisibilityResult);
@@ -1323,17 +1493,32 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}/visibility', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/{id}/visibility', 'PUT');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['extendable']).toEqual(extendable);
-        expect(options.body['include']).toEqual(include);
-        expect(options.body['exclude']).toEqual(exclude);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.extendable).toEqual(extendable);
+        expect(mockRequestOptions.body.include).toEqual(include);
+        expect(mockRequestOptions.body.exclude).toEqual(exclude);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVisibilityTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __updateVisibilityTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __updateVisibilityTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1341,7 +1526,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVisibilityParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1349,7 +1534,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.updateVisibility(params);
+        globalCatalogService.updateVisibility(updateVisibilityParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1366,29 +1551,33 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVisibilityPromise = globalCatalogService.updateVisibility();
-        expectToBePromise(updateVisibilityPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.updateVisibility();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVisibilityPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getPricing', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getPricingTest() {
         // Construct the params object for operation getPricing
         const id = 'testString';
         const account = 'testString';
-        const params = {
-          id: id,
-          account: account,
+        const deploymentRegion = 'testString';
+        const getPricingParams = {
+          id,
+          account,
+          deploymentRegion,
         };
 
-        const getPricingResult = globalCatalogService.getPricing(params);
+        const getPricingResult = globalCatalogService.getPricing(getPricingParams);
 
         // all methods should return a Promise
         expectToBePromise(getPricingResult);
@@ -1396,14 +1585,30 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}/pricing', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{id}/pricing', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.deployment_region).toEqual(deploymentRegion);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPricingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getPricingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getPricingTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1411,7 +1616,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getPricingParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1419,7 +1624,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.getPricing(params);
+        globalCatalogService.getPricing(getPricingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1436,56 +1641,63 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getPricingPromise = globalCatalogService.getPricing();
-        expectToBePromise(getPricingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getPricing();
+        } catch (e) {
+          err = e;
+        }
 
-        getPricingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
-  describe('getAuditLogs', () => {
+
+  describe('getPricingDeployments', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAuditLogs
+      function __getPricingDeploymentsTest() {
+        // Construct the params object for operation getPricingDeployments
         const id = 'testString';
         const account = 'testString';
-        const ascending = 'testString';
-        const startat = 'testString';
-        const offset = 38;
-        const limit = 200;
-        const params = {
-          id: id,
-          account: account,
-          ascending: ascending,
-          startat: startat,
-          offset: offset,
-          limit: limit,
+        const getPricingDeploymentsParams = {
+          id,
+          account,
         };
 
-        const getAuditLogsResult = globalCatalogService.getAuditLogs(params);
+        const getPricingDeploymentsResult = globalCatalogService.getPricingDeployments(
+          getPricingDeploymentsParams
+        );
 
         // all methods should return a Promise
-        expectToBePromise(getAuditLogsResult);
+        expectToBePromise(getPricingDeploymentsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{id}/logs', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{id}/pricing/deployment', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.qs['ascending']).toEqual(ascending);
-        expect(options.qs['startat']).toEqual(startat);
-        expect(options.qs['_offset']).toEqual(offset);
-        expect(options.qs['_limit']).toEqual(limit);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPricingDeploymentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getPricingDeploymentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getPricingDeploymentsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1493,7 +1705,7 @@ describe('GlobalCatalogV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getPricingDeploymentsParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -1501,7 +1713,106 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.getAuditLogs(params);
+        globalCatalogService.getPricingDeployments(getPricingDeploymentsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await globalCatalogService.getPricingDeployments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getPricingDeployments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getAuditLogs', () => {
+    describe('positive tests', () => {
+      function __getAuditLogsTest() {
+        // Construct the params object for operation getAuditLogs
+        const id = 'testString';
+        const account = 'testString';
+        const ascending = 'false';
+        const startat = 'testString';
+        const offset = 0;
+        const limit = 50;
+        const getAuditLogsParams = {
+          id,
+          account,
+          ascending,
+          startat,
+          offset,
+          limit,
+        };
+
+        const getAuditLogsResult = globalCatalogService.getAuditLogs(getAuditLogsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getAuditLogsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/{id}/logs', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.qs.ascending).toEqual(ascending);
+        expect(mockRequestOptions.qs.startat).toEqual(startat);
+        expect(mockRequestOptions.qs._offset).toEqual(offset);
+        expect(mockRequestOptions.qs._limit).toEqual(limit);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAuditLogsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getAuditLogsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getAuditLogsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getAuditLogsParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        globalCatalogService.getAuditLogs(getAuditLogsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1518,29 +1829,31 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getAuditLogsPromise = globalCatalogService.getAuditLogs();
-        expectToBePromise(getAuditLogsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getAuditLogs();
+        } catch (e) {
+          err = e;
+        }
 
-        getAuditLogsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('listArtifacts', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listArtifactsTest() {
         // Construct the params object for operation listArtifacts
         const objectId = 'testString';
         const account = 'testString';
-        const params = {
-          objectId: objectId,
-          account: account,
+        const listArtifactsParams = {
+          objectId,
+          account,
         };
 
-        const listArtifactsResult = globalCatalogService.listArtifacts(params);
+        const listArtifactsResult = globalCatalogService.listArtifacts(listArtifactsParams);
 
         // all methods should return a Promise
         expectToBePromise(listArtifactsResult);
@@ -1548,14 +1861,29 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{object_id}/artifacts', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{object_id}/artifacts', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['object_id']).toEqual(objectId);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.object_id).toEqual(objectId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listArtifactsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __listArtifactsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __listArtifactsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1563,7 +1891,7 @@ describe('GlobalCatalogV1', () => {
         const objectId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listArtifactsParams = {
           objectId,
           headers: {
             Accept: userAccept,
@@ -1571,7 +1899,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.listArtifacts(params);
+        globalCatalogService.listArtifacts(listArtifactsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1588,33 +1916,35 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listArtifactsPromise = globalCatalogService.listArtifacts();
-        expectToBePromise(listArtifactsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.listArtifacts();
+        } catch (e) {
+          err = e;
+        }
 
-        listArtifactsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('getArtifact', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getArtifactTest() {
         // Construct the params object for operation getArtifact
         const objectId = 'testString';
         const artifactId = 'testString';
         const accept = 'testString';
         const account = 'testString';
-        const params = {
-          objectId: objectId,
-          artifactId: artifactId,
-          accept: accept,
-          account: account,
+        const getArtifactParams = {
+          objectId,
+          artifactId,
+          accept,
+          account,
         };
 
-        const getArtifactResult = globalCatalogService.getArtifact(params);
+        const getArtifactResult = globalCatalogService.getArtifact(getArtifactParams);
 
         // all methods should return a Promise
         expectToBePromise(getArtifactResult);
@@ -1622,17 +1952,32 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{object_id}/artifacts/{artifact_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/{object_id}/artifacts/{artifact_id}', 'GET');
         const expectedAccept = accept;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Accept', accept);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['object_id']).toEqual(objectId);
-        expect(options.path['artifact_id']).toEqual(artifactId);
-        expect(options.responseType).toBe('stream');
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.object_id).toEqual(objectId);
+        expect(mockRequestOptions.path.artifact_id).toEqual(artifactId);
+        expect(mockRequestOptions.responseType).toBe('stream');
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getArtifactTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __getArtifactTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __getArtifactTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1641,7 +1986,7 @@ describe('GlobalCatalogV1', () => {
         const artifactId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getArtifactParams = {
           objectId,
           artifactId,
           headers: {
@@ -1650,7 +1995,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.getArtifact(params);
+        globalCatalogService.getArtifact(getArtifactParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1667,35 +2012,37 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getArtifactPromise = globalCatalogService.getArtifact();
-        expectToBePromise(getArtifactPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.getArtifact();
+        } catch (e) {
+          err = e;
+        }
 
-        getArtifactPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('uploadArtifact', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __uploadArtifactTest() {
         // Construct the params object for operation uploadArtifact
         const objectId = 'testString';
         const artifactId = 'testString';
         const artifact = Buffer.from('This is a mock file.');
         const contentType = 'testString';
         const account = 'testString';
-        const params = {
-          objectId: objectId,
-          artifactId: artifactId,
-          artifact: artifact,
-          contentType: contentType,
-          account: account,
+        const uploadArtifactParams = {
+          objectId,
+          artifactId,
+          artifact,
+          contentType,
+          account,
         };
 
-        const uploadArtifactResult = globalCatalogService.uploadArtifact(params);
+        const uploadArtifactResult = globalCatalogService.uploadArtifact(uploadArtifactParams);
 
         // all methods should return a Promise
         expectToBePromise(uploadArtifactResult);
@@ -1703,17 +2050,32 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{object_id}/artifacts/{artifact_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/{object_id}/artifacts/{artifact_id}', 'PUT');
         const expectedAccept = undefined;
         const expectedContentType = contentType;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Content-Type', contentType);
-        expect(options.body).toEqual(artifact);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['object_id']).toEqual(objectId);
-        expect(options.path['artifact_id']).toEqual(artifactId);
+        expect(mockRequestOptions.body).toEqual(artifact);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.object_id).toEqual(objectId);
+        expect(mockRequestOptions.path.artifact_id).toEqual(artifactId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __uploadArtifactTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __uploadArtifactTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __uploadArtifactTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1722,7 +2084,7 @@ describe('GlobalCatalogV1', () => {
         const artifactId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const uploadArtifactParams = {
           objectId,
           artifactId,
           headers: {
@@ -1731,7 +2093,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.uploadArtifact(params);
+        globalCatalogService.uploadArtifact(uploadArtifactParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1748,31 +2110,33 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const uploadArtifactPromise = globalCatalogService.uploadArtifact();
-        expectToBePromise(uploadArtifactPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.uploadArtifact();
+        } catch (e) {
+          err = e;
+        }
 
-        uploadArtifactPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
+
   describe('deleteArtifact', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteArtifactTest() {
         // Construct the params object for operation deleteArtifact
         const objectId = 'testString';
         const artifactId = 'testString';
         const account = 'testString';
-        const params = {
-          objectId: objectId,
-          artifactId: artifactId,
-          account: account,
+        const deleteArtifactParams = {
+          objectId,
+          artifactId,
+          account,
         };
 
-        const deleteArtifactResult = globalCatalogService.deleteArtifact(params);
+        const deleteArtifactResult = globalCatalogService.deleteArtifact(deleteArtifactParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteArtifactResult);
@@ -1780,15 +2144,30 @@ describe('GlobalCatalogV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/{object_id}/artifacts/{artifact_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/{object_id}/artifacts/{artifact_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['account']).toEqual(account);
-        expect(options.path['object_id']).toEqual(objectId);
-        expect(options.path['artifact_id']).toEqual(artifactId);
+        expect(mockRequestOptions.qs.account).toEqual(account);
+        expect(mockRequestOptions.path.object_id).toEqual(objectId);
+        expect(mockRequestOptions.path.artifact_id).toEqual(artifactId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteArtifactTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.enableRetries();
+        __deleteArtifactTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        globalCatalogService.disableRetries();
+        __deleteArtifactTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1797,7 +2176,7 @@ describe('GlobalCatalogV1', () => {
         const artifactId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteArtifactParams = {
           objectId,
           artifactId,
           headers: {
@@ -1806,7 +2185,7 @@ describe('GlobalCatalogV1', () => {
           },
         };
 
-        globalCatalogService.deleteArtifact(params);
+        globalCatalogService.deleteArtifact(deleteArtifactParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1823,14 +2202,15 @@ describe('GlobalCatalogV1', () => {
         expect(err.message).toMatch(/Missing required parameters/);
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteArtifactPromise = globalCatalogService.deleteArtifact();
-        expectToBePromise(deleteArtifactPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalCatalogService.deleteArtifact();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteArtifactPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });

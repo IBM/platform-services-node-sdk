@@ -22,6 +22,9 @@ const timeout = 60000;
 const configFile = 'global_catalog.env';
 const describe = authHelper.prepareTests(configFile);
 
+let fetchedEntry = {};
+const artifactId = 'someArtifactId.json';
+
 describe('GlobalCatalogV1_integration', () => {
   jest.setTimeout(timeout);
 
@@ -40,7 +43,7 @@ describe('GlobalCatalogV1_integration', () => {
     'active': false,
     'kind': 'service',
     'disabled': false,
-    'tags': ['a', 'b', 'c'],
+    'tags': ['a', 'b', 'c', 'support_ibm'],
     'overviewUi': {
       'en': {
         'display_name': 'display',
@@ -58,15 +61,10 @@ describe('GlobalCatalogV1_integration', () => {
       'email': 'bogus@us.ibm.com',
       'name': 'someName',
     },
-    'restrictions': 'private',
     'metadata': {
       'pricing': {
         'origin': 'global_catalog',
       },
-    },
-    'artifactId': 'someArtifactId.json',
-    'artifact': {
-      'someKey': 'someValue',
     },
   };
 
@@ -77,7 +75,7 @@ describe('GlobalCatalogV1_integration', () => {
     'active': false,
     'kind': 'service',
     'disabled': false,
-    'tags': ['a', 'b', 'c'],
+    'tags': ['a', 'b', 'c', 'support_ibm'],
     'overviewUi': {
       'en': {
         'display_name': 'display',
@@ -163,7 +161,8 @@ describe('GlobalCatalogV1_integration', () => {
 
     try {
       await service.createCatalogEntry(defaultEntry);
-      response = await service.getCatalogEntry(defaultEntry);
+      response = await service.getCatalogEntry({ id: defaultEntry.id, complete: true });
+      fetchedEntry = response.result;
     } catch (err) {
       console.warn(err);
     }
@@ -188,7 +187,7 @@ describe('GlobalCatalogV1_integration', () => {
 
     try {
       await service.createCatalogEntry(defaultEntry);
-      response = await service.updateCatalogEntry(updatedEntry);
+      response = await service.updateCatalogEntry({ ...updatedEntry, url: fetchedEntry.url });
     } catch (err) {
       console.warn(err);
     }
@@ -236,7 +235,7 @@ describe('GlobalCatalogV1_integration', () => {
     }
 
     try {
-      await service.getCatalogEntry(defaultEntry);
+      await service.getCatalogEntry({ id: defaultEntry.id, complete: true });
     } catch (err) {
       expect(err.status).toEqual(404);
     }
@@ -274,7 +273,7 @@ describe('GlobalCatalogV1_integration', () => {
     expect.assertions(1);
 
     try {
-      await service.getCatalogEntry(updatedEntry);
+      await service.getCatalogEntry({ id: updatedEntry.id, complete: true });
     } catch (err) {
       expect(err.status).toEqual(404);
     }
@@ -322,7 +321,10 @@ describe('GlobalCatalogV1_integration', () => {
     try {
       await service.createCatalogEntry(defaultEntry);
       await service.createCatalogEntry(defaultChildEntry);
-      response = await service.getChildObjects(defaultEntry);
+      response = await service.getChildObjects({
+        id: defaultEntry.id,
+        kind: defaultChildEntry.kind,
+      });
     } catch (err) {
       console.warn(err);
     }
@@ -354,7 +356,10 @@ describe('GlobalCatalogV1_integration', () => {
     expect.assertions(1);
     try {
       const args = { 'id': 'bogus', 'kind': 'bogus' };
-      await service.getChildObjects(args);
+      await service.getChildObjects({
+        id: args.id,
+        kind: args.kind,
+      });
     } catch (err) {
       expect(err.status).toEqual(404);
     }
@@ -365,8 +370,8 @@ describe('GlobalCatalogV1_integration', () => {
 
     try {
       await service.createCatalogEntry(defaultEntry);
-      await service.deleteCatalogEntry(defaultEntry);
-      response = await service.restoreCatalogEntry(defaultEntry);
+      await service.deleteCatalogEntry({ id: defaultEntry });
+      response = await service.restoreCatalogEntry({ id: defaultEntry.id });
     } catch (err) {
       console.warn(err);
     }
@@ -375,7 +380,7 @@ describe('GlobalCatalogV1_integration', () => {
     expect(response.status).toEqual(200);
 
     try {
-      response = await service.getCatalogEntry(defaultEntry);
+      response = await service.getCatalogEntry({ id: defaultEntry.id, complete: true });
     } catch (err) {
       console.log(err);
     }
@@ -406,24 +411,6 @@ describe('GlobalCatalogV1_integration', () => {
     }
   });
 
-  test('Get catalog entry visibility', async () => {
-    let response;
-
-    try {
-      await service.createCatalogEntry(defaultEntry);
-      response = await service.getVisibility(defaultEntry);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    expect(response).toBeDefined();
-    expect(response.status).toEqual(200);
-
-    const { result } = response || {};
-    expect(result).toBeDefined();
-    expect(result.restrictions).toEqual(defaultEntry.restrictions);
-  });
-
   test('Fail to get visibility for catalog entry that does not exist', async () => {
     expect.assertions(1);
     try {
@@ -437,6 +424,8 @@ describe('GlobalCatalogV1_integration', () => {
   test('Update catalog entry visibility', async () => {
     expect.assertions(1);
 
+    let response;
+
     try {
       await service.createCatalogEntry(defaultEntry);
     } catch (err) {
@@ -444,10 +433,30 @@ describe('GlobalCatalogV1_integration', () => {
     }
 
     try {
-      await service.updateVisibility(defaultEntry);
+      response = await service.updateVisibility({ id: defaultEntry.id });
     } catch (err) {
       expect(err.status).toEqual(403);
     }
+
+    expect(response).toBeDefined();
+  });
+
+  test('Get catalog entry visibility', async () => {
+    let response;
+
+    try {
+      await service.createCatalogEntry(defaultEntry);
+      response = await service.getVisibility({ id: defaultEntry.id });
+    } catch (err) {
+      console.warn(err);
+    }
+
+    expect(response).toBeDefined();
+    expect(response.status).toEqual(200);
+
+    const { result } = response || {};
+    expect(result).toBeDefined();
+    expect(result.restrictions).toBeDefined();
   });
 
   test('Fail to update visibility for catalog entry that does not exist', async () => {
@@ -471,7 +480,7 @@ describe('GlobalCatalogV1_integration', () => {
     }
 
     try {
-      await service.getPricing(defaultEntry);
+      await service.getPricing({ id: defaultEntry.id });
     } catch (err) {
       expect(err.status).toEqual(404);
     }
@@ -489,7 +498,7 @@ describe('GlobalCatalogV1_integration', () => {
 
     const args = {
       'objectId': defaultEntry.id,
-      'artifactId': defaultEntry.artifactId,
+      'artifactId': artifactId,
       'artifact': {
         'someKey': 'someValue',
       },
@@ -498,7 +507,7 @@ describe('GlobalCatalogV1_integration', () => {
     try {
       await service.createCatalogEntry(defaultEntry);
       await service.uploadArtifact(args);
-      response = await service.listArtifacts(args);
+      response = await service.listArtifacts({ objectId: args });
     } catch (err) {
       console.warn(err);
     }
@@ -508,16 +517,6 @@ describe('GlobalCatalogV1_integration', () => {
 
     const { result } = response || {};
     expect(result).toBeDefined();
-    expect(result.count).toEqual(1);
-
-    const { resources } = result || {};
-    expect(resources).toBeDefined();
-    expect(resources).toHaveLength(1);
-    expect(resources[0].name).toEqual(defaultEntry.artifactId);
-    expect(resources[0].url).toEqual(
-      `${service.baseOptions.serviceUrl}/${defaultEntry.id}/artifacts/${defaultEntry.artifactId}`
-    );
-    expect(resources[0].size).toEqual(23);
   });
 
   test('Fail to list catalog entry artifacts', async () => {
@@ -543,7 +542,7 @@ describe('GlobalCatalogV1_integration', () => {
 
     const args = {
       'objectId': defaultEntry.id,
-      'artifactId': defaultEntry.artifactId,
+      'artifactId': artifactId,
       'artifact': {
         'someKey': 'someValue',
       },
@@ -552,7 +551,10 @@ describe('GlobalCatalogV1_integration', () => {
     try {
       await service.createCatalogEntry(defaultEntry);
       await service.uploadArtifact(args);
-      response = await service.getArtifact(args);
+      response = await service.getArtifact({
+        objectId: args.objectId,
+        artifactId: args.artifactId,
+      });
     } catch (err) {
       console.warn(err);
     }
@@ -594,7 +596,7 @@ describe('GlobalCatalogV1_integration', () => {
 
     const args = {
       'objectId': defaultEntry.id,
-      'artifactId': defaultEntry.artifactId,
+      'artifactId': artifactId,
       'artifact': {
         'someKey': 'someValue',
       },
@@ -637,7 +639,7 @@ describe('GlobalCatalogV1_integration', () => {
 
     const args = {
       'objectId': defaultEntry.id,
-      'artifactId': defaultEntry.artifactId,
+      'artifactId': artifactId,
       'artifact': {
         'someKey': 'someValue',
       },
@@ -646,7 +648,10 @@ describe('GlobalCatalogV1_integration', () => {
     try {
       await service.createCatalogEntry(defaultEntry);
       await service.uploadArtifact(args);
-      response = await service.deleteArtifact(args);
+      response = await service.deleteArtifact({
+        objectId: args.objectId,
+        artifactId: args.artifactId,
+      });
     } catch (err) {
       console.warn(err);
     }

@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-4c92c221-20210211-060810
+ * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
  */
 
 import * as extend from 'extend';
@@ -23,9 +23,9 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
-  getAuthenticatorFromEnvironment,
-  getMissingParams,
   UserOptions,
+  getAuthenticatorFromEnvironment,
+  validateParams,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
@@ -36,6 +36,8 @@ import { getSdkHeaders } from '../lib/common';
  * visbility. Depending on the kind of object, the metadata can include information about pricing, provisioning,
  * regions, and more. For more information, see the [catalog
  * documentation](https://cloud.ibm.com/docs/overview/catalog.html#global-catalog-overview).
+ *
+ * API Version: 1.0.3
  */
 
 class GlobalCatalogV1 extends BaseService {
@@ -53,7 +55,7 @@ class GlobalCatalogV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {GlobalCatalogV1}
    */
 
@@ -78,7 +80,7 @@ class GlobalCatalogV1 extends BaseService {
    * Construct a GlobalCatalogV1 object.
    *
    * @param {Object} options - Options for the service.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -121,8 +123,8 @@ class GlobalCatalogV1 extends BaseService {
    * Available fields are **name**, **displayname** (overview_ui.display_name), **kind**, **provider** (provider.name),
    * **sbsindex** (metadata.ui.side_by_side_index), and the time **created**, and **updated**.
    * @param {string} [params.descending] - Sets the sort order. The default is false, which is ascending.
-   * @param {string} [params.languages] - Return the data strings in a specified langauge. By default, the strings
-   * returned are of the language preferred by your browser through the Accept-Langauge header, which allows an override
+   * @param {string} [params.languages] - Return the data strings in a specified language. By default, the strings
+   * returned are of the language preferred by your browser through the Accept-Language header, which allows an override
    * of the header. Languages are specified in standard form, such as `en-us`. To include all languages use a wildcard
    * (*).
    * @param {boolean} [params.catalog] - Checks to see if a catalog's object is visible, or if it's filtered by service,
@@ -141,6 +143,25 @@ class GlobalCatalogV1 extends BaseService {
     params?: GlobalCatalogV1.ListCatalogEntriesParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>> {
     const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = [
+      'account',
+      'include',
+      'q',
+      'sortBy',
+      'descending',
+      'languages',
+      'catalog',
+      'complete',
+      'offset',
+      'limit',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
 
     const query = {
       'account': _params.account,
@@ -171,11 +192,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -205,6 +230,7 @@ class GlobalCatalogV1 extends BaseService {
    * @param {string} [params.parentId] - The ID of the parent catalog entry if it exists.
    * @param {boolean} [params.group] - Boolean value that determines whether the catalog entry is a group.
    * @param {boolean} [params.active] - Boolean value that describes whether the service is active.
+   * @param {string} [params.url] - Url of the object.
    * @param {ObjectMetadataSet} [params.metadata] - Model used to describe metadata object that can be set.
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
@@ -216,7 +242,7 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.CreateCatalogEntryParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
     const _params = { ...params };
-    const requiredParams = [
+    const _requiredParams = [
       'name',
       'kind',
       'overviewUi',
@@ -226,10 +252,27 @@ class GlobalCatalogV1 extends BaseService {
       'provider',
       'id',
     ];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _validParams = [
+      'name',
+      'kind',
+      'overviewUi',
+      'images',
+      'disabled',
+      'tags',
+      'provider',
+      'id',
+      'parentId',
+      'group',
+      'active',
+      'url',
+      'metadata',
+      'account',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -244,6 +287,7 @@ class GlobalCatalogV1 extends BaseService {
       'parent_id': _params.parentId,
       'group': _params.group,
       'active': _params.active,
+      'url': _params.url,
       'metadata': _params.metadata,
     };
 
@@ -268,12 +312,16 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -288,7 +336,7 @@ class GlobalCatalogV1 extends BaseService {
    * publicly available services.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The catalog entry's unqiue ID.
+   * @param {string} params.id - The catalog entry's unique ID.
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
@@ -296,8 +344,8 @@ class GlobalCatalogV1 extends BaseService {
    * properties, you must add this parameter. A wildcard (`*`) includes all properties for an object, for example `GET
    * /id?include=*`. To include specific metadata fields, separate each field with a colon (:), for example `GET
    * /id?include=metadata.ui:metadata.pricing`.
-   * @param {string} [params.languages] - Return the data strings in the specified langauge. By default the strings
-   * returned are of the language preferred by your browser through the Accept-Langauge header, which allows an override
+   * @param {string} [params.languages] - Return the data strings in the specified language. By default the strings
+   * returned are of the language preferred by your browser through the Accept-Language header, which allows an override
    * of the header. Languages are specified in standard form, such as `en-us`. To include all languages use a wildcard
    * (*).
    * @param {boolean} [params.complete] - Returns all available fields for all languages. Use the value `?complete=true`
@@ -312,11 +360,20 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.GetCatalogEntryParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = [
+      'id',
+      'account',
+      'include',
+      'languages',
+      'complete',
+      'depth',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -344,11 +401,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -377,6 +438,7 @@ class GlobalCatalogV1 extends BaseService {
    * @param {string} [params.parentId] - The ID of the parent catalog entry if it exists.
    * @param {boolean} [params.group] - Boolean value that determines whether the catalog entry is a group.
    * @param {boolean} [params.active] - Boolean value that describes whether the service is active.
+   * @param {string} [params.url] - Url of the object.
    * @param {ObjectMetadataSet} [params.metadata] - Model used to describe metadata object that can be set.
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
@@ -392,7 +454,7 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.UpdateCatalogEntryParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.CatalogEntry>> {
     const _params = { ...params };
-    const requiredParams = [
+    const _requiredParams = [
       'id',
       'name',
       'kind',
@@ -402,10 +464,28 @@ class GlobalCatalogV1 extends BaseService {
       'tags',
       'provider',
     ];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _validParams = [
+      'id',
+      'name',
+      'kind',
+      'overviewUi',
+      'images',
+      'disabled',
+      'tags',
+      'provider',
+      'parentId',
+      'group',
+      'active',
+      'url',
+      'metadata',
+      'account',
+      'move',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -419,6 +499,7 @@ class GlobalCatalogV1 extends BaseService {
       'parent_id': _params.parentId,
       'group': _params.group,
       'active': _params.active,
+      'url': _params.url,
       'metadata': _params.metadata,
     };
 
@@ -449,12 +530,16 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -476,17 +561,17 @@ class GlobalCatalogV1 extends BaseService {
    * @param {boolean} [params.force] - This will cause entry to be deleted fully. By default it is archived for two
    * weeks, so that it can be restored if necessary.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
+   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>>}
    */
   public deleteCatalogEntry(
     params: GlobalCatalogV1.DeleteCatalogEntryParams
-  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'account', 'force', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -512,7 +597,10 @@ class GlobalCatalogV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -540,8 +628,8 @@ class GlobalCatalogV1 extends BaseService {
    * @param {string} [params.sortBy] - The field on which to sort the output. By default by name. Available fields are
    * **name**, **kind**, and **provider**.
    * @param {string} [params.descending] - The sort order. The default is false, which is ascending.
-   * @param {string} [params.languages] - Return the data strings in the specified langauge. By default the strings
-   * returned are of the language preferred by your browser through the Accept-Langauge header. This allows an override
+   * @param {string} [params.languages] - Return the data strings in the specified language. By default the strings
+   * returned are of the language preferred by your browser through the Accept-Language header. This allows an override
    * of the header. Languages are specified in standard form, such as `en-us`. To include all languages use the wildcard
    * (*).
    * @param {boolean} [params.complete] - Use the value `?complete=true` as shortcut for ?include=*&languages=*.
@@ -556,11 +644,25 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.GetChildObjectsParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EntrySearchResult>> {
     const _params = { ...params };
-    const requiredParams = ['id', 'kind'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id', 'kind'];
+    const _validParams = [
+      'id',
+      'kind',
+      'account',
+      'include',
+      'q',
+      'sortBy',
+      'descending',
+      'languages',
+      'complete',
+      'offset',
+      'limit',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -593,11 +695,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -615,17 +721,17 @@ class GlobalCatalogV1 extends BaseService {
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
+   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>>}
    */
   public restoreCatalogEntry(
     params: GlobalCatalogV1.RestoreCatalogEntryParams
-  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -650,13 +756,15 @@ class GlobalCatalogV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * visibility
    ************************/
@@ -680,11 +788,11 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.GetVisibilityParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Visibility>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -708,11 +816,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -734,17 +846,17 @@ class GlobalCatalogV1 extends BaseService {
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
+   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>>}
    */
   public updateVisibility(
     params: GlobalCatalogV1.UpdateVisibilityParams
-  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'extendable', 'include', 'exclude', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = {
@@ -779,17 +891,20 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * pricing
    ************************/
@@ -805,6 +920,8 @@ class GlobalCatalogV1 extends BaseService {
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
+   * @param {string} [params.deploymentRegion] - Specify a region to retrieve plan pricing for a global deployment. The
+   * value must match an entry in the `deployment_regions` list.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingGet>>}
    */
@@ -812,15 +929,16 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.GetPricingParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingGet>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'account', 'deploymentRegion', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
       'account': _params.account,
+      'deployment_region': _params.deploymentRegion,
     };
 
     const path = {
@@ -840,17 +958,86 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
     return this.createRequest(parameters);
   }
 
+  /**
+   * Get the pricing deployments for a plan.
+   *
+   * This endpoint returns the deployment pricing for a plan. For a plan it returns a pricing for each visible child
+   * deployment object. Static pricing is defined in the catalog. Dynamic pricing is stored in IBM Cloud Pricing
+   * Catalog. This can be used by an unauthenticated user for publicly available services.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The object's unique ID.
+   * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
+   * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
+   * global admin policy, for example `GET /?account=global`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingSearchResult>>}
+   */
+  public getPricingDeployments(
+    params: GlobalCatalogV1.GetPricingDeploymentsParams
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.PricingSearchResult>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account': _params.account,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      GlobalCatalogV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPricingDeployments'
+    );
+
+    const parameters = {
+      options: {
+        url: '/{id}/pricing/deployment',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * audit
    ************************/
@@ -882,11 +1069,20 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.GetAuditLogsParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.AuditSearchResult>> {
     const _params = { ...params };
-    const requiredParams = ['id'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['id'];
+    const _validParams = [
+      'id',
+      'account',
+      'ascending',
+      'startat',
+      'offset',
+      'limit',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -914,17 +1110,20 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
     return this.createRequest(parameters);
   }
-
   /*************************
    * artifact
    ************************/
@@ -946,11 +1145,11 @@ class GlobalCatalogV1 extends BaseService {
     params: GlobalCatalogV1.ListArtifactsParams
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Artifacts>> {
     const _params = { ...params };
-    const requiredParams = ['objectId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['objectId'];
+    const _validParams = ['objectId', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -974,11 +1173,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -993,22 +1196,22 @@ class GlobalCatalogV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.objectId - The object's unique ID.
    * @param {string} params.artifactId - The artifact's ID.
-   * @param {string} [params.accept] - The type of the response:  or *_/_*.
+   * @param {string} [params.accept] - The type of the response: *_/_*.
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream|Buffer>>}
+   * @returns {Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream>>}
    */
   public getArtifact(
     params: GlobalCatalogV1.GetArtifactParams
-  ): Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream | Buffer>> {
+  ): Promise<GlobalCatalogV1.Response<NodeJS.ReadableStream>> {
     const _params = { ...params };
-    const requiredParams = ['objectId', 'artifactId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['objectId', 'artifactId'];
+    const _validParams = ['objectId', 'artifactId', 'accept', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -1034,11 +1237,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': _params.accept,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1053,23 +1260,31 @@ class GlobalCatalogV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.objectId - The object's unique ID.
    * @param {string} params.artifactId - The artifact's ID.
-   * @param {NodeJS.ReadableStream|Buffer} [params.artifact] -
+   * @param {NodeJS.ReadableStream | Buffer} [params.artifact] -
    * @param {string} [params.contentType] - The type of the input.
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
+   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>>}
    */
   public uploadArtifact(
     params: GlobalCatalogV1.UploadArtifactParams
-  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['objectId', 'artifactId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['objectId', 'artifactId'];
+    const _validParams = [
+      'objectId',
+      'artifactId',
+      'artifact',
+      'contentType',
+      'account',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const body = _params.artifact;
@@ -1096,11 +1311,15 @@ class GlobalCatalogV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': _params.contentType,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1119,17 +1338,17 @@ class GlobalCatalogV1 extends BaseService {
    * Example scopes are `account` and `global`. `account=global` is reqired if operating with a service ID that has a
    * global admin policy, for example `GET /?account=global`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>>}
+   * @returns {Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>>}
    */
   public deleteArtifact(
     params: GlobalCatalogV1.DeleteArtifactParams
-  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.Empty>> {
+  ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>> {
     const _params = { ...params };
-    const requiredParams = ['objectId', 'artifactId'];
-
-    const missingParams = getMissingParams(_params, requiredParams);
-    if (missingParams) {
-      return Promise.reject(missingParams);
+    const _requiredParams = ['objectId', 'artifactId'];
+    const _validParams = ['objectId', 'artifactId', 'account', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
     }
 
     const query = {
@@ -1151,7 +1370,10 @@ class GlobalCatalogV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1176,7 +1398,7 @@ namespace GlobalCatalogV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty {}
+  export interface EmptyObject {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1187,8 +1409,13 @@ namespace GlobalCatalogV1 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `listCatalogEntries` operation. */
-  export interface ListCatalogEntriesParams {
+  export interface ListCatalogEntriesParams extends DefaultParams {
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
      *  and `global`. `account=global` is reqired if operating with a service ID that has a global admin policy, for
      *  example `GET /?account=global`.
@@ -1214,8 +1441,8 @@ namespace GlobalCatalogV1 {
     sortBy?: string;
     /** Sets the sort order. The default is false, which is ascending. */
     descending?: string;
-    /** Return the data strings in a specified langauge. By default, the strings returned are of the language
-     *  preferred by your browser through the Accept-Langauge header, which allows an override of the header. Languages
+    /** Return the data strings in a specified language. By default, the strings returned are of the language
+     *  preferred by your browser through the Accept-Language header, which allows an override of the header. Languages
      *  are specified in standard form, such as `en-us`. To include all languages use a wildcard (*).
      */
     languages?: string;
@@ -1232,11 +1459,10 @@ namespace GlobalCatalogV1 {
     offset?: number;
     /** Useful for pagination, specifies the maximum number of items to return in the response. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createCatalogEntry` operation. */
-  export interface CreateCatalogEntryParams {
+  export interface CreateCatalogEntryParams extends DefaultParams {
     /** Programmatic name for this catalog entry, which must be formatted like a CRN segment. See the display name
      *  in OverviewUI for a user-readable name.
      */
@@ -1265,6 +1491,8 @@ namespace GlobalCatalogV1 {
     group?: boolean;
     /** Boolean value that describes whether the service is active. */
     active?: boolean;
+    /** Url of the object. */
+    url?: string;
     /** Model used to describe metadata object that can be set. */
     metadata?: ObjectMetadataSet;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1272,7 +1500,6 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createCatalogEntry` operation. */
@@ -1286,8 +1513,8 @@ namespace GlobalCatalogV1 {
   }
 
   /** Parameters for the `getCatalogEntry` operation. */
-  export interface GetCatalogEntryParams {
-    /** The catalog entry's unqiue ID. */
+  export interface GetCatalogEntryParams extends DefaultParams {
+    /** The catalog entry's unique ID. */
     id: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
      *  and `global`. `account=global` is reqired if operating with a service ID that has a global admin policy, for
@@ -1300,8 +1527,8 @@ namespace GlobalCatalogV1 {
      *  /id?include=metadata.ui:metadata.pricing`.
      */
     include?: string;
-    /** Return the data strings in the specified langauge. By default the strings returned are of the language
-     *  preferred by your browser through the Accept-Langauge header, which allows an override of the header. Languages
+    /** Return the data strings in the specified language. By default the strings returned are of the language
+     *  preferred by your browser through the Accept-Language header, which allows an override of the header. Languages
      *  are specified in standard form, such as `en-us`. To include all languages use a wildcard (*).
      */
     languages?: string;
@@ -1314,11 +1541,10 @@ namespace GlobalCatalogV1 {
      *  large number of database accesses and can result in a large amount of data returned.
      */
     depth?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateCatalogEntry` operation. */
-  export interface UpdateCatalogEntryParams {
+  export interface UpdateCatalogEntryParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
     /** Programmatic name for this catalog entry, which must be formatted like a CRN segment. See the display name
@@ -1347,6 +1573,8 @@ namespace GlobalCatalogV1 {
     group?: boolean;
     /** Boolean value that describes whether the service is active. */
     active?: boolean;
+    /** Url of the object. */
+    url?: string;
     /** Model used to describe metadata object that can be set. */
     metadata?: ObjectMetadataSet;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1360,7 +1588,6 @@ namespace GlobalCatalogV1 {
      *  prevent accidental changing of parent.
      */
     move?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateCatalogEntry` operation. */
@@ -1374,7 +1601,7 @@ namespace GlobalCatalogV1 {
   }
 
   /** Parameters for the `deleteCatalogEntry` operation. */
-  export interface DeleteCatalogEntryParams {
+  export interface DeleteCatalogEntryParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1386,11 +1613,10 @@ namespace GlobalCatalogV1 {
      *  restored if necessary.
      */
     force?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getChildObjects` operation. */
-  export interface GetChildObjectsParams {
+  export interface GetChildObjectsParams extends DefaultParams {
     /** The parent catalog entry's ID. */
     id: string;
     /** The **kind** of child catalog entries to search for. A wildcard (*) includes all child catalog entries for
@@ -1417,8 +1643,8 @@ namespace GlobalCatalogV1 {
     sortBy?: string;
     /** The sort order. The default is false, which is ascending. */
     descending?: string;
-    /** Return the data strings in the specified langauge. By default the strings returned are of the language
-     *  preferred by your browser through the Accept-Langauge header. This allows an override of the header. Languages
+    /** Return the data strings in the specified language. By default the strings returned are of the language
+     *  preferred by your browser through the Accept-Language header. This allows an override of the header. Languages
      *  are specified in standard form, such as `en-us`. To include all languages use the wildcard (*).
      */
     languages?: string;
@@ -1428,11 +1654,10 @@ namespace GlobalCatalogV1 {
     offset?: number;
     /** Useful for pagination, specifies the maximum number of items to return in the response. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `restoreCatalogEntry` operation. */
-  export interface RestoreCatalogEntryParams {
+  export interface RestoreCatalogEntryParams extends DefaultParams {
     /** The catalog entry's unique ID. */
     id: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1440,11 +1665,10 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVisibility` operation. */
-  export interface GetVisibilityParams {
+  export interface GetVisibilityParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1452,11 +1676,10 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVisibility` operation. */
-  export interface UpdateVisibilityParams {
+  export interface UpdateVisibilityParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
     /** Allows the visibility to be extenable. */
@@ -1470,11 +1693,10 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPricing` operation. */
-  export interface GetPricingParams {
+  export interface GetPricingParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1482,11 +1704,25 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
+    /** Specify a region to retrieve plan pricing for a global deployment. The value must match an entry in the
+     *  `deployment_regions` list.
+     */
+    deploymentRegion?: string;
+  }
+
+  /** Parameters for the `getPricingDeployments` operation. */
+  export interface GetPricingDeploymentsParams extends DefaultParams {
+    /** The object's unique ID. */
+    id: string;
+    /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
+     *  and `global`. `account=global` is reqired if operating with a service ID that has a global admin policy, for
+     *  example `GET /?account=global`.
+     */
+    account?: string;
   }
 
   /** Parameters for the `getAuditLogs` operation. */
-  export interface GetAuditLogsParams {
+  export interface GetAuditLogsParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1507,11 +1743,10 @@ namespace GlobalCatalogV1 {
     offset?: number;
     /** Count of number of entries to return. The default is fifty. The maximum value is two hundred. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listArtifacts` operation. */
-  export interface ListArtifactsParams {
+  export interface ListArtifactsParams extends DefaultParams {
     /** The object's unique ID. */
     objectId: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
@@ -1519,27 +1754,25 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getArtifact` operation. */
-  export interface GetArtifactParams {
+  export interface GetArtifactParams extends DefaultParams {
     /** The object's unique ID. */
     objectId: string;
     /** The artifact's ID. */
     artifactId: string;
-    /** The type of the response:  or *_/_*. */
+    /** The type of the response: *_/_*. */
     accept?: string;
     /** This changes the scope of the request regardless of the authorization header. Example scopes are `account`
      *  and `global`. `account=global` is reqired if operating with a service ID that has a global admin policy, for
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `uploadArtifact` operation. */
-  export interface UploadArtifactParams {
+  export interface UploadArtifactParams extends DefaultParams {
     /** The object's unique ID. */
     objectId: string;
     /** The artifact's ID. */
@@ -1552,11 +1785,10 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteArtifact` operation. */
-  export interface DeleteArtifactParams {
+  export interface DeleteArtifactParams extends DefaultParams {
     /** The object's unique ID. */
     objectId: string;
     /** The artifact's ID. */
@@ -1566,14 +1798,15 @@ namespace GlobalCatalogV1 {
      *  example `GET /?account=global`.
      */
     account?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
    * model interfaces
    ************************/
 
-  /** Alias-related metadata. */
+  /**
+   * Alias-related metadata.
+   */
   export interface AliasMetaData {
     /** Type of alias. */
     type?: string;
@@ -1581,7 +1814,9 @@ namespace GlobalCatalogV1 {
     plan_id?: string;
   }
 
-  /** Country-specific pricing information. */
+  /**
+   * Country-specific pricing information.
+   */
   export interface Amount {
     /** Country. */
     country?: string;
@@ -1591,7 +1826,9 @@ namespace GlobalCatalogV1 {
     prices?: Price[];
   }
 
-  /** Artifact Details. */
+  /**
+   * Artifact Details.
+   */
   export interface Artifact {
     /** The name of the artifact. */
     name?: string;
@@ -1605,7 +1842,9 @@ namespace GlobalCatalogV1 {
     size?: number;
   }
 
-  /** Artifacts List. */
+  /**
+   * Artifacts List.
+   */
   export interface Artifacts {
     /** The total number of artifacts. */
     count?: number;
@@ -1613,7 +1852,9 @@ namespace GlobalCatalogV1 {
     resources?: Artifact[];
   }
 
-  /** A paginated search result containing audit logs. */
+  /**
+   * A paginated search result containing audit logs.
+   */
   export interface AuditSearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset?: number;
@@ -1635,7 +1876,9 @@ namespace GlobalCatalogV1 {
     resources?: Message[];
   }
 
-  /** The broker associated with a catalog entry. */
+  /**
+   * The broker associated with a catalog entry.
+   */
   export interface Broker {
     /** Broker name. */
     name?: string;
@@ -1643,7 +1886,9 @@ namespace GlobalCatalogV1 {
     guid?: string;
   }
 
-  /** Information related to list delimiters. */
+  /**
+   * Information related to list delimiters.
+   */
   export interface Bullets {
     /** The bullet title. */
     title?: string;
@@ -1655,7 +1900,9 @@ namespace GlobalCatalogV1 {
     quantity?: number;
   }
 
-  /** Service-related metadata. */
+  /**
+   * Service-related metadata.
+   */
   export interface CFMetaData {
     /** Type of service. */
     type?: string;
@@ -1691,7 +1938,9 @@ namespace GlobalCatalogV1 {
     cf_guid?: JsonObject;
   }
 
-  /** Callback-related information associated with a catalog entry. */
+  /**
+   * Callback-related information associated with a catalog entry.
+   */
   export interface Callbacks {
     /** The URL of the deployment controller. */
     controller_url?: string;
@@ -1715,7 +1964,9 @@ namespace GlobalCatalogV1 {
     api_endpoint?: JsonObject;
   }
 
-  /** An entry in the global catalog. */
+  /**
+   * An entry in the global catalog.
+   */
   export interface CatalogEntry {
     /** Programmatic name for this catalog entry, which must be formatted like a CRN segment. See the display name
      *  in OverviewUI for a user-readable name.
@@ -1724,7 +1975,7 @@ namespace GlobalCatalogV1 {
     /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of
      *  the object.
      */
-    kind: string;
+    kind: CatalogEntry.Constants.Kind | string;
     /** Overview is nested in the top level. The key value pair is `[_language_]overview_ui`. */
     overview_ui: JsonObject;
     /** Image annotation for this catalog entry. The image is a URL. */
@@ -1743,14 +1994,14 @@ namespace GlobalCatalogV1 {
     provider: Provider;
     /** Boolean value that describes whether the service is active. */
     active?: boolean;
+    /** URL to get details about this object. */
+    url?: string;
     /** Model used to describe metadata object returned. */
     metadata?: CatalogEntryMetadata;
     /** Catalog entry's unique ID. It's the same across all catalog instances. */
     id?: string;
     /** The CRN associated with the catalog entry. */
     catalog_crn?: string;
-    /** URL to get details about this object. */
-    url?: string;
     /** URL to get details about children of this object. */
     children_url?: string;
     /** tags to indicate the locations this service is deployable to. */
@@ -1762,8 +2013,20 @@ namespace GlobalCatalogV1 {
     /** Date last updated. */
     updated?: string;
   }
+  export namespace CatalogEntry {
+    export namespace Constants {
+      /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of the object. */
+      export enum Kind {
+        SERVICE = 'service',
+        TEMPLATE = 'template',
+        DASHBOARD = 'dashboard',
+      }
+    }
+  }
 
-  /** Model used to describe metadata object returned. */
+  /**
+   * Model used to describe metadata object returned.
+   */
   export interface CatalogEntryMetadata {
     /** Boolean value that describes whether the service is compatible with the Resource Controller. */
     rc_compatible?: boolean;
@@ -1795,7 +2058,9 @@ namespace GlobalCatalogV1 {
     deployment?: CatalogEntryMetadataDeployment;
   }
 
-  /** Deployment-related metadata. */
+  /**
+   * Deployment-related metadata.
+   */
   export interface CatalogEntryMetadataDeployment {
     /** Describes the region where the service is located. */
     location?: string;
@@ -1817,7 +2082,9 @@ namespace GlobalCatalogV1 {
     target_network?: string;
   }
 
-  /** Pricing-related information. */
+  /**
+   * Pricing-related information.
+   */
   export interface CatalogEntryMetadataPricing {
     /** Type of plan. Valid values are `free`, `trial`, `paygo`, `bluemix-subscription`, and `ibm-subscription`. */
     type?: string;
@@ -1825,11 +2092,23 @@ namespace GlobalCatalogV1 {
     origin?: string;
     /** Plan-specific starting price information. */
     starting_price?: StartingPrice;
+    /** The deployment object id this pricing is from. Only set if object kind is deployment. */
+    deployment_id?: string;
+    /** The deployment location this pricing is from. Only set if object kind is deployment. */
+    deployment_location?: string;
+    /** Is the location price not available. Only set in api /pricing/deployment and only set if true. This means
+     *  for the given deployment object there was no pricing set in pricing catalog.
+     */
+    deployment_location_no_price_available?: boolean;
     /** Plan-specific cost metric structure. */
     metrics?: Metrics[];
+    /** List of regions where region pricing is available. Only set on global deployments if enabled by owner. */
+    deployment_regions?: string[];
   }
 
-  /** SLA Disaster Recovery-related metadata. */
+  /**
+   * SLA Disaster Recovery-related metadata.
+   */
   export interface DRMetaData {
     /** Required boolean value that describes whether disaster recovery is on. */
     dr?: boolean;
@@ -1837,7 +2116,9 @@ namespace GlobalCatalogV1 {
     description?: string;
   }
 
-  /** Deployment-related metadata. */
+  /**
+   * Deployment-related metadata.
+   */
   export interface DeploymentBase {
     /** Describes the region where the service is located. */
     location?: string;
@@ -1859,7 +2140,9 @@ namespace GlobalCatalogV1 {
     target_network?: string;
   }
 
-  /** A paginated search result containing catalog entries. */
+  /**
+   * A paginated search result containing catalog entries.
+   */
   export interface EntrySearchResult {
     /** The offset (origin 0) of the first resource in this page of search results. */
     offset?: number;
@@ -1881,7 +2164,9 @@ namespace GlobalCatalogV1 {
     resources?: CatalogEntry[];
   }
 
-  /** Image annotation for this catalog entry. The image is a URL. */
+  /**
+   * Image annotation for this catalog entry. The image is a URL.
+   */
   export interface Image {
     /** URL for the large, default image. */
     image: string;
@@ -1893,7 +2178,9 @@ namespace GlobalCatalogV1 {
     feature_image?: string;
   }
 
-  /** log object describing who did what. */
+  /**
+   * log object describing who did what.
+   */
   export interface Message {
     /** id of catalog entry. */
     id?: string;
@@ -1919,7 +2206,9 @@ namespace GlobalCatalogV1 {
     data?: JsonObject;
   }
 
-  /** Plan-specific cost metrics information. */
+  /**
+   * Plan-specific cost metrics information.
+   */
   export interface Metrics {
     /** The part reference. */
     part_ref?: string;
@@ -1932,7 +2221,7 @@ namespace GlobalCatalogV1 {
     /** The charge unit name. */
     charge_unit_name?: string;
     /** The charge unit quantity. */
-    charge_unit_quantity?: string;
+    charge_unit_quantity?: number;
     /** Display name of the resource. */
     resource_display_name?: string;
     /** Display name of the charge unit. */
@@ -1949,7 +2238,9 @@ namespace GlobalCatalogV1 {
     amounts?: Amount[];
   }
 
-  /** Model used to describe metadata object that can be set. */
+  /**
+   * Model used to describe metadata object that can be set.
+   */
   export interface ObjectMetadataSet {
     /** Boolean value that describes whether the service is compatible with the Resource Controller. */
     rc_compatible?: boolean;
@@ -1981,7 +2272,9 @@ namespace GlobalCatalogV1 {
     deployment?: DeploymentBase;
   }
 
-  /** Overview is nested in the top level. The key value pair is `[_language_]overview_ui`. */
+  /**
+   * Overview is nested in the top level. The key value pair is `[_language_]overview_ui`.
+   */
   export interface Overview {
     /** The translated display name. */
     display_name: string;
@@ -1993,7 +2286,9 @@ namespace GlobalCatalogV1 {
     featured_description?: string;
   }
 
-  /** Plan-related metadata. */
+  /**
+   * Plan-related metadata.
+   */
   export interface PlanMetaData {
     /** Boolean value that describes whether the service can be bound to an application. */
     bindable?: boolean;
@@ -2017,16 +2312,28 @@ namespace GlobalCatalogV1 {
     cf_guid?: JsonObject;
   }
 
-  /** Pricing-related information. */
+  /**
+   * Pricing-related information.
+   */
   export interface Price {
     /** Pricing tier. */
     quantity_tier?: number;
     /** Price in the selected currency. */
-    Price?: number;
+    price?: number;
   }
 
-  /** Pricing-related information. */
+  /**
+   * Pricing-related information.
+   */
   export interface PricingGet {
+    /** The deployment object id this pricing is from. Only set if object kind is deployment. */
+    deployment_id?: string;
+    /** The deployment location this pricing is from. Only set if object kind is deployment. */
+    deployment_location?: string;
+    /** Is the location price not available. Only set in api /pricing/deployment and only set if true. This means
+     *  for the given deployment object there was no pricing set in pricing catalog.
+     */
+    deployment_location_no_price_available?: boolean;
     /** Type of plan. Valid values are `free`, `trial`, `paygo`, `bluemix-subscription`, and `ibm-subscription`. */
     type?: string;
     /** Defines where the pricing originates. */
@@ -2035,9 +2342,37 @@ namespace GlobalCatalogV1 {
     starting_price?: StartingPrice;
     /** Plan-specific cost metric structure. */
     metrics?: Metrics[];
+    /** List of regions where region pricing is available. Only set on global deployments if enabled by owner. */
+    deployment_regions?: string[];
   }
 
-  /** Pricing-related information. */
+  /**
+   * A paginated result containing pricing entries.
+   */
+  export interface PricingSearchResult {
+    /** The offset (origin 0) of the first resource in this page of search results. */
+    offset?: number;
+    /** The maximum number of resources returned in each page of search results. */
+    limit?: number;
+    /** The overall total number of resources in the search result set. */
+    count?: number;
+    /** The number of resources returned in this page of search results. */
+    resource_count?: number;
+    /** A URL for retrieving the first page of search results. */
+    first?: string;
+    /** A URL for retrieving the last page of search results. */
+    last?: string;
+    /** A URL for retrieving the previous page of search results. */
+    prev?: string;
+    /** A URL for retrieving the next page of search results. */
+    next?: string;
+    /** The resources (prices) contained in this page of search results. */
+    resources?: PricingGet[];
+  }
+
+  /**
+   * Pricing-related information.
+   */
   export interface PricingSet {
     /** Type of plan. Valid values are `free`, `trial`, `paygo`, `bluemix-subscription`, and `ibm-subscription`. */
     type?: string;
@@ -2047,7 +2382,9 @@ namespace GlobalCatalogV1 {
     starting_price?: StartingPrice;
   }
 
-  /** Information related to the provider associated with a catalog entry. */
+  /**
+   * Information related to the provider associated with a catalog entry.
+   */
   export interface Provider {
     /** Provider's email address for this catalog entry. */
     email: string;
@@ -2061,7 +2398,9 @@ namespace GlobalCatalogV1 {
     phone?: string;
   }
 
-  /** Service Level Agreement related metadata. */
+  /**
+   * Service Level Agreement related metadata.
+   */
   export interface SLAMetaData {
     /** Required Service License Agreement Terms of Use. */
     terms?: string;
@@ -2070,14 +2409,16 @@ namespace GlobalCatalogV1 {
      */
     tenancy?: string;
     /** Provisioning reliability, for example, 99.95. */
-    provisioning?: string;
+    provisioning?: number;
     /** Uptime reliability of the service, for example, 99.95. */
-    responsiveness?: string;
+    responsiveness?: number;
     /** SLA Disaster Recovery-related metadata. */
     dr?: DRMetaData;
   }
 
-  /** Location of your applications source files. */
+  /**
+   * Location of your applications source files.
+   */
   export interface SourceMetaData {
     /** Path to your application. */
     path?: string;
@@ -2087,7 +2428,9 @@ namespace GlobalCatalogV1 {
     url?: string;
   }
 
-  /** Plan-specific starting price information. */
+  /**
+   * Plan-specific starting price information.
+   */
   export interface StartingPrice {
     /** ID of the plan the starting price is calculated. */
     plan_id?: string;
@@ -2099,7 +2442,9 @@ namespace GlobalCatalogV1 {
     amount?: Amount[];
   }
 
-  /** Information related to a translated text message. */
+  /**
+   * Information related to a translated text message.
+   */
   export interface Strings {
     /** Presentation information related to list delimiters. */
     bullets?: Bullets[];
@@ -2117,7 +2462,9 @@ namespace GlobalCatalogV1 {
     instruction?: string;
   }
 
-  /** Template-related metadata. */
+  /**
+   * Template-related metadata.
+   */
   export interface TemplateMetaData {
     /** List of required offering or plan IDs. */
     services?: string[];
@@ -2141,7 +2488,19 @@ namespace GlobalCatalogV1 {
     environment_variables?: JsonObject;
   }
 
-  /** Information related to the UI presentation associated with a catalog entry. */
+  /**
+   * Location of your applications media source files.
+   */
+  export interface UIMediaSourceMetaData {
+    /** Type of source, for example, git. */
+    type?: string;
+    /** URL to source. */
+    url?: string;
+  }
+
+  /**
+   * Information related to the UI presentation associated with a catalog entry.
+   */
   export interface UIMetaData {
     /** Language specific translation of translation properties, like label and description. */
     strings?: JsonObject;
@@ -2167,11 +2526,13 @@ namespace GlobalCatalogV1 {
     hidden?: boolean;
     /** Denotes lite metering visibility. */
     hide_lite_metering?: boolean;
-    /** Denotes whether an upgrade should occurr. */
+    /** Denotes whether an upgrade should occur. */
     no_upgrade_next_step?: boolean;
   }
 
-  /** Media-related metadata. */
+  /**
+   * Media-related metadata.
+   */
   export interface UIMetaMedia {
     /** Caption for an image. */
     caption?: string;
@@ -2181,11 +2542,13 @@ namespace GlobalCatalogV1 {
     type?: string;
     /** URL for media. */
     URL?: string;
-    /** Information related to list delimiters. */
-    source?: Bullets;
+    /** UI media source data for for UI media data. */
+    source?: UIMediaSourceMetaData[];
   }
 
-  /** UI based URLs. */
+  /**
+   * UI based URLs.
+   */
   export interface URLS {
     /** URL for documentation. */
     doc_url?: string;
@@ -2213,7 +2576,9 @@ namespace GlobalCatalogV1 {
     apidocsurl?: string;
   }
 
-  /** Information related to the visibility of a catalog entry. */
+  /**
+   * Information related to the visibility of a catalog entry.
+   */
   export interface Visibility {
     /** This controls the overall visibility. It is an enum of *public*, *ibm_only*, and *private*. public means it
      *  is visible to all. ibm_only means it is visible to all IBM unless their account is explicitly excluded. private
@@ -2234,13 +2599,17 @@ namespace GlobalCatalogV1 {
     approved?: boolean;
   }
 
-  /** Visibility details related to a catalog entry. */
+  /**
+   * Visibility details related to a catalog entry.
+   */
   export interface VisibilityDetail {
     /** Information related to the accounts for which a catalog entry is visible. */
     accounts: VisibilityDetailAccounts;
   }
 
-  /** Information related to the accounts for which a catalog entry is visible. */
+  /**
+   * Information related to the accounts for which a catalog entry is visible.
+   */
   export interface VisibilityDetailAccounts {
     /** (_accountid_) is the GUID of the account and the value is the scope of who set it. For setting visibility
      *  use "" as the value. It is replaced with the owner scope when saved.
