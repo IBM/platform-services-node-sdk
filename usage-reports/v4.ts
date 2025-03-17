@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.96.0-d6dec9d7-20241008-212902
+ * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
  */
 
 /* eslint-disable max-classes-per-file */
@@ -24,6 +24,7 @@
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -118,7 +119,7 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.AccountSummary>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'billingmonth'];
-    const _validParams = ['accountId', 'billingmonth', 'headers'];
+    const _validParams = ['accountId', 'billingmonth', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -145,11 +146,15 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -178,7 +183,14 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.AccountUsage>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'billingmonth'];
-    const _validParams = ['accountId', 'billingmonth', 'names', 'acceptLanguage', 'headers'];
+    const _validParams = [
+      'accountId',
+      'billingmonth',
+      'names',
+      'acceptLanguage',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -206,12 +218,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -250,6 +266,7 @@ class UsageReportsV4 extends BaseService {
       'billingmonth',
       'names',
       'acceptLanguage',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -284,12 +301,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -343,6 +364,7 @@ class UsageReportsV4 extends BaseService {
       'resourceId',
       'planId',
       'region',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -385,12 +407,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -442,6 +468,7 @@ class UsageReportsV4 extends BaseService {
       'resourceId',
       'planId',
       'region',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -483,12 +510,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -540,6 +571,7 @@ class UsageReportsV4 extends BaseService {
       'resourceId',
       'planId',
       'region',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -581,12 +613,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -625,6 +661,7 @@ class UsageReportsV4 extends BaseService {
       'billingmonth',
       'names',
       'acceptLanguage',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -655,12 +692,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -703,6 +744,7 @@ class UsageReportsV4 extends BaseService {
       'cosReportsFolder',
       'reportTypes',
       'versioning',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -736,12 +778,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -763,7 +809,7 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotConfig>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'headers'];
+    const _validParams = ['accountId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -789,11 +835,15 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -831,6 +881,7 @@ class UsageReportsV4 extends BaseService {
       'cosReportsFolder',
       'reportTypes',
       'versioning',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -864,12 +915,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -891,7 +946,7 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'headers'];
+    const _validParams = ['accountId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -914,7 +969,10 @@ class UsageReportsV4 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -954,6 +1012,7 @@ class UsageReportsV4 extends BaseService {
       'cosReportsFolder',
       'reportTypes',
       'versioning',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -987,12 +1046,16 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1020,7 +1083,16 @@ class UsageReportsV4 extends BaseService {
   ): Promise<UsageReportsV4.Response<UsageReportsV4.SnapshotList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'month'];
-    const _validParams = ['accountId', 'month', 'dateFrom', 'dateTo', 'limit', 'start', 'headers'];
+    const _validParams = [
+      'accountId',
+      'month',
+      'dateFrom',
+      'dateTo',
+      'limit',
+      'start',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1051,11 +1123,15 @@ class UsageReportsV4 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1091,17 +1167,21 @@ namespace UsageReportsV4 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `getAccountSummary` operation. */
-  export interface GetAccountSummaryParams {
+  export interface GetAccountSummaryParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** The billing month for which the usage report is requested.  Format is yyyy-mm. */
     billingmonth: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getAccountUsage` operation. */
-  export interface GetAccountUsageParams {
+  export interface GetAccountUsageParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** The billing month for which the usage report is requested.  Format is yyyy-mm. */
@@ -1110,11 +1190,10 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getResourceGroupUsage` operation. */
-  export interface GetResourceGroupUsageParams {
+  export interface GetResourceGroupUsageParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** Resource group for which the usage report is requested. */
@@ -1125,11 +1204,10 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getResourceUsageAccount` operation. */
-  export interface GetResourceUsageAccountParams {
+  export interface GetResourceUsageAccountParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** The billing month for which the usage report is requested.  Format is yyyy-mm. */
@@ -1156,11 +1234,10 @@ namespace UsageReportsV4 {
     planId?: string;
     /** Region in which the resource instance is provisioned. */
     region?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getResourceUsageResourceGroup` operation. */
-  export interface GetResourceUsageResourceGroupParams {
+  export interface GetResourceUsageResourceGroupParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** Resource group for which the usage report is requested. */
@@ -1185,11 +1262,10 @@ namespace UsageReportsV4 {
     planId?: string;
     /** Region in which the resource instance is provisioned. */
     region?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getResourceUsageOrg` operation. */
-  export interface GetResourceUsageOrgParams {
+  export interface GetResourceUsageOrgParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** ID of the organization. */
@@ -1214,11 +1290,10 @@ namespace UsageReportsV4 {
     planId?: string;
     /** Region in which the resource instance is provisioned. */
     region?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOrgUsage` operation. */
-  export interface GetOrgUsageParams {
+  export interface GetOrgUsageParams extends DefaultParams {
     /** Account ID for which the usage report is requested. */
     accountId: string;
     /** ID of the organization. */
@@ -1229,11 +1304,10 @@ namespace UsageReportsV4 {
     names?: boolean;
     /** Prioritize the names returned in the order of the specified languages. Language will default to English. */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createReportsSnapshotConfig` operation. */
-  export interface CreateReportsSnapshotConfigParams {
+  export interface CreateReportsSnapshotConfigParams extends DefaultParams {
     /** Account ID for which billing report snapshot is configured. */
     accountId: string;
     /** Frequency of taking the snapshot of the billing reports. */
@@ -1254,7 +1328,6 @@ namespace UsageReportsV4 {
      *  to "new".
      */
     versioning?: CreateReportsSnapshotConfigConstants.Versioning | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createReportsSnapshotConfig` operation. */
@@ -1277,14 +1350,13 @@ namespace UsageReportsV4 {
   }
 
   /** Parameters for the `getReportsSnapshotConfig` operation. */
-  export interface GetReportsSnapshotConfigParams {
+  export interface GetReportsSnapshotConfigParams extends DefaultParams {
     /** Account ID for which the billing report snapshot is configured. */
     accountId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateReportsSnapshotConfig` operation. */
-  export interface UpdateReportsSnapshotConfigParams {
+  export interface UpdateReportsSnapshotConfigParams extends DefaultParams {
     /** Account ID for which billing report snapshot is configured. */
     accountId: string;
     /** Frequency of taking the snapshot of the billing reports. */
@@ -1301,7 +1373,6 @@ namespace UsageReportsV4 {
     reportTypes?: UpdateReportsSnapshotConfigConstants.ReportTypes[] | string[];
     /** A new version of report is created or the existing report version is overwritten with every update. */
     versioning?: UpdateReportsSnapshotConfigConstants.Versioning | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateReportsSnapshotConfig` operation. */
@@ -1324,14 +1395,13 @@ namespace UsageReportsV4 {
   }
 
   /** Parameters for the `deleteReportsSnapshotConfig` operation. */
-  export interface DeleteReportsSnapshotConfigParams {
+  export interface DeleteReportsSnapshotConfigParams extends DefaultParams {
     /** Account ID for which the billing report snapshot is configured. */
     accountId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `validateReportsSnapshotConfig` operation. */
-  export interface ValidateReportsSnapshotConfigParams {
+  export interface ValidateReportsSnapshotConfigParams extends DefaultParams {
     /** Account ID for which billing report snapshot is configured. */
     accountId: string;
     /** Frequency of taking the snapshot of the billing reports. */
@@ -1352,7 +1422,6 @@ namespace UsageReportsV4 {
      *  to "new".
      */
     versioning?: ValidateReportsSnapshotConfigConstants.Versioning | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `validateReportsSnapshotConfig` operation. */
@@ -1375,7 +1444,7 @@ namespace UsageReportsV4 {
   }
 
   /** Parameters for the `getReportsSnapshot` operation. */
-  export interface GetReportsSnapshotParams {
+  export interface GetReportsSnapshotParams extends DefaultParams {
     /** Account ID for which the billing report snapshot is requested. */
     accountId: string;
     /** The month for which billing report snapshot is requested.  Format is yyyy-mm. */
@@ -1388,7 +1457,6 @@ namespace UsageReportsV4 {
     limit?: number;
     /** The offset from which the records must be fetched. Offset information is included in the response. */
     start?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
@@ -1501,6 +1569,12 @@ namespace UsageReportsV4 {
     plan_name?: string;
     /** The ID of the pricing plan used to rate the usage. */
     pricing_plan_id?: string;
+    /** The ID of service subscription with effective from timestamp. */
+    subscription_id?: string;
+    /** The timestamp in RFC 3339 string format at which instance is created. */
+    created_at?: string;
+    /** The timestamp in RFC 3339 string format at which instance is deleted. */
+    deleted_at?: string;
     /** The month. */
     month: string;
     /** All the resource used in the account. */
@@ -1657,6 +1731,8 @@ namespace UsageReportsV4 {
     cost: number;
     /** Total pre-discounted cost incurred by the plan. */
     rated_cost: number;
+    /** The ID of service subscription with effective from timestamp. */
+    subscription_id?: string;
     /** All the metrics in the plan. */
     usage: Metric[];
     /** All the discounts applicable to the plan. */
