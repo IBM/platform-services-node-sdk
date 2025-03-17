@@ -1,3 +1,10 @@
+# [0.70.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.69.2...v0.70.0) (2025-03-17)
+
+
+### Features
+
+* **Usage Reports:** added subscription_id, created_at, deleted_at to InstanceUsage API response ([#294](https://github.com/IBM/platform-services-node-sdk/issues/294)) ([3d0d338](https://github.com/IBM/platform-services-node-sdk/commit/3d0d338be8ea816b0c1c27e80183c597c850d3dd))
+
 ## [0.69.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.69.1...v0.69.2) (2025-03-13)
 
 
