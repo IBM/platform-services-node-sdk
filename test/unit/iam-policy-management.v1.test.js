@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/* eslint-disable no-await-in-loop */
+
+const nock = require('nock');
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
@@ -41,6 +45,12 @@ function mock_createRequest() {
   if (!createRequestMock) {
     createRequestMock = jest.spyOn(iamPolicyManagementService, 'createRequest');
     createRequestMock.mockImplementation(() => Promise.resolve());
+  }
+}
+function unmock_createRequest() {
+  if (createRequestMock) {
+    createRequestMock.mockRestore();
+    createRequestMock = null;
   }
 }
 
@@ -126,6 +136,8 @@ describe('IamPolicyManagementV1', () => {
         const sort = 'id';
         const format = 'include_last_permit';
         const state = 'active';
+        const limit = 50;
+        const start = 'testString';
         const listPoliciesParams = {
           accountId,
           acceptLanguage,
@@ -138,6 +150,8 @@ describe('IamPolicyManagementV1', () => {
           sort,
           format,
           state,
+          limit,
+          start,
         };
 
         const listPoliciesResult = iamPolicyManagementService.listPolicies(listPoliciesParams);
@@ -165,6 +179,8 @@ describe('IamPolicyManagementV1', () => {
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.format).toEqual(format);
         expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -221,6 +237,76 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('PoliciesPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/policies';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"policies":[{"id":"id","type":"type","description":"description","subjects":[{"attributes":[{"name":"name","value":"value"}]}],"roles":[{"role_id":"role_id","display_name":"display_name","description":"description"}],"resources":[{"attributes":[{"name":"name","value":"value","operator":"operator"}],"tags":[{"name":"name","value":"value","operator":"operator"}]}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","state":"active","template":{"id":"id","version":"version","assignment_id":"assignment_id","root_id":"root_id","root_version":"root_version"}}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"policies":[{"id":"id","type":"type","description":"description","subjects":[{"attributes":[{"name":"name","value":"value"}]}],"roles":[{"role_id":"role_id","display_name":"display_name","description":"description"}],"resources":[{"attributes":[{"name":"name","value":"value","operator":"operator"}],"tags":[{"name":"name","value":"value","operator":"operator"}]}],"href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","state":"active","template":{"id":"id","version":"version","assignment_id":"assignment_id","root_id":"root_id","root_version":"root_version"}}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          iamId: 'testString',
+          accessGroupId: 'testString',
+          type: 'access',
+          serviceType: 'service',
+          tagName: 'testString',
+          tagValue: 'testString',
+          sort: 'id',
+          format: 'include_last_permit',
+          state: 'active',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.PoliciesPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          iamId: 'testString',
+          accessGroupId: 'testString',
+          type: 'access',
+          serviceType: 'service',
+          tagName: 'testString',
+          tagValue: 'testString',
+          sort: 'id',
+          format: 'include_last_permit',
+          state: 'active',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.PoliciesPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
@@ -1252,6 +1338,8 @@ describe('IamPolicyManagementV1', () => {
         const sort = 'testString';
         const format = 'include_last_permit';
         const state = 'active';
+        const limit = 50;
+        const start = 'testString';
         const listV2PoliciesParams = {
           accountId,
           acceptLanguage,
@@ -1264,6 +1352,8 @@ describe('IamPolicyManagementV1', () => {
           sort,
           format,
           state,
+          limit,
+          start,
         };
 
         const listV2PoliciesResult = iamPolicyManagementService.listV2Policies(listV2PoliciesParams);
@@ -1291,6 +1381,8 @@ describe('IamPolicyManagementV1', () => {
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.format).toEqual(format);
         expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1347,6 +1439,76 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('V2PoliciesPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v2/policies';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"policies":[{"type":"access","description":"description","subject":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}]},"resource":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}],"tags":[{"key":"key","value":"value","operator":"stringEquals"}]},"pattern":"pattern","rule":{"key":"key","operator":"stringEquals","value":"anyValue"},"id":"id","href":"href","control":{"grant":{"roles":[{"role_id":"role_id"}]}},"created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","state":"active","last_permit_at":"last_permit_at","last_permit_frequency":21,"template":{"id":"id","version":"version","assignment_id":"assignment_id","root_id":"root_id","root_version":"root_version"}}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"policies":[{"type":"access","description":"description","subject":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}]},"resource":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}],"tags":[{"key":"key","value":"value","operator":"stringEquals"}]},"pattern":"pattern","rule":{"key":"key","operator":"stringEquals","value":"anyValue"},"id":"id","href":"href","control":{"grant":{"roles":[{"role_id":"role_id"}]}},"created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","state":"active","last_permit_at":"last_permit_at","last_permit_frequency":21,"template":{"id":"id","version":"version","assignment_id":"assignment_id","root_id":"root_id","root_version":"root_version"}}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          iamId: 'testString',
+          accessGroupId: 'testString',
+          type: 'access',
+          serviceType: 'service',
+          serviceName: 'testString',
+          serviceGroupId: 'testString',
+          sort: 'testString',
+          format: 'include_last_permit',
+          state: 'active',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.V2PoliciesPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          iamId: 'testString',
+          accessGroupId: 'testString',
+          type: 'access',
+          serviceType: 'service',
+          serviceName: 'testString',
+          serviceGroupId: 'testString',
+          sort: 'testString',
+          format: 'include_last_permit',
+          state: 'active',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.V2PoliciesPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
@@ -1867,6 +2029,8 @@ describe('IamPolicyManagementV1', () => {
         const policyServiceName = 'testString';
         const policyServiceGroupId = 'testString';
         const policyType = 'access';
+        const limit = 50;
+        const start = 'testString';
         const listPolicyTemplatesParams = {
           accountId,
           acceptLanguage,
@@ -1876,6 +2040,8 @@ describe('IamPolicyManagementV1', () => {
           policyServiceName,
           policyServiceGroupId,
           policyType,
+          limit,
+          start,
         };
 
         const listPolicyTemplatesResult = iamPolicyManagementService.listPolicyTemplates(listPolicyTemplatesParams);
@@ -1900,6 +2066,8 @@ describe('IamPolicyManagementV1', () => {
         expect(mockRequestOptions.qs.policy_service_name).toEqual(policyServiceName);
         expect(mockRequestOptions.qs.policy_service_group_id).toEqual(policyServiceGroupId);
         expect(mockRequestOptions.qs.policy_type).toEqual(policyType);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1956,6 +2124,70 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('PolicyTemplatesPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/policy_templates';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"policy_templates":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"policy":{"type":"access","description":"description","resource":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}],"tags":[{"key":"key","value":"value","operator":"stringEquals"}]},"subject":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}]},"pattern":"pattern","rule":{"key":"key","operator":"stringEquals","value":"anyValue"},"control":{"grant":{"roles":[{"role_id":"role_id"}]}}},"state":"active","id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"policy_templates":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"policy":{"type":"access","description":"description","resource":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}],"tags":[{"key":"key","value":"value","operator":"stringEquals"}]},"subject":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}]},"pattern":"pattern","rule":{"key":"key","operator":"stringEquals","value":"anyValue"},"control":{"grant":{"roles":[{"role_id":"role_id"}]}}},"state":"active","id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          state: 'active',
+          name: 'testString',
+          policyServiceType: 'service',
+          policyServiceName: 'testString',
+          policyServiceGroupId: 'testString',
+          policyType: 'access',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.PolicyTemplatesPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          state: 'active',
+          name: 'testString',
+          policyServiceType: 'service',
+          policyServiceName: 'testString',
+          policyServiceGroupId: 'testString',
+          policyType: 'access',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.PolicyTemplatesPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
@@ -2472,9 +2704,13 @@ describe('IamPolicyManagementV1', () => {
         // Construct the params object for operation listPolicyTemplateVersions
         const policyTemplateId = 'testString';
         const state = 'active';
+        const limit = 50;
+        const start = 'testString';
         const listPolicyTemplateVersionsParams = {
           policyTemplateId,
           state,
+          limit,
+          start,
         };
 
         const listPolicyTemplateVersionsResult = iamPolicyManagementService.listPolicyTemplateVersions(listPolicyTemplateVersionsParams);
@@ -2492,6 +2728,8 @@ describe('IamPolicyManagementV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
         expect(mockRequestOptions.path.policy_template_id).toEqual(policyTemplateId);
       }
 
@@ -2549,6 +2787,58 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('PolicyTemplateVersionsPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/policy_templates/testString/versions';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"policy":{"type":"access","description":"description","resource":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}],"tags":[{"key":"key","value":"value","operator":"stringEquals"}]},"subject":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}]},"pattern":"pattern","rule":{"key":"key","operator":"stringEquals","value":"anyValue"},"control":{"grant":{"roles":[{"role_id":"role_id"}]}}},"state":"active","id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"versions":[{"name":"name","description":"description","account_id":"account_id","version":"version","committed":false,"policy":{"type":"access","description":"description","resource":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}],"tags":[{"key":"key","value":"value","operator":"stringEquals"}]},"subject":{"attributes":[{"key":"key","operator":"stringEquals","value":"anyValue"}]},"pattern":"pattern","rule":{"key":"key","operator":"stringEquals","value":"anyValue"},"control":{"grant":{"roles":[{"role_id":"role_id"}]}}},"state":"active","id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id"}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          policyTemplateId: 'testString',
+          state: 'active',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.PolicyTemplateVersionsPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          policyTemplateId: 'testString',
+          state: 'active',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.PolicyTemplateVersionsPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
@@ -3004,12 +3294,16 @@ describe('IamPolicyManagementV1', () => {
         const acceptLanguage = 'default';
         const templateId = 'testString';
         const templateVersion = 'testString';
+        const limit = 50;
+        const start = 'testString';
         const listPolicyAssignmentsParams = {
           version,
           accountId,
           acceptLanguage,
           templateId,
           templateVersion,
+          limit,
+          start,
         };
 
         const listPolicyAssignmentsResult = iamPolicyManagementService.listPolicyAssignments(listPolicyAssignmentsParams);
@@ -3031,6 +3325,8 @@ describe('IamPolicyManagementV1', () => {
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.template_id).toEqual(templateId);
         expect(mockRequestOptions.qs.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -3089,6 +3385,64 @@ describe('IamPolicyManagementV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('PolicyAssignmentsPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/policy_assignments';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"assignments":[{"target":{"type":"Account","id":"id"},"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","resources":[{"target":{"type":"Account","id":"id"},"policy":{"resource_created":{"id":"id"},"status":"status","error_message":{"trace":"trace","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}],"status_code":11}}}],"subject":{"id":"id","type":"iam_id"},"template":{"id":"id","version":"version"},"status":"in_progress"}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"assignments":[{"target":{"type":"Account","id":"id"},"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","resources":[{"target":{"type":"Account","id":"id"},"policy":{"resource_created":{"id":"id"},"status":"status","error_message":{"trace":"trace","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}],"status_code":11}}}],"subject":{"id":"id","type":"iam_id"},"template":{"id":"id","version":"version"},"status":"in_progress"}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          version: '1.0',
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          templateId: 'testString',
+          templateVersion: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.PolicyAssignmentsPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          version: '1.0',
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          templateId: 'testString',
+          templateVersion: 'testString',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.PolicyAssignmentsPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
       });
     });
   });
@@ -3467,6 +3821,208 @@ describe('IamPolicyManagementV1', () => {
         let err;
         try {
           await iamPolicyManagementService.deletePolicyAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getSettings', () => {
+    describe('positive tests', () => {
+      function __getSettingsTest() {
+        // Construct the params object for operation getSettings
+        const accountId = 'testString';
+        const acceptLanguage = 'default';
+        const getSettingsParams = {
+          accountId,
+          acceptLanguage,
+        };
+
+        const getSettingsResult = iamPolicyManagementService.getSettings(getSettingsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getSettingsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/accounts/{account_id}/settings/access_management', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getSettingsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getSettingsParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getSettings(getSettingsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getSettings({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getSettings();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateSettings', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // IdentityTypesBase
+      const identityTypesBaseModel = {
+        state: 'enabled',
+        external_allowed_accounts: ['testString'],
+      };
+
+      // IdentityTypesPatch
+      const identityTypesPatchModel = {
+        user: identityTypesBaseModel,
+        service_id: identityTypesBaseModel,
+        service: identityTypesBaseModel,
+      };
+
+      // ExternalAccountIdentityInteractionPatch
+      const externalAccountIdentityInteractionPatchModel = {
+        identity_types: identityTypesPatchModel,
+      };
+
+      function __updateSettingsTest() {
+        // Construct the params object for operation updateSettings
+        const accountId = 'testString';
+        const ifMatch = 'testString';
+        const externalAccountIdentityInteraction = externalAccountIdentityInteractionPatchModel;
+        const acceptLanguage = 'default';
+        const updateSettingsParams = {
+          accountId,
+          ifMatch,
+          externalAccountIdentityInteraction,
+          acceptLanguage,
+        };
+
+        const updateSettingsResult = iamPolicyManagementService.updateSettings(updateSettingsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateSettingsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/accounts/{account_id}/settings/access_management', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.body.external_account_identity_interaction).toEqual(externalAccountIdentityInteraction);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSettingsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __updateSettingsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __updateSettingsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const ifMatch = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateSettingsParams = {
+          accountId,
+          ifMatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.updateSettings(updateSettingsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.updateSettings({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.updateSettings();
         } catch (e) {
           err = e;
         }

@@ -148,6 +148,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testS2STemplateBaseVersion;
   let testS2STemplateVersion;
   let testAssignmentETag;
+  let testAccountSettingsETag;
   const TEST_TEMPLATE_PREFIX = 'SDKNode';
   const testTemplateName = TEST_TEMPLATE_PREFIX + testUniqueId;
   const testTemplatePolicy = {
@@ -1246,6 +1247,87 @@ describe('IamPolicyManagementV1_integration', () => {
 
       expect(response).toBeDefined();
       expect(response.status).toEqual(204);
+    });
+  });
+
+  describe('Access Management account settings tests', () => {
+    test('GetSettings - Retrieve Access Management account settings by account ID', async () => {
+      const getSettingsParams = {
+        accountId: testAccountId,
+        acceptLanguage: 'default',
+      };
+      let response;
+      try {
+        response = await service.getSettings(getSettingsParams);
+      } catch (err) {
+        console.warn(err);
+      }
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      expect(response.result).toBeDefined();
+      expect(response.result).toHaveProperty('external_account_identity_interaction');
+      expect(response.result.external_account_identity_interaction).toHaveProperty(
+        'identity_types'
+      );
+      expect(response.result.external_account_identity_interaction.identity_types).toHaveProperty(
+        'user'
+      );
+      expect(response.result.external_account_identity_interaction.identity_types).toHaveProperty(
+        'service_id'
+      );
+      expect(response.result.external_account_identity_interaction.identity_types).toHaveProperty(
+        'service'
+      );
+      testAccountSettingsETag = response.headers.etag;
+    });
+    test('UpdateSettings - Updates Access Management account settings by account ID', async () => {
+      expect(testAccountSettingsETag).not.toBeNull();
+      // IdentityTypesBase
+      const identityTypesBaseModel = {
+        state: 'monitor',
+        external_allowed_accounts: [],
+      };
+
+      // IdentityTypesPatch
+      const identityTypesPatchModel = {
+        user: identityTypesBaseModel,
+        service_id: identityTypesBaseModel,
+        service: identityTypesBaseModel,
+      };
+
+      // ExternalAccountIdentityInteractionPatch
+      const externalAccountIdentityInteraction = {
+        identity_types: identityTypesPatchModel,
+      };
+      const updateSettingsParams = {
+        accountId: testAccountId,
+        acceptLanguage: 'default',
+        ifMatch: testAccountSettingsETag,
+        externalAccountIdentityInteraction,
+      };
+
+      const response = await service.updateSettings(updateSettingsParams);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(response.result).toBeDefined();
+      expect(response.result).toHaveProperty('external_account_identity_interaction');
+      const externalAccountIdentityInteractionResponse =
+        response.result.external_account_identity_interaction;
+      expect(externalAccountIdentityInteractionResponse).toHaveProperty('identity_types');
+      expect(externalAccountIdentityInteractionResponse.identity_types).toHaveProperty('user');
+      expect(externalAccountIdentityInteractionResponse.identity_types.user.state).toEqual(
+        'monitor'
+      );
+      expect(externalAccountIdentityInteractionResponse.identity_types).toHaveProperty(
+        'service_id'
+      );
+      expect(externalAccountIdentityInteractionResponse.identity_types.service_id.state).toEqual(
+        'monitor'
+      );
+      expect(externalAccountIdentityInteractionResponse.identity_types).toHaveProperty('service');
+      expect(externalAccountIdentityInteractionResponse.identity_types.service.state).toEqual(
+        'monitor'
+      );
     });
   });
 });
