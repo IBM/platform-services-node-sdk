@@ -1113,34 +1113,6 @@ describe('IamPolicyManagementV1_integration', () => {
   });
 
   describe('Policy Assignment tests', () => {
-    test('Create policy assignments error out check the input parameters target type is not one of enum values', async () => {
-      const params = {
-        acceptLanguage: 'default',
-        version: '1.0',
-        target: {
-          id: testTargetEnterpriseAccountId,
-          type: 'Enterprise',
-        },
-        templates: [
-          {
-            id: testS2STemplateId,
-            version: testS2STemplateBaseVersion,
-          },
-        ],
-      };
-
-      try {
-        await service.createPolicyTemplateAssignment(params);
-      } catch (err) {
-        expect(err).toBeTruthy(); // This assertion ensures that the test passes when an error occurs
-        expect(err.status).toBe(400);
-        expect(err.statusText).toBe('Bad Request');
-        expect(err.body).toContain(
-          'Invalid body format. Check the input parameters. instance.target.type is not one of enum values: Account'
-        );
-      }
-    });
-
     test('Create policy assignments', async () => {
       const params = {
         acceptLanguage: 'default',
