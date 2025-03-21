@@ -65,6 +65,7 @@ describe('IamPolicyManagementV1', () => {
   let exampleAssignmentPolicyId;
   let exampleTargetAccountId;
   let exampleAssignmentETag;
+  let exampleAccountSettingsETag;
   const exampleCustomRoleDipslayName = 'IAM Groups read access';
   const exampleUserId = 'IBMid-user1';
   const exampleServiceName = 'iam-groups';
@@ -1341,5 +1342,76 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-delete_policy_template
+  });
+  test('getSettings request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-get_access_management_account_settings
+
+    const getSettingsParams = {
+      accountId: exampleAccountId,
+      acceptLanguage: 'default',
+    };
+
+    try {
+      const res = await iamPolicyManagementService.getSettings(getSettingsParams);
+      exampleAccountSettingsETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+    // end-get_access_management_account_settings
+  });
+  test('updateSettings request example', async () => {
+    expect(exampleAccountSettingsETag).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-update_access_management_account_settings
+
+    // IdentityTypesBase
+    const identityTypesBaseModel = {
+      state: 'monitor',
+      external_allowed_accounts: [],
+    };
+
+    // IdentityTypesPatch
+    const identityTypesPatchModel = {
+      user: identityTypesBaseModel,
+      service_id: identityTypesBaseModel,
+      service: identityTypesBaseModel,
+    };
+
+    // ExternalAccountIdentityInteractionPatch
+    const externalAccountIdentityInteraction = {
+      identity_types: identityTypesPatchModel,
+    };
+    const updateSettingsParams = {
+      accountId: exampleAccountId,
+      acceptLanguage: 'default',
+      ifMatch: exampleAccountSettingsETag,
+      externalAccountIdentityInteraction,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.updateSettings(updateSettingsParams);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err)
+    }
+    // end-update_access_management_account_settings
   });
 });

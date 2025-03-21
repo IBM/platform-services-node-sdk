@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,16 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.90.1-64fd3296-20240515-180710
+ * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
  */
+
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-await-in-loop */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -134,6 +138,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.state] - The state of the policy.
    * * `active` - returns active policies
    * * `deleted` - returns non-active policies.
+   * @param {number} [params.limit] - The number of documents to include in collection.
+   * @param {string} [params.start] - Page token that refers to the page of collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyCollection>>}
    */
@@ -154,6 +160,9 @@ class IamPolicyManagementV1 extends BaseService {
       'sort',
       'format',
       'state',
+      'limit',
+      'start',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -172,6 +181,8 @@ class IamPolicyManagementV1 extends BaseService {
       'sort': _params.sort,
       'format': _params.format,
       'state': _params.state,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -190,12 +201,16 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -282,6 +297,7 @@ class IamPolicyManagementV1 extends BaseService {
       'resources',
       'description',
       'acceptLanguage',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -313,6 +329,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -320,6 +337,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -394,6 +414,7 @@ class IamPolicyManagementV1 extends BaseService {
       'roles',
       'resources',
       'description',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -430,6 +451,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -437,6 +459,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -458,7 +483,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateMetaData>> {
     const _params = { ...params };
     const _requiredParams = ['policyId'];
-    const _validParams = ['policyId', 'headers'];
+    const _validParams = ['policyId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -480,11 +505,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -507,7 +536,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['policyId'];
-    const _validParams = ['policyId', 'headers'];
+    const _validParams = ['policyId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -530,7 +559,10 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -557,7 +589,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.Policy>> {
     const _params = { ...params };
     const _requiredParams = ['policyId', 'ifMatch'];
-    const _validParams = ['policyId', 'ifMatch', 'state', 'headers'];
+    const _validParams = ['policyId', 'ifMatch', 'state', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -588,6 +620,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -595,6 +628,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -646,6 +682,7 @@ class IamPolicyManagementV1 extends BaseService {
       'sourceServiceName',
       'policyType',
       'serviceGroupId',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -673,12 +710,16 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -730,6 +771,7 @@ class IamPolicyManagementV1 extends BaseService {
       'serviceName',
       'description',
       'acceptLanguage',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -762,6 +804,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -769,6 +812,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -798,7 +844,15 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
     const _requiredParams = ['roleId', 'ifMatch', 'displayName', 'actions'];
-    const _validParams = ['roleId', 'ifMatch', 'displayName', 'actions', 'description', 'headers'];
+    const _validParams = [
+      'roleId',
+      'ifMatch',
+      'displayName',
+      'actions',
+      'description',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -831,6 +885,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -838,6 +893,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -859,7 +917,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.CustomRole>> {
     const _params = { ...params };
     const _requiredParams = ['roleId'];
-    const _validParams = ['roleId', 'headers'];
+    const _validParams = ['roleId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -881,11 +939,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -907,7 +969,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['roleId'];
-    const _validParams = ['roleId', 'headers'];
+    const _validParams = ['roleId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -930,7 +992,10 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -991,6 +1056,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.state] - The state of the policy.
    * * `active` - returns active policies
    * * `deleted` - returns non-active policies.
+   * @param {number} [params.limit] - The number of documents to include in collection.
+   * @param {string} [params.start] - Page token that refers to the page of collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyCollection>>}
    */
@@ -1011,6 +1078,9 @@ class IamPolicyManagementV1 extends BaseService {
       'sort',
       'format',
       'state',
+      'limit',
+      'start',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1029,6 +1099,8 @@ class IamPolicyManagementV1 extends BaseService {
       'sort': _params.sort,
       'format': _params.format,
       'state': _params.state,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1047,12 +1119,16 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1219,6 +1295,7 @@ class IamPolicyManagementV1 extends BaseService {
       'pattern',
       'rule',
       'acceptLanguage',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1252,6 +1329,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1259,6 +1337,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1416,6 +1497,7 @@ class IamPolicyManagementV1 extends BaseService {
       'resource',
       'pattern',
       'rule',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1454,6 +1536,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1461,6 +1544,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1487,7 +1573,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyTemplateMetaData>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'format', 'headers'];
+    const _validParams = ['id', 'format', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1518,11 +1604,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1545,7 +1635,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1568,7 +1658,10 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1608,6 +1701,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.policyServiceName] - Service name, Optional.
    * @param {string} [params.policyServiceGroupId] - Service group id, Optional.
    * @param {string} [params.policyType] - Policy type, Optional.
+   * @param {number} [params.limit] - The number of documents to include in collection.
+   * @param {string} [params.start] - Page token that refers to the page of collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>>}
    */
@@ -1625,6 +1720,9 @@ class IamPolicyManagementV1 extends BaseService {
       'policyServiceName',
       'policyServiceGroupId',
       'policyType',
+      'limit',
+      'start',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1640,6 +1738,8 @@ class IamPolicyManagementV1 extends BaseService {
       'policy_service_name': _params.policyServiceName,
       'policy_service_group_id': _params.policyServiceGroupId,
       'policy_type': _params.policyType,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -1658,12 +1758,16 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1711,6 +1815,7 @@ class IamPolicyManagementV1 extends BaseService {
       'description',
       'committed',
       'acceptLanguage',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1742,6 +1847,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1749,6 +1855,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1771,7 +1880,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
-    const _validParams = ['policyTemplateId', 'state', 'headers'];
+    const _validParams = ['policyTemplateId', 'state', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1802,11 +1911,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1830,7 +1943,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
-    const _validParams = ['policyTemplateId', 'headers'];
+    const _validParams = ['policyTemplateId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1853,7 +1966,10 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1888,6 +2004,7 @@ class IamPolicyManagementV1 extends BaseService {
       'name',
       'description',
       'committed',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1923,12 +2040,16 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1943,6 +2064,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {string} [params.state] - The policy template state.
+   * @param {number} [params.limit] - The number of documents to include in collection.
+   * @param {string} [params.start] - Page token that refers to the page of collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>>}
    */
@@ -1953,7 +2076,7 @@ class IamPolicyManagementV1 extends BaseService {
   > {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId'];
-    const _validParams = ['policyTemplateId', 'state', 'headers'];
+    const _validParams = ['policyTemplateId', 'state', 'limit', 'start', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1961,6 +2084,8 @@ class IamPolicyManagementV1 extends BaseService {
 
     const query = {
       'state': _params.state,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const path = {
@@ -1984,11 +2109,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2028,6 +2157,7 @@ class IamPolicyManagementV1 extends BaseService {
       'name',
       'description',
       'committed',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2064,6 +2194,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2071,6 +2202,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2095,7 +2229,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'version'];
-    const _validParams = ['policyTemplateId', 'version', 'headers'];
+    const _validParams = ['policyTemplateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2119,7 +2253,10 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2142,7 +2279,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'version'];
-    const _validParams = ['policyTemplateId', 'version', 'headers'];
+    const _validParams = ['policyTemplateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2169,11 +2306,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2197,7 +2338,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['policyTemplateId', 'version'];
-    const _validParams = ['policyTemplateId', 'version', 'headers'];
+    const _validParams = ['policyTemplateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2221,7 +2362,10 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2257,6 +2401,8 @@ class IamPolicyManagementV1 extends BaseService {
    * * `zh-tw` - (Chinese, Taiwan).
    * @param {string} [params.templateId] - Optional template id.
    * @param {string} [params.templateVersion] - Optional policy template version.
+   * @param {number} [params.limit] - The number of documents to include in collection.
+   * @param {string} [params.start] - Page token that refers to the page of collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>>}
    */
@@ -2273,6 +2419,9 @@ class IamPolicyManagementV1 extends BaseService {
       'acceptLanguage',
       'templateId',
       'templateVersion',
+      'limit',
+      'start',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2285,6 +2434,8 @@ class IamPolicyManagementV1 extends BaseService {
       'account_id': _params.accountId,
       'template_id': _params.templateId,
       'template_version': _params.templateVersion,
+      'limit': _params.limit,
+      'start': _params.start,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -2303,12 +2454,16 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Accept-Language': _params.acceptLanguage,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2345,7 +2500,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1Collection>> {
     const _params = { ...params };
     const _requiredParams = ['version', 'target', 'templates'];
-    const _validParams = ['version', 'target', 'templates', 'acceptLanguage', 'headers'];
+    const _validParams = ['version', 'target', 'templates', 'acceptLanguage', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2377,6 +2532,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2384,6 +2540,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2399,14 +2558,14 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.assignmentId - The policy template assignment ID.
    * @param {string} params.version - specify version of response body format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.GetPolicyAssignmentResponse>>}
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentItems>>}
    */
   public getPolicyAssignment(
     params: IamPolicyManagementV1.GetPolicyAssignmentParams
-  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.GetPolicyAssignmentResponse>> {
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentItems>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId', 'version'];
-    const _validParams = ['assignmentId', 'version', 'headers'];
+    const _validParams = ['assignmentId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2437,11 +2596,15 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2468,7 +2631,14 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId', 'version', 'ifMatch', 'templateVersion'];
-    const _validParams = ['assignmentId', 'version', 'ifMatch', 'templateVersion', 'headers'];
+    const _validParams = [
+      'assignmentId',
+      'version',
+      'ifMatch',
+      'templateVersion',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2504,6 +2674,7 @@ class IamPolicyManagementV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2511,6 +2682,9 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2533,7 +2707,7 @@ class IamPolicyManagementV1 extends BaseService {
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
-    const _validParams = ['assignmentId', 'headers'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2556,7 +2730,201 @@ class IamPolicyManagementV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * accessManagementSettings
+   ************************/
+
+  /**
+   * Retrieve Access Management account settings by account ID.
+   *
+   * Retrieve Access Management settings for an account by providing the account ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID that the settings belong to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.AccountSettingsAccessManagement>>}
+   */
+  public getSettings(
+    params: IamPolicyManagementV1.GetSettingsParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.AccountSettingsAccessManagement>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'acceptLanguage', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSettings'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/accounts/{account_id}/settings/access_management',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update Access Management account settings by account ID.
+   *
+   * Update access management settings for an account.
+   *
+   * ### External Account Identity Interaction
+   *
+   * Update the way identities within an external account are allowed to interact with the requested account by
+   * providing:
+   * * the `account_id` as a parameter
+   * * the external account ID(s) and state for the specific identity in the request body
+   *
+   * External account identity interaction includes the following `identity_types`: `user` (user identities defined as
+   * [IBMid's](https://test.cloud.ibm.com/docs/account?topic=account-identity-overview#users-bestpract)), `service_id`
+   * (defined as [IAM
+   * ServiceIds](https://test.cloud.ibm.com/docs/account?topic=account-identity-overview#serviceid-bestpract)),
+   * `service` (defined by a service’s [CRN](https://test.cloud.ibm.com/docs/account?topic=account-crn)). To update an
+   * Identity’s setting, the `state` and `external_allowed_accounts` fields are required.
+   *
+   * Different identity states are:
+   * * "enabled": An identity type is allowed to access resources in the account provided it has access policies on
+   * those resources.
+   * * "limited": An identity type is allowed to access resources in the account provided it has access policies on
+   * those resources AND it is associated with either the account the resources are in or one of the allowed accounts.
+   * This setting leverages the "external_allowed_accounts" list.
+   * * "monitor": Has no direct impact on an Identity’s access. Instead, it creates AT events for access decisions as if
+   * the account were in a limited “state”.
+   *
+   * **Note**: The state "enabled" is a special case. In this case, access is given to all accounts and there is no need
+   * to specify a particular list. Therefore, when updating "state" to "enabled" for an identity type
+   * "external_allowed_accounts" should be left empty.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID that the settings belong to.
+   * @param {string} params.ifMatch - The revision number for updating Access Management Account Settings and must match
+   * the ETag value of the existing Access Management Account Settings. The Etag can be retrieved using the GET
+   * /v1/accounts/{account_id}/settings/access_management API and looking at the ETag response header.
+   * @param {ExternalAccountIdentityInteractionPatch} [params.externalAccountIdentityInteraction] - Update to how
+   * external accounts can interact in relation to the requested account.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.AccountSettingsAccessManagement>>}
+   */
+  public updateSettings(
+    params: IamPolicyManagementV1.UpdateSettingsParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.AccountSettingsAccessManagement>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'ifMatch'];
+    const _validParams = [
+      'accountId',
+      'ifMatch',
+      'externalAccountIdentityInteraction',
+      'acceptLanguage',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'external_account_identity_interaction': _params.externalAccountIdentityInteraction,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateSettings'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/accounts/{account_id}/settings/access_management',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2592,8 +2960,13 @@ namespace IamPolicyManagementV1 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `listPolicies` operation. */
-  export interface ListPoliciesParams {
+  export interface ListPoliciesParams extends DefaultParams {
     /** The account GUID that the policies belong to. */
     accountId: string;
     /** Language code for translations
@@ -2634,7 +3007,10 @@ namespace IamPolicyManagementV1 {
     format?: ListPoliciesConstants.Format | string;
     /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
     state?: ListPoliciesConstants.State | string;
-    headers?: OutgoingHttpHeaders;
+    /** The number of documents to include in collection. */
+    limit?: number;
+    /** Page token that refers to the page of collection to return. */
+    start?: string;
   }
 
   /** Constants for the `listPolicies` operation. */
@@ -2673,7 +3049,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `createPolicy` operation. */
-  export interface CreatePolicyParams {
+  export interface CreatePolicyParams extends DefaultParams {
     /** The policy type; either 'access' or 'authorization'. */
     type: string;
     /** The subjects associated with a policy. */
@@ -2698,11 +3074,10 @@ namespace IamPolicyManagementV1 {
      *  * `zh-tw` - (Chinese, Taiwan).
      */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replacePolicy` operation. */
-  export interface ReplacePolicyParams {
+  export interface ReplacePolicyParams extends DefaultParams {
     /** The policy ID. */
     policyId: string;
     /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
@@ -2719,25 +3094,22 @@ namespace IamPolicyManagementV1 {
     resources: PolicyResource[];
     /** Customer-defined description. */
     description?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPolicy` operation. */
-  export interface GetPolicyParams {
+  export interface GetPolicyParams extends DefaultParams {
     /** The policy ID. */
     policyId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deletePolicy` operation. */
-  export interface DeletePolicyParams {
+  export interface DeletePolicyParams extends DefaultParams {
     /** The policy ID. */
     policyId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePolicyState` operation. */
-  export interface UpdatePolicyStateParams {
+  export interface UpdatePolicyStateParams extends DefaultParams {
     /** The policy ID. */
     policyId: string;
     /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
@@ -2746,7 +3118,6 @@ namespace IamPolicyManagementV1 {
     ifMatch: string;
     /** The policy state. */
     state?: UpdatePolicyStateConstants.State | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updatePolicyState` operation. */
@@ -2759,7 +3130,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `listRoles` operation. */
-  export interface ListRolesParams {
+  export interface ListRolesParams extends DefaultParams {
     /** Language code for translations
      *  * `default` - English
      *  * `de` -  German (Standard)
@@ -2784,11 +3155,10 @@ namespace IamPolicyManagementV1 {
     policyType?: string;
     /** Optional id of service group. */
     serviceGroupId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createRole` operation. */
-  export interface CreateRoleParams {
+  export interface CreateRoleParams extends DefaultParams {
     /** The display name of the role that is shown in the console. */
     displayName: string;
     /** The actions of the role. For more information, see [IAM roles and
@@ -2817,11 +3187,10 @@ namespace IamPolicyManagementV1 {
      *  * `zh-tw` - (Chinese, Taiwan).
      */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceRole` operation. */
-  export interface ReplaceRoleParams {
+  export interface ReplaceRoleParams extends DefaultParams {
     /** The role ID. */
     roleId: string;
     /** The revision number for updating a role and must match the ETag value of the existing role. The Etag can be
@@ -2836,25 +3205,22 @@ namespace IamPolicyManagementV1 {
     actions: string[];
     /** The description of the role. */
     description?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getRole` operation. */
-  export interface GetRoleParams {
+  export interface GetRoleParams extends DefaultParams {
     /** The role ID. */
     roleId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteRole` operation. */
-  export interface DeleteRoleParams {
+  export interface DeleteRoleParams extends DefaultParams {
     /** The role ID. */
     roleId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listV2Policies` operation. */
-  export interface ListV2PoliciesParams {
+  export interface ListV2PoliciesParams extends DefaultParams {
     /** The account GUID in which the policies belong to. */
     accountId: string;
     /** Language code for translations
@@ -2908,7 +3274,10 @@ namespace IamPolicyManagementV1 {
     format?: ListV2PoliciesConstants.Format | string;
     /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
     state?: ListV2PoliciesConstants.State | string;
-    headers?: OutgoingHttpHeaders;
+    /** The number of documents to include in collection. */
+    limit?: number;
+    /** Page token that refers to the page of collection to return. */
+    start?: string;
   }
 
   /** Constants for the `listV2Policies` operation. */
@@ -2936,7 +3305,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `createV2Policy` operation. */
-  export interface CreateV2PolicyParams {
+  export interface CreateV2PolicyParams extends DefaultParams {
     /** Specifies the type of access granted by the policy. */
     control: Control;
     /** The policy type; either 'access' or 'authorization'. */
@@ -2967,7 +3336,6 @@ namespace IamPolicyManagementV1 {
      *  * `zh-tw` - (Chinese, Taiwan).
      */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createV2Policy` operation. */
@@ -2980,7 +3348,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `replaceV2Policy` operation. */
-  export interface ReplaceV2PolicyParams {
+  export interface ReplaceV2PolicyParams extends DefaultParams {
     /** The policy ID. */
     id: string;
     /** The revision number for updating a policy and must match the ETag value of the existing policy. The Etag can
@@ -3003,7 +3371,6 @@ namespace IamPolicyManagementV1 {
     pattern?: string;
     /** Additional access conditions associated with the policy. */
     rule?: V2PolicyRule;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `replaceV2Policy` operation. */
@@ -3016,7 +3383,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `getV2Policy` operation. */
-  export interface GetV2PolicyParams {
+  export interface GetV2PolicyParams extends DefaultParams {
     /** The policy ID. */
     id: string;
     /** Include additional data for policy returned
@@ -3026,7 +3393,6 @@ namespace IamPolicyManagementV1 {
      *  relevant fields.
      */
     format?: GetV2PolicyConstants.Format | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getV2Policy` operation. */
@@ -3039,14 +3405,13 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `deleteV2Policy` operation. */
-  export interface DeleteV2PolicyParams {
+  export interface DeleteV2PolicyParams extends DefaultParams {
     /** The policy ID. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listPolicyTemplates` operation. */
-  export interface ListPolicyTemplatesParams {
+  export interface ListPolicyTemplatesParams extends DefaultParams {
     /** The account GUID that the policy templates belong to. */
     accountId: string;
     /** Language code for translations
@@ -3075,7 +3440,10 @@ namespace IamPolicyManagementV1 {
     policyServiceGroupId?: string;
     /** Policy type, Optional. */
     policyType?: ListPolicyTemplatesConstants.PolicyType | string;
-    headers?: OutgoingHttpHeaders;
+    /** The number of documents to include in collection. */
+    limit?: number;
+    /** Page token that refers to the page of collection to return. */
+    start?: string;
   }
 
   /** Constants for the `listPolicyTemplates` operation. */
@@ -3098,7 +3466,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `createPolicyTemplate` operation. */
-  export interface CreatePolicyTemplateParams {
+  export interface CreatePolicyTemplateParams extends DefaultParams {
     /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
      *  will change the name value for all existing versions of the template.
      */
@@ -3127,16 +3495,14 @@ namespace IamPolicyManagementV1 {
      *  * `zh-tw` - (Chinese, Taiwan).
      */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPolicyTemplate` operation. */
-  export interface GetPolicyTemplateParams {
+  export interface GetPolicyTemplateParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The policy template state. */
     state?: GetPolicyTemplateConstants.State | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getPolicyTemplate` operation. */
@@ -3149,14 +3515,13 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `deletePolicyTemplate` operation. */
-  export interface DeletePolicyTemplateParams {
+  export interface DeletePolicyTemplateParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createPolicyTemplateVersion` operation. */
-  export interface CreatePolicyTemplateVersionParams {
+  export interface CreatePolicyTemplateVersionParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The core set of properties associated with the template's policy objet. */
@@ -3171,16 +3536,18 @@ namespace IamPolicyManagementV1 {
     description?: string;
     /** Committed status of the template version. */
     committed?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listPolicyTemplateVersions` operation. */
-  export interface ListPolicyTemplateVersionsParams {
+  export interface ListPolicyTemplateVersionsParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The policy template state. */
     state?: ListPolicyTemplateVersionsConstants.State | string;
-    headers?: OutgoingHttpHeaders;
+    /** The number of documents to include in collection. */
+    limit?: number;
+    /** Page token that refers to the page of collection to return. */
+    start?: string;
   }
 
   /** Constants for the `listPolicyTemplateVersions` operation. */
@@ -3193,7 +3560,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /** Parameters for the `replacePolicyTemplate` operation. */
-  export interface ReplacePolicyTemplateParams {
+  export interface ReplacePolicyTemplateParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The policy template version. */
@@ -3215,38 +3582,34 @@ namespace IamPolicyManagementV1 {
     description?: string;
     /** Committed status of the template version. */
     committed?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deletePolicyTemplateVersion` operation. */
-  export interface DeletePolicyTemplateVersionParams {
+  export interface DeletePolicyTemplateVersionParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The policy template version. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPolicyTemplateVersion` operation. */
-  export interface GetPolicyTemplateVersionParams {
+  export interface GetPolicyTemplateVersionParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The policy template version. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `commitPolicyTemplate` operation. */
-  export interface CommitPolicyTemplateParams {
+  export interface CommitPolicyTemplateParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
     /** The policy template version. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listPolicyAssignments` operation. */
-  export interface ListPolicyAssignmentsParams {
+  export interface ListPolicyAssignmentsParams extends DefaultParams {
     /** specify version of response body format. */
     version: string;
     /** The account GUID in which the policies belong to. */
@@ -3269,11 +3632,14 @@ namespace IamPolicyManagementV1 {
     templateId?: string;
     /** Optional policy template version. */
     templateVersion?: string;
-    headers?: OutgoingHttpHeaders;
+    /** The number of documents to include in collection. */
+    limit?: number;
+    /** Page token that refers to the page of collection to return. */
+    start?: string;
   }
 
   /** Parameters for the `createPolicyTemplateAssignment` operation. */
-  export interface CreatePolicyTemplateAssignmentParams {
+  export interface CreatePolicyTemplateAssignmentParams extends DefaultParams {
     /** specify version of response body format. */
     version: string;
     /** assignment target account and type. */
@@ -3294,20 +3660,18 @@ namespace IamPolicyManagementV1 {
      *  * `zh-tw` - (Chinese, Taiwan).
      */
     acceptLanguage?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPolicyAssignment` operation. */
-  export interface GetPolicyAssignmentParams {
+  export interface GetPolicyAssignmentParams extends DefaultParams {
     /** The policy template assignment ID. */
     assignmentId: string;
     /** specify version of response body format. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePolicyAssignment` operation. */
-  export interface UpdatePolicyAssignmentParams {
+  export interface UpdatePolicyAssignmentParams extends DefaultParams {
     /** The policy template assignment ID. */
     assignmentId: string;
     /** specify version of response body format. */
@@ -3319,27 +3683,84 @@ namespace IamPolicyManagementV1 {
     ifMatch: string;
     /** The policy template version to update to. */
     templateVersion: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deletePolicyAssignment` operation. */
-  export interface DeletePolicyAssignmentParams {
+  export interface DeletePolicyAssignmentParams extends DefaultParams {
     /** The policy template assignment ID. */
     assignmentId: string;
-    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getSettings` operation. */
+  export interface GetSettingsParams extends DefaultParams {
+    /** The account GUID that the settings belong to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+  }
+
+  /** Parameters for the `updateSettings` operation. */
+  export interface UpdateSettingsParams extends DefaultParams {
+    /** The account GUID that the settings belong to. */
+    accountId: string;
+    /** The revision number for updating Access Management Account Settings and must match the ETag value of the
+     *  existing Access Management Account Settings. The Etag can be retrieved using the GET
+     *  /v1/accounts/{account_id}/settings/access_management API and looking at the ETag response header.
+     */
+    ifMatch: string;
+    /** Update to how external accounts can interact in relation to the requested account. */
+    externalAccountIdentityInteraction?: ExternalAccountIdentityInteractionPatch;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
   }
 
   /*************************
    * model interfaces
    ************************/
 
-  /** On success, includes the  policy assigned. */
+  /**
+   * The Access Management Account Settings that are currently set for the requested account.
+   */
+  export interface AccountSettingsAccessManagement {
+    /** How external accounts can interact in relation to the requested account. */
+    external_account_identity_interaction: ExternalAccountIdentityInteraction;
+  }
+
+  /**
+   * On success, includes the  policy assigned.
+   */
   export interface AssignmentResourceCreated {
     /** policy id. */
     id?: string;
   }
 
-  /** assignment target account and type. */
+  /**
+   * assignment target account and type.
+   */
   export interface AssignmentTargetDetails {
     /** Assignment target type. */
     type?: AssignmentTargetDetails.Constants.Type | string;
@@ -3355,7 +3776,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** policy template details. */
+  /**
+   * policy template details.
+   */
   export interface AssignmentTemplateDetails {
     /** policy template id. */
     id?: string;
@@ -3363,7 +3786,9 @@ namespace IamPolicyManagementV1 {
     version?: string;
   }
 
-  /** Details of conflicting resource. */
+  /**
+   * Details of conflicting resource.
+   */
   export interface ConflictsWith {
     /** The revision number of the resource. */
     etag?: string;
@@ -3373,16 +3798,22 @@ namespace IamPolicyManagementV1 {
     policy?: string;
   }
 
-  /** Specifies the type of access granted by the policy. */
+  /**
+   * Specifies the type of access granted by the policy.
+   */
   export interface Control {
     /** Permission granted by the policy. */
     grant: Grant;
   }
 
-  /** ControlResponse. */
+  /**
+   * ControlResponse.
+   */
   export interface ControlResponse {}
 
-  /** An additional set of properties associated with a role. */
+  /**
+   * An additional set of properties associated with a role.
+   */
   export interface CustomRole {
     /** The role ID. Composed of hexadecimal characters. */
     id?: string;
@@ -3416,7 +3847,10 @@ namespace IamPolicyManagementV1 {
     href?: string;
   }
 
-  /** A role associated with a policy with additional information (display_name, description, actions) when `format=display`. */
+  /**
+   * A role associated with a policy with additional information (display_name, description, actions) when
+   * `format=display`.
+   */
   export interface EnrichedRoles {
     /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
      *  'crn:v1:bluemix:public:iam::::role:Editor'.
@@ -3432,13 +3866,17 @@ namespace IamPolicyManagementV1 {
     actions: RoleAction[];
   }
 
-  /** Additional error details. */
+  /**
+   * Additional error details.
+   */
   export interface ErrorDetails {
     /** Details of conflicting resource. */
     conflicts_with?: ConflictsWith;
   }
 
-  /** ErrorObject. */
+  /**
+   * ErrorObject.
+   */
   export interface ErrorObject {
     /** The API error code for the error. */
     code: ErrorObject.Constants.Code | string;
@@ -3470,11 +3908,14 @@ namespace IamPolicyManagementV1 {
         POLICY_TEMPLATE_NOT_FOUND = 'policy_template_not_found',
         POLICY_ASSIGNMENT_NOT_FOUND = 'policy_assignment_not_found',
         POLICY_ASSIGNMENT_CONFLICT_ERROR = 'policy_assignment_conflict_error',
+        RESOURCE_NOT_FOUND = 'resource_not_found',
       }
     }
   }
 
-  /** The error response from API. */
+  /**
+   * The error response from API.
+   */
   export interface ErrorResponse {
     /** The unique transaction id for the request. */
     trace?: string;
@@ -3484,37 +3925,93 @@ namespace IamPolicyManagementV1 {
     status_code?: number;
   }
 
-  /** GetPolicyAssignmentResponse. */
-  export interface GetPolicyAssignmentResponse {}
-
-  /** subject details of access type assignment. */
-  export interface GetPolicyAssignmentResponsePolicyAssignmentV1Subject {
-    id?: string;
-    type?: GetPolicyAssignmentResponsePolicyAssignmentV1Subject.Constants.Type | string;
-  }
-  export namespace GetPolicyAssignmentResponsePolicyAssignmentV1Subject {
-    export namespace Constants {
-      /** Type */
-      export enum Type {
-        IAM_ID = 'iam_id',
-        ACCESS_GROUP_ID = 'access_group_id',
-      }
-    }
+  /**
+   * How external accounts can interact in relation to the requested account.
+   */
+  export interface ExternalAccountIdentityInteraction {
+    /** The settings for each identity type. */
+    identity_types: IdentityTypes;
   }
 
-  /** Permission granted by the policy. */
+  /**
+   * Update to how external accounts can interact in relation to the requested account.
+   */
+  export interface ExternalAccountIdentityInteractionPatch {
+    /** The settings to apply for each identity type for a request. */
+    identity_types?: IdentityTypesPatch;
+  }
+
+  /**
+   * Details with href linking to first page of requested collection.
+   */
+  export interface First {
+    /** The href linking to the page of requested collection. */
+    href?: string;
+  }
+
+  /**
+   * Permission granted by the policy.
+   */
   export interface Grant {
     /** A set of role cloud resource names (CRNs) granted by the policy. */
     roles: Roles[];
   }
 
-  /** Permission granted by the policy with translated roles and additional role information. */
+  /**
+   * Permission granted by the policy with translated roles and additional role information.
+   */
   export interface GrantWithEnrichedRoles {
     /** A set of roles granted by the policy. */
     roles: EnrichedRoles[];
   }
 
-  /** policy template current and limit details with in an account. */
+  /**
+   * The settings for each identity type.
+   */
+  export interface IdentityTypes {
+    /** The core set of properties associated with an identity type. */
+    user: IdentityTypesBase;
+    /** The core set of properties associated with an identity type. */
+    service_id: IdentityTypesBase;
+    /** The core set of properties associated with an identity type. */
+    service: IdentityTypesBase;
+  }
+
+  /**
+   * The core set of properties associated with an identity type.
+   */
+  export interface IdentityTypesBase {
+    /** The state of the identity type. */
+    state: IdentityTypesBase.Constants.State | string;
+    /** List of accounts that the state applies to for a given identity. */
+    external_allowed_accounts: string[];
+  }
+  export namespace IdentityTypesBase {
+    export namespace Constants {
+      /** The state of the identity type. */
+      export enum State {
+        ENABLED = 'enabled',
+        MONITOR = 'monitor',
+        LIMITED = 'limited',
+      }
+    }
+  }
+
+  /**
+   * The settings to apply for each identity type for a request.
+   */
+  export interface IdentityTypesPatch {
+    /** The core set of properties associated with an identity type. */
+    user?: IdentityTypesBase;
+    /** The core set of properties associated with an identity type. */
+    service_id?: IdentityTypesBase;
+    /** The core set of properties associated with an identity type. */
+    service?: IdentityTypesBase;
+  }
+
+  /**
+   * policy template current and limit details with in an account.
+   */
   export interface LimitData {
     /** policy template current count. */
     current?: number;
@@ -3522,10 +4019,24 @@ namespace IamPolicyManagementV1 {
     limit?: number;
   }
 
-  /** Condition that specifies additional conditions or RuleAttribute to grant access. */
+  /**
+   * Condition that specifies additional conditions or RuleAttribute to grant access.
+   */
   export interface NestedCondition {}
 
-  /** The core set of properties associated with a policy. */
+  /**
+   * Details with href linking to following page of requested collection.
+   */
+  export interface Next {
+    /** The href linking to the page of requested collection. */
+    href?: string;
+    /** Page token that refers to the page of collection. */
+    start?: string;
+  }
+
+  /**
+   * The core set of properties associated with a policy.
+   */
   export interface Policy {
     /** The policy ID. */
     id?: string;
@@ -3562,7 +4073,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Set of properties for the assigned resource. */
+  /**
+   * Set of properties for the assigned resource.
+   */
   export interface PolicyAssignmentResourcePolicy {
     /** On success, includes the  policy assigned. */
     resource_created?: AssignmentResourceCreated;
@@ -3572,7 +4085,9 @@ namespace IamPolicyManagementV1 {
     error_message?: ErrorResponse;
   }
 
-  /** The policy assignment resources. */
+  /**
+   * The policy assignment resources.
+   */
   export interface PolicyAssignmentResources {
     /** Account ID where resources are assigned. */
     target?: string;
@@ -3580,7 +4095,9 @@ namespace IamPolicyManagementV1 {
     policy?: PolicyAssignmentResourcePolicy;
   }
 
-  /** The set of properties associated with the policy template assignment. */
+  /**
+   * The set of properties associated with the policy template assignment.
+   */
   export interface PolicyAssignmentV1 {
     /** assignment target account and type. */
     target: AssignmentTargetDetails;
@@ -3619,13 +4136,17 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Policy assignment response. */
+  /**
+   * Policy assignment response.
+   */
   export interface PolicyAssignmentV1Collection {
     /** Response of policy assignments. */
     assignments?: PolicyAssignmentV1[];
   }
 
-  /** The policy assignment resources. */
+  /**
+   * The policy assignment resources.
+   */
   export interface PolicyAssignmentV1Resources {
     /** assignment target account and type. */
     target?: AssignmentTargetDetails;
@@ -3633,14 +4154,18 @@ namespace IamPolicyManagementV1 {
     policy?: PolicyAssignmentResourcePolicy;
   }
 
-  /** subject details of access type assignment. */
+  /**
+   * subject details of access type assignment.
+   */
   export interface PolicyAssignmentV1Subject {
+    /** The unique identifier of the subject of the assignment. */
     id?: string;
+    /** The identity type of the subject of the assignment. */
     type?: PolicyAssignmentV1Subject.Constants.Type | string;
   }
   export namespace PolicyAssignmentV1Subject {
     export namespace Constants {
-      /** Type */
+      /** The identity type of the subject of the assignment. */
       export enum Type {
         IAM_ID = 'iam_id',
         ACCESS_GROUP_ID = 'access_group_id',
@@ -3648,13 +4173,25 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** A collection of policies. */
+  /**
+   * A collection of policies.
+   */
   export interface PolicyCollection {
+    /** The number of documents to include per each page of collection. */
+    limit?: number;
+    /** Details with href linking to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to following page of requested collection. */
+    next?: Next;
+    /** Details with href linking to previous page of requested collection. */
+    previous?: Previous;
     /** List of policies. */
     policies?: PolicyTemplateMetaData[];
   }
 
-  /** The attributes of the resource. Note that only one resource is allowed in a policy. */
+  /**
+   * The attributes of the resource. Note that only one resource is allowed in a policy.
+   */
   export interface PolicyResource {
     /** List of resource attributes. */
     attributes?: ResourceAttribute[];
@@ -3662,7 +4199,9 @@ namespace IamPolicyManagementV1 {
     tags?: ResourceTag[];
   }
 
-  /** A role associated with a policy. */
+  /**
+   * A role associated with a policy.
+   */
   export interface PolicyRole {
     /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
      *  'crn:v1:bluemix:public:iam::::role:Editor'.
@@ -3674,13 +4213,17 @@ namespace IamPolicyManagementV1 {
     description?: string;
   }
 
-  /** The subject attribute values that must match in order for this policy to apply in a permission decision. */
+  /**
+   * The subject attribute values that must match in order for this policy to apply in a permission decision.
+   */
   export interface PolicySubject {
     /** List of subject attributes. */
     attributes?: SubjectAttribute[];
   }
 
-  /** The core set of properties associated with the policy template. */
+  /**
+   * The core set of properties associated with the policy template.
+   */
   export interface PolicyTemplate {
     /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
      *  will change the name value for all existing versions of the template.
@@ -3723,22 +4266,46 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** A collection of policies assignments. */
+  /**
+   * A collection of policies assignments.
+   */
   export interface PolicyTemplateAssignmentCollection {
+    /** The number of documents to include per each page of collection. */
+    limit?: number;
+    /** Details with href linking to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to following page of requested collection. */
+    next?: Next;
+    /** Details with href linking to previous page of requested collection. */
+    previous?: Previous;
     /** List of policy assignments. */
     assignments?: PolicyTemplateAssignmentItems[];
   }
 
-  /** PolicyTemplateAssignmentItems. */
+  /**
+   * PolicyTemplateAssignmentItems.
+   */
   export interface PolicyTemplateAssignmentItems {}
 
-  /** A collection of policy Templates. */
+  /**
+   * A collection of policy Templates.
+   */
   export interface PolicyTemplateCollection {
+    /** The number of documents to include per each page of collection. */
+    limit?: number;
+    /** Details with href linking to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to following page of requested collection. */
+    next?: Next;
+    /** Details with href linking to previous page of requested collection. */
+    previous?: Previous;
     /** List of policy templates. */
     policy_templates?: PolicyTemplate[];
   }
 
-  /** The core set of properties associated with the policy template. */
+  /**
+   * The core set of properties associated with the policy template.
+   */
   export interface PolicyTemplateLimitData {
     /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
      *  will change the name value for all existing versions of the template.
@@ -3783,7 +4350,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The core set of properties associated with a policy. */
+  /**
+   * The core set of properties associated with a policy.
+   */
   export interface PolicyTemplateMetaData {
     /** The policy ID. */
     id?: string;
@@ -3825,13 +4394,35 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** A collection of versions for a specific policy template. */
+  /**
+   * A collection of versions for a specific policy template.
+   */
   export interface PolicyTemplateVersionsCollection {
+    /** The number of documents to include per each page of collection. */
+    limit?: number;
+    /** Details with href linking to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to following page of requested collection. */
+    next?: Next;
+    /** Details with href linking to previous page of requested collection. */
+    previous?: Previous;
     /** List of policy templates versions. */
     versions?: PolicyTemplate[];
   }
 
-  /** An attribute associated with a resource. */
+  /**
+   * Details with href linking to previous page of requested collection.
+   */
+  export interface Previous {
+    /** The href linking to the page of requested collection. */
+    href?: string;
+    /** Page token that refers to the page of collection. */
+    start?: string;
+  }
+
+  /**
+   * An attribute associated with a resource.
+   */
   export interface ResourceAttribute {
     /** The name of an attribute. */
     name: string;
@@ -3841,7 +4432,9 @@ namespace IamPolicyManagementV1 {
     operator?: string;
   }
 
-  /** A tag associated with a resource. */
+  /**
+   * A tag associated with a resource.
+   */
   export interface ResourceTag {
     /** The name of an access management tag. */
     name: string;
@@ -3851,7 +4444,9 @@ namespace IamPolicyManagementV1 {
     operator?: string;
   }
 
-  /** A role resource. */
+  /**
+   * A role resource.
+   */
   export interface Role {
     /** The display name of the role that is shown in the console. */
     display_name: string;
@@ -3867,7 +4462,9 @@ namespace IamPolicyManagementV1 {
     crn?: string;
   }
 
-  /** An action that can be performed by the policy subject when assigned role. */
+  /**
+   * An action that can be performed by the policy subject when assigned role.
+   */
   export interface RoleAction {
     /** Unique identifier for action with structure service.resource.action e.g., cbr.rule.read. */
     id: string;
@@ -3877,7 +4474,9 @@ namespace IamPolicyManagementV1 {
     description: string;
   }
 
-  /** A collection of roles returned by the 'list roles' operation. */
+  /**
+   * A collection of roles returned by the 'list roles' operation.
+   */
   export interface RoleCollection {
     /** List of custom roles. */
     custom_roles?: CustomRole[];
@@ -3887,7 +4486,9 @@ namespace IamPolicyManagementV1 {
     system_roles?: Role[];
   }
 
-  /** A role associated with a policy. */
+  /**
+   * A role associated with a policy.
+   */
   export interface Roles {
     /** The role Cloud Resource Name (CRN) granted by the policy. Example CRN:
      *  'crn:v1:bluemix:public:iam::::role:Editor'.
@@ -3895,7 +4496,9 @@ namespace IamPolicyManagementV1 {
     role_id: string;
   }
 
-  /** Rule that specifies additional access granted (e.g., time-based condition). */
+  /**
+   * Rule that specifies additional access granted (e.g., time-based condition).
+   */
   export interface RuleAttribute {
     /** The name of an attribute. */
     key: string;
@@ -3933,7 +4536,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** An attribute associated with a subject. */
+  /**
+   * An attribute associated with a subject.
+   */
   export interface SubjectAttribute {
     /** The name of an attribute. */
     name: string;
@@ -3941,7 +4546,9 @@ namespace IamPolicyManagementV1 {
     value: string;
   }
 
-  /** policy template count details. */
+  /**
+   * policy template count details.
+   */
   export interface TemplateCountData {
     /** policy template current and limit details with in an account. */
     template?: LimitData;
@@ -3949,7 +4556,10 @@ namespace IamPolicyManagementV1 {
     version?: LimitData;
   }
 
-  /** The details of the IAM template that was used to create an enterprise-managed policy in your account. When returned, this indicates that the policy is created from and managed by a template in the root enterprise account. */
+  /**
+   * The details of the IAM template that was used to create an enterprise-managed policy in your account. When
+   * returned, this indicates that the policy is created from and managed by a template in the root enterprise account.
+   */
   export interface TemplateMetadata {
     /** The policy template ID. */
     id?: string;
@@ -3963,7 +4573,9 @@ namespace IamPolicyManagementV1 {
     root_version?: string;
   }
 
-  /** The core set of properties associated with the template's policy objet. */
+  /**
+   * The core set of properties associated with the template's policy objet.
+   */
   export interface TemplatePolicy {
     /** The policy type; either 'access' or 'authorization'. */
     type: TemplatePolicy.Constants.Type | string;
@@ -3994,7 +4606,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The core set of properties associated with the policy. */
+  /**
+   * The core set of properties associated with the policy.
+   */
   export interface V2Policy {
     /** The policy type; either 'access' or 'authorization'. */
     type: V2Policy.Constants.Type | string;
@@ -4047,13 +4661,25 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** A collection of policies. */
+  /**
+   * A collection of policies.
+   */
   export interface V2PolicyCollection {
+    /** The number of documents to include per each page of collection. */
+    limit?: number;
+    /** Details with href linking to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to following page of requested collection. */
+    next?: Next;
+    /** Details with href linking to previous page of requested collection. */
+    previous?: Previous;
     /** List of policies. */
     policies?: V2PolicyTemplateMetaData[];
   }
 
-  /** The resource attributes to which the policy grants access. */
+  /**
+   * The resource attributes to which the policy grants access.
+   */
   export interface V2PolicyResource {
     /** List of resource attributes to which the policy grants access. */
     attributes: V2PolicyResourceAttribute[];
@@ -4061,7 +4687,9 @@ namespace IamPolicyManagementV1 {
     tags?: V2PolicyResourceTag[];
   }
 
-  /** Resource attribute to which the policy grants access. */
+  /**
+   * Resource attribute to which the policy grants access.
+   */
   export interface V2PolicyResourceAttribute {
     /** The name of a resource attribute. */
     key: string;
@@ -4085,7 +4713,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** A tag associated with a resource. */
+  /**
+   * A tag associated with a resource.
+   */
   export interface V2PolicyResourceTag {
     /** The name of an access management tag. */
     key: string;
@@ -4104,16 +4734,22 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Additional access conditions associated with the policy. */
+  /**
+   * Additional access conditions associated with the policy.
+   */
   export interface V2PolicyRule {}
 
-  /** The subject attributes for whom the policy grants access. */
+  /**
+   * The subject attributes for whom the policy grants access.
+   */
   export interface V2PolicySubject {
     /** List of subject attributes associated with policy/. */
     attributes: V2PolicySubjectAttribute[];
   }
 
-  /** Subject attribute for whom the policy grants access. */
+  /**
+   * Subject attribute for whom the policy grants access.
+   */
   export interface V2PolicySubjectAttribute {
     /** The name of a subject attribute, e.g., iam_id, access_group_id. */
     key: string;
@@ -4134,7 +4770,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The core set of properties associated with the policy. */
+  /**
+   * The core set of properties associated with the policy.
+   */
   export interface V2PolicyTemplateMetaData {
     /** The policy type; either 'access' or 'authorization'. */
     type: V2PolicyTemplateMetaData.Constants.Type | string;
@@ -4192,106 +4830,25 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Specifies the type of access granted by the policy. */
+  /**
+   * Specifies the type of access granted by the policy.
+   */
   export interface ControlResponseControl extends ControlResponse {
     /** Permission granted by the policy. */
     grant: Grant;
   }
 
-  /** Specifies the type of access granted by the policy with additional role information. */
+  /**
+   * Specifies the type of access granted by the policy with additional role information.
+   */
   export interface ControlResponseControlWithEnrichedRoles extends ControlResponse {
     /** Permission granted by the policy with translated roles and additional role information. */
     grant: GrantWithEnrichedRoles;
   }
 
-  /** The set of properties associated with the policy template assignment. */
-  export interface GetPolicyAssignmentResponsePolicyAssignment extends GetPolicyAssignmentResponse {
-    /** policy template id. */
-    template_id?: string;
-    /** policy template version. */
-    template_version?: string;
-    /** Passed in value to correlate with other assignments. */
-    assignment_id?: string;
-    /** Assignment target type. */
-    target_type?: GetPolicyAssignmentResponsePolicyAssignment.Constants.TargetType | string;
-    /** ID of the target account. */
-    target?: string;
-    /** Policy assignment ID. */
-    id?: string;
-    /** The account GUID that the policies assignments belong to.. */
-    account_id?: string;
-    /** The href URL that links to the policies assignments API by policy assignment ID. */
-    href?: string;
-    /** The UTC timestamp when the policy assignment was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the policy assignment. */
-    created_by_id?: string;
-    /** The UTC timestamp when the policy assignment was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy assignment. */
-    last_modified_by_id?: string;
-    /** Object for each account assigned. */
-    resources?: PolicyAssignmentResources[];
-    /** The policy assignment status. */
-    status?: GetPolicyAssignmentResponsePolicyAssignment.Constants.Status | string;
-  }
-  export namespace GetPolicyAssignmentResponsePolicyAssignment {
-    export namespace Constants {
-      /** Assignment target type. */
-      export enum TargetType {
-        ACCOUNT = 'Account',
-      }
-      /** The policy assignment status. */
-      export enum Status {
-        IN_PROGRESS = 'in_progress',
-        SUCCEEDED = 'succeeded',
-        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
-        FAILED = 'failed',
-      }
-    }
-  }
-
-  /** The set of properties associated with the policy template assignment. */
-  export interface GetPolicyAssignmentResponsePolicyAssignmentV1
-    extends GetPolicyAssignmentResponse {
-    /** assignment target account and type. */
-    target: AssignmentTargetDetails;
-    /** Policy assignment ID. */
-    id?: string;
-    /** The account GUID that the policies assignments belong to.. */
-    account_id?: string;
-    /** The href URL that links to the policies assignments API by policy assignment ID. */
-    href?: string;
-    /** The UTC timestamp when the policy assignment was created. */
-    created_at?: string;
-    /** The iam ID of the entity that created the policy assignment. */
-    created_by_id?: string;
-    /** The UTC timestamp when the policy assignment was last modified. */
-    last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy assignment. */
-    last_modified_by_id?: string;
-    /** Object for each account assigned. */
-    resources: PolicyAssignmentV1Resources[];
-    /** subject details of access type assignment. */
-    subject?: GetPolicyAssignmentResponsePolicyAssignmentV1Subject;
-    /** policy template details. */
-    template: AssignmentTemplateDetails;
-    /** The policy assignment status. */
-    status: GetPolicyAssignmentResponsePolicyAssignmentV1.Constants.Status | string;
-  }
-  export namespace GetPolicyAssignmentResponsePolicyAssignmentV1 {
-    export namespace Constants {
-      /** The policy assignment status. */
-      export enum Status {
-        IN_PROGRESS = 'in_progress',
-        SUCCEEDED = 'succeeded',
-        SUCCEED_WITH_ERRORS = 'succeed_with_errors',
-        FAILED = 'failed',
-      }
-    }
-  }
-
-  /** Rule that specifies additional access granted (e.g., time-based condition). */
+  /**
+   * Rule that specifies additional access granted (e.g., time-based condition).
+   */
   export interface NestedConditionRuleAttribute extends NestedCondition {
     /** The name of an attribute. */
     key: string;
@@ -4329,7 +4886,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
+  /**
+   * Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions.
+   */
   export interface NestedConditionRuleWithConditions extends NestedCondition {
     /** Operator to evaluate conditions. */
     operator: NestedConditionRuleWithConditions.Constants.Operator | string;
@@ -4348,7 +4907,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The set of properties associated with the policy template assignment. */
+  /**
+   * The set of properties associated with the policy template assignment.
+   */
   export interface PolicyTemplateAssignmentItemsPolicyAssignment
     extends PolicyTemplateAssignmentItems {
     /** policy template id. */
@@ -4396,7 +4957,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** The set of properties associated with the policy template assignment. */
+  /**
+   * The set of properties associated with the policy template assignment.
+   */
   export interface PolicyTemplateAssignmentItemsPolicyAssignmentV1
     extends PolicyTemplateAssignmentItems {
     /** assignment target account and type. */
@@ -4436,7 +4999,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Rule that specifies additional access granted (e.g., time-based condition). */
+  /**
+   * Rule that specifies additional access granted (e.g., time-based condition).
+   */
   export interface V2PolicyRuleRuleAttribute extends V2PolicyRule {
     /** The name of an attribute. */
     key: string;
@@ -4474,7 +5039,9 @@ namespace IamPolicyManagementV1 {
     }
   }
 
-  /** Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions. */
+  /**
+   * Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions.
+   */
   export interface V2PolicyRuleRuleWithNestedConditions extends V2PolicyRule {
     /** Operator to evaluate conditions. */
     operator: V2PolicyRuleRuleWithNestedConditions.Constants.Operator | string;
@@ -4490,6 +5057,414 @@ namespace IamPolicyManagementV1 {
         AND = 'and',
         OR = 'or',
       }
+    }
+  }
+
+  /*************************
+   * pager classes
+   ************************/
+
+  /**
+   * PoliciesPager can be used to simplify the use of listPolicies().
+   */
+  export class PoliciesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListPoliciesParams;
+
+    /**
+     * Construct a PoliciesPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listPolicies()
+     * @param {Object} params - The parameters to be passed to listPolicies()
+     * @constructor
+     * @returns {PoliciesPager}
+     */
+    constructor(client: IamPolicyManagementV1, params: IamPolicyManagementV1.ListPoliciesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPolicies().
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplateMetaData[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.PolicyTemplateMetaData[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPolicies(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.policies;
+    }
+
+    /**
+     * Returns all results by invoking listPolicies() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplateMetaData[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.PolicyTemplateMetaData[]> {
+      const results: PolicyTemplateMetaData[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * V2PoliciesPager can be used to simplify the use of listV2Policies().
+   */
+  export class V2PoliciesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListV2PoliciesParams;
+
+    /**
+     * Construct a V2PoliciesPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listV2Policies()
+     * @param {Object} params - The parameters to be passed to listV2Policies()
+     * @constructor
+     * @returns {V2PoliciesPager}
+     */
+    constructor(client: IamPolicyManagementV1, params: IamPolicyManagementV1.ListV2PoliciesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listV2Policies().
+     * @returns {Promise<IamPolicyManagementV1.V2PolicyTemplateMetaData[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.V2PolicyTemplateMetaData[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listV2Policies(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.policies;
+    }
+
+    /**
+     * Returns all results by invoking listV2Policies() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.V2PolicyTemplateMetaData[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.V2PolicyTemplateMetaData[]> {
+      const results: V2PolicyTemplateMetaData[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * PolicyTemplatesPager can be used to simplify the use of listPolicyTemplates().
+   */
+  export class PolicyTemplatesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListPolicyTemplatesParams;
+
+    /**
+     * Construct a PolicyTemplatesPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listPolicyTemplates()
+     * @param {Object} params - The parameters to be passed to listPolicyTemplates()
+     * @constructor
+     * @returns {PolicyTemplatesPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListPolicyTemplatesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPolicyTemplates().
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplate[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.PolicyTemplate[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPolicyTemplates(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.policy_templates;
+    }
+
+    /**
+     * Returns all results by invoking listPolicyTemplates() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplate[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.PolicyTemplate[]> {
+      const results: PolicyTemplate[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * PolicyTemplateVersionsPager can be used to simplify the use of listPolicyTemplateVersions().
+   */
+  export class PolicyTemplateVersionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListPolicyTemplateVersionsParams;
+
+    /**
+     * Construct a PolicyTemplateVersionsPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listPolicyTemplateVersions()
+     * @param {Object} params - The parameters to be passed to listPolicyTemplateVersions()
+     * @constructor
+     * @returns {PolicyTemplateVersionsPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListPolicyTemplateVersionsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPolicyTemplateVersions().
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplate[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.PolicyTemplate[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPolicyTemplateVersions(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.versions;
+    }
+
+    /**
+     * Returns all results by invoking listPolicyTemplateVersions() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplate[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.PolicyTemplate[]> {
+      const results: PolicyTemplate[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * PolicyAssignmentsPager can be used to simplify the use of listPolicyAssignments().
+   */
+  export class PolicyAssignmentsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListPolicyAssignmentsParams;
+
+    /**
+     * Construct a PolicyAssignmentsPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listPolicyAssignments()
+     * @param {Object} params - The parameters to be passed to listPolicyAssignments()
+     * @constructor
+     * @returns {PolicyAssignmentsPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListPolicyAssignmentsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPolicyAssignments().
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplateAssignmentItems[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.PolicyTemplateAssignmentItems[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPolicyAssignments(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.assignments;
+    }
+
+    /**
+     * Returns all results by invoking listPolicyAssignments() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.PolicyTemplateAssignmentItems[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.PolicyTemplateAssignmentItems[]> {
+      const results: PolicyTemplateAssignmentItems[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
     }
   }
 }
