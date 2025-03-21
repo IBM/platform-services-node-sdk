@@ -1,3 +1,10 @@
+# [0.71.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.70.0...v0.71.0) (2025-03-21)
+
+
+### Features
+
+* **IAM Policy Management:** add access management account settings API ([#295](https://github.com/IBM/platform-services-node-sdk/issues/295)) ([0994fe3](https://github.com/IBM/platform-services-node-sdk/commit/0994fe3dd76635a0cd2f243f34b5ba5ddd2e8185))
+
 # [0.70.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.69.2...v0.70.0) (2025-03-17)
 
 
