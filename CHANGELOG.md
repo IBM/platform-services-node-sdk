@@ -1,3 +1,10 @@
+# [0.72.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.71.0...v0.72.0) (2025-04-28)
+
+
+### Features
+
+* **IAM Identity:** add filter parameter for search api ([#296](https://github.com/IBM/platform-services-node-sdk/issues/296)) ([d3a76bd](https://github.com/IBM/platform-services-node-sdk/commit/d3a76bd8e81f1851331c46daae99ecf847087812))
+
 # [0.71.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.70.0...v0.71.0) (2025-03-21)
 
 
