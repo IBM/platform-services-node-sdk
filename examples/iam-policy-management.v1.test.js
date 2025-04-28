@@ -49,6 +49,7 @@ const originalWarn = console.warn;
 // Mocks for console.log and console.warn
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
+jest.setTimeout(10000);
 
 describe('IamPolicyManagementV1', () => {
 
@@ -66,9 +67,14 @@ describe('IamPolicyManagementV1', () => {
   let exampleTargetAccountId;
   let exampleAssignmentETag;
   let exampleAccountSettingsETag;
+  const exampleActionControlTemplateName = 'ActionControlTemplateNodeSDKTest';
   const exampleCustomRoleDipslayName = 'IAM Groups read access';
   const exampleUserId = 'IBMid-user1';
   const exampleServiceName = 'iam-groups';
+  let exampleActionControlTemplateId;
+  let exampleActionControlBaseVersion;
+  let exampleActionControlTemplateEtag;
+  let exampleActionControlTemplateVersion;
 
   // begin-common
 
@@ -1342,6 +1348,456 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-delete_policy_template
+  });
+  test('createActionControlTemplate request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createActionControlTemplate() result:');
+    // begin-create_action_control_template
+
+    // Request models needed by this operation.
+    const actionControl = {
+      service_name: 'am-test-service',
+      description: 'am-test-service service actionControl',
+      actions: ['am-test-service.test.delete'],
+    };
+
+    try {
+      const res = await iamPolicyManagementService.createActionControlTemplate({
+        name: exampleActionControlTemplateName,
+        accountId: exampleAccountId,
+        description: 'Test ActionControl templates with action control',
+        actionControl,
+      });
+      exampleActionControlTemplateId = res.result.id;
+      exampleActionControlBaseVersion = res.result.version;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_action_control_template
+  });
+  test('getActionControlTemplate request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getActionControlTemplate() result:');
+    // begin-get_action_control_template
+
+    const params = {
+      actionControlTemplateId: exampleActionControlTemplateId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.getActionControlTemplate(params);
+      exampleActionControlTemplateEtag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_action_control_template
+  });
+  test('replaceActionControlTemplate request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    expect(exampleActionControlBaseVersion).not.toBeNull();
+    expect(exampleActionControlTemplateEtag).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('replaceActionControlTemplate() result:');
+    // begin-replace_action_control_template
+    // Request models needed by this operation.
+    const actionControl = {
+      service_name: 'am-test-service',
+      description: 'am-test-service service actionControl',
+      actions: ['am-test-service.test.delete'],
+    };
+    const params = {
+      ifMatch: exampleActionControlTemplateEtag,
+      actionControlTemplateId: exampleActionControlTemplateId,
+      version: exampleActionControlBaseVersion,
+      actionControl,
+    };
+    
+    let res;
+    try {
+      res = await iamPolicyManagementService.replaceActionControlTemplate(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-replace_action_control_template
+  });
+  test('listActionControlTemplates request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listActionControlTemplates() result:');
+    // begin-list_action_control_templates
+
+    const params = {
+      accountId: exampleAccountId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.listActionControlTemplates(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_action_control_templates
+  });
+  test('createActionControlTemplateVersion request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createActionControlTemplateVersion() result:');
+    // begin-create_action_control_template_version
+
+    // Request models needed by this operation.
+    const actionControl = {
+      service_name: 'am-test-service',
+      description: 'am-test-service service actionControl',
+      actions: ['am-test-service.test.create'],
+    };
+    const params = {
+      actionControlTemplateId: exampleActionControlTemplateId,
+      actionControl,
+      committed: true,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.createActionControlTemplateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+      exampleActionControlTemplateVersion = res.result.version;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_action_control_template_version
+  });
+  test('getActionControlTemplateVersion request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    expect(exampleActionControlTemplateVersion).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getActionControlTemplateVersion() result:');
+    // begin-get_action_control_template_version
+
+    const params = {
+      actionControlTemplateId: exampleActionControlTemplateId,
+      version: exampleActionControlTemplateVersion,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.getActionControlTemplateVersion(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_action_control_template_version
+  });
+  test('commitActionControlTemplate request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    expect(exampleActionControlBaseVersion).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-commit_action_control_template
+
+    const params = {
+      actionControlTemplateId: exampleActionControlTemplateId,
+      version: exampleActionControlBaseVersion,
+    };
+
+    try {
+      await iamPolicyManagementService.commitActionControlTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-commit_action_control_template
+  });
+  test('listActionControlTemplateVersions request example', async () => {
+    expect(exampleTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listActionControlTemplateVersions() result:');
+    // begin-list_action_control_template_versions
+
+    const params = {
+      actionControlTemplateId: exampleTemplateId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.listActionControlTemplateVersions(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_action_control_template_versions
+  });
+  test('createActionControlTemplateAssignment request example', async () => {
+    expect(exampleTargetAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createActionControlTemplateAssignment() result:');
+    // begin-create_action_control_template_assignment
+
+    // Request models needed by this operation.
+
+    const params = {
+      acceptLanguage: 'default',
+      target: {
+        id: exampleTargetAccountId,
+        type: 'Account',
+      },
+      templates: [
+        {
+          id: exampleActionControlTemplateId,
+          version: exampleActionControlBaseVersion,
+        },
+      ]
+    };
+
+    try {
+      const res = await iamPolicyManagementService.createActionControlTemplateAssignment(params);
+      exampleAssignmentId = res.result.assignments[0].id;
+      exampleAssignmentETag = res.headers.etag;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_action_control_template_assignment
+  });
+  test('updateActionControlAssignment request example', async () => {
+    expect(exampleAssignmentId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+    originalLog('updateActionControlAssignment() result:');
+    // begin-update_action_control_assignment
+    const params = {
+      assignmentId: exampleAssignmentId,
+      templateVersion: exampleActionControlTemplateVersion,
+      ifMatch: exampleAssignmentETag,
+    };
+    try {
+    const response = await iamPolicyManagementService.updateActionControlAssignment(params);
+    } catch (err){
+      console.warn(err);
+    }
+    // end-update_action_control_assignment
+  });
+  test('listActionControlAssignments request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listActionControlAssignments() result:');
+    // begin-list_action_control_assignments
+
+    const params = {
+      accountId: exampleAccountId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.listActionControlAssignments(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_action_control_assignments
+  });
+  test('getActionControlAssignment request example', async () => {
+    expect(exampleAssignmentId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getPolicyAssignment() result:');
+    // begin-get_action_control_assignment
+
+    const params = {
+      assignmentId: exampleAssignmentId,
+    };
+
+    let res;
+    try {
+      res = await iamPolicyManagementService.getActionControlAssignment(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_action_control_assignment
+  });
+  test('deleteActionControlAssignment request example', async () => {
+    expect(exampleAssignmentId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_action_control_assignment
+
+    const params = {
+      assignmentId: exampleAssignmentId,
+    };
+
+    try {
+      await iamPolicyManagementService.deleteActionControlAssignment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_action_control_assignment
+  });
+  test('deleteActionControlTemplateVersion request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    expect(exampleActionControlBaseVersion).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_action_control_template_version
+
+    const params = {
+      actionControlTemplateId: exampleActionControlTemplateId,
+      version: exampleActionControlBaseVersion,
+    };
+
+    try {
+      await iamPolicyManagementService.deleteActionControlTemplateVersion(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-delete_action_control_template_template_version
+  });
+  test('deletePolicyTemplate request example', async () => {
+    expect(exampleActionControlTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_action_control_template
+
+    const params = {
+      actionControlTemplateId: exampleActionControlTemplateId,
+    };
+
+    try {
+      await iamPolicyManagementService.deleteActionControlTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_action_control_template
   });
   test('getSettings request example', async () => {
     consoleLogMock.mockImplementation((output) => {

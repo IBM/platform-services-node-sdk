@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
+ * IBM OpenAPI SDK Code Generator Version: 3.103.0-e8b84313-20250402-201816
  */
 
 /* eslint-disable max-classes-per-file */
@@ -138,8 +138,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.state] - The state of the policy.
    * * `active` - returns active policies
    * * `deleted` - returns non-active policies.
-   * @param {number} [params.limit] - The number of documents to include in collection.
-   * @param {string} [params.start] - Page token that refers to the page of collection to return.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyCollection>>}
    */
@@ -267,7 +267,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
    * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
-   * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
+   * @param {PolicyRole[]} params.roles - A set of role Cloud Resource Names (CRNs) granted by the policy.
    * @param {PolicyResource[]} params.resources - The resources associated with a policy.
    * @param {string} [params.description] - Customer-defined description.
    * @param {string} [params.acceptLanguage] - Language code for translations
@@ -395,7 +395,7 @@ class IamPolicyManagementV1 extends BaseService {
    * response header.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
    * @param {PolicySubject[]} params.subjects - The subjects associated with a policy.
-   * @param {PolicyRole[]} params.roles - A set of role cloud resource names (CRNs) granted by the policy.
+   * @param {PolicyRole[]} params.roles - A set of role Cloud Resource Names (CRNs) granted by the policy.
    * @param {PolicyResource[]} params.resources - The resources associated with a policy.
    * @param {string} [params.description] - Customer-defined description.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -735,10 +735,10 @@ class IamPolicyManagementV1 extends BaseService {
    * the new role.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.displayName - The display name of the role that is shown in the console.
+   * @param {string} params.displayName - The display the name of the role that is shown in the console.
    * @param {string[]} params.actions - The actions of the role. For more information, see [IAM roles and
    * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
-   * @param {string} params.name - The name of the role that is used in the CRN. Can only be alphanumeric and has to be
+   * @param {string} params.name - The name of the role that is used in the CRN. This must be alphanumeric and
    * capitalized.
    * @param {string} params.accountId - The account GUID.
    * @param {string} params.serviceName - The service name.
@@ -832,7 +832,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.ifMatch - The revision number for updating a role and must match the ETag value of the
    * existing role. The Etag can be retrieved using the GET /v2/roles/{role_id} API and looking at the ETag response
    * header.
-   * @param {string} params.displayName - The display name of the role that is shown in the console.
+   * @param {string} params.displayName - The display the name of the role that is shown in the console.
    * @param {string[]} params.actions - The actions of the role. For more information, see [IAM roles and
    * actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
    * @param {string} [params.description] - The description of the role.
@@ -1056,8 +1056,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.state] - The state of the policy.
    * * `active` - returns active policies
    * * `deleted` - returns non-active policies.
-   * @param {number} [params.limit] - The number of documents to include in collection.
-   * @param {string} [params.start] - Page token that refers to the page of collection to return.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.V2PolicyCollection>>}
    */
@@ -1185,7 +1185,9 @@ class IamPolicyManagementV1 extends BaseService {
    *   'dateLessThan', 'dateLessThanOrEquals', 'dateGreaterThan', 'dateGreaterThanOrEquals',
    *   'dateTimeLessThan', 'dateTimeLessThanOrEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEquals',
    *   'dayOfWeekEquals', 'dayOfWeekAnyOf'
-   * ``` The pattern field that matches the rule is required when rule is provided. For the business hour rule example
+   * ```
+   *
+   * The pattern field that matches the rule is required when rule is provided. For the business hour rule example
    * above, the **`pattern`** is **`"time-based-conditions:weekly"`**. For more information, see [Time-based conditions
    * operators](/docs/account?topic=account-iam-condition-properties&interface=ui#policy-condition-properties) and
    * [Limiting access with time-based conditions](/docs/account?topic=account-iam-time-based&interface=ui). If the
@@ -1258,7 +1260,7 @@ class IamPolicyManagementV1 extends BaseService {
    * against Global Catalog locations.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {Control} params.control - Specifies the type of access granted by the policy.
+   * @param {Control} params.control - Specifies the type of access that is granted by the policy.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
    * @param {string} [params.description] - Description of the policy.
    * @param {V2PolicySubject} [params.subject] - The subject attributes for whom the policy grants access.
@@ -1471,7 +1473,7 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.ifMatch - The revision number for updating a policy and must match the ETag value of the
    * existing policy. The Etag can be retrieved using the GET /v2/policies/{id} API and looking at the ETag response
    * header.
-   * @param {Control} params.control - Specifies the type of access granted by the policy.
+   * @param {Control} params.control - Specifies the type of access that is granted by the policy.
    * @param {string} params.type - The policy type; either 'access' or 'authorization'.
    * @param {string} [params.description] - Description of the policy.
    * @param {V2PolicySubject} [params.subject] - The subject attributes for whom the policy grants access.
@@ -1701,8 +1703,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} [params.policyServiceName] - Service name, Optional.
    * @param {string} [params.policyServiceGroupId] - Service group id, Optional.
    * @param {string} [params.policyType] - Policy type, Optional.
-   * @param {number} [params.limit] - The number of documents to include in collection.
-   * @param {string} [params.start] - Page token that refers to the page of collection to return.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateCollection>>}
    */
@@ -1781,10 +1783,10 @@ class IamPolicyManagementV1 extends BaseService {
    * grant access to multiple subjects.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.name - Required field when creating a new template. Otherwise this field is optional. If the
-   * field is included it will change the name value for all existing versions of the template.
-   * @param {string} params.accountId - Enterprise account ID where this template will be created.
-   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
+   * @param {string} params.name - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it changes the name value for all existing versions of the template.
+   * @param {string} params.accountId - Enterprise account ID where this template is created.
+   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy object.
    * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template.
@@ -1984,9 +1986,9 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
-   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
-   * @param {string} [params.name] - Required field when creating a new template. Otherwise this field is optional. If
-   * the field is included it will change the name value for all existing versions of the template.
+   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy object.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it changes the name value for all existing versions of the template.
    * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template version.
@@ -2064,8 +2066,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {string} [params.state] - The policy template state.
-   * @param {number} [params.limit] - The number of documents to include in collection.
-   * @param {string} [params.start] - Page token that refers to the page of collection to return.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateVersionsCollection>>}
    */
@@ -2135,9 +2137,9 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.ifMatch - The revision number for updating a policy template version and must match the ETag
    * value of the existing policy template version. The Etag can be retrieved using the GET
    * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
-   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy objet.
-   * @param {string} [params.name] - Required field when creating a new template. Otherwise this field is optional. If
-   * the field is included it will change the name value for all existing versions of the template.
+   * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy object.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it changes the name value for all existing versions of the template.
    * @param {string} [params.description] - Description of the policy template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the policy for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template version.
@@ -2401,8 +2403,8 @@ class IamPolicyManagementV1 extends BaseService {
    * * `zh-tw` - (Chinese, Taiwan).
    * @param {string} [params.templateId] - Optional template id.
    * @param {string} [params.templateVersion] - Optional policy template version.
-   * @param {number} [params.limit] - The number of documents to include in collection.
-   * @param {string} [params.start] - Page token that refers to the page of collection to return.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyTemplateAssignmentCollection>>}
    */
@@ -2619,9 +2621,9 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.assignmentId - The policy template assignment ID.
    * @param {string} params.version - specify version of response body format.
-   * @param {string} params.ifMatch - The revision number for updating a policy assignment and must match the ETag value
+   * @param {string} params.ifMatch - The revision number for updating a policy assignment and must match the Etag value
    * of the existing policy assignment. The Etag can be retrieved using the GET /v1/policy_assignments/{assignment_id}
-   * API and looking at the ETag response header.
+   * API and looking at the Etag response header.
    * @param {string} params.templateVersion - The policy template version to update to.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.PolicyAssignmentV1>>}
@@ -2824,23 +2826,23 @@ class IamPolicyManagementV1 extends BaseService {
    * Update the way identities within an external account are allowed to interact with the requested account by
    * providing:
    * * the `account_id` as a parameter
-   * * the external account ID(s) and state for the specific identity in the request body
+   * * one or more external account ID(s) and state for the specific identity in the request body
    *
-   * External account identity interaction includes the following `identity_types`: `user` (user identities defined as
-   * [IBMid's](https://test.cloud.ibm.com/docs/account?topic=account-identity-overview#users-bestpract)), `service_id`
-   * (defined as [IAM
-   * ServiceIds](https://test.cloud.ibm.com/docs/account?topic=account-identity-overview#serviceid-bestpract)),
-   * `service` (defined by a service’s [CRN](https://test.cloud.ibm.com/docs/account?topic=account-crn)). To update an
-   * Identity’s setting, the `state` and `external_allowed_accounts` fields are required.
+   * External account identity interaction includes the following `identity_types`: `user` (user identities that are
+   * defined as [IBMid's](https://cloud.ibm.com/docs/account?topic=account-identity-overview#users-bestpract)),
+   * `service_id` (defined as [IAM
+   * ServiceIds](https://cloud.ibm.com/docs/account?topic=account-identity-overview#serviceid-bestpract)), `service`
+   * (defined by a service’s [CRN](https://cloud.ibm.com/docs/account?topic=account-crn)). To update an Identity’s
+   * setting, the `state` and `external_allowed_accounts` fields are required.
    *
    * Different identity states are:
    * * "enabled": An identity type is allowed to access resources in the account provided it has access policies on
    * those resources.
    * * "limited": An identity type is allowed to access resources in the account provided it has access policies on
    * those resources AND it is associated with either the account the resources are in or one of the allowed accounts.
-   * This setting leverages the "external_allowed_accounts" list.
-   * * "monitor": Has no direct impact on an Identity’s access. Instead, it creates AT events for access decisions as if
-   * the account were in a limited “state”.
+   * This setting uses the "external_allowed_accounts" list.
+   * * "monitor": It has no direct impact on an Identity’s access. Instead, it creates AT events for access decisions as
+   * if the account were in a limited “state”.
    *
    * **Note**: The state "enabled" is a special case. In this case, access is given to all accounts and there is no need
    * to specify a particular list. Therefore, when updating "state" to "enabled" for an identity type
@@ -2849,8 +2851,8 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - The account GUID that the settings belong to.
    * @param {string} params.ifMatch - The revision number for updating Access Management Account Settings and must match
-   * the ETag value of the existing Access Management Account Settings. The Etag can be retrieved using the GET
-   * /v1/accounts/{account_id}/settings/access_management API and looking at the ETag response header.
+   * the Etag value of the existing Access Management Account Settings. The Etag can be retrieved using the GET
+   * /v1/accounts/{account_id}/settings/access_management API and looking at the Etag response header.
    * @param {ExternalAccountIdentityInteractionPatch} [params.externalAccountIdentityInteraction] - Update to how
    * external accounts can interact in relation to the requested account.
    * @param {string} [params.acceptLanguage] - Language code for translations
@@ -2922,6 +2924,1046 @@ class IamPolicyManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * actionControlTemplates
+   ************************/
+
+  /**
+   * List action control templates by attributes.
+   *
+   * List action control templates and filter by attributes by using query parameters. The following attributes are
+   * supported:
+   * `account_id`
+   * `account_id` is a required query parameter. Only action control templates that have the specified attributes and
+   * that the caller has read access to are returned. If the caller does not have read access to any action control
+   * templates an empty array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID that the action control templates belong to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplateCollection>>}
+   */
+  public listActionControlTemplates(
+    params: IamPolicyManagementV1.ListActionControlTemplatesParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplateCollection>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'acceptLanguage', 'limit', 'start', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listActionControlTemplates'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create an action control template.
+   *
+   * Create an action control template. Action control templates define a service action control.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it changes the name value for all existing versions of the template.
+   * @param {string} params.accountId - Enterprise account ID where this template is created.
+   * @param {string} [params.description] - Description of the action control template. This is shown to users in the
+   * enterprise account. Use this to describe the purpose or context of the action control for enterprise users managing
+   * IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template. If committed is set to true, then the
+   * template version can no longer be updated.
+   * @param {TemplateActionControl} [params.actionControl] - The action control properties that are created in an action
+   * resource when the template is assigned.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>>}
+   */
+  public createActionControlTemplate(
+    params: IamPolicyManagementV1.CreateActionControlTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['name', 'accountId'];
+    const _validParams = [
+      'name',
+      'accountId',
+      'description',
+      'committed',
+      'actionControl',
+      'acceptLanguage',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'account_id': _params.accountId,
+      'description': _params.description,
+      'committed': _params.committed,
+      'action_control': _params.actionControl,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createActionControlTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve the latest version of an action control template.
+   *
+   * Retrieve the latest version of an action control template by providing an action control template ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - Action control template ID.
+   * @param {string} [params.state] - The action control template state.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>>}
+   */
+  public getActionControlTemplate(
+    params: IamPolicyManagementV1.GetActionControlTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId'];
+    const _validParams = ['actionControlTemplateId', 'state', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'state': _params.state,
+    };
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getActionControlTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete an action control template.
+   *
+   * Delete an action control template by providing the action control template ID. This deletes all versions of this
+   * template. An action control template can't be deleted if any version of the template is assigned to one or more
+   * child accounts. You must remove the action control assignments first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - Action control template ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deleteActionControlTemplate(
+    params: IamPolicyManagementV1.DeleteActionControlTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId'];
+    const _validParams = ['actionControlTemplateId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteActionControlTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a new action control template version.
+   *
+   * Create a new version of an action control template. Use this if you need to make updates to an action control
+   * template that is committed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - The action control template ID.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - Description of the action control template. This is shown to users in the
+   * enterprise account. Use this to describe the purpose or context of the action control for enterprise users managing
+   * IAM templates.
+   * @param {TemplateActionControl} [params.actionControl] - The action control properties that are created in an action
+   * resource when the template is assigned.
+   * @param {boolean} [params.committed] - Committed status of the template version. If committed is set to true, then
+   * the template version can no longer be updated.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>>}
+   */
+  public createActionControlTemplateVersion(
+    params: IamPolicyManagementV1.CreateActionControlTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId'];
+    const _validParams = [
+      'actionControlTemplateId',
+      'name',
+      'description',
+      'actionControl',
+      'committed',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'description': _params.description,
+      'action_control': _params.actionControl,
+      'committed': _params.committed,
+    };
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createActionControlTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}/versions',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve action control template versions.
+   *
+   * Retrieve the versions of an action control template by providing an action control template ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - The action control template ID.
+   * @param {string} [params.state] - Action control template state.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplateVersionsCollection>>}
+   */
+  public listActionControlTemplateVersions(
+    params: IamPolicyManagementV1.ListActionControlTemplateVersionsParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplateVersionsCollection>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId'];
+    const _validParams = [
+      'actionControlTemplateId',
+      'state',
+      'limit',
+      'start',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'state': _params.state,
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listActionControlTemplateVersions'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}/versions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an action control template version.
+   *
+   * Update a specific version of an action control template. You can use this only if the version isn't committed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - Action control template ID.
+   * @param {string} params.version - Action control template version.
+   * @param {string} params.ifMatch - The revision number for updating an action control template version must match the
+   * Etag value of the existing action control template version. The Etag can be retrieved using the GET
+   * /v1/action_control_templates/{template_id}/versions/{version} API and looking at the Etag response header.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - Description of the action control template. This is shown to users in the
+   * enterprise account. Use this to describe the purpose or context of the action control for enterprise users managing
+   * IAM templates.
+   * @param {TemplateActionControl} [params.actionControl] - The action control properties that are created in an action
+   * resource when the template is assigned.
+   * @param {boolean} [params.committed] - Committed status of the template version. If committed is set to true, then
+   * the template version can no longer be updated.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>>}
+   */
+  public replaceActionControlTemplate(
+    params: IamPolicyManagementV1.ReplaceActionControlTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId', 'version', 'ifMatch'];
+    const _validParams = [
+      'actionControlTemplateId',
+      'version',
+      'ifMatch',
+      'name',
+      'description',
+      'actionControl',
+      'committed',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'description': _params.description,
+      'action_control': _params.actionControl,
+      'committed': _params.committed,
+    };
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceActionControlTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}/versions/{version}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete an action control template version.
+   *
+   * Delete a specific version of an action control template by providing an action control template ID and version
+   * number. You can't delete an action control template version that is assigned to one or more child accounts. You
+   * must remove the action control assignments first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - Action control template ID.
+   * @param {string} params.version - Action control template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deleteActionControlTemplateVersion(
+    params: IamPolicyManagementV1.DeleteActionControlTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId', 'version'];
+    const _validParams = ['actionControlTemplateId', 'version', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteActionControlTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}/versions/{version}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an action control template version.
+   *
+   * Retrieve an action control template by providing an action control template ID and version number.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - Action control template ID.
+   * @param {string} params.version - Action control template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>>}
+   */
+  public getActionControlTemplateVersion(
+    params: IamPolicyManagementV1.GetActionControlTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId', 'version'];
+    const _validParams = ['actionControlTemplateId', 'version', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getActionControlTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}/versions/{version}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Commit an action control template version.
+   *
+   * Commit an action control template version. You cannot make any further changes to the action control template once
+   * it's committed. If you have to make updates after committing a version, create a new version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.actionControlTemplateId - Action control template ID.
+   * @param {string} params.version - The action control template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public commitActionControlTemplate(
+    params: IamPolicyManagementV1.CommitActionControlTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['actionControlTemplateId', 'version'];
+    const _validParams = ['actionControlTemplateId', 'version', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'action_control_template_id': _params.actionControlTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitActionControlTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_templates/{action_control_template_id}/versions/{version}/commit',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * actionControlAssignments
+   ************************/
+
+  /**
+   * Get action control template assignments.
+   *
+   * Get action control template assignments by attributes. The following attributes are supported:
+   * `account_id`, `template_id`, `template_version`, `sort`.
+   * `account_id` is a required query parameter. Only action control template assignments with the specified attributes
+   * and  accessible by the caller are returned. If the caller does not have read access to any action control template
+   * assignments, an empty array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID in which the action control assignment belongs to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.templateId] - Optional template ID.
+   * @param {string} [params.templateVersion] - Optional action control template version.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignmentCollection>>}
+   */
+  public listActionControlAssignments(
+    params: IamPolicyManagementV1.ListActionControlAssignmentsParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignmentCollection>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'templateId',
+      'templateVersion',
+      'limit',
+      'start',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listActionControlAssignments'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_assignments',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create an action control template assignment.
+   *
+   * Assign an action control template to child accounts and account groups. This creates the action control in the
+   * accounts and account groups that you specify.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {AssignmentTargetDetails} params.target - assignment target account and type.
+   * @param {ActionControlAssignmentTemplate[]} params.templates - List of action control template details for action
+   * control assignment.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignmentCollection>>}
+   */
+  public createActionControlTemplateAssignment(
+    params: IamPolicyManagementV1.CreateActionControlTemplateAssignmentParams
+  ): Promise<
+    IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignmentCollection>
+  > {
+    const _params = { ...params };
+    const _requiredParams = ['target', 'templates'];
+    const _validParams = ['target', 'templates', 'acceptLanguage', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'target': _params.target,
+      'templates': _params.templates,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createActionControlTemplateAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_assignments',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an action control assignment.
+   *
+   * Retrieve an action control template assignment by providing an action control assignment ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - Action control template assignment ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignment>>}
+   */
+  public getActionControlAssignment(
+    params: IamPolicyManagementV1.GetActionControlAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignment>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getActionControlAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_assignments/{assignment_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an action control assignment.
+   *
+   * Update an action control assignment by providing an action control assignment ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - Action control template assignment ID.
+   * @param {string} params.ifMatch - The revision number for updating an action control assignment and must match the
+   * Etag value of the existing action control assignment. The Etag can be retrieved using the GET
+   * /v1/action_control_assignments/{assignment_id} API and looking at the Etag response header.
+   * @param {string} params.templateVersion - The version number of the template used to identify different versions of
+   * same template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignment>>}
+   */
+  public updateActionControlAssignment(
+    params: IamPolicyManagementV1.UpdateActionControlAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.ActionControlAssignment>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
+    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_version': _params.templateVersion,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateActionControlAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_assignments/{assignment_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove an action control assignment.
+   *
+   * Remove an action control template assignment by providing an action control assignment ID. You can't delete an
+   * action control assignment if the status is "in_progress".
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - Action control template assignment ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deleteActionControlAssignment(
+    params: IamPolicyManagementV1.DeleteActionControlAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteActionControlAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/action_control_assignments/{assignment_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
         axiosOptions: {
           signal: _params.signal,
         },
@@ -3007,9 +4049,9 @@ namespace IamPolicyManagementV1 {
     format?: ListPoliciesConstants.Format | string;
     /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
     state?: ListPoliciesConstants.State | string;
-    /** The number of documents to include in collection. */
+    /** The number of documents to include in the collection. */
     limit?: number;
-    /** Page token that refers to the page of collection to return. */
+    /** Page token that refers to the page of the collection to return. */
     start?: string;
   }
 
@@ -3054,7 +4096,7 @@ namespace IamPolicyManagementV1 {
     type: string;
     /** The subjects associated with a policy. */
     subjects: PolicySubject[];
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    /** A set of role Cloud Resource Names (CRNs) granted by the policy. */
     roles: PolicyRole[];
     /** The resources associated with a policy. */
     resources: PolicyResource[];
@@ -3088,7 +4130,7 @@ namespace IamPolicyManagementV1 {
     type: string;
     /** The subjects associated with a policy. */
     subjects: PolicySubject[];
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    /** A set of role Cloud Resource Names (CRNs) granted by the policy. */
     roles: PolicyRole[];
     /** The resources associated with a policy. */
     resources: PolicyResource[];
@@ -3159,13 +4201,13 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `createRole` operation. */
   export interface CreateRoleParams extends DefaultParams {
-    /** The display name of the role that is shown in the console. */
+    /** The display the name of the role that is shown in the console. */
     displayName: string;
     /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
      */
     actions: string[];
-    /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
+    /** The name of the role that is used in the CRN. This must be alphanumeric and capitalized. */
     name: string;
     /** The account GUID. */
     accountId: string;
@@ -3197,7 +4239,7 @@ namespace IamPolicyManagementV1 {
      *  retrieved using the GET /v2/roles/{role_id} API and looking at the ETag response header.
      */
     ifMatch: string;
-    /** The display name of the role that is shown in the console. */
+    /** The display the name of the role that is shown in the console. */
     displayName: string;
     /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
@@ -3274,9 +4316,9 @@ namespace IamPolicyManagementV1 {
     format?: ListV2PoliciesConstants.Format | string;
     /** The state of the policy. * `active` - returns active policies * `deleted` - returns non-active policies. */
     state?: ListV2PoliciesConstants.State | string;
-    /** The number of documents to include in collection. */
+    /** The number of documents to include in the collection. */
     limit?: number;
-    /** Page token that refers to the page of collection to return. */
+    /** Page token that refers to the page of the collection to return. */
     start?: string;
   }
 
@@ -3306,7 +4348,7 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `createV2Policy` operation. */
   export interface CreateV2PolicyParams extends DefaultParams {
-    /** Specifies the type of access granted by the policy. */
+    /** Specifies the type of access that is granted by the policy. */
     control: Control;
     /** The policy type; either 'access' or 'authorization'. */
     type: CreateV2PolicyConstants.Type | string;
@@ -3355,7 +4397,7 @@ namespace IamPolicyManagementV1 {
      *  be retrieved using the GET /v2/policies/{id} API and looking at the ETag response header.
      */
     ifMatch: string;
-    /** Specifies the type of access granted by the policy. */
+    /** Specifies the type of access that is granted by the policy. */
     control: Control;
     /** The policy type; either 'access' or 'authorization'. */
     type: ReplaceV2PolicyConstants.Type | string;
@@ -3440,9 +4482,9 @@ namespace IamPolicyManagementV1 {
     policyServiceGroupId?: string;
     /** Policy type, Optional. */
     policyType?: ListPolicyTemplatesConstants.PolicyType | string;
-    /** The number of documents to include in collection. */
+    /** The number of documents to include in the collection. */
     limit?: number;
-    /** Page token that refers to the page of collection to return. */
+    /** Page token that refers to the page of the collection to return. */
     start?: string;
   }
 
@@ -3467,13 +4509,13 @@ namespace IamPolicyManagementV1 {
 
   /** Parameters for the `createPolicyTemplate` operation. */
   export interface CreatePolicyTemplateParams extends DefaultParams {
-    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
-     *  will change the name value for all existing versions of the template.
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
      */
     name: string;
-    /** Enterprise account ID where this template will be created. */
+    /** Enterprise account ID where this template is created. */
     accountId: string;
-    /** The core set of properties associated with the template's policy objet. */
+    /** The core set of properties associated with the template's policy object. */
     policy: TemplatePolicy;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
      *  the purpose or context of the policy for enterprise users managing IAM templates.
@@ -3524,10 +4566,10 @@ namespace IamPolicyManagementV1 {
   export interface CreatePolicyTemplateVersionParams extends DefaultParams {
     /** The policy template ID. */
     policyTemplateId: string;
-    /** The core set of properties associated with the template's policy objet. */
+    /** The core set of properties associated with the template's policy object. */
     policy: TemplatePolicy;
-    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
-     *  will change the name value for all existing versions of the template.
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
      */
     name?: string;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
@@ -3544,9 +4586,9 @@ namespace IamPolicyManagementV1 {
     policyTemplateId: string;
     /** The policy template state. */
     state?: ListPolicyTemplateVersionsConstants.State | string;
-    /** The number of documents to include in collection. */
+    /** The number of documents to include in the collection. */
     limit?: number;
-    /** Page token that refers to the page of collection to return. */
+    /** Page token that refers to the page of the collection to return. */
     start?: string;
   }
 
@@ -3570,10 +4612,10 @@ namespace IamPolicyManagementV1 {
      *  /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
      */
     ifMatch: string;
-    /** The core set of properties associated with the template's policy objet. */
+    /** The core set of properties associated with the template's policy object. */
     policy: TemplatePolicy;
-    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
-     *  will change the name value for all existing versions of the template.
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
      */
     name?: string;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
@@ -3632,9 +4674,9 @@ namespace IamPolicyManagementV1 {
     templateId?: string;
     /** Optional policy template version. */
     templateVersion?: string;
-    /** The number of documents to include in collection. */
+    /** The number of documents to include in the collection. */
     limit?: number;
-    /** Page token that refers to the page of collection to return. */
+    /** Page token that refers to the page of the collection to return. */
     start?: string;
   }
 
@@ -3676,9 +4718,9 @@ namespace IamPolicyManagementV1 {
     assignmentId: string;
     /** specify version of response body format. */
     version: string;
-    /** The revision number for updating a policy assignment and must match the ETag value of the existing policy
+    /** The revision number for updating a policy assignment and must match the Etag value of the existing policy
      *  assignment. The Etag can be retrieved using the GET /v1/policy_assignments/{assignment_id} API and looking at
-     *  the ETag response header.
+     *  the Etag response header.
      */
     ifMatch: string;
     /** The policy template version to update to. */
@@ -3715,9 +4757,9 @@ namespace IamPolicyManagementV1 {
   export interface UpdateSettingsParams extends DefaultParams {
     /** The account GUID that the settings belong to. */
     accountId: string;
-    /** The revision number for updating Access Management Account Settings and must match the ETag value of the
+    /** The revision number for updating Access Management Account Settings and must match the Etag value of the
      *  existing Access Management Account Settings. The Etag can be retrieved using the GET
-     *  /v1/accounts/{account_id}/settings/access_management API and looking at the ETag response header.
+     *  /v1/accounts/{account_id}/settings/access_management API and looking at the Etag response header.
      */
     ifMatch: string;
     /** Update to how external accounts can interact in relation to the requested account. */
@@ -3738,6 +4780,254 @@ namespace IamPolicyManagementV1 {
     acceptLanguage?: string;
   }
 
+  /** Parameters for the `listActionControlTemplates` operation. */
+  export interface ListActionControlTemplatesParams extends DefaultParams {
+    /** The account GUID that the action control templates belong to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    /** The number of documents to include in the collection. */
+    limit?: number;
+    /** Page token that refers to the page of the collection to return. */
+    start?: string;
+  }
+
+  /** Parameters for the `createActionControlTemplate` operation. */
+  export interface CreateActionControlTemplateParams extends DefaultParams {
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
+     */
+    name: string;
+    /** Enterprise account ID where this template is created. */
+    accountId: string;
+    /** Description of the action control template. This is shown to users in the enterprise account. Use this to
+     *  describe the purpose or context of the action control for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** Committed status of the template. If committed is set to true, then the template version can no longer be
+     *  updated.
+     */
+    committed?: boolean;
+    /** The action control properties that are created in an action resource when the template is assigned. */
+    actionControl?: TemplateActionControl;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+  }
+
+  /** Parameters for the `getActionControlTemplate` operation. */
+  export interface GetActionControlTemplateParams extends DefaultParams {
+    /** Action control template ID. */
+    actionControlTemplateId: string;
+    /** The action control template state. */
+    state?: GetActionControlTemplateConstants.State | string;
+  }
+
+  /** Constants for the `getActionControlTemplate` operation. */
+  export namespace GetActionControlTemplateConstants {
+    /** The action control template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
+  }
+
+  /** Parameters for the `deleteActionControlTemplate` operation. */
+  export interface DeleteActionControlTemplateParams extends DefaultParams {
+    /** Action control template ID. */
+    actionControlTemplateId: string;
+  }
+
+  /** Parameters for the `createActionControlTemplateVersion` operation. */
+  export interface CreateActionControlTemplateVersionParams extends DefaultParams {
+    /** The action control template ID. */
+    actionControlTemplateId: string;
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  will change the name value for all existing versions of the template.
+     */
+    name?: string;
+    /** Description of the action control template. This is shown to users in the enterprise account. Use this to
+     *  describe the purpose or context of the action control for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** The action control properties that are created in an action resource when the template is assigned. */
+    actionControl?: TemplateActionControl;
+    /** Committed status of the template version. If committed is set to true, then the template version can no
+     *  longer be updated.
+     */
+    committed?: boolean;
+  }
+
+  /** Parameters for the `listActionControlTemplateVersions` operation. */
+  export interface ListActionControlTemplateVersionsParams extends DefaultParams {
+    /** The action control template ID. */
+    actionControlTemplateId: string;
+    /** Action control template state. */
+    state?: ListActionControlTemplateVersionsConstants.State | string;
+    /** The number of documents to include in the collection. */
+    limit?: number;
+    /** Page token that refers to the page of the collection to return. */
+    start?: string;
+  }
+
+  /** Constants for the `listActionControlTemplateVersions` operation. */
+  export namespace ListActionControlTemplateVersionsConstants {
+    /** Action control template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
+  }
+
+  /** Parameters for the `replaceActionControlTemplate` operation. */
+  export interface ReplaceActionControlTemplateParams extends DefaultParams {
+    /** Action control template ID. */
+    actionControlTemplateId: string;
+    /** Action control template version. */
+    version: string;
+    /** The revision number for updating an action control template version must match the Etag value of the
+     *  existing action control template version. The Etag can be retrieved using the GET
+     *  /v1/action_control_templates/{template_id}/versions/{version} API and looking at the Etag response header.
+     */
+    ifMatch: string;
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  will change the name value for all existing versions of the template.
+     */
+    name?: string;
+    /** Description of the action control template. This is shown to users in the enterprise account. Use this to
+     *  describe the purpose or context of the action control for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** The action control properties that are created in an action resource when the template is assigned. */
+    actionControl?: TemplateActionControl;
+    /** Committed status of the template version. If committed is set to true, then the template version can no
+     *  longer be updated.
+     */
+    committed?: boolean;
+  }
+
+  /** Parameters for the `deleteActionControlTemplateVersion` operation. */
+  export interface DeleteActionControlTemplateVersionParams extends DefaultParams {
+    /** Action control template ID. */
+    actionControlTemplateId: string;
+    /** Action control template version. */
+    version: string;
+  }
+
+  /** Parameters for the `getActionControlTemplateVersion` operation. */
+  export interface GetActionControlTemplateVersionParams extends DefaultParams {
+    /** Action control template ID. */
+    actionControlTemplateId: string;
+    /** Action control template version. */
+    version: string;
+  }
+
+  /** Parameters for the `commitActionControlTemplate` operation. */
+  export interface CommitActionControlTemplateParams extends DefaultParams {
+    /** Action control template ID. */
+    actionControlTemplateId: string;
+    /** The action control template version. */
+    version: string;
+  }
+
+  /** Parameters for the `listActionControlAssignments` operation. */
+  export interface ListActionControlAssignmentsParams extends DefaultParams {
+    /** The account GUID in which the action control assignment belongs to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    /** Optional template ID. */
+    templateId?: string;
+    /** Optional action control template version. */
+    templateVersion?: string;
+    /** The number of documents to include in the collection. */
+    limit?: number;
+    /** Page token that refers to the page of the collection to return. */
+    start?: string;
+  }
+
+  /** Parameters for the `createActionControlTemplateAssignment` operation. */
+  export interface CreateActionControlTemplateAssignmentParams extends DefaultParams {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** List of action control template details for action control assignment. */
+    templates: ActionControlAssignmentTemplate[];
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+  }
+
+  /** Parameters for the `getActionControlAssignment` operation. */
+  export interface GetActionControlAssignmentParams extends DefaultParams {
+    /** Action control template assignment ID. */
+    assignmentId: string;
+  }
+
+  /** Parameters for the `updateActionControlAssignment` operation. */
+  export interface UpdateActionControlAssignmentParams extends DefaultParams {
+    /** Action control template assignment ID. */
+    assignmentId: string;
+    /** The revision number for updating an action control assignment and must match the Etag value of the existing
+     *  action control assignment. The Etag can be retrieved using the GET
+     *  /v1/action_control_assignments/{assignment_id} API and looking at the Etag response header.
+     */
+    ifMatch: string;
+    /** The version number of the template used to identify different versions of same template. */
+    templateVersion: string;
+  }
+
+  /** Parameters for the `deleteActionControlAssignment` operation. */
+  export interface DeleteActionControlAssignmentParams extends DefaultParams {
+    /** Action control template assignment ID. */
+    assignmentId: string;
+  }
+
   /*************************
    * model interfaces
    ************************/
@@ -3751,10 +5041,191 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * On success, includes the  policy assigned.
+   * The set of properties associated with the assigned action control template.
+   */
+  export interface ActionControlAssignment {
+    /** Action control assignment ID. */
+    id?: string;
+    /** The account GUID that the action control assignments belong to. */
+    account_id?: string;
+    /** The href URL that links to the action control assignments API by action control assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the action control assignment was created. */
+    created_at?: string;
+    /** The IAM ID of the entity that created the action control assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the action control assignment was last modified. */
+    last_modified_at?: string;
+    /** The IAM ID of the entity that last modified the action control assignment. */
+    last_modified_by_id?: string;
+    /** The current operation of the action control assignment. */
+    operation?: ActionControlAssignment.Constants.Operation | string;
+    /** Resources created when action control template is assigned. */
+    resources?: ActionControlAssignmentResource[];
+    /** The action control template id and version that will be assigned. */
+    template: ActionControlAssignmentTemplate;
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** The action control assignment status. */
+    status?: ActionControlAssignment.Constants.Status | string;
+  }
+  export namespace ActionControlAssignment {
+    export namespace Constants {
+      /** The current operation of the action control assignment. */
+      export enum Operation {
+        CREATE = 'create',
+        APPLY = 'apply',
+        UPDATE = 'update',
+        REMOVE = 'remove',
+      }
+      /** The action control assignment status. */
+      export enum Status {
+        ACCEPTED = 'accepted',
+        FAILURE = 'failure',
+        IN_PROGRESS = 'in_progress',
+        SUPERSEDED = 'superseded',
+      }
+    }
+  }
+
+  /**
+   * A collection of action control assignments.
+   */
+  export interface ActionControlAssignmentCollection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
+    /** List of action control assignments. */
+    assignments: ActionControlAssignment[];
+  }
+
+  /**
+   * The action control assignment resources and target where the template is assigned.
+   */
+  export interface ActionControlAssignmentResource {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** Set of properties of the assigned resource or error message if assignment failed. */
+    action_control?: ActionControlAssignmentResourceActionControl;
+  }
+
+  /**
+   * Set of properties of the assigned resource or error message if assignment failed.
+   */
+  export interface ActionControlAssignmentResourceActionControl {
+    /** On success, it includes the action control assigned. */
+    resource_created?: ActionControlAssignmentResourceCreated;
+    /** The error response from API. */
+    error_message?: ErrorResponse;
+  }
+
+  /**
+   * On success, it includes the action control assigned.
+   */
+  export interface ActionControlAssignmentResourceCreated {
+    /** action control id. */
+    id?: string;
+  }
+
+  /**
+   * The action control template id and version that will be assigned.
+   */
+  export interface ActionControlAssignmentTemplate {
+    /** Action control template ID. */
+    id: string;
+    /** Action control template version. */
+    version: string;
+  }
+
+  /**
+   * The set of properties associated with the action control template.
+   */
+  export interface ActionControlTemplate {
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
+     */
+    name: string;
+    /** Description of the action control template. This is shown to users in the enterprise account. Use this to
+     *  describe the purpose or context of the action control for enterprise users managing IAM templates.
+     */
+    description: string;
+    /** Enterprise account ID where this template is created. */
+    account_id: string;
+    /** Committed status of the template. If committed is set to true, then the template version can no longer be
+     *  updated.
+     */
+    committed?: boolean;
+    /** The action control properties that are created in an action resource when the template is assigned. */
+    action_control?: TemplateActionControl;
+    /** The action control template ID. */
+    id?: string;
+    /** The href URL that links to the action control templates API by action control template ID. */
+    href?: string;
+    /** The UTC timestamp when the action control template was created. */
+    created_at?: string;
+    /** The IAM ID of the entity that created the action control template. */
+    created_by_id?: string;
+    /** The UTC timestamp when the action control template was last modified. */
+    last_modified_at?: string;
+    /** The IAM ID of the entity that last modified the action control template. */
+    last_modified_by_id?: string;
+    /** The version number of the template used to identify different versions of same template. */
+    version: string;
+    /** State of action control template. */
+    state: ActionControlTemplate.Constants.State | string;
+  }
+  export namespace ActionControlTemplate {
+    export namespace Constants {
+      /** State of action control template. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
+  }
+
+  /**
+   * A collection of action control templates.
+   */
+  export interface ActionControlTemplateCollection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
+    /** List of action control templates. */
+    action_control_templates: ActionControlTemplate[];
+  }
+
+  /**
+   * A collection of versions for a specific action control template.
+   */
+  export interface ActionControlTemplateVersionsCollection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
+    /** List of action control templates versions. */
+    versions: ActionControlTemplate[];
+  }
+
+  /**
+   * On success, includes the  policy that is assigned.
    */
   export interface AssignmentResourceCreated {
-    /** policy id. */
+    /** Policy id. */
     id?: string;
   }
 
@@ -3763,9 +5234,9 @@ namespace IamPolicyManagementV1 {
    */
   export interface AssignmentTargetDetails {
     /** Assignment target type. */
-    type?: AssignmentTargetDetails.Constants.Type | string;
+    type: AssignmentTargetDetails.Constants.Type | string;
     /** ID of the target account. */
-    id?: string;
+    id: string;
   }
   export namespace AssignmentTargetDetails {
     export namespace Constants {
@@ -3780,9 +5251,9 @@ namespace IamPolicyManagementV1 {
    * policy template details.
    */
   export interface AssignmentTemplateDetails {
-    /** policy template id. */
+    /** Policy template ID. */
     id?: string;
-    /** policy template version. */
+    /** Policy template version. */
     version?: string;
   }
 
@@ -3792,17 +5263,17 @@ namespace IamPolicyManagementV1 {
   export interface ConflictsWith {
     /** The revision number of the resource. */
     etag?: string;
-    /** The conflicting role id. */
+    /** The conflicting role of ID. */
     role?: string;
-    /** The conflicting policy id. */
+    /** The conflicting policy ID. */
     policy?: string;
   }
 
   /**
-   * Specifies the type of access granted by the policy.
+   * Specifies the type of access that is granted by the policy.
    */
   export interface Control {
-    /** Permission granted by the policy. */
+    /** Permission is granted by the policy. */
     grant: Grant;
   }
 
@@ -3817,7 +5288,7 @@ namespace IamPolicyManagementV1 {
   export interface CustomRole {
     /** The role ID. Composed of hexadecimal characters. */
     id?: string;
-    /** The display name of the role that is shown in the console. */
+    /** The display the name of the role that is shown in the console. */
     display_name: string;
     /** The description of the role. */
     description?: string;
@@ -3829,7 +5300,7 @@ namespace IamPolicyManagementV1 {
      *  'crn:v1:ibmcloud:public:iam-access-management::a/exampleAccountId::customRole:ExampleRoleName'.
      */
     crn?: string;
-    /** The name of the role that is used in the CRN. Can only be alphanumeric and has to be capitalized. */
+    /** The name of the role that is used in the CRN. This must be alphanumeric and capitalized. */
     name: string;
     /** The account GUID. */
     account_id: string;
@@ -3837,13 +5308,13 @@ namespace IamPolicyManagementV1 {
     service_name: string;
     /** The UTC timestamp when the role was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the role. */
+    /** The IAM ID of the entity that created the role. */
     created_by_id?: string;
     /** The UTC timestamp when the role was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
+    /** The IAM ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
-    /** The href link back to the role. */
+    /** The href links back to the role. */
     href?: string;
   }
 
@@ -3856,9 +5327,9 @@ namespace IamPolicyManagementV1 {
      *  'crn:v1:bluemix:public:iam::::role:Editor'.
      */
     role_id: string;
-    /** The service defined (or user defined if a custom role) display name of the role. */
+    /** The display name of the role, either service-defined or user-defined for custom roles. */
     display_name?: string;
-    /** The service defined (or user defined if a custom role) description of the role. */
+    /** The role description, either service-defined or user-defined for custom roles. */
     description?: string;
     /** The actions of the role. For more information, see [IAM roles and
      *  actions](https://cloud.ibm.com/docs/account?topic=account-iam-service-roles-actions).
@@ -3909,6 +5380,8 @@ namespace IamPolicyManagementV1 {
         POLICY_ASSIGNMENT_NOT_FOUND = 'policy_assignment_not_found',
         POLICY_ASSIGNMENT_CONFLICT_ERROR = 'policy_assignment_conflict_error',
         RESOURCE_NOT_FOUND = 'resource_not_found',
+        ACTION_CONTROL_TEMPLATE_NOT_FOUND = 'action_control_template_not_found',
+        ACTION_CONTROL_ASSIGNMENT_NOT_FOUND = 'action_control_assignment_not_found',
       }
     }
   }
@@ -3917,12 +5390,12 @@ namespace IamPolicyManagementV1 {
    * The error response from API.
    */
   export interface ErrorResponse {
-    /** The unique transaction id for the request. */
-    trace?: string;
+    /** The unique transaction ID for the request. */
+    trace: string;
     /** The errors encountered during the response. */
-    errors?: ErrorObject[];
-    /** The http error code of the response. */
-    status_code?: number;
+    errors: ErrorObject[];
+    /** The HTTP error code of the response. */
+    status_code: number;
   }
 
   /**
@@ -3942,7 +5415,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Details with href linking to first page of requested collection.
+   * Details with linking href to first page of requested collection.
    */
   export interface First {
     /** The href linking to the page of requested collection. */
@@ -3950,10 +5423,10 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Permission granted by the policy.
+   * Permission is granted by the policy.
    */
   export interface Grant {
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    /** A set of role Cloud Resource Names (CRNs) granted by the policy. */
     roles: Roles[];
   }
 
@@ -4025,12 +5498,12 @@ namespace IamPolicyManagementV1 {
   export interface NestedCondition {}
 
   /**
-   * Details with href linking to following page of requested collection.
+   * Details with href linking to the following page of requested collection.
    */
   export interface Next {
     /** The href linking to the page of requested collection. */
     href?: string;
-    /** Page token that refers to the page of collection. */
+    /** Page token that refers to the page of the collection. */
     start?: string;
   }
 
@@ -4046,19 +5519,19 @@ namespace IamPolicyManagementV1 {
     description?: string;
     /** The subjects associated with a policy. */
     subjects: PolicySubject[];
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    /** A set of role Cloud Resource Names (CRNs) granted by the policy. */
     roles: PolicyRole[];
     /** The resources associated with a policy. */
     resources: PolicyResource[];
-    /** The href link back to the policy. */
+    /** The href links back to the policy. */
     href?: string;
     /** The UTC timestamp when the policy was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy. */
+    /** The IAM ID of the entity that created the policy. */
     created_by_id?: string;
     /** The UTC timestamp when the policy was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
+    /** The IAM ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state. */
     state?: Policy.Constants.State | string;
@@ -4077,7 +5550,7 @@ namespace IamPolicyManagementV1 {
    * Set of properties for the assigned resource.
    */
   export interface PolicyAssignmentResourcePolicy {
-    /** On success, includes the  policy assigned. */
+    /** On success, includes the  policy that is assigned. */
     resource_created?: AssignmentResourceCreated;
     /** policy status. */
     status?: string;
@@ -4103,21 +5576,21 @@ namespace IamPolicyManagementV1 {
     target: AssignmentTargetDetails;
     /** Policy assignment ID. */
     id?: string;
-    /** The account GUID that the policies assignments belong to.. */
+    /** The account GUID that the policies assignments belong to. */
     account_id?: string;
     /** The href URL that links to the policies assignments API by policy assignment ID. */
     href?: string;
     /** The UTC timestamp when the policy assignment was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy assignment. */
+    /** The IAM ID of the entity that created the policy assignment. */
     created_by_id?: string;
     /** The UTC timestamp when the policy assignment was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy assignment. */
+    /** The IAM ID of the entity that last modified the policy assignment. */
     last_modified_by_id?: string;
     /** Object for each account assigned. */
     resources: PolicyAssignmentV1Resources[];
-    /** subject details of access type assignment. */
+    /** Subject details of access type assignment. */
     subject?: PolicyAssignmentV1Subject;
     /** policy template details. */
     template: AssignmentTemplateDetails;
@@ -4140,8 +5613,16 @@ namespace IamPolicyManagementV1 {
    * Policy assignment response.
    */
   export interface PolicyAssignmentV1Collection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
     /** Response of policy assignments. */
-    assignments?: PolicyAssignmentV1[];
+    assignments: PolicyAssignmentV1[];
   }
 
   /**
@@ -4155,7 +5636,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * subject details of access type assignment.
+   * Subject details of access type assignment.
    */
   export interface PolicyAssignmentV1Subject {
     /** The unique identifier of the subject of the assignment. */
@@ -4177,16 +5658,16 @@ namespace IamPolicyManagementV1 {
    * A collection of policies.
    */
   export interface PolicyCollection {
-    /** The number of documents to include per each page of collection. */
+    /** The number of documents to include per each page of the collection. */
     limit?: number;
-    /** Details with href linking to first page of requested collection. */
+    /** Details with linking href to first page of requested collection. */
     first?: First;
-    /** Details with href linking to following page of requested collection. */
+    /** Details with href linking to the following page of requested collection. */
     next?: Next;
-    /** Details with href linking to previous page of requested collection. */
+    /** Details with linking href to previous page of requested collection. */
     previous?: Previous;
     /** List of policies. */
-    policies?: PolicyTemplateMetaData[];
+    policies: PolicyTemplateMetaData[];
   }
 
   /**
@@ -4194,7 +5675,7 @@ namespace IamPolicyManagementV1 {
    */
   export interface PolicyResource {
     /** List of resource attributes. */
-    attributes?: ResourceAttribute[];
+    attributes: ResourceAttribute[];
     /** List of access management tags. */
     tags?: ResourceTag[];
   }
@@ -4218,42 +5699,42 @@ namespace IamPolicyManagementV1 {
    */
   export interface PolicySubject {
     /** List of subject attributes. */
-    attributes?: SubjectAttribute[];
+    attributes: SubjectAttribute[];
   }
 
   /**
    * The core set of properties associated with the policy template.
    */
   export interface PolicyTemplate {
-    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
-     *  will change the name value for all existing versions of the template.
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
      */
     name: string;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
      *  the purpose or context of the policy for enterprise users managing IAM templates.
      */
     description?: string;
-    /** Enterprise account ID where this template will be created. */
+    /** Enterprise account ID where this template is created. */
     account_id: string;
     /** Template version. */
     version: string;
     /** Committed status of the template version. */
     committed?: boolean;
-    /** The core set of properties associated with the template's policy objet. */
+    /** The core set of properties associated with the template's policy object. */
     policy: TemplatePolicy;
     /** State of policy template. */
-    state?: PolicyTemplate.Constants.State | string;
+    state: PolicyTemplate.Constants.State | string;
     /** The policy template ID. */
     id?: string;
     /** The href URL that links to the policy templates API by policy template ID. */
     href?: string;
     /** The UTC timestamp when the policy template was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy template. */
+    /** The IAM ID of the entity that created the policy template. */
     created_by_id?: string;
     /** The UTC timestamp when the policy template was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy template. */
+    /** The IAM ID of the entity that last modified the policy template. */
     last_modified_by_id?: string;
   }
   export namespace PolicyTemplate {
@@ -4270,16 +5751,16 @@ namespace IamPolicyManagementV1 {
    * A collection of policies assignments.
    */
   export interface PolicyTemplateAssignmentCollection {
-    /** The number of documents to include per each page of collection. */
+    /** The number of documents to include per each page of the collection. */
     limit?: number;
-    /** Details with href linking to first page of requested collection. */
+    /** Details with linking href to first page of requested collection. */
     first?: First;
-    /** Details with href linking to following page of requested collection. */
+    /** Details with href linking to the following page of requested collection. */
     next?: Next;
-    /** Details with href linking to previous page of requested collection. */
+    /** Details with linking href to previous page of requested collection. */
     previous?: Previous;
     /** List of policy assignments. */
-    assignments?: PolicyTemplateAssignmentItems[];
+    assignments: PolicyTemplateAssignmentItems[];
   }
 
   /**
@@ -4291,51 +5772,51 @@ namespace IamPolicyManagementV1 {
    * A collection of policy Templates.
    */
   export interface PolicyTemplateCollection {
-    /** The number of documents to include per each page of collection. */
+    /** The number of documents to include per each page of the collection. */
     limit?: number;
-    /** Details with href linking to first page of requested collection. */
+    /** Details with linking href to first page of requested collection. */
     first?: First;
-    /** Details with href linking to following page of requested collection. */
+    /** Details with href linking to the following page of requested collection. */
     next?: Next;
-    /** Details with href linking to previous page of requested collection. */
+    /** Details with linking href to previous page of requested collection. */
     previous?: Previous;
     /** List of policy templates. */
-    policy_templates?: PolicyTemplate[];
+    policy_templates: PolicyTemplate[];
   }
 
   /**
    * The core set of properties associated with the policy template.
    */
   export interface PolicyTemplateLimitData {
-    /** Required field when creating a new template. Otherwise this field is optional. If the field is included it
-     *  will change the name value for all existing versions of the template.
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
      */
     name: string;
     /** Description of the policy template. This is shown to users in the enterprise account. Use this to describe
      *  the purpose or context of the policy for enterprise users managing IAM templates.
      */
     description?: string;
-    /** Enterprise account ID where this template will be created. */
+    /** Enterprise account ID where this template is created. */
     account_id: string;
     /** Template version. */
     version: string;
     /** Committed status of the template version. */
     committed?: boolean;
-    /** The core set of properties associated with the template's policy objet. */
+    /** The core set of properties associated with the template's policy object. */
     policy: TemplatePolicy;
     /** State of policy template. */
-    state?: PolicyTemplateLimitData.Constants.State | string;
+    state: PolicyTemplateLimitData.Constants.State | string;
     /** The policy template ID. */
     id?: string;
     /** The href URL that links to the policy templates API by policy template ID. */
     href?: string;
     /** The UTC timestamp when the policy template was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy template. */
+    /** The IAM ID of the entity that created the policy template. */
     created_by_id?: string;
     /** The UTC timestamp when the policy template was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy template. */
+    /** The IAM ID of the entity that last modified the policy template. */
     last_modified_by_id?: string;
     /** policy template count details. */
     counts?: TemplateCountData;
@@ -4362,19 +5843,19 @@ namespace IamPolicyManagementV1 {
     description?: string;
     /** The subjects associated with a policy. */
     subjects: PolicySubject[];
-    /** A set of role cloud resource names (CRNs) granted by the policy. */
+    /** A set of role Cloud Resource Names (CRNs) granted by the policy. */
     roles: PolicyRole[];
     /** The resources associated with a policy. */
     resources: PolicyResource[];
-    /** The href link back to the policy. */
+    /** The href links back to the policy. */
     href?: string;
     /** The UTC timestamp when the policy was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy. */
+    /** The IAM ID of the entity that created the policy. */
     created_by_id?: string;
     /** The UTC timestamp when the policy was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
+    /** The IAM ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state. */
     state?: PolicyTemplateMetaData.Constants.State | string;
@@ -4398,25 +5879,25 @@ namespace IamPolicyManagementV1 {
    * A collection of versions for a specific policy template.
    */
   export interface PolicyTemplateVersionsCollection {
-    /** The number of documents to include per each page of collection. */
+    /** The number of documents to include per each page of the collection. */
     limit?: number;
-    /** Details with href linking to first page of requested collection. */
+    /** Details with linking href to first page of requested collection. */
     first?: First;
-    /** Details with href linking to following page of requested collection. */
+    /** Details with href linking to the following page of requested collection. */
     next?: Next;
-    /** Details with href linking to previous page of requested collection. */
+    /** Details with linking href to previous page of requested collection. */
     previous?: Previous;
     /** List of policy templates versions. */
-    versions?: PolicyTemplate[];
+    versions: PolicyTemplate[];
   }
 
   /**
-   * Details with href linking to previous page of requested collection.
+   * Details with linking href to previous page of requested collection.
    */
   export interface Previous {
     /** The href linking to the page of requested collection. */
     href?: string;
-    /** Page token that refers to the page of collection. */
+    /** Page token that refers to the page of the collection. */
     start?: string;
   }
 
@@ -4448,7 +5929,7 @@ namespace IamPolicyManagementV1 {
    * A role resource.
    */
   export interface Role {
-    /** The display name of the role that is shown in the console. */
+    /** The display the name of the role that is shown in the console. */
     display_name: string;
     /** The description of the role. */
     description?: string;
@@ -4463,12 +5944,12 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * An action that can be performed by the policy subject when assigned role.
+   * An action that can be performed by the policy subject when assigned a role.
    */
   export interface RoleAction {
-    /** Unique identifier for action with structure service.resource.action e.g., cbr.rule.read. */
+    /** Unique identifier for action with structure service.resource.action. For example, cbr.rule.read. */
     id: string;
-    /** Service defined display name for action. */
+    /** Services defined display name for action. */
     display_name: string;
     /** Service defined description for action. */
     description: string;
@@ -4479,11 +5960,11 @@ namespace IamPolicyManagementV1 {
    */
   export interface RoleCollection {
     /** List of custom roles. */
-    custom_roles?: CustomRole[];
+    custom_roles: CustomRole[];
     /** List of service roles. */
-    service_roles?: Role[];
+    service_roles: Role[];
     /** List of system roles. */
-    system_roles?: Role[];
+    system_roles: Role[];
   }
 
   /**
@@ -4497,7 +5978,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Rule that specifies additional access granted (e.g., time-based condition).
+   * Rule that specifies additional access that is granted (For example, time-based condition).
    */
   export interface RuleAttribute {
     /** The name of an attribute. */
@@ -4505,7 +5986,8 @@ namespace IamPolicyManagementV1 {
     /** The operator of an attribute. */
     operator: RuleAttribute.Constants.Operator | string;
     /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
-     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
+     *  attribute. Can be a string or an array of strings (for example, an array of days to permit access) for rule
+     *  attribute.
      */
     value: any;
   }
@@ -4547,6 +6029,18 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
+   * The action control properties that are created in an action resource when the template is assigned.
+   */
+  export interface TemplateActionControl {
+    /** The service name that the action control refers. */
+    service_name: string;
+    /** Description of the action control. */
+    description?: string;
+    /** List of actions to control access. */
+    actions: string[];
+  }
+
+  /**
    * policy template count details.
    */
   export interface TemplateCountData {
@@ -4565,16 +6059,16 @@ namespace IamPolicyManagementV1 {
     id?: string;
     /** Template version. */
     version?: string;
-    /** policy assignment id. */
+    /** Policy assignment ID. */
     assignment_id?: string;
-    /** orchestrator template id. */
+    /** Orchestrator template ID. */
     root_id?: string;
-    /** orchestrator template version. */
+    /** Orchestrator template version. */
     root_version?: string;
   }
 
   /**
-   * The core set of properties associated with the template's policy objet.
+   * The core set of properties associated with the template's policy object.
    */
   export interface TemplatePolicy {
     /** The policy type; either 'access' or 'authorization'. */
@@ -4593,7 +6087,7 @@ namespace IamPolicyManagementV1 {
     pattern?: string;
     /** Additional access conditions associated with the policy. */
     rule?: V2PolicyRule;
-    /** Specifies the type of access granted by the policy. */
+    /** Specifies the type of access that is granted by the policy. */
     control?: Control;
   }
   export namespace TemplatePolicy {
@@ -4631,11 +6125,11 @@ namespace IamPolicyManagementV1 {
     control: ControlResponse;
     /** The UTC timestamp when the policy was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy. */
+    /** The IAM ID of the entity that created the policy. */
     created_by_id?: string;
     /** The UTC timestamp when the policy was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
+    /** The IAM ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state, either 'deleted' or 'active'. */
     state: V2Policy.Constants.State | string;
@@ -4665,16 +6159,16 @@ namespace IamPolicyManagementV1 {
    * A collection of policies.
    */
   export interface V2PolicyCollection {
-    /** The number of documents to include per each page of collection. */
+    /** The number of documents to include per each page of the collection. */
     limit?: number;
-    /** Details with href linking to first page of requested collection. */
+    /** Details with linking href to first page of requested collection. */
     first?: First;
-    /** Details with href linking to following page of requested collection. */
+    /** Details with href linking to the following page of requested collection. */
     next?: Next;
-    /** Details with href linking to previous page of requested collection. */
+    /** Details with linking href to previous page of requested collection. */
     previous?: Previous;
     /** List of policies. */
-    policies?: V2PolicyTemplateMetaData[];
+    policies: V2PolicyTemplateMetaData[];
   }
 
   /**
@@ -4696,7 +6190,8 @@ namespace IamPolicyManagementV1 {
     /** The operator of an attribute. */
     operator: V2PolicyResourceAttribute.Constants.Operator | string;
     /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
-     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
+     *  attribute. Can be a string or an array of strings (for example, an array of days to permit access) for rule
+     *  attribute.
      */
     value: any;
   }
@@ -4743,7 +6238,7 @@ namespace IamPolicyManagementV1 {
    * The subject attributes for whom the policy grants access.
    */
   export interface V2PolicySubject {
-    /** List of subject attributes associated with policy/. */
+    /** List of subject attributes associated with policy. */
     attributes: V2PolicySubjectAttribute[];
   }
 
@@ -4751,12 +6246,13 @@ namespace IamPolicyManagementV1 {
    * Subject attribute for whom the policy grants access.
    */
   export interface V2PolicySubjectAttribute {
-    /** The name of a subject attribute, e.g., iam_id, access_group_id. */
+    /** The name of a subject attribute. For example, iam_id, access_group_id. */
     key: string;
     /** The operator of an attribute. */
     operator: V2PolicySubjectAttribute.Constants.Operator | string;
     /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
-     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
+     *  attribute. Can be a string or an array of strings (for example, an array of days to permit access) for rule
+     *  attribute.
      */
     value: any;
   }
@@ -4795,11 +6291,11 @@ namespace IamPolicyManagementV1 {
     control: ControlResponse;
     /** The UTC timestamp when the policy was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy. */
+    /** The IAM ID of the entity that created the policy. */
     created_by_id?: string;
     /** The UTC timestamp when the policy was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy. */
+    /** The IAM ID of the entity that last modified the policy. */
     last_modified_by_id?: string;
     /** The policy state, either 'deleted' or 'active'. */
     state: V2PolicyTemplateMetaData.Constants.State | string;
@@ -4831,15 +6327,15 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Specifies the type of access granted by the policy.
+   * Specifies the type of access that is granted by the policy.
    */
   export interface ControlResponseControl extends ControlResponse {
-    /** Permission granted by the policy. */
+    /** Permission is granted by the policy. */
     grant: Grant;
   }
 
   /**
-   * Specifies the type of access granted by the policy with additional role information.
+   * Specifies the type of access that is granted by the policy with additional role information.
    */
   export interface ControlResponseControlWithEnrichedRoles extends ControlResponse {
     /** Permission granted by the policy with translated roles and additional role information. */
@@ -4847,7 +6343,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Rule that specifies additional access granted (e.g., time-based condition).
+   * Rule that specifies additional access that is granted (For example, time-based condition).
    */
   export interface NestedConditionRuleAttribute extends NestedCondition {
     /** The name of an attribute. */
@@ -4855,7 +6351,8 @@ namespace IamPolicyManagementV1 {
     /** The operator of an attribute. */
     operator: NestedConditionRuleAttribute.Constants.Operator | string;
     /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
-     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
+     *  attribute. Can be a string or an array of strings (for example, an array of days to permit access) for rule
+     *  attribute.
      */
     value: any;
   }
@@ -4887,13 +6384,14 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions.
+   * Rule that specifies additional access that is granted (for example, time-based condition) accross multiple
+   * conditions.
    */
   export interface NestedConditionRuleWithConditions extends NestedCondition {
     /** Operator to evaluate conditions. */
     operator: NestedConditionRuleWithConditions.Constants.Operator | string;
-    /** List of conditions associated with a policy, e.g., time-based conditions that grant access over a certain
-     *  time period.
+    /** List of conditions associated with a policy. For example, time-based conditions that grant access over a
+     *  certain time period.
      */
     conditions: RuleAttribute[];
   }
@@ -4912,40 +6410,42 @@ namespace IamPolicyManagementV1 {
    */
   export interface PolicyTemplateAssignmentItemsPolicyAssignment
     extends PolicyTemplateAssignmentItems {
-    /** policy template id. */
-    template_id?: string;
+    /** policy template ID. */
+    template_id: string;
     /** policy template version. */
-    template_version?: string;
+    template_version: string;
     /** Passed in value to correlate with other assignments. */
     assignment_id?: string;
     /** Assignment target type. */
-    target_type?: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.TargetType | string;
+    target_type: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.TargetType | string;
     /** ID of the target account. */
-    target?: string;
+    target: string;
     /** Policy assignment ID. */
     id?: string;
-    /** The account GUID that the policies assignments belong to.. */
+    /** The account GUID that the policies assignments belong to. */
     account_id?: string;
     /** The href URL that links to the policies assignments API by policy assignment ID. */
     href?: string;
     /** The UTC timestamp when the policy assignment was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy assignment. */
+    /** The IAM ID of the entity that created the policy assignment. */
     created_by_id?: string;
     /** The UTC timestamp when the policy assignment was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy assignment. */
+    /** The IAM ID of the entity that last modified the policy assignment. */
     last_modified_by_id?: string;
     /** Object for each account assigned. */
-    resources?: PolicyAssignmentResources[];
+    resources: PolicyAssignmentResources[];
     /** The policy assignment status. */
-    status?: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.Status | string;
+    status: PolicyTemplateAssignmentItemsPolicyAssignment.Constants.Status | string;
   }
   export namespace PolicyTemplateAssignmentItemsPolicyAssignment {
     export namespace Constants {
       /** Assignment target type. */
       export enum TargetType {
         ACCOUNT = 'Account',
+        ACCOUNTGROUP = 'AccountGroup',
+        ENTERPRISE = 'Enterprise',
       }
       /** The policy assignment status. */
       export enum Status {
@@ -4966,21 +6466,21 @@ namespace IamPolicyManagementV1 {
     target: AssignmentTargetDetails;
     /** Policy assignment ID. */
     id?: string;
-    /** The account GUID that the policies assignments belong to.. */
+    /** The account GUID that the policies assignments belong to. */
     account_id?: string;
     /** The href URL that links to the policies assignments API by policy assignment ID. */
     href?: string;
     /** The UTC timestamp when the policy assignment was created. */
     created_at?: string;
-    /** The iam ID of the entity that created the policy assignment. */
+    /** The IAM ID of the entity that created the policy assignment. */
     created_by_id?: string;
     /** The UTC timestamp when the policy assignment was last modified. */
     last_modified_at?: string;
-    /** The iam ID of the entity that last modified the policy assignment. */
+    /** The IAM ID of the entity that last modified the policy assignment. */
     last_modified_by_id?: string;
     /** Object for each account assigned. */
     resources: PolicyAssignmentV1Resources[];
-    /** subject details of access type assignment. */
+    /** Subject details of access type assignment. */
     subject?: PolicyAssignmentV1Subject;
     /** policy template details. */
     template: AssignmentTemplateDetails;
@@ -5000,7 +6500,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Rule that specifies additional access granted (e.g., time-based condition).
+   * Rule that specifies additional access that is granted (For example, time-based condition).
    */
   export interface V2PolicyRuleRuleAttribute extends V2PolicyRule {
     /** The name of an attribute. */
@@ -5008,7 +6508,8 @@ namespace IamPolicyManagementV1 {
     /** The operator of an attribute. */
     operator: V2PolicyRuleRuleAttribute.Constants.Operator | string;
     /** The value of a rule, resource, or subject attribute; can be boolean or string for resource and subject
-     *  attribute. Can be string or an array of strings (e.g., array of days to permit access) for rule attribute.
+     *  attribute. Can be a string or an array of strings (for example, an array of days to permit access) for rule
+     *  attribute.
      */
     value: any;
   }
@@ -5040,13 +6541,14 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * Rule that specifies additional access granted (e.g., time-based condition) accross multiple conditions.
+   * Rule that specifies additional access that is granted (for example, time-based condition) accross multiple
+   * conditions.
    */
   export interface V2PolicyRuleRuleWithNestedConditions extends V2PolicyRule {
     /** Operator to evaluate conditions. */
     operator: V2PolicyRuleRuleWithNestedConditions.Constants.Operator | string;
-    /** List of conditions associated with a policy, e.g., time-based conditions that grant access over a certain
-     *  time period.
+    /** List of conditions associated with a policy. For example, time-based conditions that grant access over a
+     *  certain time period.
      */
     conditions: NestedCondition[];
   }
@@ -5460,6 +6962,252 @@ namespace IamPolicyManagementV1 {
      */
     public async getAll(): Promise<IamPolicyManagementV1.PolicyTemplateAssignmentItems[]> {
       const results: PolicyTemplateAssignmentItems[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ActionControlTemplatesPager can be used to simplify the use of listActionControlTemplates().
+   */
+  export class ActionControlTemplatesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListActionControlTemplatesParams;
+
+    /**
+     * Construct a ActionControlTemplatesPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listActionControlTemplates()
+     * @param {Object} params - The parameters to be passed to listActionControlTemplates()
+     * @constructor
+     * @returns {ActionControlTemplatesPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListActionControlTemplatesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listActionControlTemplates().
+     * @returns {Promise<IamPolicyManagementV1.ActionControlTemplate[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.ActionControlTemplate[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listActionControlTemplates(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.action_control_templates;
+    }
+
+    /**
+     * Returns all results by invoking listActionControlTemplates() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.ActionControlTemplate[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.ActionControlTemplate[]> {
+      const results: ActionControlTemplate[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ActionControlTemplateVersionsPager can be used to simplify the use of listActionControlTemplateVersions().
+   */
+  export class ActionControlTemplateVersionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListActionControlTemplateVersionsParams;
+
+    /**
+     * Construct a ActionControlTemplateVersionsPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listActionControlTemplateVersions()
+     * @param {Object} params - The parameters to be passed to listActionControlTemplateVersions()
+     * @constructor
+     * @returns {ActionControlTemplateVersionsPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListActionControlTemplateVersionsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listActionControlTemplateVersions().
+     * @returns {Promise<IamPolicyManagementV1.ActionControlTemplate[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.ActionControlTemplate[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listActionControlTemplateVersions(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.versions;
+    }
+
+    /**
+     * Returns all results by invoking listActionControlTemplateVersions() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.ActionControlTemplate[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.ActionControlTemplate[]> {
+      const results: ActionControlTemplate[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ActionControlAssignmentsPager can be used to simplify the use of listActionControlAssignments().
+   */
+  export class ActionControlAssignmentsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListActionControlAssignmentsParams;
+
+    /**
+     * Construct a ActionControlAssignmentsPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listActionControlAssignments()
+     * @param {Object} params - The parameters to be passed to listActionControlAssignments()
+     * @constructor
+     * @returns {ActionControlAssignmentsPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListActionControlAssignmentsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listActionControlAssignments().
+     * @returns {Promise<IamPolicyManagementV1.ActionControlAssignment[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.ActionControlAssignment[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listActionControlAssignments(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.assignments;
+    }
+
+    /**
+     * Returns all results by invoking listActionControlAssignments() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.ActionControlAssignment[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.ActionControlAssignment[]> {
+      const results: ActionControlAssignment[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
