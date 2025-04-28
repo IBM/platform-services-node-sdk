@@ -124,6 +124,7 @@ describe('IamIdentityV1', () => {
         const sort = 'testString';
         const order = 'asc';
         const includeHistory = false;
+        const filter = 'testString';
         const listApiKeysParams = {
           accountId,
           iamId,
@@ -134,6 +135,7 @@ describe('IamIdentityV1', () => {
           sort,
           order,
           includeHistory,
+          filter,
         };
 
         const listApiKeysResult = iamIdentityService.listApiKeys(listApiKeysParams);
@@ -159,6 +161,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.order).toEqual(order);
         expect(mockRequestOptions.qs.include_history).toEqual(includeHistory);
+        expect(mockRequestOptions.qs.filter).toEqual(filter);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1001,6 +1004,7 @@ describe('IamIdentityV1', () => {
         const sort = 'testString';
         const order = 'asc';
         const includeHistory = false;
+        const filter = 'testString';
         const listServiceIdsParams = {
           accountId,
           name,
@@ -1009,6 +1013,7 @@ describe('IamIdentityV1', () => {
           sort,
           order,
           includeHistory,
+          filter,
         };
 
         const listServiceIdsResult = iamIdentityService.listServiceIds(listServiceIdsParams);
@@ -1032,6 +1037,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.order).toEqual(order);
         expect(mockRequestOptions.qs.include_history).toEqual(includeHistory);
+        expect(mockRequestOptions.qs.filter).toEqual(filter);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1726,6 +1732,7 @@ describe('IamIdentityV1', () => {
         const order = 'asc';
         const includeHistory = false;
         const pagetoken = 'testString';
+        const filter = 'testString';
         const listProfilesParams = {
           accountId,
           name,
@@ -1734,6 +1741,7 @@ describe('IamIdentityV1', () => {
           order,
           includeHistory,
           pagetoken,
+          filter,
         };
 
         const listProfilesResult = iamIdentityService.listProfiles(listProfilesParams);
@@ -1757,6 +1765,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.qs.order).toEqual(order);
         expect(mockRequestOptions.qs.include_history).toEqual(includeHistory);
         expect(mockRequestOptions.qs.pagetoken).toEqual(pagetoken);
+        expect(mockRequestOptions.qs.filter).toEqual(filter);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -5764,7 +5773,7 @@ describe('IamIdentityV1', () => {
         const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(mockRequestOptions, '/v1/preferences/accounts/{account_id}/identities/{iam_id}/{service}/{preference_id}', 'DELETE');
-        const expectedAccept = undefined;
+        const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);

@@ -108,7 +108,7 @@ describe('IamIdentityV1_integration', () => {
     iamApikey = config.apikey;
     enterpriseAccountId = config.enterpriseAccountId;
     enterpriseSubAccountId = config.enterpriseSubaccountId
-    iamIDForPreferences =config.iamIDForPreferences
+    iamIDForPreferences =config.iamIdForPreferences
     expect(accountId).not.toBeNull();
     expect(accountId).toBeDefined();
     expect(enterpriseAccountId).not.toBeNull();
@@ -270,8 +270,8 @@ describe('IamIdentityV1_integration', () => {
           accountId,
           iamId,
           pagesize: pageSize,
-          pagetoken: pageToken,
           includeHistory: true,
+          ...(pageToken !== null && { pagetoken: pageToken }),
         };
 
         const res = await iamIdentityService.listApiKeys(params);
@@ -757,8 +757,8 @@ describe('IamIdentityV1_integration', () => {
         const params = {
           accountId,
           pagesize: pageSize,
-          pagetoken: pageToken,
           includeHistory: false,
+          ...(pageToken !== null && { pagetoken: pageToken }),
         };
 
         const res = await iamIdentityService.listProfiles(params);
@@ -1689,7 +1689,7 @@ describe('IamIdentityV1_integration', () => {
       accountId,
 			iamId:        iamIDForPreferences,
 			service,
-			preferenceID: preferenceID1,
+			preferenceId: preferenceID1,
 			valueString,
     };
 
@@ -1721,7 +1721,7 @@ describe('IamIdentityV1_integration', () => {
       accountId,
 			iamId:        iamIDForPreferences,
 			service,
-			preferenceID: preferenceID1,
+			preferenceId: preferenceID1,
     };
 
     iamIdentityService
@@ -1781,7 +1781,7 @@ describe('IamIdentityV1_integration', () => {
       accountId,
 			iamId:        iamIDForPreferences,
 			service,
-			preferenceID: preferenceID1,
+			preferenceId: preferenceID1,
     };
 
     iamIdentityService
@@ -2532,6 +2532,7 @@ describe('IamIdentityV1_integration', () => {
       const profilesResult = profilesResponse.result;
       if (profilesResult.profiles) {
         for (const elem of profilesResult.profiles) {
+          if (elem.name === 'Node-SDK-IT-Profile1' || elem.name === 'Node-SDK-IT-Profile2') {
           console.log('Cleaning profile: ', elem.id);
           const params = {
             profileId: elem.id,
@@ -2539,6 +2540,7 @@ describe('IamIdentityV1_integration', () => {
           const response = await iamIdentityService.deleteProfile(params);
           expect(response).not.toBeNull();
           expect(response.status).toEqual(204);
+          }         
         }
       }
 
