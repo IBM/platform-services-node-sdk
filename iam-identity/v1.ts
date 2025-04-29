@@ -15,12 +15,13 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.98.0-8be2046a-20241205-162752
+ * IBM OpenAPI SDK Code Generator Version: 3.103.0-e8b84313-20250402-201816
  */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -120,6 +121,8 @@ class IamIdentityV1 extends BaseService {
    * created_by. If specified, the items are sorted by the value of this property.
    * @param {string} [params.order] - Optional sort order, valid values are asc and desc. Default: asc.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {string} [params.filter] - An optional filter query parameter used to refine the results of the search
+   * operation. For more information see [Filtering list results](#filter-list-results) section.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKeyList>>}
    */
@@ -138,6 +141,8 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'filter',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -155,6 +160,7 @@ class IamIdentityV1 extends BaseService {
       'sort': _params.sort,
       'order': _params.order,
       'include_history': _params.includeHistory,
+      'filter': _params.filter,
     };
 
     const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'listApiKeys');
@@ -169,11 +175,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -228,6 +238,7 @@ class IamIdentityV1 extends BaseService {
       'actionWhenLeaked',
       'entityLock',
       'entityDisable',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -258,6 +269,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -266,6 +278,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -289,7 +304,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['iamApiKey', 'includeHistory', 'headers'];
+    const _validParams = ['iamApiKey', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -311,12 +326,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'IAM-ApiKey': _params.iamApiKey,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -342,7 +361,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'includeHistory', 'includeActivity', 'headers'];
+    const _validParams = ['id', 'includeHistory', 'includeActivity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -370,11 +389,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -418,6 +441,7 @@ class IamIdentityV1 extends BaseService {
       'description',
       'supportSessions',
       'actionWhenLeaked',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -449,6 +473,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -456,6 +481,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -478,7 +506,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -497,7 +525,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -520,7 +551,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -539,7 +570,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -562,7 +596,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -581,7 +615,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -604,7 +641,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -623,7 +660,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -646,7 +686,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -665,7 +705,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -695,6 +738,8 @@ class IamIdentityV1 extends BaseService {
    * modified_at. If specified, the items are sorted by the value of this property.
    * @param {string} [params.order] - Optional sort order, valid values are asc and desc. Default: asc.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {string} [params.filter] - An optional filter query parameter used to refine the results of the search
+   * operation. For more information see [Filtering list results](#filter-list-results) section.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ServiceIdList>>}
    */
@@ -711,6 +756,8 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'filter',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -726,6 +773,7 @@ class IamIdentityV1 extends BaseService {
       'sort': _params.sort,
       'order': _params.order,
       'include_history': _params.includeHistory,
+      'filter': _params.filter,
     };
 
     const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'listServiceIds');
@@ -740,11 +788,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -784,6 +836,7 @@ class IamIdentityV1 extends BaseService {
       'uniqueInstanceCrns',
       'apikey',
       'entityLock',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -811,6 +864,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -818,6 +872,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -844,7 +901,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'includeHistory', 'includeActivity', 'headers'];
+    const _validParams = ['id', 'includeHistory', 'includeActivity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -872,11 +929,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -912,7 +973,15 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ServiceId>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'ifMatch'];
-    const _validParams = ['id', 'ifMatch', 'name', 'description', 'uniqueInstanceCrns', 'headers'];
+    const _validParams = [
+      'id',
+      'ifMatch',
+      'name',
+      'description',
+      'uniqueInstanceCrns',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -941,6 +1010,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -948,6 +1018,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -972,7 +1045,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -991,7 +1064,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1014,7 +1090,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1033,7 +1109,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1056,7 +1135,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1075,7 +1154,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1104,7 +1186,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name', 'accountId'];
-    const _validParams = ['name', 'accountId', 'description', 'headers'];
+    const _validParams = ['name', 'accountId', 'description', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1128,12 +1210,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1157,6 +1243,8 @@ class IamIdentityV1 extends BaseService {
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
    * @param {string} [params.pagetoken] - Optional Prev or Next page token returned from a previous query execution.
    * Default is start with first page.
+   * @param {string} [params.filter] - An optional filter query parameter used to refine the results of the search
+   * operation. For more information see [Filtering list results](#filter-list-results) section.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfilesList>>}
    */
@@ -1173,6 +1261,8 @@ class IamIdentityV1 extends BaseService {
       'order',
       'includeHistory',
       'pagetoken',
+      'filter',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1188,6 +1278,7 @@ class IamIdentityV1 extends BaseService {
       'order': _params.order,
       'include_history': _params.includeHistory,
       'pagetoken': _params.pagetoken,
+      'filter': _params.filter,
     };
 
     const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'listProfiles');
@@ -1202,11 +1293,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1231,7 +1326,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>> {
     const _params = { ...params };
     const _requiredParams = ['profileId'];
-    const _validParams = ['profileId', 'includeActivity', 'headers'];
+    const _validParams = ['profileId', 'includeActivity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1258,11 +1353,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1292,7 +1391,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfile>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'ifMatch'];
-    const _validParams = ['profileId', 'ifMatch', 'name', 'description', 'headers'];
+    const _validParams = ['profileId', 'ifMatch', 'name', 'description', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1320,6 +1419,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1327,6 +1427,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1349,7 +1452,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId'];
-    const _validParams = ['profileId', 'headers'];
+    const _validParams = ['profileId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1368,7 +1471,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1408,6 +1514,7 @@ class IamIdentityV1 extends BaseService {
       'realmName',
       'crType',
       'expiration',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1442,12 +1549,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1470,7 +1581,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRuleList>> {
     const _params = { ...params };
     const _requiredParams = ['profileId'];
-    const _validParams = ['profileId', 'headers'];
+    const _validParams = ['profileId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1492,11 +1603,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1519,7 +1634,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRule>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'ruleId'];
-    const _validParams = ['profileId', 'ruleId', 'headers'];
+    const _validParams = ['profileId', 'ruleId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1542,11 +1657,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1592,6 +1711,7 @@ class IamIdentityV1 extends BaseService {
       'realmName',
       'crType',
       'expiration',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1627,6 +1747,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1634,6 +1755,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1657,7 +1781,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'ruleId'];
-    const _validParams = ['profileId', 'ruleId', 'headers'];
+    const _validParams = ['profileId', 'ruleId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1677,7 +1801,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1703,7 +1830,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLink>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'crType', 'link'];
-    const _validParams = ['profileId', 'crType', 'link', 'name', 'headers'];
+    const _validParams = ['profileId', 'crType', 'link', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1732,12 +1859,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1759,7 +1890,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLinkList>> {
     const _params = { ...params };
     const _requiredParams = ['profileId'];
-    const _validParams = ['profileId', 'headers'];
+    const _validParams = ['profileId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1781,11 +1912,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1808,7 +1943,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLink>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'linkId'];
-    const _validParams = ['profileId', 'linkId', 'headers'];
+    const _validParams = ['profileId', 'linkId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1831,11 +1966,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1858,7 +1997,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'linkId'];
-    const _validParams = ['profileId', 'linkId', 'headers'];
+    const _validParams = ['profileId', 'linkId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1878,7 +2017,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1900,7 +2042,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>> {
     const _params = { ...params };
     const _requiredParams = ['profileId'];
-    const _validParams = ['profileId', 'headers'];
+    const _validParams = ['profileId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1926,11 +2068,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1956,7 +2102,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentitiesResponse>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'ifMatch'];
-    const _validParams = ['profileId', 'ifMatch', 'identities', 'headers'];
+    const _validParams = ['profileId', 'ifMatch', 'identities', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1987,6 +2133,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -1994,6 +2141,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2003,7 +2153,9 @@ class IamIdentityV1 extends BaseService {
   /**
    * Add a specific identity that can assume the trusted profile.
    *
-   * Add a specific identity that can assume the trusted profile.
+   * Add a specific identity that can assume the trusted profile. This API will update the trusted profile itself, thus
+   * calling it repeatedly for the same profile can lead to conflicts responded with HTTP code 409. Make sure to call
+   * this API only once in a few seconds for the same trusted profile.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile.
@@ -2033,6 +2185,7 @@ class IamIdentityV1 extends BaseService {
       'type',
       'accounts',
       'description',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2069,12 +2222,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2098,7 +2255,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileIdentityResponse>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'identityType', 'identifierId'];
-    const _validParams = ['profileId', 'identityType', 'identifierId', 'headers'];
+    const _validParams = ['profileId', 'identityType', 'identifierId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2126,11 +2283,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2138,7 +2299,7 @@ class IamIdentityV1 extends BaseService {
   }
 
   /**
-   * Delete the identity that can assume the trusted profile.
+   * Delete the identity that can assume the trusted profile. This API will update the trusted profile itself, thus calling it repeatedly for the same profile can lead to conflicts responded with HTTP code 409. Make sure to call this API only once in a few seconds for the same trusted profile.
    *
    * Delete the identity that can assume the trusted profile.
    *
@@ -2154,7 +2315,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'identityType', 'identifierId'];
-    const _validParams = ['profileId', 'identityType', 'identifierId', 'headers'];
+    const _validParams = ['profileId', 'identityType', 'identifierId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2179,7 +2340,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2205,7 +2369,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'includeHistory', 'headers'];
+    const _validParams = ['accountId', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2236,11 +2400,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2323,6 +2491,7 @@ class IamIdentityV1 extends BaseService {
       'maxSessionsPerIdentity',
       'systemAccessTokenExpirationInSeconds',
       'systemRefreshTokenExpirationInSeconds',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2364,6 +2533,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2371,6 +2541,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2396,7 +2569,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.UserMfaEnrollments>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'iamId'];
-    const _validParams = ['accountId', 'iamId', 'headers'];
+    const _validParams = ['accountId', 'iamId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2423,11 +2596,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2452,7 +2629,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'type', 'headers'];
+    const _validParams = ['accountId', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2479,11 +2656,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2508,7 +2689,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ReportMfaEnrollmentStatus>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'reference'];
-    const _validParams = ['accountId', 'reference', 'headers'];
+    const _validParams = ['accountId', 'reference', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2531,11 +2712,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2583,6 +2768,7 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2619,11 +2805,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2648,7 +2838,14 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'templateVersion', 'targetType', 'target'];
-    const _validParams = ['templateId', 'templateVersion', 'targetType', 'target', 'headers'];
+    const _validParams = [
+      'templateId',
+      'templateVersion',
+      'targetType',
+      'target',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2677,12 +2874,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2705,7 +2906,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
-    const _validParams = ['assignmentId', 'includeHistory', 'headers'];
+    const _validParams = ['assignmentId', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2736,11 +2937,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2763,7 +2968,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
-    const _validParams = ['assignmentId', 'headers'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2789,11 +2994,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2821,7 +3030,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
-    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'headers'];
+    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2852,6 +3061,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -2859,6 +3069,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2898,6 +3111,7 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2930,11 +3144,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2961,7 +3179,14 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['accountId', 'name', 'description', 'accountSettings', 'headers'];
+    const _validParams = [
+      'accountId',
+      'name',
+      'description',
+      'accountSettings',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2990,12 +3215,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3018,7 +3247,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId'];
-    const _validParams = ['templateId', 'includeHistory', 'headers'];
+    const _validParams = ['templateId', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3049,11 +3278,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3076,7 +3309,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['templateId'];
-    const _validParams = ['templateId', 'headers'];
+    const _validParams = ['templateId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3099,7 +3332,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3135,6 +3371,7 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3171,11 +3408,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3209,6 +3450,7 @@ class IamIdentityV1 extends BaseService {
       'name',
       'description',
       'accountSettings',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3244,12 +3486,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3273,7 +3519,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'version'];
-    const _validParams = ['templateId', 'version', 'includeHistory', 'headers'];
+    const _validParams = ['templateId', 'version', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3305,11 +3551,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3349,6 +3599,7 @@ class IamIdentityV1 extends BaseService {
       'name',
       'description',
       'accountSettings',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3385,6 +3636,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -3392,6 +3644,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3414,7 +3669,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'version'];
-    const _validParams = ['templateId', 'version', 'headers'];
+    const _validParams = ['templateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3438,7 +3693,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3462,7 +3720,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'version'];
-    const _validParams = ['templateId', 'version', 'headers'];
+    const _validParams = ['templateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3486,7 +3744,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3515,7 +3776,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ReportReference>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'type', 'duration', 'headers'];
+    const _validParams = ['accountId', 'type', 'duration', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3543,11 +3804,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3572,7 +3837,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.Report>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'reference'];
-    const _validParams = ['accountId', 'reference', 'headers'];
+    const _validParams = ['accountId', 'reference', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3595,11 +3860,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3626,7 +3895,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EffectiveAccountSettingsResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'includeHistory', 'resolveUserMfa', 'headers'];
+    const _validParams = ['accountId', 'includeHistory', 'resolveUserMfa', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3658,11 +3927,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3718,6 +3991,7 @@ class IamIdentityV1 extends BaseService {
       'preferenceId',
       'valueString',
       'valueListOfStrings',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3754,12 +4028,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3777,14 +4055,14 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.service - Service of the preference to be deleted.
    * @param {string} params.preferenceId - Identifier of preference to be deleted.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>>}
    */
   public deletePreferencesOnScopeAccount(
     params: IamIdentityV1.DeletePreferencesOnScopeAccountParams
-  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'iamId', 'service', 'preferenceId'];
-    const _validParams = ['accountId', 'iamId', 'service', 'preferenceId', 'headers'];
+    const _validParams = ['accountId', 'iamId', 'service', 'preferenceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3810,7 +4088,18 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3835,7 +4124,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.IdentityPreferenceResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'iamId', 'service', 'preferenceId'];
-    const _validParams = ['accountId', 'iamId', 'service', 'preferenceId', 'headers'];
+    const _validParams = ['accountId', 'iamId', 'service', 'preferenceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3864,11 +4153,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3891,7 +4184,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.IdentityPreferencesResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId', 'iamId'];
-    const _validParams = ['accountId', 'iamId', 'headers'];
+    const _validParams = ['accountId', 'iamId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3918,11 +4211,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3970,6 +4267,7 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4006,11 +4304,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4035,7 +4337,14 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'templateVersion', 'targetType', 'target'];
-    const _validParams = ['templateId', 'templateVersion', 'targetType', 'target', 'headers'];
+    const _validParams = [
+      'templateId',
+      'templateVersion',
+      'targetType',
+      'target',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4064,12 +4373,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4092,7 +4405,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
-    const _validParams = ['assignmentId', 'includeHistory', 'headers'];
+    const _validParams = ['assignmentId', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4123,11 +4436,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4149,7 +4466,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ExceptionResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId'];
-    const _validParams = ['assignmentId', 'headers'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4175,11 +4492,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4207,7 +4528,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TemplateAssignmentResponse>> {
     const _params = { ...params };
     const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
-    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'headers'];
+    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4238,6 +4559,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -4245,6 +4567,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4284,6 +4609,7 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4316,11 +4642,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4358,6 +4688,7 @@ class IamIdentityV1 extends BaseService {
       'profile',
       'policyTemplateReferences',
       'actionControls',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4390,12 +4721,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4418,7 +4753,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId'];
-    const _validParams = ['templateId', 'includeHistory', 'headers'];
+    const _validParams = ['templateId', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4449,11 +4784,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4476,7 +4815,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['templateId'];
-    const _validParams = ['templateId', 'headers'];
+    const _validParams = ['templateId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4499,7 +4838,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4535,6 +4877,7 @@ class IamIdentityV1 extends BaseService {
       'sort',
       'order',
       'includeHistory',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4571,11 +4914,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4615,6 +4962,7 @@ class IamIdentityV1 extends BaseService {
       'profile',
       'policyTemplateReferences',
       'actionControls',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4652,12 +5000,16 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4681,7 +5033,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.TrustedProfileTemplateResponse>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'version'];
-    const _validParams = ['templateId', 'version', 'includeHistory', 'headers'];
+    const _validParams = ['templateId', 'version', 'includeHistory', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4713,11 +5065,15 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4763,6 +5119,7 @@ class IamIdentityV1 extends BaseService {
       'profile',
       'policyTemplateReferences',
       'actionControls',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4801,6 +5158,7 @@ class IamIdentityV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -4808,6 +5166,9 @@ class IamIdentityV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4831,7 +5192,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'version'];
-    const _validParams = ['templateId', 'version', 'headers'];
+    const _validParams = ['templateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4855,7 +5216,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4879,7 +5243,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['templateId', 'version'];
-    const _validParams = ['templateId', 'version', 'headers'];
+    const _validParams = ['templateId', 'version', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4903,7 +5267,10 @@ class IamIdentityV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {}, _params.headers),
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4939,8 +5306,13 @@ namespace IamIdentityV1 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `listApiKeys` operation. */
-  export interface ListApiKeysParams {
+  export interface ListApiKeysParams extends DefaultParams {
     /** Account ID of the API keys to query. If a service IAM ID is specified in iam_id then account_id must match
      *  the account of the IAM ID. If a user IAM ID is specified in iam_id then then account_id must match the account
      *  of the Authorization token.
@@ -4966,7 +5338,10 @@ namespace IamIdentityV1 {
     order?: ListApiKeysConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
+    /** An optional filter query parameter used to refine the results of the search operation. For more information
+     *  see [Filtering list results](#filter-list-results) section.
+     */
+    filter?: string;
   }
 
   /** Constants for the `listApiKeys` operation. */
@@ -4989,7 +5364,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createApiKey` operation. */
-  export interface CreateApiKeyParams {
+  export interface CreateApiKeyParams extends DefaultParams {
     /** Name of the API key. The name is not checked for uniqueness. Therefore multiple names with the same value
      *  can exist. Access is done via the UUID of the API key.
      */
@@ -5025,20 +5400,18 @@ namespace IamIdentityV1 {
     entityLock?: string;
     /** Indicates if the API key is disabled. False by default. */
     entityDisable?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getApiKeysDetails` operation. */
-  export interface GetApiKeysDetailsParams {
+  export interface GetApiKeysDetailsParams extends DefaultParams {
     /** API key value. */
     iamApiKey?: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getApiKey` operation. */
-  export interface GetApiKeyParams {
+  export interface GetApiKeyParams extends DefaultParams {
     /** Unique ID of the API key. */
     id: string;
     /** Defines if the entity history is included in the response. */
@@ -5047,11 +5420,10 @@ namespace IamIdentityV1 {
      *  operation, so only request this when needed.
      */
     includeActivity?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateApiKey` operation. */
-  export interface UpdateApiKeyParams {
+  export interface UpdateApiKeyParams extends DefaultParams {
     /** Unique ID of the API key to be updated. */
     id: string;
     /** Version of the API key to be updated. Specify the version that you retrieved when reading the API key. This
@@ -5074,46 +5446,40 @@ namespace IamIdentityV1 {
     supportSessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     actionWhenLeaked?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteApiKey` operation. */
-  export interface DeleteApiKeyParams {
+  export interface DeleteApiKeyParams extends DefaultParams {
     /** Unique ID of the API key. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `lockApiKey` operation. */
-  export interface LockApiKeyParams {
+  export interface LockApiKeyParams extends DefaultParams {
     /** Unique ID of the API key. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `unlockApiKey` operation. */
-  export interface UnlockApiKeyParams {
+  export interface UnlockApiKeyParams extends DefaultParams {
     /** Unique ID of the API key. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `disableApiKey` operation. */
-  export interface DisableApiKeyParams {
+  export interface DisableApiKeyParams extends DefaultParams {
     /** Unique ID of the API key. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `enableApiKey` operation. */
-  export interface EnableApiKeyParams {
+  export interface EnableApiKeyParams extends DefaultParams {
     /** Unique ID of the API key. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listServiceIds` operation. */
-  export interface ListServiceIdsParams {
+  export interface ListServiceIdsParams extends DefaultParams {
     /** Account ID of the service ID(s) to query. This parameter is required (unless using a pagetoken). */
     accountId?: string;
     /** Name of the service ID(s) to query. Optional.20 items per page. Valid range is 1 to 100. */
@@ -5130,7 +5496,10 @@ namespace IamIdentityV1 {
     order?: ListServiceIdsConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
+    /** An optional filter query parameter used to refine the results of the search operation. For more information
+     *  see [Filtering list results](#filter-list-results) section.
+     */
+    filter?: string;
   }
 
   /** Constants for the `listServiceIds` operation. */
@@ -5143,7 +5512,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createServiceId` operation. */
-  export interface CreateServiceIdParams {
+  export interface CreateServiceIdParams extends DefaultParams {
     /** ID of the account the service ID belongs to. */
     accountId: string;
     /** Name of the Service Id. The name is not checked for uniqueness. Therefore multiple names with the same value
@@ -5160,11 +5529,10 @@ namespace IamIdentityV1 {
     apikey?: ApiKeyInsideCreateServiceIdRequest;
     /** Indicates if the service ID is locked for further write operations. False by default. */
     entityLock?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getServiceId` operation. */
-  export interface GetServiceIdParams {
+  export interface GetServiceIdParams extends DefaultParams {
     /** Unique ID of the service ID. */
     id: string;
     /** Defines if the entity history is included in the response. */
@@ -5173,11 +5541,10 @@ namespace IamIdentityV1 {
      *  operation, so only request this when needed.
      */
     includeActivity?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateServiceId` operation. */
-  export interface UpdateServiceIdParams {
+  export interface UpdateServiceIdParams extends DefaultParams {
     /** Unique ID of the service ID to be updated. */
     id: string;
     /** Version of the service ID to be updated. Specify the version that you retrieved as entity_tag (ETag header)
@@ -5197,32 +5564,28 @@ namespace IamIdentityV1 {
      *  all existing unique instance crns of the service ID.
      */
     uniqueInstanceCrns?: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteServiceId` operation. */
-  export interface DeleteServiceIdParams {
+  export interface DeleteServiceIdParams extends DefaultParams {
     /** Unique ID of the service ID. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `lockServiceId` operation. */
-  export interface LockServiceIdParams {
+  export interface LockServiceIdParams extends DefaultParams {
     /** Unique ID of the service ID. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `unlockServiceId` operation. */
-  export interface UnlockServiceIdParams {
+  export interface UnlockServiceIdParams extends DefaultParams {
     /** Unique ID of the service ID. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createProfile` operation. */
-  export interface CreateProfileParams {
+  export interface CreateProfileParams extends DefaultParams {
     /** Name of the trusted profile. The name is checked for uniqueness. Therefore trusted profiles with the same
      *  names can not exist in the same account.
      */
@@ -5233,11 +5596,10 @@ namespace IamIdentityV1 {
      *  description was provided during creation of trusted profile.
      */
     description?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listProfiles` operation. */
-  export interface ListProfilesParams {
+  export interface ListProfilesParams extends DefaultParams {
     /** Account ID to query for trusted profiles. */
     accountId: string;
     /** Name of the trusted profile to query. */
@@ -5254,7 +5616,10 @@ namespace IamIdentityV1 {
     includeHistory?: boolean;
     /** Optional Prev or Next page token returned from a previous query execution. Default is start with first page. */
     pagetoken?: string;
-    headers?: OutgoingHttpHeaders;
+    /** An optional filter query parameter used to refine the results of the search operation. For more information
+     *  see [Filtering list results](#filter-list-results) section.
+     */
+    filter?: string;
   }
 
   /** Constants for the `listProfiles` operation. */
@@ -5267,18 +5632,17 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `getProfile` operation. */
-  export interface GetProfileParams {
+  export interface GetProfileParams extends DefaultParams {
     /** ID of the trusted profile to get. */
     profileId: string;
     /** Defines if the entity's activity is included in the response. Retrieving activity data is an expensive
      *  operation, so only request this when needed.
      */
     includeActivity?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateProfile` operation. */
-  export interface UpdateProfileParams {
+  export interface UpdateProfileParams extends DefaultParams {
     /** ID of the trusted profile to be updated. */
     profileId: string;
     /** Version of the trusted profile to be updated. Specify the version that you retrived when reading list of
@@ -5294,18 +5658,16 @@ namespace IamIdentityV1 {
      *  description of the trusted profile. If a non empty value is provided the trusted profile will be updated.
      */
     description?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteProfile` operation. */
-  export interface DeleteProfileParams {
+  export interface DeleteProfileParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createClaimRule` operation. */
-  export interface CreateClaimRuleParams {
+  export interface CreateClaimRuleParams extends DefaultParams {
     /** ID of the trusted profile to create a claim rule. */
     profileId: string;
     /** Type of the claim rule, either 'Profile-SAML' or 'Profile-CR'. */
@@ -5326,27 +5688,24 @@ namespace IamIdentityV1 {
     crType?: string;
     /** Session expiration in seconds, only required if type is 'Profile-SAML'. */
     expiration?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listClaimRules` operation. */
-  export interface ListClaimRulesParams {
+  export interface ListClaimRulesParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getClaimRule` operation. */
-  export interface GetClaimRuleParams {
+  export interface GetClaimRuleParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** ID of the claim rule to get. */
     ruleId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateClaimRule` operation. */
-  export interface UpdateClaimRuleParams {
+  export interface UpdateClaimRuleParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** ID of the claim rule to update. */
@@ -5374,20 +5733,18 @@ namespace IamIdentityV1 {
     crType?: string;
     /** Session expiration in seconds, only required if type is 'Profile-SAML'. */
     expiration?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteClaimRule` operation. */
-  export interface DeleteClaimRuleParams {
+  export interface DeleteClaimRuleParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** ID of the claim rule to delete. */
     ruleId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLink` operation. */
-  export interface CreateLinkParams {
+  export interface CreateLinkParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** The compute resource type. Valid values are VSI, IKS_SA, ROKS_SA. */
@@ -5396,43 +5753,38 @@ namespace IamIdentityV1 {
     link: CreateProfileLinkRequestLink;
     /** Optional name of the Link. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listLinks` operation. */
-  export interface ListLinksParams {
+  export interface ListLinksParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLink` operation. */
-  export interface GetLinkParams {
+  export interface GetLinkParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** ID of the link. */
     linkId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteLink` operation. */
-  export interface DeleteLinkParams {
+  export interface DeleteLinkParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** ID of the link. */
     linkId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getProfileIdentities` operation. */
-  export interface GetProfileIdentitiesParams {
+  export interface GetProfileIdentitiesParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `setProfileIdentities` operation. */
-  export interface SetProfileIdentitiesParams {
+  export interface SetProfileIdentitiesParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** Entity tag of the Identities to be updated. Specify the tag that you retrieved when reading the Profile
@@ -5442,11 +5794,10 @@ namespace IamIdentityV1 {
     ifMatch: string;
     /** List of identities that can assume the trusted profile. */
     identities?: ProfileIdentityRequest[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `setProfileIdentity` operation. */
-  export interface SetProfileIdentityParams {
+  export interface SetProfileIdentityParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** Type of the identity. */
@@ -5466,7 +5817,6 @@ namespace IamIdentityV1 {
      *  project'.
      */
     description?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `setProfileIdentity` operation. */
@@ -5486,14 +5836,13 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `getProfileIdentity` operation. */
-  export interface GetProfileIdentityParams {
+  export interface GetProfileIdentityParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** Type of the identity. */
     identityType: GetProfileIdentityConstants.IdentityType | string;
     /** Identifier of the identity that can assume the trusted profiles. */
     identifierId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getProfileIdentity` operation. */
@@ -5507,14 +5856,13 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `deleteProfileIdentity` operation. */
-  export interface DeleteProfileIdentityParams {
+  export interface DeleteProfileIdentityParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
     /** Type of the identity. */
     identityType: DeleteProfileIdentityConstants.IdentityType | string;
     /** Identifier of the identity that can assume the trusted profiles. */
     identifierId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `deleteProfileIdentity` operation. */
@@ -5528,16 +5876,15 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `getAccountSettings` operation. */
-  export interface GetAccountSettingsParams {
+  export interface GetAccountSettingsParams extends DefaultParams {
     /** Unique ID of the account. */
     accountId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateAccountSettings` operation. */
-  export interface UpdateAccountSettingsParams {
+  export interface UpdateAccountSettingsParams extends DefaultParams {
     /** Version of the account settings to be updated. Specify the version that you retrieved as entity_tag (ETag
      *  header) when reading the account. This value helps identifying parallel usage of this API. Pass * to indicate to
      *  update any version available. This might result in stale updates.
@@ -5601,7 +5948,6 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     systemRefreshTokenExpirationInSeconds?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateAccountSettings` operation. */
@@ -5631,38 +5977,35 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `getMfaStatus` operation. */
-  export interface GetMfaStatusParams {
+  export interface GetMfaStatusParams extends DefaultParams {
     /** ID of the account. */
     accountId: string;
     /** iam_id of the user. This user must be the member of the account. */
     iamId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createMfaReport` operation. */
-  export interface CreateMfaReportParams {
+  export interface CreateMfaReportParams extends DefaultParams {
     /** ID of the account. */
     accountId: string;
     /** Optional report type. The supported value is 'mfa_status'. List MFA enrollment status for all the
      *  identities.
      */
     type?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getMfaReport` operation. */
-  export interface GetMfaReportParams {
+  export interface GetMfaReportParams extends DefaultParams {
     /** ID of the account. */
     accountId: string;
     /** Reference for the report to be generated, You can use 'latest' to get the latest report for the given
      *  account.
      */
     reference: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listAccountSettingsAssignments` operation. */
-  export interface ListAccountSettingsAssignmentsParams {
+  export interface ListAccountSettingsAssignmentsParams extends DefaultParams {
     /** Account ID of the Assignments to query. This parameter is required unless using a pagetoken. */
     accountId?: string;
     /** Filter results by Template Id. */
@@ -5683,7 +6026,6 @@ namespace IamIdentityV1 {
     order?: ListAccountSettingsAssignmentsConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listAccountSettingsAssignments` operation. */
@@ -5707,7 +6049,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createAccountSettingsAssignment` operation. */
-  export interface CreateAccountSettingsAssignmentParams {
+  export interface CreateAccountSettingsAssignmentParams extends DefaultParams {
     /** ID of the template to assign. */
     templateId: string;
     /** Version of the template to assign. */
@@ -5716,7 +6058,6 @@ namespace IamIdentityV1 {
     targetType: CreateAccountSettingsAssignmentConstants.TargetType | string;
     /** Identifier of target to deploy to. */
     target: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createAccountSettingsAssignment` operation. */
@@ -5729,23 +6070,21 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `getAccountSettingsAssignment` operation. */
-  export interface GetAccountSettingsAssignmentParams {
+  export interface GetAccountSettingsAssignmentParams extends DefaultParams {
     /** ID of the Assignment Record. */
     assignmentId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteAccountSettingsAssignment` operation. */
-  export interface DeleteAccountSettingsAssignmentParams {
+  export interface DeleteAccountSettingsAssignmentParams extends DefaultParams {
     /** ID of the Assignment Record. */
     assignmentId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateAccountSettingsAssignment` operation. */
-  export interface UpdateAccountSettingsAssignmentParams {
+  export interface UpdateAccountSettingsAssignmentParams extends DefaultParams {
     /** ID of the Assignment Record. */
     assignmentId: string;
     /** Version of the assignment to be updated. Specify the version that you retrieved when reading the assignment.
@@ -5757,11 +6096,10 @@ namespace IamIdentityV1 {
      *  version. To migrate to a different version, provide the new version number.
      */
     templateVersion: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listAccountSettingsTemplates` operation. */
-  export interface ListAccountSettingsTemplatesParams {
+  export interface ListAccountSettingsTemplatesParams extends DefaultParams {
     /** Account ID of the account settings templates to query. This parameter is required unless using a pagetoken. */
     accountId?: string;
     /** Optional size of a single page. */
@@ -5774,7 +6112,6 @@ namespace IamIdentityV1 {
     order?: ListAccountSettingsTemplatesConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listAccountSettingsTemplates` operation. */
@@ -5793,7 +6130,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createAccountSettingsTemplate` operation. */
-  export interface CreateAccountSettingsTemplateParams {
+  export interface CreateAccountSettingsTemplateParams extends DefaultParams {
     /** ID of the account where the template resides. */
     accountId?: string;
     /** The name of the trusted profile template. This is visible only in the enterprise account. */
@@ -5801,27 +6138,24 @@ namespace IamIdentityV1 {
     /** The description of the trusted profile template. Describe the template for enterprise account users. */
     description?: string;
     accountSettings?: AccountSettingsComponent;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLatestAccountSettingsTemplateVersion` operation. */
-  export interface GetLatestAccountSettingsTemplateVersionParams {
+  export interface GetLatestAccountSettingsTemplateVersionParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteAllVersionsOfAccountSettingsTemplate` operation. */
-  export interface DeleteAllVersionsOfAccountSettingsTemplateParams {
+  export interface DeleteAllVersionsOfAccountSettingsTemplateParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVersionsOfAccountSettingsTemplate` operation. */
-  export interface ListVersionsOfAccountSettingsTemplateParams {
+  export interface ListVersionsOfAccountSettingsTemplateParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
     /** Optional size of a single page. */
@@ -5834,7 +6168,6 @@ namespace IamIdentityV1 {
     order?: ListVersionsOfAccountSettingsTemplateConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVersionsOfAccountSettingsTemplate` operation. */
@@ -5853,7 +6186,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createAccountSettingsTemplateVersion` operation. */
-  export interface CreateAccountSettingsTemplateVersionParams {
+  export interface CreateAccountSettingsTemplateVersionParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
     /** ID of the account where the template resides. */
@@ -5863,22 +6196,20 @@ namespace IamIdentityV1 {
     /** The description of the trusted profile template. Describe the template for enterprise account users. */
     description?: string;
     accountSettings?: AccountSettingsComponent;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getAccountSettingsTemplateVersion` operation. */
-  export interface GetAccountSettingsTemplateVersionParams {
+  export interface GetAccountSettingsTemplateVersionParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
     /** Version of the account settings template. */
     version: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateAccountSettingsTemplateVersion` operation. */
-  export interface UpdateAccountSettingsTemplateVersionParams {
+  export interface UpdateAccountSettingsTemplateVersionParams extends DefaultParams {
     /** Entity tag of the Template to be updated. Specify the tag that you retrieved when reading the account
      *  settings template. This value helps identifying parallel usage of this API. Pass * to indicate to update any
      *  version available. This might result in stale updates.
@@ -5895,29 +6226,26 @@ namespace IamIdentityV1 {
     /** The description of the trusted profile template. Describe the template for enterprise account users. */
     description?: string;
     accountSettings?: AccountSettingsComponent;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteAccountSettingsTemplateVersion` operation. */
-  export interface DeleteAccountSettingsTemplateVersionParams {
+  export interface DeleteAccountSettingsTemplateVersionParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
     /** Version of the account settings template. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `commitAccountSettingsTemplate` operation. */
-  export interface CommitAccountSettingsTemplateParams {
+  export interface CommitAccountSettingsTemplateParams extends DefaultParams {
     /** ID of the account settings template. */
     templateId: string;
     /** Version of the account settings template. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createReport` operation. */
-  export interface CreateReportParams {
+  export interface CreateReportParams extends DefaultParams {
     /** ID of the account. */
     accountId: string;
     /** Optional report type. The supported value is 'inactive'. List all identities that have not authenticated
@@ -5926,33 +6254,30 @@ namespace IamIdentityV1 {
     type?: string;
     /** Optional duration of the report. The supported unit of duration is hours. */
     duration?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getReport` operation. */
-  export interface GetReportParams {
+  export interface GetReportParams extends DefaultParams {
     /** ID of the account. */
     accountId: string;
     /** Reference for the report to be generated, You can use 'latest' to get the latest report for the given
      *  account.
      */
     reference: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getEffectiveAccountSettings` operation. */
-  export interface GetEffectiveAccountSettingsParams {
+  export interface GetEffectiveAccountSettingsParams extends DefaultParams {
     /** Unique ID of the account. */
     accountId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
     /** Enrich MFA exemptions with user information. */
     resolveUserMfa?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePreferenceOnScopeAccount` operation. */
-  export interface UpdatePreferenceOnScopeAccountParams {
+  export interface UpdatePreferenceOnScopeAccountParams extends DefaultParams {
     /** Account id to update preference for. */
     accountId: string;
     /** IAM id to update the preference for. */
@@ -5969,11 +6294,10 @@ namespace IamIdentityV1 {
      *  'value_list_of_strings' is present.
      */
     valueListOfStrings?: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deletePreferencesOnScopeAccount` operation. */
-  export interface DeletePreferencesOnScopeAccountParams {
+  export interface DeletePreferencesOnScopeAccountParams extends DefaultParams {
     /** Account id to delete preference for. */
     accountId: string;
     /** IAM id to delete the preference for. */
@@ -5982,11 +6306,10 @@ namespace IamIdentityV1 {
     service: string;
     /** Identifier of preference to be deleted. */
     preferenceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPreferencesOnScopeAccount` operation. */
-  export interface GetPreferencesOnScopeAccountParams {
+  export interface GetPreferencesOnScopeAccountParams extends DefaultParams {
     /** Account id to get preference for. */
     accountId: string;
     /** IAM id to get the preference for. */
@@ -5995,20 +6318,18 @@ namespace IamIdentityV1 {
     service: string;
     /** Identifier of preference to be fetched. */
     preferenceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getAllPreferencesOnScopeAccount` operation. */
-  export interface GetAllPreferencesOnScopeAccountParams {
+  export interface GetAllPreferencesOnScopeAccountParams extends DefaultParams {
     /** Account id to get preferences for. */
     accountId: string;
     /** IAM id to get the preferences for. */
     iamId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listTrustedProfileAssignments` operation. */
-  export interface ListTrustedProfileAssignmentsParams {
+  export interface ListTrustedProfileAssignmentsParams extends DefaultParams {
     /** Account ID of the Assignments to query. This parameter is required unless using a pagetoken. */
     accountId?: string;
     /** Filter results by Template Id. */
@@ -6029,7 +6350,6 @@ namespace IamIdentityV1 {
     order?: ListTrustedProfileAssignmentsConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listTrustedProfileAssignments` operation. */
@@ -6053,7 +6373,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createTrustedProfileAssignment` operation. */
-  export interface CreateTrustedProfileAssignmentParams {
+  export interface CreateTrustedProfileAssignmentParams extends DefaultParams {
     /** ID of the template to assign. */
     templateId: string;
     /** Version of the template to assign. */
@@ -6062,7 +6382,6 @@ namespace IamIdentityV1 {
     targetType: CreateTrustedProfileAssignmentConstants.TargetType | string;
     /** Identifier of target to deploy to. */
     target: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createTrustedProfileAssignment` operation. */
@@ -6075,23 +6394,21 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `getTrustedProfileAssignment` operation. */
-  export interface GetTrustedProfileAssignmentParams {
+  export interface GetTrustedProfileAssignmentParams extends DefaultParams {
     /** ID of the Assignment Record. */
     assignmentId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteTrustedProfileAssignment` operation. */
-  export interface DeleteTrustedProfileAssignmentParams {
+  export interface DeleteTrustedProfileAssignmentParams extends DefaultParams {
     /** ID of the Assignment Record. */
     assignmentId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateTrustedProfileAssignment` operation. */
-  export interface UpdateTrustedProfileAssignmentParams {
+  export interface UpdateTrustedProfileAssignmentParams extends DefaultParams {
     /** ID of the Assignment Record. */
     assignmentId: string;
     /** Version of the Assignment to be updated. Specify the version that you retrieved when reading the Assignment.
@@ -6103,11 +6420,10 @@ namespace IamIdentityV1 {
      *  version. To migrate to a different version, provide the new version number.
      */
     templateVersion: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listProfileTemplates` operation. */
-  export interface ListProfileTemplatesParams {
+  export interface ListProfileTemplatesParams extends DefaultParams {
     /** Account ID of the trusted profile templates to query. This parameter is required unless using a pagetoken. */
     accountId?: string;
     /** Optional size of a single page. */
@@ -6120,7 +6436,6 @@ namespace IamIdentityV1 {
     order?: ListProfileTemplatesConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listProfileTemplates` operation. */
@@ -6139,7 +6454,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createProfileTemplate` operation. */
-  export interface CreateProfileTemplateParams {
+  export interface CreateProfileTemplateParams extends DefaultParams {
     /** ID of the account where the template resides. */
     accountId?: string;
     /** The name of the trusted profile template. This is visible only in the enterprise account. Required field
@@ -6154,27 +6469,24 @@ namespace IamIdentityV1 {
     /** Existing policy templates that you can reference to assign access in the trusted profile component. */
     policyTemplateReferences?: PolicyTemplateReference[];
     actionControls?: ActionControls;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLatestProfileTemplateVersion` operation. */
-  export interface GetLatestProfileTemplateVersionParams {
+  export interface GetLatestProfileTemplateVersionParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteAllVersionsOfProfileTemplate` operation. */
-  export interface DeleteAllVersionsOfProfileTemplateParams {
+  export interface DeleteAllVersionsOfProfileTemplateParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVersionsOfProfileTemplate` operation. */
-  export interface ListVersionsOfProfileTemplateParams {
+  export interface ListVersionsOfProfileTemplateParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
     /** Optional size of a single page. */
@@ -6187,7 +6499,6 @@ namespace IamIdentityV1 {
     order?: ListVersionsOfProfileTemplateConstants.Order | string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVersionsOfProfileTemplate` operation. */
@@ -6206,7 +6517,7 @@ namespace IamIdentityV1 {
   }
 
   /** Parameters for the `createProfileTemplateVersion` operation. */
-  export interface CreateProfileTemplateVersionParams {
+  export interface CreateProfileTemplateVersionParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
     /** ID of the account where the template resides. */
@@ -6223,22 +6534,20 @@ namespace IamIdentityV1 {
     /** Existing policy templates that you can reference to assign access in the trusted profile component. */
     policyTemplateReferences?: PolicyTemplateReference[];
     actionControls?: ActionControls;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getProfileTemplateVersion` operation. */
-  export interface GetProfileTemplateVersionParams {
+  export interface GetProfileTemplateVersionParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
     /** Version of the Profile Template. */
     version: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateProfileTemplateVersion` operation. */
-  export interface UpdateProfileTemplateVersionParams {
+  export interface UpdateProfileTemplateVersionParams extends DefaultParams {
     /** Entity tag of the Template to be updated. Specify the tag that you retrieved when reading the Profile
      *  Template. This value helps identifying parallel usage of this API. Pass * to indicate to update any version
      *  available. This might result in stale updates.
@@ -6262,25 +6571,22 @@ namespace IamIdentityV1 {
     /** Existing policy templates that you can reference to assign access in the trusted profile component. */
     policyTemplateReferences?: PolicyTemplateReference[];
     actionControls?: ActionControls;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteProfileTemplateVersion` operation. */
-  export interface DeleteProfileTemplateVersionParams {
+  export interface DeleteProfileTemplateVersionParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
     /** Version of the Profile Template. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `commitProfileTemplate` operation. */
-  export interface CommitProfileTemplateParams {
+  export interface CommitProfileTemplateParams extends DefaultParams {
     /** ID of the trusted profile template. */
     templateId: string;
     /** Version of the Profile Template. */
     version: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
