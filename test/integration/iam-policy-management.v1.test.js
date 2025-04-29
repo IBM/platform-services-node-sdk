@@ -40,7 +40,6 @@ describe('IamPolicyManagementV1_integration', () => {
   let testV2PolicyId;
   let testAssignmentPolicyId;
   let testTargetAccountId;
-  let testTargetEnterpriseAccountId;
   let testAssignmentActionControlId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
@@ -228,17 +227,14 @@ describe('IamPolicyManagementV1_integration', () => {
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
     expect(config).toHaveProperty('testTargetAccountId');
-    expect(config).toHaveProperty('testTargetEnterpriseAccountId');
 
     // Retrieve the test account id and target account_id to be used with the tests.
     testAccountId = config.testAccountId;
     testTargetAccountId = config.testTargetAccountId;
-    testTargetEnterpriseAccountId = config.testTargetEnterpriseAccountId;
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
     expect(testTargetAccountId).not.toBeNull();
-    expect(testTargetEnterpriseAccountId).not.toBeNull();
     done();
   });
 
@@ -1317,7 +1313,7 @@ describe('IamPolicyManagementV1_integration', () => {
       const testTemplateDescription = 'Node SDK Test template';
       const params = {
         name: testActionControlTemplateName,
-        accountId: testTargetEnterpriseAccountId,
+        accountId: testAccountId,
         description: testTemplateDescription,
       };
 
@@ -1411,7 +1407,7 @@ describe('IamPolicyManagementV1_integration', () => {
       };
       const response = await service.createActionControlTemplate({
         name: testActionControlTemplateName,
-        accountId: testTargetEnterpriseAccountId,
+        accountId: testAccountId,
         description: 'Test ActionControl templates with action control',
         actionControl,
       });
@@ -1426,7 +1422,7 @@ describe('IamPolicyManagementV1_integration', () => {
       testActionControlTemplateETag = response.headers.etag;
     });
     test('Get an action control template by id', async () => {
-      expect(testTemplateId).toBeDefined();
+      expect(testActionControlTemplateId).toBeDefined();
       const params = {
         actionControlTemplateId: testActionControlTemplateId,
       };
@@ -1467,7 +1463,7 @@ describe('IamPolicyManagementV1_integration', () => {
     });
     test('List action control templates', async () => {
       const params = {
-        accountId: testTargetEnterpriseAccountId,
+        accountId: testAccountId,
         acceptLanguage: 'default',
       };
 
@@ -1598,7 +1594,7 @@ describe('IamPolicyManagementV1_integration', () => {
       });
       test('List action control assignments', async () => {
         const params = {
-          accountId: testTargetEnterpriseAccountId,
+          accountId: testAccountId,
           acceptLanguage: 'default',
         };
         const response = await service.listActionControlAssignments(params);
@@ -1645,7 +1641,7 @@ describe('IamPolicyManagementV1_integration', () => {
     test('Clean up all test action control templates', async () => {
       // List all action control templates in the account
       const params = {
-        accountId: testTargetEnterpriseAccountId,
+        accountId: testAccountId,
       };
 
       let response;

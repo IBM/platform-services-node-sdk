@@ -49,7 +49,6 @@ const originalWarn = console.warn;
 // Mocks for console.log and console.warn
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
-jest.setTimeout(10000);
 
 describe('IamPolicyManagementV1', () => {
 
@@ -75,6 +74,8 @@ describe('IamPolicyManagementV1', () => {
   let exampleActionControlBaseVersion;
   let exampleActionControlTemplateEtag;
   let exampleActionControlTemplateVersion;
+  let  exampleActionControlAssignmentId;
+  let exampleActionControlAssignmentETag;
 
   // begin-common
 
@@ -1576,7 +1577,7 @@ describe('IamPolicyManagementV1', () => {
     // end-commit_action_control_template
   });
   test('listActionControlTemplateVersions request example', async () => {
-    expect(exampleTemplateId).not.toBeNull();
+    expect(exampleActionControlTemplateId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1590,7 +1591,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-list_action_control_template_versions
 
     const params = {
-      actionControlTemplateId: exampleTemplateId,
+      actionControlTemplateId: exampleActionControlTemplateId,
     };
 
     let res;
@@ -1635,8 +1636,8 @@ describe('IamPolicyManagementV1', () => {
 
     try {
       const res = await iamPolicyManagementService.createActionControlTemplateAssignment(params);
-      exampleAssignmentId = res.result.assignments[0].id;
-      exampleAssignmentETag = res.headers.etag;
+      exampleActionControlAssignmentId = res.result.assignments[0].id;
+      exampleActionControlAssignmentETag = res.headers.etag;
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
@@ -1645,7 +1646,9 @@ describe('IamPolicyManagementV1', () => {
     // end-create_action_control_template_assignment
   });
   test('updateActionControlAssignment request example', async () => {
-    expect(exampleAssignmentId).not.toBeNull();
+    expect(exampleActionControlAssignmentId).not.toBeNull();
+    expect(exampleActionControlTemplateVersion).not.toBeNull();
+    expect(exampleActionControlAssignmentETag).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1657,9 +1660,9 @@ describe('IamPolicyManagementV1', () => {
     originalLog('updateActionControlAssignment() result:');
     // begin-update_action_control_assignment
     const params = {
-      assignmentId: exampleAssignmentId,
+      assignmentId: exampleActionControlAssignmentId,
       templateVersion: exampleActionControlTemplateVersion,
-      ifMatch: exampleAssignmentETag,
+      ifMatch: exampleActionControlAssignmentETag,
     };
     try {
     const response = await iamPolicyManagementService.updateActionControlAssignment(params);
@@ -1697,7 +1700,7 @@ describe('IamPolicyManagementV1', () => {
     // end-list_action_control_assignments
   });
   test('getActionControlAssignment request example', async () => {
-    expect(exampleAssignmentId).not.toBeNull();
+    expect(exampleActionControlAssignmentId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1707,11 +1710,11 @@ describe('IamPolicyManagementV1', () => {
       expect(true).toBeFalsy();
     });
 
-    originalLog('getPolicyAssignment() result:');
+    originalLog('getActionControlAssignment() result:');
     // begin-get_action_control_assignment
 
     const params = {
-      assignmentId: exampleAssignmentId,
+      assignmentId: exampleActionControlAssignmentId,
     };
 
     let res;
@@ -1725,7 +1728,7 @@ describe('IamPolicyManagementV1', () => {
     // end-get_action_control_assignment
   });
   test('deleteActionControlAssignment request example', async () => {
-    expect(exampleAssignmentId).not.toBeNull();
+    expect(exampleActionControlAssignmentId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -1738,7 +1741,7 @@ describe('IamPolicyManagementV1', () => {
     // begin-delete_action_control_assignment
 
     const params = {
-      assignmentId: exampleAssignmentId,
+      assignmentId: exampleActionControlAssignmentId,
     };
 
     try {
