@@ -1777,7 +1777,7 @@ describe('IamPolicyManagementV1', () => {
     }
     // end-delete_action_control_template_template_version
   });
-  test('deletePolicyTemplate request example', async () => {
+  test('deleteActionControlTemplate request example', async () => {
     expect(exampleActionControlTemplateId).not.toBeNull();
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
