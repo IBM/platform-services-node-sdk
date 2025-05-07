@@ -1,3 +1,10 @@
+# [0.73.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.72.0...v0.73.0) (2025-05-07)
+
+
+### Features
+
+* **IAM Policy Management:** add support for action control templates from IAM ([#297](https://github.com/IBM/platform-services-node-sdk/issues/297)) ([7aab0b2](https://github.com/IBM/platform-services-node-sdk/commit/7aab0b25f0a762380027d2da0458a97f7a547ecc))
+
 # [0.72.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.71.0...v0.72.0) (2025-04-28)
 
 
