@@ -40,7 +40,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testV2PolicyId;
   let testAssignmentPolicyId;
   let testTargetAccountId;
-  let testTargetEnterpriseAccountId;
+  let testAssignmentActionControlId;
   const testUniqueId = Math.floor(Math.random() * 100000);
   const testUserId = `IBMid-SDKNode${testUniqueId}`;
   const testViewerRoleCrn = 'crn:v1:bluemix:public:iam::::role:Viewer';
@@ -151,6 +151,14 @@ describe('IamPolicyManagementV1_integration', () => {
   let testAccountSettingsETag;
   const TEST_TEMPLATE_PREFIX = 'SDKNode';
   const testTemplateName = TEST_TEMPLATE_PREFIX + testUniqueId;
+  const testActionControlTemplateName = `${TEST_TEMPLATE_PREFIX}ActionControl${testUniqueId}`;
+  let testActionControlBasicTemplateId;
+  let testActionControlBasicTemplateVersion;
+  let testActionControlBasicTemplateETag;
+  let testActionControlTemplateId;
+  let testActionControlTemplateVersion;
+  let testActionControlTemplateETag;
+  let testActionControlTemplateUpdateVersion;
   const testTemplatePolicy = {
     type: 'access',
     description: 'SDK Test Policy',
@@ -219,17 +227,14 @@ describe('IamPolicyManagementV1_integration', () => {
     expect(config).not.toBeNull();
     expect(config).toHaveProperty('testAccountId');
     expect(config).toHaveProperty('testTargetAccountId');
-    expect(config).toHaveProperty('testTargetEnterpriseAccountId');
 
     // Retrieve the test account id and target account_id to be used with the tests.
     testAccountId = config.testAccountId;
     testTargetAccountId = config.testTargetAccountId;
-    testTargetEnterpriseAccountId = config.testTargetEnterpriseAccountId;
     policyResourceAccountAttribute.value = testAccountId;
 
     expect(testAccountId).not.toBeNull();
     expect(testTargetAccountId).not.toBeNull();
-    expect(testTargetEnterpriseAccountId).not.toBeNull();
     done();
   });
 
@@ -1300,6 +1305,383 @@ describe('IamPolicyManagementV1_integration', () => {
       expect(externalAccountIdentityInteractionResponse.identity_types.service.state).toEqual(
         'monitor'
       );
+    });
+  });
+
+  describe('Action Control Template tests', () => {
+    test('Create an action control basic template', async () => {
+      const testTemplateDescription = 'Node SDK Test template';
+      const params = {
+        name: testActionControlTemplateName,
+        accountId: testAccountId,
+        description: testTemplateDescription,
+      };
+
+      const response = await service.createActionControlTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.name).toEqual(testActionControlTemplateName);
+      expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
+      testActionControlBasicTemplateId = result.id;
+      testActionControlBasicTemplateVersion = result.version;
+      testActionControlBasicTemplateETag = response.headers.etag;
+    });
+    test('Get an action control template basic version', async () => {
+      expect(testActionControlBasicTemplateId).toBeDefined();
+      expect(testActionControlBasicTemplateVersion).toBeDefined();
+      const params = {
+        actionControlTemplateId: testActionControlBasicTemplateId,
+        version: testActionControlBasicTemplateVersion,
+      };
+
+      const response = await service.getActionControlTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.version).toEqual(testActionControlBasicTemplateVersion);
+      expect(result.state).toEqual('active');
+    });
+    test('Replace an action control basic template', async () => {
+      const testTemplateDescription = 'Node SDK Test template update';
+      const name = `${TEST_TEMPLATE_PREFIX}ActionControlUpdate${testUniqueId}`;
+      const params = {
+        name,
+        description: testTemplateDescription,
+        ifMatch: testActionControlBasicTemplateETag,
+        actionControlTemplateId: testActionControlBasicTemplateId,
+        version: testActionControlBasicTemplateVersion,
+      };
+
+      const response = await service.replaceActionControlTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.name).toEqual(name);
+      expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
+      testActionControlBasicTemplateETag = response.headers.etag;
+    });
+    test('Replace an action control basic template with action_control', async () => {
+      const testTemplateDescription = 'Node SDK Test template update';
+      const actionControl = {
+        service_name: 'am-test-service',
+        description: 'am-test-service service actionControl',
+        actions: ['am-test-service.test.delete'],
+      };
+      const params = {
+        description: testTemplateDescription,
+        ifMatch: testActionControlBasicTemplateETag,
+        actionControlTemplateId: testActionControlBasicTemplateId,
+        actionControl,
+        version: testActionControlBasicTemplateVersion,
+      };
+
+      const response = await service.replaceActionControlTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
+    });
+    test('Delete an action control template version', async () => {
+      const params = {
+        actionControlTemplateId: testActionControlBasicTemplateId,
+        version: testActionControlBasicTemplateVersion,
+      };
+
+      const response = await service.deleteActionControlTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(204);
+    });
+    test('Create an action control template', async () => {
+      const actionControl = {
+        service_name: 'am-test-service',
+        description: 'am-test-service service actionControl',
+        actions: ['am-test-service.test.delete'],
+      };
+      const response = await service.createActionControlTemplate({
+        name: testActionControlTemplateName,
+        accountId: testAccountId,
+        description: 'Test ActionControl templates with action control',
+        actionControl,
+      });
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.name).toEqual(testActionControlTemplateName);
+      expect(result.state).toEqual('active');
+      testActionControlTemplateId = result.id;
+      testActionControlTemplateVersion = result.version;
+      testActionControlTemplateETag = response.headers.etag;
+    });
+    test('Get an action control template by id', async () => {
+      expect(testActionControlTemplateId).toBeDefined();
+      const params = {
+        actionControlTemplateId: testActionControlTemplateId,
+      };
+
+      const response = await service.getActionControlTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.state).toEqual('active');
+    });
+    test('Replace an action control template', async () => {
+      expect(testActionControlTemplateId).toBeDefined();
+      expect(testActionControlTemplateVersion).toBeDefined();
+      expect(testActionControlTemplateETag).toBeDefined();
+
+      const testTemplateDescription = 'Updated Node SDK Test template update';
+      const actionControl = {
+        service_name: 'am-test-service',
+        description: 'am-test-service service actionControl',
+        actions: ['am-test-service.test.delete'],
+      };
+      const params = {
+        description: testTemplateDescription,
+        ifMatch: testActionControlTemplateETag,
+        actionControlTemplateId: testActionControlTemplateId,
+        actionControl,
+        version: testActionControlTemplateVersion,
+      };
+
+      const response = await service.replaceActionControlTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
+    });
+    test('List action control templates', async () => {
+      const params = {
+        accountId: testAccountId,
+        acceptLanguage: 'default',
+      };
+
+      const response = await service.listActionControlTemplates(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      let foundTestTemplate = false;
+      for (const template of result.action_control_templates) {
+        if (template.id === testActionControlTemplateId) {
+          foundTestTemplate = true;
+          break;
+        }
+      }
+      expect(foundTestTemplate).toBeTruthy();
+    });
+    test('Create an action control template version', async () => {
+      expect(testActionControlTemplateId).toBeDefined();
+      expect(testActionControlTemplateVersion).toBeDefined();
+
+      const testTemplateDescription = 'New version of SDK Test action control template';
+
+      const actionControl = {
+        service_name: 'am-test-service',
+        description: 'am-test-service service actionControl',
+        actions: ['am-test-service.test.create'],
+      };
+      const params = {
+        description: testTemplateDescription,
+        actionControlTemplateId: testActionControlTemplateId,
+        actionControl,
+        committed: true,
+      };
+
+      const response = await service.createActionControlTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(Number(result.version)).toBeGreaterThan(Number(testActionControlTemplateVersion));
+      expect(result.state).toEqual('active');
+      testActionControlTemplateUpdateVersion = result.version;
+    });
+
+    test('Get an action control template version', async () => {
+      expect(testActionControlTemplateId).toBeDefined();
+      expect(testActionControlTemplateVersion).toBeDefined();
+      const params = {
+        actionControlTemplateId: testActionControlTemplateId,
+        version: testActionControlTemplateVersion,
+      };
+
+      const response = await service.getActionControlTemplateVersion(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.version).toEqual(testActionControlTemplateVersion);
+      expect(result.state).toEqual('active');
+    });
+    test('Commit an action control template version', async () => {
+      expect(testActionControlTemplateId).toBeDefined();
+      expect(testActionControlTemplateVersion).toBeDefined();
+      const params = {
+        actionControlTemplateId: testActionControlTemplateId,
+        version: testActionControlTemplateVersion,
+      };
+
+      const response = await service.commitActionControlTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toBe(204);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+    });
+    test('List action control template versions', async () => {
+      const response = await service.listActionControlTemplateVersions({
+        actionControlTemplateId: testActionControlTemplateId,
+      });
+      expect(response).toBeDefined();
+      expect(response.status).toBe(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      const { versions: templates } = result || [];
+      expect(templates).toHaveLength(2);
+      expect(templates[0].version).not.toEqual(testActionControlTemplateUpdateVersion);
+      expect(templates[0].state).toEqual('active');
+    });
+
+    describe('Action Control Assignment tests', () => {
+      test('Create action control assignments', async () => {
+        const params = {
+          acceptLanguage: 'default',
+          target: {
+            id: testTargetAccountId,
+            type: 'Account',
+          },
+          templates: [
+            {
+              id: testActionControlTemplateId,
+              version: testActionControlTemplateVersion,
+            },
+          ],
+        };
+        const response = await service.createActionControlTemplateAssignment(params);
+        expect(response).toBeDefined();
+        expect(response.status).toBe(201);
+        const { result } = response || {};
+        expect(result).toBeDefined();
+        testAssignmentId = result.assignments[0].id;
+        testAssignmentETag = response.headers.etag;
+        testAssignmentActionControlId =
+          result.assignments[0].resources[0].action_control.resource_created.id;
+      });
+      test('Update action control assignment by id', async () => {
+        expect(testAssignmentId).toBeDefined();
+        const params = {
+          assignmentId: testAssignmentId,
+          templateVersion: testActionControlTemplateUpdateVersion,
+          ifMatch: testAssignmentETag,
+        };
+        const response = await service.updateActionControlAssignment(params);
+        expect(response).toBeDefined();
+        expect(response.status).toBe(200);
+        expect(response.result.resources[0].action_control.resource_created.id).toEqual(
+          testAssignmentActionControlId
+        );
+      });
+      test('List action control assignments', async () => {
+        const params = {
+          accountId: testAccountId,
+          acceptLanguage: 'default',
+        };
+        const response = await service.listActionControlAssignments(params);
+        expect(response).toBeDefined();
+        expect(response.status).toBe(200);
+        const { result } = response || {};
+        expect(result).toBeDefined();
+      });
+      test('Get action control assignment by id', async () => {
+        expect(testAssignmentId).toBeDefined();
+        const params = {
+          assignmentId: testAssignmentId,
+        };
+        const response = await service.getActionControlAssignment(params);
+        expect(response).toBeDefined();
+        expect(response.status).toBe(200);
+        expect(response.result).toBeDefined();
+      });
+      test('Delete action control assignment by id', async () => {
+        expect(testAssignmentId).toBeDefined();
+        const params = {
+          assignmentId: testAssignmentId,
+        };
+        const response = await service.deleteActionControlAssignment(params);
+        expect(response.status).toBe(204);
+      });
+      test('Delete action control templates', async () => {
+        const params = {
+          actionControlTemplateId: testActionControlTemplateId,
+        };
+
+        let response;
+        try {
+          response = await service.deleteActionControlTemplate(params);
+        } catch (err) {
+          console.warn(err);
+        }
+
+        expect(response).toBeDefined();
+        expect(response.status).toEqual(204);
+      });
+    });
+
+    test('Clean up all test action control templates', async () => {
+      // List all action control templates in the account
+      const params = {
+        accountId: testAccountId,
+      };
+
+      let response;
+      try {
+        response = await service.listActionControlTemplates(params);
+      } catch (err) {
+        console.warn(err);
+      }
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(200);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+
+      // Iterate across the action control templates
+      let template;
+      for (template of result.action_control_templates) {
+        // Delete the test policy (or any test action control templates older than 5 minutes)
+        const createdAt = Date.parse(template.created_at);
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        const fiveMinutesAgo = Date.now() - FIVE_MINUTES;
+        if (
+          template.name.startsWith(TEST_TEMPLATE_PREFIX) &&
+          (template.id === testActionControlBasicTemplateId ||
+            template.id === testActionControlTemplateId ||
+            createdAt < fiveMinutesAgo)
+        ) {
+          const params = {
+            actionControlTemplateId: template.id,
+          };
+          let response;
+          try {
+            response = await service.deleteActionControlTemplate(params);
+          } catch (err) {
+            console.warn(err);
+          }
+
+          expect(response).toBeDefined();
+          expect(response.status).toEqual(204);
+        }
+      }
     });
   });
 });
