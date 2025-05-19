@@ -2136,7 +2136,7 @@ namespace GlobalCatalogV1 {
     /** A CRN that describes the deployment. crn:v1:[cname]:[ctype]:[location]:[scope]::[resource-type]:[resource]. */
     target_crn?: string;
     /** Cloud resource name for this deployment. */
-    crn?: string;
+    service_crn?: string;
     /** Deprecated: ID of the multi cloud connectivity platform. */
     mccp_id?: string;
     /** The broker associated with a catalog entry. */
@@ -2214,7 +2214,7 @@ namespace GlobalCatalogV1 {
     /** A CRN that describes the deployment. crn:v1:[cname]:[ctype]:[location]:[scope]::[resource-type]:[resource]. */
     target_crn?: string;
     /** Cloud resource name for this deployment. */
-    crn?: string;
+    service_crn?: string;
     /** Deprecated: ID of the multi cloud connectivity platform. */
     mccp_id?: string;
     /** The broker associated with a catalog entry. */
