@@ -248,6 +248,12 @@ describe('GlobalCatalogV1', () => {
         test_check_interval: 38,
         service_key_supported: true,
         cf_guid: { 'key1': 'testString' },
+        crn_mask: 'testString',
+        parameters: { anyKey: 'anyValue' },
+        user_defined_service: { anyKey: 'anyValue' },
+        extension: { anyKey: 'anyValue' },
+        paid_only: true,
+        custom_create_page_hybrid_enabled: true,
       };
 
       // PlanMetaData
@@ -257,6 +263,7 @@ describe('GlobalCatalogV1', () => {
         allow_internal_users: true,
         async_provisioning_supported: true,
         async_unprovisioning_supported: true,
+        provision_type: 'testString',
         test_check_interval: 38,
         single_scope_instance: 'testString',
         service_check_enabled: true,
@@ -426,7 +433,7 @@ describe('GlobalCatalogV1', () => {
         location_url: 'testString',
         original_location: 'testString',
         target_crn: 'testString',
-        service_crn: 'testString',
+        crn: 'testString',
         mccp_id: 'testString',
         broker: brokerModel,
         supports_rc_migration: true,
@@ -731,6 +738,12 @@ describe('GlobalCatalogV1', () => {
         test_check_interval: 38,
         service_key_supported: true,
         cf_guid: { 'key1': 'testString' },
+        crn_mask: 'testString',
+        parameters: { anyKey: 'anyValue' },
+        user_defined_service: { anyKey: 'anyValue' },
+        extension: { anyKey: 'anyValue' },
+        paid_only: true,
+        custom_create_page_hybrid_enabled: true,
       };
 
       // PlanMetaData
@@ -740,6 +753,7 @@ describe('GlobalCatalogV1', () => {
         allow_internal_users: true,
         async_provisioning_supported: true,
         async_unprovisioning_supported: true,
+        provision_type: 'testString',
         test_check_interval: 38,
         single_scope_instance: 'testString',
         service_check_enabled: true,
@@ -909,7 +923,7 @@ describe('GlobalCatalogV1', () => {
         location_url: 'testString',
         original_location: 'testString',
         target_crn: 'testString',
-        service_crn: 'testString',
+        crn: 'testString',
         mccp_id: 'testString',
         broker: brokerModel,
         supports_rc_migration: true,
@@ -1472,12 +1486,14 @@ describe('GlobalCatalogV1', () => {
       function __updateVisibilityTest() {
         // Construct the params object for operation updateVisibility
         const id = 'testString';
+        const restrictions = 'testString';
         const extendable = true;
         const include = visibilityDetailModel;
         const exclude = visibilityDetailModel;
         const account = 'testString';
         const updateVisibilityParams = {
           id,
+          restrictions,
           extendable,
           include,
           exclude,
@@ -1499,6 +1515,7 @@ describe('GlobalCatalogV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.restrictions).toEqual(restrictions);
         expect(mockRequestOptions.body.extendable).toEqual(extendable);
         expect(mockRequestOptions.body.include).toEqual(include);
         expect(mockRequestOptions.body.exclude).toEqual(exclude);

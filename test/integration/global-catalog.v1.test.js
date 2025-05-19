@@ -433,7 +433,7 @@ describe('GlobalCatalogV1_integration', () => {
     }
 
     try {
-      response = await service.updateVisibility({ id: defaultEntry.id });
+      response = await service.updateVisibility({ id: defaultEntry.id, restrictions: 'private' });
     } catch (err) {
       expect(err.status).toEqual(403);
     }

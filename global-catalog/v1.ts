@@ -15,12 +15,13 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
+ * IBM OpenAPI SDK Code Generator Version: 3.104.0-b4a47c49-20250418-184351
  */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -217,14 +218,15 @@ class GlobalCatalogV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.name - Programmatic name for this catalog entry, which must be formatted like a CRN segment.
    * See the display name in OverviewUI for a user-readable name.
-   * @param {string} params.kind - The type of catalog entry, **service**, **template**, **dashboard**, which determines
-   * the type and shape of the object.
+   * @param {string} params.kind - The type of catalog entry which determines the type and shape of the object. Valid GC
+   * types are buildpack, cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard.
    * @param {JsonObject} params.overviewUi - Overview is nested in the top level. The key value pair is
    * `[_language_]overview_ui`.
    * @param {Image} params.images - Image annotation for this catalog entry. The image is a URL.
    * @param {boolean} params.disabled - Boolean value that determines the global visibility for the catalog entry, and
    * its children. If it is not enabled, all plans are disabled.
-   * @param {string[]} params.tags - A list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant.
+   * @param {string[]} params.tags - A searchable list of tags. For example, IBM, 3rd Party, Beta, GA, and Single
+   * Tenant. Valid values found at https://globalcatalog.test.cloud.ibm.com/search.
    * @param {Provider} params.provider - Information related to the provider associated with a catalog entry.
    * @param {string} params.id - Catalog entry's unique ID. It's the same across all catalog instances.
    * @param {string} [params.parentId] - The ID of the parent catalog entry if it exists.
@@ -426,14 +428,15 @@ class GlobalCatalogV1 extends BaseService {
    * @param {string} params.id - The object's unique ID.
    * @param {string} params.name - Programmatic name for this catalog entry, which must be formatted like a CRN segment.
    * See the display name in OverviewUI for a user-readable name.
-   * @param {string} params.kind - The type of catalog entry, **service**, **template**, **dashboard**, which determines
-   * the type and shape of the object.
+   * @param {string} params.kind - The type of catalog entry which determines the type and shape of the object. Valid GC
+   * types are buildpack, cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard.
    * @param {JsonObject} params.overviewUi - Overview is nested in the top level. The key value pair is
    * `[_language_]overview_ui`.
    * @param {Image} params.images - Image annotation for this catalog entry. The image is a URL.
    * @param {boolean} params.disabled - Boolean value that determines the global visibility for the catalog entry, and
    * its children. If it is not enabled, all plans are disabled.
-   * @param {string[]} params.tags - A list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant.
+   * @param {string[]} params.tags - A searchable list of tags. For example, IBM, 3rd Party, Beta, GA, and Single
+   * Tenant. Valid values found at https://globalcatalog.test.cloud.ibm.com/search.
    * @param {Provider} params.provider - Information related to the provider associated with a catalog entry.
    * @param {string} [params.parentId] - The ID of the parent catalog entry if it exists.
    * @param {boolean} [params.group] - Boolean value that determines whether the catalog entry is a group.
@@ -839,7 +842,11 @@ class GlobalCatalogV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The object's unique ID.
-   * @param {boolean} [params.extendable] - Allows the visibility to be extenable.
+   * @param {string} [params.restrictions] - This controls the overall visibility. It is an enum of *public*,
+   * *nonibm_only*, *ibm_only*, and *private*. public means it is visible to all. nonibm_only means it is visible to all
+   * except IBM unless their account is explicitly included, ibm_only means it is visible to all IBM unless their
+   * account is explicitly excluded. private means it is visible only to the included accounts.
+   * @param {boolean} [params.extendable] - Allows the visibility to be extendable.
    * @param {VisibilityDetail} [params.include] - Visibility details related to a catalog entry.
    * @param {VisibilityDetail} [params.exclude] - Visibility details related to a catalog entry.
    * @param {string} [params.account] - This changes the scope of the request regardless of the authorization header.
@@ -853,13 +860,23 @@ class GlobalCatalogV1 extends BaseService {
   ): Promise<GlobalCatalogV1.Response<GlobalCatalogV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'extendable', 'include', 'exclude', 'account', 'signal', 'headers'];
+    const _validParams = [
+      'id',
+      'restrictions',
+      'extendable',
+      'include',
+      'exclude',
+      'account',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'restrictions': _params.restrictions,
       'extendable': _params.extendable,
       'include': _params.include,
       'exclude': _params.exclude,
@@ -1467,8 +1484,8 @@ namespace GlobalCatalogV1 {
      *  in OverviewUI for a user-readable name.
      */
     name: string;
-    /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of
-     *  the object.
+    /** The type of catalog entry which determines the type and shape of the object. Valid GC types are buildpack,
+     *  cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard.
      */
     kind: CreateCatalogEntryConstants.Kind | string;
     /** Overview is nested in the top level. The key value pair is `[_language_]overview_ui`. */
@@ -1479,7 +1496,9 @@ namespace GlobalCatalogV1 {
      *  enabled, all plans are disabled.
      */
     disabled: boolean;
-    /** A list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant. */
+    /** A searchable list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant. Valid values found at
+     *  https://globalcatalog.test.cloud.ibm.com/search.
+     */
     tags: string[];
     /** Information related to the provider associated with a catalog entry. */
     provider: Provider;
@@ -1504,7 +1523,7 @@ namespace GlobalCatalogV1 {
 
   /** Constants for the `createCatalogEntry` operation. */
   export namespace CreateCatalogEntryConstants {
-    /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of the object. */
+    /** The type of catalog entry which determines the type and shape of the object. Valid GC types are buildpack, cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard. */
     export enum Kind {
       SERVICE = 'service',
       TEMPLATE = 'template',
@@ -1551,8 +1570,8 @@ namespace GlobalCatalogV1 {
      *  in OverviewUI for a user-readable name.
      */
     name: string;
-    /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of
-     *  the object.
+    /** The type of catalog entry which determines the type and shape of the object. Valid GC types are buildpack,
+     *  cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard.
      */
     kind: UpdateCatalogEntryConstants.Kind | string;
     /** Overview is nested in the top level. The key value pair is `[_language_]overview_ui`. */
@@ -1563,7 +1582,9 @@ namespace GlobalCatalogV1 {
      *  enabled, all plans are disabled.
      */
     disabled: boolean;
-    /** A list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant. */
+    /** A searchable list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant. Valid values found at
+     *  https://globalcatalog.test.cloud.ibm.com/search.
+     */
     tags: string[];
     /** Information related to the provider associated with a catalog entry. */
     provider: Provider;
@@ -1592,7 +1613,7 @@ namespace GlobalCatalogV1 {
 
   /** Constants for the `updateCatalogEntry` operation. */
   export namespace UpdateCatalogEntryConstants {
-    /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of the object. */
+    /** The type of catalog entry which determines the type and shape of the object. Valid GC types are buildpack, cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard. */
     export enum Kind {
       SERVICE = 'service',
       TEMPLATE = 'template',
@@ -1682,7 +1703,13 @@ namespace GlobalCatalogV1 {
   export interface UpdateVisibilityParams extends DefaultParams {
     /** The object's unique ID. */
     id: string;
-    /** Allows the visibility to be extenable. */
+    /** This controls the overall visibility. It is an enum of *public*, *nonibm_only*, *ibm_only*, and *private*.
+     *  public means it is visible to all. nonibm_only means it is visible to all except IBM unless their account is
+     *  explicitly included, ibm_only means it is visible to all IBM unless their account is explicitly excluded.
+     *  private means it is visible only to the included accounts.
+     */
+    restrictions?: string;
+    /** Allows the visibility to be extendable. */
     extendable?: boolean;
     /** Visibility details related to a catalog entry. */
     include?: VisibilityDetail;
@@ -1904,38 +1931,70 @@ namespace GlobalCatalogV1 {
    * Service-related metadata.
    */
   export interface CFMetaData {
-    /** Type of service. */
+    /** Deprecated: The type of service (public, cfaas, personal_catalog, kms, toolchain, etc.). */
     type?: string;
-    /** Boolean value that describes whether the service is compatible with Identity and Access Management. */
+    /** Boolean value that describes whether the service is compatible with Identity and Access Management for
+     *  authentication and authorization.
+     */
     iam_compatible?: boolean;
-    /** Boolean value that describes whether the service has a unique API key. */
+    /** Deprecated: Boolean value that describes whether the service has a unique API key. Only settable on
+     *  services, should be set via partnercenter.
+     */
     unique_api_key?: boolean;
-    /** Boolean value that describes whether the service is provisionable or not. You may need sales or support to
-     *  create this service.
+    /** Boolean value that, if true, the service is provisionable via resource controller (RC) or, if false, via a
+     *  service control point API. If false, you may need sales or support to create this service.
      */
     provisionable?: boolean;
-    /** Boolean value that describes whether you can create bindings for this service. */
+    /** Boolean value that describes whether the service can be bound to an application. If true then this will
+     *  create and use resource keys.
+     */
     bindable?: boolean;
-    /** Boolean value that describes whether the service supports asynchronous provisioning. */
+    /** Deprecated: Boolean value that describes whether the service supports asynchronous provisioning. Now handled
+     *  by a 202 response indicating support from the broker on provisioning.
+     */
     async_provisioning_supported?: boolean;
-    /** Boolean value that describes whether the service supports asynchronous unprovisioning. */
+    /** Deprecated: Boolean value that describes whether the service supports asynchronous unprovisioning. Now
+     *  handled by a 202 response indicating support from the broker on unprovisioning.
+     */
     async_unprovisioning_supported?: boolean;
-    /** Service dependencies. */
+    /** Deprecated: Dependencies needed to use this service. */
     requires?: string[];
-    /** Boolean value that describes whether the service supports upgrade or downgrade for some plans. */
+    /** Boolean value that describes whether the service supports changing plans within the service. Only settable
+     *  on services, read only on plans and deployments.
+     */
     plan_updateable?: boolean;
-    /** String that describes whether the service is active or inactive. */
+    /** Deprecated: String that describes whether the service is active or inactive. */
     state?: string;
-    /** Boolean value that describes whether the service check is enabled. */
+    /** Deprecated: Boolean value that describes whether the Estado testing service will perform uptime tests for
+     *  this service.
+     */
     service_check_enabled?: boolean;
-    /** Test check interval. */
+    /** Deprecated: A unit of time that determines the time in between uptime checks performed by Estado. */
     test_check_interval?: number;
-    /** Boolean value that describes whether the service supports service keys. */
+    /** Boolean value that describes whether the service supports the creation of service credentials. Without
+     *  service key support, a service cannot be bound to a cluster.
+     */
     service_key_supported?: boolean;
-    /** If the field is imported from Cloud Foundry, the Cloud Foundry region's GUID. This is a required field. For
-     *  example, `us-south=123`.
+    /** Deprecated: If the field is imported from Cloud Foundry, the Cloud Foundry region's GUID. This is a required
+     *  field. For example, `us-south=123`.
      */
     cf_guid?: JsonObject;
+    /** Cloud resource name identifying the environment containing this service. */
+    crn_mask?: string;
+    /** Service specific parameters needed to configure the service on provisioning. Each parameter must be a map
+     *  with string keys containing a 'name' key.
+     */
+    parameters?: JsonObject;
+    /** Deprecated: An extended set of metadata fields that pertain to user-defined services. */
+    user_defined_service?: JsonObject;
+    /** Deprecated: A property-bag like extension to service metadata. */
+    extension?: JsonObject;
+    /** Deprecated: Boolean flag indicating if this service only offers paid pricing plans rather than the default
+     *  paygo.
+     */
+    paid_only?: boolean;
+    /** Boolean flag that determines if the hybrid page is accessible from the main catalog provisioning page. */
+    custom_create_page_hybrid_enabled?: boolean;
   }
 
   /**
@@ -1946,7 +2005,7 @@ namespace GlobalCatalogV1 {
     controller_url?: string;
     /** The URL of the deployment broker. */
     broker_url?: string;
-    /** The URL of the deployment broker SC proxy. */
+    /** Deprecated: The URL of the deployment broker SC proxy. */
     broker_proxy_url?: string;
     /** The URL of dashboard callback. */
     dashboard_url?: string;
@@ -1972,8 +2031,8 @@ namespace GlobalCatalogV1 {
      *  in OverviewUI for a user-readable name.
      */
     name: string;
-    /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of
-     *  the object.
+    /** The type of catalog entry which determines the type and shape of the object. Valid GC types are buildpack,
+     *  cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard.
      */
     kind: CatalogEntry.Constants.Kind | string;
     /** Overview is nested in the top level. The key value pair is `[_language_]overview_ui`. */
@@ -1986,7 +2045,9 @@ namespace GlobalCatalogV1 {
      *  enabled, all plans are disabled.
      */
     disabled: boolean;
-    /** A list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant. */
+    /** A searchable list of tags. For example, IBM, 3rd Party, Beta, GA, and Single Tenant. Valid values found at
+     *  https://globalcatalog.test.cloud.ibm.com/search.
+     */
     tags: string[];
     /** Boolean value that determines whether the catalog entry is a group. */
     group?: boolean;
@@ -2006,7 +2067,9 @@ namespace GlobalCatalogV1 {
     children_url?: string;
     /** tags to indicate the locations this service is deployable to. */
     geo_tags?: string[];
-    /** tags to indicate the type of pricing plans this service supports. */
+    /** tags to indicate the type of pricing plans this service supports. Plans tagged with paid_only will not be
+     *  shown for trial accounts.
+     */
     pricing_tags?: string[];
     /** Date created. */
     created?: string;
@@ -2015,7 +2078,7 @@ namespace GlobalCatalogV1 {
   }
   export namespace CatalogEntry {
     export namespace Constants {
-      /** The type of catalog entry, **service**, **template**, **dashboard**, which determines the type and shape of the object. */
+      /** The type of catalog entry which determines the type and shape of the object. Valid GC types are buildpack, cname, dataset, geography, iaas, platform_service, runtime, service, template, ui-dashboard. */
       export enum Kind {
         SERVICE = 'service',
         TEMPLATE = 'template',
@@ -2028,7 +2091,9 @@ namespace GlobalCatalogV1 {
    * Model used to describe metadata object returned.
    */
   export interface CatalogEntryMetadata {
-    /** Boolean value that describes whether the service is compatible with the Resource Controller. */
+    /** Boolean value that describes whether the service is compatible with the Resource Controller. Only settable
+     *  for deployments, propogated upward.
+     */
     rc_compatible?: boolean;
     /** Service-related metadata. */
     service?: CFMetaData;
@@ -2048,7 +2113,7 @@ namespace GlobalCatalogV1 {
     callbacks?: Callbacks;
     /** The original name of the object. */
     original_name?: string;
-    /** Optional version of the object. */
+    /** Deprecated: Optional version of the object. Only valid for templates. */
     version?: string;
     /** Additional information. */
     other?: JsonObject;
@@ -2066,19 +2131,23 @@ namespace GlobalCatalogV1 {
     location?: string;
     /** Pointer to the location resource in the catalog. */
     location_url?: string;
-    /** Original service location. */
+    /** The original region in which this deployment existed. */
     original_location?: string;
     /** A CRN that describes the deployment. crn:v1:[cname]:[ctype]:[location]:[scope]::[resource-type]:[resource]. */
     target_crn?: string;
-    /** CRN for the service. */
-    service_crn?: string;
-    /** ID for MCCP. */
+    /** Cloud resource name for this deployment. */
+    crn?: string;
+    /** Deprecated: ID of the multi cloud connectivity platform. */
     mccp_id?: string;
     /** The broker associated with a catalog entry. */
     broker?: Broker;
-    /** This deployment not only supports RC but is ready to migrate and support the RC broker for a location. */
+    /** Deprecated: This deployment not only supports RC but is ready to migrate and support the RC broker for a
+     *  location.
+     */
     supports_rc_migration?: boolean;
-    /** network to use during deployment. */
+    /** When using the service_endpoint_supported tag for a deployment, this optional field can be set on a
+     *  deployment to denote the supported service endpoint type (cse_private, public, or cse_private+public).
+     */
     target_network?: string;
   }
 
@@ -2086,7 +2155,7 @@ namespace GlobalCatalogV1 {
    * Pricing-related information.
    */
   export interface CatalogEntryMetadataPricing {
-    /** Type of plan. Valid values are `free`, `trial`, `paygo`, `bluemix-subscription`, and `ibm-subscription`. */
+    /** Type of plan. Valid values are `free`, `trial`, `paygo`, `paid`, `subscription`. */
     type?: string;
     /** Defines where the pricing originates. */
     origin?: string;
@@ -2096,6 +2165,10 @@ namespace GlobalCatalogV1 {
     deployment_id?: string;
     /** The deployment location this pricing is from. Only set if object kind is deployment. */
     deployment_location?: string;
+    /** If price is for a deployment object then the region in the pricing catalog of the deployment object will be
+     *  here. To be valid, this value must be contained within deployment_regions.
+     */
+    deployment_region?: string;
     /** Is the location price not available. Only set in api /pricing/deployment and only set if true. This means
      *  for the given deployment object there was no pricing set in pricing catalog.
      */
@@ -2104,6 +2177,18 @@ namespace GlobalCatalogV1 {
     metrics?: Metrics[];
     /** List of regions where region pricing is available. Only set on global deployments if enabled by owner. */
     deployment_regions?: string[];
+    /** The start date-time indicating when this pricing plan takes effect. */
+    effective_from?: string;
+    /** The end date-time indicating when this pricing plan is no longer in effect. */
+    effective_until?: string;
+    /** Boolean value indicating whether or not this pricing plan requires login to get pricing data. */
+    require_login?: boolean;
+    /** URL to the entry for this plan on the pricing catalog. */
+    pricing_catalog_url?: string;
+    /** Tags describing how this plan was purchased (catalog [default], seller, private offer). Currently only
+     *  settable on MCSP subscription plans.
+     */
+    sales_avenue?: string[];
   }
 
   /**
@@ -2124,19 +2209,23 @@ namespace GlobalCatalogV1 {
     location?: string;
     /** URL of deployment. */
     location_url?: string;
-    /** Original service location. */
+    /** The original region in which this deployment existed. */
     original_location?: string;
     /** A CRN that describes the deployment. crn:v1:[cname]:[ctype]:[location]:[scope]::[resource-type]:[resource]. */
     target_crn?: string;
-    /** CRN for the service. */
-    service_crn?: string;
-    /** ID for MCCP. */
+    /** Cloud resource name for this deployment. */
+    crn?: string;
+    /** Deprecated: ID of the multi cloud connectivity platform. */
     mccp_id?: string;
     /** The broker associated with a catalog entry. */
     broker?: Broker;
-    /** This deployment not only supports RC but is ready to migrate and support the RC broker for a location. */
+    /** Deprecated: This deployment not only supports RC but is ready to migrate and support the RC broker for a
+     *  location.
+     */
     supports_rc_migration?: boolean;
-    /** network to use during deployment. */
+    /** When using the service_endpoint_supported tag for a deployment, this optional field can be set on a
+     *  deployment to denote the supported service endpoint type (cse_private, public, or cse_private+public).
+     */
     target_network?: string;
   }
 
@@ -2210,39 +2299,45 @@ namespace GlobalCatalogV1 {
    * Plan-specific cost metrics information.
    */
   export interface Metrics {
-    /** The part reference. */
+    /** The reference guid for the part. */
     part_ref?: string;
     /** The metric ID or part number. */
     metric_id?: string;
-    /** The tier model. */
+    /** The pricing tier type used to calculate the marginal unit price. Follows simple, graduated or block tier
+     *  styles.
+     */
     tier_model?: string;
-    /** The unit to charge. */
+    /** The unit to be charged under this metric. */
     charge_unit?: string;
-    /** The charge unit name. */
+    /** The name associated with a charge unit to provide context. */
     charge_unit_name?: string;
-    /** The charge unit quantity. */
+    /** The quantity associated with the charge unit to determine price change intervals. */
     charge_unit_quantity?: number;
-    /** Display name of the resource. */
+    /** The display name of the resource tied to the charge unit of this metric. */
     resource_display_name?: string;
-    /** Display name of the charge unit. */
+    /** Display name of the charge unit to be rendered human readable by the UI. */
     charge_unit_display_name?: string;
-    /** Usage limit for the metric. */
+    /** Upper bound for the usage under the parent metric. */
     usage_cap_qty?: number;
-    /** Display capacity. */
+    /** The display capacity for the UI. */
     display_cap?: number;
-    /** Effective from time. */
+    /** The end date-time indicating when this metric is no longer in effect. */
     effective_from?: string;
-    /** Effective until time. */
+    /** The start date-time indicating when this metric takes effect. */
     effective_until?: string;
     /** The pricing per metric by country and currency. */
     amounts?: Amount[];
+    /** A property-bag like extension to metric metadata. */
+    additional_properties?: JsonObject;
   }
 
   /**
    * Model used to describe metadata object that can be set.
    */
   export interface ObjectMetadataSet {
-    /** Boolean value that describes whether the service is compatible with the Resource Controller. */
+    /** Boolean value that describes whether the service is compatible with the Resource Controller. Only settable
+     *  for deployments, propogated upward.
+     */
     rc_compatible?: boolean;
     /** Service-related metadata. */
     service?: CFMetaData;
@@ -2262,7 +2357,7 @@ namespace GlobalCatalogV1 {
     callbacks?: Callbacks;
     /** The original name of the object. */
     original_name?: string;
-    /** Optional version of the object. */
+    /** Deprecated: Optional version of the object. Only valid for templates. */
     version?: string;
     /** Additional information. */
     other?: JsonObject;
@@ -2290,24 +2385,38 @@ namespace GlobalCatalogV1 {
    * Plan-related metadata.
    */
   export interface PlanMetaData {
-    /** Boolean value that describes whether the service can be bound to an application. */
+    /** Boolean value that describes whether the service can be bound to an application. If true then this will
+     *  create and use resource keys.
+     */
     bindable?: boolean;
-    /** Boolean value that describes whether the service can be reserved. */
+    /** Boolean value that describes whether the service can be reserved for pricing subscriptions. */
     reservable?: boolean;
-    /** Boolean value that describes whether the service can be used internally. */
+    /** Boolean value that describes whether the service can be used on IBM accounts. If false this cannot be
+     *  onboarded by an IBM account.
+     */
     allow_internal_users?: boolean;
-    /** Boolean value that describes whether the service can be provisioned asynchronously. */
+    /** Deprecated: Boolean value that describes whether the service supports asynchronous provisioning. Now handled
+     *  by a 202 response indicating support from the broker on provisioning.
+     */
     async_provisioning_supported?: boolean;
-    /** Boolean value that describes whether the service can be unprovisioned asynchronously. */
+    /** Deprecated: Boolean value that describes whether the service supports asynchronous unprovisioning. Now
+     *  handled by a 202 response indicating support from the broker on unprovisioning.
+     */
     async_unprovisioning_supported?: boolean;
-    /** Test check interval. */
+    /** How the subscription is provisioned (managed cloud service provider (mcsp), IBM_cloud, legacy). */
+    provision_type?: string;
+    /** Deprecated: A unit of time that determines the time in between uptime checks to be performed by the Estado
+     *  testing service.
+     */
     test_check_interval?: number;
-    /** Single scope instance. */
+    /** Deprecated: String denoting if a single instance is shared among a group of users. E.g. org. */
     single_scope_instance?: string;
-    /** Boolean value that describes whether the service check is enabled. */
+    /** Deprecated: Boolean value that describes whether the Estado testing service will perform uptime tests for
+     *  this service.
+     */
     service_check_enabled?: boolean;
-    /** If the field is imported from Cloud Foundry, the Cloud Foundry region's GUID. This is a required field. For
-     *  example, `us-south=123`.
+    /** Deprecated: If the field is imported from Cloud Foundry, the Cloud Foundry region's GUID. This is a required
+     *  field. For example, `us-south=123`.
      */
     cf_guid?: JsonObject;
   }
@@ -2316,7 +2425,7 @@ namespace GlobalCatalogV1 {
    * Pricing-related information.
    */
   export interface Price {
-    /** Pricing tier. */
+    /** The quantity of _metric_ associated with the current price point. */
     quantity_tier?: number;
     /** Price in the selected currency. */
     price?: number;
@@ -2330,11 +2439,15 @@ namespace GlobalCatalogV1 {
     deployment_id?: string;
     /** The deployment location this pricing is from. Only set if object kind is deployment. */
     deployment_location?: string;
+    /** If price is for a deployment object then the region in the pricing catalog of the deployment object will be
+     *  here. To be valid, this value must be contained within deployment_regions.
+     */
+    deployment_region?: string;
     /** Is the location price not available. Only set in api /pricing/deployment and only set if true. This means
      *  for the given deployment object there was no pricing set in pricing catalog.
      */
     deployment_location_no_price_available?: boolean;
-    /** Type of plan. Valid values are `free`, `trial`, `paygo`, `bluemix-subscription`, and `ibm-subscription`. */
+    /** Type of plan. Valid values are `free`, `trial`, `paygo`, `paid`, `subscription`. */
     type?: string;
     /** Defines where the pricing originates. */
     origin?: string;
@@ -2344,6 +2457,18 @@ namespace GlobalCatalogV1 {
     metrics?: Metrics[];
     /** List of regions where region pricing is available. Only set on global deployments if enabled by owner. */
     deployment_regions?: string[];
+    /** The start date-time indicating when this pricing plan takes effect. */
+    effective_from?: string;
+    /** The end date-time indicating when this pricing plan is no longer in effect. */
+    effective_until?: string;
+    /** Boolean value indicating whether or not this pricing plan requires login to get pricing data. */
+    require_login?: boolean;
+    /** URL to the entry for this plan on the pricing catalog. */
+    pricing_catalog_url?: string;
+    /** Tags describing how this plan was purchased (catalog [default], seller, private offer). Currently only
+     *  settable on MCSP subscription plans.
+     */
+    sales_avenue?: string[];
   }
 
   /**
@@ -2374,9 +2499,9 @@ namespace GlobalCatalogV1 {
    * Pricing-related information.
    */
   export interface PricingSet {
-    /** Type of plan. Valid values are `free`, `trial`, `paygo`, `bluemix-subscription`, and `ibm-subscription`. */
+    /** Type of plan. Valid values are `free`, `trial`, `paygo`, `paid`, `subscription`. */
     type?: string;
-    /** Defines where the pricing originates. */
+    /** Defines where the pricing originates, either the pricing catalog or the global catalog. */
     origin?: string;
     /** Plan-specific starting price information. */
     starting_price?: StartingPrice;
@@ -2470,7 +2595,7 @@ namespace GlobalCatalogV1 {
     services?: string[];
     /** Cloud Foundry instance memory value. */
     default_memory?: number;
-    /** Start Command. */
+    /** Command used to start a service. */
     start_cmd?: string;
     /** Location of your applications source files. */
     source?: SourceMetaData;
@@ -2522,7 +2647,9 @@ namespace GlobalCatalogV1 {
     side_by_side_index?: number;
     /** Date and time the service will no longer be available. */
     end_of_service_time?: string;
-    /** Denotes visibility. */
+    /** Denotes visibility. Can be set on a service/plan/deployment only by an account with bluemix admin
+     *  privileges.
+     */
     hidden?: boolean;
     /** Denotes lite metering visibility. */
     hide_lite_metering?: boolean;
@@ -2562,9 +2689,9 @@ namespace GlobalCatalogV1 {
     sdk_download_url?: string;
     /** URL to the terms of use for your service. */
     terms_url?: string;
-    /** URL to the custom create page for your serivce. */
+    /** URL to the custom create page for your service. */
     custom_create_page_url?: string;
-    /** URL to the catalog details page for your serivce. */
+    /** URL to the catalog details page for your service. */
     catalog_details_url?: string;
     /** URL for deprecation documentation. */
     deprecation_doc_url?: string;
@@ -2580,21 +2707,22 @@ namespace GlobalCatalogV1 {
    * Information related to the visibility of a catalog entry.
    */
   export interface Visibility {
-    /** This controls the overall visibility. It is an enum of *public*, *ibm_only*, and *private*. public means it
-     *  is visible to all. ibm_only means it is visible to all IBM unless their account is explicitly excluded. private
-     *  means it is visible only to the included accounts.
+    /** This controls the overall visibility. It is an enum of *public*, *nonibm_only*, *ibm_only*, and *private*.
+     *  public means it is visible to all. nonibm_only means it is visible to all except IBM unless their account is
+     *  explicitly included, ibm_only means it is visible to all IBM unless their account is explicitly excluded.
+     *  private means it is visible only to the included accounts.
      */
     restrictions?: string;
     /** IAM Scope-related information associated with a catalog entry. */
     owner?: string;
-    /** Allows the visibility to be extenable. */
+    /** Allows the visibility to be extendable. */
     extendable?: boolean;
     /** Visibility details related to a catalog entry. */
     include?: VisibilityDetail;
     /** Visibility details related to a catalog entry. */
     exclude?: VisibilityDetail;
     /** Determines whether the owning account has full control over the visibility of the entry such as adding
-     *  non-IBM accounts to the whitelist and making entries `private`, `ibm_only` or `public`.
+     *  non-IBM accounts to the whitelist and making entries `private`, `nonibm_only`, `ibm_only` or `public`.
      */
     approved?: boolean;
   }
