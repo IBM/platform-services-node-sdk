@@ -355,6 +355,7 @@ describe('GlobalCatalogV1', () => {
 
     const params = {
       id: catalogEntryId,
+      restrictions: 'private',
       extendable: false,
     };
 
