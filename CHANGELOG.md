@@ -1,3 +1,10 @@
+# [0.74.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.73.0...v0.74.0) (2025-05-20)
+
+
+### Features
+
+* **Global Catalog:** support non ibm only visibility ([#299](https://github.com/IBM/platform-services-node-sdk/issues/299)) ([0791140](https://github.com/IBM/platform-services-node-sdk/commit/079114005e1ae4091b6316899ac70683a60d31a1))
+
 # [0.73.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.72.0...v0.73.0) (2025-05-07)
 
 
