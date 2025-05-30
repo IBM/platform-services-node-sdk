@@ -1,3 +1,10 @@
+## [0.74.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.74.0...v0.74.1) (2025-05-30)
+
+
+### Bug Fixes
+
+* **build:** bump node core to 5.4.0 ([78ed747](https://github.com/IBM/platform-services-node-sdk/commit/78ed74746597827c220aa6fc9382dbcbe3bc4c50))
+
 # [0.74.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.73.0...v0.74.0) (2025-05-20)
 
 
