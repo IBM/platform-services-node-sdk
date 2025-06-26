@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,10 @@
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
+
+const { NoAuthAuthenticator } = sdkCorePackage;
+const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
+
 const {
   getOptions,
   checkUrlAndMethod,
@@ -24,9 +28,6 @@ const {
   checkUserHeader,
   checkForSuccessfulExecution,
 } = require('@ibm-cloud/sdk-test-utilities');
-const { NoAuthAuthenticator, unitTestUtils } = sdkCorePackage;
-const GlobalTaggingV1 = require('../../dist/global-tagging/v1');
-
 
 const globalTaggingServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
@@ -488,11 +489,17 @@ describe('GlobalTaggingV1', () => {
         resource_type: 'testString',
       };
 
+      // QueryString
+      const queryStringModel = {
+        query_string: 'testString',
+      };
+
       function __attachTagTest() {
         // Construct the params object for operation attachTag
-        const resources = [resourceModel];
         const tagName = 'testString';
         const tagNames = ['testString'];
+        const resources = [resourceModel];
+        const query = queryStringModel;
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const accountId = 'testString';
@@ -500,9 +507,10 @@ describe('GlobalTaggingV1', () => {
         const replace = false;
         const update = false;
         const attachTagParams = {
-          resources,
           tagName,
           tagNames,
+          resources,
+          query,
           xRequestId,
           xCorrelationId,
           accountId,
@@ -527,9 +535,10 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.query).toEqual(query);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
         expect(mockRequestOptions.qs.replace).toEqual(replace);
@@ -553,11 +562,9 @@ describe('GlobalTaggingV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const resources = [resourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const attachTagParams = {
-          resources,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -567,29 +574,11 @@ describe('GlobalTaggingV1', () => {
         globalTaggingService.attachTag(attachTagParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
-    });
 
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await globalTaggingService.attachTag({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await globalTaggingService.attachTag();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        globalTaggingService.attachTag({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
@@ -604,19 +593,26 @@ describe('GlobalTaggingV1', () => {
         resource_type: 'testString',
       };
 
+      // QueryString
+      const queryStringModel = {
+        query_string: 'testString',
+      };
+
       function __detachTagTest() {
         // Construct the params object for operation detachTag
-        const resources = [resourceModel];
         const tagName = 'testString';
         const tagNames = ['testString'];
+        const resources = [resourceModel];
+        const query = queryStringModel;
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const accountId = 'testString';
         const tagType = 'user';
         const detachTagParams = {
-          resources,
           tagName,
           tagNames,
+          resources,
+          query,
           xRequestId,
           xCorrelationId,
           accountId,
@@ -639,9 +635,10 @@ describe('GlobalTaggingV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        expect(mockRequestOptions.body.resources).toEqual(resources);
         expect(mockRequestOptions.body.tag_name).toEqual(tagName);
         expect(mockRequestOptions.body.tag_names).toEqual(tagNames);
+        expect(mockRequestOptions.body.resources).toEqual(resources);
+        expect(mockRequestOptions.body.query).toEqual(query);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.tag_type).toEqual(tagType);
       }
@@ -663,11 +660,9 @@ describe('GlobalTaggingV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const resources = [resourceModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const detachTagParams = {
-          resources,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -677,29 +672,11 @@ describe('GlobalTaggingV1', () => {
         globalTaggingService.detachTag(detachTagParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
-    });
 
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await globalTaggingService.detachTag({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await globalTaggingService.detachTag();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        globalTaggingService.detachTag({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
