@@ -66,6 +66,7 @@ describe('IamIdentityV1', () => {
   const config = readExternalSources(IamIdentityV1.DEFAULT_SERVICE_NAME);
   const apikeyName = 'Example-ApiKey';
   const serviceIdName = 'Example-ServiceId';
+  const serviceIdGroupName = 'Example-ServiceId-Group'
   const realmName = 'https://sdk.test.realm/1234';
   const service = 'console'
   const valueString = '/billing'
@@ -84,6 +85,9 @@ describe('IamIdentityV1', () => {
 
   let svcId = null;
   let svcIdEtag = null;
+
+  let serviceIdGroupId = null;
+  let serviceIdGroupEtag = null;
 
   let profileId = null;
   let profileEtag = null;
@@ -597,6 +601,151 @@ test('createApiKey request example', async () => {
     }
 
     // end-delete_service_id
+  });
+  test('createServiceIdGroup request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createServiceIdGroup() result:');
+    // begin-create_service_id_group
+
+    const params = {
+      accountId: accountId,
+      name: serviceIdGroupName,
+      description: 'Example ServiceIdGroup',
+    };
+
+    try {
+      const res = await iamIdentityService.createServiceIdGroup(params);
+      serviceIdGroupId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_service_id_group
+  });
+  test('getServiceIdGroup request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getServiceIdGroup() result:');
+    // begin-get_service_id_group
+
+    const params = {
+      id: serviceIdGroupId,
+    };
+
+    try {
+      const res = await iamIdentityService.getServiceIdGroup(params);
+      serviceIdGroupEtag = res.headers['etag'];
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_service_id_group
+  });
+  test('listServiceIdGroup request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listServiceIdGroup() result:');
+    // begin-list_service_id_group
+
+    const params = {
+      accountId: accountId,
+    };
+
+    try {
+      const res = await iamIdentityService.listServiceIdGroup(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_service_id_group
+  });
+  test('updateServiceIdGroup request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(serviceIdGroupId).not.toBeNull();
+    expect(serviceIdGroupEtag).not.toBeNull();
+
+    originalLog('updateServiceIdGroup() result:');
+    // begin-update_service_id_group
+
+    const params = {
+      id: serviceIdGroupId,
+      ifMatch: serviceIdGroupEtag,
+      name: serviceIdGroupName,
+      description: 'This is an updated description',
+    };
+
+    try {
+      const res = await iamIdentityService.updateServiceIdGroup(params)
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_service_id_group
+  });
+  test('deleteServiceIdGroup request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(svcId).not.toBeNull();
+
+    // begin-delete_service_id_group
+
+    const params = {
+      id: serviceIdGroupId,
+    };
+
+    try {
+      await iamIdentityService.deleteServiceIdGroup(params)
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_service_id_group
   });
   test('createProfile request example', async () => {
 
