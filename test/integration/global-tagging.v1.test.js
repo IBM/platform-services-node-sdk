@@ -41,7 +41,6 @@ let globalTaggingService;
 let resourceCrn;
 let queryString;
 
-
 describe('GlobalTaggingV1_integration', () => {
   jest.setTimeout(timeout);
 
@@ -60,7 +59,6 @@ describe('GlobalTaggingV1_integration', () => {
     expect(resourceCrn).toBeDefined();
 
     queryString = 'crn:"' + resourceCrn + '"';
-
 
     console.log('Service URL: ', serviceUrl);
     console.log('Resource CRN: ', resourceCrn);
@@ -136,7 +134,7 @@ describe('GlobalTaggingV1_integration', () => {
     const params = {
       query: queryStringModel,
       tagNames: [userTag3, userTag4],
-      tagType: 'user',
+      tagType: 'user'
     };
 
     const res = await globalTaggingService.attachTag(params);
@@ -158,7 +156,6 @@ describe('GlobalTaggingV1_integration', () => {
     expect(tagNames).toContain(userTag3);
     expect(tagNames).toContain(userTag4);
   });
-
 
   test('attachTag(access)', async () => {
     // Request models needed by this operation.
@@ -334,7 +331,7 @@ describe('GlobalTaggingV1_integration', () => {
     const params = {
       query: queryStringModel,
       tagNames: [userTag3, userTag4],
-      tagType: 'user',
+      tagType: 'user'
     };
 
     const res = await globalTaggingService.detachTag(params);
