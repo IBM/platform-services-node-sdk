@@ -39,6 +39,8 @@ const accessTag4 = `region:${sdkLabel}-us-south-1`;
 
 let globalTaggingService;
 let resourceCrn;
+let queryString;
+
 
 describe('GlobalTaggingV1_integration', () => {
   jest.setTimeout(timeout);
@@ -57,8 +59,12 @@ describe('GlobalTaggingV1_integration', () => {
     resourceCrn = config.resourceCrn;
     expect(resourceCrn).toBeDefined();
 
+    queryString = 'crn:"' + resourceCrn + '"';
+
+
     console.log('Service URL: ', serviceUrl);
     console.log('Resource CRN: ', resourceCrn);
+    console.log('queryString: ', queryString);
 
     await cleanTags(globalTaggingService, resourceCrn);
 
@@ -122,10 +128,9 @@ describe('GlobalTaggingV1_integration', () => {
   });
 
   test('attachTag(user) with query_string', async () => {
-
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: 'crn:"' + resourceCrn + '"'
+      query_string: queryString
     };
 
     const params = {
@@ -189,7 +194,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('attachTag(access) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: 'crn:"' + resourceCrn + '"'
+      query_string: queryString
     };
 
     const params = {
@@ -323,7 +328,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('detachTag(user) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: 'crn:"' + resourceCrn + '"'
+      query_string: queryString
     };
 
     const params = {
@@ -379,7 +384,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('detachTag(access) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: 'crn:"' + resourceCrn + '"'
+      query_string: queryString
     };
 
     const params = {
