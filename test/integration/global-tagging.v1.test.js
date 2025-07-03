@@ -128,13 +128,13 @@ describe('GlobalTaggingV1_integration', () => {
   test('attachTag(user) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: queryString
+      query_string: queryString,
     };
 
     const params = {
       query: queryStringModel,
       tagNames: [userTag3, userTag4],
-      tagType: 'user'
+      tagType: 'user',
     };
 
     const res = await globalTaggingService.attachTag(params);
@@ -191,7 +191,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('attachTag(access) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: queryString
+      query_string: queryString,
     };
 
     const params = {
@@ -325,13 +325,13 @@ describe('GlobalTaggingV1_integration', () => {
   test('detachTag(user) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: queryString
+      query_string: queryString,
     };
 
     const params = {
       query: queryStringModel,
       tagNames: [userTag3, userTag4],
-      tagType: 'user'
+      tagType: 'user',
     };
 
     const res = await globalTaggingService.detachTag(params);
@@ -381,7 +381,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('detachTag(access) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: queryString
+      query_string: queryString,
     };
 
     const params = {
