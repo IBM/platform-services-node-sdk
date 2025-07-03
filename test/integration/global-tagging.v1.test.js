@@ -125,7 +125,7 @@ describe('GlobalTaggingV1_integration', () => {
 
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: "crn:\"" + resourceCrn + "\""
+      query_string: 'crn:"' + resourceCrn + '"'
     };
 
     const params = {
@@ -189,7 +189,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('attachTag(access) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: "crn:\"" + resourceCrn + "\""
+      query_string: 'crn:"' + resourceCrn + '"'
     };
 
     const params = {
@@ -323,7 +323,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('detachTag(user) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: "crn:\"" + resourceCrn + "\""
+      query_string: 'crn:"' + resourceCrn + '"'
     };
 
     const params = {
@@ -379,7 +379,7 @@ describe('GlobalTaggingV1_integration', () => {
   test('detachTag(access) with query_string', async () => {
     // Request models needed by this operation.
     const queryStringModel = {
-      query_string: "crn:\"" + resourceCrn + "\""
+      query_string: 'crn:"' + resourceCrn + '"'
     };
 
     const params = {
