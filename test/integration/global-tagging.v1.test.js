@@ -58,7 +58,7 @@ describe('GlobalTaggingV1_integration', () => {
     resourceCrn = config.resourceCrn;
     expect(resourceCrn).toBeDefined();
 
-    queryString = 'crn:"' + resourceCrn + '"';
+    queryString = 'crn:"'.concat(resourceCrn, '"');
 
     console.log('Service URL: ', serviceUrl);
     console.log('Resource CRN: ', resourceCrn);
