@@ -144,7 +144,7 @@ describe('GlobalTaggingV1', () => {
     };
 
     const params = {
-      resources: [resourceModel],
+      // resources: [resourceModel],
       tagNames: ["tag_test_1", "tag_test_2"],
       tagType: 'user',
     };
@@ -177,7 +177,7 @@ describe('GlobalTaggingV1', () => {
     };
 
     const params = {
-      resources: [resourceModel],
+      // resources: [resourceModel],
       tagNames: ["tag_test_1", "tag_test_2"],
       tagType: 'user',
     };
