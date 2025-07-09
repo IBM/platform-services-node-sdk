@@ -1,3 +1,10 @@
+# [0.75.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.74.1...v0.75.0) (2025-07-09)
+
+
+### Features
+
+* **Global Tagging:** regenerate service with latest API definition ([#301](https://github.com/IBM/platform-services-node-sdk/issues/301)) ([94359f9](https://github.com/IBM/platform-services-node-sdk/commit/94359f93716a0f954d5d4e5cb272f85bf0dae977))
+
 ## [0.74.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.74.0...v0.74.1) (2025-05-30)
 
 
