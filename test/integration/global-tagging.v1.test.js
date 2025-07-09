@@ -30,11 +30,16 @@ const describe = authHelper.prepareTests(configFile);
 const sdkLabel = 'node-sdk';
 const userTag1 = `${sdkLabel}-user-test1`;
 const userTag2 = `${sdkLabel}-user-test2`;
+const userTag3 = `${sdkLabel}-user-test3`;
+const userTag4 = `${sdkLabel}-user-test4`;
 const accessTag1 = `env:${sdkLabel}-public`;
 const accessTag2 = `region:${sdkLabel}-us-south`;
+const accessTag3 = `env:${sdkLabel}-public-1`;
+const accessTag4 = `region:${sdkLabel}-us-south-1`;
 
 let globalTaggingService;
 let resourceCrn;
+let queryString;
 
 describe('GlobalTaggingV1_integration', () => {
   jest.setTimeout(timeout);
@@ -53,8 +58,11 @@ describe('GlobalTaggingV1_integration', () => {
     resourceCrn = config.resourceCrn;
     expect(resourceCrn).toBeDefined();
 
+    queryString = 'crn:"'.concat(resourceCrn, '"');
+
     console.log('Service URL: ', serviceUrl);
     console.log('Resource CRN: ', resourceCrn);
+    console.log('queryString: ', queryString);
 
     await cleanTags(globalTaggingService, resourceCrn);
 
@@ -69,7 +77,7 @@ describe('GlobalTaggingV1_integration', () => {
 
   test('createTag()', async () => {
     const params = {
-      tagNames: [accessTag1, accessTag2],
+      tagNames: [accessTag1, accessTag2, accessTag3, accessTag4],
       tagType: 'access',
     };
 
@@ -117,6 +125,38 @@ describe('GlobalTaggingV1_integration', () => {
     expect(tagNames).toContain(userTag2);
   });
 
+  test('attachTag(user) with query_string', async () => {
+    // Request models needed by this operation.
+    const queryStringModel = {
+      query_string: queryString,
+    };
+
+    const params = {
+      query: queryStringModel,
+      tagNames: [userTag3, userTag4],
+      tagType: 'user',
+    };
+
+    const res = await globalTaggingService.attachTag(params);
+
+    expect(res).not.toBeNull();
+    expect(res.status).toBe(200);
+
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('attachTag(user) with query_string result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact attached to the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'user');
+    expect(tagNames).toContain(userTag3);
+    expect(tagNames).toContain(userTag4);
+  });
+
   test('attachTag(access)', async () => {
     // Request models needed by this operation.
     const resourceModel = {
@@ -146,6 +186,37 @@ describe('GlobalTaggingV1_integration', () => {
     const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'access');
     expect(tagNames).toContain(accessTag1);
     expect(tagNames).toContain(accessTag2);
+  });
+
+  test('attachTag(access) with query_string', async () => {
+    // Request models needed by this operation.
+    const queryStringModel = {
+      query_string: queryString,
+    };
+
+    const params = {
+      query: queryStringModel,
+      tagNames: [accessTag3, accessTag4],
+      tagType: 'access',
+    };
+
+    const res = await globalTaggingService.attachTag(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toBe(200);
+
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('attachTag(access) with query_string result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact attached to the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'access');
+    expect(tagNames).toContain(accessTag3);
+    expect(tagNames).toContain(accessTag4);
   });
 
   test('listTags(user)', async () => {
@@ -251,6 +322,34 @@ describe('GlobalTaggingV1_integration', () => {
     expect(tagNames).not.toContain(userTag2);
   });
 
+  test('detachTag(user) with query_string', async () => {
+    // Request models needed by this operation.
+    const queryStringModel = {
+      query_string: queryString,
+    };
+
+    const params = {
+      query: queryStringModel,
+      tagNames: [userTag3, userTag4],
+      tagType: 'user',
+    };
+
+    const res = await globalTaggingService.detachTag(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('detachTag(user) with query_string result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact detached from the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'user');
+    expect(tagNames).not.toContain(userTag3);
+    expect(tagNames).not.toContain(userTag4);
+  });
+
   test('detachTag(access)', async () => {
     // Request models needed by this operation.
     const resourceModel = {
@@ -277,6 +376,34 @@ describe('GlobalTaggingV1_integration', () => {
     const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'access');
     expect(tagNames).not.toContain(accessTag1);
     expect(tagNames).not.toContain(accessTag2);
+  });
+
+  test('detachTag(access) with query_string', async () => {
+    // Request models needed by this operation.
+    const queryStringModel = {
+      query_string: queryString,
+    };
+
+    const params = {
+      query: queryStringModel,
+      tagNames: [accessTag3, accessTag4],
+      tagType: 'access',
+    };
+
+    const res = await globalTaggingService.detachTag(params);
+    const { result } = res;
+    expect(result).toBeDefined();
+    console.log('detachTag(access) with query_string result: ', result);
+
+    expect(result.results).toBeDefined();
+    result.results.forEach((elem) => {
+      expect(elem.is_error).toBe(false);
+    });
+
+    // Make sure the tags were in fact detached from the resource.
+    const tagNames = await getTagNamesForResource(globalTaggingService, resourceCrn, 'access');
+    expect(tagNames).not.toContain(accessTag3);
+    expect(tagNames).not.toContain(accessTag4);
   });
 
   test('deleteTag(user)', async () => {

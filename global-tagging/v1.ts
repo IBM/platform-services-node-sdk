@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.87.0-91c7c775-20240320-213027
+ * IBM OpenAPI SDK Code Generator Version: 3.105.0-3c13b041-20250605-193116
  */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -35,9 +36,9 @@ import { getSdkHeaders } from '../lib/common';
  * two formats: `key:value` or `label`. The tagging API supports three types of tag: `user` `service`, and `access`
  * tags. `service` tags cannot be attached to IMS resources. `service` tags must be in the form
  * `service_prefix:tag_label` where `service_prefix` identifies the Service owning the tag. `access` tags cannot be
- * attached to IMS and Cloud Foundry resources. They must be in the form `key:value`. You can replace all resource's
- * tags using the `replace` query parameter in the attach operation. You can update the `value` of a resource's tag in
- * the format `key:value`, using the `update` query parameter in the attach operation.
+ * attached to IMS resources. They must be in the form `key:value`. You can replace all resource's tags using the
+ * `replace` query parameter in the attach operation. You can update the `value` of a resource's tag in the format
+ * `key:value`, using the `update` query parameter in the attach operation.
  *
  * API Version: 1.2.0
  */
@@ -164,6 +165,7 @@ class GlobalTaggingV1 extends BaseService {
       'timeout',
       'orderByName',
       'attachedOnly',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -196,6 +198,7 @@ class GlobalTaggingV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'x-request-id': _params.xRequestId,
@@ -203,6 +206,9 @@ class GlobalTaggingV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -245,6 +251,7 @@ class GlobalTaggingV1 extends BaseService {
       'xCorrelationId',
       'accountId',
       'tagType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -274,6 +281,7 @@ class GlobalTaggingV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -282,6 +290,9 @@ class GlobalTaggingV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -324,6 +335,7 @@ class GlobalTaggingV1 extends BaseService {
       'providers',
       'accountId',
       'tagType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -349,6 +361,7 @@ class GlobalTaggingV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'x-request-id': _params.xRequestId,
@@ -356,6 +369,9 @@ class GlobalTaggingV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -401,6 +417,7 @@ class GlobalTaggingV1 extends BaseService {
       'providers',
       'accountId',
       'tagType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -431,6 +448,7 @@ class GlobalTaggingV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'x-request-id': _params.xRequestId,
@@ -438,6 +456,9 @@ class GlobalTaggingV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -450,10 +471,11 @@ class GlobalTaggingV1 extends BaseService {
    * Attaches one or more tags to one or more resources. Each resource can have no more than 1000 tags per each 'user'
    * and 'service' type, and no more than 250 'access' tags (which is the account limit).
    *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {Resource[]} params.resources - List of resources on which the tag or tags are attached.
+   * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.tagName] - The name of the tag to attach.
    * @param {string[]} [params.tagNames] - An array of tag names to attach.
+   * @param {Resource[]} [params.resources] - List of resources on which the tagging operation operates on.
+   * @param {QueryString} [params.query] - A valid Global Search string.
    * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
    * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
    * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
@@ -481,20 +503,22 @@ class GlobalTaggingV1 extends BaseService {
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>>}
    */
   public attachTag(
-    params: GlobalTaggingV1.AttachTagParams
+    params?: GlobalTaggingV1.AttachTagParams
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
-    const _requiredParams = ['resources'];
+    const _requiredParams = [];
     const _validParams = [
-      'resources',
       'tagName',
       'tagNames',
+      'resources',
+      'query',
       'xRequestId',
       'xCorrelationId',
       'accountId',
       'tagType',
       'replace',
       'update',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -503,9 +527,10 @@ class GlobalTaggingV1 extends BaseService {
     }
 
     const body = {
-      'resources': _params.resources,
       'tag_name': _params.tagName,
       'tag_names': _params.tagNames,
+      'resources': _params.resources,
+      'query': _params.query,
     };
 
     const query = {
@@ -528,6 +553,7 @@ class GlobalTaggingV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -536,6 +562,9 @@ class GlobalTaggingV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -547,10 +576,11 @@ class GlobalTaggingV1 extends BaseService {
    *
    * Detaches one or more tags from one or more resources.
    *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {Resource[]} params.resources - List of resources on which the tag or tags are detached.
+   * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.tagName] - The name of the tag to detach.
    * @param {string[]} [params.tagNames] - An array of tag names to detach.
+   * @param {Resource[]} [params.resources] - List of resources on which the tagging operation operates on.
+   * @param {QueryString} [params.query] - A valid Global Search string.
    * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
    * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
    * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
@@ -570,18 +600,20 @@ class GlobalTaggingV1 extends BaseService {
    * @returns {Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>>}
    */
   public detachTag(
-    params: GlobalTaggingV1.DetachTagParams
+    params?: GlobalTaggingV1.DetachTagParams
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
-    const _requiredParams = ['resources'];
+    const _requiredParams = [];
     const _validParams = [
-      'resources',
       'tagName',
       'tagNames',
+      'resources',
+      'query',
       'xRequestId',
       'xCorrelationId',
       'accountId',
       'tagType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -590,9 +622,10 @@ class GlobalTaggingV1 extends BaseService {
     }
 
     const body = {
-      'resources': _params.resources,
       'tag_name': _params.tagName,
       'tag_names': _params.tagNames,
+      'resources': _params.resources,
+      'query': _params.query,
     };
 
     const query = {
@@ -613,6 +646,7 @@ class GlobalTaggingV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -621,6 +655,9 @@ class GlobalTaggingV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -656,8 +693,13 @@ namespace GlobalTaggingV1 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `listTags` operation. */
-  export interface ListTagsParams {
+  export interface ListTagsParams extends DefaultParams {
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
      *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
      *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
@@ -708,7 +750,6 @@ namespace GlobalTaggingV1 {
      *  `false`, it returns all tags.
      */
     attachedOnly?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listTags` operation. */
@@ -732,7 +773,7 @@ namespace GlobalTaggingV1 {
   }
 
   /** Parameters for the `createTag` operation. */
-  export interface CreateTagParams {
+  export interface CreateTagParams extends DefaultParams {
     /** An array of tag names to create. */
     tagNames: string[];
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
@@ -754,7 +795,6 @@ namespace GlobalTaggingV1 {
     accountId?: string;
     /** The type of the tags you want to create. The only allowed value is `access`. */
     tagType?: CreateTagConstants.TagType | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createTag` operation. */
@@ -766,7 +806,7 @@ namespace GlobalTaggingV1 {
   }
 
   /** Parameters for the `deleteTagAll` operation. */
-  export interface DeleteTagAllParams {
+  export interface DeleteTagAllParams extends DefaultParams {
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
      *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
      *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
@@ -792,7 +832,6 @@ namespace GlobalTaggingV1 {
      *  supported for IMS resources (`providers` parameter set to `ims`).
      */
     tagType?: DeleteTagAllConstants.TagType | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `deleteTagAll` operation. */
@@ -811,7 +850,7 @@ namespace GlobalTaggingV1 {
   }
 
   /** Parameters for the `deleteTag` operation. */
-  export interface DeleteTagParams {
+  export interface DeleteTagParams extends DefaultParams {
     /** The name of tag to be deleted. */
     tagName: string;
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
@@ -841,7 +880,6 @@ namespace GlobalTaggingV1 {
      *  supported for IMS resources (`providers` parameter set to `ims`).
      */
     tagType?: DeleteTagConstants.TagType | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `deleteTag` operation. */
@@ -860,13 +898,15 @@ namespace GlobalTaggingV1 {
   }
 
   /** Parameters for the `attachTag` operation. */
-  export interface AttachTagParams {
-    /** List of resources on which the tag or tags are attached. */
-    resources: Resource[];
+  export interface AttachTagParams extends DefaultParams {
     /** The name of the tag to attach. */
     tagName?: string;
     /** An array of tag names to attach. */
     tagNames?: string[];
+    /** List of resources on which the tagging operation operates on. */
+    resources?: Resource[];
+    /** A valid Global Search string. */
+    query?: QueryString;
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
      *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
      *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
@@ -902,7 +942,6 @@ namespace GlobalTaggingV1 {
      *  tags.
      */
     update?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `attachTag` operation. */
@@ -916,13 +955,15 @@ namespace GlobalTaggingV1 {
   }
 
   /** Parameters for the `detachTag` operation. */
-  export interface DetachTagParams {
-    /** List of resources on which the tag or tags are detached. */
-    resources: Resource[];
+  export interface DetachTagParams extends DefaultParams {
     /** The name of the tag to detach. */
     tagName?: string;
     /** An array of tag names to detach. */
     tagNames?: string[];
+    /** List of resources on which the tagging operation operates on. */
+    resources?: Resource[];
+    /** A valid Global Search string. */
+    query?: QueryString;
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
      *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
      *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
@@ -946,7 +987,6 @@ namespace GlobalTaggingV1 {
      *  supported for IMS resources.
      */
     tagType?: DetachTagConstants.TagType | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `detachTag` operation. */
@@ -963,13 +1003,17 @@ namespace GlobalTaggingV1 {
    * model interfaces
    ************************/
 
-  /** Results of a create tag(s) request. */
+  /**
+   * Results of a create tag(s) request.
+   */
   export interface CreateTagResults {
     /** Array of results of a create_tag request. */
     results?: CreateTagResultsResultsItem[];
   }
 
-  /** CreateTagResultsResultsItem. */
+  /**
+   * CreateTagResultsResultsItem.
+   */
   export interface CreateTagResultsResultsItem {
     /** The name of the tag created. */
     tag_name?: string;
@@ -977,19 +1021,28 @@ namespace GlobalTaggingV1 {
     is_error?: boolean;
   }
 
-  /** Results of a delete_tag request. */
+  /**
+   * Results of a delete_tag request.
+   */
   export interface DeleteTagResults {
     /** Array of results of a delete_tag request. */
     results?: DeleteTagResultsItem[];
   }
 
-  /** Result of a delete_tag request. */
+  /**
+   * Result of a delete_tag request.
+   *
+   * This type supports additional properties of type any.
+   */
   export interface DeleteTagResultsItem {
     /** The provider of the tag. */
     provider?: DeleteTagResultsItem.Constants.Provider | string;
     /** It is `true` if the operation exits with an error (for example, the tag does not exist). */
     is_error?: boolean;
-    /** DeleteTagResultsItem accepts additional properties. */
+
+    /**
+     * DeleteTagResultsItem accepts additional properties of type any.
+     */
     [propName: string]: any;
   }
   export namespace DeleteTagResultsItem {
@@ -1002,7 +1055,9 @@ namespace GlobalTaggingV1 {
     }
   }
 
-  /** Results of deleting unattatched tags. */
+  /**
+   * Results of deleting unattatched tags.
+   */
   export interface DeleteTagsResult {
     /** The number of tags that have been deleted. */
     total_count?: number;
@@ -1012,7 +1067,9 @@ namespace GlobalTaggingV1 {
     items?: DeleteTagsResultItem[];
   }
 
-  /** Result of a delete_tags request. */
+  /**
+   * Result of a delete_tags request.
+   */
   export interface DeleteTagsResultItem {
     /** The name of the deleted tag. */
     tag_name?: string;
@@ -1020,21 +1077,39 @@ namespace GlobalTaggingV1 {
     is_error?: boolean;
   }
 
-  /** A resource that might have tags that are attached. */
+  /**
+   * A valid Global Search string.
+   */
+  export interface QueryString {
+    /** The Lucene-formatted query string. */
+    query_string: string;
+  }
+
+  /**
+   * A resource that might have tags that are attached.
+   */
   export interface Resource {
     /** The CRN or IMS ID of the resource. */
     resource_id: string;
-    /** The IMS resource type of the resource. */
+    /** The IMS resource type of the resource. It can be one of SoftLayer_Virtual_DedicatedHost, SoftLayer_Hardware,
+     *  SoftLayer_Hardware_Server, SoftLayer_Network_Application_Delivery_Controller, SoftLayer_Network_Vlan,
+     *  SoftLayer_Network_Vlan_Firewall, SoftLayer_Network_Component_Firewall,
+     *  SoftLayer_Network_Firewall_Module_Context, SoftLayer_Virtual_Guest.
+     */
     resource_type?: string;
   }
 
-  /** A tag. */
+  /**
+   * A tag.
+   */
   export interface Tag {
     /** The name of the tag. */
     name: string;
   }
 
-  /** A list of tags. */
+  /**
+   * A list of tags.
+   */
   export interface TagList {
     /** Set the occurrences of the total tags that are associated with this account. */
     total_count?: number;
@@ -1046,13 +1121,17 @@ namespace GlobalTaggingV1 {
     items?: Tag[];
   }
 
-  /** Results of an attach_tag or detach_tag request. */
+  /**
+   * Results of an attach_tag or detach_tag request.
+   */
   export interface TagResults {
     /** Array of results of an attach_tag or detach_tag request. */
     results?: TagResultsItem[];
   }
 
-  /** Result of an attach_tag or detach_tag request for a tagged resource. */
+  /**
+   * Result of an attach_tag or detach_tag request for a tagged resource.
+   */
   export interface TagResultsItem {
     /** The CRN or IMS ID of the resource. */
     resource_id: string;
