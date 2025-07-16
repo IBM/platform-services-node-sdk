@@ -249,9 +249,6 @@ describe('GlobalCatalogV1', () => {
         service_key_supported: true,
         cf_guid: { 'key1': 'testString' },
         crn_mask: 'testString',
-        parameters: { anyKey: 'anyValue' },
-        user_defined_service: { anyKey: 'anyValue' },
-        extension: { anyKey: 'anyValue' },
         paid_only: true,
         custom_create_page_hybrid_enabled: true,
       };
@@ -739,9 +736,6 @@ describe('GlobalCatalogV1', () => {
         service_key_supported: true,
         cf_guid: { 'key1': 'testString' },
         crn_mask: 'testString',
-        parameters: { anyKey: 'anyValue' },
-        user_defined_service: { anyKey: 'anyValue' },
-        extension: { anyKey: 'anyValue' },
         paid_only: true,
         custom_create_page_hybrid_enabled: true,
       };

@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.104.0-b4a47c49-20250418-184351
+ * IBM OpenAPI SDK Code Generator Version: 3.106.0-09823488-20250707-071701
  */
 
 import * as extend from 'extend';
@@ -1981,14 +1981,6 @@ namespace GlobalCatalogV1 {
     cf_guid?: JsonObject;
     /** Cloud resource name identifying the environment containing this service. */
     crn_mask?: string;
-    /** Service specific parameters needed to configure the service on provisioning. Each parameter must be a map
-     *  with string keys containing a 'name' key.
-     */
-    parameters?: JsonObject;
-    /** Deprecated: An extended set of metadata fields that pertain to user-defined services. */
-    user_defined_service?: JsonObject;
-    /** Deprecated: A property-bag like extension to service metadata. */
-    extension?: JsonObject;
     /** Deprecated: Boolean flag indicating if this service only offers paid pricing plans rather than the default
      *  paygo.
      */
