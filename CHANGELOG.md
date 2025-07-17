@@ -1,3 +1,10 @@
+## [0.75.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.75.0...v0.75.1) (2025-07-17)
+
+
+### Bug Fixes
+
+* **Global Catalog:** remove bad metadata fields ([#303](https://github.com/IBM/platform-services-node-sdk/issues/303)) ([60c3aa3](https://github.com/IBM/platform-services-node-sdk/commit/60c3aa365bc74df49d26253a1f6d42a9a6b3f9de))
+
 # [0.75.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.74.1...v0.75.0) (2025-07-09)
 
 
