@@ -30,6 +30,7 @@ const describe = authHelper.prepareTests(configFile);
 
 const apikeyName = 'Node-SDK-IT-ApiKey';
 const serviceIdName = 'Node-SDK-IT-ServiceId';
+const serviceIdGroupName = 'Node-SDK-IT-ServiceIdGroup Name'
 const profileName1 = 'Node-SDK-IT-Profile1';
 const profileName2 = 'Node-SDK-IT-Profile2';
 const newDescription = 'This is an updated description';
@@ -58,6 +59,8 @@ let apikeyId2;
 
 let serviceId1;
 let serviceIdEtag1;
+let serviceIdGroupId;
+let serviceIdGroupEtag;
 
 let profileId1;
 let profileId2;
@@ -654,6 +657,134 @@ describe('IamIdentityV1_integration', () => {
 
         getServiceId(serviceId1).then((serviceId) => {
           expect(serviceId).toBeNull();
+          done();
+        });
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('createServiceIdGroup()', (done) => {
+    const params = {
+      accountId,
+      name: serviceIdGroupName,
+      description: 'NodeSDK ServiceIdGroup desc',
+    };
+
+    iamIdentityService
+      .createServiceIdGroup(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(201);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+        expect(result.id).not.toBeNull();
+        serviceIdGroupId = result.id;
+        expect(serviceIdGroupId).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('getServiceIdGroup()', (done) => {
+    expect(serviceIdGroupId).toBeDefined();
+    expect(serviceIdGroupId).not.toBeNull();
+    const params = {
+      id: serviceIdGroupId,
+    };
+
+    iamIdentityService
+      .getServiceIdGroup(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+        expect(result.id).toEqual(serviceIdGroupId);
+        expect(result.name).toEqual(serviceIdGroupName);
+
+        serviceIdGroupEtag = result.entity_tag;
+        expect(serviceIdGroupEtag).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('listServiceIdGroup()', (done) => {
+    const params = {
+      accountId,
+    };
+
+    iamIdentityService
+      .listServiceIdGroup(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('updateServiceIdGroup()', (done) => {
+    expect(serviceIdGroupId).toBeDefined();
+    expect(serviceIdGroupId).not.toBeNull();
+    const params = {
+      id: serviceIdGroupId,
+      ifMatch: serviceIdGroupEtag,
+      name: serviceIdGroupName,
+      description: newDescription,
+    };
+
+    iamIdentityService
+      .updateServiceIdGroup(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(200);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+
+        expect(result.description).toEqual(newDescription);
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('deleteServiceIdGroup()', (done) => {
+    expect(serviceIdGroupId).toBeDefined();
+    expect(serviceIdGroupId).not.toBeNull();
+    const params = {
+      id: serviceIdGroupId,
+    };
+
+    iamIdentityService
+      .deleteServiceIdGroup(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(204);
+
+        getServiceId(serviceIdGroupId).then((serviceIdGroup) => {
+          expect(serviceIdGroup).toBeNull();
           done();
         });
       })
