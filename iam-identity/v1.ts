@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.105.1-067d600b-20250616-154447
+ * IBM OpenAPI SDK Code Generator Version: 3.106.0-09823488-20250707-071701
  */
 
 import * as extend from 'extend';
@@ -8514,7 +8514,7 @@ namespace IamIdentityV1 {
     profile?: TemplateAssignmentResponseResourceDetail;
     account_settings?: TemplateAssignmentResponseResourceDetail;
     /** Policy resource(s) included only for trusted profile assignments with policy references. */
-    policy_template_refs?: TemplateAssignmentResponseResourceDetail[];
+    policy_template_references?: TemplateAssignmentResponseResourceDetail[];
   }
 
   /**
