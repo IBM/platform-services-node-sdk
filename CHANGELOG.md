@@ -1,3 +1,10 @@
+# [0.76.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.75.1...v0.76.0) (2025-07-18)
+
+
+### Features
+
+* **IAM Identity:** adding serviceId Groups API ([#302](https://github.com/IBM/platform-services-node-sdk/issues/302)) ([b3266f9](https://github.com/IBM/platform-services-node-sdk/commit/b3266f992ec6ec285947dc65e1c8096c47c211af))
+
 ## [0.75.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.75.0...v0.75.1) (2025-07-17)
 
 
