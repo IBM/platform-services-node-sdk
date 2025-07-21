@@ -1,3 +1,10 @@
+## [0.76.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.0...v0.76.1) (2025-07-21)
+
+
+### Bug Fixes
+
+* **IAM Identity:** fix incorrect mapping of policy references in IAM Identity templates ([#304](https://github.com/IBM/platform-services-node-sdk/issues/304)) ([7bf19bd](https://github.com/IBM/platform-services-node-sdk/commit/7bf19bdbbd33d871505d448c1599ac59ee5cb64c))
+
 # [0.76.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.75.1...v0.76.0) (2025-07-18)
 
 
