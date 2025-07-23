@@ -1,3 +1,10 @@
+## [0.76.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.1...v0.76.2) (2025-07-23)
+
+
+### Bug Fixes
+
+* **build:** bump dependencies to avoid CVEs ([#305](https://github.com/IBM/platform-services-node-sdk/issues/305)) ([fbc2b5e](https://github.com/IBM/platform-services-node-sdk/commit/fbc2b5e2e9f662c4201361a3b3520f0b53fa7e67))
+
 ## [0.76.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.0...v0.76.1) (2025-07-21)
 
 
