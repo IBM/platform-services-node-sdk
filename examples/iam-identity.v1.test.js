@@ -1158,6 +1158,57 @@ test('createApiKey request example', async () => {
 
     // end-delete_link
   });
+  test('deleteLinkByParameters request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(profileId).not.toBeNull();
+    const CreateProfileLinkRequestLink = {
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
+      component_name: 'test_component_name',
+      component_type: 'test_component_type',
+    };
+
+    const paramsCreateLink = {
+      profileId: profileId,
+      name: 'Great link',
+      crType: 'CE',
+      link: CreateProfileLinkRequestLink,
+    };
+
+    try {
+      const res = await iamIdentityService.createLink(paramsCreateLink)
+      linkId = res.result.id
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // begin-delete_link_by_parameters
+
+    const params = {
+      profileId: profileId,
+      type: 'CE',
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
+      componentName: 'test_component_name',
+      componentType: 'test_component_type',
+    };
+
+    try {
+      await iamIdentityService.deleteLinkByParameters(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_link_by_parameters
+  });
   test('getProfileIdentities request example', async () => {
 
     consoleLogMock.mockImplementation(output => {

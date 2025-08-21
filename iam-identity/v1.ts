@@ -2269,6 +2269,80 @@ class IamIdentityV1 extends BaseService {
   }
 
   /**
+   * Delete compute resource link to profile by given parameters.
+   *
+   * Deletes compute resource link of a Trusted Profile matching the given parameters.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.profileId - The unique ID of the Trusted Profile.
+   * @param {string} params.type - The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE.
+   * @param {string} [params.crn] - CRN of the compute resource (IKS/ROKS/VSI/BMS).
+   * @param {string} [params.namespace] - Namespace of the compute resource (IKS/ROKS).
+   * @param {string} [params.name] - Name of the compute resource (IKS/ROKS).
+   * @param {string} [params.componentType] - Component type of the compute resource, only required if type is CE.
+   * @param {string} [params.componentName] - Component name of the compute resource, only required if type is CE.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteLinkByParameters(
+    params: IamIdentityV1.DeleteLinkByParametersParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['profileId', 'type'];
+    const _validParams = [
+      'profileId',
+      'type',
+      'crn',
+      'namespace',
+      'name',
+      'componentType',
+      'componentName',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'type': _params.type,
+      'crn': _params.crn,
+      'namespace': _params.namespace,
+      'name': _params.name,
+      'component_type': _params.componentType,
+      'component_name': _params.componentName,
+    };
+
+    const path = {
+      'profile-id': _params.profileId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLinkByParameters'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/profiles/{profile-id}/links',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Get link to a trusted profile.
    *
    * Get a specific link to a trusted profile by `link_id`.
@@ -6215,6 +6289,24 @@ namespace IamIdentityV1 {
     profileId: string;
   }
 
+  /** Parameters for the `deleteLinkByParameters` operation. */
+  export interface DeleteLinkByParametersParams extends DefaultParams {
+    /** The unique ID of the Trusted Profile. */
+    profileId: string;
+    /** The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE. */
+    type: string;
+    /** CRN of the compute resource (IKS/ROKS/VSI/BMS). */
+    crn?: string;
+    /** Namespace of the compute resource (IKS/ROKS). */
+    namespace?: string;
+    /** Name of the compute resource (IKS/ROKS). */
+    name?: string;
+    /** Component type of the compute resource, only required if type is CE. */
+    componentType?: string;
+    /** Component name of the compute resource, only required if type is CE. */
+    componentName?: string;
+  }
+
   /** Parameters for the `getLink` operation. */
   export interface GetLinkParams extends DefaultParams {
     /** ID of the trusted profile. */
@@ -7807,9 +7899,13 @@ namespace IamIdentityV1 {
     /** The CRN of the compute resource. */
     crn: string;
     /** The compute resource namespace, only required if cr_type is IKS_SA or ROKS_SA. */
-    namespace: string;
+    namespace?: string;
     /** Name of the compute resource, only required if cr_type is IKS_SA or ROKS_SA. */
     name?: string;
+    /** Component type of the compute resource, only required if cr_type is CE. */
+    component_type?: string;
+    /** Component name of the compute resource, only required if cr_type is CE. */
+    component_name?: string;
   }
 
   /**
@@ -8212,7 +8308,7 @@ namespace IamIdentityV1 {
     modified_at: string;
     /** Optional name of the Link. */
     name?: string;
-    /** The compute resource type. Valid values are VSI, IKS_SA, ROKS_SA. */
+    /** The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE. */
     cr_type: string;
     link: ProfileLinkLink;
   }
@@ -8227,6 +8323,10 @@ namespace IamIdentityV1 {
     namespace?: string;
     /** Name of the compute resource, only required if cr_type is IKS_SA or ROKS_SA. */
     name?: string;
+    /** Component type of the compute resource, only required if cr_type is CE. */
+    component_type?: string;
+    /** Component name of the compute resource, only required if cr_type is CE. */
+    component_name?: string;
   }
 
   /**
