@@ -1262,6 +1262,61 @@ describe('IamIdentityV1_integration', () => {
       });
   });
 
+  test('deleteLinkByParameters()', (done) => {
+    const CreateProfileLinkRequestLink = {
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
+      component_name: 'test_component_name',
+      component_type: 'test_component_type',
+    };
+
+    const paramsCreateLink = {
+      profileId: profileId2,
+      name: 'Great link',
+      crType: 'CE',
+      link: CreateProfileLinkRequestLink,
+    };
+
+    iamIdentityService
+      .createLink(paramsCreateLink)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(201);
+
+        const { result } = res;
+        expect(result).not.toBeNull();
+        linkId = result.id;
+        expect(linkId).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+    const params = {
+      profileId: profileId2,
+      type: 'CE',
+      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
+      componentName: 'test_component_name',
+      componentType: 'test_component_type',
+    };
+
+    iamIdentityService
+      .deleteLinkByParameters(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(204);
+
+        getLinkById(profileId2, linkId).then((link) => {
+          expect(link).toBeNull();
+          done();
+        });
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
   test('deleteClaimRule2()', (done) => {
     expect(claimRuleId2).toBeDefined();
     expect(claimRuleId2).not.toBeNull();

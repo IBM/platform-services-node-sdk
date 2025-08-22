@@ -3087,6 +3087,8 @@ describe('IamIdentityV1', () => {
         crn: 'testString',
         namespace: 'testString',
         name: 'testString',
+        component_type: 'testString',
+        component_name: 'testString',
       };
 
       function __createLinkTest() {
@@ -3259,6 +3261,110 @@ describe('IamIdentityV1', () => {
         let err;
         try {
           await iamIdentityService.listLinks();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteLinkByParameters', () => {
+    describe('positive tests', () => {
+      function __deleteLinkByParametersTest() {
+        // Construct the params object for operation deleteLinkByParameters
+        const profileId = 'testString';
+        const type = 'testString';
+        const crn = 'testString';
+        const namespace = 'testString';
+        const name = 'testString';
+        const componentType = 'testString';
+        const componentName = 'testString';
+        const deleteLinkByParametersParams = {
+          profileId,
+          type,
+          crn,
+          namespace,
+          name,
+          componentType,
+          componentName,
+        };
+
+        const deleteLinkByParametersResult = iamIdentityService.deleteLinkByParameters(deleteLinkByParametersParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteLinkByParametersResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/profiles/{profile-id}/links', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.type).toEqual(type);
+        expect(mockRequestOptions.qs.crn).toEqual(crn);
+        expect(mockRequestOptions.qs.namespace).toEqual(namespace);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.component_type).toEqual(componentType);
+        expect(mockRequestOptions.qs.component_name).toEqual(componentName);
+        expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLinkByParametersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __deleteLinkByParametersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __deleteLinkByParametersTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const profileId = 'testString';
+        const type = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteLinkByParametersParams = {
+          profileId,
+          type,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.deleteLinkByParameters(deleteLinkByParametersParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.deleteLinkByParameters({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.deleteLinkByParameters();
         } catch (e) {
           err = e;
         }
