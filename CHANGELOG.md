@@ -1,3 +1,10 @@
+## [0.76.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.3...v0.76.4) (2025-08-22)
+
+
+### Bug Fixes
+
+* **IAM Identity:** add delete link with parameter api ([#307](https://github.com/IBM/platform-services-node-sdk/issues/307)) ([6148aa5](https://github.com/IBM/platform-services-node-sdk/commit/6148aa5c6c7a772c6b990f805adfcce4cd261e86))
+
 ## [0.76.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.2...v0.76.3) (2025-07-29)
 
 
