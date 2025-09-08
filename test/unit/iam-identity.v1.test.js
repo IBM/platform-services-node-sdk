@@ -4216,9 +4216,11 @@ describe('IamIdentityV1', () => {
         // Construct the params object for operation getAccountSettings
         const accountId = 'testString';
         const includeHistory = false;
+        const resolveUserMfa = false;
         const getAccountSettingsParams = {
           accountId,
           includeHistory,
+          resolveUserMfa,
         };
 
         const getAccountSettingsResult = iamIdentityService.getAccountSettings(getAccountSettingsParams);
@@ -4236,6 +4238,7 @@ describe('IamIdentityV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.include_history).toEqual(includeHistory);
+        expect(mockRequestOptions.qs.resolve_user_mfa).toEqual(resolveUserMfa);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
 
@@ -4301,8 +4304,15 @@ describe('IamIdentityV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // AccountSettingsUserMFA
-      const accountSettingsUserMfaModel = {
+      // AccountSettingsUserDomainRestriction
+      const accountSettingsUserDomainRestrictionModel = {
+        realm_id: 'IBMid',
+        invitation_email_allow_patterns: [ '*.*@ibm.com' ],
+        restrict_invitation: false,
+      };
+
+      // UserMfa
+      const userMfaModel = {
         iam_id: 'testString',
         mfa: 'NONE',
       };
@@ -4311,29 +4321,33 @@ describe('IamIdentityV1', () => {
         // Construct the params object for operation updateAccountSettings
         const ifMatch = 'testString';
         const accountId = 'testString';
-        const restrictCreateServiceId = 'RESTRICTED';
-        const restrictCreatePlatformApikey = 'RESTRICTED';
+        const restrictCreateServiceId = 'NOT_SET';
+        const restrictCreatePlatformApikey = 'NOT_SET';
+        const restrictUserListVisibility = 'NOT_RESTRICTED';
+        const restrictUserDomains = [accountSettingsUserDomainRestrictionModel];
         const allowedIpAddresses = 'testString';
         const mfa = 'NONE';
-        const userMfa = [accountSettingsUserMfaModel];
         const sessionExpirationInSeconds = '86400';
         const sessionInvalidationInSeconds = '7200';
         const maxSessionsPerIdentity = 'testString';
         const systemAccessTokenExpirationInSeconds = '3600';
         const systemRefreshTokenExpirationInSeconds = '259200';
+        const userMfa = [userMfaModel];
         const updateAccountSettingsParams = {
           ifMatch,
           accountId,
           restrictCreateServiceId,
           restrictCreatePlatformApikey,
+          restrictUserListVisibility,
+          restrictUserDomains,
           allowedIpAddresses,
           mfa,
-          userMfa,
           sessionExpirationInSeconds,
           sessionInvalidationInSeconds,
           maxSessionsPerIdentity,
           systemAccessTokenExpirationInSeconds,
           systemRefreshTokenExpirationInSeconds,
+          userMfa,
         };
 
         const updateAccountSettingsResult = iamIdentityService.updateAccountSettings(updateAccountSettingsParams);
@@ -4353,14 +4367,16 @@ describe('IamIdentityV1', () => {
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.restrict_create_service_id).toEqual(restrictCreateServiceId);
         expect(mockRequestOptions.body.restrict_create_platform_apikey).toEqual(restrictCreatePlatformApikey);
+        expect(mockRequestOptions.body.restrict_user_list_visibility).toEqual(restrictUserListVisibility);
+        expect(mockRequestOptions.body.restrict_user_domains).toEqual(restrictUserDomains);
         expect(mockRequestOptions.body.allowed_ip_addresses).toEqual(allowedIpAddresses);
         expect(mockRequestOptions.body.mfa).toEqual(mfa);
-        expect(mockRequestOptions.body.user_mfa).toEqual(userMfa);
         expect(mockRequestOptions.body.session_expiration_in_seconds).toEqual(sessionExpirationInSeconds);
         expect(mockRequestOptions.body.session_invalidation_in_seconds).toEqual(sessionInvalidationInSeconds);
         expect(mockRequestOptions.body.max_sessions_per_identity).toEqual(maxSessionsPerIdentity);
         expect(mockRequestOptions.body.system_access_token_expiration_in_seconds).toEqual(systemAccessTokenExpirationInSeconds);
         expect(mockRequestOptions.body.system_refresh_token_expiration_in_seconds).toEqual(systemRefreshTokenExpirationInSeconds);
+        expect(mockRequestOptions.body.user_mfa).toEqual(userMfa);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
 
@@ -6821,8 +6837,8 @@ describe('IamIdentityV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // AccountSettingsUserMFA
-      const accountSettingsUserMfaModel = {
+      // UserMfa
+      const userMfaModel = {
         iam_id: 'testString',
         mfa: 'NONE',
       };
@@ -6833,7 +6849,7 @@ describe('IamIdentityV1', () => {
         restrict_create_platform_apikey: 'NOT_SET',
         allowed_ip_addresses: 'testString',
         mfa: 'NONE',
-        user_mfa: [accountSettingsUserMfaModel],
+        user_mfa: [userMfaModel],
         session_expiration_in_seconds: '86400',
         session_invalidation_in_seconds: '7200',
         max_sessions_per_identity: 'testString',
@@ -7186,8 +7202,8 @@ describe('IamIdentityV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // AccountSettingsUserMFA
-      const accountSettingsUserMfaModel = {
+      // UserMfa
+      const userMfaModel = {
         iam_id: 'testString',
         mfa: 'NONE',
       };
@@ -7198,7 +7214,7 @@ describe('IamIdentityV1', () => {
         restrict_create_platform_apikey: 'NOT_SET',
         allowed_ip_addresses: 'testString',
         mfa: 'NONE',
-        user_mfa: [accountSettingsUserMfaModel],
+        user_mfa: [userMfaModel],
         session_expiration_in_seconds: '86400',
         session_invalidation_in_seconds: '7200',
         max_sessions_per_identity: 'testString',
@@ -7396,8 +7412,8 @@ describe('IamIdentityV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // AccountSettingsUserMFA
-      const accountSettingsUserMfaModel = {
+      // UserMfa
+      const userMfaModel = {
         iam_id: 'testString',
         mfa: 'NONE',
       };
@@ -7408,7 +7424,7 @@ describe('IamIdentityV1', () => {
         restrict_create_platform_apikey: 'NOT_SET',
         allowed_ip_addresses: 'testString',
         mfa: 'NONE',
-        user_mfa: [accountSettingsUserMfaModel],
+        user_mfa: [userMfaModel],
         session_expiration_in_seconds: '86400',
         session_invalidation_in_seconds: '7200',
         max_sessions_per_identity: 'testString',

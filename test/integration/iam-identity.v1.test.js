@@ -28,18 +28,20 @@ const configFile = 'iam_identity.env';
 
 const describe = authHelper.prepareTests(configFile);
 
-const apikeyName = 'Node-SDK-IT-ApiKey';
-const serviceIdName = 'Node-SDK-IT-ServiceId';
-const serviceIdGroupName = 'Node-SDK-IT-ServiceIdGroup Name'
-const profileName1 = 'Node-SDK-IT-Profile1';
-const profileName2 = 'Node-SDK-IT-Profile2';
+const now = Date.now();
+
+const apikeyName = `Node-SDK-IT-ApiKey-${  now}`;
+const serviceIdName = `Node-SDK-IT-ServiceId-${  now}`;
+const serviceIdGroupName = `Node-SDK-IT-ServiceIdGroup Name-${  now}`;
+const profileName1 = `Node-SDK-IT-Profile1-${  now}`;
+const profileName2 = `Node-SDK-IT-Profile2-${  now}`;
 const newDescription = 'This is an updated description';
 const claimRuleType = 'Profile-SAML';
 const realmName = 'https://sdk.test.realm/1234';
 const invalidAccountId = 'invalid';
-const profileTemplateName = 'Node-SDK-IT-ProfileTemplate';
-const profileTemplateProfileName = 'Node-SDK-IT-Profile-FromTemplate';
-const accountSettingsTemplateName = 'Node-SDK-IT-AccountSettingsTemplate';
+const profileTemplateName = `Node-SDK-IT-ProfileTemplate-${  now}`;
+const profileTemplateProfileName = `Node-SDK-IT-Profile-FromTemplate-${  now}`;
+const accountSettingsTemplateName = `Node-SDK-IT-AccountSettingsTemplate-${  now}`;
 const service = 'console';
 const valueString = '/billing';
 const preferenceID1 = 'landing_page';
@@ -47,7 +49,6 @@ const preferenceID1 = 'landing_page';
 let iamIdentityService;
 let accountId;
 let iamId;
-let iamIdMember;
 let iamApikey;
 let enterpriseAccountId;
 let enterpriseSubAccountId;
@@ -107,7 +108,7 @@ describe('IamIdentityV1_integration', () => {
 
     accountId = config.accountId;
     iamId = config.iamId;
-    iamIdMember = config.iamIdMember;
+    iamId = config.iamId;
     iamApikey = config.apikey;
     enterpriseAccountId = config.enterpriseAccountId;
     enterpriseSubAccountId = config.enterpriseSubaccountId
@@ -120,12 +121,8 @@ describe('IamIdentityV1_integration', () => {
     expect(enterpriseSubAccountId).toBeDefined();
     expect(iamId).not.toBeNull();
     expect(iamId).toBeDefined();
-    expect(iamIdMember).not.toBeNull();
-    expect(iamIdMember).toBeDefined();
     expect(iamApikey).not.toBeNull();
     expect(iamApikey).toBeDefined();
-    expect(iamIDForPreferences).not.toBeNull();
-    expect(iamIDForPreferences).toBeDefined();
 
     await cleanupResources();
 
@@ -262,7 +259,7 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('listApiKeys()', async () => {
-    const pageSize = 1;
+    const pageSize = 100;
     let pageToken = null;
     const apikeys = [];
 
@@ -836,6 +833,7 @@ describe('IamIdentityV1_integration', () => {
         const { result } = res;
         expect(result).not.toBeNull();
         profileId2 = result.id;
+        iamIDForPreferences = result.iam_id;
         expect(profileId2).not.toBeNull();
         done();
       })
@@ -879,7 +877,7 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('listProfiles()', async () => {
-    const pageSize = 1;
+    const pageSize = 100;
     let pageToken = null;
     const profiles = [];
 
@@ -1404,6 +1402,10 @@ describe('IamIdentityV1_integration', () => {
 
     const { result } = res;
     expect(result.identifier).toBeDefined();
+
+    // delete again as need to set in future test
+    const delResp = await iamIdentityService.deleteProfileIdentity(params);
+    expect(delResp.status).toEqual(204);
   });
 
   test('setProfileIdentity()', async () => {
@@ -1411,7 +1413,7 @@ describe('IamIdentityV1_integration', () => {
     const params = {
       profileId: profileId2,
       identityType: 'user',
-      identifier: iamIdMember,
+      identifier: iamId,
       type: 'user',
       accounts: profileaccounts,
       description: 'identity description'
@@ -1428,36 +1430,12 @@ describe('IamIdentityV1_integration', () => {
     const params = {
       profileId: profileId2,
       identityType: 'user',
-      identifierId: iamIdMember
+      identifierId: iamId
     };
 
     const res = await iamIdentityService.deleteProfileIdentity(params);
     expect(res.status).toEqual(204);
 
-  });
-
-  test('deleteProfile2()', (done) => {
-    expect(profileId2).toBeDefined();
-    expect(profileId2).not.toBeNull();
-    const params = {
-      profileId: profileId2,
-    };
-
-    iamIdentityService
-      .deleteProfile(params)
-      .then((res) => {
-        expect(res).not.toBeNull();
-        expect(res.status).toEqual(204);
-
-        getProfileById(profileId2).then((profile) => {
-          expect(profile).toBeNull();
-          done();
-        });
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
   });
 
   test('createProfileBadRequest()', async () => {
@@ -1657,18 +1635,27 @@ describe('IamIdentityV1_integration', () => {
   test('updateAccountSettings()', (done) => {
     expect(accountSettingsEtag).toBeDefined();
 
+    const accountSettingsUserDomainRestriction = {
+      realm_id: 'IBMid',
+      invitation_email_allow_patterns: [ '*.*@ibm.com' ],
+      restrict_invitation: false,
+    };
+
     const accountSettingsUserMFA = {
-      iam_id: iamIdMember,
+      iam_id: iamId,
       mfa: 'NONE',
     };
 
     const userMfa = [accountSettingsUserMFA];
+    const restrictUserDomains = [accountSettingsUserDomainRestriction];
 
     const params = {
       ifMatch: accountSettingsEtag,
       accountId,
       restrictCreateServiceId: 'NOT_RESTRICTED',
       restrictCreatePlatformApikey: 'NOT_RESTRICTED',
+      restrictUserListVisibility: 'NOT_RESTRICTED',
+      restrictUserDomains,
       // allowedIpAddresses: 'testString',
       mfa: 'NONE',
       userMfa,
@@ -1694,6 +1681,8 @@ describe('IamIdentityV1_integration', () => {
         expect(result.entity_tag).toEqual(res.headers.etag);
         expect(result.restrict_create_service_id).toEqual(params.restrictCreateServiceId);
         expect(result.restrict_create_platform_apikey).toEqual(params.restrictCreatePlatformApikey);
+        expect(result.restrict_user_list_visibility).toEqual(params.restrictUserListVisibility);
+        expect(result.restrict_user_domains).toEqual(params.restrictUserDomains);
         expect(result.mfa).toEqual(params.mfa);
         expect(result.session_expiration_in_seconds).toEqual(params.sessionExpirationInSeconds);
         expect(result.session_invalidation_in_seconds).toEqual(params.sessionInvalidationInSeconds);
@@ -1977,6 +1966,30 @@ describe('IamIdentityV1_integration', () => {
         expect(res.status).toEqual(204);
 
         done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  test('deleteProfile2()', (done) => {
+    expect(profileId2).toBeDefined();
+    expect(profileId2).not.toBeNull();
+    const params = {
+      profileId: profileId2,
+    };
+
+    iamIdentityService
+      .deleteProfile(params)
+      .then((res) => {
+        expect(res).not.toBeNull();
+        expect(res.status).toEqual(204);
+
+        getProfileById(profileId2).then((profile) => {
+          expect(profile).toBeNull();
+          done();
+        });
       })
       .catch((err) => {
         console.warn(err);
