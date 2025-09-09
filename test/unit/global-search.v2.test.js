@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,17 @@
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
+
+const { NoAuthAuthenticator } = sdkCorePackage;
+const GlobalSearchV2 = require('../../dist/global-search/v2');
+
 const {
   getOptions,
   checkUrlAndMethod,
   checkMediaHeaders,
   expectToBePromise,
   checkUserHeader,
-  checkForSuccessfulExecution,
 } = require('@ibm-cloud/sdk-test-utilities');
-const { NoAuthAuthenticator } = sdkCorePackage;
-const GlobalSearchV2 = require('../../dist/global-search/v2');
 
 const globalSearchServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
@@ -111,11 +112,17 @@ describe('GlobalSearchV2', () => {
 
   describe('search', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // SearchRequestFirstCall
+      const searchRequestModel = {
+        query: 'testString',
+        fields: ['testString'],
+      };
+
       function __searchTest() {
         // Construct the params object for operation search
-        const query = 'testString';
-        const fields = ['testString'];
-        const searchCursor = 'testString';
+        const body = searchRequestModel;
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const accountId = 'testString';
@@ -124,14 +131,11 @@ describe('GlobalSearchV2', () => {
         const sort = ['testString'];
         const isDeleted = 'false';
         const isReclaimed = 'false';
-        const isPublic = 'false';
         const impersonateUser = 'testString';
         const canTag = 'false';
         const isProjectResource = 'false';
         const searchParams = {
-          query,
-          fields,
-          searchCursor,
+          body,
           xRequestId,
           xCorrelationId,
           accountId,
@@ -140,7 +144,6 @@ describe('GlobalSearchV2', () => {
           sort,
           isDeleted,
           isReclaimed,
-          isPublic,
           impersonateUser,
           canTag,
           isProjectResource,
@@ -162,16 +165,13 @@ describe('GlobalSearchV2', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        expect(mockRequestOptions.body.query).toEqual(query);
-        expect(mockRequestOptions.body.fields).toEqual(fields);
-        expect(mockRequestOptions.body.search_cursor).toEqual(searchCursor);
+        expect(mockRequestOptions.body).toEqual(body);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.timeout).toEqual(timeout);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.is_deleted).toEqual(isDeleted);
         expect(mockRequestOptions.qs.is_reclaimed).toEqual(isReclaimed);
-        expect(mockRequestOptions.qs.is_public).toEqual(isPublic);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.can_tag).toEqual(canTag);
         expect(mockRequestOptions.qs.is_project_resource).toEqual(isProjectResource);
@@ -194,9 +194,11 @@ describe('GlobalSearchV2', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
+        const body = searchRequestModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const searchParams = {
+          body,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -206,11 +208,29 @@ describe('GlobalSearchV2', () => {
         globalSearchService.search(searchParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
+    });
 
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        globalSearchService.search({});
-        checkForSuccessfulExecution(createRequestMock);
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await globalSearchService.search({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await globalSearchService.search();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
