@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,10 @@
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const sdkCorePackage = require('ibm-cloud-sdk-core');
+
+const { NoAuthAuthenticator } = sdkCorePackage;
+const GlobalSearchV2 = require('../../dist/global-search/v2');
+
 const {
   getOptions,
   checkUrlAndMethod,
@@ -24,8 +28,6 @@ const {
   checkUserHeader,
   checkForSuccessfulExecution,
 } = require('@ibm-cloud/sdk-test-utilities');
-const { NoAuthAuthenticator } = sdkCorePackage;
-const GlobalSearchV2 = require('../../dist/global-search/v2');
 
 const globalSearchServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
@@ -124,7 +126,6 @@ describe('GlobalSearchV2', () => {
         const sort = ['testString'];
         const isDeleted = 'false';
         const isReclaimed = 'false';
-        const isPublic = 'false';
         const impersonateUser = 'testString';
         const canTag = 'false';
         const isProjectResource = 'false';
@@ -140,7 +141,6 @@ describe('GlobalSearchV2', () => {
           sort,
           isDeleted,
           isReclaimed,
-          isPublic,
           impersonateUser,
           canTag,
           isProjectResource,
@@ -171,7 +171,6 @@ describe('GlobalSearchV2', () => {
         expect(mockRequestOptions.qs.sort).toEqual(sort);
         expect(mockRequestOptions.qs.is_deleted).toEqual(isDeleted);
         expect(mockRequestOptions.qs.is_reclaimed).toEqual(isReclaimed);
-        expect(mockRequestOptions.qs.is_public).toEqual(isPublic);
         expect(mockRequestOptions.qs.impersonate_user).toEqual(impersonateUser);
         expect(mockRequestOptions.qs.can_tag).toEqual(canTag);
         expect(mockRequestOptions.qs.is_project_resource).toEqual(isProjectResource);
