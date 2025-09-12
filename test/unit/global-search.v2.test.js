@@ -114,15 +114,16 @@ describe('GlobalSearchV2', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // SearchRequestFirstCall
-      const searchRequestModel = {
+      // ScanBodyFirstCall
+      const scanBodyModel = {
         query: 'testString',
         fields: ['testString'],
+        search_cursor: 'testString',
       };
 
       function __searchTest() {
         // Construct the params object for operation search
-        const body = searchRequestModel;
+        const body = scanBodyModel;
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const accountId = 'testString';
@@ -194,7 +195,7 @@ describe('GlobalSearchV2', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const body = searchRequestModel;
+        const body = scanBodyModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const searchParams = {
