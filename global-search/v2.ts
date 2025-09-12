@@ -170,7 +170,23 @@ class GlobalSearchV2 extends BaseService {
   ): Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['query', 'fields', 'searchCursor', 'xRequestId', 'xCorrelationId', 'accountId', 'limit', 'timeout', 'sort', 'isDeleted', 'isReclaimed', 'impersonateUser', 'canTag', 'isProjectResource', 'headers'];
+    const _validParams = [
+      'query',
+      'fields',
+      'searchCursor',
+      'xRequestId',
+      'xCorrelationId',
+      'accountId',
+      'limit',
+      'timeout',
+      'sort',
+      'isDeleted',
+      'isReclaimed',
+      'impersonateUser',
+      'canTag',
+      'isProjectResource',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
