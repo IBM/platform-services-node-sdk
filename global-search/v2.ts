@@ -119,11 +119,14 @@ class GlobalSearchV2 extends BaseService {
    * the `fields` request body attribute. Set `"fields": ["*"]` to discover the complete set of fields which are
    * available to request.
    *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {ScanBody} params.body - It contains the query filters on the first operation call, or the search_cursor on
-   * next calls. On subsequent calls, set the `search_cursor` to the value returned by the previous call. After the
-   * first, you must set only the `search_cursor`. Any other parameter but the `search_cursor` are ignored. The
-   * `search_cursor` encodes all the information that needs to get the next batch of `limit` data.
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.query] - The Lucene-formatted query string. Default to '*' if not set.
+   * @param {string[]} [params.fields] - The list of the fields returned by the search. By default, the returned fields
+   * are the `account_id`, `name`, `type`, `family`, and `crn`. For all queries, `crn` is always returned. You may set
+   * `"fields": ["*"]` to discover the set of fields available to request.
+   * @param {string} [params.searchCursor] - An opaque cursor that is returned on each call and that must be set on the
+   * subsequent call to get the next batch of items. If the search returns no items, then the search_cursor is not
+   * present in the response. NOTE: any other properties present in the body will be ignored.
    * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
    * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
    * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
@@ -163,17 +166,22 @@ class GlobalSearchV2 extends BaseService {
    * @returns {Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>>}
    */
   public search(
-    params: GlobalSearchV2.SearchParams
+    params?: GlobalSearchV2.SearchParams
   ): Promise<GlobalSearchV2.Response<GlobalSearchV2.ScanResult>> {
     const _params = { ...params };
-    const _requiredParams = ['body'];
-    const _validParams = ['body', 'xRequestId', 'xCorrelationId', 'accountId', 'limit', 'timeout', 'sort', 'isDeleted', 'isReclaimed', 'impersonateUser', 'canTag', 'isProjectResource', 'headers'];
+    const _requiredParams = [];
+    const _validParams = ['query', 'fields', 'searchCursor', 'xRequestId', 'xCorrelationId', 'accountId', 'limit', 'timeout', 'sort', 'isDeleted', 'isReclaimed', 'impersonateUser', 'canTag', 'isProjectResource', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
-    const body = _params.body;
+    const body = {
+      'query': _params.query,
+      'fields': _params.fields,
+      'search_cursor': _params.searchCursor,
+    };
+
     const query = {
       'account_id': _params.accountId,
       'limit': _params.limit,
@@ -245,12 +253,18 @@ namespace GlobalSearchV2 {
 
   /** Parameters for the `search` operation. */
   export interface SearchParams {
-    /** It contains the query filters on the first operation call, or the search_cursor on next calls. On subsequent
-     *  calls, set the `search_cursor` to the value returned by the previous call. After the first, you must set only
-     *  the `search_cursor`. Any other parameter but the `search_cursor` are ignored. The `search_cursor` encodes all
-     *  the information that needs to get the next batch of `limit` data.
+    /** The Lucene-formatted query string. Default to '*' if not set. */
+    query?: string;
+    /** The list of the fields returned by the search. By default, the returned fields are the `account_id`, `name`,
+     *  `type`, `family`, and `crn`. For all queries, `crn` is always returned. You may set `"fields": ["*"]` to
+     *  discover the set of fields available to request.
      */
-    body: ScanBody;
+    fields?: string[];
+    /** An opaque cursor that is returned on each call and that must be set on the subsequent call to get the next
+     *  batch of items. If the search returns no items, then the search_cursor is not present in the response. NOTE: any
+     *  other properties present in the body will be ignored.
+     */
+    searchCursor?: string;
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
      *  of following segment separators: space ( ), comma (,), hyphen, (-), and underscore (_) and may have a length up
      *  to 1024 bytes. The value is considered invalid and must be ignored if that value includes any other character or
@@ -354,24 +368,6 @@ namespace GlobalSearchV2 {
   }
 
   /**
-   * The request body associated with a search request.
-   */
-  export interface ScanBody {
-    /** The Lucene-formatted query string. Default to '*' if not set. */
-    query?: string;
-    /** The list of the fields returned by the search. By default, the returned fields are the `account_id`, `name`,
-     *  `type`, `family`, and `crn`. For all queries, `crn` is always returned. You may set `"fields": ["*"]` to
-     *  discover the set of fields available to request.
-     */
-    fields?: string[];
-    /** An opaque cursor that is returned on each call and that must be set on the subsequent call to get the next
-     *  batch of items. If the search returns no items, then the search_cursor is not present in the response. NOTE: any
-     *  other properties present in the body will be ignored.
-     */
-    search_cursor?: string;
-  }
-
-  /**
    * The search scan response.
    */
   export interface ScanResult {
@@ -385,18 +381,6 @@ namespace GlobalSearchV2 {
      *  more results to fetch.
      */
     items: ResultItem[];
-  }
-
-  /**
-   * ScanBodyFirstCall.
-   */
-  export interface ScanBodyFirstCall extends ScanBody {
-  }
-
-  /**
-   * ScanBodySubsequentCalls.
-   */
-  export interface ScanBodySubsequentCalls extends ScanBody {
   }
 }
 

@@ -26,6 +26,7 @@ const {
   checkMediaHeaders,
   expectToBePromise,
   checkUserHeader,
+  checkForSuccessfulExecution,
 } = require('@ibm-cloud/sdk-test-utilities');
 
 const globalSearchServiceOptions = {
@@ -112,18 +113,11 @@ describe('GlobalSearchV2', () => {
 
   describe('search', () => {
     describe('positive tests', () => {
-      // Request models needed by this operation.
-
-      // ScanBodyFirstCall
-      const scanBodyModel = {
-        query: 'testString',
-        fields: ['testString'],
-        search_cursor: 'testString',
-      };
-
       function __searchTest() {
         // Construct the params object for operation search
-        const body = scanBodyModel;
+        const query = 'testString';
+        const fields = ['testString'];
+        const searchCursor = 'testString';
         const xRequestId = 'testString';
         const xCorrelationId = 'testString';
         const accountId = 'testString';
@@ -136,7 +130,9 @@ describe('GlobalSearchV2', () => {
         const canTag = 'false';
         const isProjectResource = 'false';
         const searchParams = {
-          body,
+          query,
+          fields,
+          searchCursor,
           xRequestId,
           xCorrelationId,
           accountId,
@@ -166,7 +162,9 @@ describe('GlobalSearchV2', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'x-request-id', xRequestId);
         checkUserHeader(createRequestMock, 'x-correlation-id', xCorrelationId);
-        expect(mockRequestOptions.body).toEqual(body);
+        expect(mockRequestOptions.body.query).toEqual(query);
+        expect(mockRequestOptions.body.fields).toEqual(fields);
+        expect(mockRequestOptions.body.search_cursor).toEqual(searchCursor);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.timeout).toEqual(timeout);
@@ -195,11 +193,9 @@ describe('GlobalSearchV2', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const body = scanBodyModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const searchParams = {
-          body,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -209,29 +205,11 @@ describe('GlobalSearchV2', () => {
         globalSearchService.search(searchParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
-    });
 
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await globalSearchService.search({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await globalSearchService.search();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        globalSearchService.search({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
