@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.87.0-91c7c775-20240320-213027
+ * IBM OpenAPI SDK Code Generator Version: 3.100.0-2ad7a784-20250212-162551
  */
 
 import * as extend from 'extend';
@@ -106,22 +106,18 @@ class GlobalSearchV2 extends BaseService {
    * Find instances of resources (v3).
    *
    * Find IAM-enabled resources or storage and network resources that run on classic infrastructure in a specific
-   * account ID. You can apply query strings if necessary.
-   *
-   * To filter results, you can insert a string by using the Lucene syntax and the query string is parsed into a series
-   * of terms and operators. A term can be a single word or a phrase, in which case the search is performed for all the
-   * words, in the same order. To filter for a specific value regardless of the property that contains it, type the
-   * search term without specifying a field. Only resources that belong to the account ID and that are accessible by the
-   * client are returned.
+   * account ID.
    *
    * You must use `/v3/resources/search` when you need to fetch more than `10000` resource items. On the first call, the
    * operation returns a live cursor on the data that you must use on all the subsequent calls to get the next batch of
    * results until you get the empty result set.
    *
-   * By default, the fields that are returned for every resource are `crn`, `name`,
-   * `family`, `type`, and `account_id`. You can specify the subset of the fields you want in your request using the
-   * `fields` request body attribute. Set `"fields": ["*"]` to discover the set of fields which are available to
-   * request.
+   * To filter results, you can apply query strings following the *Lucene* query syntax.
+   *
+   * By default, the fields that are returned for every resource are **crn**, **name**,
+   * **family**, **type**, and **account_id**. You can specify the subset of the fields you want in your request using
+   * the `fields` request body attribute. Set `"fields": ["*"]` to discover the complete set of fields which are
+   * available to request.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.query] - The Lucene-formatted query string. Default to '*' if not set.
@@ -129,8 +125,9 @@ class GlobalSearchV2 extends BaseService {
    * are the `account_id`, `name`, `type`, `family`, and `crn`. For all queries, `crn` is always returned. You may set
    * `"fields": ["*"]` to discover the set of fields available to request.
    * @param {string} [params.searchCursor] - An opaque cursor that is returned on each call and that must be set on the
-   * subsequent call to get the next batch of items. If the search returns no items, then the search_cursor is not
-   * present in the response.
+   * subsequent call to get the next batch of items. You can stop paging when the search returns less items than the
+   * specified `limit` or when the `search_cursor` is not present in the response. NOTE: when setting this parameter,
+   * any other properties present in the body will be ignored.
    * @param {string} [params.xRequestId] - An alphanumeric string that is used to trace the request. The value  may
    * include ASCII alphanumerics and any of following segment separators: space ( ), comma (,), hyphen, (-), and
    * underscore (_) and may have a length up to 1024 bytes. The value is considered invalid and must be ignored if that
@@ -155,9 +152,6 @@ class GlobalSearchV2 extends BaseService {
    * @param {string} [params.isReclaimed] - Determines if reclaimed documents should be included in result set or not.
    * Possible values are false (default), true or any. If false, only not reclaimed documents are returned; if true,
    * only reclaimed documents are returned; If any, both reclaimed and not reclaimed documents are returned.
-   * @param {string} [params.isPublic] - Determines if public resources should be included in result set or not.
-   * Possible values are false (default), true or any. If false, do not search public resources; if true, search only
-   * public resources; If any, search also public resources.
    * @param {string} [params.impersonateUser] - The user on whose behalf the search must be performed. Only a GhoST
    * admin can impersonate a user, so be sure you set a GhoST admin IAM token in the Authorization header if you set
    * this parameter. (_for administrators only_).
@@ -189,7 +183,6 @@ class GlobalSearchV2 extends BaseService {
       'sort',
       'isDeleted',
       'isReclaimed',
-      'isPublic',
       'impersonateUser',
       'canTag',
       'isProjectResource',
@@ -213,7 +206,6 @@ class GlobalSearchV2 extends BaseService {
       'sort': _params.sort,
       'is_deleted': _params.isDeleted,
       'is_reclaimed': _params.isReclaimed,
-      'is_public': _params.isPublic,
       'impersonate_user': _params.impersonateUser,
       'can_tag': _params.canTag,
       'is_project_resource': _params.isProjectResource,
@@ -232,6 +224,7 @@ class GlobalSearchV2 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -285,7 +278,9 @@ namespace GlobalSearchV2 {
      */
     fields?: string[];
     /** An opaque cursor that is returned on each call and that must be set on the subsequent call to get the next
-     *  batch of items. If the search returns no items, then the search_cursor is not present in the response.
+     *  batch of items. You can stop paging when the search returns less items than the specified `limit` or when the
+     *  `search_cursor` is not present in the response. NOTE: when setting this parameter, any other properties present
+     *  in the body will be ignored.
      */
     searchCursor?: string;
     /** An alphanumeric string that is used to trace the request. The value  may include ASCII alphanumerics and any
@@ -323,11 +318,6 @@ namespace GlobalSearchV2 {
      *  are returned; If any, both reclaimed and not reclaimed documents are returned.
      */
     isReclaimed?: SearchConstants.IsReclaimed | string;
-    /** Determines if public resources should be included in result set or not. Possible values are false (default),
-     *  true or any. If false, do not search public resources; if true, search only public resources; If any, search
-     *  also public resources.
-     */
-    isPublic?: SearchConstants.IsPublic | string;
     /** The user on whose behalf the search must be performed. Only a GhoST admin can impersonate a user, so be sure
      *  you set a GhoST admin IAM token in the Authorization header if you set this parameter. (_for administrators
      *  only_).
@@ -362,12 +352,6 @@ namespace GlobalSearchV2 {
       FALSE = 'false',
       ANY = 'any',
     }
-    /** Determines if public resources should be included in result set or not. Possible values are false (default), true or any. If false, do not search public resources; if true, search only public resources; If any, search also public resources. */
-    export enum IsPublic {
-      TRUE = 'true',
-      FALSE = 'false',
-      ANY = 'any',
-    }
     /** Determines if the result set must return the resources that the user can tag or the resources that the user can view (only a GhoST admin can use this parameter). If false (default), only resources user can view are returned; if true, only resources that user has permissions for tagging are returned (_for administrators only_). */
     export enum CanTag {
       TRUE = 'true',
@@ -385,15 +369,25 @@ namespace GlobalSearchV2 {
    * model interfaces
    ************************/
 
-  /** A resource returned in a search result, which is identified by its `crn`. It contains other properties that depend on the resource type. */
+  /**
+   * A resource returned in a search result, which is identified by its `crn`. It contains other properties that depend
+   * on the resource type.
+   *
+   * This type supports additional properties of type any.
+   */
   export interface ResultItem {
     /** Resource identifier in CRN format. */
     crn: string;
-    /** ResultItem accepts additional properties. */
+
+    /**
+     * ResultItem accepts additional properties of type any.
+     */
     [propName: string]: any;
   }
 
-  /** The search scan response. */
+  /**
+   * The search scan response.
+   */
   export interface ScanResult {
     /** The search cursor to use on all calls after the first one. */
     search_cursor?: string;
