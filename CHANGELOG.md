@@ -1,3 +1,10 @@
+## [0.76.6](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.5...v0.76.6) (2025-09-18)
+
+
+### Bug Fixes
+
+* **Global Search:** regenerated services with latest API definition ([#312](https://github.com/IBM/platform-services-node-sdk/issues/312)) ([5f8e266](https://github.com/IBM/platform-services-node-sdk/commit/5f8e266f7f2c8b37dd88d851fc9c50e2eb1ee5cf))
+
 ## [0.76.5](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.4...v0.76.5) (2025-09-17)
 
 
