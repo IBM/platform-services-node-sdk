@@ -30,18 +30,18 @@ const describe = authHelper.prepareTests(configFile);
 
 const now = Date.now();
 
-const apikeyName = `Node-SDK-IT-ApiKey-${  now}`;
-const serviceIdName = `Node-SDK-IT-ServiceId-${  now}`;
-const serviceIdGroupName = `Node-SDK-IT-ServiceIdGroup Name-${  now}`;
-const profileName1 = `Node-SDK-IT-Profile1-${  now}`;
-const profileName2 = `Node-SDK-IT-Profile2-${  now}`;
+const apikeyName = `Node-SDK-IT-ApiKey-${now}`;
+const serviceIdName = `Node-SDK-IT-ServiceId-${now}`;
+const serviceIdGroupName = `Node-SDK-IT-ServiceIdGroup Name-${now}`;
+const profileName1 = `Node-SDK-IT-Profile1-${now}`;
+const profileName2 = `Node-SDK-IT-Profile2-${now}`;
 const newDescription = 'This is an updated description';
 const claimRuleType = 'Profile-SAML';
 const realmName = 'https://sdk.test.realm/1234';
 const invalidAccountId = 'invalid';
-const profileTemplateName = `Node-SDK-IT-ProfileTemplate-${  now}`;
-const profileTemplateProfileName = `Node-SDK-IT-Profile-FromTemplate-${  now}`;
-const accountSettingsTemplateName = `Node-SDK-IT-AccountSettingsTemplate-${  now}`;
+const profileTemplateName = `Node-SDK-IT-ProfileTemplate-${now}`;
+const profileTemplateProfileName = `Node-SDK-IT-Profile-FromTemplate-${now}`;
+const accountSettingsTemplateName = `Node-SDK-IT-AccountSettingsTemplate-${now}`;
 const service = 'console';
 const valueString = '/billing';
 const preferenceID1 = 'landing_page';
