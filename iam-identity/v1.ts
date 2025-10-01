@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.106.0-09823488-20250707-071701
+ * IBM OpenAPI SDK Code Generator Version: 3.107.1-41b0fbd0-20250825-080732
  */
 
 import * as extend from 'extend';
@@ -2903,6 +2903,7 @@ class IamIdentityV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - Unique ID of the account.
    * @param {boolean} [params.includeHistory] - Defines if the entity history is included in the response.
+   * @param {boolean} [params.resolveUserMfa] - Enrich MFA exemptions with user PI.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>>}
    */
@@ -2911,7 +2912,7 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'includeHistory', 'signal', 'headers'];
+    const _validParams = ['accountId', 'includeHistory', 'resolveUserMfa', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2919,6 +2920,7 @@ class IamIdentityV1 extends BaseService {
 
     const query = {
       'include_history': _params.includeHistory,
+      'resolve_user_mfa': _params.resolveUserMfa,
     };
 
     const path = {
@@ -2968,21 +2970,29 @@ class IamIdentityV1 extends BaseService {
    * retrieved as entity_tag (ETag header) when reading the account. This value helps identifying parallel usage of this
    * API. Pass * to indicate to update any version available. This might result in stale updates.
    * @param {string} params.accountId - The id of the account to update the settings for.
-   * @param {string} [params.restrictCreateServiceId] - Defines whether or not creating a service ID is access
+   * @param {string} [params.restrictCreateServiceId] - Defines whether or not creating the resource is access
    * controlled. Valid values:
    *   * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service
    * IDs, including the account owner
    *   * NOT_RESTRICTED - all members of an account can create service IDs
    *   * NOT_SET - to 'unset' a previous set value.
-   * @param {string} [params.restrictCreatePlatformApikey] - Defines whether or not creating platform API keys is access
+   * @param {string} [params.restrictCreatePlatformApikey] - Defines whether or not creating the resource is access
    * controlled. Valid values:
-   *   * RESTRICTED - only users assigned the 'User API key creator' role on the IAM Identity Service can create API
-   * keys, including the account owner
-   *   * NOT_RESTRICTED - all members of an account can create platform API keys
+   *   * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service
+   * IDs, including the account owner
+   *   * NOT_RESTRICTED - all members of an account can create service IDs
    *   * NOT_SET - to 'unset' a previous set value.
+   * @param {string} [params.restrictUserListVisibility] - Defines whether or not user visibility is access controlled.
+   * Valid values:
+   *   * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to
+   * the account, or descendants of those users based on the classic infrastructure hierarchy
+   *   * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+   * @param {AccountSettingsUserDomainRestriction[]} [params.restrictUserDomains] - Defines if account invitations are
+   * restricted to specified domains. To remove an entry for a realm_id, perform an update (PUT) request with only the
+   * realm_id set.
    * @param {string} [params.allowedIpAddresses] - Defines the IP addresses and subnets from which IAM tokens can be
    * created for the account.
-   * @param {string} [params.mfa] - Defines the MFA trait for the account. Valid values:
+   * @param {string} [params.mfa] - MFA trait definitions as follows:
    *   * NONE - No MFA trait set
    *   * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
    *   * TOTP - For all non-federated IBMId users
@@ -2990,8 +3000,6 @@ class IamIdentityV1 extends BaseService {
    *   * LEVEL1 - Email-based MFA for all users
    *   * LEVEL2 - TOTP-based MFA for all users
    *   * LEVEL3 - U2F MFA for all users.
-   * @param {AccountSettingsUserMFA[]} [params.userMfa] - List of users that are exempted from the MFA requirement of
-   * the account.
    * @param {string} [params.sessionExpirationInSeconds] - Defines the session expiration in seconds for the account.
    * Valid values:
    *   * Any whole number between between '900' and '86400'
@@ -3001,7 +3009,7 @@ class IamIdentityV1 extends BaseService {
    *   * Any whole number between '900' and '7200'
    *   * NOT_SET - To unset account setting and use service default.
    * @param {string} [params.maxSessionsPerIdentity] - Defines the max allowed sessions per identity required by the
-   * account. Value values:
+   * account. Valid values:
    *   * Any whole number greater than 0
    *   * NOT_SET - To unset account setting and use service default.
    * @param {string} [params.systemAccessTokenExpirationInSeconds] - Defines the access token expiration in seconds.
@@ -3012,6 +3020,7 @@ class IamIdentityV1 extends BaseService {
    * Valid values:
    *   * Any whole number between '900' and '259200'
    *   * NOT_SET - To unset account setting and use service default.
+   * @param {UserMfa[]} [params.userMfa] - List of users that are exempted from the MFA requirement of the account.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>>}
    */
@@ -3025,14 +3034,16 @@ class IamIdentityV1 extends BaseService {
       'accountId',
       'restrictCreateServiceId',
       'restrictCreatePlatformApikey',
+      'restrictUserListVisibility',
+      'restrictUserDomains',
       'allowedIpAddresses',
       'mfa',
-      'userMfa',
       'sessionExpirationInSeconds',
       'sessionInvalidationInSeconds',
       'maxSessionsPerIdentity',
       'systemAccessTokenExpirationInSeconds',
       'systemRefreshTokenExpirationInSeconds',
+      'userMfa',
       'signal',
       'headers',
     ];
@@ -3044,14 +3055,16 @@ class IamIdentityV1 extends BaseService {
     const body = {
       'restrict_create_service_id': _params.restrictCreateServiceId,
       'restrict_create_platform_apikey': _params.restrictCreatePlatformApikey,
+      'restrict_user_list_visibility': _params.restrictUserListVisibility,
+      'restrict_user_domains': _params.restrictUserDomains,
       'allowed_ip_addresses': _params.allowedIpAddresses,
       'mfa': _params.mfa,
-      'user_mfa': _params.userMfa,
       'session_expiration_in_seconds': _params.sessionExpirationInSeconds,
       'session_invalidation_in_seconds': _params.sessionInvalidationInSeconds,
       'max_sessions_per_identity': _params.maxSessionsPerIdentity,
       'system_access_token_expiration_in_seconds': _params.systemAccessTokenExpirationInSeconds,
       'system_refresh_token_expiration_in_seconds': _params.systemRefreshTokenExpirationInSeconds,
+      'user_mfa': _params.userMfa,
     };
 
     const path = {
@@ -6449,6 +6462,8 @@ namespace IamIdentityV1 {
     accountId: string;
     /** Defines if the entity history is included in the response. */
     includeHistory?: boolean;
+    /** Enrich MFA exemptions with user PI. */
+    resolveUserMfa?: boolean;
   }
 
   /** Parameters for the `updateAccountSettings` operation. */
@@ -6460,25 +6475,35 @@ namespace IamIdentityV1 {
     ifMatch: string;
     /** The id of the account to update the settings for. */
     accountId: string;
-    /** Defines whether or not creating a service ID is access controlled. Valid values:
+    /** Defines whether or not creating the resource is access controlled. Valid values:
      *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
      *  service IDs, including the account owner
      *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrictCreateServiceId?: UpdateAccountSettingsConstants.RestrictCreateServiceId | string;
-    /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - only users assigned the 'User API key creator' role on the IAM Identity Service can create API
-     *  keys, including the account owner
-     *    * NOT_RESTRICTED - all members of an account can create platform API keys
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrictCreatePlatformApikey?:
       | UpdateAccountSettingsConstants.RestrictCreatePlatformApikey
       | string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+     */
+    restrictUserListVisibility?: UpdateAccountSettingsConstants.RestrictUserListVisibility | string;
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrictUserDomains?: AccountSettingsUserDomainRestriction[];
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowedIpAddresses?: string;
-    /** Defines the MFA trait for the account. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -6488,8 +6513,6 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     mfa?: UpdateAccountSettingsConstants.Mfa | string;
-    /** List of users that are exempted from the MFA requirement of the account. */
-    userMfa?: AccountSettingsUserMFA[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
@@ -6501,7 +6524,7 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     sessionInvalidationInSeconds?: string;
-    /** Defines the max allowed sessions per identity required by the account. Value values:
+    /** Defines the max allowed sessions per identity required by the account. Valid values:
      *    * Any whole number greater than 0
      *    * NOT_SET - To unset account setting and use service default.
      */
@@ -6516,23 +6539,30 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     systemRefreshTokenExpirationInSeconds?: string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    userMfa?: UserMfa[];
   }
 
   /** Constants for the `updateAccountSettings` operation. */
   export namespace UpdateAccountSettingsConstants {
-    /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+    /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
     export enum RestrictCreateServiceId {
       RESTRICTED = 'RESTRICTED',
       NOT_RESTRICTED = 'NOT_RESTRICTED',
       NOT_SET = 'NOT_SET',
     }
-    /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - only users assigned the 'User API key creator' role on the IAM Identity Service can create API keys, including the account owner * NOT_RESTRICTED - all members of an account can create platform API keys * NOT_SET - to 'unset' a previous set value. */
+    /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
     export enum RestrictCreatePlatformApikey {
       RESTRICTED = 'RESTRICTED',
       NOT_RESTRICTED = 'NOT_RESTRICTED',
       NOT_SET = 'NOT_SET',
     }
-    /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+    /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+    export enum RestrictUserListVisibility {
+      NOT_RESTRICTED = 'NOT_RESTRICTED',
+      RESTRICTED = 'RESTRICTED',
+    }
+    /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
     export enum Mfa {
       NONE = 'NONE',
       NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7151,109 +7181,16 @@ namespace IamIdentityV1 {
   }
 
   /**
-   * AccountSettingsAccountSection.
-   */
-  export interface AccountSettingsAccountSection {
-    /** Unique ID of the account. */
-    account_id?: string;
-    /** Defines whether or not creating a service ID is access controlled. Valid values:
-     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
-     *  service IDs, including the account owner
-     *    * NOT_RESTRICTED - all members of an account can create service IDs
-     *    * NOT_SET - to 'unset' a previous set value.
-     */
-    restrict_create_service_id?:
-      | AccountSettingsAccountSection.Constants.RestrictCreateServiceId
-      | string;
-    /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
-     *    * NOT_SET - to 'unset' a previous set value.
-     */
-    restrict_create_platform_apikey?:
-      | AccountSettingsAccountSection.Constants.RestrictCreatePlatformApikey
-      | string;
-    /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
-    allowed_ip_addresses?: string;
-    /** Defines the MFA requirement for the user. Valid values:
-     *    * NONE - No MFA trait set
-     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
-     *    * TOTP - For all non-federated IBMId users
-     *    * TOTP4ALL - For all users
-     *    * LEVEL1 - Email-based MFA for all users
-     *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
-     */
-    mfa?: AccountSettingsAccountSection.Constants.Mfa | string;
-    /** List of users that are exempted from the MFA requirement of the account. */
-    user_mfa?: EffectiveAccountSettingsUserMFA[];
-    /** History of the Account Settings. */
-    history?: EnityHistoryRecord[];
-    /** Defines the session expiration in seconds for the account. Valid values:
-     *    * Any whole number between between '900' and '86400'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    session_expiration_in_seconds?: string;
-    /** Defines the period of time in seconds in which a session will be invalidated due to inactivity. Valid
-     *  values:
-     *    * Any whole number between '900' and '7200'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    session_invalidation_in_seconds?: string;
-    /** Defines the max allowed sessions per identity required by the account. Valid values:
-     *    * Any whole number greater than 0
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    max_sessions_per_identity?: string;
-    /** Defines the access token expiration in seconds. Valid values:
-     *    * Any whole number between '900' and '3600'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    system_access_token_expiration_in_seconds?: string;
-    /** Defines the refresh token expiration in seconds. Valid values:
-     *    * Any whole number between '900' and '259200'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    system_refresh_token_expiration_in_seconds?: string;
-  }
-  export namespace AccountSettingsAccountSection {
-    export namespace Constants {
-      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
-      export enum RestrictCreateServiceId {
-        RESTRICTED = 'RESTRICTED',
-        NOT_RESTRICTED = 'NOT_RESTRICTED',
-        NOT_SET = 'NOT_SET',
-      }
-      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
-      export enum RestrictCreatePlatformApikey {
-        RESTRICTED = 'RESTRICTED',
-        NOT_RESTRICTED = 'NOT_RESTRICTED',
-        NOT_SET = 'NOT_SET',
-      }
-      /** Defines the MFA requirement for the user. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
-      export enum Mfa {
-        NONE = 'NONE',
-        NONE_NO_ROPC = 'NONE_NO_ROPC',
-        TOTP = 'TOTP',
-        TOTP4ALL = 'TOTP4ALL',
-        LEVEL1 = 'LEVEL1',
-        LEVEL2 = 'LEVEL2',
-        LEVEL3 = 'LEVEL3',
-      }
-    }
-  }
-
-  /**
-   * AccountSettingsAssignedTemplatesSection.
+   * Response body format for Account Settings REST requests.
    */
   export interface AccountSettingsAssignedTemplatesSection {
     /** Template Id. */
-    template_id?: string;
+    template_id: string;
     /** Template version. */
-    template_version?: number;
+    template_version: number;
     /** Template name. */
-    template_name?: string;
-    /** Defines whether or not creating a service ID is access controlled. Valid values:
+    template_name: string;
+    /** Defines whether or not creating the resource is access controlled. Valid values:
      *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
      *  service IDs, including the account owner
      *    * NOT_RESTRICTED - all members of an account can create service IDs
@@ -7262,17 +7199,30 @@ namespace IamIdentityV1 {
     restrict_create_service_id?:
       | AccountSettingsAssignedTemplatesSection.Constants.RestrictCreateServiceId
       | string;
-    /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrict_create_platform_apikey?:
       | AccountSettingsAssignedTemplatesSection.Constants.RestrictCreatePlatformApikey
       | string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+     */
+    restrict_user_list_visibility?:
+      | AccountSettingsAssignedTemplatesSection.Constants.RestrictUserListVisibility
+      | string;
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrict_user_domains?: AccountSettingsUserDomainRestriction[];
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses?: string;
-    /** Defines the MFA requirement for the user. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -7282,8 +7232,6 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     mfa?: AccountSettingsAssignedTemplatesSection.Constants.Mfa | string;
-    /** List of users that are exempted from the MFA requirement of the account. */
-    user_mfa?: EffectiveAccountSettingsUserMFA[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
@@ -7310,22 +7258,29 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds?: string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    user_mfa?: AccountSettingsUserMFAResponse[];
   }
   export namespace AccountSettingsAssignedTemplatesSection {
     export namespace Constants {
-      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreateServiceId {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreatePlatformApikey {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines the MFA requirement for the user. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+      export enum RestrictUserListVisibility {
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        RESTRICTED = 'RESTRICTED',
+      }
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7342,7 +7297,7 @@ namespace IamIdentityV1 {
    * AccountSettingsComponent.
    */
   export interface AccountSettingsComponent {
-    /** Defines whether or not creating a service ID is access controlled. Valid values:
+    /** Defines whether or not creating the resource is access controlled. Valid values:
      *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
      *  service IDs, including the account owner
      *    * NOT_RESTRICTED - all members of an account can create service IDs
@@ -7351,9 +7306,10 @@ namespace IamIdentityV1 {
     restrict_create_service_id?:
       | AccountSettingsComponent.Constants.RestrictCreateServiceId
       | string;
-    /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrict_create_platform_apikey?:
@@ -7361,7 +7317,7 @@ namespace IamIdentityV1 {
       | string;
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses?: string;
-    /** Defines the MFA trait for the account. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -7372,7 +7328,7 @@ namespace IamIdentityV1 {
      */
     mfa?: AccountSettingsComponent.Constants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
-    user_mfa?: AccountSettingsUserMFA[];
+    user_mfa?: UserMfa[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
@@ -7402,19 +7358,19 @@ namespace IamIdentityV1 {
   }
   export namespace AccountSettingsComponent {
     export namespace Constants {
-      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreateServiceId {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreatePlatformApikey {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7431,7 +7387,7 @@ namespace IamIdentityV1 {
    * AccountSettingsEffectiveSection.
    */
   export interface AccountSettingsEffectiveSection {
-    /** Defines whether or not creating a service ID is access controlled. Valid values:
+    /** Defines whether or not creating the resource is access controlled. Valid values:
      *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
      *  service IDs, including the account owner
      *    * NOT_RESTRICTED - all members of an account can create service IDs
@@ -7440,17 +7396,26 @@ namespace IamIdentityV1 {
     restrict_create_service_id?:
       | AccountSettingsEffectiveSection.Constants.RestrictCreateServiceId
       | string;
-    /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrict_create_platform_apikey?:
       | AccountSettingsEffectiveSection.Constants.RestrictCreatePlatformApikey
       | string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+     */
+    restrict_user_list_visibility?:
+      | AccountSettingsEffectiveSection.Constants.RestrictUserListVisibility
+      | string;
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses?: string;
-    /** Defines the MFA requirement for the user. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -7461,7 +7426,7 @@ namespace IamIdentityV1 {
      */
     mfa?: AccountSettingsEffectiveSection.Constants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
-    user_mfa?: EffectiveAccountSettingsUserMFA[];
+    user_mfa?: AccountSettingsUserMFAResponse[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
@@ -7491,19 +7456,24 @@ namespace IamIdentityV1 {
   }
   export namespace AccountSettingsEffectiveSection {
     export namespace Constants {
-      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreateServiceId {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreatePlatformApikey {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines the MFA requirement for the user. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+      export enum RestrictUserListVisibility {
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        RESTRICTED = 'RESTRICTED',
+      }
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7517,33 +7487,48 @@ namespace IamIdentityV1 {
   }
 
   /**
-   * Response body format for Account Settings REST requests.
+   * Input body parameters for the Account Settings REST request.
    */
   export interface AccountSettingsResponse {
     /** Context with key properties for problem determination. */
     context?: ResponseContext;
     /** Unique ID of the account. */
     account_id: string;
-    /** Defines whether or not creating a service ID is access controlled. Valid values:
+    /** Version of the account settings. */
+    entity_tag: string;
+    /** History of the Account Settings. */
+    history?: EnityHistoryRecord[];
+    /** Defines whether or not creating the resource is access controlled. Valid values:
      *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
      *  service IDs, including the account owner
      *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrict_create_service_id: AccountSettingsResponse.Constants.RestrictCreateServiceId | string;
-    /** Defines whether or not creating platform API keys is access controlled. Valid values:
-     *    * RESTRICTED - to apply access control
-     *    * NOT_RESTRICTED - to remove access control
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
      *    * NOT_SET - to 'unset' a previous set value.
      */
     restrict_create_platform_apikey:
       | AccountSettingsResponse.Constants.RestrictCreatePlatformApikey
       | string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+     */
+    restrict_user_list_visibility:
+      | AccountSettingsResponse.Constants.RestrictUserListVisibility
+      | string;
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrict_user_domains: AccountSettingsUserDomainRestriction[];
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses: string;
-    /** Version of the account settings. */
-    entity_tag: string;
-    /** Defines the MFA trait for the account. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -7553,10 +7538,6 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     mfa: AccountSettingsResponse.Constants.Mfa | string;
-    /** List of users that are exempted from the MFA requirement of the account. */
-    user_mfa: AccountSettingsUserMFA[];
-    /** History of the Account Settings. */
-    history?: EnityHistoryRecord[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
@@ -7583,22 +7564,29 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds: string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    user_mfa: AccountSettingsUserMFAResponse[];
   }
   export namespace AccountSettingsResponse {
     export namespace Constants {
-      /** Defines whether or not creating a service ID is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreateServiceId {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines whether or not creating platform API keys is access controlled. Valid values: * RESTRICTED - to apply access control * NOT_RESTRICTED - to remove access control * NOT_SET - to 'unset' a previous set value. */
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictCreatePlatformApikey {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+      export enum RestrictUserListVisibility {
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        RESTRICTED = 'RESTRICTED',
+      }
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7670,12 +7658,27 @@ namespace IamIdentityV1 {
   }
 
   /**
-   * AccountSettingsUserMFA.
+   * Input body parameters for the Account Settings REST request.
    */
-  export interface AccountSettingsUserMFA {
+  export interface AccountSettingsUserDomainRestriction {
+    /** The realm that the restrictions apply to. */
+    realm_id: string;
+    /** The list of allowed email patterns. Wildcard syntax is supported, '*' represents any sequence of zero or
+     *  more characters in the string, except for '.' and '@'. The sequence ends if a '.' or '@' was found. '**'
+     *  represents any sequence of zero or more characters in the string - without limit.
+     */
+    invitation_email_allow_patterns?: string[];
+    /** When true invites will only be possible to the domain patterns provided, otherwise invites are unrestricted. */
+    restrict_invitation?: boolean;
+  }
+
+  /**
+   * AccountSettingsUserMFAResponse.
+   */
+  export interface AccountSettingsUserMFAResponse {
     /** The iam_id of the user. */
     iam_id: string;
-    /** Defines the MFA requirement for the user. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -7684,11 +7687,19 @@ namespace IamIdentityV1 {
      *    * LEVEL2 - TOTP-based MFA for all users
      *    * LEVEL3 - U2F MFA for all users.
      */
-    mfa: AccountSettingsUserMFA.Constants.Mfa | string;
+    mfa: AccountSettingsUserMFAResponse.Constants.Mfa | string;
+    /** name of the user account. */
+    name?: string;
+    /** userName of the user. */
+    userName?: string;
+    /** email of the user. */
+    email?: string;
+    /** optional description. */
+    description?: string;
   }
-  export namespace AccountSettingsUserMFA {
+  export namespace AccountSettingsUserMFAResponse {
     export namespace Constants {
-      /** Defines the MFA requirement for the user. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7917,49 +7928,10 @@ namespace IamIdentityV1 {
     /** Unique ID of the account. */
     account_id: string;
     effective: AccountSettingsEffectiveSection;
-    account: AccountSettingsAccountSection;
+    /** Input body parameters for the Account Settings REST request. */
+    account: AccountSettingsResponse;
     /** assigned template section. */
     assigned_templates?: AccountSettingsAssignedTemplatesSection[];
-  }
-
-  /**
-   * EffectiveAccountSettingsUserMFA.
-   */
-  export interface EffectiveAccountSettingsUserMFA {
-    /** The iam_id of the user. */
-    iam_id: string;
-    /** Defines the MFA requirement for the user. Valid values:
-     *    * NONE - No MFA trait set
-     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
-     *    * TOTP - For all non-federated IBMId users
-     *    * TOTP4ALL - For all users
-     *    * LEVEL1 - Email-based MFA for all users
-     *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
-     */
-    mfa: EffectiveAccountSettingsUserMFA.Constants.Mfa | string;
-    /** name of the user account. */
-    name?: string;
-    /** userName of the user. */
-    userName?: string;
-    /** email of the user. */
-    email?: string;
-    /** optional description. */
-    description?: string;
-  }
-  export namespace EffectiveAccountSettingsUserMFA {
-    export namespace Constants {
-      /** Defines the MFA requirement for the user. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
-      export enum Mfa {
-        NONE = 'NONE',
-        NONE_NO_ROPC = 'NONE_NO_ROPC',
-        TOTP = 'TOTP',
-        TOTP4ALL = 'TOTP4ALL',
-        LEVEL1 = 'LEVEL1',
-        LEVEL2 = 'LEVEL2',
-        LEVEL3 = 'LEVEL3',
-      }
-    }
   }
 
   /**
@@ -8027,7 +7999,7 @@ namespace IamIdentityV1 {
    * IdBasedMfaEnrollment.
    */
   export interface IdBasedMfaEnrollment {
-    /** Defines the MFA trait for the account. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -8037,7 +8009,7 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     trait_account_default: IdBasedMfaEnrollment.Constants.TraitAccountDefault | string;
-    /** Defines the MFA trait for the account. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -8047,7 +8019,7 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     trait_user_specific?: IdBasedMfaEnrollment.Constants.TraitUserSpecific | string;
-    /** Defines the MFA trait for the account. Valid values:
+    /** MFA trait definitions as follows:
      *    * NONE - No MFA trait set
      *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
      *    * TOTP - For all non-federated IBMId users
@@ -8069,7 +8041,7 @@ namespace IamIdentityV1 {
   }
   export namespace IdBasedMfaEnrollment {
     export namespace Constants {
-      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum TraitAccountDefault {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -8079,7 +8051,7 @@ namespace IamIdentityV1 {
         LEVEL2 = 'LEVEL2',
         LEVEL3 = 'LEVEL3',
       }
-      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum TraitUserSpecific {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -8089,7 +8061,7 @@ namespace IamIdentityV1 {
         LEVEL2 = 'LEVEL2',
         LEVEL3 = 'LEVEL3',
       }
-      /** Defines the MFA trait for the account. Valid values: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum TraitEffective {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -8863,6 +8835,38 @@ namespace IamIdentityV1 {
     email?: string;
     /** Time when the user was last authenticated. */
     last_authn?: string;
+  }
+
+  /**
+   * UserMfa.
+   */
+  export interface UserMfa {
+    /** The iam_id of the user. */
+    iam_id?: string;
+    /** MFA trait definitions as follows:
+     *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    mfa?: UserMfa.Constants.Mfa | string;
+  }
+  export namespace UserMfa {
+    export namespace Constants {
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum Mfa {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+    }
   }
 
   /**

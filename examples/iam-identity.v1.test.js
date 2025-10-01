@@ -21,7 +21,6 @@
 const IamIdentityV1 = require('../dist/iam-identity/v1');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
 const authHelper = require('../test/resources/auth-helper.js');
-const { expectToBePromise } = require('ibm-cloud-sdk-core/lib/sdk-test-helpers');
 
 //
 // This file provides an example of how to use the IAM Identity service.
@@ -62,11 +61,12 @@ describe('IamIdentityV1', () => {
   const iamIdentityService = IamIdentityV1.newInstance({});
 
   // end-common
+  const now = Date.now();
 
   const config = readExternalSources(IamIdentityV1.DEFAULT_SERVICE_NAME);
-  const apikeyName = 'Example-ApiKey';
-  const serviceIdName = 'Example-ServiceId';
-  const serviceIdGroupName = 'Example-ServiceId-Group'
+  const apikeyName = 'Node-SDK-IT-Example-ApiKey-' + now;
+  const serviceIdName = 'Node-SDK-IT-Example-ServiceId-' + now;
+  const serviceIdGroupName = 'Node-SDK-IT-Example-ServiceId-Group-' + now
   const realmName = 'https://sdk.test.realm/1234';
   const service = 'console'
   const valueString = '/billing'
@@ -74,7 +74,6 @@ describe('IamIdentityV1', () => {
 
   let accountId = config.accountId;
   let iamId = config.iamId;
-  let iamIdMember = config.iamIdMember;
   let iamApikey = config.apikey;
   let enterpriseAccountId = config.enterpriseAccountId;
   let enterpriseSubAccountId = config.enterpriseSubaccountId;
@@ -108,13 +107,15 @@ describe('IamIdentityV1', () => {
   let profileTemplateEtag;
   let profileTemplateAssignmentId;
   let profileTemplateAssignmentEtag;
+  let profileTemplateName = 'Node-SDK-IT-Example-Profile-Template-' + now
+  let profileTemplateProfileName = 'Node-SDK-IT-Example-Profile-From-Template-' + now
 
   let accountSettingsTemplateId;
   let accountSettingsTemplateVersion;
   let accountSettingsTemplateEtag;
   let accountSettingsTemplateAssignmentId;
   let accountSettingsTemplateAssignmentEtag;
-
+  let accountSettingsTemplateName = 'Node-SDK-IT-Example-AccountSettings-Template-' + now
 
 test('createApiKey request example', async () => {
 
@@ -767,15 +768,20 @@ test('createApiKey request example', async () => {
       accountId,
     };
 
+    let profile;
     try {
       const res = await iamIdentityService.createProfile(params);
-      profileId = res.result.id
+      profile = res.result;
+      profileId = profile.id
       console.log(JSON.stringify(res.result, null, 2));
     } catch (err) {
       console.warn(err);
     }
 
     // end-create_profile
+
+    iamIDForPreferences = profile.iam_id
+
   });
   test('getProfile request example', async () => {
 
@@ -1274,6 +1280,7 @@ test('createApiKey request example', async () => {
     }
 
     // end-set_profile_identities
+
   });
   test('getProfileIdentity request example', async () => {
 
@@ -1303,7 +1310,21 @@ test('createApiKey request example', async () => {
     }
 
     // end-get_profile_identity
-   
+
+    // delete so it can be set again later
+    try {
+      const params = {
+        profileId: profileId,
+        identityType: 'user',
+        identifierId: iamId
+      };
+
+      const res = await iamIdentityService.deleteProfileIdentity(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
   });
   test('setProfileIdentity request example', async () => {
 
@@ -1323,7 +1344,7 @@ test('createApiKey request example', async () => {
     const params = {
       profileId: profileId,
       identityType: 'user',
-      identifier: iamIdMember,
+      identifier: iamId,
       type: 'user',
       accounts: profileaccounts,
       description: 'identity description'
@@ -1356,7 +1377,7 @@ test('createApiKey request example', async () => {
     const params = {
       profileId: profileId,
       identityType: 'user',
-      identifierId: iamIdMember
+      identifierId: iamId
     };
 
     try {
@@ -1368,33 +1389,6 @@ test('createApiKey request example', async () => {
 
     // end-delete_profile_identity
    
-  });
-  test('deleteProfile request example', async () => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation(output => {
-      originalWarn(output);
-      // when the test fails we need to print out the error message and stop execution right after it
-      expect(true).toBeFalsy();
-    });
-
-    expect(profileId).not.toBeNull();
-
-    // begin-delete_profile
-
-    const params = {
-      profileId
-    };
-
-    try {
-      await iamIdentityService.deleteProfile(params);
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_profile
   });
   test('getAccountSettings request example', async () => {
 
@@ -1443,17 +1437,26 @@ test('createApiKey request example', async () => {
     // begin-updateAccountSettings
     
     const accountSettingsUserMFA = {
-      iam_id: iamIdMember,
+      iam_id: iamId,
       mfa: 'NONE',
     };
 
+    const accountSettingsUserDomainRestriction = {
+      realm_id: 'IBMid',
+      invitation_email_allow_patterns: [ '*.*@ibm.com' ],
+      restrict_invitation: false,
+    };
+
     const userMfa = [accountSettingsUserMFA];
+    const restrictUserDomains = [accountSettingsUserDomainRestriction];
 
     const params = {
       ifMatch: accountSettingsEtag,
       accountId: accountId,
       restrictCreateServiceId: "NOT_RESTRICTED",
       restrictCreatePlatformApikey: "NOT_RESTRICTED",
+      restrictUserListVisibility: 'NOT_RESTRICTED',
+      restrictUserDomains,
       mfa: "NONE",
       userMfa,
       sessionExpirationInSeconds: "86400",
@@ -1662,11 +1665,11 @@ test('createApiKey request example', async () => {
     }
     const profile = {
       rules: [claimRule],
-      name: "Profile-From-Example-Template",
+      name: profileTemplateProfileName,
       description: "Trusted profile created from a template",
     }
     const templateParams = {
-      name: "Example-Profile-Template",
+      name: profileTemplateName,
       description: "IAM enterprise trusted profile template example",
       accountId: enterpriseAccountId,
       profile: profile,
@@ -1755,7 +1758,7 @@ test('createApiKey request example', async () => {
       templateId: profileTemplateId,
       version: profileTemplateVersion,
       ifMatch: profileTemplateEtag,
-      name: "Example-Profile-Template",
+      name: profileTemplateName,
       description: "IAM enterprise trusted profile template example - updated",
     }
     try {
@@ -1897,13 +1900,13 @@ test('createApiKey request example', async () => {
    }
    const profile = {
       rules: [claimRule],
-      name: "Profile-From-Example-Template",
+      name: profileTemplateProfileName,
       description: "Trusted profile created from a template - new version",
       identities: [identity],
     }
     const templateParams = {
       templateId: profileTemplateId,
-      name: "Example-Profile-Template",
+      name: profileTemplateName,
       description: "IAM enterprise trusted profile template example - new version",
       accountId: enterpriseAccountId,
       profile: profile,
@@ -2111,7 +2114,7 @@ test('createApiKey request example', async () => {
       system_access_token_expiration_in_seconds: "3000",
     }
     const templateParams = {
-      name: "Example-Account-Settings-Template",
+      name: accountSettingsTemplateName,
       description: "IAM enterprise account settings template example",
       accountId: enterpriseAccountId,
       accountSettings: settings,
@@ -2207,7 +2210,7 @@ test('createApiKey request example', async () => {
       templateId: accountSettingsTemplateId,
       version: accountSettingsTemplateVersion,
       ifMatch: accountSettingsTemplateEtag,
-      name: "Example-Account-Settings-Template",
+      name: accountSettingsTemplateName,
       description: "IAM enterprise account settings template example - updated",
       accountSettings: settings,
     }
@@ -2317,7 +2320,7 @@ test('createApiKey request example', async () => {
     }
     const templateParams = {
       templateId: accountSettingsTemplateId,
-      name: "Example-Account-Settings-Template",
+      name: accountSettingsTemplateName,
       description: "IAM enterprise account settings template example - new version",
       accountId: enterpriseAccountId,
       accountSettings: settings,
@@ -2526,7 +2529,7 @@ test('createApiKey request example', async () => {
       accountId:    accountId,
 			iamId:        iamIDForPreferences,
 			service:      service,
-			preferenceID: preferenceID1,
+			preferenceId: preferenceID1,
 			valueString:  valueString,
     };
 
@@ -2559,7 +2562,7 @@ test('createApiKey request example', async () => {
       accountId:    accountId,
 			iamId:        iamIDForPreferences,
 			service:      service,
-			preferenceID: preferenceID1,
+			preferenceId: preferenceID1,
     };
 
     try {
@@ -2621,7 +2624,7 @@ test('createApiKey request example', async () => {
       accountId:    accountId,
 			iamId:        iamIDForPreferences,
 			service:      service,
-			preferenceID: preferenceID1,
+			preferenceId: preferenceID1,
     };
 
     try {
@@ -2631,6 +2634,33 @@ test('createApiKey request example', async () => {
     }
 
     // end-delete_preferences_on_scope_account
+  });
+  test('deleteProfile request example', async () => {
+
+    consoleLogMock.mockImplementation(output => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation(output => {
+      originalWarn(output);
+      // when the test fails we need to print out the error message and stop execution right after it
+      expect(true).toBeFalsy();
+    });
+
+    expect(profileId).not.toBeNull();
+
+    // begin-delete_profile
+
+    const params = {
+      profileId
+    };
+
+    try {
+      await iamIdentityService.deleteProfile(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_profile
   });
 
   function isFinishedEx(status) {
