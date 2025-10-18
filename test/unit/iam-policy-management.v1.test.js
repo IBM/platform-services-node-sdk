@@ -3392,9 +3392,9 @@ describe('IamPolicyManagementV1', () => {
       const serviceUrl = iamPolicyManagementServiceOptions.url;
       const path = '/v1/policy_assignments';
       const mockPagerResponse1 =
-        '{"next":{"start":"1"},"assignments":[{"target":{"type":"Account","id":"id"},"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","resources":[{"target":{"type":"Account","id":"id"},"policy":{"resource_created":{"id":"id"},"status":"status","error_message":{"trace":"trace","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}],"status_code":0}}}],"subject":{"id":"id","type":"iam_id"},"template":{"id":"id","version":"version"},"status":"in_progress"}],"total_count":2,"limit":1}';
+        '{"next":{"start":"1"},"assignments":[{"target":{"type":"Account","id":"id"},"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","resources":[{"target":{"type":"Account","id":"id"},"policy":{"resource_created":{"id":"id"},"status":"status","error_message":{"name":"name","errorCode":"errorCode","message":"message","code":"code","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}]}}}],"subject":{"id":"id","type":"iam_id"},"template":{"id":"id","version":"version"},"status":"in_progress"}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"assignments":[{"target":{"type":"Account","id":"id"},"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","resources":[{"target":{"type":"Account","id":"id"},"policy":{"resource_created":{"id":"id"},"status":"status","error_message":{"trace":"trace","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}],"status_code":0}}}],"subject":{"id":"id","type":"iam_id"},"template":{"id":"id","version":"version"},"status":"in_progress"}],"total_count":2,"limit":1}';
+        '{"assignments":[{"target":{"type":"Account","id":"id"},"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","resources":[{"target":{"type":"Account","id":"id"},"policy":{"resource_created":{"id":"id"},"status":"status","error_message":{"name":"name","errorCode":"errorCode","message":"message","code":"code","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}]}}}],"subject":{"id":"id","type":"iam_id"},"template":{"id":"id","version":"version"},"status":"in_progress"}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -5192,9 +5192,9 @@ describe('IamPolicyManagementV1', () => {
       const serviceUrl = iamPolicyManagementServiceOptions.url;
       const path = '/v1/action_control_assignments';
       const mockPagerResponse1 =
-        '{"next":{"start":"1"},"assignments":[{"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","operation":"create","resources":[{"target":{"type":"Account","id":"id"},"action_control":{"resource_created":{"id":"id"},"error_message":{"trace":"trace","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}],"status_code":0}}}],"template":{"id":"id","version":"version"},"target":{"type":"Account","id":"id"},"status":"accepted"}],"total_count":2,"limit":1}';
+        '{"next":{"start":"1"},"assignments":[{"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","operation":"create","resources":[{"target":{"type":"Account","id":"id"},"action_control":{"resource_created":{"id":"id"},"error_message":{"name":"name","errorCode":"errorCode","message":"message","code":"code","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}]}}}],"template":{"id":"id","version":"version"},"target":{"type":"Account","id":"id"},"status":"accepted"}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"assignments":[{"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","operation":"create","resources":[{"target":{"type":"Account","id":"id"},"action_control":{"resource_created":{"id":"id"},"error_message":{"trace":"trace","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}],"status_code":0}}}],"template":{"id":"id","version":"version"},"target":{"type":"Account","id":"id"},"status":"accepted"}],"total_count":2,"limit":1}';
+        '{"assignments":[{"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","operation":"create","resources":[{"target":{"type":"Account","id":"id"},"action_control":{"resource_created":{"id":"id"},"error_message":{"name":"name","errorCode":"errorCode","message":"message","code":"code","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}]}}}],"template":{"id":"id","version":"version"},"target":{"type":"Account","id":"id"},"status":"accepted"}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -5604,6 +5604,1617 @@ describe('IamPolicyManagementV1', () => {
         let err;
         try {
           await iamPolicyManagementService.deleteActionControlAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listRoleTemplates', () => {
+    describe('positive tests', () => {
+      function __listRoleTemplatesTest() {
+        // Construct the params object for operation listRoleTemplates
+        const accountId = 'testString';
+        const acceptLanguage = 'default';
+        const name = 'testString';
+        const roleName = 'testString';
+        const roleServiceName = 'testString';
+        const state = 'active';
+        const limit = 50;
+        const start = 'testString';
+        const listRoleTemplatesParams = {
+          accountId,
+          acceptLanguage,
+          name,
+          roleName,
+          roleServiceName,
+          state,
+          limit,
+          start,
+        };
+
+        const listRoleTemplatesResult = iamPolicyManagementService.listRoleTemplates(listRoleTemplatesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listRoleTemplatesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.role_name).toEqual(roleName);
+        expect(mockRequestOptions.qs.role_service_name).toEqual(roleServiceName);
+        expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listRoleTemplatesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listRoleTemplatesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listRoleTemplatesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listRoleTemplatesParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.listRoleTemplates(listRoleTemplatesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listRoleTemplates({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listRoleTemplates();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('RoleTemplatesPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/role_templates';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"role_templates":[{"name":"name","description":"description","account_id":"account_id","committed":false,"role":{"name":"name","display_name":"display_name","service_name":"service_name","description":"description","actions":["actions"]},"id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","version":"version","state":"active"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"role_templates":[{"name":"name","description":"description","account_id":"account_id","committed":false,"role":{"name":"name","display_name":"display_name","service_name":"service_name","description":"description","actions":["actions"]},"id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","version":"version","state":"active"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          name: 'testString',
+          roleName: 'testString',
+          roleServiceName: 'testString',
+          state: 'active',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.RoleTemplatesPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          name: 'testString',
+          roleName: 'testString',
+          roleServiceName: 'testString',
+          state: 'active',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.RoleTemplatesPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createRoleTemplate', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // TemplateRole
+      const templateRoleModel = {
+        name: 'testString',
+        display_name: 'testString',
+        service_name: 'testString',
+        description: 'testString',
+        actions: ['testString'],
+      };
+
+      function __createRoleTemplateTest() {
+        // Construct the params object for operation createRoleTemplate
+        const name = 'testString';
+        const accountId = 'testString';
+        const description = 'testString';
+        const committed = true;
+        const role = templateRoleModel;
+        const acceptLanguage = 'default';
+        const createRoleTemplateParams = {
+          name,
+          accountId,
+          description,
+          committed,
+          role,
+          acceptLanguage,
+        };
+
+        const createRoleTemplateResult = iamPolicyManagementService.createRoleTemplate(createRoleTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createRoleTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.account_id).toEqual(accountId);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
+        expect(mockRequestOptions.body.role).toEqual(role);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createRoleTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createRoleTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createRoleTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const name = 'testString';
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createRoleTemplateParams = {
+          name,
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.createRoleTemplate(createRoleTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createRoleTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createRoleTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getRoleTemplate', () => {
+    describe('positive tests', () => {
+      function __getRoleTemplateTest() {
+        // Construct the params object for operation getRoleTemplate
+        const roleTemplateId = 'testString';
+        const state = 'active';
+        const getRoleTemplateParams = {
+          roleTemplateId,
+          state,
+        };
+
+        const getRoleTemplateResult = iamPolicyManagementService.getRoleTemplate(getRoleTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getRoleTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRoleTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getRoleTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getRoleTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getRoleTemplateParams = {
+          roleTemplateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getRoleTemplate(getRoleTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getRoleTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getRoleTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteRoleTemplate', () => {
+    describe('positive tests', () => {
+      function __deleteRoleTemplateTest() {
+        // Construct the params object for operation deleteRoleTemplate
+        const roleTemplateId = 'testString';
+        const deleteRoleTemplateParams = {
+          roleTemplateId,
+        };
+
+        const deleteRoleTemplateResult = iamPolicyManagementService.deleteRoleTemplate(deleteRoleTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteRoleTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteRoleTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deleteRoleTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deleteRoleTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteRoleTemplateParams = {
+          roleTemplateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.deleteRoleTemplate(deleteRoleTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deleteRoleTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deleteRoleTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createRoleTemplateVersion', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // TemplateRole
+      const templateRoleModel = {
+        name: 'testString',
+        display_name: 'testString',
+        service_name: 'testString',
+        description: 'testString',
+        actions: ['testString'],
+      };
+
+      function __createRoleTemplateVersionTest() {
+        // Construct the params object for operation createRoleTemplateVersion
+        const roleTemplateId = 'testString';
+        const role = templateRoleModel;
+        const name = 'testString';
+        const description = 'testString';
+        const committed = true;
+        const createRoleTemplateVersionParams = {
+          roleTemplateId,
+          role,
+          name,
+          description,
+          committed,
+        };
+
+        const createRoleTemplateVersionResult = iamPolicyManagementService.createRoleTemplateVersion(createRoleTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createRoleTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}/versions', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.role).toEqual(role);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createRoleTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createRoleTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createRoleTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const role = templateRoleModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createRoleTemplateVersionParams = {
+          roleTemplateId,
+          role,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.createRoleTemplateVersion(createRoleTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createRoleTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createRoleTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listRoleTemplateVersions', () => {
+    describe('positive tests', () => {
+      function __listRoleTemplateVersionsTest() {
+        // Construct the params object for operation listRoleTemplateVersions
+        const roleTemplateId = 'testString';
+        const state = 'active';
+        const limit = 50;
+        const start = 'testString';
+        const listRoleTemplateVersionsParams = {
+          roleTemplateId,
+          state,
+          limit,
+          start,
+        };
+
+        const listRoleTemplateVersionsResult = iamPolicyManagementService.listRoleTemplateVersions(listRoleTemplateVersionsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listRoleTemplateVersionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}/versions', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.state).toEqual(state);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listRoleTemplateVersionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listRoleTemplateVersionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listRoleTemplateVersionsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listRoleTemplateVersionsParams = {
+          roleTemplateId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.listRoleTemplateVersions(listRoleTemplateVersionsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listRoleTemplateVersions({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listRoleTemplateVersions();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('RoleTemplateVersionsPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/role_templates/testString/versions';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"versions":[{"name":"name","description":"description","account_id":"account_id","committed":false,"role":{"name":"name","display_name":"display_name","service_name":"service_name","description":"description","actions":["actions"]},"id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","version":"version","state":"active"}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"versions":[{"name":"name","description":"description","account_id":"account_id","committed":false,"role":{"name":"name","display_name":"display_name","service_name":"service_name","description":"description","actions":["actions"]},"id":"id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","version":"version","state":"active"}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          roleTemplateId: 'testString',
+          state: 'active',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.RoleTemplateVersionsPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          roleTemplateId: 'testString',
+          state: 'active',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.RoleTemplateVersionsPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('replaceRoleTemplate', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // TemplateRole
+      const templateRoleModel = {
+        name: 'testString',
+        display_name: 'testString',
+        service_name: 'testString',
+        description: 'testString',
+        actions: ['testString'],
+      };
+
+      function __replaceRoleTemplateTest() {
+        // Construct the params object for operation replaceRoleTemplate
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const ifMatch = 'testString';
+        const role = templateRoleModel;
+        const name = 'testString';
+        const description = 'testString';
+        const committed = true;
+        const replaceRoleTemplateParams = {
+          roleTemplateId,
+          version,
+          ifMatch,
+          role,
+          name,
+          description,
+          committed,
+        };
+
+        const replaceRoleTemplateResult = iamPolicyManagementService.replaceRoleTemplate(replaceRoleTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(replaceRoleTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}/versions/{version}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.role).toEqual(role);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.committed).toEqual(committed);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceRoleTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __replaceRoleTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __replaceRoleTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const ifMatch = 'testString';
+        const role = templateRoleModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const replaceRoleTemplateParams = {
+          roleTemplateId,
+          version,
+          ifMatch,
+          role,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.replaceRoleTemplate(replaceRoleTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.replaceRoleTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.replaceRoleTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteRoleTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __deleteRoleTemplateVersionTest() {
+        // Construct the params object for operation deleteRoleTemplateVersion
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const deleteRoleTemplateVersionParams = {
+          roleTemplateId,
+          version,
+        };
+
+        const deleteRoleTemplateVersionResult = iamPolicyManagementService.deleteRoleTemplateVersion(deleteRoleTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteRoleTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}/versions/{version}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteRoleTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deleteRoleTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deleteRoleTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteRoleTemplateVersionParams = {
+          roleTemplateId,
+          version,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.deleteRoleTemplateVersion(deleteRoleTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deleteRoleTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deleteRoleTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getRoleTemplateVersion', () => {
+    describe('positive tests', () => {
+      function __getRoleTemplateVersionTest() {
+        // Construct the params object for operation getRoleTemplateVersion
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const getRoleTemplateVersionParams = {
+          roleTemplateId,
+          version,
+        };
+
+        const getRoleTemplateVersionResult = iamPolicyManagementService.getRoleTemplateVersion(getRoleTemplateVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getRoleTemplateVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}/versions/{version}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRoleTemplateVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getRoleTemplateVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getRoleTemplateVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getRoleTemplateVersionParams = {
+          roleTemplateId,
+          version,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getRoleTemplateVersion(getRoleTemplateVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getRoleTemplateVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getRoleTemplateVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('commitRoleTemplate', () => {
+    describe('positive tests', () => {
+      function __commitRoleTemplateTest() {
+        // Construct the params object for operation commitRoleTemplate
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const commitRoleTemplateParams = {
+          roleTemplateId,
+          version,
+        };
+
+        const commitRoleTemplateResult = iamPolicyManagementService.commitRoleTemplate(commitRoleTemplateParams);
+
+        // all methods should return a Promise
+        expectToBePromise(commitRoleTemplateResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_templates/{role_template_id}/versions/{version}/commit', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
+        expect(mockRequestOptions.path.version).toEqual(version);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __commitRoleTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __commitRoleTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __commitRoleTemplateTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const roleTemplateId = 'testString';
+        const version = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const commitRoleTemplateParams = {
+          roleTemplateId,
+          version,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.commitRoleTemplate(commitRoleTemplateParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.commitRoleTemplate({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.commitRoleTemplate();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listRoleAssignments', () => {
+    describe('positive tests', () => {
+      function __listRoleAssignmentsTest() {
+        // Construct the params object for operation listRoleAssignments
+        const accountId = 'testString';
+        const acceptLanguage = 'default';
+        const templateId = 'testString';
+        const templateVersion = 'testString';
+        const limit = 50;
+        const start = 'testString';
+        const listRoleAssignmentsParams = {
+          accountId,
+          acceptLanguage,
+          templateId,
+          templateVersion,
+          limit,
+          start,
+        };
+
+        const listRoleAssignmentsResult = iamPolicyManagementService.listRoleAssignments(listRoleAssignmentsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listRoleAssignmentsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_assignments', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.template_id).toEqual(templateId);
+        expect(mockRequestOptions.qs.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listRoleAssignmentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __listRoleAssignmentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __listRoleAssignmentsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listRoleAssignmentsParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.listRoleAssignments(listRoleAssignmentsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listRoleAssignments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.listRoleAssignments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('RoleAssignmentsPager tests', () => {
+      const serviceUrl = iamPolicyManagementServiceOptions.url;
+      const path = '/v1/role_assignments';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"assignments":[{"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","operation":"create","resources":[{"target":{"type":"Account","id":"id"},"role":{"resource_created":{"id":"id"},"error_message":{"name":"name","errorCode":"errorCode","message":"message","code":"code","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}]}}}],"template":{"id":"id","version":"version"},"target":{"type":"Account","id":"id"},"status":"accepted"}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"assignments":[{"id":"id","account_id":"account_id","href":"href","created_at":"2019-01-01T12:00:00.000Z","created_by_id":"created_by_id","last_modified_at":"2019-01-01T12:00:00.000Z","last_modified_by_id":"last_modified_by_id","operation":"create","resources":[{"target":{"type":"Account","id":"id"},"role":{"resource_created":{"id":"id"},"error_message":{"name":"name","errorCode":"errorCode","message":"message","code":"code","errors":[{"code":"insufficent_permissions","message":"message","details":{"conflicts_with":{"etag":"etag","role":"role","policy":"policy"}},"more_info":"more_info"}]}}}],"template":{"id":"id","version":"version"},"target":{"type":"Account","id":"id"},"status":"accepted"}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          templateId: 'testString',
+          templateVersion: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new IamPolicyManagementV1.RoleAssignmentsPager(iamPolicyManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'testString',
+          acceptLanguage: 'default',
+          templateId: 'testString',
+          templateVersion: 'testString',
+          limit: 10,
+        };
+        const pager = new IamPolicyManagementV1.RoleAssignmentsPager(iamPolicyManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createRoleTemplateAssignment', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // AssignmentTargetDetails
+      const assignmentTargetDetailsModel = {
+        type: 'Account',
+        id: 'testString',
+      };
+
+      // RoleAssignmentTemplate
+      const roleAssignmentTemplateModel = {
+        id: 'testString',
+        version: 'testString',
+      };
+
+      function __createRoleTemplateAssignmentTest() {
+        // Construct the params object for operation createRoleTemplateAssignment
+        const target = assignmentTargetDetailsModel;
+        const templates = [roleAssignmentTemplateModel];
+        const acceptLanguage = 'default';
+        const createRoleTemplateAssignmentParams = {
+          target,
+          templates,
+          acceptLanguage,
+        };
+
+        const createRoleTemplateAssignmentResult = iamPolicyManagementService.createRoleTemplateAssignment(createRoleTemplateAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createRoleTemplateAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_assignments', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Accept-Language', acceptLanguage);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.templates).toEqual(templates);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createRoleTemplateAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __createRoleTemplateAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __createRoleTemplateAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const target = assignmentTargetDetailsModel;
+        const templates = [roleAssignmentTemplateModel];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createRoleTemplateAssignmentParams = {
+          target,
+          templates,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.createRoleTemplateAssignment(createRoleTemplateAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createRoleTemplateAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.createRoleTemplateAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getRoleAssignment', () => {
+    describe('positive tests', () => {
+      function __getRoleAssignmentTest() {
+        // Construct the params object for operation getRoleAssignment
+        const assignmentId = 'testString';
+        const getRoleAssignmentParams = {
+          assignmentId,
+        };
+
+        const getRoleAssignmentResult = iamPolicyManagementService.getRoleAssignment(getRoleAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getRoleAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_assignments/{assignment_id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRoleAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __getRoleAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __getRoleAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getRoleAssignmentParams = {
+          assignmentId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.getRoleAssignment(getRoleAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getRoleAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.getRoleAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateRoleAssignment', () => {
+    describe('positive tests', () => {
+      function __updateRoleAssignmentTest() {
+        // Construct the params object for operation updateRoleAssignment
+        const assignmentId = 'testString';
+        const ifMatch = 'testString';
+        const templateVersion = 'testString';
+        const updateRoleAssignmentParams = {
+          assignmentId,
+          ifMatch,
+          templateVersion,
+        };
+
+        const updateRoleAssignmentResult = iamPolicyManagementService.updateRoleAssignment(updateRoleAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateRoleAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_assignments/{assignment_id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.template_version).toEqual(templateVersion);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateRoleAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __updateRoleAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __updateRoleAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const ifMatch = 'testString';
+        const templateVersion = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateRoleAssignmentParams = {
+          assignmentId,
+          ifMatch,
+          templateVersion,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.updateRoleAssignment(updateRoleAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.updateRoleAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.updateRoleAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteRoleAssignment', () => {
+    describe('positive tests', () => {
+      function __deleteRoleAssignmentTest() {
+        // Construct the params object for operation deleteRoleAssignment
+        const assignmentId = 'testString';
+        const deleteRoleAssignmentParams = {
+          assignmentId,
+        };
+
+        const deleteRoleAssignmentResult = iamPolicyManagementService.deleteRoleAssignment(deleteRoleAssignmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteRoleAssignmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/role_assignments/{assignment_id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.assignment_id).toEqual(assignmentId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteRoleAssignmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.enableRetries();
+        __deleteRoleAssignmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamPolicyManagementService.disableRetries();
+        __deleteRoleAssignmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const assignmentId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteRoleAssignmentParams = {
+          assignmentId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamPolicyManagementService.deleteRoleAssignment(deleteRoleAssignmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deleteRoleAssignment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamPolicyManagementService.deleteRoleAssignment();
         } catch (e) {
           err = e;
         }

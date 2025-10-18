@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.103.0-e8b84313-20250402-201816
+ * IBM OpenAPI SDK Code Generator Version: 3.107.1-41b0fbd0-20250825-080732
  */
 
 /* eslint-disable max-classes-per-file */
@@ -3972,6 +3972,1043 @@ class IamPolicyManagementV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * roleTemplates
+   ************************/
+
+  /**
+   * List role templates by attributes.
+   *
+   * List role templates and filter by attributes by using query parameters. The following attributes are supported:
+   * `account_id`, `name`, `role_name`, `role_service_name`, `state`, `limit`, `start`.
+   * `account_id` is a required query parameter. Only role templates that have the specified attributes and that the
+   * caller has read access to are returned. If the caller does not have read access to any role templates an empty
+   * array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID that the role templates belong to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.name] - The role template name.
+   * @param {string} [params.roleName] - The template role name.
+   * @param {string} [params.roleServiceName] - The template role service name.
+   * @param {string} [params.state] - The role template state.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplateCollection>>}
+   */
+  public listRoleTemplates(
+    params: IamPolicyManagementV1.ListRoleTemplatesParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplateCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'name',
+      'roleName',
+      'roleServiceName',
+      'state',
+      'limit',
+      'start',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'role_name': _params.roleName,
+      'role_service_name': _params.roleServiceName,
+      'state': _params.state,
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listRoleTemplates'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create role template.
+   *
+   * Create a role template. Role templates define roles from an existing system or service defined role.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it changes the name value for all existing versions of the template.
+   * @param {string} params.accountId - Enterprise account ID where this template is created.
+   * @param {string} [params.description] - Description of the role template. This is shown to users in the enterprise
+   * account. Use this to describe the purpose or context of the role for enterprise users managing IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template. If committed is set to true, then the
+   * template version can no longer be updated.
+   * @param {TemplateRole} [params.role] - The role properties that are created in an action resource when the template
+   * is assigned.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>>}
+   */
+  public createRoleTemplate(
+    params: IamPolicyManagementV1.CreateRoleTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['name', 'accountId'];
+    const _validParams = [
+      'name',
+      'accountId',
+      'description',
+      'committed',
+      'role',
+      'acceptLanguage',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'account_id': _params.accountId,
+      'description': _params.description,
+      'committed': _params.committed,
+      'role': _params.role,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createRoleTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve the latest version of a role template.
+   *
+   * Retrieve the latest version of a role template by providing a role template ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - Role template ID.
+   * @param {string} [params.state] - The role template state.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>>}
+   */
+  public getRoleTemplate(
+    params: IamPolicyManagementV1.GetRoleTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId'];
+    const _validParams = ['roleTemplateId', 'state', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'state': _params.state,
+    };
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getRoleTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a Role template.
+   *
+   * Delete a role template by providing the role template ID. This deletes all versions of this template. A role
+   * template can't be deleted if any version of the template is assigned to one or more child accounts. You must remove
+   * the role assignments first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - Role template ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deleteRoleTemplate(
+    params: IamPolicyManagementV1.DeleteRoleTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId'];
+    const _validParams = ['roleTemplateId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteRoleTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a new role template version.
+   *
+   * Create a new version of a role template. Use this if you need to make updates to a role template that is committed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - The role template ID.
+   * @param {TemplateRole} params.role - The role properties that are created in an action resource when the template is
+   * assigned.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - Description of the role template. This is shown to users in the enterprise
+   * account. Use this to describe the purpose or context of the role for enterprise users managing IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template version. If committed is set to true, then
+   * the template version can no longer be updated.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>>}
+   */
+  public createRoleTemplateVersion(
+    params: IamPolicyManagementV1.CreateRoleTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId', 'role'];
+    const _validParams = [
+      'roleTemplateId',
+      'role',
+      'name',
+      'description',
+      'committed',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'role': _params.role,
+      'name': _params.name,
+      'description': _params.description,
+      'committed': _params.committed,
+    };
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createRoleTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}/versions',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve role template versions.
+   *
+   * Retrieve the versions of a role template by providing a role template ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - The role template ID.
+   * @param {string} [params.state] - Role template state.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplateVersionsCollection>>}
+   */
+  public listRoleTemplateVersions(
+    params: IamPolicyManagementV1.ListRoleTemplateVersionsParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplateVersionsCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId'];
+    const _validParams = ['roleTemplateId', 'state', 'limit', 'start', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'state': _params.state,
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listRoleTemplateVersions'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}/versions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a role template version.
+   *
+   * Update a specific version of a role template. You can use this only if the version isn't committed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - Role template ID.
+   * @param {string} params.version - Role template version.
+   * @param {string} params.ifMatch - The revision number for updating a role template version must match the Etag value
+   * of the existing role template version. The Etag can be retrieved using the GET
+   * /v1/role_templates/{template_id}/versions/{version} API and looking at the Etag response header.
+   * @param {TemplateRole} params.role - The role properties that are created in an action resource when the template is
+   * assigned.
+   * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
+   * the field is included, it will change the name value for all existing versions of the template.
+   * @param {string} [params.description] - Description of the role template. This is shown to users in the enterprise
+   * account. Use this to describe the purpose or context of the role for enterprise users managing IAM templates.
+   * @param {boolean} [params.committed] - Committed status of the template version. If committed is set to true, then
+   * the template version can no longer be updated.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>>}
+   */
+  public replaceRoleTemplate(
+    params: IamPolicyManagementV1.ReplaceRoleTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId', 'version', 'ifMatch', 'role'];
+    const _validParams = [
+      'roleTemplateId',
+      'version',
+      'ifMatch',
+      'role',
+      'name',
+      'description',
+      'committed',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'role': _params.role,
+      'name': _params.name,
+      'description': _params.description,
+      'committed': _params.committed,
+    };
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceRoleTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}/versions/{version}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a role template version.
+   *
+   * Delete a specific version of a role template by providing a role template ID and version number. You can't delete a
+   * role template version that is assigned to one or more child accounts. You must remove the role assignments first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - Role template ID.
+   * @param {string} params.version - Role template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deleteRoleTemplateVersion(
+    params: IamPolicyManagementV1.DeleteRoleTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId', 'version'];
+    const _validParams = ['roleTemplateId', 'version', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteRoleTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}/versions/{version}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a role template version.
+   *
+   * Retrieve a role template by providing a role template ID and version number.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - Role template ID.
+   * @param {string} params.version - Role template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>>}
+   */
+  public getRoleTemplateVersion(
+    params: IamPolicyManagementV1.GetRoleTemplateVersionParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId', 'version'];
+    const _validParams = ['roleTemplateId', 'version', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getRoleTemplateVersion'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}/versions/{version}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Commit a role template version.
+   *
+   * Commit a role template version. You cannot make any further changes to the role template once it's committed. If
+   * you have to make updates after committing a version, create a new version.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.roleTemplateId - Role template ID.
+   * @param {string} params.version - The role template version.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public commitRoleTemplate(
+    params: IamPolicyManagementV1.CommitRoleTemplateParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['roleTemplateId', 'version'];
+    const _validParams = ['roleTemplateId', 'version', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'role_template_id': _params.roleTemplateId,
+      'version': _params.version,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'commitRoleTemplate'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_templates/{role_template_id}/versions/{version}/commit',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * roleAssignments
+   ************************/
+
+  /**
+   * Get role template assignments.
+   *
+   * Get role template assignments by attributes. The following attributes are supported:
+   * `account_id`, `template_id`, `template_version`, `target`, `target_type`, `limit`, `start`.
+   * `account_id` is a required query parameter. Only role template assignments with the specified attributes and
+   * accessible by the caller are returned. If the caller does not have read access to any role template assignments, an
+   * empty array is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - The account GUID in which the role assignment belongs to.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {string} [params.templateId] - Optional template ID.
+   * @param {string} [params.templateVersion] - Optional role template version.
+   * @param {number} [params.limit] - The number of documents to include in the collection.
+   * @param {string} [params.start] - Page token that refers to the page of the collection to return.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignmentCollection>>}
+   */
+  public listRoleAssignments(
+    params: IamPolicyManagementV1.ListRoleAssignmentsParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'acceptLanguage',
+      'templateId',
+      'templateVersion',
+      'limit',
+      'start',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'template_id': _params.templateId,
+      'template_version': _params.templateVersion,
+      'limit': _params.limit,
+      'start': _params.start,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listRoleAssignments'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_assignments',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a role template assignment.
+   *
+   * Assign a role template to child accounts and account groups. This creates the role in the accounts and account
+   * groups that you specify.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {AssignmentTargetDetails} params.target - assignment target account and type.
+   * @param {RoleAssignmentTemplate[]} params.templates - List of role template details for role assignment.
+   * @param {string} [params.acceptLanguage] - Language code for translations
+   * * `default` - English
+   * * `de` -  German (Standard)
+   * * `en` - English
+   * * `es` - Spanish (Spain)
+   * * `fr` - French (Standard)
+   * * `it` - Italian (Standard)
+   * * `ja` - Japanese
+   * * `ko` - Korean
+   * * `pt-br` - Portuguese (Brazil)
+   * * `zh-cn` - Chinese (Simplified, PRC)
+   * * `zh-tw` - (Chinese, Taiwan).
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignmentCollection>>}
+   */
+  public createRoleTemplateAssignment(
+    params: IamPolicyManagementV1.CreateRoleTemplateAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['target', 'templates'];
+    const _validParams = ['target', 'templates', 'acceptLanguage', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'target': _params.target,
+      'templates': _params.templates,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createRoleTemplateAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_assignments',
+        method: 'POST',
+        body,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': _params.acceptLanguage,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a role assignment.
+   *
+   * Retrieve a role template assignment by providing a role assignment ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - Role template assignment ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignment>>}
+   */
+  public getRoleAssignment(
+    params: IamPolicyManagementV1.GetRoleAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignment>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getRoleAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_assignments/{assignment_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a role assignment.
+   *
+   * Update a role assignment by providing a role assignment ID.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - Role template assignment ID.
+   * @param {string} params.ifMatch - The revision number for updating a role assignment and must match the Etag value
+   * of the existing role assignment. The Etag can be retrieved using the GET /v1/role_assignments/{assignment_id} API
+   * and looking at the Etag response header.
+   * @param {string} params.templateVersion - The version number of the template used to identify different versions of
+   * same template.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignment>>}
+   */
+  public updateRoleAssignment(
+    params: IamPolicyManagementV1.UpdateRoleAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleAssignment>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId', 'ifMatch', 'templateVersion'];
+    const _validParams = ['assignmentId', 'ifMatch', 'templateVersion', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'template_version': _params.templateVersion,
+    };
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateRoleAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_assignments/{assignment_id}',
+        method: 'PATCH',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove a role assignment.
+   *
+   * Remove a role template assignment by providing a role assignment ID. You can't delete a role assignment if the
+   * status is "in_progress".
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.assignmentId - Role template assignment ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>>}
+   */
+  public deleteRoleAssignment(
+    params: IamPolicyManagementV1.DeleteRoleAssignmentParams
+  ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['assignmentId'];
+    const _validParams = ['assignmentId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'assignment_id': _params.assignmentId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamPolicyManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteRoleAssignment'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/role_assignments/{assignment_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -5028,6 +6065,271 @@ namespace IamPolicyManagementV1 {
     assignmentId: string;
   }
 
+  /** Parameters for the `listRoleTemplates` operation. */
+  export interface ListRoleTemplatesParams extends DefaultParams {
+    /** The account GUID that the role templates belong to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    /** The role template name. */
+    name?: string;
+    /** The template role name. */
+    roleName?: string;
+    /** The template role service name. */
+    roleServiceName?: string;
+    /** The role template state. */
+    state?: ListRoleTemplatesConstants.State | string;
+    /** The number of documents to include in the collection. */
+    limit?: number;
+    /** Page token that refers to the page of the collection to return. */
+    start?: string;
+  }
+
+  /** Constants for the `listRoleTemplates` operation. */
+  export namespace ListRoleTemplatesConstants {
+    /** The role template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
+  }
+
+  /** Parameters for the `createRoleTemplate` operation. */
+  export interface CreateRoleTemplateParams extends DefaultParams {
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
+     */
+    name: string;
+    /** Enterprise account ID where this template is created. */
+    accountId: string;
+    /** Description of the role template. This is shown to users in the enterprise account. Use this to describe the
+     *  purpose or context of the role for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** Committed status of the template. If committed is set to true, then the template version can no longer be
+     *  updated.
+     */
+    committed?: boolean;
+    /** The role properties that are created in an action resource when the template is assigned. */
+    role?: TemplateRole;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+  }
+
+  /** Parameters for the `getRoleTemplate` operation. */
+  export interface GetRoleTemplateParams extends DefaultParams {
+    /** Role template ID. */
+    roleTemplateId: string;
+    /** The role template state. */
+    state?: GetRoleTemplateConstants.State | string;
+  }
+
+  /** Constants for the `getRoleTemplate` operation. */
+  export namespace GetRoleTemplateConstants {
+    /** The role template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
+  }
+
+  /** Parameters for the `deleteRoleTemplate` operation. */
+  export interface DeleteRoleTemplateParams extends DefaultParams {
+    /** Role template ID. */
+    roleTemplateId: string;
+  }
+
+  /** Parameters for the `createRoleTemplateVersion` operation. */
+  export interface CreateRoleTemplateVersionParams extends DefaultParams {
+    /** The role template ID. */
+    roleTemplateId: string;
+    /** The role properties that are created in an action resource when the template is assigned. */
+    role: TemplateRole;
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  will change the name value for all existing versions of the template.
+     */
+    name?: string;
+    /** Description of the role template. This is shown to users in the enterprise account. Use this to describe the
+     *  purpose or context of the role for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** Committed status of the template version. If committed is set to true, then the template version can no
+     *  longer be updated.
+     */
+    committed?: boolean;
+  }
+
+  /** Parameters for the `listRoleTemplateVersions` operation. */
+  export interface ListRoleTemplateVersionsParams extends DefaultParams {
+    /** The role template ID. */
+    roleTemplateId: string;
+    /** Role template state. */
+    state?: ListRoleTemplateVersionsConstants.State | string;
+    /** The number of documents to include in the collection. */
+    limit?: number;
+    /** Page token that refers to the page of the collection to return. */
+    start?: string;
+  }
+
+  /** Constants for the `listRoleTemplateVersions` operation. */
+  export namespace ListRoleTemplateVersionsConstants {
+    /** Role template state. */
+    export enum State {
+      ACTIVE = 'active',
+      DELETED = 'deleted',
+    }
+  }
+
+  /** Parameters for the `replaceRoleTemplate` operation. */
+  export interface ReplaceRoleTemplateParams extends DefaultParams {
+    /** Role template ID. */
+    roleTemplateId: string;
+    /** Role template version. */
+    version: string;
+    /** The revision number for updating a role template version must match the Etag value of the existing role
+     *  template version. The Etag can be retrieved using the GET /v1/role_templates/{template_id}/versions/{version}
+     *  API and looking at the Etag response header.
+     */
+    ifMatch: string;
+    /** The role properties that are created in an action resource when the template is assigned. */
+    role: TemplateRole;
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  will change the name value for all existing versions of the template.
+     */
+    name?: string;
+    /** Description of the role template. This is shown to users in the enterprise account. Use this to describe the
+     *  purpose or context of the role for enterprise users managing IAM templates.
+     */
+    description?: string;
+    /** Committed status of the template version. If committed is set to true, then the template version can no
+     *  longer be updated.
+     */
+    committed?: boolean;
+  }
+
+  /** Parameters for the `deleteRoleTemplateVersion` operation. */
+  export interface DeleteRoleTemplateVersionParams extends DefaultParams {
+    /** Role template ID. */
+    roleTemplateId: string;
+    /** Role template version. */
+    version: string;
+  }
+
+  /** Parameters for the `getRoleTemplateVersion` operation. */
+  export interface GetRoleTemplateVersionParams extends DefaultParams {
+    /** Role template ID. */
+    roleTemplateId: string;
+    /** Role template version. */
+    version: string;
+  }
+
+  /** Parameters for the `commitRoleTemplate` operation. */
+  export interface CommitRoleTemplateParams extends DefaultParams {
+    /** Role template ID. */
+    roleTemplateId: string;
+    /** The role template version. */
+    version: string;
+  }
+
+  /** Parameters for the `listRoleAssignments` operation. */
+  export interface ListRoleAssignmentsParams extends DefaultParams {
+    /** The account GUID in which the role assignment belongs to. */
+    accountId: string;
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+    /** Optional template ID. */
+    templateId?: string;
+    /** Optional role template version. */
+    templateVersion?: string;
+    /** The number of documents to include in the collection. */
+    limit?: number;
+    /** Page token that refers to the page of the collection to return. */
+    start?: string;
+  }
+
+  /** Parameters for the `createRoleTemplateAssignment` operation. */
+  export interface CreateRoleTemplateAssignmentParams extends DefaultParams {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** List of role template details for role assignment. */
+    templates: RoleAssignmentTemplate[];
+    /** Language code for translations
+     *  * `default` - English
+     *  * `de` -  German (Standard)
+     *  * `en` - English
+     *  * `es` - Spanish (Spain)
+     *  * `fr` - French (Standard)
+     *  * `it` - Italian (Standard)
+     *  * `ja` - Japanese
+     *  * `ko` - Korean
+     *  * `pt-br` - Portuguese (Brazil)
+     *  * `zh-cn` - Chinese (Simplified, PRC)
+     *  * `zh-tw` - (Chinese, Taiwan).
+     */
+    acceptLanguage?: string;
+  }
+
+  /** Parameters for the `getRoleAssignment` operation. */
+  export interface GetRoleAssignmentParams extends DefaultParams {
+    /** Role template assignment ID. */
+    assignmentId: string;
+  }
+
+  /** Parameters for the `updateRoleAssignment` operation. */
+  export interface UpdateRoleAssignmentParams extends DefaultParams {
+    /** Role template assignment ID. */
+    assignmentId: string;
+    /** The revision number for updating a role assignment and must match the Etag value of the existing role
+     *  assignment. The Etag can be retrieved using the GET /v1/role_assignments/{assignment_id} API and looking at the
+     *  Etag response header.
+     */
+    ifMatch: string;
+    /** The version number of the template used to identify different versions of same template. */
+    templateVersion: string;
+  }
+
+  /** Parameters for the `deleteRoleAssignment` operation. */
+  export interface DeleteRoleAssignmentParams extends DefaultParams {
+    /** Role template assignment ID. */
+    assignmentId: string;
+  }
+
   /*************************
    * model interfaces
    ************************/
@@ -5120,8 +6422,8 @@ namespace IamPolicyManagementV1 {
   export interface ActionControlAssignmentResourceActionControl {
     /** On success, it includes the action control assigned. */
     resource_created?: ActionControlAssignmentResourceCreated;
-    /** The error response from API. */
-    error_message?: ErrorResponse;
+    /** Body parameters for assignment error. */
+    error_message?: AssignmentResourceError;
   }
 
   /**
@@ -5227,6 +6529,22 @@ namespace IamPolicyManagementV1 {
   export interface AssignmentResourceCreated {
     /** Policy id. */
     id?: string;
+  }
+
+  /**
+   * Body parameters for assignment error.
+   */
+  export interface AssignmentResourceError {
+    /** Name of the error. */
+    name?: string;
+    /** error code. */
+    errorCode?: string;
+    /** Error message detailing the nature of the error. */
+    message?: string;
+    /** Internal status code for the error. */
+    code?: string;
+    /** The errors encountered during the response. */
+    errors?: ErrorObject[];
   }
 
   /**
@@ -5382,20 +6700,11 @@ namespace IamPolicyManagementV1 {
         RESOURCE_NOT_FOUND = 'resource_not_found',
         ACTION_CONTROL_TEMPLATE_NOT_FOUND = 'action_control_template_not_found',
         ACTION_CONTROL_ASSIGNMENT_NOT_FOUND = 'action_control_assignment_not_found',
+        ROLE_TEMPLATE_CONFLICT_ERROR = 'role_template_conflict_error',
+        ROLE_TEMPLATE_NOT_FOUND = 'role_template_not_found',
+        ROLE_ASSIGNMENT_NOT_FOUND = 'role_assignment_not_found',
       }
     }
-  }
-
-  /**
-   * The error response from API.
-   */
-  export interface ErrorResponse {
-    /** The unique transaction ID for the request. */
-    trace: string;
-    /** The errors encountered during the response. */
-    errors: ErrorObject[];
-    /** The HTTP error code of the response. */
-    status_code: number;
   }
 
   /**
@@ -5554,8 +6863,8 @@ namespace IamPolicyManagementV1 {
     resource_created?: AssignmentResourceCreated;
     /** policy status. */
     status?: string;
-    /** The error response from API. */
-    error_message?: ErrorResponse;
+    /** Body parameters for assignment error. */
+    error_message?: AssignmentResourceError;
   }
 
   /**
@@ -5956,6 +7265,108 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
+   * The set of properties associated with the assigned role template.
+   */
+  export interface RoleAssignment {
+    /** Action control assignment ID. */
+    id?: string;
+    /** The account GUID that the role assignments belong to. */
+    account_id?: string;
+    /** The href URL that links to the role assignments API by role assignment ID. */
+    href?: string;
+    /** The UTC timestamp when the role assignment was created. */
+    created_at?: string;
+    /** The IAM ID of the entity that created the role assignment. */
+    created_by_id?: string;
+    /** The UTC timestamp when the role assignment was last modified. */
+    last_modified_at?: string;
+    /** The IAM ID of the entity that last modified the role assignment. */
+    last_modified_by_id?: string;
+    /** The current operation of the role assignment. */
+    operation?: RoleAssignment.Constants.Operation | string;
+    /** Resources created when role template is assigned. */
+    resources?: RoleAssignmentResource[];
+    /** The role template id and version that will be assigned. */
+    template: RoleAssignmentTemplate;
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** The role assignment status. */
+    status?: RoleAssignment.Constants.Status | string;
+  }
+  export namespace RoleAssignment {
+    export namespace Constants {
+      /** The current operation of the role assignment. */
+      export enum Operation {
+        CREATE = 'create',
+        APPLY = 'apply',
+        UPDATE = 'update',
+        REMOVE = 'remove',
+      }
+      /** The role assignment status. */
+      export enum Status {
+        ACCEPTED = 'accepted',
+        FAILURE = 'failure',
+        IN_PROGRESS = 'in_progress',
+        SUPERSEDED = 'superseded',
+      }
+    }
+  }
+
+  /**
+   * A collection of role assignments.
+   */
+  export interface RoleAssignmentCollection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
+    /** List of role assignments. */
+    assignments: RoleAssignment[];
+  }
+
+  /**
+   * The role assignment resources and target where the template is assigned.
+   */
+  export interface RoleAssignmentResource {
+    /** assignment target account and type. */
+    target: AssignmentTargetDetails;
+    /** Set of properties of the assigned resource or error message if assignment failed. */
+    role?: RoleAssignmentResourceRole;
+  }
+
+  /**
+   * On success, it includes the action control assigned.
+   */
+  export interface RoleAssignmentResourceCreated {
+    /** role id. */
+    id?: string;
+  }
+
+  /**
+   * Set of properties of the assigned resource or error message if assignment failed.
+   */
+  export interface RoleAssignmentResourceRole {
+    /** On success, it includes the action control assigned. */
+    resource_created?: RoleAssignmentResourceCreated;
+    /** Body parameters for assignment error. */
+    error_message?: AssignmentResourceError;
+  }
+
+  /**
+   * The role template id and version that will be assigned.
+   */
+  export interface RoleAssignmentTemplate {
+    /** Action control template ID. */
+    id: string;
+    /** Action control template version. */
+    version: string;
+  }
+
+  /**
    * A collection of roles returned by the 'list roles' operation.
    */
   export interface RoleCollection {
@@ -5965,6 +7376,85 @@ namespace IamPolicyManagementV1 {
     service_roles: Role[];
     /** List of system roles. */
     system_roles: Role[];
+  }
+
+  /**
+   * The set of properties associated with the role template.
+   */
+  export interface RoleTemplate {
+    /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
+     *  changes the name value for all existing versions of the template.
+     */
+    name: string;
+    /** Description of the role template. This is shown to users in the enterprise account. Use this to describe the
+     *  purpose or context of the role for enterprise users managing IAM templates.
+     */
+    description: string;
+    /** Enterprise account ID where this template is created. */
+    account_id: string;
+    /** Committed status of the template. If committed is set to true, then the template version can no longer be
+     *  updated.
+     */
+    committed?: boolean;
+    /** The role properties that are created in an action resource when the template is assigned. */
+    role?: TemplateRole;
+    /** The role template ID. */
+    id?: string;
+    /** The href URL that links to the role templates API by role template ID. */
+    href?: string;
+    /** The UTC timestamp when the role template was created. */
+    created_at?: string;
+    /** The IAM ID of the entity that created the role template. */
+    created_by_id?: string;
+    /** The UTC timestamp when the role template was last modified. */
+    last_modified_at?: string;
+    /** The IAM ID of the entity that last modified the role template. */
+    last_modified_by_id?: string;
+    /** The version number of the template used to identify different versions of same template. */
+    version: string;
+    /** State of role template. */
+    state: RoleTemplate.Constants.State | string;
+  }
+  export namespace RoleTemplate {
+    export namespace Constants {
+      /** State of role template. */
+      export enum State {
+        ACTIVE = 'active',
+        DELETED = 'deleted',
+      }
+    }
+  }
+
+  /**
+   * A collection of role templates.
+   */
+  export interface RoleTemplateCollection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
+    /** List of role templates. */
+    role_templates: RoleTemplate[];
+  }
+
+  /**
+   * A collection of versions for a specific role template.
+   */
+  export interface RoleTemplateVersionsCollection {
+    /** The number of documents to include per each page of the collection. */
+    limit?: number;
+    /** Details with linking href to first page of requested collection. */
+    first?: First;
+    /** Details with href linking to the following page of requested collection. */
+    next?: Next;
+    /** Details with linking href to previous page of requested collection. */
+    previous?: Previous;
+    /** List of role templates versions. */
+    versions: RoleTemplate[];
   }
 
   /**
@@ -6098,6 +7588,22 @@ namespace IamPolicyManagementV1 {
         AUTHORIZATION = 'authorization',
       }
     }
+  }
+
+  /**
+   * The role properties that are created in an action resource when the template is assigned.
+   */
+  export interface TemplateRole {
+    /** The name of the role that is used in the CRN. This must be alphanumeric and capitalized. */
+    name: string;
+    /** The display the name of the role that is shown in the console. */
+    display_name: string;
+    /** The service name that the role refers. */
+    service_name: string;
+    /** Description of the role. */
+    description?: string;
+    /** The actions of the role. */
+    actions: string[];
   }
 
   /**
@@ -7208,6 +8714,252 @@ namespace IamPolicyManagementV1 {
      */
     public async getAll(): Promise<IamPolicyManagementV1.ActionControlAssignment[]> {
       const results: ActionControlAssignment[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * RoleTemplatesPager can be used to simplify the use of listRoleTemplates().
+   */
+  export class RoleTemplatesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListRoleTemplatesParams;
+
+    /**
+     * Construct a RoleTemplatesPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listRoleTemplates()
+     * @param {Object} params - The parameters to be passed to listRoleTemplates()
+     * @constructor
+     * @returns {RoleTemplatesPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListRoleTemplatesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listRoleTemplates().
+     * @returns {Promise<IamPolicyManagementV1.RoleTemplate[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.RoleTemplate[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listRoleTemplates(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.role_templates;
+    }
+
+    /**
+     * Returns all results by invoking listRoleTemplates() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.RoleTemplate[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.RoleTemplate[]> {
+      const results: RoleTemplate[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * RoleTemplateVersionsPager can be used to simplify the use of listRoleTemplateVersions().
+   */
+  export class RoleTemplateVersionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListRoleTemplateVersionsParams;
+
+    /**
+     * Construct a RoleTemplateVersionsPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listRoleTemplateVersions()
+     * @param {Object} params - The parameters to be passed to listRoleTemplateVersions()
+     * @constructor
+     * @returns {RoleTemplateVersionsPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListRoleTemplateVersionsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listRoleTemplateVersions().
+     * @returns {Promise<IamPolicyManagementV1.RoleTemplate[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.RoleTemplate[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listRoleTemplateVersions(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.versions;
+    }
+
+    /**
+     * Returns all results by invoking listRoleTemplateVersions() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.RoleTemplate[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.RoleTemplate[]> {
+      const results: RoleTemplate[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * RoleAssignmentsPager can be used to simplify the use of listRoleAssignments().
+   */
+  export class RoleAssignmentsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: IamPolicyManagementV1;
+
+    protected params: IamPolicyManagementV1.ListRoleAssignmentsParams;
+
+    /**
+     * Construct a RoleAssignmentsPager object.
+     *
+     * @param {IamPolicyManagementV1}  client - The service client instance used to invoke listRoleAssignments()
+     * @param {Object} params - The parameters to be passed to listRoleAssignments()
+     * @constructor
+     * @returns {RoleAssignmentsPager}
+     */
+    constructor(
+      client: IamPolicyManagementV1,
+      params: IamPolicyManagementV1.ListRoleAssignmentsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listRoleAssignments().
+     * @returns {Promise<IamPolicyManagementV1.RoleAssignment[]>}
+     */
+    public async getNext(): Promise<IamPolicyManagementV1.RoleAssignment[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listRoleAssignments(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.assignments;
+    }
+
+    /**
+     * Returns all results by invoking listRoleAssignments() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<IamPolicyManagementV1.RoleAssignment[]>}
+     */
+    public async getAll(): Promise<IamPolicyManagementV1.RoleAssignment[]> {
+      const results: RoleAssignment[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
