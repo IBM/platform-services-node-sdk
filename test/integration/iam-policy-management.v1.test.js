@@ -152,6 +152,7 @@ describe('IamPolicyManagementV1_integration', () => {
   const TEST_TEMPLATE_PREFIX = 'SDKNode';
   const testTemplateName = TEST_TEMPLATE_PREFIX + testUniqueId;
   const testActionControlTemplateName = `${TEST_TEMPLATE_PREFIX}ActionControl${testUniqueId}`;
+  const testCustomRoleTemplateName = `${TEST_TEMPLATE_PREFIX}Role${testUniqueId}`;
   let testActionControlBasicTemplateId;
   let testActionControlBasicTemplateVersion;
   let testActionControlBasicTemplateETag;
@@ -159,6 +160,9 @@ describe('IamPolicyManagementV1_integration', () => {
   let testActionControlTemplateVersion;
   let testActionControlTemplateETag;
   let testActionControlTemplateUpdateVersion;
+  let testRoleTemplateId;
+  let testRoleTemplateVersion;
+  let testRoleTemplateETag;
   const testTemplatePolicy = {
     type: 'access',
     description: 'SDK Test Policy',
@@ -1682,6 +1686,291 @@ describe('IamPolicyManagementV1_integration', () => {
           expect(response.status).toEqual(204);
         }
       }
+    });
+  });
+
+  describe('Role Template & Assignment tests', () => {
+    test('createRoleTemplate()', async () => {
+      const testTemplateDescription = 'Node SDK Test Role template Create';
+
+      // Request models needed by this operation.
+
+      // TemplateRole
+      const templateRoleModel = {
+        name: testCustomRoleName,
+        display_name: testCustomRoleDisplayName,
+        service_name: testServiceName,
+        description: testCustomRoleDescription,
+        actions: testCustomRoleActions,
+      };
+
+      const params = {
+        name: testCustomRoleTemplateName,
+        accountId: testAccountId,
+        description: testTemplateDescription,
+        role: templateRoleModel,
+        acceptLanguage: 'default',
+      };
+
+      const res = await service.createRoleTemplate(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(201);
+      expect(res.result).toBeDefined();
+      const { result } = res || {};
+      testRoleTemplateId = result.id;
+      testRoleTemplateVersion = result.version;
+      testRoleTemplateETag = res.headers.etag;
+    });
+
+    test('getRoleTemplate()', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        state: 'active',
+      };
+
+      const res = await service.getRoleTemplate(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('replaceRoleTemplate()', async () => {
+      // Request models needed by this operation.
+
+      // TemplateRole
+      const templateRoleModel = {
+        name: `${testCustomRoleName}Updated`,
+        display_name: `${testCustomRoleDisplayName} Updated`,
+        service_name: 'am-test-service',
+        description: 'am-test-service service customRole',
+        actions: ['am-test-service.test.delete'],
+      };
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        version: testRoleTemplateVersion,
+        ifMatch: testRoleTemplateETag,
+        role: templateRoleModel,
+        committed: true,
+      };
+
+      const res = await service.replaceRoleTemplate(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('listRoleTemplates()', async () => {
+      const params = {
+        accountId: testAccountId,
+        state: 'active',
+      };
+
+      const res = await service.listRoleTemplates(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('listRoleTemplates() via RoleTemplatesPager', async () => {
+      const params = {
+        accountId: testAccountId,
+        state: 'active',
+        limit: 10,
+      };
+
+      const allResults = [];
+
+      // Test getNext().
+      let pager = new IamPolicyManagementV1.RoleTemplatesPager(service, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+
+      // Test getAll().
+      pager = new IamPolicyManagementV1.RoleTemplatesPager(service, params);
+      const allItems = await pager.getAll();
+      expect(allItems).not.toBeNull();
+      expect(allItems).toHaveLength(allResults.length);
+      console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+    });
+
+    test('createRoleTemplateVersion()', async () => {
+      // Request models needed by this operation.
+
+      // TemplateRole
+      const templateRoleModel = {
+        name: `${testCustomRoleName}ver`,
+        display_name: `${testCustomRoleDisplayName}TemplateVersion`,
+        service_name: 'am-test-service',
+        description: 'am-test-service versioon customRole',
+        actions: ['am-test-service.test.create'],
+      };
+
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        role: templateRoleModel,
+        description: 'testString',
+      };
+
+      const res = await service.createRoleTemplateVersion(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(201);
+      expect(res.result).toBeDefined();
+      const { result } = res || {};
+      testRoleTemplateVersion = result.version;
+      testRoleTemplateETag = res.headers.etag;
+    });
+
+    test('listRoleTemplateVersions()', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        state: 'active',
+        limit: 50,
+      };
+
+      const res = await service.listRoleTemplateVersions(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('listRoleTemplateVersions() via RoleTemplateVersionsPager', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        state: 'active',
+        limit: 10,
+      };
+
+      const allResults = [];
+
+      // Test getNext().
+      let pager = new IamPolicyManagementV1.RoleTemplateVersionsPager(service, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+
+      // Test getAll().
+      pager = new IamPolicyManagementV1.RoleTemplateVersionsPager(service, params);
+      const allItems = await pager.getAll();
+      expect(allItems).not.toBeNull();
+      expect(allItems).toHaveLength(allResults.length);
+      console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+    });
+
+    test('getRoleTemplateVersion()', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        version: testRoleTemplateVersion,
+      };
+
+      const res = await service.getRoleTemplateVersion(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('commitRoleTemplate()', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        version: testRoleTemplateVersion,
+      };
+
+      const res = await service.commitRoleTemplate(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(204);
+      expect(res.result).toBeDefined();
+    });
+
+    test('createRoleTemplateAssignment()', async () => {
+      // Request models needed by this operation.
+
+      // AssignmentTargetDetails
+      const assignmentTargetDetailsModel = {
+        type: 'Account',
+        id: testTargetAccountId,
+      };
+
+      // RoleAssignmentTemplate
+      const roleAssignmentTemplateModel = {
+        id: testRoleTemplateId,
+        version: testRoleTemplateVersion,
+      };
+
+      const params = {
+        target: assignmentTargetDetailsModel,
+        templates: [roleAssignmentTemplateModel],
+        acceptLanguage: 'default',
+      };
+
+      const res = await service.createRoleTemplateAssignment(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(201);
+      expect(res.result).toBeDefined();
+      const { result } = res || {};
+      testAssignmentId = result.assignments[0].id;
+      testAssignmentETag = res.headers.etag;
+    });
+
+    test('getRoleAssignment()', async () => {
+      const params = {
+        assignmentId: testAssignmentId,
+      };
+
+      const res = await service.getRoleAssignment(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('updateRoleAssignment()', async () => {
+      const params = {
+        assignmentId: testAssignmentId,
+        ifMatch: testAssignmentETag,
+        templateVersion: testRoleTemplateVersion,
+      };
+
+      const res = await service.updateRoleAssignment(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.result).toBeDefined();
+    });
+
+    test('deleteRoleAssignment()', async () => {
+      const params = {
+        assignmentId: testAssignmentId,
+      };
+
+      const res = await service.deleteRoleAssignment(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(204);
+      expect(res.result).toBeDefined();
+    });
+
+    test('deleteRoleTemplateVersion()', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+        version: testRoleTemplateVersion,
+      };
+
+      const res = await service.deleteRoleTemplateVersion(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(204);
+      expect(res.result).toBeDefined();
+    });
+
+    test('deleteRoleTemplate()', async () => {
+      const params = {
+        roleTemplateId: testRoleTemplateId,
+      };
+
+      const res = await service.deleteRoleTemplate(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(204);
+      expect(res.result).toBeDefined();
     });
   });
 });
