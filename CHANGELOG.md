@@ -1,3 +1,10 @@
+# [0.78.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.77.0...v0.78.0) (2025-10-27)
+
+
+### Features
+
+* **IAM Policy Management:** add enterprise custom role ([#316](https://github.com/IBM/platform-services-node-sdk/issues/316)) ([3d063c7](https://github.com/IBM/platform-services-node-sdk/commit/3d063c7e76c97eb093cb65a47943609b4778ad7c))
+
 # [0.77.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.76.6...v0.77.0) (2025-10-01)
 
 
