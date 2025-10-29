@@ -4304,17 +4304,17 @@ describe('IamIdentityV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // AccountSettingsUserDomainRestriction
-      const accountSettingsUserDomainRestrictionModel = {
-        realm_id: 'IBMid',
-        invitation_email_allow_patterns: [ '*.*@ibm.com' ],
-        restrict_invitation: false,
-      };
-
       // UserMfa
       const userMfaModel = {
         iam_id: 'testString',
         mfa: 'NONE',
+      };
+
+      // AccountSettingsUserDomainRestriction
+      const accountSettingsUserDomainRestrictionModel = {
+        realm_id: 'IBMid',
+        invitation_email_allow_patterns: [],
+        restrict_invitation: true,
       };
 
       function __updateAccountSettingsTest() {
@@ -4323,31 +4323,31 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const restrictCreateServiceId = 'NOT_SET';
         const restrictCreatePlatformApikey = 'NOT_SET';
-        const restrictUserListVisibility = 'NOT_RESTRICTED';
-        const restrictUserDomains = [accountSettingsUserDomainRestrictionModel];
         const allowedIpAddresses = 'testString';
         const mfa = 'NONE';
+        const userMfa = [userMfaModel];
         const sessionExpirationInSeconds = '86400';
         const sessionInvalidationInSeconds = '7200';
         const maxSessionsPerIdentity = 'testString';
         const systemAccessTokenExpirationInSeconds = '3600';
         const systemRefreshTokenExpirationInSeconds = '259200';
-        const userMfa = [userMfaModel];
+        const restrictUserListVisibility = 'NOT_RESTRICTED';
+        const restrictUserDomains = [accountSettingsUserDomainRestrictionModel];
         const updateAccountSettingsParams = {
           ifMatch,
           accountId,
           restrictCreateServiceId,
           restrictCreatePlatformApikey,
-          restrictUserListVisibility,
-          restrictUserDomains,
           allowedIpAddresses,
           mfa,
+          userMfa,
           sessionExpirationInSeconds,
           sessionInvalidationInSeconds,
           maxSessionsPerIdentity,
           systemAccessTokenExpirationInSeconds,
           systemRefreshTokenExpirationInSeconds,
-          userMfa,
+          restrictUserListVisibility,
+          restrictUserDomains,
         };
 
         const updateAccountSettingsResult = iamIdentityService.updateAccountSettings(updateAccountSettingsParams);
@@ -4367,16 +4367,16 @@ describe('IamIdentityV1', () => {
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.restrict_create_service_id).toEqual(restrictCreateServiceId);
         expect(mockRequestOptions.body.restrict_create_platform_apikey).toEqual(restrictCreatePlatformApikey);
-        expect(mockRequestOptions.body.restrict_user_list_visibility).toEqual(restrictUserListVisibility);
-        expect(mockRequestOptions.body.restrict_user_domains).toEqual(restrictUserDomains);
         expect(mockRequestOptions.body.allowed_ip_addresses).toEqual(allowedIpAddresses);
         expect(mockRequestOptions.body.mfa).toEqual(mfa);
+        expect(mockRequestOptions.body.user_mfa).toEqual(userMfa);
         expect(mockRequestOptions.body.session_expiration_in_seconds).toEqual(sessionExpirationInSeconds);
         expect(mockRequestOptions.body.session_invalidation_in_seconds).toEqual(sessionInvalidationInSeconds);
         expect(mockRequestOptions.body.max_sessions_per_identity).toEqual(maxSessionsPerIdentity);
         expect(mockRequestOptions.body.system_access_token_expiration_in_seconds).toEqual(systemAccessTokenExpirationInSeconds);
         expect(mockRequestOptions.body.system_refresh_token_expiration_in_seconds).toEqual(systemRefreshTokenExpirationInSeconds);
-        expect(mockRequestOptions.body.user_mfa).toEqual(userMfa);
+        expect(mockRequestOptions.body.restrict_user_list_visibility).toEqual(restrictUserListVisibility);
+        expect(mockRequestOptions.body.restrict_user_domains).toEqual(restrictUserDomains);
         expect(mockRequestOptions.path.account_id).toEqual(accountId);
       }
 
@@ -6843,8 +6843,21 @@ describe('IamIdentityV1', () => {
         mfa: 'NONE',
       };
 
-      // AccountSettingsComponent
-      const accountSettingsComponentModel = {
+      // AccountSettingsUserDomainRestriction
+      const accountSettingsUserDomainRestrictionModel = {
+        realm_id: 'IBMid',
+        invitation_email_allow_patterns: [],
+        restrict_invitation: true,
+      };
+
+      // TemplateAccountSettingsRestrictUserDomains
+      const templateAccountSettingsRestrictUserDomainsModel = {
+        account_sufficient: true,
+        restrictions: [accountSettingsUserDomainRestrictionModel],
+      };
+
+      // TemplateAccountSettings
+      const templateAccountSettingsModel = {
         restrict_create_service_id: 'NOT_SET',
         restrict_create_platform_apikey: 'NOT_SET',
         allowed_ip_addresses: 'testString',
@@ -6855,6 +6868,8 @@ describe('IamIdentityV1', () => {
         max_sessions_per_identity: 'testString',
         system_access_token_expiration_in_seconds: '3600',
         system_refresh_token_expiration_in_seconds: '259200',
+        restrict_user_list_visibility: 'RESTRICTED',
+        restrict_user_domains: templateAccountSettingsRestrictUserDomainsModel,
       };
 
       function __createAccountSettingsTemplateTest() {
@@ -6862,7 +6877,7 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const name = 'testString';
         const description = 'testString';
-        const accountSettings = accountSettingsComponentModel;
+        const accountSettings = templateAccountSettingsModel;
         const createAccountSettingsTemplateParams = {
           accountId,
           name,
@@ -7208,8 +7223,21 @@ describe('IamIdentityV1', () => {
         mfa: 'NONE',
       };
 
-      // AccountSettingsComponent
-      const accountSettingsComponentModel = {
+      // AccountSettingsUserDomainRestriction
+      const accountSettingsUserDomainRestrictionModel = {
+        realm_id: 'IBMid',
+        invitation_email_allow_patterns: [],
+        restrict_invitation: true,
+      };
+
+      // TemplateAccountSettingsRestrictUserDomains
+      const templateAccountSettingsRestrictUserDomainsModel = {
+        account_sufficient: true,
+        restrictions: [accountSettingsUserDomainRestrictionModel],
+      };
+
+      // TemplateAccountSettings
+      const templateAccountSettingsModel = {
         restrict_create_service_id: 'NOT_SET',
         restrict_create_platform_apikey: 'NOT_SET',
         allowed_ip_addresses: 'testString',
@@ -7220,6 +7248,8 @@ describe('IamIdentityV1', () => {
         max_sessions_per_identity: 'testString',
         system_access_token_expiration_in_seconds: '3600',
         system_refresh_token_expiration_in_seconds: '259200',
+        restrict_user_list_visibility: 'RESTRICTED',
+        restrict_user_domains: templateAccountSettingsRestrictUserDomainsModel,
       };
 
       function __createAccountSettingsTemplateVersionTest() {
@@ -7228,7 +7258,7 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const name = 'testString';
         const description = 'testString';
-        const accountSettings = accountSettingsComponentModel;
+        const accountSettings = templateAccountSettingsModel;
         const createAccountSettingsTemplateVersionParams = {
           templateId,
           accountId,
@@ -7418,8 +7448,21 @@ describe('IamIdentityV1', () => {
         mfa: 'NONE',
       };
 
-      // AccountSettingsComponent
-      const accountSettingsComponentModel = {
+      // AccountSettingsUserDomainRestriction
+      const accountSettingsUserDomainRestrictionModel = {
+        realm_id: 'IBMid',
+        invitation_email_allow_patterns: [],
+        restrict_invitation: true,
+      };
+
+      // TemplateAccountSettingsRestrictUserDomains
+      const templateAccountSettingsRestrictUserDomainsModel = {
+        account_sufficient: true,
+        restrictions: [accountSettingsUserDomainRestrictionModel],
+      };
+
+      // TemplateAccountSettings
+      const templateAccountSettingsModel = {
         restrict_create_service_id: 'NOT_SET',
         restrict_create_platform_apikey: 'NOT_SET',
         allowed_ip_addresses: 'testString',
@@ -7430,6 +7473,8 @@ describe('IamIdentityV1', () => {
         max_sessions_per_identity: 'testString',
         system_access_token_expiration_in_seconds: '3600',
         system_refresh_token_expiration_in_seconds: '259200',
+        restrict_user_list_visibility: 'RESTRICTED',
+        restrict_user_domains: templateAccountSettingsRestrictUserDomainsModel,
       };
 
       function __updateAccountSettingsTemplateVersionTest() {
@@ -7440,7 +7485,7 @@ describe('IamIdentityV1', () => {
         const accountId = 'testString';
         const name = 'testString';
         const description = 'testString';
-        const accountSettings = accountSettingsComponentModel;
+        const accountSettings = templateAccountSettingsModel;
         const updateAccountSettingsTemplateVersionParams = {
           ifMatch,
           templateId,

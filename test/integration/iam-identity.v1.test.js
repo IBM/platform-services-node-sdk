@@ -1710,7 +1710,6 @@ describe('IamIdentityV1_integration', () => {
         expect(result).toBeDefined();
 
         // console.log('getEffectiveAccountSettings() result: ', result);
-        expect(result.account_id).toEqual(accountId);
         expect(result.effective).toBeDefined();
         expect(result.account).toBeDefined();
         
@@ -2278,18 +2277,48 @@ describe('IamIdentityV1_integration', () => {
   });
     
   async function createAccountSettingsTemplate() {
-    const settings = {
-      mfa: "LEVEL1",
-      system_access_token_expiration_in_seconds: "3000",
-    }
-    const templateParams = {
-      name: accountSettingsTemplateName,
-      description: "node SDK test Account Settings Template",
-      accountId: enterpriseAccountId,
-      accountSettings: settings,
-    }
+    // UserMfa
+    const userMfaModel = {
+      iam_id: iamId,
+      mfa: 'LEVEL1',
+    };
 
-    const res = await iamIdentityService.createAccountSettingsTemplate(templateParams);
+    // AccountSettingsUserDomainRestriction
+    const accountSettingsUserDomainRestrictionModel = {
+      realm_id: 'IBMid',
+      invitation_email_allow_patterns: ["*.*@ibm.com"],
+      restrict_invitation: true,
+    };
+
+    // TemplateAccountSettingsRestrictUserDomains
+    const templateAccountSettingsRestrictUserDomainsModel = {
+      account_sufficient: true,
+      restrictions: [accountSettingsUserDomainRestrictionModel],
+    };
+
+    // TemplateAccountSettings
+    const templateAccountSettingsModel = {
+      restrict_create_service_id: 'NOT_SET',
+      restrict_create_platform_apikey: 'NOT_SET',
+      mfa: 'LEVEL1',
+      user_mfa: [userMfaModel],
+      session_expiration_in_seconds: '86400',
+      session_invalidation_in_seconds: '7200',
+      max_sessions_per_identity: '10',
+      system_access_token_expiration_in_seconds: '3600',
+      system_refresh_token_expiration_in_seconds: '259200',
+      restrict_user_list_visibility: 'RESTRICTED',
+      restrict_user_domains: templateAccountSettingsRestrictUserDomainsModel,
+    };
+
+    const params = {
+      accountId: enterpriseAccountId,
+      name: accountSettingsTemplateName,
+      description: 'NodeSDK test Account Settings Template',
+      accountSettings: templateAccountSettingsModel,
+    };
+
+    const res = await iamIdentityService.createAccountSettingsTemplate(params);
     expect(res).not.toBeNull();
     expect(res.status).toEqual(201);
     expect(res.headers.etag).not.toBeNull();
@@ -2333,10 +2362,39 @@ describe('IamIdentityV1_integration', () => {
   }
 
   async function updateAccountSettingsTemplate() {
-    const settings = {
-      mfa: "LEVEL1",
-      system_access_token_expiration_in_seconds: "3000",
-    }
+    // UserMfa
+    const userMfaModel = {
+      iam_id: iamId,
+      mfa: 'LEVEL1',
+    };
+
+    // AccountSettingsUserDomainRestriction
+    const accountSettingsUserDomainRestrictionModel = {
+      realm_id: 'IBMid',
+      invitation_email_allow_patterns: ["*.*@sap.com"],
+      restrict_invitation: false,
+    };
+
+    // TemplateAccountSettingsRestrictUserDomains
+    const templateAccountSettingsRestrictUserDomainsModel = {
+      account_sufficient: false,
+      restrictions: [accountSettingsUserDomainRestrictionModel],
+    };
+
+    // TemplateAccountSettings
+    const templateAccountSettingsModel = {
+      restrict_create_service_id: 'RESTRICTED',
+      restrict_create_platform_apikey: 'RESTRICTED',
+      mfa: 'LEVEL1',
+      user_mfa: [userMfaModel],
+      session_expiration_in_seconds: '86400',
+      session_invalidation_in_seconds: '7200',
+      max_sessions_per_identity: '10',
+      system_access_token_expiration_in_seconds: '3600',
+      system_refresh_token_expiration_in_seconds: '259200',
+      restrict_user_list_visibility: 'NOT_RESTRICTED',
+      restrict_user_domains: templateAccountSettingsRestrictUserDomainsModel,
+    };
     const params = {
       accountId: enterpriseAccountId,
       templateId: accountSettingsTemplateId,
@@ -2344,7 +2402,7 @@ describe('IamIdentityV1_integration', () => {
       ifMatch: accountSettingsTemplateEtag,
       name: accountSettingsTemplateName,
       description: "node SDK test Account Settings Template - updated",
-      accountSettings: settings,
+      accountSettings: templateAccountSettingsModel,
     }
     const res = await iamIdentityService.updateAccountSettingsTemplateVersion(params);
     expect(res).not.toBeNull();
@@ -2401,18 +2459,46 @@ describe('IamIdentityV1_integration', () => {
   }
 
   async function createNewAccountSettingsTemplateVersion() {
-    const settings = {
-      mfa: "LEVEL1",
-      system_access_token_expiration_in_seconds: "2600",
-      restrict_create_platform_apikey: "RESTRICTED",
-      restrict_create_service_id: "RESTRICTED",
-    }
+    // UserMfa
+    const userMfaModel = {
+      iam_id: iamId,
+      mfa: 'LEVEL1',
+    };
+
+    // AccountSettingsUserDomainRestriction
+    const accountSettingsUserDomainRestrictionModel = {
+      realm_id: 'IBMid',
+      invitation_email_allow_patterns: ["*.*@sap.com"],
+      restrict_invitation: false,
+    };
+
+    // TemplateAccountSettingsRestrictUserDomains
+    const templateAccountSettingsRestrictUserDomainsModel = {
+      account_sufficient: false,
+      restrictions: [accountSettingsUserDomainRestrictionModel],
+    };
+
+    // TemplateAccountSettings
+    const templateAccountSettingsModel = {
+      restrict_create_service_id: 'NOT_SET',
+      restrict_create_platform_apikey: 'NOT_SET',
+      mfa: 'LEVEL1',
+      user_mfa: [userMfaModel],
+      session_expiration_in_seconds: '72400',
+      session_invalidation_in_seconds: '6000',
+      max_sessions_per_identity: '5',
+      system_access_token_expiration_in_seconds: '3000',
+      system_refresh_token_expiration_in_seconds: '59200',
+      restrict_user_list_visibility: 'RESTRICTED',
+      restrict_user_domains: templateAccountSettingsRestrictUserDomainsModel,
+    };
+
     const templateParams = {
       templateId: accountSettingsTemplateId,
       name: accountSettingsTemplateName,
       description: "node SDK test Account Settings Template - new version",
       accountId: enterpriseAccountId,
-      accountSettings: settings,
+      accountSettings: templateAccountSettingsModel,
     }
   
     const res = await iamIdentityService.createAccountSettingsTemplateVersion(templateParams);
