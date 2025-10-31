@@ -2982,14 +2982,6 @@ class IamIdentityV1 extends BaseService {
    * IDs, including the account owner
    *   * NOT_RESTRICTED - all members of an account can create service IDs
    *   * NOT_SET - to 'unset' a previous set value.
-   * @param {string} [params.restrictUserListVisibility] - Defines whether or not user visibility is access controlled.
-   * Valid values:
-   *   * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to
-   * the account, or descendants of those users based on the classic infrastructure hierarchy
-   *   * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
-   * @param {AccountSettingsUserDomainRestriction[]} [params.restrictUserDomains] - Defines if account invitations are
-   * restricted to specified domains. To remove an entry for a realm_id, perform an update (PUT) request with only the
-   * realm_id set.
    * @param {string} [params.allowedIpAddresses] - Defines the IP addresses and subnets from which IAM tokens can be
    * created for the account.
    * @param {string} [params.mfa] - MFA trait definitions as follows:
@@ -3000,6 +2992,7 @@ class IamIdentityV1 extends BaseService {
    *   * LEVEL1 - Email-based MFA for all users
    *   * LEVEL2 - TOTP-based MFA for all users
    *   * LEVEL3 - U2F MFA for all users.
+   * @param {UserMfa[]} [params.userMfa] - List of users that are exempted from the MFA requirement of the account.
    * @param {string} [params.sessionExpirationInSeconds] - Defines the session expiration in seconds for the account.
    * Valid values:
    *   * Any whole number between between '900' and '86400'
@@ -3020,7 +3013,14 @@ class IamIdentityV1 extends BaseService {
    * Valid values:
    *   * Any whole number between '900' and '259200'
    *   * NOT_SET - To unset account setting and use service default.
-   * @param {UserMfa[]} [params.userMfa] - List of users that are exempted from the MFA requirement of the account.
+   * @param {string} [params.restrictUserListVisibility] - Defines whether or not user visibility is access controlled.
+   * Valid values:
+   *   * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to
+   * the account, or descendants of those users based on the classic infrastructure hierarchy
+   *   * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+   * @param {AccountSettingsUserDomainRestriction[]} [params.restrictUserDomains] - Defines if account invitations are
+   * restricted to specified domains. To remove an entry for a realm_id, perform an update (PUT) request with only the
+   * realm_id set.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsResponse>>}
    */
@@ -3034,16 +3034,16 @@ class IamIdentityV1 extends BaseService {
       'accountId',
       'restrictCreateServiceId',
       'restrictCreatePlatformApikey',
-      'restrictUserListVisibility',
-      'restrictUserDomains',
       'allowedIpAddresses',
       'mfa',
+      'userMfa',
       'sessionExpirationInSeconds',
       'sessionInvalidationInSeconds',
       'maxSessionsPerIdentity',
       'systemAccessTokenExpirationInSeconds',
       'systemRefreshTokenExpirationInSeconds',
-      'userMfa',
+      'restrictUserListVisibility',
+      'restrictUserDomains',
       'signal',
       'headers',
     ];
@@ -3055,16 +3055,16 @@ class IamIdentityV1 extends BaseService {
     const body = {
       'restrict_create_service_id': _params.restrictCreateServiceId,
       'restrict_create_platform_apikey': _params.restrictCreatePlatformApikey,
-      'restrict_user_list_visibility': _params.restrictUserListVisibility,
-      'restrict_user_domains': _params.restrictUserDomains,
       'allowed_ip_addresses': _params.allowedIpAddresses,
       'mfa': _params.mfa,
+      'user_mfa': _params.userMfa,
       'session_expiration_in_seconds': _params.sessionExpirationInSeconds,
       'session_invalidation_in_seconds': _params.sessionInvalidationInSeconds,
       'max_sessions_per_identity': _params.maxSessionsPerIdentity,
       'system_access_token_expiration_in_seconds': _params.systemAccessTokenExpirationInSeconds,
       'system_refresh_token_expiration_in_seconds': _params.systemRefreshTokenExpirationInSeconds,
-      'user_mfa': _params.userMfa,
+      'restrict_user_list_visibility': _params.restrictUserListVisibility,
+      'restrict_user_domains': _params.restrictUserDomains,
     };
 
     const path = {
@@ -4815,7 +4815,8 @@ class IamIdentityV1 extends BaseService {
    * account.
    * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
    * enterprise account users.
-   * @param {AccountSettingsComponent} [params.accountSettings] -
+   * @param {TemplateAccountSettings} [params.accountSettings] - Input body parameters for the Account Settings REST
+   * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
    */
@@ -5080,7 +5081,8 @@ class IamIdentityV1 extends BaseService {
    * account.
    * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
    * enterprise account users.
-   * @param {AccountSettingsComponent} [params.accountSettings] -
+   * @param {TemplateAccountSettings} [params.accountSettings] - Input body parameters for the Account Settings REST
+   * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
    */
@@ -5227,7 +5229,8 @@ class IamIdentityV1 extends BaseService {
    * account.
    * @param {string} [params.description] - The description of the trusted profile template. Describe the template for
    * enterprise account users.
-   * @param {AccountSettingsComponent} [params.accountSettings] -
+   * @param {TemplateAccountSettings} [params.accountSettings] - Input body parameters for the Account Settings REST
+   * request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountSettingsTemplateResponse>>}
    */
@@ -6491,16 +6494,6 @@ namespace IamIdentityV1 {
     restrictCreatePlatformApikey?:
       | UpdateAccountSettingsConstants.RestrictCreatePlatformApikey
       | string;
-    /** Defines whether or not user visibility is access controlled. Valid values:
-     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
-     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
-     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
-     */
-    restrictUserListVisibility?: UpdateAccountSettingsConstants.RestrictUserListVisibility | string;
-    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
-     *  perform an update (PUT) request with only the realm_id set.
-     */
-    restrictUserDomains?: AccountSettingsUserDomainRestriction[];
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowedIpAddresses?: string;
     /** MFA trait definitions as follows:
@@ -6513,6 +6506,8 @@ namespace IamIdentityV1 {
      *    * LEVEL3 - U2F MFA for all users.
      */
     mfa?: UpdateAccountSettingsConstants.Mfa | string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    userMfa?: UserMfa[];
     /** Defines the session expiration in seconds for the account. Valid values:
      *    * Any whole number between between '900' and '86400'
      *    * NOT_SET - To unset account setting and use service default.
@@ -6539,8 +6534,16 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     systemRefreshTokenExpirationInSeconds?: string;
-    /** List of users that are exempted from the MFA requirement of the account. */
-    userMfa?: UserMfa[];
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+     */
+    restrictUserListVisibility?: UpdateAccountSettingsConstants.RestrictUserListVisibility | string;
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrictUserDomains?: AccountSettingsUserDomainRestriction[];
   }
 
   /** Constants for the `updateAccountSettings` operation. */
@@ -6557,11 +6560,6 @@ namespace IamIdentityV1 {
       NOT_RESTRICTED = 'NOT_RESTRICTED',
       NOT_SET = 'NOT_SET',
     }
-    /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
-    export enum RestrictUserListVisibility {
-      NOT_RESTRICTED = 'NOT_RESTRICTED',
-      RESTRICTED = 'RESTRICTED',
-    }
     /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
     export enum Mfa {
       NONE = 'NONE',
@@ -6571,6 +6569,11 @@ namespace IamIdentityV1 {
       LEVEL1 = 'LEVEL1',
       LEVEL2 = 'LEVEL2',
       LEVEL3 = 'LEVEL3',
+    }
+    /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+    export enum RestrictUserListVisibility {
+      NOT_RESTRICTED = 'NOT_RESTRICTED',
+      RESTRICTED = 'RESTRICTED',
     }
   }
 
@@ -6964,7 +6967,8 @@ namespace IamIdentityV1 {
     name?: string;
     /** The description of the trusted profile template. Describe the template for enterprise account users. */
     description?: string;
-    accountSettings?: AccountSettingsComponent;
+    /** Input body parameters for the Account Settings REST request. */
+    accountSettings?: TemplateAccountSettings;
   }
 
   /** Parameters for the `getLatestAccountSettingsTemplateVersion` operation. */
@@ -7022,7 +7026,8 @@ namespace IamIdentityV1 {
     name?: string;
     /** The description of the trusted profile template. Describe the template for enterprise account users. */
     description?: string;
-    accountSettings?: AccountSettingsComponent;
+    /** Input body parameters for the Account Settings REST request. */
+    accountSettings?: TemplateAccountSettings;
   }
 
   /** Parameters for the `getAccountSettingsTemplateVersion` operation. */
@@ -7052,7 +7057,8 @@ namespace IamIdentityV1 {
     name?: string;
     /** The description of the trusted profile template. Describe the template for enterprise account users. */
     description?: string;
-    accountSettings?: AccountSettingsComponent;
+    /** Input body parameters for the Account Settings REST request. */
+    accountSettings?: TemplateAccountSettings;
   }
 
   /** Parameters for the `deleteAccountSettingsTemplateVersion` operation. */
@@ -7181,7 +7187,7 @@ namespace IamIdentityV1 {
   }
 
   /**
-   * Response body format for Account Settings REST requests.
+   * Input body parameters for the Account Settings REST request.
    */
   export interface AccountSettingsAssignedTemplatesSection {
     /** Template Id. */
@@ -7208,18 +7214,6 @@ namespace IamIdentityV1 {
     restrict_create_platform_apikey?:
       | AccountSettingsAssignedTemplatesSection.Constants.RestrictCreatePlatformApikey
       | string;
-    /** Defines whether or not user visibility is access controlled. Valid values:
-     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
-     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
-     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
-     */
-    restrict_user_list_visibility?:
-      | AccountSettingsAssignedTemplatesSection.Constants.RestrictUserListVisibility
-      | string;
-    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
-     *  perform an update (PUT) request with only the realm_id set.
-     */
-    restrict_user_domains?: AccountSettingsUserDomainRestriction[];
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses?: string;
     /** MFA trait definitions as follows:
@@ -7258,8 +7252,18 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds?: string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console
+     *    * NOT_SET - to 'unset' a previous set value.
+     */
+    restrict_user_list_visibility?:
+      | AccountSettingsAssignedTemplatesSection.Constants.RestrictUserListVisibility
+      | string;
     /** List of users that are exempted from the MFA requirement of the account. */
     user_mfa?: AccountSettingsUserMFAResponse[];
+    restrict_user_domains?: AssignedTemplatesAccountSettingsRestrictUserDomains;
   }
   export namespace AccountSettingsAssignedTemplatesSection {
     export namespace Constants {
@@ -7275,110 +7279,21 @@ namespace IamIdentityV1 {
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum Mfa {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console * NOT_SET - to 'unset' a previous set value. */
       export enum RestrictUserListVisibility {
-        NOT_RESTRICTED = 'NOT_RESTRICTED',
-        RESTRICTED = 'RESTRICTED',
-      }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
-      export enum Mfa {
-        NONE = 'NONE',
-        NONE_NO_ROPC = 'NONE_NO_ROPC',
-        TOTP = 'TOTP',
-        TOTP4ALL = 'TOTP4ALL',
-        LEVEL1 = 'LEVEL1',
-        LEVEL2 = 'LEVEL2',
-        LEVEL3 = 'LEVEL3',
-      }
-    }
-  }
-
-  /**
-   * AccountSettingsComponent.
-   */
-  export interface AccountSettingsComponent {
-    /** Defines whether or not creating the resource is access controlled. Valid values:
-     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
-     *  service IDs, including the account owner
-     *    * NOT_RESTRICTED - all members of an account can create service IDs
-     *    * NOT_SET - to 'unset' a previous set value.
-     */
-    restrict_create_service_id?:
-      | AccountSettingsComponent.Constants.RestrictCreateServiceId
-      | string;
-    /** Defines whether or not creating the resource is access controlled. Valid values:
-     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
-     *  service IDs, including the account owner
-     *    * NOT_RESTRICTED - all members of an account can create service IDs
-     *    * NOT_SET - to 'unset' a previous set value.
-     */
-    restrict_create_platform_apikey?:
-      | AccountSettingsComponent.Constants.RestrictCreatePlatformApikey
-      | string;
-    /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
-    allowed_ip_addresses?: string;
-    /** MFA trait definitions as follows:
-     *    * NONE - No MFA trait set
-     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
-     *    * TOTP - For all non-federated IBMId users
-     *    * TOTP4ALL - For all users
-     *    * LEVEL1 - Email-based MFA for all users
-     *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
-     */
-    mfa?: AccountSettingsComponent.Constants.Mfa | string;
-    /** List of users that are exempted from the MFA requirement of the account. */
-    user_mfa?: UserMfa[];
-    /** Defines the session expiration in seconds for the account. Valid values:
-     *    * Any whole number between between '900' and '86400'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    session_expiration_in_seconds?: string;
-    /** Defines the period of time in seconds in which a session will be invalidated due to inactivity. Valid
-     *  values:
-     *    * Any whole number between '900' and '7200'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    session_invalidation_in_seconds?: string;
-    /** Defines the max allowed sessions per identity required by the account. Valid values:
-     *    * Any whole number greater than 0
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    max_sessions_per_identity?: string;
-    /** Defines the access token expiration in seconds. Valid values:
-     *    * Any whole number between '900' and '3600'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    system_access_token_expiration_in_seconds?: string;
-    /** Defines the refresh token expiration in seconds. Valid values:
-     *    * Any whole number between '900' and '259200'
-     *    * NOT_SET - To unset account setting and use service default.
-     */
-    system_refresh_token_expiration_in_seconds?: string;
-  }
-  export namespace AccountSettingsComponent {
-    export namespace Constants {
-      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
-      export enum RestrictCreateServiceId {
         RESTRICTED = 'RESTRICTED',
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
-      }
-      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
-      export enum RestrictCreatePlatformApikey {
-        RESTRICTED = 'RESTRICTED',
-        NOT_RESTRICTED = 'NOT_RESTRICTED',
-        NOT_SET = 'NOT_SET',
-      }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
-      export enum Mfa {
-        NONE = 'NONE',
-        NONE_NO_ROPC = 'NONE_NO_ROPC',
-        TOTP = 'TOTP',
-        TOTP4ALL = 'TOTP4ALL',
-        LEVEL1 = 'LEVEL1',
-        LEVEL2 = 'LEVEL2',
-        LEVEL3 = 'LEVEL3',
       }
     }
   }
@@ -7514,18 +7429,6 @@ namespace IamIdentityV1 {
     restrict_create_platform_apikey:
       | AccountSettingsResponse.Constants.RestrictCreatePlatformApikey
       | string;
-    /** Defines whether or not user visibility is access controlled. Valid values:
-     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
-     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
-     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
-     */
-    restrict_user_list_visibility:
-      | AccountSettingsResponse.Constants.RestrictUserListVisibility
-      | string;
-    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
-     *  perform an update (PUT) request with only the realm_id set.
-     */
-    restrict_user_domains: AccountSettingsUserDomainRestriction[];
     /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
     allowed_ip_addresses: string;
     /** MFA trait definitions as follows:
@@ -7564,8 +7467,20 @@ namespace IamIdentityV1 {
      *    * NOT_SET - To unset account setting and use service default.
      */
     system_refresh_token_expiration_in_seconds: string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console.
+     */
+    restrict_user_list_visibility:
+      | AccountSettingsResponse.Constants.RestrictUserListVisibility
+      | string;
     /** List of users that are exempted from the MFA requirement of the account. */
     user_mfa: AccountSettingsUserMFAResponse[];
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrict_user_domains: AccountSettingsUserDomainRestriction[];
   }
   export namespace AccountSettingsResponse {
     export namespace Constants {
@@ -7581,11 +7496,6 @@ namespace IamIdentityV1 {
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
-      export enum RestrictUserListVisibility {
-        NOT_RESTRICTED = 'NOT_RESTRICTED',
-        RESTRICTED = 'RESTRICTED',
-      }
       /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
@@ -7595,6 +7505,11 @@ namespace IamIdentityV1 {
         LEVEL1 = 'LEVEL1',
         LEVEL2 = 'LEVEL2',
         LEVEL3 = 'LEVEL3',
+      }
+      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console. */
+      export enum RestrictUserListVisibility {
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        RESTRICTED = 'RESTRICTED',
       }
     }
   }
@@ -7640,7 +7555,8 @@ namespace IamIdentityV1 {
     description?: string;
     /** Committed flag determines if the template is ready for assignment. */
     committed: boolean;
-    account_settings: AccountSettingsComponent;
+    /** Input body parameters for the Account Settings REST request. */
+    account_settings: TemplateAccountSettings;
     /** History of the Template. */
     history?: EnityHistoryRecord[];
     /** Entity tag for this templateId-version combination. */
@@ -7901,6 +7817,17 @@ namespace IamIdentityV1 {
     username?: string;
     /** Email of the user. */
     email?: string;
+  }
+
+  /**
+   * AssignedTemplatesAccountSettingsRestrictUserDomains.
+   */
+  export interface AssignedTemplatesAccountSettingsRestrictUserDomains {
+    account_sufficient?: boolean;
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrictions?: AccountSettingsUserDomainRestriction[];
   }
 
   /**
@@ -8488,6 +8415,121 @@ namespace IamIdentityV1 {
      *  the response but might be empty depending on the query parameter values provided.
      */
     serviceids: ServiceId[];
+  }
+
+  /**
+   * Input body parameters for the Account Settings REST request.
+   */
+  export interface TemplateAccountSettings {
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
+     *    * NOT_SET - to 'unset' a previous set value.
+     */
+    restrict_create_service_id?: TemplateAccountSettings.Constants.RestrictCreateServiceId | string;
+    /** Defines whether or not creating the resource is access controlled. Valid values:
+     *    * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create
+     *  service IDs, including the account owner
+     *    * NOT_RESTRICTED - all members of an account can create service IDs
+     *    * NOT_SET - to 'unset' a previous set value.
+     */
+    restrict_create_platform_apikey?:
+      | TemplateAccountSettings.Constants.RestrictCreatePlatformApikey
+      | string;
+    /** Defines the IP addresses and subnets from which IAM tokens can be created for the account. */
+    allowed_ip_addresses?: string;
+    /** MFA trait definitions as follows:
+     *    * NONE - No MFA trait set
+     *    * NONE_NO_ROPC- No MFA, disable CLI logins with only a password
+     *    * TOTP - For all non-federated IBMId users
+     *    * TOTP4ALL - For all users
+     *    * LEVEL1 - Email-based MFA for all users
+     *    * LEVEL2 - TOTP-based MFA for all users
+     *    * LEVEL3 - U2F MFA for all users.
+     */
+    mfa?: TemplateAccountSettings.Constants.Mfa | string;
+    /** List of users that are exempted from the MFA requirement of the account. */
+    user_mfa?: UserMfa[];
+    /** Defines the session expiration in seconds for the account. Valid values:
+     *    * Any whole number between between '900' and '86400'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    session_expiration_in_seconds?: string;
+    /** Defines the period of time in seconds in which a session will be invalidated due to inactivity. Valid
+     *  values:
+     *    * Any whole number between '900' and '7200'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    session_invalidation_in_seconds?: string;
+    /** Defines the max allowed sessions per identity required by the account. Valid values:
+     *    * Any whole number greater than 0
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    max_sessions_per_identity?: string;
+    /** Defines the access token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '3600'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    system_access_token_expiration_in_seconds?: string;
+    /** Defines the refresh token expiration in seconds. Valid values:
+     *    * Any whole number between '900' and '259200'
+     *    * NOT_SET - To unset account setting and use service default.
+     */
+    system_refresh_token_expiration_in_seconds?: string;
+    /** Defines whether or not user visibility is access controlled. Valid values:
+     *    * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited
+     *  to the account, or descendants of those users based on the classic infrastructure hierarchy
+     *    * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console
+     *    * NOT_SET - to 'unset' a previous set value.
+     */
+    restrict_user_list_visibility?:
+      | TemplateAccountSettings.Constants.RestrictUserListVisibility
+      | string;
+    restrict_user_domains?: TemplateAccountSettingsRestrictUserDomains;
+  }
+  export namespace TemplateAccountSettings {
+    export namespace Constants {
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictCreateServiceId {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+      /** Defines whether or not creating the resource is access controlled. Valid values: * RESTRICTED - only users assigned the 'Service ID creator' role on the IAM Identity Service can create service IDs, including the account owner * NOT_RESTRICTED - all members of an account can create service IDs * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictCreatePlatformApikey {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      export enum Mfa {
+        NONE = 'NONE',
+        NONE_NO_ROPC = 'NONE_NO_ROPC',
+        TOTP = 'TOTP',
+        TOTP4ALL = 'TOTP4ALL',
+        LEVEL1 = 'LEVEL1',
+        LEVEL2 = 'LEVEL2',
+        LEVEL3 = 'LEVEL3',
+      }
+      /** Defines whether or not user visibility is access controlled. Valid values: * RESTRICTED - users can view only specific types of users in the account, such as those the user has invited to the account, or descendants of those users based on the classic infrastructure hierarchy * NOT_RESTRICTED - any user in the account can view other users from the Users page in IBM Cloud console * NOT_SET - to 'unset' a previous set value. */
+      export enum RestrictUserListVisibility {
+        RESTRICTED = 'RESTRICTED',
+        NOT_RESTRICTED = 'NOT_RESTRICTED',
+        NOT_SET = 'NOT_SET',
+      }
+    }
+  }
+
+  /**
+   * TemplateAccountSettingsRestrictUserDomains.
+   */
+  export interface TemplateAccountSettingsRestrictUserDomains {
+    account_sufficient?: boolean;
+    /** Defines if account invitations are restricted to specified domains. To remove an entry for a realm_id,
+     *  perform an update (PUT) request with only the realm_id set.
+     */
+    restrictions?: AccountSettingsUserDomainRestriction[];
   }
 
   /**
