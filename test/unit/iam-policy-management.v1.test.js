@@ -2240,14 +2240,14 @@ describe('IamPolicyManagementV1', () => {
         role_id: 'testString',
       };
 
-      // Grant
-      const grantModel = {
+      // TemplateGrantRoles
+      const templateGrantModel = {
         roles: [rolesModel],
       };
 
-      // Control
-      const controlModel = {
-        grant: grantModel,
+      // TemplateControl
+      const templateControlModel = {
+        grant: templateGrantModel,
       };
 
       // TemplatePolicy
@@ -2258,7 +2258,7 @@ describe('IamPolicyManagementV1', () => {
         subject: v2PolicySubjectModel,
         pattern: 'testString',
         rule: v2PolicyRuleModel,
-        control: controlModel,
+        control: templateControlModel,
       };
 
       function __createPolicyTemplateTest() {
@@ -2581,14 +2581,14 @@ describe('IamPolicyManagementV1', () => {
         role_id: 'testString',
       };
 
-      // Grant
-      const grantModel = {
+      // TemplateGrantRoles
+      const templateGrantModel = {
         roles: [rolesModel],
       };
 
-      // Control
-      const controlModel = {
-        grant: grantModel,
+      // TemplateControl
+      const templateControlModel = {
+        grant: templateGrantModel,
       };
 
       // TemplatePolicy
@@ -2599,7 +2599,7 @@ describe('IamPolicyManagementV1', () => {
         subject: v2PolicySubjectModel,
         pattern: 'testString',
         rule: v2PolicyRuleModel,
-        control: controlModel,
+        control: templateControlModel,
       };
 
       function __createPolicyTemplateVersionTest() {
@@ -2891,14 +2891,14 @@ describe('IamPolicyManagementV1', () => {
         role_id: 'testString',
       };
 
-      // Grant
-      const grantModel = {
+      // TemplateGrantRoles
+      const templateGrantModel = {
         roles: [rolesModel],
       };
 
-      // Control
-      const controlModel = {
-        grant: grantModel,
+      // TemplateControl
+      const templateControlModel = {
+        grant: templateGrantModel,
       };
 
       // TemplatePolicy
@@ -2909,7 +2909,7 @@ describe('IamPolicyManagementV1', () => {
         subject: v2PolicySubjectModel,
         pattern: 'testString',
         rule: v2PolicyRuleModel,
-        control: controlModel,
+        control: templateControlModel,
       };
 
       function __replacePolicyTemplateTest() {
@@ -5782,8 +5782,8 @@ describe('IamPolicyManagementV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // TemplateRole
-      const templateRoleModel = {
+      // RoleTemplatePrototypeRole
+      const roleTemplatePrototypeRoleModel = {
         name: 'testString',
         display_name: 'testString',
         service_name: 'testString',
@@ -5797,7 +5797,7 @@ describe('IamPolicyManagementV1', () => {
         const accountId = 'testString';
         const description = 'testString';
         const committed = true;
-        const role = templateRoleModel;
+        const role = roleTemplatePrototypeRoleModel;
         const acceptLanguage = 'default';
         const createRoleTemplateParams = {
           name,
@@ -6067,7 +6067,6 @@ describe('IamPolicyManagementV1', () => {
 
       // TemplateRole
       const templateRoleModel = {
-        name: 'testString',
         display_name: 'testString',
         service_name: 'testString',
         description: 'testString',
@@ -6077,15 +6076,15 @@ describe('IamPolicyManagementV1', () => {
       function __createRoleTemplateVersionTest() {
         // Construct the params object for operation createRoleTemplateVersion
         const roleTemplateId = 'testString';
-        const role = templateRoleModel;
         const name = 'testString';
         const description = 'testString';
+        const role = templateRoleModel;
         const committed = true;
         const createRoleTemplateVersionParams = {
           roleTemplateId,
-          role,
           name,
           description,
+          role,
           committed,
         };
 
@@ -6103,9 +6102,9 @@ describe('IamPolicyManagementV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.role).toEqual(role);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.role).toEqual(role);
         expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
       }
@@ -6128,12 +6127,10 @@ describe('IamPolicyManagementV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const roleTemplateId = 'testString';
-        const role = templateRoleModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const createRoleTemplateVersionParams = {
           roleTemplateId,
-          role,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -6321,7 +6318,6 @@ describe('IamPolicyManagementV1', () => {
 
       // TemplateRole
       const templateRoleModel = {
-        name: 'testString',
         display_name: 'testString',
         service_name: 'testString',
         description: 'testString',
@@ -6333,17 +6329,17 @@ describe('IamPolicyManagementV1', () => {
         const roleTemplateId = 'testString';
         const version = 'testString';
         const ifMatch = 'testString';
-        const role = templateRoleModel;
         const name = 'testString';
         const description = 'testString';
+        const role = templateRoleModel;
         const committed = true;
         const replaceRoleTemplateParams = {
           roleTemplateId,
           version,
           ifMatch,
-          role,
           name,
           description,
+          role,
           committed,
         };
 
@@ -6362,9 +6358,9 @@ describe('IamPolicyManagementV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
-        expect(mockRequestOptions.body.role).toEqual(role);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.description).toEqual(description);
+        expect(mockRequestOptions.body.role).toEqual(role);
         expect(mockRequestOptions.body.committed).toEqual(committed);
         expect(mockRequestOptions.path.role_template_id).toEqual(roleTemplateId);
         expect(mockRequestOptions.path.version).toEqual(version);
@@ -6390,14 +6386,12 @@ describe('IamPolicyManagementV1', () => {
         const roleTemplateId = 'testString';
         const version = 'testString';
         const ifMatch = 'testString';
-        const role = templateRoleModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const replaceRoleTemplateParams = {
           roleTemplateId,
           version,
           ifMatch,
-          role,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,

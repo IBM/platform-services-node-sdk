@@ -82,6 +82,10 @@ describe('IamPolicyManagementV1', () => {
   let exampleRoleTemplateVersion;
   let exampleRoleAssignmentId;
   let exampleRoleAssignmentETag;
+  let exampleRolePolicyTemplateId;
+  const exampleCustomRoleName = 'TestNodeRole';
+  const exampleCustomRoleDisplayName = 'SDK TestNodeRole';
+  const exampleCustomRoleDescription = 'SDK TestNodeRole';
 
   // begin-common
 
@@ -1895,9 +1899,18 @@ describe('IamPolicyManagementV1', () => {
     originalLog('createRoleTemplate() result:');
     // begin-create_role_template
 
+    const templateRoleModel = {
+      name: exampleCustomRoleName,
+      display_name: exampleCustomRoleDisplayName,
+      service_name: 'am-test-service',
+      description: exampleCustomRoleDescription,
+      actions: ['am-test-service.test.create'],
+    };
+
     const params = {
       name: exampleRoleTemplateName,
       accountId: exampleAccountId,
+      role: templateRoleModel,
     };
 
     let res;
@@ -1957,9 +1970,7 @@ describe('IamPolicyManagementV1', () => {
 
     // TemplateRole
     const templateRoleModel = {
-      name: 'GOSDKTestRoleReplace',
       display_name: 'GOSDKTestRoleReplaceDisplay',
-      service_name: 'am-test-service',
       actions: ['am-test-service.test.delete'],
     };
 
@@ -2030,9 +2041,7 @@ describe('IamPolicyManagementV1', () => {
 
     // TemplateRole
     const templateRoleModel = {
-      name: 'GOSDKTestRoleVersionTemplate',
       display_name: 'GOSDKTestRoleVersionTemplateDisplay',
-      service_name: 'am-test-service',
       actions: ['am-test-service.test.create'],
     };
 
@@ -2138,6 +2147,79 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-commit_role_template
+  });
+  test('createRolePolicyTemplate request example', async () => {
+    expect(exampleAccountId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createRolePolicyTemplate() result:');
+    // begin-create_policy_template
+
+    // Request models needed by this operation.
+
+    // V2PolicyResourceAttribute
+    const v2PolicyResourceAttributeModel = {
+      key: 'serviceName',
+      operator: 'stringEquals',
+      value: 'am-test-service',
+    };
+
+    // V2PolicyResource
+    const v2PolicyResourceModel = {
+      attributes: [v2PolicyResourceAttributeModel],
+    };
+
+    // Roles
+    const rolesModel = {
+      role_id: 'crn:v1:bluemix:public:iam::::role:Viewer',
+    };
+
+    // Role template references
+    const roleTemplateReferencesModel = {
+      id: exampleRoleTemplateId,
+      version: exampleRoleTemplateVersion,
+    };
+
+    // Grant
+    const grantModel = {
+      roles: [rolesModel],
+      role_template_references: [roleTemplateReferencesModel],
+    };
+
+    // Control
+    const controlModel = {
+      grant: grantModel,
+    };
+
+    // TemplatePolicy
+    const templatePolicyModel = {
+      type: 'access',
+      resource: v2PolicyResourceModel,
+      control: controlModel,
+    };
+
+    const params = {
+      name: 'SDKNodeExampleTemplate',
+      accountId: exampleAccountId,
+      policy: templatePolicyModel,
+    };
+
+    try {
+      const res = await iamPolicyManagementService.createPolicyTemplate(params);
+      exampleRolePolicyTemplateId = res.result.id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_policy_template
   });
   test('createRoleTemplateAssignment request example', async () => {
     consoleLogMock.mockImplementation((output) => {
@@ -2295,6 +2377,31 @@ describe('IamPolicyManagementV1', () => {
     }
 
     // end-delete_role_assignment
+  });
+  test('deleteRolePolicyTemplate request example', async () => {
+    expect(exampleRolePolicyTemplateId).not.toBeNull();
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_role_policy_template
+
+    const params = {
+      policyTemplateId: exampleRolePolicyTemplateId,
+    };
+
+    try {
+      await iamPolicyManagementService.deletePolicyTemplate(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_policy_template
   });
   test('deleteRoleTemplateVersion request example', async () => {
     consoleLogMock.mockImplementation((output) => {

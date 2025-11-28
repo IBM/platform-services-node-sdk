@@ -163,6 +163,7 @@ describe('IamPolicyManagementV1_integration', () => {
   let testRoleTemplateId;
   let testRoleTemplateVersion;
   let testRoleTemplateETag;
+  let testRolePolicyTemplateId;
   const testTemplatePolicy = {
     type: 'access',
     description: 'SDK Test Policy',
@@ -1699,9 +1700,9 @@ describe('IamPolicyManagementV1_integration', () => {
       const templateRoleModel = {
         name: testCustomRoleName,
         display_name: testCustomRoleDisplayName,
-        service_name: testServiceName,
+        service_name: 'am-test-service',
         description: testCustomRoleDescription,
-        actions: testCustomRoleActions,
+        actions: ['am-test-service.test.create'],
       };
 
       const params = {
@@ -1722,6 +1723,50 @@ describe('IamPolicyManagementV1_integration', () => {
       testRoleTemplateETag = res.headers.etag;
     });
 
+    test('createRolePolicyTemplate()', async () => {
+      const testRolePolicyTemplate = {
+        ...testTemplatePolicy,
+        resource: {
+          attributes: [
+            {
+              key: 'serviceName',
+              operator: 'stringEquals',
+              value: 'am-test-service',
+            },
+          ],
+        },
+        control: {
+          grant: {
+            roles: policyRoles,
+            role_template_references: [
+              {
+                id: testRoleTemplateId,
+                version: testRoleTemplateVersion,
+              },
+            ],
+          },
+        },
+      };
+      const testTemplateDescription = 'SDK Test template with viewer role';
+      const params = {
+        name: testTemplateName,
+        accountId: testAccountId,
+        policy: testRolePolicyTemplate,
+        description: testTemplateDescription,
+      };
+
+      const response = await service.createPolicyTemplate(params);
+      expect(response).toBeDefined();
+      expect(response.status).toEqual(201);
+      const { result } = response || {};
+      expect(result).toBeDefined();
+      expect(result.policy).toEqual(testRolePolicyTemplate);
+      expect(result.name).toEqual(testTemplateName);
+      expect(result.description).toEqual(testTemplateDescription);
+      expect(result.state).toEqual('active');
+      testRolePolicyTemplateId = result.id;
+    });
+
     test('getRoleTemplate()', async () => {
       const params = {
         roleTemplateId: testRoleTemplateId,
@@ -1739,9 +1784,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       // TemplateRole
       const templateRoleModel = {
-        name: `${testCustomRoleName}Updated`,
         display_name: `${testCustomRoleDisplayName} Updated`,
-        service_name: 'am-test-service',
         description: 'am-test-service service customRole',
         actions: ['am-test-service.test.delete'],
       };
@@ -1801,9 +1844,7 @@ describe('IamPolicyManagementV1_integration', () => {
 
       // TemplateRole
       const templateRoleModel = {
-        name: `${testCustomRoleName}ver`,
         display_name: `${testCustomRoleDisplayName}TemplateVersion`,
-        service_name: 'am-test-service',
         description: 'am-test-service versioon customRole',
         actions: ['am-test-service.test.create'],
       };
@@ -1945,6 +1986,17 @@ describe('IamPolicyManagementV1_integration', () => {
       };
 
       const res = await service.deleteRoleAssignment(params);
+      expect(res).toBeDefined();
+      expect(res.status).toBe(204);
+      expect(res.result).toBeDefined();
+    });
+
+    test('deleteRolePolicyTemplate()', async () => {
+      const params = {
+        policyTemplateId: testRolePolicyTemplateId,
+      };
+
+      const res = await service.deletePolicyTemplate(params);
       expect(res).toBeDefined();
       expect(res.status).toBe(204);
       expect(res.result).toBeDefined();
