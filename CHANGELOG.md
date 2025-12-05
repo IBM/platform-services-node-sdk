@@ -1,3 +1,10 @@
+## [0.79.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.79.0...v0.79.1) (2025-12-05)
+
+
+### Bug Fixes
+
+* **deps:** bump core, jsonwebtoken and jws to avoid CVE ([#320](https://github.com/IBM/platform-services-node-sdk/issues/320)) ([16f9ce9](https://github.com/IBM/platform-services-node-sdk/commit/16f9ce9d8ac1f984f7cd3b362ef7e505bc0bbc7a))
+
 # [0.79.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.78.0...v0.79.0) (2025-11-03)
 
 
