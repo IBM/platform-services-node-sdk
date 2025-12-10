@@ -1,3 +1,10 @@
+# [0.80.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.79.1...v0.80.0) (2025-12-10)
+
+
+### Features
+
+* **IAM Policy Management:** Updated role template references changes and test cases ([#319](https://github.com/IBM/platform-services-node-sdk/issues/319)) ([9aad590](https://github.com/IBM/platform-services-node-sdk/commit/9aad590526c847eecb08b1d3bd7a8988981680df))
+
 ## [0.79.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.79.0...v0.79.1) (2025-12-05)
 
 
