@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.107.1-41b0fbd0-20250825-080732
+ * IBM OpenAPI SDK Code Generator Version: 3.103.0-e8b84313-20250402-201816
  */
 
 /* eslint-disable max-classes-per-file */
@@ -2134,9 +2134,9 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.policyTemplateId - The policy template ID.
    * @param {string} params.version - The policy template version.
-   * @param {string} params.ifMatch - The revision number for updating a policy template version and must match the ETag
+   * @param {string} params.ifMatch - The revision number for updating a policy template version and must match the Etag
    * value of the existing policy template version. The Etag can be retrieved using the GET
-   * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
+   * /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the Etag response header.
    * @param {TemplatePolicy} params.policy - The core set of properties associated with the template's policy object.
    * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
    * the field is included, it changes the name value for all existing versions of the template.
@@ -4085,8 +4085,8 @@ class IamPolicyManagementV1 extends BaseService {
    * account. Use this to describe the purpose or context of the role for enterprise users managing IAM templates.
    * @param {boolean} [params.committed] - Committed status of the template. If committed is set to true, then the
    * template version can no longer be updated.
-   * @param {TemplateRole} [params.role] - The role properties that are created in an action resource when the template
-   * is assigned.
+   * @param {RoleTemplatePrototypeRole} [params.role] - The role properties that are created in an action resource when
+   * the template is assigned.
    * @param {string} [params.acceptLanguage] - Language code for translations
    * * `default` - English
    * * `de` -  German (Standard)
@@ -4282,12 +4282,12 @@ class IamPolicyManagementV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.roleTemplateId - The role template ID.
-   * @param {TemplateRole} params.role - The role properties that are created in an action resource when the template is
-   * assigned.
    * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
    * the field is included, it will change the name value for all existing versions of the template.
    * @param {string} [params.description] - Description of the role template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the role for enterprise users managing IAM templates.
+   * @param {TemplateRole} [params.role] - The role properties that are created in an action resource when the template
+   * is assigned.
    * @param {boolean} [params.committed] - Committed status of the template version. If committed is set to true, then
    * the template version can no longer be updated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -4297,12 +4297,12 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.CreateRoleTemplateVersionParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
     const _params = { ...params };
-    const _requiredParams = ['roleTemplateId', 'role'];
+    const _requiredParams = ['roleTemplateId'];
     const _validParams = [
       'roleTemplateId',
-      'role',
       'name',
       'description',
+      'role',
       'committed',
       'signal',
       'headers',
@@ -4313,9 +4313,9 @@ class IamPolicyManagementV1 extends BaseService {
     }
 
     const body = {
-      'role': _params.role,
       'name': _params.name,
       'description': _params.description,
+      'role': _params.role,
       'committed': _params.committed,
     };
 
@@ -4433,12 +4433,12 @@ class IamPolicyManagementV1 extends BaseService {
    * @param {string} params.ifMatch - The revision number for updating a role template version must match the Etag value
    * of the existing role template version. The Etag can be retrieved using the GET
    * /v1/role_templates/{template_id}/versions/{version} API and looking at the Etag response header.
-   * @param {TemplateRole} params.role - The role properties that are created in an action resource when the template is
-   * assigned.
    * @param {string} [params.name] - Required field when creating a new template. Otherwise, this field is optional. If
    * the field is included, it will change the name value for all existing versions of the template.
    * @param {string} [params.description] - Description of the role template. This is shown to users in the enterprise
    * account. Use this to describe the purpose or context of the role for enterprise users managing IAM templates.
+   * @param {TemplateRole} [params.role] - The role properties that are created in an action resource when the template
+   * is assigned.
    * @param {boolean} [params.committed] - Committed status of the template version. If committed is set to true, then
    * the template version can no longer be updated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -4448,14 +4448,14 @@ class IamPolicyManagementV1 extends BaseService {
     params: IamPolicyManagementV1.ReplaceRoleTemplateParams
   ): Promise<IamPolicyManagementV1.Response<IamPolicyManagementV1.RoleTemplate>> {
     const _params = { ...params };
-    const _requiredParams = ['roleTemplateId', 'version', 'ifMatch', 'role'];
+    const _requiredParams = ['roleTemplateId', 'version', 'ifMatch'];
     const _validParams = [
       'roleTemplateId',
       'version',
       'ifMatch',
-      'role',
       'name',
       'description',
+      'role',
       'committed',
       'signal',
       'headers',
@@ -4466,9 +4466,9 @@ class IamPolicyManagementV1 extends BaseService {
     }
 
     const body = {
-      'role': _params.role,
       'name': _params.name,
       'description': _params.description,
+      'role': _params.role,
       'committed': _params.committed,
     };
 
@@ -5644,9 +5644,9 @@ namespace IamPolicyManagementV1 {
     policyTemplateId: string;
     /** The policy template version. */
     version: string;
-    /** The revision number for updating a policy template version and must match the ETag value of the existing
+    /** The revision number for updating a policy template version and must match the Etag value of the existing
      *  policy template version. The Etag can be retrieved using the GET
-     *  /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the ETag response header.
+     *  /v1/policy_templates/{policy_template_id}/versions/{version} API and looking at the Etag response header.
      */
     ifMatch: string;
     /** The core set of properties associated with the template's policy object. */
@@ -6123,7 +6123,7 @@ namespace IamPolicyManagementV1 {
      */
     committed?: boolean;
     /** The role properties that are created in an action resource when the template is assigned. */
-    role?: TemplateRole;
+    role?: RoleTemplatePrototypeRole;
     /** Language code for translations
      *  * `default` - English
      *  * `de` -  German (Standard)
@@ -6167,8 +6167,6 @@ namespace IamPolicyManagementV1 {
   export interface CreateRoleTemplateVersionParams extends DefaultParams {
     /** The role template ID. */
     roleTemplateId: string;
-    /** The role properties that are created in an action resource when the template is assigned. */
-    role: TemplateRole;
     /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
      *  will change the name value for all existing versions of the template.
      */
@@ -6177,6 +6175,8 @@ namespace IamPolicyManagementV1 {
      *  purpose or context of the role for enterprise users managing IAM templates.
      */
     description?: string;
+    /** The role properties that are created in an action resource when the template is assigned. */
+    role?: TemplateRole;
     /** Committed status of the template version. If committed is set to true, then the template version can no
      *  longer be updated.
      */
@@ -6215,8 +6215,6 @@ namespace IamPolicyManagementV1 {
      *  API and looking at the Etag response header.
      */
     ifMatch: string;
-    /** The role properties that are created in an action resource when the template is assigned. */
-    role: TemplateRole;
     /** Required field when creating a new template. Otherwise, this field is optional. If the field is included, it
      *  will change the name value for all existing versions of the template.
      */
@@ -6225,6 +6223,8 @@ namespace IamPolicyManagementV1 {
      *  purpose or context of the role for enterprise users managing IAM templates.
      */
     description?: string;
+    /** The role properties that are created in an action resource when the template is assigned. */
+    role?: TemplateRole;
     /** Committed status of the template version. If committed is set to true, then the template version can no
      *  longer be updated.
      */
@@ -7339,7 +7339,7 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * On success, it includes the action control assigned.
+   * On success, it includes the role assigned.
    */
   export interface RoleAssignmentResourceCreated {
     /** role id. */
@@ -7350,7 +7350,7 @@ namespace IamPolicyManagementV1 {
    * Set of properties of the assigned resource or error message if assignment failed.
    */
   export interface RoleAssignmentResourceRole {
-    /** On success, it includes the action control assigned. */
+    /** On success, it includes the role assigned. */
     resource_created?: RoleAssignmentResourceCreated;
     /** Body parameters for assignment error. */
     error_message?: AssignmentResourceError;
@@ -7397,7 +7397,7 @@ namespace IamPolicyManagementV1 {
      */
     committed?: boolean;
     /** The role properties that are created in an action resource when the template is assigned. */
-    role?: TemplateRole;
+    role?: RoleTemplatePrototypeRole;
     /** The role template ID. */
     id?: string;
     /** The href URL that links to the role templates API by role template ID. */
@@ -7439,6 +7439,32 @@ namespace IamPolicyManagementV1 {
     previous?: Previous;
     /** List of role templates. */
     role_templates: RoleTemplate[];
+  }
+
+  /**
+   * The role properties that are created in an action resource when the template is assigned.
+   */
+  export interface RoleTemplatePrototypeRole {
+    /** The name of the role that is used in the CRN. This must be alphanumeric and capitalized. */
+    name: string;
+    /** The display the name of the role that is shown in the console. */
+    display_name: string;
+    /** The service name that the role refers. */
+    service_name?: string;
+    /** Description of the role. */
+    description?: string;
+    /** The actions of the role. */
+    actions: string[];
+  }
+
+  /**
+   * A role template reference associated with a policy template.
+   */
+  export interface RoleTemplateReferencesItem {
+    /** The role template ID. */
+    id: string;
+    /** Role template version. */
+    version: string;
   }
 
   /**
@@ -7531,6 +7557,14 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
+   * Specifies the type of access that is granted by the policy.
+   */
+  export interface TemplateControl {
+    /** Permission is granted by the policy. */
+    grant: TemplateGrant;
+  }
+
+  /**
    * policy template count details.
    */
   export interface TemplateCountData {
@@ -7539,6 +7573,11 @@ namespace IamPolicyManagementV1 {
     /** policy template current and limit details with in an account. */
     version?: LimitData;
   }
+
+  /**
+   * Permission is granted by the policy.
+   */
+  export interface TemplateGrant {}
 
   /**
    * The details of the IAM template that was used to create an enterprise-managed policy in your account. When
@@ -7578,7 +7617,7 @@ namespace IamPolicyManagementV1 {
     /** Additional access conditions associated with the policy. */
     rule?: V2PolicyRule;
     /** Specifies the type of access that is granted by the policy. */
-    control?: Control;
+    control?: TemplateControl;
   }
   export namespace TemplatePolicy {
     export namespace Constants {
@@ -7594,12 +7633,10 @@ namespace IamPolicyManagementV1 {
    * The role properties that are created in an action resource when the template is assigned.
    */
   export interface TemplateRole {
-    /** The name of the role that is used in the CRN. This must be alphanumeric and capitalized. */
-    name: string;
     /** The display the name of the role that is shown in the console. */
     display_name: string;
     /** The service name that the role refers. */
-    service_name: string;
+    service_name?: string;
     /** Description of the role. */
     description?: string;
     /** The actions of the role. */
@@ -8003,6 +8040,22 @@ namespace IamPolicyManagementV1 {
         FAILED = 'failed',
       }
     }
+  }
+
+  /**
+   * TemplateGrantRoleReferences.
+   */
+  export interface TemplateGrantRoleReferences extends TemplateGrant {
+    /** A set of role template reference IDs granted by the policy. */
+    role_template_references: RoleTemplateReferencesItem[];
+  }
+
+  /**
+   * TemplateGrantRoles.
+   */
+  export interface TemplateGrantRoles extends TemplateGrant {
+    /** A set of role Cloud Resource Names (CRNs) granted by the policy. */
+    roles: Roles[];
   }
 
   /**
