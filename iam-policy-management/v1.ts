@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.107.1-41b0fbd0-20250825-080732
+ * IBM OpenAPI SDK Code Generator Version: 3.103.0-e8b84313-20250402-201816
  */
 
 /* eslint-disable max-classes-per-file */
@@ -8043,9 +8043,9 @@ namespace IamPolicyManagementV1 {
   }
 
   /**
-   * TemplateGrantRoleTemplateReferences.
+   * TemplateGrantRoleReferences.
    */
-  export interface TemplateGrantRoleTemplateReferences extends TemplateGrant {
+  export interface TemplateGrantRoleReferences extends TemplateGrant {
     /** A set of role template reference IDs granted by the policy. */
     role_template_references: RoleTemplateReferencesItem[];
   }
