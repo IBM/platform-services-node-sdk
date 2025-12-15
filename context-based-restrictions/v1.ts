@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.86.0-bc6f14b3-20240221-193958
+ * IBM OpenAPI SDK Code Generator Version: 3.108.0-56772134-20251111-102802
  */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -127,16 +128,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'name',
-      'accountId',
-      'addresses',
-      'description',
-      'excluded',
-      'xCorrelationId',
-      'transactionId',
-      'headers',
-    ];
+    const _validParams = ['name', 'accountId', 'addresses', 'description', 'excluded', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -150,11 +142,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'excluded': _params.excluded,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createZone'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'createZone');
 
     const parameters = {
       options: {
@@ -166,6 +154,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -174,6 +163,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -206,14 +198,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ZoneList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = [
-      'accountId',
-      'xCorrelationId',
-      'transactionId',
-      'name',
-      'sort',
-      'headers',
-    ];
+    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'name', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -225,11 +210,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'sort': _params.sort,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listZones'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listZones');
 
     const parameters = {
       options: {
@@ -241,6 +222,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -248,6 +230,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -277,7 +262,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const _requiredParams = ['zoneId'];
-    const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -287,11 +272,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'zone_id': _params.zoneId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getZone'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getZone');
 
     const parameters = {
       options: {
@@ -303,6 +284,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -310,6 +292,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -348,18 +333,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Zone>> {
     const _params = { ...params };
     const _requiredParams = ['zoneId', 'ifMatch'];
-    const _validParams = [
-      'zoneId',
-      'ifMatch',
-      'name',
-      'accountId',
-      'addresses',
-      'description',
-      'excluded',
-      'xCorrelationId',
-      'transactionId',
-      'headers',
-    ];
+    const _validParams = ['zoneId', 'ifMatch', 'name', 'accountId', 'addresses', 'description', 'excluded', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -377,11 +351,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'zone_id': _params.zoneId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceZone'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceZone');
 
     const parameters = {
       options: {
@@ -394,6 +364,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -403,6 +374,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -432,7 +406,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['zoneId'];
-    const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = ['zoneId', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -442,11 +416,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'zone_id': _params.zoneId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteZone'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteZone');
 
     const parameters = {
       options: {
@@ -458,12 +428,16 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'X-Correlation-Id': _params.xCorrelationId,
             'Transaction-Id': _params.transactionId,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -493,7 +467,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTargetList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['xCorrelationId', 'transactionId', 'type', 'headers'];
+    const _validParams = ['xCorrelationId', 'transactionId', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -503,11 +477,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'type': _params.type,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listAvailableServicerefTargets'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listAvailableServicerefTargets');
 
     const parameters = {
       options: {
@@ -519,6 +489,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -526,6 +497,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -555,7 +529,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.ServiceRefTarget>> {
     const _params = { ...params };
     const _requiredParams = ['serviceName'];
-    const _validParams = ['serviceName', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = ['serviceName', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -565,11 +539,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'service_name': _params.serviceName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getServicerefTarget'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getServicerefTarget');
 
     const parameters = {
       options: {
@@ -581,6 +551,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -588,6 +559,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -627,16 +601,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'contexts',
-      'resources',
-      'description',
-      'operations',
-      'enforcementMode',
-      'xCorrelationId',
-      'transactionId',
-      'headers',
-    ];
+    const _validParams = ['contexts', 'resources', 'description', 'operations', 'enforcementMode', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -650,11 +615,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'enforcement_mode': _params.enforcementMode,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createRule'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'createRule');
 
     const parameters = {
       options: {
@@ -666,6 +627,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -674,6 +636,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -714,22 +679,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.RuleList>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = [
-      'accountId',
-      'xCorrelationId',
-      'transactionId',
-      'region',
-      'resource',
-      'resourceType',
-      'serviceInstance',
-      'serviceName',
-      'serviceType',
-      'serviceGroupId',
-      'zoneId',
-      'sort',
-      'enforcementMode',
-      'headers',
-    ];
+    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'region', 'resource', 'resourceType', 'serviceInstance', 'serviceName', 'serviceType', 'serviceGroupId', 'zoneId', 'sort', 'enforcementMode', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -749,11 +699,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'enforcement_mode': _params.enforcementMode,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listRules'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listRules');
 
     const parameters = {
       options: {
@@ -765,6 +711,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -772,6 +719,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -801,7 +751,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const _requiredParams = ['ruleId'];
-    const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -811,11 +761,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'rule_id': _params.ruleId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getRule'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getRule');
 
     const parameters = {
       options: {
@@ -827,6 +773,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -834,6 +781,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -874,18 +824,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.Rule>> {
     const _params = { ...params };
     const _requiredParams = ['ruleId', 'ifMatch'];
-    const _validParams = [
-      'ruleId',
-      'ifMatch',
-      'contexts',
-      'resources',
-      'description',
-      'operations',
-      'enforcementMode',
-      'xCorrelationId',
-      'transactionId',
-      'headers',
-    ];
+    const _validParams = ['ruleId', 'ifMatch', 'contexts', 'resources', 'description', 'operations', 'enforcementMode', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -903,11 +842,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'rule_id': _params.ruleId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceRule'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceRule');
 
     const parameters = {
       options: {
@@ -920,6 +855,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -929,6 +865,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -958,7 +897,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['ruleId'];
-    const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = ['ruleId', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -968,11 +907,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'rule_id': _params.ruleId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteRule'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteRule');
 
     const parameters = {
       options: {
@@ -984,12 +919,16 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'X-Correlation-Id': _params.xCorrelationId,
             'Transaction-Id': _params.transactionId,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1022,7 +961,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.AccountSettings>> {
     const _params = { ...params };
     const _requiredParams = ['accountId'];
-    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'headers'];
+    const _validParams = ['accountId', 'xCorrelationId', 'transactionId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1032,11 +971,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'account_id': _params.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getAccountSettings'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountSettings');
 
     const parameters = {
       options: {
@@ -1048,6 +983,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -1055,6 +991,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1089,14 +1028,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
   ): Promise<ContextBasedRestrictionsV1.Response<ContextBasedRestrictionsV1.OperationsList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'xCorrelationId',
-      'transactionId',
-      'serviceName',
-      'serviceGroupId',
-      'resourceType',
-      'headers',
-    ];
+    const _validParams = ['xCorrelationId', 'transactionId', 'serviceName', 'serviceGroupId', 'resourceType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1108,11 +1040,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
       'resource_type': _params.resourceType,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listAvailableServiceOperations'
-    );
+    const sdkHeaders = getSdkHeaders(ContextBasedRestrictionsV1.DEFAULT_SERVICE_NAME, 'v1', 'listAvailableServiceOperations');
 
     const parameters = {
       options: {
@@ -1124,6 +1052,7 @@ class ContextBasedRestrictionsV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'X-Correlation-Id': _params.xCorrelationId,
@@ -1131,6 +1060,9 @@ class ContextBasedRestrictionsV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1155,7 +1087,7 @@ namespace ContextBasedRestrictionsV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface EmptyObject {}
+  export interface EmptyObject { }
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -1166,8 +1098,13 @@ namespace ContextBasedRestrictionsV1 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `createZone` operation. */
-  export interface CreateZoneParams {
+  export interface CreateZoneParams extends DefaultParams {
     /** The name of the zone. */
     name?: string;
     /** The id of the account owning this zone. */
@@ -1191,11 +1128,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listZones` operation. */
-  export interface ListZonesParams {
+  export interface ListZonesParams extends DefaultParams {
     /** The ID of the managing account. */
     accountId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1215,11 +1151,10 @@ namespace ContextBasedRestrictionsV1 {
      *  [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
      */
     sort?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getZone` operation. */
-  export interface GetZoneParams {
+  export interface GetZoneParams extends DefaultParams {
     /** The ID of a zone. */
     zoneId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1233,11 +1168,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceZone` operation. */
-  export interface ReplaceZoneParams {
+  export interface ReplaceZoneParams extends DefaultParams {
     /** The ID of a zone. */
     zoneId: string;
     /** The current revision of the resource being updated. This can be found in the Create/Get/Update resource
@@ -1267,11 +1201,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteZone` operation. */
-  export interface DeleteZoneParams {
+  export interface DeleteZoneParams extends DefaultParams {
     /** The ID of a zone. */
     zoneId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1285,11 +1218,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listAvailableServicerefTargets` operation. */
-  export interface ListAvailableServicerefTargetsParams {
+  export interface ListAvailableServicerefTargetsParams extends DefaultParams {
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
      *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
@@ -1303,7 +1235,6 @@ namespace ContextBasedRestrictionsV1 {
     transactionId?: string;
     /** Specifies the types of services to retrieve. */
     type?: ListAvailableServicerefTargetsConstants.Type | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listAvailableServicerefTargets` operation. */
@@ -1316,7 +1247,7 @@ namespace ContextBasedRestrictionsV1 {
   }
 
   /** Parameters for the `getServicerefTarget` operation. */
-  export interface GetServicerefTargetParams {
+  export interface GetServicerefTargetParams extends DefaultParams {
     /** The name of a service. */
     serviceName: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1330,11 +1261,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createRule` operation. */
-  export interface CreateRuleParams {
+  export interface CreateRuleParams extends DefaultParams {
     /** The contexts this rule applies to. */
     contexts?: RuleContext[];
     /** The resources this rule apply to. */
@@ -1360,7 +1290,6 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createRule` operation. */
@@ -1374,7 +1303,7 @@ namespace ContextBasedRestrictionsV1 {
   }
 
   /** Parameters for the `listRules` operation. */
-  export interface ListRulesParams {
+  export interface ListRulesParams extends DefaultParams {
     /** The ID of the managing account. */
     accountId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1410,7 +1339,6 @@ namespace ContextBasedRestrictionsV1 {
     sort?: string;
     /** The rule's `enforcement_mode` attribute. */
     enforcementMode?: ListRulesConstants.EnforcementMode | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listRules` operation. */
@@ -1424,7 +1352,7 @@ namespace ContextBasedRestrictionsV1 {
   }
 
   /** Parameters for the `getRule` operation. */
-  export interface GetRuleParams {
+  export interface GetRuleParams extends DefaultParams {
     /** The ID of a rule. */
     ruleId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1438,11 +1366,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceRule` operation. */
-  export interface ReplaceRuleParams {
+  export interface ReplaceRuleParams extends DefaultParams {
     /** The ID of a rule. */
     ruleId: string;
     /** The current revision of the resource being updated. This can be found in the Create/Get/Update resource
@@ -1474,7 +1401,6 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `replaceRule` operation. */
@@ -1488,7 +1414,7 @@ namespace ContextBasedRestrictionsV1 {
   }
 
   /** Parameters for the `deleteRule` operation. */
-  export interface DeleteRuleParams {
+  export interface DeleteRuleParams extends DefaultParams {
     /** The ID of a rule. */
     ruleId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1502,11 +1428,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getAccountSettings` operation. */
-  export interface GetAccountSettingsParams {
+  export interface GetAccountSettingsParams extends DefaultParams {
     /** The ID of the account the settings are for. */
     accountId: string;
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
@@ -1520,11 +1445,10 @@ namespace ContextBasedRestrictionsV1 {
      *  `Transaction-Id`.
      */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listAvailableServiceOperations` operation. */
-  export interface ListAvailableServiceOperationsParams {
+  export interface ListAvailableServiceOperationsParams extends DefaultParams {
     /** The supplied or generated value of this header is logged for a request and repeated in a response header for
      *  the corresponding response. The same value is used for downstream requests and retries of those requests. If a
      *  value of this headers is not supplied in a request, the service generates a random (version 4) UUID.
@@ -1542,14 +1466,15 @@ namespace ContextBasedRestrictionsV1 {
     serviceGroupId?: string;
     /** The type of resource. */
     resourceType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
    * model interfaces
    ************************/
 
-  /** Service API Type details. */
+  /**
+   * Service API Type details.
+   */
   export interface APIType {
     /** The id of the API type. */
     api_type_id: string;
@@ -1565,7 +1490,9 @@ namespace ContextBasedRestrictionsV1 {
     enforcement_modes?: string[];
   }
 
-  /** An output account settings. */
+  /**
+   * An output account settings.
+   */
   export interface AccountSettings {
     /** The globally unique ID of the account settings. */
     id: string;
@@ -1576,26 +1503,28 @@ namespace ContextBasedRestrictionsV1 {
     /** the max number of zones allowed for the account. */
     zone_count_limit: number;
     /** the max number of rules with tags allowed for the account. */
-    tags_rule_count_limit?: number;
+    tags_rule_count_limit: number;
     /** the current number of rules used by the account. */
     current_rule_count: number;
     /** the current number of zones used by the account. */
     current_zone_count: number;
     /** the current number of rules with tags used by the account. */
-    current_tags_rule_count?: number;
+    current_tags_rule_count: number;
     /** The href link to the resource. */
     href: string;
     /** The time the resource was created. */
-    created_at: string;
+    created_at?: string;
     /** IAM ID of the user or service which created the resource. */
-    created_by_id: string;
+    created_by_id?: string;
     /** The last time the resource was modified. */
-    last_modified_at: string;
+    last_modified_at?: string;
     /** IAM ID of the user or service which modified the resource. */
-    last_modified_by_id: string;
+    last_modified_by_id?: string;
   }
 
-  /** Service API Type actions. */
+  /**
+   * Service API Type actions.
+   */
   export interface Action {
     /** The id of the action. */
     action_id: string;
@@ -1603,7 +1532,9 @@ namespace ContextBasedRestrictionsV1 {
     description: string;
   }
 
-  /** A zone address. */
+  /**
+   * A zone address.
+   */
   export interface Address {
     /** The type of address. */
     type?: Address.Constants.Type | string;
@@ -1621,24 +1552,32 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
-  /** The operations this rule applies to. */
+  /**
+   * The operations this rule applies to.
+   */
   export interface NewRuleOperations {
     /** The API types this rule applies to. */
     api_types: NewRuleOperationsApiTypesItem[];
   }
 
-  /** NewRuleOperationsApiTypesItem. */
+  /**
+   * NewRuleOperationsApiTypesItem.
+   */
   export interface NewRuleOperationsApiTypesItem {
     api_type_id: string;
   }
 
-  /** The response object of the `list_available_service_operations` operation. */
+  /**
+   * The response object of the `list_available_service_operations` operation.
+   */
   export interface OperationsList {
     /** The returned API types. */
     api_types: APIType[];
   }
 
-  /** An rule resource. */
+  /**
+   * An rule resource.
+   */
   export interface Resource {
     /** The resource attributes. */
     attributes: ResourceAttribute[];
@@ -1646,7 +1585,9 @@ namespace ContextBasedRestrictionsV1 {
     tags?: ResourceTagAttribute[];
   }
 
-  /** A rule resource attribute. */
+  /**
+   * A rule resource attribute.
+   */
   export interface ResourceAttribute {
     /** The attribute name. */
     name: string;
@@ -1656,7 +1597,9 @@ namespace ContextBasedRestrictionsV1 {
     operator?: string;
   }
 
-  /** A rule resource tag attribute. */
+  /**
+   * A rule resource tag attribute.
+   */
   export interface ResourceTagAttribute {
     /** The tag attribute name. */
     name: string;
@@ -1666,7 +1609,9 @@ namespace ContextBasedRestrictionsV1 {
     operator?: string;
   }
 
-  /** An output rule. */
+  /**
+   * An output rule.
+   */
   export interface Rule {
     /** The globally unique ID of the rule. */
     id: string;
@@ -1708,13 +1653,17 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
-  /** A rule context. */
+  /**
+   * A rule context.
+   */
   export interface RuleContext {
     /** The attributes. */
     attributes: RuleContextAttribute[];
   }
 
-  /** An rule context attribute. */
+  /**
+   * An rule context attribute.
+   */
   export interface RuleContextAttribute {
     /** The attribute name. */
     name: string;
@@ -1722,7 +1671,9 @@ namespace ContextBasedRestrictionsV1 {
     value: string;
   }
 
-  /** The response object of the ListRules operation. */
+  /**
+   * The response object of the ListRules operation.
+   */
   export interface RuleList {
     /** The number of returned results. */
     count: number;
@@ -1730,7 +1681,9 @@ namespace ContextBasedRestrictionsV1 {
     rules: Rule[];
   }
 
-  /** Summary information about a service reference target. */
+  /**
+   * Summary information about a service reference target.
+   */
   export interface ServiceRefTarget {
     /** The name of the service. */
     service_name: string;
@@ -1738,9 +1691,13 @@ namespace ContextBasedRestrictionsV1 {
     service_type?: string;
     /** The locations the service is available. */
     locations?: ServiceRefTargetLocationsItem[];
+    /** The display name of the service. */
+    display_name?: string;
   }
 
-  /** A list of service reference targets. */
+  /**
+   * A list of service reference targets.
+   */
   export interface ServiceRefTargetList {
     /** The number of returned results. */
     count: number;
@@ -1748,7 +1705,9 @@ namespace ContextBasedRestrictionsV1 {
     targets: ServiceRefTarget[];
   }
 
-  /** ServiceRefTargetLocationsItem. */
+  /**
+   * ServiceRefTargetLocationsItem.
+   */
   export interface ServiceRefTargetLocationsItem {
     /** The location display name. */
     display_name?: string;
@@ -1758,7 +1717,9 @@ namespace ContextBasedRestrictionsV1 {
     name: string;
   }
 
-  /** A service reference value. */
+  /**
+   * A service reference value.
+   */
   export interface ServiceRefValue {
     /** The id of the account owning the service. */
     account_id: string;
@@ -1772,7 +1733,9 @@ namespace ContextBasedRestrictionsV1 {
     location?: string;
   }
 
-  /** An output zone. */
+  /**
+   * An output zone.
+   */
   export interface Zone {
     /** The globally unique ID of the zone. */
     id: string;
@@ -1806,7 +1769,9 @@ namespace ContextBasedRestrictionsV1 {
     last_modified_by_id: string;
   }
 
-  /** The response object of the ListZones operation. */
+  /**
+   * The response object of the ListZones operation.
+   */
   export interface ZoneList {
     /** The number of returned results. */
     count: number;
@@ -1814,7 +1779,9 @@ namespace ContextBasedRestrictionsV1 {
     zones: ZoneSummary[];
   }
 
-  /** An output zone summary. */
+  /**
+   * An output zone summary.
+   */
   export interface ZoneSummary {
     /** The globally unique ID of the zone. */
     id: string;
@@ -1842,7 +1809,9 @@ namespace ContextBasedRestrictionsV1 {
     last_modified_by_id: string;
   }
 
-  /** A single IP address. IPv4 and IPv6 are supported. */
+  /**
+   * A single IP address. IPv4 and IPv6 are supported.
+   */
   export interface AddressIPAddress extends Address {
     /** The type of address. */
     type: AddressIPAddress.Constants.Type | string;
@@ -1858,7 +1827,9 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
-  /** An IP address range. IPv4 and IPv6 are supported. */
+  /**
+   * An IP address range. IPv4 and IPv6 are supported.
+   */
   export interface AddressIPAddressRange extends Address {
     /** The type of address. */
     type: AddressIPAddressRange.Constants.Type | string;
@@ -1874,7 +1845,9 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
-  /** A service reference. */
+  /**
+   * A service reference.
+   */
   export interface AddressServiceRef extends Address {
     /** The type of address. */
     type: AddressServiceRef.Constants.Type | string;
@@ -1890,7 +1863,9 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
-  /** A subnet in CIDR format. */
+  /**
+   * A subnet in CIDR format.
+   */
   export interface AddressSubnet extends Address {
     /** The type of address. */
     type: AddressSubnet.Constants.Type | string;
@@ -1906,7 +1881,9 @@ namespace ContextBasedRestrictionsV1 {
     }
   }
 
-  /** A single VPC address. */
+  /**
+   * A single VPC address.
+   */
   export interface AddressVPC extends Address {
     /** The type of address. */
     type: AddressVPC.Constants.Type | string;
