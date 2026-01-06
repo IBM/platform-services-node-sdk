@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -993,6 +993,8 @@ class IamIdentityV1 extends BaseService {
    * access, delete or rotate the API key. Available only for user API keys.
    * @param {string} [params.actionWhenLeaked] - Defines the action to take when API key is leaked, valid values are
    * 'none', 'disable' and 'delete'.
+   * @param {string} [params.expiresAt] - Date and time when the API key becomes invalid, ISO 8601 datetime in the
+   * format 'yyyy-MM-ddTHH:mm+0000'.
    * @param {string} [params.entityLock] - Indicates if the API key is locked for further write operations. False by
    * default.
    * @param {string} [params.entityDisable] - Indicates if the API key is disabled. False by default.
@@ -1013,6 +1015,7 @@ class IamIdentityV1 extends BaseService {
       'storeValue',
       'supportSessions',
       'actionWhenLeaked',
+      'expiresAt',
       'entityLock',
       'entityDisable',
       'signal',
@@ -1032,6 +1035,7 @@ class IamIdentityV1 extends BaseService {
       'store_value': _params.storeValue,
       'support_sessions': _params.supportSessions,
       'action_when_leaked': _params.actionWhenLeaked,
+      'expires_at': _params.expiresAt,
     };
 
     const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'createApiKey');
@@ -1203,6 +1207,8 @@ class IamIdentityV1 extends BaseService {
    * access, delete or rotate the API key. Available only for user API keys.
    * @param {string} [params.actionWhenLeaked] - Defines the action to take when API key is leaked, valid values are
    * 'none', 'disable' and 'delete'.
+   * @param {string} [params.expiresAt] - Date and time when the API key becomes invalid, ISO 8601 datetime in the
+   * format 'yyyy-MM-ddTHH:mm+0000'.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>>}
    */
@@ -1218,6 +1224,7 @@ class IamIdentityV1 extends BaseService {
       'description',
       'supportSessions',
       'actionWhenLeaked',
+      'expiresAt',
       'signal',
       'headers',
     ];
@@ -1231,6 +1238,7 @@ class IamIdentityV1 extends BaseService {
       'description': _params.description,
       'support_sessions': _params.supportSessions,
       'action_when_leaked': _params.actionWhenLeaked,
+      'expires_at': _params.expiresAt,
     };
 
     const path = {
@@ -6040,6 +6048,8 @@ namespace IamIdentityV1 {
     supportSessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     actionWhenLeaked?: string;
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    expiresAt?: string;
     /** Indicates if the API key is locked for further write operations. False by default. */
     entityLock?: string;
     /** Indicates if the API key is disabled. False by default. */
@@ -6090,6 +6100,8 @@ namespace IamIdentityV1 {
     supportSessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     actionWhenLeaked?: string;
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    expiresAt?: string;
   }
 
   /** Parameters for the `deleteApiKey` operation. */
@@ -7708,6 +7720,8 @@ namespace IamIdentityV1 {
     support_sessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     action_when_leaked?: string;
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    expires_at?: string;
     /** The optional description of the API key. The 'description' property is only available if a description was
      *  provided during a create of an API key.
      */
@@ -7751,6 +7765,10 @@ namespace IamIdentityV1 {
      *  allow storing of API keys for users.
      */
     store_value?: boolean;
+    /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
+    action_when_leaked?: string;
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    expires_at?: string;
   }
 
   /**
@@ -8045,16 +8063,6 @@ namespace IamIdentityV1 {
     required: boolean;
     /** Describes whether the enrollment type is enrolled. */
     enrolled: boolean;
-  }
-
-  /**
-   * MfaEnrollments.
-   */
-  export interface MfaEnrollments {
-    /** currently effective mfa type i.e. id_based_mfa or account_based_mfa. */
-    effective_mfa_type: string;
-    id_based_mfa?: IdBasedMfaEnrollment;
-    account_based_mfa?: AccountBasedMfaEnrollment;
   }
 
   /**
@@ -8935,7 +8943,10 @@ namespace IamIdentityV1 {
     username: string;
     /** Email of the user. */
     email?: string;
-    enrollments: MfaEnrollments;
+    /** currently effective mfa type i.e. id_based_mfa or account_based_mfa. */
+    effective_mfa_type: string;
+    id_based_mfa: IdBasedMfaEnrollment;
+    account_based_mfa: AccountBasedMfaEnrollment;
   }
 }
 
