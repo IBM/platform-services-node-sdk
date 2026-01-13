@@ -1,3 +1,10 @@
+# [0.81.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.80.0...v0.81.0) (2026-01-13)
+
+
+### Features
+
+* **IAM Identity:** add apikey expiration ([#322](https://github.com/IBM/platform-services-node-sdk/issues/322)) ([a3a4812](https://github.com/IBM/platform-services-node-sdk/commit/a3a4812a57d80648a4aafc45401011abc42ae58f))
+
 # [0.80.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.79.1...v0.80.0) (2025-12-10)
 
 
