@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -212,6 +212,8 @@ describe('IamIdentityV1', () => {
         description: 'testString',
         apikey: 'testString',
         store_value: true,
+        action_when_leaked: 'testString',
+        expires_at: 'testString',
       };
 
       function __createServiceIdTest() {
@@ -1292,6 +1294,7 @@ describe('IamIdentityV1', () => {
         const storeValue = true;
         const supportSessions = true;
         const actionWhenLeaked = 'testString';
+        const expiresAt = 'testString';
         const entityLock = 'false';
         const entityDisable = 'false';
         const createApiKeyParams = {
@@ -1303,6 +1306,7 @@ describe('IamIdentityV1', () => {
           storeValue,
           supportSessions,
           actionWhenLeaked,
+          expiresAt,
           entityLock,
           entityDisable,
         };
@@ -1331,6 +1335,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.store_value).toEqual(storeValue);
         expect(mockRequestOptions.body.support_sessions).toEqual(supportSessions);
         expect(mockRequestOptions.body.action_when_leaked).toEqual(actionWhenLeaked);
+        expect(mockRequestOptions.body.expires_at).toEqual(expiresAt);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -1560,6 +1565,7 @@ describe('IamIdentityV1', () => {
         const description = 'testString';
         const supportSessions = true;
         const actionWhenLeaked = 'testString';
+        const expiresAt = 'testString';
         const updateApiKeyParams = {
           id,
           ifMatch,
@@ -1567,6 +1573,7 @@ describe('IamIdentityV1', () => {
           description,
           supportSessions,
           actionWhenLeaked,
+          expiresAt,
         };
 
         const updateApiKeyResult = iamIdentityService.updateApiKey(updateApiKeyParams);
@@ -1588,6 +1595,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.description).toEqual(description);
         expect(mockRequestOptions.body.support_sessions).toEqual(supportSessions);
         expect(mockRequestOptions.body.action_when_leaked).toEqual(actionWhenLeaked);
+        expect(mockRequestOptions.body.expires_at).toEqual(expiresAt);
         expect(mockRequestOptions.path.id).toEqual(id);
       }
 

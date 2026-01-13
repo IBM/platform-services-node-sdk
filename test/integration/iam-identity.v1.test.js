@@ -140,6 +140,7 @@ describe('IamIdentityV1_integration', () => {
       name: apikeyName,
       iamId,
       description: 'NodeSDK test apikey #1',
+      expiresAt: '2049-01-02T18:30:00+0000',
     };
 
     iamIdentityService
@@ -306,6 +307,7 @@ describe('IamIdentityV1_integration', () => {
       id: apikeyId1,
       ifMatch: apikeyEtag1,
       description: newDescription,
+      expiresAt: "2026-01-02T18:30:00+0000",
     };
 
     iamIdentityService
@@ -474,10 +476,17 @@ describe('IamIdentityV1_integration', () => {
   });
 
   test('createServiceId()', (done) => {
+    const apiKeyInsideCreateServiceIdRequestModel = {
+      name: 'APIKey Name',
+      store_value: true,
+      expires_at: '2049-01-02T18:30:00+0000',
+    };
+
     const params = {
       accountId,
       name: serviceIdName,
       description: 'NodeSDK ServiceId desc',
+      apikey: apiKeyInsideCreateServiceIdRequestModel,
     };
 
     iamIdentityService
