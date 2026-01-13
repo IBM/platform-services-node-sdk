@@ -92,7 +92,7 @@ describe('ContextBasedRestrictionsV1_integration', () => {
       ref: {
         account_id: accountId,
         service_name: 'containers-kubernetes',
-        location: 'us-south',
+        location: 'dal',
       },
     };
 
