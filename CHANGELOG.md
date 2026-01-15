@@ -1,3 +1,10 @@
+## [0.81.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.81.0...v0.81.1) (2026-01-15)
+
+
+### Bug Fixes
+
+* **Context-Based Restrictions:** add display name to service ref response ([#321](https://github.com/IBM/platform-services-node-sdk/issues/321)) ([45841cb](https://github.com/IBM/platform-services-node-sdk/commit/45841cbad2c4614fe83b9f6b70be491612ea170f))
+
 # [0.81.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.80.0...v0.81.0) (2026-01-13)
 
 
