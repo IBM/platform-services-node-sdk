@@ -61,6 +61,21 @@ jobs:
           npm run test-unit-travis
           npm run lint
 
+  results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Final Test Results
+    needs: [build]
+    steps:
+      - run: |
+          result="${{ needs.build.result }}"
+          if [[ $result == "success" || $result == "skipped" ]]; then
+            exit 0
+          else
+            exit 1
+          fi
+
+
   publish-release:
     if: "github.ref_name == 'main' && github.event_name != 'pull_request'"
     name: semantic-release
