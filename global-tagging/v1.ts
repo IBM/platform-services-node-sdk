@@ -1137,6 +1137,8 @@ namespace GlobalTaggingV1 {
     resource_id: string;
     /** It is `true` if the operation exits with an error. */
     is_error?: boolean;
+    /** Error message returned when the operation fails. */
+    message?: string;
   }
 }
 
