@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.105.0-3c13b041-20250605-193116
+ * IBM OpenAPI SDK Code Generator Version: 3.111.0-1bfb72c2-20260206-185521
  */
 
 import * as extend from 'extend';
@@ -152,22 +152,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagList>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'xRequestId',
-      'xCorrelationId',
-      'accountId',
-      'tagType',
-      'fullData',
-      'providers',
-      'attachedTo',
-      'offset',
-      'limit',
-      'timeout',
-      'orderByName',
-      'attachedOnly',
-      'signal',
-      'headers',
-    ];
+    const _validParams = ['xRequestId', 'xCorrelationId', 'accountId', 'tagType', 'fullData', 'providers', 'attachedTo', 'offset', 'limit', 'timeout', 'orderByName', 'attachedOnly', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -245,15 +230,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.CreateTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagNames'];
-    const _validParams = [
-      'tagNames',
-      'xRequestId',
-      'xCorrelationId',
-      'accountId',
-      'tagType',
-      'signal',
-      'headers',
-    ];
+    const _validParams = ['tagNames', 'xRequestId', 'xCorrelationId', 'accountId', 'tagType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -329,15 +306,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagsResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'xRequestId',
-      'xCorrelationId',
-      'providers',
-      'accountId',
-      'tagType',
-      'signal',
-      'headers',
-    ];
+    const _validParams = ['xRequestId', 'xCorrelationId', 'providers', 'accountId', 'tagType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -410,16 +379,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.DeleteTagResults>> {
     const _params = { ...params };
     const _requiredParams = ['tagName'];
-    const _validParams = [
-      'tagName',
-      'xRequestId',
-      'xCorrelationId',
-      'providers',
-      'accountId',
-      'tagType',
-      'signal',
-      'headers',
-    ];
+    const _validParams = ['tagName', 'xRequestId', 'xCorrelationId', 'providers', 'accountId', 'tagType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -507,20 +467,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'tagName',
-      'tagNames',
-      'resources',
-      'query',
-      'xRequestId',
-      'xCorrelationId',
-      'accountId',
-      'tagType',
-      'replace',
-      'update',
-      'signal',
-      'headers',
-    ];
+    const _validParams = ['tagName', 'tagNames', 'resources', 'query', 'xRequestId', 'xCorrelationId', 'accountId', 'tagType', 'replace', 'update', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -604,18 +551,7 @@ class GlobalTaggingV1 extends BaseService {
   ): Promise<GlobalTaggingV1.Response<GlobalTaggingV1.TagResults>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = [
-      'tagName',
-      'tagNames',
-      'resources',
-      'query',
-      'xRequestId',
-      'xCorrelationId',
-      'accountId',
-      'tagType',
-      'signal',
-      'headers',
-    ];
+    const _validParams = ['tagName', 'tagNames', 'resources', 'query', 'xRequestId', 'xCorrelationId', 'accountId', 'tagType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -693,10 +629,10 @@ namespace GlobalTaggingV1 {
    * request interfaces
    ************************/
 
-  interface DefaultParams {
-    headers?: OutgoingHttpHeaders;
-    signal?: AbortSignal;
-  }
+   interface DefaultParams {
+     headers?: OutgoingHttpHeaders;
+     signal?: AbortSignal;
+   }
 
   /** Parameters for the `listTags` operation. */
   export interface ListTagsParams extends DefaultParams {
