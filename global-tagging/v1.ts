@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.105.0-3c13b041-20250605-193116
+ * IBM OpenAPI SDK Code Generator Version: 3.111.0-1bfb72c2-20260206-185521
  */
 
 import * as extend from 'extend';
@@ -1137,6 +1137,8 @@ namespace GlobalTaggingV1 {
     resource_id: string;
     /** It is `true` if the operation exits with an error. */
     is_error?: boolean;
+    /** Error message returned when the operation fails. */
+    message?: string;
   }
 }
 
