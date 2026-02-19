@@ -419,7 +419,8 @@ describe('GlobalTaggingV1_integration', () => {
 
     expect(result.results).toBeDefined();
     result.results.forEach((elem) => {
-      expect(elem.is_error).toBe(false);
+      // tags are already deleted at detach time if not attached to any resource
+      expect(elem.is_error).toBe(true);
     });
   });
 

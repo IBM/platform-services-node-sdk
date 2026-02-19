@@ -139,7 +139,12 @@ describe('GlobalTaggingV1', () => {
     originalLog('attachTag() result:');
     // begin-attach_tag
 
+    const resourceModel = {
+      resource_id: resourceCrn,
+    };
+
     const params = {
+      resources: [resourceModel],
       tagNames: ["tag_test_1", "tag_test_2"],
       tagType: 'user',
     };
@@ -167,7 +172,12 @@ describe('GlobalTaggingV1', () => {
     originalLog('detachTag() result:');
     // begin-detach_tag
 
+    const resourceModel = {
+      resource_id: resourceCrn,
+    };
+
     const params = {
+      resources: [resourceModel],
       tagNames: ["tag_test_1", "tag_test_2"],
       tagType: 'user',
     };
