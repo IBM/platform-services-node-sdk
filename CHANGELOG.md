@@ -1,3 +1,10 @@
+## [0.81.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.81.1...v0.81.2) (2026-02-19)
+
+
+### Bug Fixes
+
+* **Global Tagging:** add `message` field to `TagResultsItem` ([#326](https://github.com/IBM/platform-services-node-sdk/issues/326)) ([5be967a](https://github.com/IBM/platform-services-node-sdk/commit/5be967a9d9be66adc9e87a6f21127cd96527c2ca))
+
 ## [0.81.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.81.0...v0.81.1) (2026-01-15)
 
 
