@@ -70,6 +70,7 @@ IBM Cloud services:
 
 Service Name | Import Path
 --- | --- 
+[Account Management](https://test.cloud.ibm.com/apidocs/account-management) | @ibm-cloud/platform-services/account-management/v4
 [Case Management](https://cloud.ibm.com/apidocs/case-management?code=node) | @ibm-cloud/platform-services/case-management/v1
 [Catalog Management](https://cloud.ibm.com/apidocs/resource-catalog/private-catalog?code=node) | @ibm-cloud/platform-services/catalog-management/v1
 [Context Based Restrictions](https://cloud.ibm.com/apidocs/context-based-restrictions?code=node) | @ibm-cloud/platform-services/context-based-restrictions/v1
