@@ -1,3 +1,10 @@
+# [0.82.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.81.3...v0.82.0) (2026-02-27)
+
+
+### Features
+
+* **Account Management:** add new service to the project ([#328](https://github.com/IBM/platform-services-node-sdk/issues/328)) ([07e8936](https://github.com/IBM/platform-services-node-sdk/commit/07e8936ec49612a808c43fe4a26e97c237af3231))
+
 ## [0.81.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.81.2...v0.81.3) (2026-02-20)
 
 
