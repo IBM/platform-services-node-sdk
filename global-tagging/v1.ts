@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.111.0-1bfb72c2-20260206-185521
+ * IBM OpenAPI SDK Code Generator Version: 3.113.1-d76630af-20260320-135953
  */
 
 import * as extend from 'extend';
