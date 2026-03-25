@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.100.0-2ad7a784-20250212-162551
+ * IBM OpenAPI SDK Code Generator Version: 3.113.1-d76630af-20260320-135953
  */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   UserOptions,
@@ -186,6 +187,7 @@ class GlobalSearchV2 extends BaseService {
       'impersonateUser',
       'canTag',
       'isProjectResource',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -233,6 +235,9 @@ class GlobalSearchV2 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -268,8 +273,13 @@ namespace GlobalSearchV2 {
    * request interfaces
    ************************/
 
+  interface DefaultParams {
+    headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
+  }
+
   /** Parameters for the `search` operation. */
-  export interface SearchParams {
+  export interface SearchParams extends DefaultParams {
     /** The Lucene-formatted query string. Default to '*' if not set. */
     query?: string;
     /** The list of the fields returned by the search. By default, the returned fields are the `account_id`, `name`,
@@ -335,7 +345,6 @@ namespace GlobalSearchV2 {
      *  Only authorized ServiceIds can use this query parameter.
      */
     isProjectResource?: SearchConstants.IsProjectResource | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `search` operation. */
