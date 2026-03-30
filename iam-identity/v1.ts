@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.107.1-41b0fbd0-20250825-080732
+ * IBM OpenAPI SDK Code Generator Version: 3.113.0-3f9df07a-20260317-160650
  */
 
 import * as extend from 'extend';
@@ -994,7 +994,9 @@ class IamIdentityV1 extends BaseService {
    * @param {string} [params.actionWhenLeaked] - Defines the action to take when API key is leaked, valid values are
    * 'none', 'disable' and 'delete'.
    * @param {string} [params.expiresAt] - Date and time when the API key becomes invalid, ISO 8601 datetime in the
-   * format 'yyyy-MM-ddTHH:mm+0000'.
+   * format 'yyyy-MM-ddTHH:mm+0000'. **WARNING** An API key will be permanently and irrevocably deleted when both the
+   * expires_at and modified_at timestamps are more than ninety (90) days in the past, regardless of the key’s locked
+   * status or any other state.
    * @param {string} [params.entityLock] - Indicates if the API key is locked for further write operations. False by
    * default.
    * @param {string} [params.entityDisable] - Indicates if the API key is disabled. False by default.
@@ -1208,7 +1210,9 @@ class IamIdentityV1 extends BaseService {
    * @param {string} [params.actionWhenLeaked] - Defines the action to take when API key is leaked, valid values are
    * 'none', 'disable' and 'delete'.
    * @param {string} [params.expiresAt] - Date and time when the API key becomes invalid, ISO 8601 datetime in the
-   * format 'yyyy-MM-ddTHH:mm+0000'.
+   * format 'yyyy-MM-ddTHH:mm+0000'. **WARNING** An API key will be permanently and irrevocably deleted when both the
+   * expires_at and modified_at timestamps are more than ninety (90) days in the past, regardless of the key’s locked
+   * status or any other state.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ApiKey>>}
    */
@@ -2171,6 +2175,8 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.crType - The compute resource type. Valid values are VSI, IKS_SA, ROKS_SA.
    * @param {CreateProfileLinkRequestLink} params.link - Link details.
    * @param {string} [params.name] - Optional name of the Link.
+   * @param {boolean} [params.isCrossAccount] - Flag to indicate that the link provides cross account access. If not
+   * provided then the account scope of the CRN must match the Profile's account.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLink>>}
    */
@@ -2179,7 +2185,15 @@ class IamIdentityV1 extends BaseService {
   ): Promise<IamIdentityV1.Response<IamIdentityV1.ProfileLink>> {
     const _params = { ...params };
     const _requiredParams = ['profileId', 'crType', 'link'];
-    const _validParams = ['profileId', 'crType', 'link', 'name', 'signal', 'headers'];
+    const _validParams = [
+      'profileId',
+      'crType',
+      'link',
+      'name',
+      'isCrossAccount',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2189,6 +2203,7 @@ class IamIdentityV1 extends BaseService {
       'cr_type': _params.crType,
       'link': _params.link,
       'name': _params.name,
+      'is_cross_account': _params.isCrossAccount,
     };
 
     const path = {
@@ -2999,7 +3014,7 @@ class IamIdentityV1 extends BaseService {
    *   * TOTP4ALL - For all users
    *   * LEVEL1 - Email-based MFA for all users
    *   * LEVEL2 - TOTP-based MFA for all users
-   *   * LEVEL3 - U2F MFA for all users.
+   *   * LEVEL3 - Security Key MFA for all users.
    * @param {UserMfa[]} [params.userMfa] - List of users that are exempted from the MFA requirement of the account.
    * @param {string} [params.sessionExpirationInSeconds] - Defines the session expiration in seconds for the account.
    * Valid values:
@@ -5760,6 +5775,218 @@ class IamIdentityV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * accountLimits
+   ************************/
+
+  /**
+   * Get account entity limits.
+   *
+   * Returns the details of an account's entity limits with query parameters for consumption details.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Unique ID of the account.
+   * @param {boolean} [params.serviceidGroups] - Boolean to include serviceid group consumption.
+   * @param {string} [params.serviceidsPerGroup] - Comma seperated list of ServiceID groups to include for consumption.
+   * @param {string} [params.profiles] - Boolean to include trusted profiles consumption.
+   * @param {string} [params.apikeysPerIdentity] - Comma seperated list of IAM IDs to include for API key consumption.
+   * @param {string} [params.templates] - Boolean to include template consumption.
+   * @param {string} [params.templateVersionsPerTemplate] - Comma seperated list of template IDs to include for template
+   * version consumption.
+   * @param {string} [params.idps] - Boolean to include identity provider consumption.
+   * @param {string} [params.claimRulesPerGroup] - Comma seperated list of access groups to include for claim rules
+   * consumption.
+   * @param {string} [params.claimRulesPerProfile] - Comma seperated list of profiles to include for claim rules
+   * consumption.
+   * @param {string} [params.crLinks] - Boolean to include compute resource links consumption.
+   * @param {string} [params.crLinksPerProfile] - Comma seperated list of profile IDs to include for cr links
+   * consumption.
+   * @param {string} [params.crRules] - Boolean to include compute resource rules consumption.
+   * @param {string} [params.crRulesPerProfile] - Comma seperated list of profile IDs to include for cr rules
+   * consumption.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.IdentityLimitsUsageResponse>>}
+   */
+  public getAccountLimits(
+    params: IamIdentityV1.GetAccountLimitsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.IdentityLimitsUsageResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'serviceidGroups',
+      'serviceidsPerGroup',
+      'profiles',
+      'apikeysPerIdentity',
+      'templates',
+      'templateVersionsPerTemplate',
+      'idps',
+      'claimRulesPerGroup',
+      'claimRulesPerProfile',
+      'crLinks',
+      'crLinksPerProfile',
+      'crRules',
+      'crRulesPerProfile',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'serviceid_groups': _params.serviceidGroups,
+      'serviceids_per_group': _params.serviceidsPerGroup,
+      'profiles': _params.profiles,
+      'apikeys_per_identity': _params.apikeysPerIdentity,
+      'templates': _params.templates,
+      'template_versions_per_template': _params.templateVersionsPerTemplate,
+      'idps': _params.idps,
+      'claim_rules_per_group': _params.claimRulesPerGroup,
+      'claim_rules_per_profile': _params.claimRulesPerProfile,
+      'cr_links': _params.crLinks,
+      'cr_links_per_profile': _params.crLinksPerProfile,
+      'cr_rules': _params.crRules,
+      'cr_rules_per_profile': _params.crRulesPerProfile,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getAccountLimits');
+
+    const parameters = {
+      options: {
+        url: '/v1/accounts/{account_id}/limits/identity',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get account entity limits via POST request.
+   *
+   * Returns the details of an account's entity limits using a body for larger list of parameters for consumption
+   * details.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Unique ID of the account.
+   * @param {boolean} [params.serviceidGroups] - Flag to include service ID groups usage.
+   * @param {string[]} [params.serviceidsPerGroup] - List of service ID group IDs to get usage for.
+   * @param {boolean} [params.profiles] - Flag to include trusted profiles usage.
+   * @param {string[]} [params.apikeysPerIdentity] - List of identity IDs to get API key usage for.
+   * @param {boolean} [params.templates] - Flag to include templates usage.
+   * @param {string[]} [params.templateVersionsPerTemplate] - List of template IDs to get version usage for.
+   * @param {boolean} [params.idps] - Flag to include identity providers usage.
+   * @param {string[]} [params.claimRulesPerGroup] - List of access group IDs to get claim rules usage for.
+   * @param {string[]} [params.claimRulesPerProfile] - List of profile IDs to get claim rules usage for.
+   * @param {boolean} [params.crLinks] - Flag to include compute resource links usage.
+   * @param {string[]} [params.crLinksPerProfile] - List of profile IDs to get compute resource links usage for.
+   * @param {boolean} [params.crRules] - Flag to include compute resource rules usage.
+   * @param {string[]} [params.crRulesPerProfile] - List of profile IDs to get compute resource rules usage for.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.IdentityLimitsUsageResponse>>}
+   */
+  public bulkListAccountEntityConsumption(
+    params: IamIdentityV1.BulkListAccountEntityConsumptionParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.IdentityLimitsUsageResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = [
+      'accountId',
+      'serviceidGroups',
+      'serviceidsPerGroup',
+      'profiles',
+      'apikeysPerIdentity',
+      'templates',
+      'templateVersionsPerTemplate',
+      'idps',
+      'claimRulesPerGroup',
+      'claimRulesPerProfile',
+      'crLinks',
+      'crLinksPerProfile',
+      'crRules',
+      'crRulesPerProfile',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'serviceid_groups': _params.serviceidGroups,
+      'serviceids_per_group': _params.serviceidsPerGroup,
+      'profiles': _params.profiles,
+      'apikeys_per_identity': _params.apikeysPerIdentity,
+      'templates': _params.templates,
+      'template_versions_per_template': _params.templateVersionsPerTemplate,
+      'idps': _params.idps,
+      'claim_rules_per_group': _params.claimRulesPerGroup,
+      'claim_rules_per_profile': _params.claimRulesPerProfile,
+      'cr_links': _params.crLinks,
+      'cr_links_per_profile': _params.crLinksPerProfile,
+      'cr_rules': _params.crRules,
+      'cr_rules_per_profile': _params.crRulesPerProfile,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'bulkListAccountEntityConsumption'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/accounts/{account_id}/limits/identity',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -6048,7 +6275,10 @@ namespace IamIdentityV1 {
     supportSessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     actionWhenLeaked?: string;
-    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'.
+     *  **WARNING** An API key will be permanently and irrevocably deleted when both the expires_at and modified_at
+     *  timestamps are more than ninety (90) days in the past, regardless of the key’s locked status or any other state.
+     */
     expiresAt?: string;
     /** Indicates if the API key is locked for further write operations. False by default. */
     entityLock?: string;
@@ -6100,7 +6330,10 @@ namespace IamIdentityV1 {
     supportSessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     actionWhenLeaked?: string;
-    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'.
+     *  **WARNING** An API key will be permanently and irrevocably deleted when both the expires_at and modified_at
+     *  timestamps are more than ninety (90) days in the past, regardless of the key’s locked status or any other state.
+     */
     expiresAt?: string;
   }
 
@@ -6309,6 +6542,10 @@ namespace IamIdentityV1 {
     link: CreateProfileLinkRequestLink;
     /** Optional name of the Link. */
     name?: string;
+    /** Flag to indicate that the link provides cross account access. If not provided then the account scope of the
+     *  CRN must match the Profile's account.
+     */
+    isCrossAccount?: boolean;
   }
 
   /** Parameters for the `listLinks` operation. */
@@ -6515,7 +6752,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa?: UpdateAccountSettingsConstants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
@@ -6572,7 +6809,7 @@ namespace IamIdentityV1 {
       NOT_RESTRICTED = 'NOT_RESTRICTED',
       NOT_SET = 'NOT_SET',
     }
-    /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+    /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
     export enum Mfa {
       NONE = 'NONE',
       NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7183,9 +7420,83 @@ namespace IamIdentityV1 {
     templateVersion: number;
   }
 
+  /** Parameters for the `getAccountLimits` operation. */
+  export interface GetAccountLimitsParams extends DefaultParams {
+    /** Unique ID of the account. */
+    accountId: string;
+    /** Boolean to include serviceid group consumption. */
+    serviceidGroups?: boolean;
+    /** Comma seperated list of ServiceID groups to include for consumption. */
+    serviceidsPerGroup?: string;
+    /** Boolean to include trusted profiles consumption. */
+    profiles?: string;
+    /** Comma seperated list of IAM IDs to include for API key consumption. */
+    apikeysPerIdentity?: string;
+    /** Boolean to include template consumption. */
+    templates?: string;
+    /** Comma seperated list of template IDs to include for template version consumption. */
+    templateVersionsPerTemplate?: string;
+    /** Boolean to include identity provider consumption. */
+    idps?: string;
+    /** Comma seperated list of access groups to include for claim rules consumption. */
+    claimRulesPerGroup?: string;
+    /** Comma seperated list of profiles to include for claim rules consumption. */
+    claimRulesPerProfile?: string;
+    /** Boolean to include compute resource links consumption. */
+    crLinks?: string;
+    /** Comma seperated list of profile IDs to include for cr links consumption. */
+    crLinksPerProfile?: string;
+    /** Boolean to include compute resource rules consumption. */
+    crRules?: string;
+    /** Comma seperated list of profile IDs to include for cr rules consumption. */
+    crRulesPerProfile?: string;
+  }
+
+  /** Parameters for the `bulkListAccountEntityConsumption` operation. */
+  export interface BulkListAccountEntityConsumptionParams extends DefaultParams {
+    /** Unique ID of the account. */
+    accountId: string;
+    /** Flag to include service ID groups usage. */
+    serviceidGroups?: boolean;
+    /** List of service ID group IDs to get usage for. */
+    serviceidsPerGroup?: string[];
+    /** Flag to include trusted profiles usage. */
+    profiles?: boolean;
+    /** List of identity IDs to get API key usage for. */
+    apikeysPerIdentity?: string[];
+    /** Flag to include templates usage. */
+    templates?: boolean;
+    /** List of template IDs to get version usage for. */
+    templateVersionsPerTemplate?: string[];
+    /** Flag to include identity providers usage. */
+    idps?: boolean;
+    /** List of access group IDs to get claim rules usage for. */
+    claimRulesPerGroup?: string[];
+    /** List of profile IDs to get claim rules usage for. */
+    claimRulesPerProfile?: string[];
+    /** Flag to include compute resource links usage. */
+    crLinks?: boolean;
+    /** List of profile IDs to get compute resource links usage for. */
+    crLinksPerProfile?: string[];
+    /** Flag to include compute resource rules usage. */
+    crRules?: boolean;
+    /** List of profile IDs to get compute resource rules usage for. */
+    crRulesPerProfile?: string[];
+  }
+
   /*************************
    * model interfaces
    ************************/
+
+  /**
+   * Claim rule count for a specific access group.
+   */
+  export interface AccessGroupCount {
+    /** Access group identifier. */
+    group_id?: string;
+    /** Number of claim rules for the access group. */
+    count?: number;
+  }
 
   /**
    * AccountBasedMfaEnrollment.
@@ -7235,7 +7546,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa?: AccountSettingsAssignedTemplatesSection.Constants.Mfa | string;
     /** Defines the session expiration in seconds for the account. Valid values:
@@ -7291,7 +7602,7 @@ namespace IamIdentityV1 {
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7349,7 +7660,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa?: AccountSettingsEffectiveSection.Constants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
@@ -7400,7 +7711,7 @@ namespace IamIdentityV1 {
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         RESTRICTED = 'RESTRICTED',
       }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7450,7 +7761,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa: AccountSettingsResponse.Constants.Mfa | string;
     /** Defines the session expiration in seconds for the account. Valid values:
@@ -7508,7 +7819,7 @@ namespace IamIdentityV1 {
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7613,7 +7924,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa: AccountSettingsUserMFAResponse.Constants.Mfa | string;
     /** name of the user account. */
@@ -7627,7 +7938,7 @@ namespace IamIdentityV1 {
   }
   export namespace AccountSettingsUserMFAResponse {
     export namespace Constants {
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7720,7 +8031,10 @@ namespace IamIdentityV1 {
     support_sessions?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     action_when_leaked?: string;
-    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'.
+     *  **WARNING** An API key will be permanently and irrevocably deleted when both the expires_at and modified_at
+     *  timestamps are more than ninety (90) days in the past, regardless of the key’s locked status or any other state.
+     */
     expires_at?: string;
     /** The optional description of the API key. The 'description' property is only available if a description was
      *  provided during a create of an API key.
@@ -7767,7 +8081,10 @@ namespace IamIdentityV1 {
     store_value?: boolean;
     /** Defines the action to take when API key is leaked, valid values are 'none', 'disable' and 'delete'. */
     action_when_leaked?: string;
-    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'. */
+    /** Date and time when the API key becomes invalid, ISO 8601 datetime in the format 'yyyy-MM-ddTHH:mm+0000'.
+     *  **WARNING** An API key will be permanently and irrevocably deleted when both the expires_at and modified_at
+     *  timestamps are more than ninety (90) days in the past, regardless of the key’s locked status or any other state.
+     */
     expires_at?: string;
   }
 
@@ -7951,7 +8268,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     trait_account_default: IdBasedMfaEnrollment.Constants.TraitAccountDefault | string;
     /** MFA trait definitions as follows:
@@ -7961,7 +8278,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     trait_user_specific?: IdBasedMfaEnrollment.Constants.TraitUserSpecific | string;
     /** MFA trait definitions as follows:
@@ -7971,7 +8288,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     trait_effective: IdBasedMfaEnrollment.Constants.TraitEffective | string;
     /** The enrollment complies to the effective requirement. */
@@ -7986,7 +8303,7 @@ namespace IamIdentityV1 {
   }
   export namespace IdBasedMfaEnrollment {
     export namespace Constants {
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum TraitAccountDefault {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -7996,7 +8313,7 @@ namespace IamIdentityV1 {
         LEVEL2 = 'LEVEL2',
         LEVEL3 = 'LEVEL3',
       }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum TraitUserSpecific {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -8006,7 +8323,7 @@ namespace IamIdentityV1 {
         LEVEL2 = 'LEVEL2',
         LEVEL3 = 'LEVEL3',
       }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum TraitEffective {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -8023,6 +8340,120 @@ namespace IamIdentityV1 {
         CROSS_ACCOUNT = 'CROSS_ACCOUNT',
       }
     }
+  }
+
+  /**
+   * API key count for a specific identity.
+   */
+  export interface IdentityCount {
+    /** IAM identifier of the identity. */
+    iam_id?: string;
+    /** Number of API keys for the identity. */
+    count?: number;
+  }
+
+  /**
+   * Response body format for identity limits usage.
+   */
+  export interface IdentityLimitsUsageResponse {
+    /** Limit and current usage count for a resource. */
+    serviceid_groups?: LimitCount;
+    /** Usage count for service IDs per group. */
+    serviceids_per_group?: IdentityLimitsUsageResponseServiceidsPerGroup;
+    /** Limit and current usage count for a resource. */
+    profiles?: LimitCount;
+    /** Usage count for API keys per identity. */
+    apikeys_per_identity?: IdentityLimitsUsageResponseApikeysPerIdentity;
+    /** Limit and current usage count for a resource. */
+    profile_templates?: LimitCount;
+    /** Limit and current usage count for a resource. */
+    account_settings_templates?: LimitCount;
+    /** Usage count for template versions per template. */
+    template_versions_per_template?: IdentityLimitsUsageResponseTemplateVersionsPerTemplate;
+    /** Limit and current usage count for a resource. */
+    idps?: LimitCount;
+    /** Usage count for claim rules per access group. */
+    claim_rules_per_group?: IdentityLimitsUsageResponseClaimRulesPerGroup;
+    /** Usage count for claim rules per profile. */
+    claim_rules_per_profile?: IdentityLimitsUsageResponseClaimRulesPerProfile;
+    /** Limit and current usage count for a resource. */
+    cr_links?: LimitCount;
+    /** Usage count for compute resource links per profile. */
+    cr_links_per_profile?: IdentityLimitsUsageResponseCrLinksPerProfile;
+    /** Limit and current usage count for a resource. */
+    cr_rules?: LimitCount;
+    /** Usage count for compute resource rules per profile. */
+    cr_rules_per_profile?: IdentityLimitsUsageResponseCrRulesPerProfile;
+  }
+
+  /**
+   * Usage count for API keys per identity.
+   */
+  export interface IdentityLimitsUsageResponseApikeysPerIdentity {
+    /** Maximum allowed API keys per identity. */
+    limit: number;
+    /** List of identities with their API key usage counts. */
+    identities?: IdentityCount[];
+  }
+
+  /**
+   * Usage count for claim rules per access group.
+   */
+  export interface IdentityLimitsUsageResponseClaimRulesPerGroup {
+    /** Maximum allowed claim rules per access group. */
+    limit: number;
+    /** List of access groups with their claim rules usage counts. */
+    access_groups?: AccessGroupCount[];
+  }
+
+  /**
+   * Usage count for claim rules per profile.
+   */
+  export interface IdentityLimitsUsageResponseClaimRulesPerProfile {
+    /** Maximum allowed claim rules per profile. */
+    limit: number;
+    /** List of profiles with their claim rules usage counts. */
+    profiles?: ProfileCount[];
+  }
+
+  /**
+   * Usage count for compute resource links per profile.
+   */
+  export interface IdentityLimitsUsageResponseCrLinksPerProfile {
+    /** Maximum allowed compute resource links per profile. */
+    limit: number;
+    /** List of profiles with their compute resource links usage counts. */
+    profiles?: ProfileCount[];
+  }
+
+  /**
+   * Usage count for compute resource rules per profile.
+   */
+  export interface IdentityLimitsUsageResponseCrRulesPerProfile {
+    /** Maximum allowed compute resource rules per profile. */
+    limit: number;
+    /** List of profiles with their compute resource rules usage counts. */
+    profiles?: ProfileCount[];
+  }
+
+  /**
+   * Usage count for service IDs per group.
+   */
+  export interface IdentityLimitsUsageResponseServiceidsPerGroup {
+    /** Maximum allowed service IDs per group. */
+    limit: number;
+    /** List of service ID groups with their usage counts. */
+    serviceid_groups?: ServiceIdGroupCount[];
+  }
+
+  /**
+   * Usage count for template versions per template.
+   */
+  export interface IdentityLimitsUsageResponseTemplateVersionsPerTemplate {
+    /** Maximum allowed versions per template. */
+    limit: number;
+    /** List of templates with their version usage counts. */
+    templates?: TemplateCount[];
   }
 
   /**
@@ -8053,6 +8484,16 @@ namespace IamIdentityV1 {
   export interface IdentityPreferencesResponse {
     /** List of Identity Preferences. */
     preferences: IdentityPreferenceResponse[];
+  }
+
+  /**
+   * Limit and current usage count for a resource.
+   */
+  export interface LimitCount {
+    /** Maximum allowed value for the resource. */
+    limit: number;
+    /** Current usage count for the resource. */
+    count?: number;
   }
 
   /**
@@ -8125,6 +8566,16 @@ namespace IamIdentityV1 {
     context?: ResponseContext;
     /** List of claim rules. */
     rules: ProfileClaimRule[];
+  }
+
+  /**
+   * Resource count for a specific profile.
+   */
+  export interface ProfileCount {
+    /** Profile identifier. */
+    profile_id?: string;
+    /** Number of resources associated with the profile. */
+    count?: number;
   }
 
   /**
@@ -8217,6 +8668,10 @@ namespace IamIdentityV1 {
     name?: string;
     /** The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE. */
     cr_type: string;
+    /** Flag to indicate that the link provides cross account access. If not provided then the account scope of the
+     *  CRN must match the Profile's account.
+     */
+    is_cross_account?: boolean;
     link: ProfileLinkLink;
   }
 
@@ -8394,6 +8849,16 @@ namespace IamIdentityV1 {
   }
 
   /**
+   * Service ID count for a specific group.
+   */
+  export interface ServiceIdGroupCount {
+    /** Service ID group identifier. */
+    group_id?: string;
+    /** Number of service IDs in the group. */
+    count?: number;
+  }
+
+  /**
    * ServiceIdGroupList.
    */
   export interface ServiceIdGroupList {
@@ -8454,7 +8919,7 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa?: TemplateAccountSettings.Constants.Mfa | string;
     /** List of users that are exempted from the MFA requirement of the account. */
@@ -8510,7 +8975,7 @@ namespace IamIdentityV1 {
         NOT_RESTRICTED = 'NOT_RESTRICTED',
         NOT_SET = 'NOT_SET',
       }
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',
@@ -8653,6 +9118,16 @@ namespace IamIdentityV1 {
     error_message?: TemplateAssignmentResourceError;
     /** Status for the target account's assignment. */
     status: string;
+  }
+
+  /**
+   * Version count for a specific template.
+   */
+  export interface TemplateCount {
+    /** Template identifier. */
+    template_id?: string;
+    /** Number of versions for the template. */
+    count?: number;
   }
 
   /**
@@ -8900,13 +9375,13 @@ namespace IamIdentityV1 {
      *    * TOTP4ALL - For all users
      *    * LEVEL1 - Email-based MFA for all users
      *    * LEVEL2 - TOTP-based MFA for all users
-     *    * LEVEL3 - U2F MFA for all users.
+     *    * LEVEL3 - Security Key MFA for all users.
      */
     mfa?: UserMfa.Constants.Mfa | string;
   }
   export namespace UserMfa {
     export namespace Constants {
-      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - U2F MFA for all users. */
+      /** MFA trait definitions as follows: * NONE - No MFA trait set * NONE_NO_ROPC- No MFA, disable CLI logins with only a password * TOTP - For all non-federated IBMId users * TOTP4ALL - For all users * LEVEL1 - Email-based MFA for all users * LEVEL2 - TOTP-based MFA for all users * LEVEL3 - Security Key MFA for all users. */
       export enum Mfa {
         NONE = 'NONE',
         NONE_NO_ROPC = 'NONE_NO_ROPC',

@@ -3105,11 +3105,13 @@ describe('IamIdentityV1', () => {
         const crType = 'testString';
         const link = createProfileLinkRequestLinkModel;
         const name = 'testString';
+        const isCrossAccount = true;
         const createLinkParams = {
           profileId,
           crType,
           link,
           name,
+          isCrossAccount,
         };
 
         const createLinkResult = iamIdentityService.createLink(createLinkParams);
@@ -3129,6 +3131,7 @@ describe('IamIdentityV1', () => {
         expect(mockRequestOptions.body.cr_type).toEqual(crType);
         expect(mockRequestOptions.body.link).toEqual(link);
         expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.is_cross_account).toEqual(isCrossAccount);
         expect(mockRequestOptions.path['profile-id']).toEqual(profileId);
       }
 
@@ -8213,6 +8216,252 @@ describe('IamIdentityV1', () => {
         let err;
         try {
           await iamIdentityService.updateAccountSettingsAssignment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getAccountLimits', () => {
+    describe('positive tests', () => {
+      function __getAccountLimitsTest() {
+        // Construct the params object for operation getAccountLimits
+        const accountId = 'testString';
+        const serviceidGroups = true;
+        const serviceidsPerGroup = 'testString';
+        const profiles = 'testString';
+        const apikeysPerIdentity = 'testString';
+        const templates = 'testString';
+        const templateVersionsPerTemplate = 'testString';
+        const idps = 'testString';
+        const claimRulesPerGroup = 'testString';
+        const claimRulesPerProfile = 'testString';
+        const crLinks = 'testString';
+        const crLinksPerProfile = 'testString';
+        const crRules = 'testString';
+        const crRulesPerProfile = 'testString';
+        const getAccountLimitsParams = {
+          accountId,
+          serviceidGroups,
+          serviceidsPerGroup,
+          profiles,
+          apikeysPerIdentity,
+          templates,
+          templateVersionsPerTemplate,
+          idps,
+          claimRulesPerGroup,
+          claimRulesPerProfile,
+          crLinks,
+          crLinksPerProfile,
+          crRules,
+          crRulesPerProfile,
+        };
+
+        const getAccountLimitsResult = iamIdentityService.getAccountLimits(getAccountLimitsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getAccountLimitsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/accounts/{account_id}/limits/identity', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.serviceid_groups).toEqual(serviceidGroups);
+        expect(mockRequestOptions.qs.serviceids_per_group).toEqual(serviceidsPerGroup);
+        expect(mockRequestOptions.qs.profiles).toEqual(profiles);
+        expect(mockRequestOptions.qs.apikeys_per_identity).toEqual(apikeysPerIdentity);
+        expect(mockRequestOptions.qs.templates).toEqual(templates);
+        expect(mockRequestOptions.qs.template_versions_per_template).toEqual(templateVersionsPerTemplate);
+        expect(mockRequestOptions.qs.idps).toEqual(idps);
+        expect(mockRequestOptions.qs.claim_rules_per_group).toEqual(claimRulesPerGroup);
+        expect(mockRequestOptions.qs.claim_rules_per_profile).toEqual(claimRulesPerProfile);
+        expect(mockRequestOptions.qs.cr_links).toEqual(crLinks);
+        expect(mockRequestOptions.qs.cr_links_per_profile).toEqual(crLinksPerProfile);
+        expect(mockRequestOptions.qs.cr_rules).toEqual(crRules);
+        expect(mockRequestOptions.qs.cr_rules_per_profile).toEqual(crRulesPerProfile);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAccountLimitsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __getAccountLimitsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __getAccountLimitsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getAccountLimitsParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.getAccountLimits(getAccountLimitsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.getAccountLimits({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.getAccountLimits();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('bulkListAccountEntityConsumption', () => {
+    describe('positive tests', () => {
+      function __bulkListAccountEntityConsumptionTest() {
+        // Construct the params object for operation bulkListAccountEntityConsumption
+        const accountId = 'testString';
+        const serviceidGroups = true;
+        const serviceidsPerGroup = ['ServiceIdGroup-12345678-1234-1234-1234-123456789abc', 'ServiceIdGroup-12345678-1234-1234-1234-123456789def'];
+        const profiles = true;
+        const apikeysPerIdentity = ['iam-ServiceId-12345678-1234-1234-1234-123456789def', 'IBMid-1234567ABC'];
+        const templates = true;
+        const templateVersionsPerTemplate = ['AccountSettingsTemplate-12345678-1234-1234-1234-123456789abc', 'ProfileTemplate-12345678-1234-1234-1234-123456789def'];
+        const idps = true;
+        const claimRulesPerGroup = ['AccessGroupId-12345678-1234-1234-1234-123456789abc', 'AccessGroupId-12345678-1234-1234-1234-123456789def'];
+        const claimRulesPerProfile = ['Profile-12345678-1234-1234-123456789abc', 'Profile-12345678-1234-1234-123456789def'];
+        const crLinks = true;
+        const crLinksPerProfile = ['Profile-12345678-1234-1234-123456789abc', 'Profile-12345678-1234-1234-123456789def'];
+        const crRules = true;
+        const crRulesPerProfile = ['Profile-12345678-1234-1234-123456789abc', 'Profile-12345678-1234-1234-123456789def'];
+        const bulkListAccountEntityConsumptionParams = {
+          accountId,
+          serviceidGroups,
+          serviceidsPerGroup,
+          profiles,
+          apikeysPerIdentity,
+          templates,
+          templateVersionsPerTemplate,
+          idps,
+          claimRulesPerGroup,
+          claimRulesPerProfile,
+          crLinks,
+          crLinksPerProfile,
+          crRules,
+          crRulesPerProfile,
+        };
+
+        const bulkListAccountEntityConsumptionResult = iamIdentityService.bulkListAccountEntityConsumption(bulkListAccountEntityConsumptionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(bulkListAccountEntityConsumptionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/accounts/{account_id}/limits/identity', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.serviceid_groups).toEqual(serviceidGroups);
+        expect(mockRequestOptions.body.serviceids_per_group).toEqual(serviceidsPerGroup);
+        expect(mockRequestOptions.body.profiles).toEqual(profiles);
+        expect(mockRequestOptions.body.apikeys_per_identity).toEqual(apikeysPerIdentity);
+        expect(mockRequestOptions.body.templates).toEqual(templates);
+        expect(mockRequestOptions.body.template_versions_per_template).toEqual(templateVersionsPerTemplate);
+        expect(mockRequestOptions.body.idps).toEqual(idps);
+        expect(mockRequestOptions.body.claim_rules_per_group).toEqual(claimRulesPerGroup);
+        expect(mockRequestOptions.body.claim_rules_per_profile).toEqual(claimRulesPerProfile);
+        expect(mockRequestOptions.body.cr_links).toEqual(crLinks);
+        expect(mockRequestOptions.body.cr_links_per_profile).toEqual(crLinksPerProfile);
+        expect(mockRequestOptions.body.cr_rules).toEqual(crRules);
+        expect(mockRequestOptions.body.cr_rules_per_profile).toEqual(crRulesPerProfile);
+        expect(mockRequestOptions.path.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __bulkListAccountEntityConsumptionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.enableRetries();
+        __bulkListAccountEntityConsumptionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        iamIdentityService.disableRetries();
+        __bulkListAccountEntityConsumptionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const accountId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const bulkListAccountEntityConsumptionParams = {
+          accountId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        iamIdentityService.bulkListAccountEntityConsumption(bulkListAccountEntityConsumptionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await iamIdentityService.bulkListAccountEntityConsumption({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await iamIdentityService.bulkListAccountEntityConsumption();
         } catch (e) {
           err = e;
         }
