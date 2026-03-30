@@ -2614,6 +2614,32 @@ describe('IamIdentityV1_integration', () => {
     accountSettingsTemplateScenarioComplete = true;
   }
 
+  test('getAccountLimits()', async () => {
+    const params = {
+      accountId: accountId,
+    };
+
+    const res = await iamIdentityService.getAccountLimits(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('bulkListAccountEntityConsumption()', async () => {
+    const params = {
+      accountId: accountId,
+      serviceidGroups: true,
+      profiles: true,
+      templates: true,
+      idps: true,
+    };
+
+    const res = await iamIdentityService.bulkListAccountEntityConsumption(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   function getPageTokenFromURL(urlstring) {
     let pageToken = null;
     if (urlstring) {

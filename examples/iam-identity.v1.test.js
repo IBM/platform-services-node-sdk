@@ -2751,6 +2751,66 @@ test('createApiKey request example', async () => {
     // end-delete_profile
   });
 
+  test('getAccountLimits request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getAccountLimits() result:');
+    // begin-getAccountLimits
+
+    const params = {
+      accountId: accountId,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.getAccountLimits(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-getAccountLimits
+  });
+
+  test('bulkListAccountEntityConsumption request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('bulkListAccountEntityConsumption() result:');
+    // begin-bulkListAccountEntityConsumption
+
+    const params = {
+      accountId: accountId,
+      serviceidGroups: true,
+      profiles: true,
+      templates: true,
+      idps: true,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.bulkListAccountEntityConsumption(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-bulkListAccountEntityConsumption
+  });
+
   function isFinishedEx(status) {
     return ("succeeded" === status.toLowerCase() || "failed" === status.toLowerCase());
   }
