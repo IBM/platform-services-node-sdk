@@ -1293,30 +1293,27 @@ describe('IamIdentityV1_integration', () => {
         expect(result).not.toBeNull();
         linkId = result.id;
         expect(linkId).not.toBeNull();
-        done();
-      })
-      .catch((err) => {
-        console.warn(err);
-        done(err);
-      });
-    const params = {
-      profileId: profileId2,
-      type: 'CE',
-      crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
-      componentName: 'test_component_name',
-      componentType: 'test_component_type',
-    };
 
-    iamIdentityService
-      .deleteLinkByParameters(params)
+        // Now delete the link we just created
+        const params = {
+          profileId: profileId2,
+          type: 'CE',
+          crn: `crn:v1:staging:public:iam-identity::a/${accountId}::computeresource:Fake-Compute-Resource`,
+          componentName: 'test_component_name',
+          componentType: 'test_component_type',
+        };
+
+        return iamIdentityService.deleteLinkByParameters(params);
+      })
       .then((res) => {
         expect(res).not.toBeNull();
         expect(res.status).toEqual(204);
 
-        getLinkById(profileId2, linkId).then((link) => {
-          expect(link).toBeNull();
-          done();
-        });
+        return getLinkById(profileId2, linkId);
+      })
+      .then((link) => {
+        expect(link).toBeNull();
+        done();
       })
       .catch((err) => {
         console.warn(err);
@@ -2613,6 +2610,32 @@ describe('IamIdentityV1_integration', () => {
 
     accountSettingsTemplateScenarioComplete = true;
   }
+
+  test('getAccountLimits()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await iamIdentityService.getAccountLimits(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('bulkListAccountEntityConsumption()', async () => {
+    const params = {
+      accountId,
+      serviceidGroups: true,
+      profiles: true,
+      templates: true,
+      idps: true,
+    };
+
+    const res = await iamIdentityService.bulkListAccountEntityConsumption(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
 
   function getPageTokenFromURL(urlstring) {
     let pageToken = null;
