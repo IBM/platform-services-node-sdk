@@ -1,3 +1,10 @@
+# [0.83.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.82.2...v0.83.0) (2026-04-07)
+
+
+### Features
+
+* **IAM Identity:** add support for limits/cross account ([#332](https://github.com/IBM/platform-services-node-sdk/issues/332)) ([a6b6941](https://github.com/IBM/platform-services-node-sdk/commit/a6b6941dca5caa836d32bd6f0154a3cb4d1b5048))
+
 ## [0.82.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.82.1...v0.82.2) (2026-04-02)
 
 
