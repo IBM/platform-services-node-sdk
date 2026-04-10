@@ -1,3 +1,10 @@
+## [0.83.1](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.0...v0.83.1) (2026-04-10)
+
+
+### Bug Fixes
+
+* **deps:** bump SDK Core to avoid CVEs ([#334](https://github.com/IBM/platform-services-node-sdk/issues/334)) ([0650994](https://github.com/IBM/platform-services-node-sdk/commit/0650994d1f845105739b8ae7fc89d73eec0bf90c))
+
 # [0.83.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.82.2...v0.83.0) (2026-04-07)
 
 
