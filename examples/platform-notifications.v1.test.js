@@ -335,7 +335,10 @@ describe('PlatformNotificationsV1', () => {
 
     const allResults = [];
     try {
-      const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
+      const pager = new PlatformNotificationsV1.NotificationsPager(
+        platformNotificationsService,
+        params
+      );
       while (pager.hasNext()) {
         const nextPage = await pager.getNext();
         expect(nextPage).not.toBeNull();
@@ -347,64 +350,6 @@ describe('PlatformNotificationsV1', () => {
     }
 
     // end-list_notifications
-  });
-
-  test('getAcknowledgment request example', async () => {
-    consoleLogMock.mockImplementation((output) => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
-      originalWarn(output);
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('getAcknowledgment() result:');
-    // begin-get_acknowledgment
-
-    const params = {
-      accountId: '1369339417d906e5620b8d861d40cfd7',
-      lastProcessedId: '1678901234000',
-    };
-
-    let res;
-    try {
-      res = await platformNotificationsService.getAcknowledgment(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-get_acknowledgment
-  });
-
-  test('replaceNotificationAcknowledgment request example', async () => {
-    consoleLogMock.mockImplementation((output) => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
-      originalWarn(output);
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('replaceNotificationAcknowledgment() result:');
-    // begin-replace_notification_acknowledgment
-
-    const params = {
-      lastAcknowledgedId: '1772804159452',
-      accountId: '1369339417d906e5620b8d861d40cfd7',
-    };
-
-    let res;
-    try {
-      res = await platformNotificationsService.replaceNotificationAcknowledgment(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-replace_notification_acknowledgment
   });
 
   test('deleteDistributionListDestination request example', async () => {
