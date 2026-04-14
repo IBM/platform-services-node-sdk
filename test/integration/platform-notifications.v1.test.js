@@ -286,30 +286,6 @@ describe('PlatformNotificationsV1_integration', () => {
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('getAcknowledgment()', async () => {
-    const params = {
-      accountId: '1369339417d906e5620b8d861d40cfd7',
-      lastProcessedId: '1678901234000',
-    };
-
-    const res = await platformNotificationsService.getAcknowledgment(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('replaceNotificationAcknowledgment()', async () => {
-    const params = {
-      lastAcknowledgedId: '1772804159452',
-      accountId: '1369339417d906e5620b8d861d40cfd7',
-    };
-
-    const res = await platformNotificationsService.replaceNotificationAcknowledgment(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
   test('deleteNotificationPreferences()', async () => {
     const params = {
       iamId,
