@@ -51,7 +51,9 @@ describe('PlatformNotificationsV1_integration', () => {
   beforeAll(() => {
     const config = readExternalSources(PlatformNotificationsV1.DEFAULT_SERVICE_NAME);
 
-    platformNotificationsService = PlatformNotificationsV1.newInstance();
+    platformNotificationsService = PlatformNotificationsV1.newInstance({
+      serviceUrl: config.serviceUrl,
+    });
     accountId = config.accountId;
     destinationId = config.destinationId;
     iamId = config.iamId;
