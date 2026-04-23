@@ -926,6 +926,125 @@ class PlatformNotificationsV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+
+  /**
+   * Get user's last acknowledged notification Id.
+   *
+   * Retrieve the ID of the last notification acknowledged by the user for a specific account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - The account ID to retrieve acknowledgement for.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>>}
+   */
+  public getAcknowledgement(
+    params?: PlatformNotificationsV1.GetAcknowledgementParams
+  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAcknowledgement'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/notifications/acknowledgement',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update user's last acknowledged notification.
+   *
+   * Update the ID of the last notification acknowledged by the user for a specific account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.lastAcknowledgedId - The ID of a notification.
+   * @param {string} [params.accountId] - The account ID to update acknowledgement for.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>>}
+   */
+  public replaceNotificationAcknowledgement(
+    params: PlatformNotificationsV1.ReplaceNotificationAcknowledgementParams
+  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>> {
+    const _params = { ...params };
+    const _requiredParams = ['lastAcknowledgedId'];
+    const _validParams = ['lastAcknowledgedId', 'accountId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'last_acknowledged_id': _params.lastAcknowledgedId,
+    };
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceNotificationAcknowledgement'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/notifications/acknowledgement',
+        method: 'PUT',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -1137,6 +1256,20 @@ namespace PlatformNotificationsV1 {
     start?: string;
     /** The maximum number of items to return per page. If unspecified, a default limit of 50 is used. */
     limit?: number;
+  }
+
+  /** Parameters for the `getAcknowledgement` operation. */
+  export interface GetAcknowledgementParams extends DefaultParams {
+    /** The account ID to retrieve acknowledgement for. */
+    accountId?: string;
+  }
+
+  /** Parameters for the `replaceNotificationAcknowledgement` operation. */
+  export interface ReplaceNotificationAcknowledgementParams extends DefaultParams {
+    /** The ID of a notification. */
+    lastAcknowledgedId: string;
+    /** The account ID to update acknowledgement for. */
+    accountId?: string;
   }
 
   /*************************
@@ -1391,6 +1524,18 @@ namespace PlatformNotificationsV1 {
   export interface TestDestinationResponseBody {
     /** The status message that indicates the test result. */
     message: string;
+  }
+
+  /**
+   * Status indicating whether the user has unread notifications.
+   */
+  export interface Acknowledgement {
+    /** Indicates whether the user has unread notifications. */
+    has_unread: boolean;
+    /** The ID of the most recent notification available to the user. */
+    latest_notification_id: string;
+    /** The ID of the last notification acknowledged by the user. */
+    last_acknowledged_id: string;
   }
 
   /**

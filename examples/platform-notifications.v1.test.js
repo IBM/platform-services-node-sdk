@@ -352,6 +352,63 @@ describe('PlatformNotificationsV1', () => {
     // end-list_notifications
   });
 
+  test('getAcknowledgement request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getAcknowledgement() result:');
+    // begin-get_acknowledgement
+
+    const params = {
+      accountId: '1369339417d906e5620b8d861d40cfd7',
+    };
+
+    let res;
+    try {
+      res = await platformNotificationsService.getAcknowledgement(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_acknowledgement
+  });
+
+  test('replaceNotificationAcknowledgement request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('replaceNotificationAcknowledgement() result:');
+    // begin-replace_notification_acknowledgement
+
+    const params = {
+      lastAcknowledgedId: '1772804159452',
+      accountId: '1369339417d906e5620b8d861d40cfd7',
+    };
+
+    let res;
+    try {
+      res = await platformNotificationsService.replaceNotificationAcknowledgement(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-replace_notification_acknowledgement
+  });
+
   test('deleteDistributionListDestination request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);

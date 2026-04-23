@@ -37,9 +37,7 @@ const platformNotificationsServiceOptions = {
   url: 'https://notifications.cloud.ibm.com/api',
 };
 
-const platformNotificationsService = new PlatformNotificationsV1(
-  platformNotificationsServiceOptions
-);
+const platformNotificationsService = new PlatformNotificationsV1(platformNotificationsServiceOptions);
 
 let createRequestMock = null;
 function mock_createRequest() {
@@ -77,9 +75,7 @@ describe('PlatformNotificationsV1', () => {
 
       expect(getAuthenticatorMock).toHaveBeenCalled();
       expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
-      expect(testInstance.baseOptions.serviceName).toBe(
-        PlatformNotificationsV1.DEFAULT_SERVICE_NAME
-      );
+      expect(testInstance.baseOptions.serviceName).toBe(PlatformNotificationsV1.DEFAULT_SERVICE_NAME);
       expect(testInstance.baseOptions.serviceUrl).toBe(PlatformNotificationsV1.DEFAULT_SERVICE_URL);
       expect(testInstance).toBeInstanceOf(PlatformNotificationsV1);
     });
@@ -133,10 +129,7 @@ describe('PlatformNotificationsV1', () => {
           accountId,
         };
 
-        const listDistributionListDestinationsResult =
-          platformNotificationsService.listDistributionListDestinations(
-            listDistributionListDestinationsParams
-          );
+        const listDistributionListDestinationsResult = platformNotificationsService.listDistributionListDestinations(listDistributionListDestinationsParams);
 
         // all methods should return a Promise
         expectToBePromise(listDistributionListDestinationsResult);
@@ -146,11 +139,7 @@ describe('PlatformNotificationsV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/v1/distribution_lists/{account_id}/destinations',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/v1/distribution_lists/{account_id}/destinations', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -185,9 +174,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.listDistributionListDestinations(
-          listDistributionListDestinationsParams
-        );
+        platformNotificationsService.listDistributionListDestinations(listDistributionListDestinationsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -236,10 +223,7 @@ describe('PlatformNotificationsV1', () => {
           addDestinationPrototype,
         };
 
-        const createDistributionListDestinationResult =
-          platformNotificationsService.createDistributionListDestination(
-            createDistributionListDestinationParams
-          );
+        const createDistributionListDestinationResult = platformNotificationsService.createDistributionListDestination(createDistributionListDestinationParams);
 
         // all methods should return a Promise
         expectToBePromise(createDistributionListDestinationResult);
@@ -249,11 +233,7 @@ describe('PlatformNotificationsV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/v1/distribution_lists/{account_id}/destinations',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/v1/distribution_lists/{account_id}/destinations', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -291,9 +271,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.createDistributionListDestination(
-          createDistributionListDestinationParams
-        );
+        platformNotificationsService.createDistributionListDestination(createDistributionListDestinationParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -334,10 +312,7 @@ describe('PlatformNotificationsV1', () => {
           destinationId,
         };
 
-        const getDistributionListDestinationResult =
-          platformNotificationsService.getDistributionListDestination(
-            getDistributionListDestinationParams
-          );
+        const getDistributionListDestinationResult = platformNotificationsService.getDistributionListDestination(getDistributionListDestinationParams);
 
         // all methods should return a Promise
         expectToBePromise(getDistributionListDestinationResult);
@@ -347,11 +322,7 @@ describe('PlatformNotificationsV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/v1/distribution_lists/{account_id}/destinations/{destination_id}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/v1/distribution_lists/{account_id}/destinations/{destination_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -389,9 +360,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.getDistributionListDestination(
-          getDistributionListDestinationParams
-        );
+        platformNotificationsService.getDistributionListDestination(getDistributionListDestinationParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -432,10 +401,7 @@ describe('PlatformNotificationsV1', () => {
           destinationId,
         };
 
-        const deleteDistributionListDestinationResult =
-          platformNotificationsService.deleteDistributionListDestination(
-            deleteDistributionListDestinationParams
-          );
+        const deleteDistributionListDestinationResult = platformNotificationsService.deleteDistributionListDestination(deleteDistributionListDestinationParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteDistributionListDestinationResult);
@@ -445,11 +411,7 @@ describe('PlatformNotificationsV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/v1/distribution_lists/{account_id}/destinations/{destination_id}',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/v1/distribution_lists/{account_id}/destinations/{destination_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -487,9 +449,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.deleteDistributionListDestination(
-          deleteDistributionListDestinationParams
-        );
+        platformNotificationsService.deleteDistributionListDestination(deleteDistributionListDestinationParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -540,10 +500,7 @@ describe('PlatformNotificationsV1', () => {
           testDestinationRequestBodyPrototype,
         };
 
-        const testDistributionListDestinationResult =
-          platformNotificationsService.testDistributionListDestination(
-            testDistributionListDestinationParams
-          );
+        const testDistributionListDestinationResult = platformNotificationsService.testDistributionListDestination(testDistributionListDestinationParams);
 
         // all methods should return a Promise
         expectToBePromise(testDistributionListDestinationResult);
@@ -553,11 +510,7 @@ describe('PlatformNotificationsV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/v1/distribution_lists/{account_id}/destinations/{destination_id}/test',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/v1/distribution_lists/{account_id}/destinations/{destination_id}/test', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -598,9 +551,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.testDistributionListDestination(
-          testDistributionListDestinationParams
-        );
+        platformNotificationsService.testDistributionListDestination(testDistributionListDestinationParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -702,8 +653,7 @@ describe('PlatformNotificationsV1', () => {
           accountId,
         };
 
-        const createPreferencesResult =
-          platformNotificationsService.createPreferences(createPreferencesParams);
+        const createPreferencesResult = platformNotificationsService.createPreferences(createPreferencesParams);
 
         // all methods should return a Promise
         expectToBePromise(createPreferencesResult);
@@ -731,24 +681,16 @@ describe('PlatformNotificationsV1', () => {
         expect(mockRequestOptions.body.billing_and_usage_order).toEqual(billingAndUsageOrder);
         expect(mockRequestOptions.body.billing_and_usage_invoices).toEqual(billingAndUsageInvoices);
         expect(mockRequestOptions.body.billing_and_usage_payments).toEqual(billingAndUsagePayments);
-        expect(mockRequestOptions.body.billing_and_usage_subscriptions_and_promo_codes).toEqual(
-          billingAndUsageSubscriptionsAndPromoCodes
-        );
-        expect(mockRequestOptions.body.billing_and_usage_spending_alerts).toEqual(
-          billingAndUsageSpendingAlerts
-        );
+        expect(mockRequestOptions.body.billing_and_usage_subscriptions_and_promo_codes).toEqual(billingAndUsageSubscriptionsAndPromoCodes);
+        expect(mockRequestOptions.body.billing_and_usage_spending_alerts).toEqual(billingAndUsageSpendingAlerts);
         expect(mockRequestOptions.body.resourceactivity_normal).toEqual(resourceactivityNormal);
         expect(mockRequestOptions.body.ordering_review).toEqual(orderingReview);
         expect(mockRequestOptions.body.ordering_approved).toEqual(orderingApproved);
         expect(mockRequestOptions.body.ordering_approved_vsi).toEqual(orderingApprovedVsi);
         expect(mockRequestOptions.body.ordering_approved_server).toEqual(orderingApprovedServer);
-        expect(mockRequestOptions.body.provisioning_reload_complete).toEqual(
-          provisioningReloadComplete
-        );
+        expect(mockRequestOptions.body.provisioning_reload_complete).toEqual(provisioningReloadComplete);
         expect(mockRequestOptions.body.provisioning_complete_vsi).toEqual(provisioningCompleteVsi);
-        expect(mockRequestOptions.body.provisioning_complete_server).toEqual(
-          provisioningCompleteServer
-        );
+        expect(mockRequestOptions.body.provisioning_complete_server).toEqual(provisioningCompleteServer);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.path.iam_id).toEqual(iamId);
       }
@@ -822,8 +764,7 @@ describe('PlatformNotificationsV1', () => {
           accountId,
         };
 
-        const getPreferencesResult =
-          platformNotificationsService.getPreferences(getPreferencesParams);
+        const getPreferencesResult = platformNotificationsService.getPreferences(getPreferencesParams);
 
         // all methods should return a Promise
         expectToBePromise(getPreferencesResult);
@@ -971,10 +912,7 @@ describe('PlatformNotificationsV1', () => {
           accountId,
         };
 
-        const replaceNotificationPreferencesResult =
-          platformNotificationsService.replaceNotificationPreferences(
-            replaceNotificationPreferencesParams
-          );
+        const replaceNotificationPreferencesResult = platformNotificationsService.replaceNotificationPreferences(replaceNotificationPreferencesParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceNotificationPreferencesResult);
@@ -1002,24 +940,16 @@ describe('PlatformNotificationsV1', () => {
         expect(mockRequestOptions.body.billing_and_usage_order).toEqual(billingAndUsageOrder);
         expect(mockRequestOptions.body.billing_and_usage_invoices).toEqual(billingAndUsageInvoices);
         expect(mockRequestOptions.body.billing_and_usage_payments).toEqual(billingAndUsagePayments);
-        expect(mockRequestOptions.body.billing_and_usage_subscriptions_and_promo_codes).toEqual(
-          billingAndUsageSubscriptionsAndPromoCodes
-        );
-        expect(mockRequestOptions.body.billing_and_usage_spending_alerts).toEqual(
-          billingAndUsageSpendingAlerts
-        );
+        expect(mockRequestOptions.body.billing_and_usage_subscriptions_and_promo_codes).toEqual(billingAndUsageSubscriptionsAndPromoCodes);
+        expect(mockRequestOptions.body.billing_and_usage_spending_alerts).toEqual(billingAndUsageSpendingAlerts);
         expect(mockRequestOptions.body.resourceactivity_normal).toEqual(resourceactivityNormal);
         expect(mockRequestOptions.body.ordering_review).toEqual(orderingReview);
         expect(mockRequestOptions.body.ordering_approved).toEqual(orderingApproved);
         expect(mockRequestOptions.body.ordering_approved_vsi).toEqual(orderingApprovedVsi);
         expect(mockRequestOptions.body.ordering_approved_server).toEqual(orderingApprovedServer);
-        expect(mockRequestOptions.body.provisioning_reload_complete).toEqual(
-          provisioningReloadComplete
-        );
+        expect(mockRequestOptions.body.provisioning_reload_complete).toEqual(provisioningReloadComplete);
         expect(mockRequestOptions.body.provisioning_complete_vsi).toEqual(provisioningCompleteVsi);
-        expect(mockRequestOptions.body.provisioning_complete_server).toEqual(
-          provisioningCompleteServer
-        );
+        expect(mockRequestOptions.body.provisioning_complete_server).toEqual(provisioningCompleteServer);
         expect(mockRequestOptions.qs.account_id).toEqual(accountId);
         expect(mockRequestOptions.path.iam_id).toEqual(iamId);
       }
@@ -1052,9 +982,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.replaceNotificationPreferences(
-          replaceNotificationPreferencesParams
-        );
+        platformNotificationsService.replaceNotificationPreferences(replaceNotificationPreferencesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1095,10 +1023,7 @@ describe('PlatformNotificationsV1', () => {
           accountId,
         };
 
-        const deleteNotificationPreferencesResult =
-          platformNotificationsService.deleteNotificationPreferences(
-            deleteNotificationPreferencesParams
-          );
+        const deleteNotificationPreferencesResult = platformNotificationsService.deleteNotificationPreferences(deleteNotificationPreferencesParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteNotificationPreferencesResult);
@@ -1144,9 +1069,7 @@ describe('PlatformNotificationsV1', () => {
           },
         };
 
-        platformNotificationsService.deleteNotificationPreferences(
-          deleteNotificationPreferencesParams
-        );
+        platformNotificationsService.deleteNotificationPreferences(deleteNotificationPreferencesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1189,8 +1112,7 @@ describe('PlatformNotificationsV1', () => {
           limit,
         };
 
-        const listNotificationsResult =
-          platformNotificationsService.listNotifications(listNotificationsParams);
+        const listNotificationsResult = platformNotificationsService.listNotifications(listNotificationsParams);
 
         // all methods should return a Promise
         expectToBePromise(listNotificationsResult);
@@ -1274,10 +1196,7 @@ describe('PlatformNotificationsV1', () => {
           limit: 50,
         };
         const allResults = [];
-        const pager = new PlatformNotificationsV1.NotificationsPager(
-          platformNotificationsService,
-          params
-        );
+        const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -1292,13 +1211,161 @@ describe('PlatformNotificationsV1', () => {
           accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
           limit: 50,
         };
-        const pager = new PlatformNotificationsV1.NotificationsPager(
-          platformNotificationsService,
-          params
-        );
+        const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getAcknowledgement', () => {
+    describe('positive tests', () => {
+      function __getAcknowledgementTest() {
+        // Construct the params object for operation getAcknowledgement
+        const accountId = '1369339417d906e5620b8d861d40cfd7';
+        const getAcknowledgementParams = {
+          accountId,
+        };
+
+        const getAcknowledgementResult = platformNotificationsService.getAcknowledgement(getAcknowledgementParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getAcknowledgementResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/notifications/acknowledgement', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAcknowledgementTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.enableRetries();
+        __getAcknowledgementTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.disableRetries();
+        __getAcknowledgementTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getAcknowledgementParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        platformNotificationsService.getAcknowledgement(getAcknowledgementParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        platformNotificationsService.getAcknowledgement({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+
+  describe('replaceNotificationAcknowledgement', () => {
+    describe('positive tests', () => {
+      function __replaceNotificationAcknowledgementTest() {
+        // Construct the params object for operation replaceNotificationAcknowledgement
+        const lastAcknowledgedId = '1772804159452';
+        const accountId = '1369339417d906e5620b8d861d40cfd7';
+        const replaceNotificationAcknowledgementParams = {
+          lastAcknowledgedId,
+          accountId,
+        };
+
+        const replaceNotificationAcknowledgementResult = platformNotificationsService.replaceNotificationAcknowledgement(replaceNotificationAcknowledgementParams);
+
+        // all methods should return a Promise
+        expectToBePromise(replaceNotificationAcknowledgementResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/notifications/acknowledgement', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.last_acknowledged_id).toEqual(lastAcknowledgedId);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceNotificationAcknowledgementTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.enableRetries();
+        __replaceNotificationAcknowledgementTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.disableRetries();
+        __replaceNotificationAcknowledgementTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const lastAcknowledgedId = '1772804159452';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const replaceNotificationAcknowledgementParams = {
+          lastAcknowledgedId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        platformNotificationsService.replaceNotificationAcknowledgement(replaceNotificationAcknowledgementParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await platformNotificationsService.replaceNotificationAcknowledgement({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await platformNotificationsService.replaceNotificationAcknowledgement();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });

@@ -288,6 +288,25 @@ describe('PlatformNotificationsV1_integration', () => {
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
+  test('getAcknowledgement()', async () => {
+    const res = await platformNotificationsService.getAcknowledgement();
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('replaceNotificationAcknowledgement()', async () => {
+    const params = {
+      lastAcknowledgedId: '1772804159452',
+      accountId,
+    };
+
+    const res = await platformNotificationsService.replaceNotificationAcknowledgement(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('deleteNotificationPreferences()', async () => {
     const params = {
       iamId,
