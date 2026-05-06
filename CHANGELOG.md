@@ -1,3 +1,10 @@
+## [0.83.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.2...v0.83.3) (2026-05-06)
+
+
+### Bug Fixes
+
+* **deps:** bump core to 5.4.14 ([#338](https://github.com/IBM/platform-services-node-sdk/issues/338)) ([fda2e92](https://github.com/IBM/platform-services-node-sdk/commit/fda2e9289a7873944ec71bd81930b1164fb1f42a))
+
 ## [0.83.2](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.1...v0.83.2) (2026-04-27)
 
 
