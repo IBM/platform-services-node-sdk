@@ -24,7 +24,7 @@ const PlatformNotificationsV1 = require('../dist/platform-notifications/v1');
 // eslint-disable-next-line node/no-unpublished-require
 const authHelper = require('../test/resources/auth-helper.js');
 // You can use the readExternalSources method to access additional configuration values
-// const { readExternalSources } = require('ibm-cloud-sdk-core');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 
 //
 // This file provides an example of how to use the Platform Notifications service.
@@ -55,15 +55,24 @@ describe('PlatformNotificationsV1', () => {
   // Service instance
   let platformNotificationsService;
 
-  // To access additional configuration values, uncomment this line and extract the values from config
-  // const config = readExternalSources(PlatformNotificationsV1.DEFAULT_SERVICE_NAME);
+  let accountId;
+  let destinationId;
+  let iamId;
+
+  beforeAll(() => {
+    const config = readExternalSources(PlatformNotificationsV1.DEFAULT_SERVICE_NAME);
+
+    platformNotificationsService = PlatformNotificationsV1.newInstance({
+      serviceUrl: config.serviceUrl,
+    });
+    accountId = config.accountId;
+    destinationId = config.destinationId;
+    iamId = config.iamId;
+    platformNotificationsService.enableRetries();
+  });
 
   test('Initialize service', async () => {
-    // begin-common
-
-    platformNotificationsService = PlatformNotificationsV1.newInstance();
-
-    // end-common
+    expect(platformNotificationsService).not.toBeNull();
   });
 
   test('listDistributionListDestinations request example', async () => {
@@ -80,7 +89,7 @@ describe('PlatformNotificationsV1', () => {
     // begin-list_distribution_list_destinations
 
     const params = {
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      accountId,
     };
 
     let res;
@@ -111,12 +120,12 @@ describe('PlatformNotificationsV1', () => {
 
     // AddDestinationPrototypeEventNotificationDestinationPrototype
     const addDestinationPrototypeModel = {
-      destination_id: '12345678-1234-1234-1234-123456789012',
+      destination_id: destinationId,
       destination_type: 'event_notifications',
     };
 
     const params = {
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      accountId,
       addDestinationPrototype: addDestinationPrototypeModel,
     };
 
@@ -145,8 +154,8 @@ describe('PlatformNotificationsV1', () => {
     // begin-get_distribution_list_destination
 
     const params = {
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-      destinationId: '12345678-1234-1234-1234-123456789012',
+      accountId,
+      destinationId,
     };
 
     let res;
@@ -182,8 +191,8 @@ describe('PlatformNotificationsV1', () => {
     };
 
     const params = {
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-      destinationId: '12345678-1234-1234-1234-123456789012',
+      accountId,
+      destinationId,
       testDestinationRequestBodyPrototype: testDestinationRequestBodyPrototypeModel,
     };
 
@@ -225,10 +234,10 @@ describe('PlatformNotificationsV1', () => {
     };
 
     const params = {
-      iamId: 'IBMid-1234567890',
+      iamId,
       incidentSeverity1: preferenceValueWithUpdatesModel,
       orderingReview: preferenceValueWithoutUpdatesModel,
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      accountId,
     };
 
     let res;
@@ -256,8 +265,8 @@ describe('PlatformNotificationsV1', () => {
     // begin-get_preferences
 
     const params = {
-      iamId: 'IBMid-1234567890',
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      iamId,
+      accountId,
     };
 
     let res;
@@ -298,10 +307,10 @@ describe('PlatformNotificationsV1', () => {
     };
 
     const params = {
-      iamId: 'IBMid-1234567890',
+      iamId,
       incidentSeverity1: preferenceValueWithUpdatesModel,
       orderingReview: preferenceValueWithoutUpdatesModel,
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      accountId,
     };
 
     let res;
@@ -329,7 +338,7 @@ describe('PlatformNotificationsV1', () => {
     // begin-list_notifications
 
     const params = {
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      accountId,
       limit: 50,
     };
 
@@ -366,7 +375,7 @@ describe('PlatformNotificationsV1', () => {
     // begin-get_acknowledgement
 
     const params = {
-      accountId: '1369339417d906e5620b8d861d40cfd7',
+      accountId,
     };
 
     let res;
@@ -395,7 +404,7 @@ describe('PlatformNotificationsV1', () => {
 
     const params = {
       lastAcknowledgedId: '1772804159452',
-      accountId: '1369339417d906e5620b8d861d40cfd7',
+      accountId,
     };
 
     let res;
@@ -422,8 +431,8 @@ describe('PlatformNotificationsV1', () => {
     // begin-delete_distribution_list_destination
 
     const params = {
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-      destinationId: '12345678-1234-1234-1234-123456789012',
+      accountId,
+      destinationId,
     };
 
     try {
@@ -448,8 +457,8 @@ describe('PlatformNotificationsV1', () => {
     // begin-delete_notification_preferences
 
     const params = {
-      iamId: 'IBMid-1234567890',
-      accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+      iamId,
+      accountId,
     };
 
     try {
