@@ -125,6 +125,11 @@ describe('ContextBasedRestrictionsV1', () => {
       type: 'vpc',
       value: vpcCRN,
     };
+    // AddressInstance
+    const instanceAddressModel = {
+      type: 'instance',
+      value: vpcCRN,
+    };
     // AddressServiceRef
     const serviceRefAddressModel = {
       type: 'serviceRef',
@@ -142,7 +147,7 @@ describe('ContextBasedRestrictionsV1', () => {
     const params = {
       name: 'an example of zone',
       accountId,
-      addresses: [ipAddressModel, ipAddressV6Model, ipRangeAddressModel, ipRangeAddressV6Model, subnetAddressModel, vpcAddressModel, serviceRefAddressModel],
+      addresses: [ipAddressModel, ipAddressV6Model, ipRangeAddressModel, ipRangeAddressV6Model, subnetAddressModel, vpcAddressModel, instanceAddressModel, serviceRefAddressModel],
       excluded: [excludedIPAddressModel],
       description: 'this is an example of zone',
     };
