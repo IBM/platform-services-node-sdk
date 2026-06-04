@@ -120,6 +120,277 @@ describe('PlatformNotificationsV1', () => {
     });
   });
 
+  describe('listNotifications', () => {
+    describe('positive tests', () => {
+      function __listNotificationsTest() {
+        // Construct the params object for operation listNotifications
+        const accountId = 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6';
+        const start = '3fe78a36b9aa7f26';
+        const limit = 50;
+        const listNotificationsParams = {
+          accountId,
+          start,
+          limit,
+        };
+
+        const listNotificationsResult = platformNotificationsService.listNotifications(listNotificationsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listNotificationsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/notifications', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listNotificationsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.enableRetries();
+        __listNotificationsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.disableRetries();
+        __listNotificationsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listNotificationsParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        platformNotificationsService.listNotifications(listNotificationsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        platformNotificationsService.listNotifications({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+
+    describe('NotificationsPager tests', () => {
+      const serviceUrl = platformNotificationsServiceOptions.url;
+      const path = '/v1/notifications';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"notifications":[{"title":"System Maintenance Scheduled","body":"Scheduled maintenance will occur on March 15th from 10:00 AM to 11:00 AM UTC.","id":"12345","category":"maintenance","component_names":["component_names"],"start_time":1771791490,"is_global":false,"state":"new","regions":["regions"],"crn_masks":["crn_masks"],"record_id":"rec-67890","source_id":"src-11111","completion_code":"successful","end_time":1771791490,"update_time":1771791490,"severity":2,"lucene_query":"region:us-south AND service_name:event-notifications","resource_link":"https://cloud.ibm.com/status/incident/12345","creation_timestamp":1772804159452}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"notifications":[{"title":"System Maintenance Scheduled","body":"Scheduled maintenance will occur on March 15th from 10:00 AM to 11:00 AM UTC.","id":"12345","category":"maintenance","component_names":["component_names"],"start_time":1771791490,"is_global":false,"state":"new","regions":["regions"],"crn_masks":["crn_masks"],"record_id":"rec-67890","source_id":"src-11111","completion_code":"successful","end_time":1771791490,"update_time":1771791490,"severity":2,"lucene_query":"region:us-south AND service_name:event-notifications","resource_link":"https://cloud.ibm.com/status/incident/12345","creation_timestamp":1772804159452}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+          limit: 50,
+        };
+        const allResults = [];
+        const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
+          limit: 50,
+        };
+        const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getAcknowledgement', () => {
+    describe('positive tests', () => {
+      function __getAcknowledgementTest() {
+        // Construct the params object for operation getAcknowledgement
+        const accountId = 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6';
+        const getAcknowledgementParams = {
+          accountId,
+        };
+
+        const getAcknowledgementResult = platformNotificationsService.getAcknowledgement(getAcknowledgementParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getAcknowledgementResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/notifications/acknowledgement', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getAcknowledgementTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.enableRetries();
+        __getAcknowledgementTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.disableRetries();
+        __getAcknowledgementTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getAcknowledgementParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        platformNotificationsService.getAcknowledgement(getAcknowledgementParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        platformNotificationsService.getAcknowledgement({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+
+  describe('replaceNotificationAcknowledgement', () => {
+    describe('positive tests', () => {
+      function __replaceNotificationAcknowledgementTest() {
+        // Construct the params object for operation replaceNotificationAcknowledgement
+        const lastAcknowledged = 1772804159452;
+        const accountId = 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6';
+        const replaceNotificationAcknowledgementParams = {
+          lastAcknowledged,
+          accountId,
+        };
+
+        const replaceNotificationAcknowledgementResult = platformNotificationsService.replaceNotificationAcknowledgement(replaceNotificationAcknowledgementParams);
+
+        // all methods should return a Promise
+        expectToBePromise(replaceNotificationAcknowledgementResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/v1/notifications/acknowledgement', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.last_acknowledged).toEqual(lastAcknowledged);
+        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceNotificationAcknowledgementTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.enableRetries();
+        __replaceNotificationAcknowledgementTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        platformNotificationsService.disableRetries();
+        __replaceNotificationAcknowledgementTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const lastAcknowledged = 1772804159452;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const replaceNotificationAcknowledgementParams = {
+          lastAcknowledged,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        platformNotificationsService.replaceNotificationAcknowledgement(replaceNotificationAcknowledgementParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await platformNotificationsService.replaceNotificationAcknowledgement({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await platformNotificationsService.replaceNotificationAcknowledgement();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('listDistributionListDestinations', () => {
     describe('positive tests', () => {
       function __listDistributionListDestinationsTest() {
@@ -1090,277 +1361,6 @@ describe('PlatformNotificationsV1', () => {
         let err;
         try {
           await platformNotificationsService.deleteNotificationPreferences();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-
-  describe('listNotifications', () => {
-    describe('positive tests', () => {
-      function __listNotificationsTest() {
-        // Construct the params object for operation listNotifications
-        const accountId = 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6';
-        const start = '3fe78a36b9aa7f26';
-        const limit = 50;
-        const listNotificationsParams = {
-          accountId,
-          start,
-          limit,
-        };
-
-        const listNotificationsResult = platformNotificationsService.listNotifications(listNotificationsParams);
-
-        // all methods should return a Promise
-        expectToBePromise(listNotificationsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/v1/notifications', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
-        expect(mockRequestOptions.qs.start).toEqual(start);
-        expect(mockRequestOptions.qs.limit).toEqual(limit);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __listNotificationsTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        platformNotificationsService.enableRetries();
-        __listNotificationsTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        platformNotificationsService.disableRetries();
-        __listNotificationsTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const listNotificationsParams = {
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        platformNotificationsService.listNotifications(listNotificationsParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        platformNotificationsService.listNotifications({});
-        checkForSuccessfulExecution(createRequestMock);
-      });
-    });
-
-    describe('NotificationsPager tests', () => {
-      const serviceUrl = platformNotificationsServiceOptions.url;
-      const path = '/v1/notifications';
-      const mockPagerResponse1 =
-        '{"next":{"start":"1"},"total_count":2,"limit":1,"notifications":[{"title":"System Maintenance Scheduled","body":"Scheduled maintenance will occur on March 15th from 10:00 AM to 11:00 AM UTC.","id":"12345","category":"maintenance","component_names":["component_names"],"start_time":1771791490,"is_global":false,"state":"new","regions":["regions"],"crn_masks":["crn_masks"],"record_id":"rec-67890","source_id":"src-11111","completion_code":"successful","end_time":1771791490,"update_time":1771791490,"severity":2,"lucene_query":"region:us-south AND service_name:event-notifications","resource_link":"https://cloud.ibm.com/status/incident/12345"}]}';
-      const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"notifications":[{"title":"System Maintenance Scheduled","body":"Scheduled maintenance will occur on March 15th from 10:00 AM to 11:00 AM UTC.","id":"12345","category":"maintenance","component_names":["component_names"],"start_time":1771791490,"is_global":false,"state":"new","regions":["regions"],"crn_masks":["crn_masks"],"record_id":"rec-67890","source_id":"src-11111","completion_code":"successful","end_time":1771791490,"update_time":1771791490,"severity":2,"lucene_query":"region:us-south AND service_name:event-notifications","resource_link":"https://cloud.ibm.com/status/incident/12345"}]}';
-
-      beforeEach(() => {
-        unmock_createRequest();
-        const scope = nock(serviceUrl)
-          .get((uri) => uri.includes(path))
-          .reply(200, mockPagerResponse1)
-          .get((uri) => uri.includes(path))
-          .reply(200, mockPagerResponse2);
-      });
-
-      afterEach(() => {
-        nock.cleanAll();
-        mock_createRequest();
-      });
-
-      test('getNext()', async () => {
-        const params = {
-          accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-          limit: 50,
-        };
-        const allResults = [];
-        const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
-        while (pager.hasNext()) {
-          const nextPage = await pager.getNext();
-          expect(nextPage).not.toBeNull();
-          allResults.push(...nextPage);
-        }
-        expect(allResults).not.toBeNull();
-        expect(allResults).toHaveLength(2);
-      });
-
-      test('getAll()', async () => {
-        const params = {
-          accountId: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-          limit: 50,
-        };
-        const pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
-        const allResults = await pager.getAll();
-        expect(allResults).not.toBeNull();
-        expect(allResults).toHaveLength(2);
-      });
-    });
-  });
-
-  describe('getAcknowledgement', () => {
-    describe('positive tests', () => {
-      function __getAcknowledgementTest() {
-        // Construct the params object for operation getAcknowledgement
-        const accountId = '1369339417d906e5620b8d861d40cfd7';
-        const getAcknowledgementParams = {
-          accountId,
-        };
-
-        const getAcknowledgementResult = platformNotificationsService.getAcknowledgement(getAcknowledgementParams);
-
-        // all methods should return a Promise
-        expectToBePromise(getAcknowledgementResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/v1/notifications/acknowledgement', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __getAcknowledgementTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        platformNotificationsService.enableRetries();
-        __getAcknowledgementTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        platformNotificationsService.disableRetries();
-        __getAcknowledgementTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const getAcknowledgementParams = {
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        platformNotificationsService.getAcknowledgement(getAcknowledgementParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        platformNotificationsService.getAcknowledgement({});
-        checkForSuccessfulExecution(createRequestMock);
-      });
-    });
-  });
-
-  describe('replaceNotificationAcknowledgement', () => {
-    describe('positive tests', () => {
-      function __replaceNotificationAcknowledgementTest() {
-        // Construct the params object for operation replaceNotificationAcknowledgement
-        const lastAcknowledgedId = '1772804159452';
-        const accountId = '1369339417d906e5620b8d861d40cfd7';
-        const replaceNotificationAcknowledgementParams = {
-          lastAcknowledgedId,
-          accountId,
-        };
-
-        const replaceNotificationAcknowledgementResult = platformNotificationsService.replaceNotificationAcknowledgement(replaceNotificationAcknowledgementParams);
-
-        // all methods should return a Promise
-        expectToBePromise(replaceNotificationAcknowledgementResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(mockRequestOptions, '/v1/notifications/acknowledgement', 'PUT');
-        const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.last_acknowledged_id).toEqual(lastAcknowledgedId);
-        expect(mockRequestOptions.qs.account_id).toEqual(accountId);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __replaceNotificationAcknowledgementTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        platformNotificationsService.enableRetries();
-        __replaceNotificationAcknowledgementTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        platformNotificationsService.disableRetries();
-        __replaceNotificationAcknowledgementTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const lastAcknowledgedId = '1772804159452';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const replaceNotificationAcknowledgementParams = {
-          lastAcknowledgedId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        platformNotificationsService.replaceNotificationAcknowledgement(replaceNotificationAcknowledgementParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await platformNotificationsService.replaceNotificationAcknowledgement({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await platformNotificationsService.replaceNotificationAcknowledgement();
         } catch (e) {
           err = e;
         }

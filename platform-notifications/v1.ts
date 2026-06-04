@@ -34,9 +34,11 @@ import {
 import { getSdkHeaders } from '../lib/common';
 
 /**
- * **This API is currently in beta and subject to change.**
- *
- * API for managing notification distribution lists for IBM Cloud accounts.
+ * API for IBM Cloud account notifications, providing capabilities to:
+ * - View notifications
+ * - Get and update acknowledgements
+ * - Manage user communication preferences
+ * - Manage notification distribution lists
  *
  * API Version: 1.0.0
  */
@@ -98,6 +100,193 @@ class PlatformNotificationsV1 extends BaseService {
     }
   }
 
+  /*************************
+   * notifications
+   ************************/
+
+  /**
+   * Get user notifications.
+   *
+   * Retrieve all notifications for the requested user.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - The IBM Cloud account ID. If not provided, the account ID from the bearer
+   * token will be used.
+   * @param {string} [params.start] - An opaque page token that specifies the resource to start the page on or after. If
+   * unspecified, the first page of results is returned.
+   * @param {number} [params.limit] - The maximum number of items to return per page. If unspecified, a default limit of
+   * 50 is used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.NotificationCollection>>}
+   */
+  public listNotifications(
+    params?: PlatformNotificationsV1.ListNotificationsParams
+  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.NotificationCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'start', 'limit', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listNotifications'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/notifications',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get acknowledgement.
+   *
+   * Retrieve the ID of the last notification acknowledged by the user for a specific account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.accountId] - The IBM Cloud account ID. If not provided, the account ID from the bearer
+   * token will be used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>>}
+   */
+  public getAcknowledgement(
+    params?: PlatformNotificationsV1.GetAcknowledgementParams
+  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['accountId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getAcknowledgement'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/notifications/acknowledgement',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update acknowledgement.
+   *
+   * Update the ID of the last notification acknowledged by the user for a specific account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {number} params.lastAcknowledged - The timestamp of the last acknowledgement.
+   * @param {string} [params.accountId] - The IBM Cloud account ID. If not provided, the account ID from the bearer
+   * token will be used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>>}
+   */
+  public replaceNotificationAcknowledgement(
+    params: PlatformNotificationsV1.ReplaceNotificationAcknowledgementParams
+  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>> {
+    const _params = { ...params };
+    const _requiredParams = ['lastAcknowledged'];
+    const _validParams = ['lastAcknowledged', 'accountId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'last_acknowledged': _params.lastAcknowledged,
+    };
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceNotificationAcknowledgement'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/notifications/acknowledgement',
+        method: 'PUT',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * distributionLists
    ************************/
@@ -280,7 +469,7 @@ class PlatformNotificationsV1 extends BaseService {
   }
 
   /**
-   * Delete destination entry.
+   * Delete a destination entry.
    *
    * Remove a destination entry.
    *
@@ -330,7 +519,7 @@ class PlatformNotificationsV1 extends BaseService {
   }
 
   /**
-   * Test destination entry.
+   * Test a destination entry.
    *
    * Send a test notification to a destination in the distribution list. This allows you to verify that the destination
    * is properly configured and can receive notifications.
@@ -402,6 +591,69 @@ class PlatformNotificationsV1 extends BaseService {
   /*************************
    * userPreferences
    ************************/
+
+  /**
+   * Get all communication preferences.
+   *
+   * Retrieve all communication preferences of a user in an account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.iamId - The IAM ID of the user. Must match the IAM ID in the bearer token.
+   * @param {string} [params.accountId] - The IBM Cloud account ID. If not provided, the account ID from the bearer
+   * token will be used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.PreferencesObject>>}
+   */
+  public getPreferences(
+    params: PlatformNotificationsV1.GetPreferencesParams
+  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.PreferencesObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['iamId'];
+    const _validParams = ['iamId', 'accountId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+    };
+
+    const path = {
+      'iam_id': _params.iamId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPreferences'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/notifications/{iam_id}/preferences',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 
   /**
    * Create communication preferences.
@@ -561,69 +813,6 @@ class PlatformNotificationsV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          },
-          _params.headers
-        ),
-        axiosOptions: {
-          signal: _params.signal,
-        },
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Get all communication preferences for a user in an account.
-   *
-   * Retrieve all communication preferences of a user in an account.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.iamId - The IAM ID of the user. Must match the IAM ID in the bearer token.
-   * @param {string} [params.accountId] - The IBM Cloud account ID. If not provided, the account ID from the bearer
-   * token will be used.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.PreferencesObject>>}
-   */
-  public getPreferences(
-    params: PlatformNotificationsV1.GetPreferencesParams
-  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.PreferencesObject>> {
-    const _params = { ...params };
-    const _requiredParams = ['iamId'];
-    const _validParams = ['iamId', 'accountId', 'signal', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'account_id': _params.accountId,
-    };
-
-    const path = {
-      'iam_id': _params.iamId,
-    };
-
-    const sdkHeaders = getSdkHeaders(
-      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getPreferences'
-    );
-
-    const parameters = {
-      options: {
-        url: '/v1/notifications/{iam_id}/preferences',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          this.baseOptions.headers,
-          {
-            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -807,9 +996,9 @@ class PlatformNotificationsV1 extends BaseService {
   }
 
   /**
-   * Resets all preferences to their default values.
+   * Reset all preferences to their default values.
    *
-   * Delete all communication preferences for the specified account, and resets all preferences to their default values.
+   * Delete all communication preferences for the specified account, and reset all preferences to their default values.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.iamId - The IAM ID of the user. Must match the IAM ID in the bearer token.
@@ -860,191 +1049,6 @@ class PlatformNotificationsV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
-  /*************************
-   * notifications
-   ************************/
-
-  /**
-   * Get user notifications.
-   *
-   * Retrieve all notifications for the requested user.
-   *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - The IBM Cloud account ID. If not provided, the account ID from the bearer
-   * token will be used.
-   * @param {string} [params.start] - An opaque page token that specifies the resource to start the page on or after. If
-   * unspecified, the first page of results is returned.
-   * @param {number} [params.limit] - The maximum number of items to return per page. If unspecified, a default limit of
-   * 50 is used.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.NotificationCollection>>}
-   */
-  public listNotifications(
-    params?: PlatformNotificationsV1.ListNotificationsParams
-  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.NotificationCollection>> {
-    const _params = { ...params };
-    const _requiredParams = [];
-    const _validParams = ['accountId', 'start', 'limit', 'signal', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'account_id': _params.accountId,
-      'start': _params.start,
-      'limit': _params.limit,
-    };
-
-    const sdkHeaders = getSdkHeaders(
-      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listNotifications'
-    );
-
-    const parameters = {
-      options: {
-        url: '/v1/notifications',
-        method: 'GET',
-        qs: query,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          this.baseOptions.headers,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-        axiosOptions: {
-          signal: _params.signal,
-        },
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Get user's last acknowledged notification Id.
-   *
-   * Retrieve the ID of the last notification acknowledged by the user for a specific account.
-   *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.accountId] - The account ID to retrieve acknowledgement for.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>>}
-   */
-  public getAcknowledgement(
-    params?: PlatformNotificationsV1.GetAcknowledgementParams
-  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>> {
-    const _params = { ...params };
-    const _requiredParams = [];
-    const _validParams = ['accountId', 'signal', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'account_id': _params.accountId,
-    };
-
-    const sdkHeaders = getSdkHeaders(
-      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getAcknowledgement'
-    );
-
-    const parameters = {
-      options: {
-        url: '/v1/notifications/acknowledgement',
-        method: 'GET',
-        qs: query,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          this.baseOptions.headers,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-        axiosOptions: {
-          signal: _params.signal,
-        },
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Update user's last acknowledged notification.
-   *
-   * Update the ID of the last notification acknowledged by the user for a specific account.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.lastAcknowledgedId - The ID of a notification.
-   * @param {string} [params.accountId] - The account ID to update acknowledgement for.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>>}
-   */
-  public replaceNotificationAcknowledgement(
-    params: PlatformNotificationsV1.ReplaceNotificationAcknowledgementParams
-  ): Promise<PlatformNotificationsV1.Response<PlatformNotificationsV1.Acknowledgement>> {
-    const _params = { ...params };
-    const _requiredParams = ['lastAcknowledgedId'];
-    const _validParams = ['lastAcknowledgedId', 'accountId', 'signal', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const body = {
-      'last_acknowledged_id': _params.lastAcknowledgedId,
-    };
-
-    const query = {
-      'account_id': _params.accountId,
-    };
-
-    const sdkHeaders = getSdkHeaders(
-      PlatformNotificationsV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceNotificationAcknowledgement'
-    );
-
-    const parameters = {
-      options: {
-        url: '/v1/notifications/acknowledgement',
-        method: 'PUT',
-        body,
-        qs: query,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          this.baseOptions.headers,
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          _params.headers
-        ),
-        axiosOptions: {
-          signal: _params.signal,
-        },
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
 }
 
 /*************************
@@ -1078,6 +1082,32 @@ namespace PlatformNotificationsV1 {
   interface DefaultParams {
     headers?: OutgoingHttpHeaders;
     signal?: AbortSignal;
+  }
+
+  /** Parameters for the `listNotifications` operation. */
+  export interface ListNotificationsParams extends DefaultParams {
+    /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
+    accountId?: string;
+    /** An opaque page token that specifies the resource to start the page on or after. If unspecified, the first
+     *  page of results is returned.
+     */
+    start?: string;
+    /** The maximum number of items to return per page. If unspecified, a default limit of 50 is used. */
+    limit?: number;
+  }
+
+  /** Parameters for the `getAcknowledgement` operation. */
+  export interface GetAcknowledgementParams extends DefaultParams {
+    /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
+    accountId?: string;
+  }
+
+  /** Parameters for the `replaceNotificationAcknowledgement` operation. */
+  export interface ReplaceNotificationAcknowledgementParams extends DefaultParams {
+    /** The timestamp of the last acknowledgement. */
+    lastAcknowledged: number;
+    /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
+    accountId?: string;
   }
 
   /** Parameters for the `listDistributionListDestinations` operation. */
@@ -1116,6 +1146,14 @@ namespace PlatformNotificationsV1 {
     /** The ID of the destination. */
     destinationId: string;
     testDestinationRequestBodyPrototype: TestDestinationRequestBodyPrototype;
+  }
+
+  /** Parameters for the `getPreferences` operation. */
+  export interface GetPreferencesParams extends DefaultParams {
+    /** The IAM ID of the user. Must match the IAM ID in the bearer token. */
+    iamId: string;
+    /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
+    accountId?: string;
   }
 
   /** Parameters for the `createPreferences` operation. */
@@ -1170,14 +1208,6 @@ namespace PlatformNotificationsV1 {
     provisioningCompleteVsi?: PreferenceValueWithoutUpdates;
     /** Preference settings for notification types that do not support updates. */
     provisioningCompleteServer?: PreferenceValueWithoutUpdates;
-    /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
-    accountId?: string;
-  }
-
-  /** Parameters for the `getPreferences` operation. */
-  export interface GetPreferencesParams extends DefaultParams {
-    /** The IAM ID of the user. Must match the IAM ID in the bearer token. */
-    iamId: string;
     /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
     accountId?: string;
   }
@@ -1246,35 +1276,19 @@ namespace PlatformNotificationsV1 {
     accountId?: string;
   }
 
-  /** Parameters for the `listNotifications` operation. */
-  export interface ListNotificationsParams extends DefaultParams {
-    /** The IBM Cloud account ID. If not provided, the account ID from the bearer token will be used. */
-    accountId?: string;
-    /** An opaque page token that specifies the resource to start the page on or after. If unspecified, the first
-     *  page of results is returned.
-     */
-    start?: string;
-    /** The maximum number of items to return per page. If unspecified, a default limit of 50 is used. */
-    limit?: number;
-  }
-
-  /** Parameters for the `getAcknowledgement` operation. */
-  export interface GetAcknowledgementParams extends DefaultParams {
-    /** The account ID to retrieve acknowledgement for. */
-    accountId?: string;
-  }
-
-  /** Parameters for the `replaceNotificationAcknowledgement` operation. */
-  export interface ReplaceNotificationAcknowledgementParams extends DefaultParams {
-    /** The ID of a notification. */
-    lastAcknowledgedId: string;
-    /** The account ID to update acknowledgement for. */
-    accountId?: string;
-  }
-
   /*************************
    * model interfaces
    ************************/
+
+  /**
+   * Status indicating whether the user has unread notifications.
+   */
+  export interface Acknowledgement {
+    /** Indicates whether the user has unread notifications. */
+    has_unread: boolean;
+    /** The timestamp of the last acknowledgement. */
+    last_acknowledged: number;
+  }
 
   /**
    * AddDestination.
@@ -1308,12 +1322,12 @@ namespace PlatformNotificationsV1 {
     category: Notification.Constants.Category | string;
     /** Array of component/service names affected by this notification. */
     component_names: string[];
-    /** The start time of the notification in Unix timestamp (milliseconds). */
-    start_time: number;
+    /** The start time of the notification in Unix timestamp (seconds). */
+    start_time?: number;
     /** Indicates if the notification is global. */
     is_global: boolean;
     /** The current state of the notification. */
-    state: Notification.Constants.State | string;
+    state?: Notification.Constants.State | string;
     /** Array of region identifiers affected by this notification. */
     regions: string[];
     /** Array of CRN masks that define the scope of affected resources. */
@@ -1323,11 +1337,11 @@ namespace PlatformNotificationsV1 {
     /** The source identifier of the notification. */
     source_id?: string;
     /** The completion code of the notification. */
-    completion_code: Notification.Constants.CompletionCode | string;
-    /** The end time of the notification in Unix timestamp (milliseconds). */
+    completion_code?: Notification.Constants.CompletionCode | string;
+    /** The end time of the notification in Unix timestamp (seconds). */
     end_time?: number;
-    /** The last update time of the notification in Unix timestamp (milliseconds). */
-    update_time: number;
+    /** The last update time of the notification in Unix timestamp (seconds). */
+    update_time?: number;
     /** The severity level of the notification (0-3). The display value depends on the notification type:
      *
      *  **Incidents:**
@@ -1354,6 +1368,8 @@ namespace PlatformNotificationsV1 {
      *  available. Mutually exclusive with lucene_query.
      */
     resource_link?: string;
+    /** The timestamp when the notification was created. */
+    creation_timestamp: number;
   }
   export namespace Notification {
     export namespace Constants {
@@ -1410,7 +1426,7 @@ namespace PlatformNotificationsV1 {
    * A pagination link object containing the URL to a page.
    */
   export interface PaginationLink {
-    /** Complete URL to the page. */
+    /** The full URL path to the page. */
     href: string;
   }
 
@@ -1524,18 +1540,6 @@ namespace PlatformNotificationsV1 {
   export interface TestDestinationResponseBody {
     /** The status message that indicates the test result. */
     message: string;
-  }
-
-  /**
-   * Status indicating whether the user has unread notifications.
-   */
-  export interface Acknowledgement {
-    /** Indicates whether the user has unread notifications. */
-    has_unread: boolean;
-    /** The ID of the most recent notification available to the user. */
-    latest_notification_id: string;
-    /** The ID of the last notification acknowledged by the user. */
-    last_acknowledged_id: string;
   }
 
   /**

@@ -117,6 +117,68 @@ describe('PlatformNotificationsV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
+  test('listNotifications()', async () => {
+    const params = {
+      accountId,
+      limit: 50,
+    };
+
+    const res = await platformNotificationsService.listNotifications(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listNotifications() via NotificationsPager', async () => {
+    const params = {
+      accountId,
+      limit: 50,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new PlatformNotificationsV1.NotificationsPager(
+      platformNotificationsService,
+      params
+    );
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getAcknowledgement()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await platformNotificationsService.getAcknowledgement(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('replaceNotificationAcknowledgement()', async () => {
+    const params = {
+      lastAcknowledged: 1772804159452,
+      accountId,
+    };
+
+    const res = await platformNotificationsService.replaceNotificationAcknowledgement(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('listDistributionListDestinations()', async () => {
     const params = {
       accountId,
@@ -245,63 +307,6 @@ describe('PlatformNotificationsV1_integration', () => {
     };
 
     const res = await platformNotificationsService.replaceNotificationPreferences(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('listNotifications()', async () => {
-    const params = {
-      accountId,
-    };
-
-    const res = await platformNotificationsService.listNotifications(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('listNotifications() via NotificationsPager', async () => {
-    const params = {
-      accountId,
-      limit: 50,
-    };
-
-    const allResults = [];
-
-    // Test getNext().
-    let pager = new PlatformNotificationsV1.NotificationsPager(
-      platformNotificationsService,
-      params
-    );
-    while (pager.hasNext()) {
-      const nextPage = await pager.getNext();
-      expect(nextPage).not.toBeNull();
-      allResults.push(...nextPage);
-    }
-
-    // Test getAll().
-    pager = new PlatformNotificationsV1.NotificationsPager(platformNotificationsService, params);
-    const allItems = await pager.getAll();
-    expect(allItems).not.toBeNull();
-    expect(allItems).toHaveLength(allResults.length);
-    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
-  });
-
-  test('getAcknowledgement()', async () => {
-    const res = await platformNotificationsService.getAcknowledgement();
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('replaceNotificationAcknowledgement()', async () => {
-    const params = {
-      lastAcknowledgedId: '1772804159452',
-      accountId,
-    };
-
-    const res = await platformNotificationsService.replaceNotificationAcknowledgement(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
