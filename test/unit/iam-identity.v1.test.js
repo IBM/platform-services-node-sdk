@@ -4868,7 +4868,6 @@ describe('IamIdentityV1', () => {
         const iamId = 'testString';
         const service = 'testString';
         const preferenceId = 'testString';
-        const valueString = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const updatePreferenceOnScopeAccountParams = {
@@ -4876,7 +4875,6 @@ describe('IamIdentityV1', () => {
           iamId,
           service,
           preferenceId,
-          valueString,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
