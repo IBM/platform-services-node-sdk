@@ -1,3 +1,10 @@
+## [0.83.5](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.4...v0.83.5) (2026-06-09)
+
+
+### Bug Fixes
+
+* **IAM Identity:** add PowerVS compute resource type support ([#341](https://github.com/IBM/platform-services-node-sdk/issues/341)) ([17fa7a9](https://github.com/IBM/platform-services-node-sdk/commit/17fa7a9b7efc0472e8af226a797d7a1f021da5ad))
+
 ## [0.83.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.3...v0.83.4) (2026-05-07)
 
 
