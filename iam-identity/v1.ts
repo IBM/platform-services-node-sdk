@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.113.0-3f9df07a-20260317-160650
+ * IBM OpenAPI SDK Code Generator Version: 3.113.1-d76630af-20260320-135953
  */
 
 import * as extend from 'extend';
@@ -1848,7 +1848,7 @@ class IamIdentityV1 extends BaseService {
    * @param {string} [params.realmName] - The realm name of the Idp this claim rule applies to. This field is required
    * only if the type is specified as 'Profile-SAML'.
    * @param {string} [params.crType] - The compute resource type the rule applies to, required only if type is specified
-   * as 'Profile-CR'. Valid values are VSI, IKS_SA, ROKS_SA.
+   * as 'Profile-CR'. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE.
    * @param {number} [params.expiration] - Session expiration in seconds, only required if type is 'Profile-SAML'.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRule>>}
@@ -2043,7 +2043,7 @@ class IamIdentityV1 extends BaseService {
    * @param {string} [params.realmName] - The realm name of the Idp this claim rule applies to. This field is required
    * only if the type is specified as 'Profile-SAML'.
    * @param {string} [params.crType] - The compute resource type the rule applies to, required only if type is specified
-   * as 'Profile-CR'. Valid values are VSI, IKS_SA, ROKS_SA.
+   * as 'Profile-CR'. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE.
    * @param {number} [params.expiration] - Session expiration in seconds, only required if type is 'Profile-SAML'.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ProfileClaimRule>>}
@@ -2172,7 +2172,7 @@ class IamIdentityV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - ID of the trusted profile.
-   * @param {string} params.crType - The compute resource type. Valid values are VSI, IKS_SA, ROKS_SA.
+   * @param {string} params.crType - The compute resource type. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE.
    * @param {CreateProfileLinkRequestLink} params.link - Link details.
    * @param {string} [params.name] - Optional name of the Link.
    * @param {boolean} [params.isCrossAccount] - Flag to indicate that the link provides cross account access. If not
@@ -2298,8 +2298,8 @@ class IamIdentityV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.profileId - The unique ID of the Trusted Profile.
-   * @param {string} params.type - The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE.
-   * @param {string} [params.crn] - CRN of the compute resource (IKS/ROKS/VSI/BMS).
+   * @param {string} params.type - The compute resource type. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE.
+   * @param {string} [params.crn] - CRN of the compute resource (VSI/PVS/BMS/IKS/ROKS/CE).
    * @param {string} [params.namespace] - Namespace of the compute resource (IKS/ROKS).
    * @param {string} [params.name] - Name of the compute resource (IKS/ROKS).
    * @param {string} [params.componentType] - Component type of the compute resource, only required if type is CE.
@@ -3426,7 +3426,7 @@ class IamIdentityV1 extends BaseService {
    * @param {string} params.iamId - IAM id to update the preference for.
    * @param {string} params.service - Service of the preference to be updated.
    * @param {string} params.preferenceId - Identifier of preference to be updated.
-   * @param {string} params.valueString - contains a string value of the preference. only one value property is set,
+   * @param {string} [params.valueString] - contains a string value of the preference. only one value property is set,
    * either 'value_string' or 'value_list_of_strings' is present.
    * @param {string[]} [params.valueListOfStrings] - contains a list of string values of the preference. only one value
    * property is set, either 'value_string' or 'value_list_of_strings' is present.
@@ -3437,7 +3437,7 @@ class IamIdentityV1 extends BaseService {
     params: IamIdentityV1.UpdatePreferenceOnScopeAccountParams
   ): Promise<IamIdentityV1.Response<IamIdentityV1.IdentityPreferenceResponse>> {
     const _params = { ...params };
-    const _requiredParams = ['accountId', 'iamId', 'service', 'preferenceId', 'valueString'];
+    const _requiredParams = ['accountId', 'iamId', 'service', 'preferenceId'];
     const _validParams = [
       'accountId',
       'iamId',
@@ -6472,7 +6472,7 @@ namespace IamIdentityV1 {
      */
     realmName?: string;
     /** The compute resource type the rule applies to, required only if type is specified as 'Profile-CR'. Valid
-     *  values are VSI, IKS_SA, ROKS_SA.
+     *  values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE.
      */
     crType?: string;
     /** Session expiration in seconds, only required if type is 'Profile-SAML'. */
@@ -6517,7 +6517,7 @@ namespace IamIdentityV1 {
      */
     realmName?: string;
     /** The compute resource type the rule applies to, required only if type is specified as 'Profile-CR'. Valid
-     *  values are VSI, IKS_SA, ROKS_SA.
+     *  values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE.
      */
     crType?: string;
     /** Session expiration in seconds, only required if type is 'Profile-SAML'. */
@@ -6536,7 +6536,7 @@ namespace IamIdentityV1 {
   export interface CreateLinkParams extends DefaultParams {
     /** ID of the trusted profile. */
     profileId: string;
-    /** The compute resource type. Valid values are VSI, IKS_SA, ROKS_SA. */
+    /** The compute resource type. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE. */
     crType: string;
     /** Link details. */
     link: CreateProfileLinkRequestLink;
@@ -6558,9 +6558,9 @@ namespace IamIdentityV1 {
   export interface DeleteLinkByParametersParams extends DefaultParams {
     /** The unique ID of the Trusted Profile. */
     profileId: string;
-    /** The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE. */
+    /** The compute resource type. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE. */
     type: string;
-    /** CRN of the compute resource (IKS/ROKS/VSI/BMS). */
+    /** CRN of the compute resource (VSI/PVS/BMS/IKS/ROKS/CE). */
     crn?: string;
     /** Namespace of the compute resource (IKS/ROKS). */
     namespace?: string;
@@ -6877,7 +6877,7 @@ namespace IamIdentityV1 {
     /** contains a string value of the preference. only one value property is set, either 'value_string' or
      *  'value_list_of_strings' is present.
      */
-    valueString: string;
+    valueString?: string;
     /** contains a list of string values of the preference. only one value property is set, either 'value_string' or
      *  'value_list_of_strings' is present.
      */
@@ -8472,7 +8472,7 @@ namespace IamIdentityV1 {
      *  'value_list_of_strings' is present.
      */
     value_string?: string;
-    /** List of value of the preference, only one value property is set, either 'value_string' or
+    /** List of values of the preference, only one value property is set, either 'value_string' or
      *  'value_list_of_strings' is present.
      */
     value_list_of_strings?: string[];
@@ -8536,7 +8536,9 @@ namespace IamIdentityV1 {
     realm_name?: string;
     /** Session expiration in seconds. */
     expiration: number;
-    /** The compute resource type. Not required if type is Profile-SAML. Valid values are VSI, IKS_SA, ROKS_SA. */
+    /** The compute resource type. Not required if type is Profile-SAML. Valid values are VSI, PVS, BMS, IKS_SA,
+     *  ROKS_SA, CE.
+     */
     cr_type?: string;
     /** Conditions of this claim rule. */
     conditions: ProfileClaimRuleConditions[];
@@ -8666,7 +8668,7 @@ namespace IamIdentityV1 {
     modified_at: string;
     /** Optional name of the Link. */
     name?: string;
-    /** The compute resource type. Valid values are VSI, BMS, IKS_SA, ROKS_SA, CE. */
+    /** The compute resource type. Valid values are VSI, PVS, BMS, IKS_SA, ROKS_SA, CE. */
     cr_type: string;
     /** Flag to indicate that the link provides cross account access. If not provided then the account scope of the
      *  CRN must match the Profile's account.

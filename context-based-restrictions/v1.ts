@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.108.0-56772134-20251111-102802
+ * IBM OpenAPI SDK Code Generator Version: 3.114.4-9b56d441-20260612-210048
  */
 
 import * as extend from 'extend';
@@ -640,6 +640,8 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {string} [params.description] - The description of the rule.
    * @param {NewRuleOperations} [params.operations] - The operations this rule applies to.
    * @param {string} [params.enforcementMode] - The rule enforcement mode:
+   *
+   *
    *  * `enabled` - The restrictions are enforced and reported. This is the default.
    *  * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
    *  * `report` - The restrictions are evaluated and reported, but not enforced.
@@ -901,6 +903,8 @@ class ContextBasedRestrictionsV1 extends BaseService {
    * @param {string} [params.description] - The description of the rule.
    * @param {NewRuleOperations} [params.operations] - The operations this rule applies to.
    * @param {string} [params.enforcementMode] - The rule enforcement mode:
+   *
+   *
    *  * `enabled` - The restrictions are enforced and reported. This is the default.
    *  * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
    *  * `report` - The restrictions are evaluated and reported, but not enforced.
@@ -1406,6 +1410,8 @@ namespace ContextBasedRestrictionsV1 {
     /** The operations this rule applies to. */
     operations?: NewRuleOperations;
     /** The rule enforcement mode:
+     *
+     *
      *   * `enabled` - The restrictions are enforced and reported. This is the default.
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
      *   * `report` - The restrictions are evaluated and reported, but not enforced.
@@ -1517,6 +1523,8 @@ namespace ContextBasedRestrictionsV1 {
     /** The operations this rule applies to. */
     operations?: NewRuleOperations;
     /** The rule enforcement mode:
+     *
+     *
      *   * `enabled` - The restrictions are enforced and reported. This is the default.
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
      *   * `report` - The restrictions are evaluated and reported, but not enforced.
@@ -1680,6 +1688,7 @@ namespace ContextBasedRestrictionsV1 {
         SUBNET = 'subnet',
         VPC = 'vpc',
         SERVICEREF = 'serviceRef',
+        INSTANCE = 'instance',
       }
     }
   }
@@ -1758,6 +1767,8 @@ namespace ContextBasedRestrictionsV1 {
     /** The operations this rule applies to. */
     operations?: NewRuleOperations;
     /** The rule enforcement mode:
+     *
+     *
      *   * `enabled` - The restrictions are enforced and reported. This is the default.
      *   * `disabled` - The restrictions are disabled. Nothing is enforced or reported.
      *   * `report` - The restrictions are evaluated and reported, but not enforced.
@@ -1973,6 +1984,24 @@ namespace ContextBasedRestrictionsV1 {
       /** The type of address. */
       export enum Type {
         IPRANGE = 'ipRange',
+      }
+    }
+  }
+
+  /**
+   * A single Instance address.
+   */
+  export interface AddressInstance extends Address {
+    /** The type of address. */
+    type: AddressInstance.Constants.Type | string;
+    /** The instance CRN. */
+    value: string;
+  }
+  export namespace AddressInstance {
+    export namespace Constants {
+      /** The type of address. */
+      export enum Type {
+        INSTANCE = 'instance',
       }
     }
   }

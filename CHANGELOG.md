@@ -1,3 +1,24 @@
+## [0.83.7](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.6...v0.83.7) (2026-06-19)
+
+
+### Bug Fixes
+
+* **Context-Based Restrictions:** add support for instance address type ([#342](https://github.com/IBM/platform-services-node-sdk/issues/342)) ([376b50f](https://github.com/IBM/platform-services-node-sdk/commit/376b50f9933f4b08805bc5af2097a7daf9ce8666))
+
+## [0.83.6](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.5...v0.83.6) (2026-06-17)
+
+
+### Bug Fixes
+
+* **deps:** bump SDK core to avoid CVEs ([#343](https://github.com/IBM/platform-services-node-sdk/issues/343)) ([a52c16c](https://github.com/IBM/platform-services-node-sdk/commit/a52c16ce4d5901fc65254a8b3d5cdddf122969aa))
+
+## [0.83.5](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.4...v0.83.5) (2026-06-09)
+
+
+### Bug Fixes
+
+* **IAM Identity:** add PowerVS compute resource type support ([#341](https://github.com/IBM/platform-services-node-sdk/issues/341)) ([17fa7a9](https://github.com/IBM/platform-services-node-sdk/commit/17fa7a9b7efc0472e8af226a797d7a1f021da5ad))
+
 ## [0.83.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.3...v0.83.4) (2026-05-07)
 
 
