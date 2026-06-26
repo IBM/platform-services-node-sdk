@@ -1,4 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"]
+  "prConcurrentLimit": 4,
+  "reviewers": ["pyrooka", "diatrcz", "Andris28"],
+  "extends": ["config:recommended", "security:minimumReleaseAgeNpm"]
 }
