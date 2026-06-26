@@ -1,3 +1,17 @@
+# [0.84.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.7...v0.84.0) (2026-06-25)
+
+
+### Features
+
+* **Platform Notifications:** add new service to the project ([#335](https://github.com/IBM/platform-services-node-sdk/issues/335)) ([d29be76](https://github.com/IBM/platform-services-node-sdk/commit/d29be76c496592f0313a6cbcd7044bda4d37dad2))
+
+## [0.83.7](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.6...v0.83.7) (2026-06-19)
+
+
+### Bug Fixes
+
+* **Context-Based Restrictions:** add support for instance address type ([#342](https://github.com/IBM/platform-services-node-sdk/issues/342)) ([376b50f](https://github.com/IBM/platform-services-node-sdk/commit/376b50f9933f4b08805bc5af2097a7daf9ce8666))
+
 ## [0.83.6](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.5...v0.83.6) (2026-06-17)
 
 
