@@ -117,6 +117,9 @@ describe('IamIdentityV1', () => {
   let accountSettingsTemplateAssignmentEtag;
   let accountSettingsTemplateName = 'Node-SDK-IT-Example-AccountSettings-Template-' + now
 
+  let idpId;
+  let idpEtag;
+
 test('createApiKey request example', async () => {
 
     consoleLogMock.mockImplementation(output => {
@@ -763,7 +766,7 @@ test('createApiKey request example', async () => {
     // begin-create_profile
 
     const params = {
-      name: 'profileName',
+      name: 'Node-SDK-Example-Profile-${Date.now()}',
       description: 'Example Profile',
       accountId,
     };
@@ -2810,6 +2813,430 @@ test('createApiKey request example', async () => {
 
     // end-bulkListAccountEntityConsumption
   });
+
+
+  test('createIdp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createIdp() result:');
+    // begin-createIdp
+
+    const idpProperties = {
+      idp: {
+        entity_id: 'http://www.okta.com/abcdefg',
+        redirect_binding_url: 'https://trial-12345.okta.com/app/trial-6789/abcdefg/sso/saml',
+        want_request_signed: true,
+      },
+      sp: {
+        want_assertion_signed: true,
+        want_response_signed: true,
+        encrypt_response: true,
+        idp_initiated_login_enabled: true,
+        logout_url_enabled_when_available: true,
+      },
+    };
+
+    const idpSecrets = {
+      idp: {},
+      sp: {},
+    };
+
+    const params = {
+      accountId,
+      name: 'My Identity Provider',
+      type: 'saml',
+      active: true,
+      properties: idpProperties,
+      secrets: idpSecrets,
+    };
+
+    try {
+      const res = await iamIdentityService.createIdp(params);
+      idpId = res.result.idp_id;
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-createIdp
+  });
+
+  test('listIdps request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listIdps() result:');
+    // begin-listIdps
+
+    const params = {
+      accountId,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.listIdps(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-listIdps
+  });
+
+  test('getIdp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    originalLog('getIdp() result:');
+    // begin-getIdp
+
+    const params = {
+      idpId,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.getIdp(params);
+      idpEtag = res.headers['etag'];
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-getIdp
+  });
+
+  test('updateIdp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+    expect(idpEtag).toBeDefined();
+
+    originalLog('updateIdp() result:');
+    // begin-updateIdp
+
+    const updatedProperties = {
+      idp: {
+        entity_id: 'http://www.okta.com/abcdefgijk',
+        redirect_binding_url: 'https://trial-12345.okta.com/app/trial-6789/abcdefgijk/sso/saml',
+        want_request_signed: false,
+      },
+      sp: {
+        want_assertion_signed: false,
+        want_response_signed: false,
+        encrypt_response: true,
+        idp_initiated_login_enabled: false,
+        logout_url_enabled_when_available: true,
+      },
+    };
+
+    const params = {
+      idpId,
+      ifMatch: idpEtag,
+      uiSetupCompleted: true,
+      active: true,
+      properties: updatedProperties,
+      forceShareScopeUpdate: true,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.updateIdp(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-updateIdp
+  });
+
+  test('listConsumerAccounts request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    originalLog('listConsumerAccounts() result:');
+    // begin-listConsumerAccounts
+
+    const params = {
+      idpId,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.listConsumerAccounts(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-listConsumerAccounts
+  });
+
+  test('getLoginSettings request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getLoginSettings() result:');
+    // begin-getLoginSettings
+
+    const params = {
+      accountId,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.getLoginSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-getLoginSettings
+  });
+
+  test('updateLoginSettings request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateLoginSettings() result:');
+    // begin-updateLoginSettings
+
+    const params = {
+      accountId,
+      alias: 'my_alias_update_test',
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.updateLoginSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-updateLoginSettings
+  });
+
+  test('listIdPSettings request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listIdPSettings() result:');
+    // begin-listIdPSettings
+
+    const params = {
+      accountId,
+      type: 'consumable',
+      includeIdpMetadata: 'true',
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.listIdPSettings(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-listIdPSettings
+  });
+
+  test('addIdPSetting request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    originalLog('addIdPSetting() result:');
+    // begin-addIdPSetting
+
+    const params = {
+      accountId,
+      idpId,
+      cloudUserStrategy: 'STATIC',
+      active: true,
+      uiDefault: true,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.addIdPSetting(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-addIdPSetting
+  });
+
+  test('getIdPSetting request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    originalLog('getIdPSetting() result:');
+    // begin-getIdPSetting
+
+    const params = {
+      accountId,
+      idpId,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.getIdPSetting(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-getIdPSetting
+  });
+
+  test('updateIdPSetting request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    originalLog('updateIdPSetting() result:');
+    // begin-updateIdPSetting
+
+    const params = {
+      accountId,
+      idpId,
+      cloudUserStrategy: 'STATIC',
+      active: true,
+      uiDefault: false,
+    };
+
+    let res;
+    try {
+      res = await iamIdentityService.updateIdPSetting(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-updateIdPSetting
+  });
+
+  test('removeIdPSetting request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    // begin-removeIdPSetting
+
+    const params = {
+      accountId,
+      idpId,
+    };
+
+    try {
+      await iamIdentityService.removeIdPSetting(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-removeIdPSetting
+  });
+
+  test('deleteIdp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    expect(idpId).toBeDefined();
+
+    // begin-deleteIdp
+
+    const params = {
+      idpId,
+    };
+
+    try {
+      await iamIdentityService.deleteIdp(params);
+      idpId = undefined;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-deleteIdp
+  });
+
 
   function isFinishedEx(status) {
     return ("succeeded" === status.toLowerCase() || "failed" === status.toLowerCase());

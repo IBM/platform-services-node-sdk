@@ -94,6 +94,9 @@ let accountSettingsTemplateAssignmentId;
 let accountSettingsTemplateAssignmentEtag;
 let accountSettingsTemplateScenarioComplete = false;
 
+let idpId;
+let idpEtag;
+
 
 describe('IamIdentityV1_integration', () => {
   jest.setTimeout(timeout);
@@ -2637,6 +2640,229 @@ describe('IamIdentityV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
+  // IDP (Identity Provider) tests
+
+  test('createIdp()', async () => {
+    const idpProperties = {
+      idp: {
+        entity_id: 'http://www.okta.com/abcdefg',
+        redirect_binding_url: 'https://trial-12345.okta.com/app/trial-6789/abcdefg/sso/saml',
+        want_request_signed: true,
+      },
+      sp: {
+        want_assertion_signed: true,
+        want_response_signed: true,
+        encrypt_response: true,
+        idp_initiated_login_enabled: true,
+        logout_url_enabled_when_available: true,
+      },
+    };
+
+    const idpSecrets = {
+      idp: {},
+      sp: {},
+    };
+
+    const params = {
+      accountId,
+      name: 'My Identity Provider',
+      type: 'saml',
+      active: true,
+      properties: idpProperties,
+      secrets: idpSecrets,
+    };
+
+    const res = await iamIdentityService.createIdp(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(201);
+    expect(res.result).toBeDefined();
+    idpId = res.result.idp_id;
+    expect(idpId).toBeDefined();
+  });
+
+  test('listIdps()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await iamIdentityService.listIdps(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getIdp()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      idpId,
+    };
+
+    const res = await iamIdentityService.getIdp(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+    idpEtag = res.headers.etag;;
+    expect(idpEtag).toBeDefined();
+  });
+
+  test('updateIdp()', async () => {
+    expect(idpId).toBeDefined();
+    expect(idpEtag).toBeDefined();
+
+    const updatedProperties = {
+      idp: {
+        entity_id: 'http://www.okta.com/abcdefgijk',
+        redirect_binding_url: 'https://trial-12345.okta.com/app/trial-6789/abcdefgijk/sso/saml',
+        want_request_signed: false,
+      },
+      sp: {
+        want_assertion_signed: false,
+        want_response_signed: false,
+        encrypt_response: true,
+        idp_initiated_login_enabled: false,
+        logout_url_enabled_when_available: true,
+      },
+    };
+
+    const params = {
+      idpId,
+      ifMatch: idpEtag,
+      uiSetupCompleted: true,
+      active: true,
+      properties: updatedProperties,
+      forceShareScopeUpdate: true,
+    };
+
+    const res = await iamIdentityService.updateIdp(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listConsumerAccounts()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      idpId,
+    };
+
+    const res = await iamIdentityService.listConsumerAccounts(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getLoginSettings()', async () => {
+    const params = {
+      accountId,
+    };
+
+    const res = await iamIdentityService.getLoginSettings(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateLoginSettings()', async () => {
+    const params = {
+      accountId,
+      alias: 'my_alias_update_test',
+    };
+
+    const res = await iamIdentityService.updateLoginSettings(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listIdPSettings()', async () => {
+    const params = {
+      accountId,
+      type: 'consumable',
+      includeIdpMetadata: 'true',
+    };
+
+    const res = await iamIdentityService.listIdPSettings(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('addIdPSetting()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      accountId,
+      idpId,
+      cloudUserStrategy: 'STATIC',
+      active: true,
+      uiDefault: true,
+    };
+
+    const res = await iamIdentityService.addIdPSetting(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getIdPSetting()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      accountId,
+      idpId,
+    };
+
+    const res = await iamIdentityService.getIdPSetting(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateIdPSetting()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      accountId,
+      idpId,
+      cloudUserStrategy: 'STATIC',
+      active: true,
+      uiDefault: false,
+    };
+
+    const res = await iamIdentityService.updateIdPSetting(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('removeIdPSetting()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      accountId,
+      idpId,
+    };
+
+    const res = await iamIdentityService.removeIdPSetting(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+  });
+
+  test('deleteIdp()', async () => {
+    expect(idpId).toBeDefined();
+
+    const params = {
+      idpId,
+    };
+
+    const res = await iamIdentityService.deleteIdp(params);
+    expect(res).not.toBeNull();
+    expect(res.status).toEqual(204);
+    idpId = undefined;
+  });
+
   function getPageTokenFromURL(urlstring) {
     let pageToken = null;
     if (urlstring) {
@@ -2941,6 +3167,24 @@ describe('IamIdentityV1_integration', () => {
             const response = await iamIdentityService.deleteAllVersionsOfAccountSettingsTemplate(deleteParams);
             expect(response).not.toBeNull();
             expect(response.status).toEqual(204);
+          }
+        }
+      }
+
+      // clean up any IdPs created during testing
+      const listIdpsParams = {
+        accountId,
+      };
+      const listIdpsResponse = await iamIdentityService.listIdps(listIdpsParams);
+      const listIdpsResult = listIdpsResponse.result;
+      if (listIdpsResult.idps) {
+        for (const elem of listIdpsResult.idps) {
+          if (elem.name === 'My Identity Provider') {
+            console.log('Cleaning IdP: ', elem.idp_id);
+            const deleteIdpParams = {
+              idpId: elem.idp_id,
+            };
+            await iamIdentityService.deleteIdp(deleteIdpParams);
           }
         }
       }
