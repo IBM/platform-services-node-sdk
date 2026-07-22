@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.113.1-d76630af-20260320-135953
+ * IBM OpenAPI SDK Code Generator Version: 3.113.0-3f9df07a-20260317-160650
  */
 
 import * as extend from 'extend';
@@ -5987,6 +5987,1023 @@ class IamIdentityV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * iDPManagement
+   ************************/
+
+  /**
+   * List IdPs.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account id to query.
+   * @param {string} [params.includeHistory] - include history of the idp.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ListIdpsResponse>>}
+   */
+  public listIdps(
+    params: IamIdentityV1.ListIdpsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ListIdpsResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'includeHistory', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'account_id': _params.accountId,
+      'include_history': _params.includeHistory,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'listIdps');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create IdP.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account where the IdP resides in.
+   * @param {string} params.name - Speaking name of the Identity Provider.
+   * @param {string} params.type - Type of the IDP.
+   * @param {boolean} [params.active] - Defines if the IDP is active (enabled) for all accounts (including those who
+   * consumed the IdP). Default during creation is true.
+   * @param {CreateIdpRequestProperties} [params.properties] - Properties of the IDP. Will be stored plain-text.
+   * @param {CreateIdpRequestSecrets} [params.secrets] - Secrets of the IDP. Will be stored encrypted.
+   * @param {ShareScope[]} [params.shareScope] - List of targets which can consume the IdP.
+   * @param {string} [params.automation] - boolean to flag if IdP is created via automation.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Idp>>}
+   */
+  public createIdp(
+    params: IamIdentityV1.CreateIdpParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.Idp>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'name', 'type'];
+    const _validParams = [
+      'accountId',
+      'name',
+      'type',
+      'active',
+      'properties',
+      'secrets',
+      'shareScope',
+      'automation',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account_id': _params.accountId,
+      'name': _params.name,
+      'type': _params.type,
+      'active': _params.active,
+      'properties': _params.properties,
+      'secrets': _params.secrets,
+      'share_scope': _params.shareScope,
+    };
+
+    const query = {
+      'automation': _params.automation,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'createIdp');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get IdP.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {string} [params.includeHistory] - include history of the idp.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Idp>>}
+   */
+  public getIdp(
+    params: IamIdentityV1.GetIdpParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.Idp>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId'];
+    const _validParams = ['idpId', 'includeHistory', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'include_history': _params.includeHistory,
+    };
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getIdp');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update IdP.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {string} params.ifMatch - Version of the account IdP settings to be updated. Specify the version that you
+   * retrieved as entity_tag (ETag header) when reading the account. This value helps identifying parallel usage of this
+   * API. Pass * to indicate to update any version available. This might result in stale updates.
+   * @param {boolean} [params.uiSetupCompleted] - Defines if the IDP setup was finished in the UI.
+   * @param {string} [params.name] - Speaking name of the Identity Provider.
+   * @param {boolean} [params.active] - Defines if the IDP is active (enabled) for all accounts (including those who
+   * consumed the IdP).
+   * @param {UpdateIdPRequestProperties} [params.properties] - Properties of the IDP. Will be stored plain-text.
+   * @param {UpdateIdPRequestSecrets} [params.secrets] - Secrets of the IDP. Will be stored encrypted.
+   * @param {ShareScope[]} [params.shareScope] - List of targets which can consume the IdP.
+   * @param {boolean} [params.forceShareScopeUpdate] - Enforces sharescope update even if active consumers are removed
+   * from the share scope.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.Idp>>}
+   */
+  public updateIdp(
+    params: IamIdentityV1.UpdateIdpParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.Idp>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId', 'ifMatch'];
+    const _validParams = [
+      'idpId',
+      'ifMatch',
+      'uiSetupCompleted',
+      'name',
+      'active',
+      'properties',
+      'secrets',
+      'shareScope',
+      'forceShareScopeUpdate',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'ui_setup_completed': _params.uiSetupCompleted,
+      'name': _params.name,
+      'active': _params.active,
+      'properties': _params.properties,
+      'secrets': _params.secrets,
+      'share_scope': _params.shareScope,
+    };
+
+    const query = {
+      'force_share_scope_update': _params.forceShareScopeUpdate,
+    };
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIdp');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete IdP.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public deleteIdp(
+    params: IamIdentityV1.DeleteIdpParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId'];
+    const _validParams = ['idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIdp');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get consumers of IdP.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ConsumersResponse>>}
+   */
+  public listConsumerAccounts(
+    params: IamIdentityV1.ListConsumerAccountsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ConsumersResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId'];
+    const _validParams = ['idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listConsumerAccounts'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}/consumers',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Export SAML IdP metadata.
+   *
+   * Returns the Service Provider (SP) SAML metadata document for the specified Identity Provider.
+   *
+   * The generated metadata contains the SP entity ID, signing certificate, supported NameID formats, and Assertion
+   * Consumer Service endpoints derived from the Identity Provider configuration.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<string>>}
+   */
+  public exportSamlMetadata(
+    params: IamIdentityV1.ExportSamlMetadataParams
+  ): Promise<IamIdentityV1.Response<string>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId'];
+    const _validParams = ['idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'exportSamlMetadata'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}/saml/metadata',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'text/xml',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Import SAML IdP metadata.
+   *
+   * Import a metadata.xml originating from the federated SAML Identity Provider.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {NodeJS.ReadableStream | Buffer | string} params.body -
+   * @param {boolean} [params.parseOnly] - If true, validates and parses the metadata without updating the Identity
+   * Provider.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.SamlMetadataImportResponse>>}
+   */
+  public importSamlIdpMetadata(
+    params: IamIdentityV1.ImportSamlIdpMetadataParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.SamlMetadataImportResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId', 'body'];
+    const _validParams = ['idpId', 'body', 'parseOnly', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const { body } = _params;
+    const query = {
+      'parse_only': _params.parseOnly,
+    };
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'importSamlIdpMetadata'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}/saml/metadata',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'text/xml',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get IdP test results.
+   *
+   * Get IDP test record.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TestResult>>}
+   */
+  public getIdpTestResult(
+    params: IamIdentityV1.GetIdpTestResultParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TestResult>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId'];
+    const _validParams = ['idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getIdpTestResult');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}/test',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Trigger IdP configuration test.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.idpId - ID of the IDP.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.TestTriggerResponse>>}
+   */
+  public testIdp(
+    params: IamIdentityV1.TestIdpParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.TestTriggerResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['idpId'];
+    const _validParams = ['idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'testIdp');
+
+    const parameters = {
+      options: {
+        url: '/v1/idps/{idp_id}/test',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * accountSettingsForIdP
+   ************************/
+
+  /**
+   * Get account login settings.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the alias.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountLoginSettings>>}
+   */
+  public getLoginSettings(
+    params: IamIdentityV1.GetLoginSettingsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountLoginSettings>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoginSettings');
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update account login settings.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the alias.
+   * @param {string} [params.alias] - Alias of the account.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountLoginSettings>>}
+   */
+  public updateLoginSettings(
+    params: IamIdentityV1.UpdateLoginSettingsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountLoginSettings>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId'];
+    const _validParams = ['accountId', 'alias', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'alias': _params.alias,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      IamIdentityV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoginSettings'
+    );
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List IdP Settings.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the IDP.
+   * @param {string} params.type - Type of IDP.
+   * @param {string} [params.includeIdpMetadata] - Flag if meta-information about account and idp should be included.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.ListIdPSettingsResponse>>}
+   */
+  public listIdPSettings(
+    params: IamIdentityV1.ListIdPSettingsParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.ListIdPSettingsResponse>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'type'];
+    const _validParams = ['accountId', 'type', 'includeIdpMetadata', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'type': _params.type,
+      'include_idp_metadata': _params.includeIdpMetadata,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'listIdPSettings');
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}/idps',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Get IdP setting.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the IDP.
+   * @param {string} params.idpId - Identity provider ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountIdpSettings>>}
+   */
+  public getIdPSetting(
+    params: IamIdentityV1.GetIdPSettingParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountIdpSettings>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'idpId'];
+    const _validParams = ['accountId', 'idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'getIdPSetting');
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}/idps/{idp_id}',
+        method: 'GET',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Add IdP Setting.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the IDP.
+   * @param {string} params.idpId - Identity provider ID.
+   * @param {string} params.cloudUserStrategy - Strategy how Cloud User representives for the IdP users are handled.
+   * @param {boolean} params.active - Specifies if the IdP is enabled for usage in the given account context.
+   * @param {boolean} params.uiDefault - Specifies if the IdP is used as default in the given account context.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountIdpSettings>>}
+   */
+  public addIdPSetting(
+    params: IamIdentityV1.AddIdPSettingParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountIdpSettings>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'idpId', 'cloudUserStrategy', 'active', 'uiDefault'];
+    const _validParams = [
+      'accountId',
+      'idpId',
+      'cloudUserStrategy',
+      'active',
+      'uiDefault',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'cloud_user_strategy': _params.cloudUserStrategy,
+      'active': _params.active,
+      'ui_default': _params.uiDefault,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'addIdPSetting');
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}/idps/{idp_id}',
+        method: 'POST',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update IdP Setting.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the IDP.
+   * @param {string} params.idpId - Identity provider ID.
+   * @param {string} [params.cloudUserStrategy] - Strategy how Cloud User representives for the IdP users are handled.
+   * @param {boolean} [params.active] - Specifies if the IdP is enabled for usage in the given account context.
+   * @param {boolean} [params.uiDefault] - Specifies if the IdP is used as default in the given account context.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.AccountIdpSettings>>}
+   */
+  public updateIdPSetting(
+    params: IamIdentityV1.UpdateIdPSettingParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.AccountIdpSettings>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'idpId'];
+    const _validParams = [
+      'accountId',
+      'idpId',
+      'cloudUserStrategy',
+      'active',
+      'uiDefault',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'cloud_user_strategy': _params.cloudUserStrategy,
+      'active': _params.active,
+      'ui_default': _params.uiDefault,
+    };
+
+    const path = {
+      'account_id': _params.accountId,
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIdPSetting');
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}/idps/{idp_id}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove IdP Setting.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.accountId - Account which is bound to the IDP.
+   * @param {string} params.idpId - Identity provider ID.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>>}
+   */
+  public removeIdPSetting(
+    params: IamIdentityV1.RemoveIdPSettingParams
+  ): Promise<IamIdentityV1.Response<IamIdentityV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['accountId', 'idpId'];
+    const _validParams = ['accountId', 'idpId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'account_id': _params.accountId,
+      'idp_id': _params.idpId,
+    };
+
+    const sdkHeaders = getSdkHeaders(IamIdentityV1.DEFAULT_SERVICE_NAME, 'v1', 'removeIdPSetting');
+
+    const parameters = {
+      options: {
+        url: '/v2/loginsettings/{account_id}/idps/{idp_id}',
+        method: 'DELETE',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -7484,6 +8501,215 @@ namespace IamIdentityV1 {
     crRulesPerProfile?: string[];
   }
 
+  /** Parameters for the `listIdps` operation. */
+  export interface ListIdpsParams extends DefaultParams {
+    /** Account id to query. */
+    accountId: string;
+    /** include history of the idp. */
+    includeHistory?: string;
+  }
+
+  /** Parameters for the `createIdp` operation. */
+  export interface CreateIdpParams extends DefaultParams {
+    /** Account where the IdP resides in. */
+    accountId: string;
+    /** Speaking name of the Identity Provider. */
+    name: string;
+    /** Type of the IDP. */
+    type: CreateIdpConstants.Type | string;
+    /** Defines if the IDP is active (enabled) for all accounts (including those who consumed the IdP). Default
+     *  during creation is true.
+     */
+    active?: boolean;
+    /** Properties of the IDP. Will be stored plain-text. */
+    properties?: CreateIdpRequestProperties;
+    /** Secrets of the IDP. Will be stored encrypted. */
+    secrets?: CreateIdpRequestSecrets;
+    /** List of targets which can consume the IdP. */
+    shareScope?: ShareScope[];
+    /** boolean to flag if IdP is created via automation. */
+    automation?: string;
+  }
+
+  /** Constants for the `createIdp` operation. */
+  export namespace CreateIdpConstants {
+    /** Type of the IDP. */
+    export enum Type {
+      LDAP = 'ldap',
+      APPID = 'appid',
+      SAML = 'saml',
+    }
+  }
+
+  /** Parameters for the `getIdp` operation. */
+  export interface GetIdpParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+    /** include history of the idp. */
+    includeHistory?: string;
+  }
+
+  /** Parameters for the `updateIdp` operation. */
+  export interface UpdateIdpParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+    /** Version of the account IdP settings to be updated. Specify the version that you retrieved as entity_tag
+     *  (ETag header) when reading the account. This value helps identifying parallel usage of this API. Pass * to
+     *  indicate to update any version available. This might result in stale updates.
+     */
+    ifMatch: string;
+    /** Defines if the IDP setup was finished in the UI. */
+    uiSetupCompleted?: boolean;
+    /** Speaking name of the Identity Provider. */
+    name?: string;
+    /** Defines if the IDP is active (enabled) for all accounts (including those who consumed the IdP). */
+    active?: boolean;
+    /** Properties of the IDP. Will be stored plain-text. */
+    properties?: UpdateIdPRequestProperties;
+    /** Secrets of the IDP. Will be stored encrypted. */
+    secrets?: UpdateIdPRequestSecrets;
+    /** List of targets which can consume the IdP. */
+    shareScope?: ShareScope[];
+    /** Enforces sharescope update even if active consumers are removed from the share scope. */
+    forceShareScopeUpdate?: boolean;
+  }
+
+  /** Parameters for the `deleteIdp` operation. */
+  export interface DeleteIdpParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+  }
+
+  /** Parameters for the `listConsumerAccounts` operation. */
+  export interface ListConsumerAccountsParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+  }
+
+  /** Parameters for the `exportSamlMetadata` operation. */
+  export interface ExportSamlMetadataParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+  }
+
+  /** Parameters for the `importSamlIdpMetadata` operation. */
+  export interface ImportSamlIdpMetadataParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+    body: NodeJS.ReadableStream | Buffer | string;
+    /** If true, validates and parses the metadata without updating the Identity Provider. */
+    parseOnly?: boolean;
+  }
+
+  /** Parameters for the `getIdpTestResult` operation. */
+  export interface GetIdpTestResultParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+  }
+
+  /** Parameters for the `testIdp` operation. */
+  export interface TestIdpParams extends DefaultParams {
+    /** ID of the IDP. */
+    idpId: string;
+  }
+
+  /** Parameters for the `getLoginSettings` operation. */
+  export interface GetLoginSettingsParams extends DefaultParams {
+    /** Account which is bound to the alias. */
+    accountId: string;
+  }
+
+  /** Parameters for the `updateLoginSettings` operation. */
+  export interface UpdateLoginSettingsParams extends DefaultParams {
+    /** Account which is bound to the alias. */
+    accountId: string;
+    /** Alias of the account. */
+    alias?: string;
+  }
+
+  /** Parameters for the `listIdPSettings` operation. */
+  export interface ListIdPSettingsParams extends DefaultParams {
+    /** Account which is bound to the IDP. */
+    accountId: string;
+    /** Type of IDP. */
+    type: ListIdPSettingsConstants.Type | string;
+    /** Flag if meta-information about account and idp should be included. */
+    includeIdpMetadata?: string;
+  }
+
+  /** Constants for the `listIdPSettings` operation. */
+  export namespace ListIdPSettingsConstants {
+    /** Type of IDP. */
+    export enum Type {
+      CONSUMABLE = 'consumable',
+      CONSUMED = 'consumed',
+    }
+  }
+
+  /** Parameters for the `getIdPSetting` operation. */
+  export interface GetIdPSettingParams extends DefaultParams {
+    /** Account which is bound to the IDP. */
+    accountId: string;
+    /** Identity provider ID. */
+    idpId: string;
+  }
+
+  /** Parameters for the `addIdPSetting` operation. */
+  export interface AddIdPSettingParams extends DefaultParams {
+    /** Account which is bound to the IDP. */
+    accountId: string;
+    /** Identity provider ID. */
+    idpId: string;
+    /** Strategy how Cloud User representives for the IdP users are handled. */
+    cloudUserStrategy: AddIdPSettingConstants.CloudUserStrategy | string;
+    /** Specifies if the IdP is enabled for usage in the given account context. */
+    active: boolean;
+    /** Specifies if the IdP is used as default in the given account context. */
+    uiDefault: boolean;
+  }
+
+  /** Constants for the `addIdPSetting` operation. */
+  export namespace AddIdPSettingConstants {
+    /** Strategy how Cloud User representives for the IdP users are handled. */
+    export enum CloudUserStrategy {
+      STATIC = 'STATIC',
+      DYNAMIC = 'DYNAMIC',
+      NEVER = 'NEVER',
+    }
+  }
+
+  /** Parameters for the `updateIdPSetting` operation. */
+  export interface UpdateIdPSettingParams extends DefaultParams {
+    /** Account which is bound to the IDP. */
+    accountId: string;
+    /** Identity provider ID. */
+    idpId: string;
+    /** Strategy how Cloud User representives for the IdP users are handled. */
+    cloudUserStrategy?: UpdateIdPSettingConstants.CloudUserStrategy | string;
+    /** Specifies if the IdP is enabled for usage in the given account context. */
+    active?: boolean;
+    /** Specifies if the IdP is used as default in the given account context. */
+    uiDefault?: boolean;
+  }
+
+  /** Constants for the `updateIdPSetting` operation. */
+  export namespace UpdateIdPSettingConstants {
+    /** Strategy how Cloud User representives for the IdP users are handled. */
+    export enum CloudUserStrategy {
+      STATIC = 'STATIC',
+      DYNAMIC = 'DYNAMIC',
+      NEVER = 'NEVER',
+    }
+  }
+
+  /** Parameters for the `removeIdPSetting` operation. */
+  export interface RemoveIdPSettingParams extends DefaultParams {
+    /** Account which is bound to the IDP. */
+    accountId: string;
+    /** Identity provider ID. */
+    idpId: string;
+  }
+
   /*************************
    * model interfaces
    ************************/
@@ -7507,6 +8733,37 @@ namespace IamIdentityV1 {
     verisign: MfaEnrollmentTypeStatus;
     /** The enrollment complies to the effective requirement. */
     complies: boolean;
+  }
+
+  /**
+   * AccountIdpSettings.
+   */
+  export interface AccountIdpSettings {
+    idp_id?: string;
+    owner_account?: string;
+    owner_account_name?: string;
+    idp_name?: string;
+    idp_type?: string;
+    cloud_user_strategy?: AccountIdpSettings.Constants.CloudUserStrategy | string;
+    active?: boolean;
+    ui_default?: boolean;
+  }
+  export namespace AccountIdpSettings {
+    export namespace Constants {
+      /** CloudUserStrategy */
+      export enum CloudUserStrategy {
+        STATIC = 'STATIC',
+        DYNAMIC = 'DYNAMIC',
+        NEVER = 'NEVER',
+      }
+    }
+  }
+
+  /**
+   * AccountLoginSettings.
+   */
+  export interface AccountLoginSettings {
+    alias?: string;
   }
 
   /**
@@ -8166,6 +9423,171 @@ namespace IamIdentityV1 {
   }
 
   /**
+   * ConsumersResponse.
+   */
+  export interface ConsumersResponse {
+    idp_id?: string;
+    consumers?: ConsumersResponseConsumersItem[];
+  }
+
+  /**
+   * ConsumersResponseConsumersItem.
+   */
+  export interface ConsumersResponseConsumersItem {
+    account_id?: string;
+    share_scope?: ShareScope[];
+  }
+
+  /**
+   * Properties of the IDP. Will be stored plain-text.
+   */
+  export interface CreateIdpRequestProperties {
+    /** Identity Provider configuration. */
+    idp?: CreateIdpRequestPropertiesIdp;
+    /** Service Provider configuration. */
+    sp?: CreateIdpRequestPropertiesSp;
+  }
+
+  /**
+   * Identity Provider configuration.
+   */
+  export interface CreateIdpRequestPropertiesIdp {
+    /** Flag indicating if IdP should be imported from metadata.xml. */
+    xml_import?: boolean;
+    /** SAML IDP entity ID (required when not using xml_import). */
+    entity_id?: string;
+    /** Redirect binding URL (required when not using xml_import). */
+    redirect_binding_url?: string;
+    /** Indicates if IDP wants requests to be signed. */
+    want_request_signed?: boolean;
+    /** SAML IDP logout URL (optional). */
+    logout_url?: string;
+  }
+
+  /**
+   * Service Provider configuration.
+   */
+  export interface CreateIdpRequestPropertiesSp {
+    /** Indicates if SP wants assertions to be signed. */
+    want_assertion_signed?: boolean;
+    /** Indicates if SP wants responses to be signed. */
+    want_response_signed?: boolean;
+    /** Indicates if responses should be encrypted. */
+    encrypt_response?: boolean;
+    /** Enables IDP-initiated login. */
+    idp_initiated_login_enabled?: boolean;
+    /** Enables logout URL when available. */
+    logout_url_enabled_when_available?: boolean;
+    /** URLs for IDP-initiated login (only when IdP initiated login is used). */
+    idp_initiated_urls?: string[];
+    /** Authentication context configuration (can be left empty to apply default). */
+    authn_context?: CreateIdpRequestPropertiesSpAuthnContext;
+    /** Custom mapping between SAML assertions and IAM claims (can be left empty when no custom mapping is needed). */
+    claims?: JsonObject;
+  }
+
+  /**
+   * Authentication context configuration (can be left empty to apply default).
+   */
+  export interface CreateIdpRequestPropertiesSpAuthnContext {
+    /** Requested authentication context classes. */
+    request?: string[];
+    /** Accepted authentication context classes. */
+    accept?: string[];
+  }
+
+  /**
+   * Secrets of the IDP. Will be stored encrypted.
+   */
+  export interface CreateIdpRequestSecrets {
+    /** Identity Provider secrets. */
+    idp?: CreateIdpRequestSecretsIdp;
+    /** Service Provider secrets (can be left empty to auto-generate SP certs). */
+    sp?: CreateIdpRequestSecretsSp;
+  }
+
+  /**
+   * Identity Provider secrets.
+   */
+  export interface CreateIdpRequestSecretsIdp {
+    /** Flag indicating if secrets should be imported from metadata.xml. */
+    xml_import?: boolean;
+    /** IDP signing certificates (required when not using xml_import). */
+    signing?: CreateIdpRequestSecretsIdpSigningItem[];
+    /** IDP encrypting certificates (optional). */
+    encrypting?: CreateIdpRequestSecretsIdpEncryptingItem[];
+  }
+
+  /**
+   * CreateIdpRequestSecretsIdpEncryptingItem.
+   */
+  export interface CreateIdpRequestSecretsIdpEncryptingItem {
+    /** Certificate value. */
+    value?: string;
+    /** Certificate type. */
+    type?: CreateIdpRequestSecretsIdpEncryptingItem.Constants.Type | string;
+  }
+  export namespace CreateIdpRequestSecretsIdpEncryptingItem {
+    export namespace Constants {
+      /** Certificate type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /**
+   * CreateIdpRequestSecretsIdpSigningItem.
+   */
+  export interface CreateIdpRequestSecretsIdpSigningItem {
+    /** Certificate value in PEM format. */
+    value?: string;
+    /** Certificate type. */
+    type?: CreateIdpRequestSecretsIdpSigningItem.Constants.Type | string;
+  }
+  export namespace CreateIdpRequestSecretsIdpSigningItem {
+    export namespace Constants {
+      /** Certificate type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /**
+   * Service Provider secrets (can be left empty to auto-generate SP certs).
+   */
+  export interface CreateIdpRequestSecretsSp {
+    /** SP signing certificates. */
+    signing?: CreateIdpRequestSecretsSpSigningItem[];
+  }
+
+  /**
+   * CreateIdpRequestSecretsSpSigningItem.
+   */
+  export interface CreateIdpRequestSecretsSpSigningItem {
+    /** Certificate value in PEM format. */
+    certificate_value?: string;
+    /** Private key value. */
+    key_value?: string;
+    /** Key encoding format (e.g., pkcs8). */
+    key_encoding?: string;
+    /** Certificate type. */
+    type?: CreateIdpRequestSecretsSpSigningItem.Constants.Type | string;
+  }
+  export namespace CreateIdpRequestSecretsSpSigningItem {
+    export namespace Constants {
+      /** Certificate type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /**
    * Link details.
    */
   export interface CreateProfileLinkRequestLink {
@@ -8487,6 +9909,23 @@ namespace IamIdentityV1 {
   }
 
   /**
+   * Idp.
+   */
+  export interface Idp {
+    idp_id?: string;
+    entity_tag?: string;
+    account_id?: string;
+    name?: string;
+    type?: string;
+    properties?: JsonObject;
+    secrets?: JsonObject;
+    share_scope?: ShareScope[];
+    active?: boolean;
+    created_at?: string;
+    modified_at?: string;
+  }
+
+  /**
    * Limit and current usage count for a resource.
    */
   export interface LimitCount {
@@ -8494,6 +9933,20 @@ namespace IamIdentityV1 {
     limit: number;
     /** Current usage count for the resource. */
     count?: number;
+  }
+
+  /**
+   * ListIdPSettingsResponse.
+   */
+  export interface ListIdPSettingsResponse {
+    idps?: AccountIdpSettings[];
+  }
+
+  /**
+   * ListIdpsResponse.
+   */
+  export interface ListIdpsResponse {
+    idps?: Idp[];
   }
 
   /**
@@ -8780,6 +10233,49 @@ namespace IamIdentityV1 {
   }
 
   /**
+   * SamlMetadataImportResponse.
+   */
+  export interface SamlMetadataImportResponse {
+    /** Realm ID of the Identity Provider. */
+    idp_id: string;
+    /** Version information used for optimistic locking. */
+    entity_tag: string;
+    /** Creation timestamp. */
+    created_at: string;
+    /** Last modification timestamp. */
+    modified_at: string;
+    /** Account that owns the Identity Provider. */
+    account_id: string;
+    /** User-friendly name of the Identity Provider. */
+    name: string;
+    type: SamlMetadataImportResponse.Constants.Type | string;
+    /** Type-specific Identity Provider configuration. */
+    properties: JsonObject;
+    /** Type-specific secret configuration. */
+    secrets: JsonObject;
+    /** History entries for the Identity Provider. */
+    history?: JsonObject[];
+    /** Accounts, enterprises, or account groups allowed to consume the IdP. */
+    share_scope?: ShareScope[];
+    /** Indicates whether the Identity Provider is enabled. If disabled, the IdP cannot be used by the owner account
+     *  or any consumer accounts.
+     */
+    active: boolean;
+    /** Internal flag used by the UI to determine whether the Identity Provider should be opened in the setup wizard
+     *  or the edit dialog.
+     */
+    ui_setup_completed?: boolean;
+  }
+  export namespace SamlMetadataImportResponse {
+    export namespace Constants {
+      /** Type */
+      export enum Type {
+        SAML = 'saml',
+      }
+    }
+  }
+
+  /**
    * Response body format for service ID V1 REST requests.
    */
   export interface ServiceId {
@@ -8890,6 +10386,23 @@ namespace IamIdentityV1 {
      *  the response but might be empty depending on the query parameter values provided.
      */
     serviceids: ServiceId[];
+  }
+
+  /**
+   * ShareScope.
+   */
+  export interface ShareScope {
+    id?: string;
+    type?: ShareScope.Constants.Type | string;
+  }
+  export namespace ShareScope {
+    export namespace Constants {
+      /** Type */
+      export enum Type {
+        ACCOUNT = 'account',
+        ENTERPRISE = 'enterprise',
+      }
+    }
   }
 
   /**
@@ -9185,6 +10698,36 @@ namespace IamIdentityV1 {
   }
 
   /**
+   * TestResult.
+   */
+  export interface TestResult {
+    idp_id?: string;
+    entity_tag?: string;
+    started_at?: number;
+    modified_at?: string;
+    idp_version?: string;
+    steps?: TestResultStepsItem[];
+  }
+
+  /**
+   * TestResultStepsItem.
+   */
+  export interface TestResultStepsItem {
+    sequence?: number;
+    name?: string;
+    state?: string;
+    result?: string;
+  }
+
+  /**
+   * TestTriggerResponse.
+   */
+  export interface TestTriggerResponse {
+    result?: string;
+    test_url?: string;
+  }
+
+  /**
    * Response body format for trusted profile V1 REST requests.
    */
   export interface TrustedProfile {
@@ -9346,6 +10889,151 @@ namespace IamIdentityV1 {
     next?: string;
     /** List of trusted profiles. */
     profiles: TrustedProfile[];
+  }
+
+  /**
+   * Properties of the IDP. Will be stored plain-text.
+   */
+  export interface UpdateIdPRequestProperties {
+    /** Identity Provider configuration. */
+    idp?: UpdateIdPRequestPropertiesIdp;
+    /** Service Provider configuration. */
+    sp?: UpdateIdPRequestPropertiesSp;
+  }
+
+  /**
+   * Identity Provider configuration.
+   */
+  export interface UpdateIdPRequestPropertiesIdp {
+    /** SAML IDP entity ID. */
+    entity_id?: string;
+    /** Redirect binding URL. */
+    redirect_binding_url?: string;
+    /** Indicates if IDP wants requests to be signed. */
+    want_request_signed?: boolean;
+    /** SAML IDP logout URL (optional). */
+    logout_url?: string;
+  }
+
+  /**
+   * Service Provider configuration.
+   */
+  export interface UpdateIdPRequestPropertiesSp {
+    /** Indicates if SP wants assertions to be signed. */
+    want_assertion_signed?: boolean;
+    /** Indicates if SP wants responses to be signed. */
+    want_response_signed?: boolean;
+    /** Indicates if responses should be encrypted. */
+    encrypt_response?: boolean;
+    /** Enables IDP-initiated login. */
+    idp_initiated_login_enabled?: boolean;
+    /** Enables logout URL when available. */
+    logout_url_enabled_when_available?: boolean;
+    /** URLs for IDP-initiated login. */
+    idp_initiated_urls?: string[];
+    /** Authentication context configuration. */
+    authn_context?: UpdateIdPRequestPropertiesSpAuthnContext;
+    /** Custom mapping between SAML assertions and IAM claims. */
+    claims?: JsonObject;
+  }
+
+  /**
+   * Authentication context configuration.
+   */
+  export interface UpdateIdPRequestPropertiesSpAuthnContext {
+    /** Requested authentication context classes. */
+    request?: string[];
+    /** Accepted authentication context classes. */
+    accept?: string[];
+  }
+
+  /**
+   * Secrets of the IDP. Will be stored encrypted.
+   */
+  export interface UpdateIdPRequestSecrets {
+    /** Identity Provider secrets. */
+    idp?: UpdateIdPRequestSecretsIdp;
+    /** Service Provider secrets. */
+    sp?: UpdateIdPRequestSecretsSp;
+  }
+
+  /**
+   * Identity Provider secrets.
+   */
+  export interface UpdateIdPRequestSecretsIdp {
+    /** IDP signing certificates. */
+    signing?: UpdateIdPRequestSecretsIdpSigningItem[];
+    /** IDP encrypting certificates. */
+    encrypting?: UpdateIdPRequestSecretsIdpEncryptingItem[];
+  }
+
+  /**
+   * UpdateIdPRequestSecretsIdpEncryptingItem.
+   */
+  export interface UpdateIdPRequestSecretsIdpEncryptingItem {
+    /** Certificate value. */
+    value?: string;
+    /** Certificate type. */
+    type?: UpdateIdPRequestSecretsIdpEncryptingItem.Constants.Type | string;
+  }
+  export namespace UpdateIdPRequestSecretsIdpEncryptingItem {
+    export namespace Constants {
+      /** Certificate type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /**
+   * UpdateIdPRequestSecretsIdpSigningItem.
+   */
+  export interface UpdateIdPRequestSecretsIdpSigningItem {
+    /** Certificate value in PEM format. */
+    value?: string;
+    /** Certificate type. */
+    type?: UpdateIdPRequestSecretsIdpSigningItem.Constants.Type | string;
+  }
+  export namespace UpdateIdPRequestSecretsIdpSigningItem {
+    export namespace Constants {
+      /** Certificate type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /**
+   * Service Provider secrets.
+   */
+  export interface UpdateIdPRequestSecretsSp {
+    /** SP signing certificates. */
+    signing?: UpdateIdPRequestSecretsSpSigningItem[];
+  }
+
+  /**
+   * UpdateIdPRequestSecretsSpSigningItem.
+   */
+  export interface UpdateIdPRequestSecretsSpSigningItem {
+    /** Certificate value in PEM format. */
+    certificate_value?: string;
+    /** Private key value. */
+    key_value?: string;
+    /** Key encoding format (e.g., pkcs8). */
+    key_encoding?: string;
+    /** Certificate type. */
+    type?: UpdateIdPRequestSecretsSpSigningItem.Constants.Type | string;
+  }
+  export namespace UpdateIdPRequestSecretsSpSigningItem {
+    export namespace Constants {
+      /** Certificate type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
   }
 
   /**
