@@ -1,3 +1,10 @@
+# [0.85.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.84.0...v0.85.0) (2026-07-22)
+
+
+### Features
+
+* **IAM Identity:** add support for IDP sharing/settings ([#356](https://github.com/IBM/platform-services-node-sdk/issues/356)) ([86ba30c](https://github.com/IBM/platform-services-node-sdk/commit/86ba30c05de1a2044bebebc38c23227c3c8bb4ea))
+
 # [0.84.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.83.7...v0.84.0) (2026-06-25)
 
 
