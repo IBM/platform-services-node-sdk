@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.99.1-daeb6e46-20250131-173156
+ * IBM OpenAPI SDK Code Generator Version: 3.116.0-df613dbc-20260803-154903
  */
 
 /* eslint-disable max-classes-per-file */
@@ -24,6 +24,7 @@
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   SDKLogger,
@@ -119,7 +120,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['headers'];
+    const _validParams = ['signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -146,6 +147,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -163,6 +167,7 @@ class CatalogManagementV1 extends BaseService {
    * @param {boolean} [params.hideIbmCloudCatalog] - Hide the public catalog in this account.
    * @param {Filters} [params.accountFilters] - Filters for account and catalog filters.
    * @param {string} [params.regionFilter] - Region filter string.
+   * @param {TerraformEngines[]} [params.terraformEngines] - List of terraform engines configured for this account.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Account>>}
    */
@@ -177,6 +182,8 @@ class CatalogManagementV1 extends BaseService {
       'hideIbmCloudCatalog',
       'accountFilters',
       'regionFilter',
+      'terraformEngines',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -190,6 +197,7 @@ class CatalogManagementV1 extends BaseService {
       'hide_IBM_cloud_catalog': _params.hideIbmCloudCatalog,
       'account_filters': _params.accountFilters,
       'region_filter': _params.regionFilter,
+      'terraform_engines': _params.terraformEngines,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -215,6 +223,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -238,7 +249,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLogs>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'lookupnames', 'headers'];
+    const _validParams = ['start', 'limit', 'lookupnames', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -272,6 +283,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -294,7 +308,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
     const _params = { ...params };
     const _requiredParams = ['auditlogIdentifier'];
-    const _validParams = ['auditlogIdentifier', 'lookupnames', 'headers'];
+    const _validParams = ['auditlogIdentifier', 'lookupnames', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -331,6 +345,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -352,7 +369,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccumulatedFilters>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['catalog', 'headers'];
+    const _validParams = ['catalog', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -384,6 +401,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -407,7 +427,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ShareApprovalListAccessResult>> {
     const _params = { ...params };
     const _requiredParams = ['objectType'];
-    const _validParams = ['objectType', 'start', 'limit', 'headers'];
+    const _validParams = ['objectType', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -430,7 +450,7 @@ class CatalogManagementV1 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/shareapproval/{object_type}/access',
+        url: '/shareapproval/{object_type}/accessv2',
         method: 'GET',
         qs: query,
         path,
@@ -445,6 +465,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -468,7 +491,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['objectType', 'accesses'];
-    const _validParams = ['objectType', 'accesses', 'headers'];
+    const _validParams = ['objectType', 'accesses', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -503,6 +526,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -525,7 +551,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['objectType', 'accesses'];
-    const _validParams = ['objectType', 'accesses', 'headers'];
+    const _validParams = ['objectType', 'accesses', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -560,6 +586,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -594,6 +623,7 @@ class CatalogManagementV1 extends BaseService {
       'start',
       'limit',
       'enterpriseId',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -620,7 +650,7 @@ class CatalogManagementV1 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/shareapproval/{object_type}/access/source/{approval_state_identifier}',
+        url: '/shareapproval/{object_type}/accessv2/source/{approval_state_identifier}',
         method: 'GET',
         qs: query,
         path,
@@ -635,6 +665,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -667,6 +700,7 @@ class CatalogManagementV1 extends BaseService {
       'approvalStateIdentifier',
       'accesses',
       'enterpriseId',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -709,6 +743,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -733,7 +770,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogSearchResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['headers'];
+    const _validParams = ['signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -760,6 +797,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -811,6 +851,7 @@ class CatalogManagementV1 extends BaseService {
       'kind',
       'metadata',
       'targetAccountContexts',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -859,6 +900,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -880,7 +924,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Catalog>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'headers'];
+    const _validParams = ['catalogIdentifier', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -908,6 +952,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -965,6 +1012,7 @@ class CatalogManagementV1 extends BaseService {
       'kind',
       'metadata',
       'targetAccountContexts',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1020,6 +1068,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1041,7 +1092,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'headers'];
+    const _validParams = ['catalogIdentifier', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1065,6 +1116,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1089,7 +1143,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLogs>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'start', 'limit', 'lookupnames', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'start',
+      'limit',
+      'lookupnames',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1128,6 +1189,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1151,7 +1215,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'auditlogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'auditlogIdentifier', 'lookupnames', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'auditlogIdentifier',
+      'lookupnames',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1189,6 +1259,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1216,7 +1289,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLogs>> {
     const _params = { ...params };
     const _requiredParams = ['enterpriseIdentifier'];
-    const _validParams = ['enterpriseIdentifier', 'start', 'limit', 'lookupnames', 'headers'];
+    const _validParams = [
+      'enterpriseIdentifier',
+      'start',
+      'limit',
+      'lookupnames',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1255,6 +1335,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1278,7 +1361,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
     const _params = { ...params };
     const _requiredParams = ['enterpriseIdentifier', 'auditlogIdentifier'];
-    const _validParams = ['enterpriseIdentifier', 'auditlogIdentifier', 'lookupnames', 'headers'];
+    const _validParams = [
+      'enterpriseIdentifier',
+      'auditlogIdentifier',
+      'lookupnames',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1316,6 +1405,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1358,6 +1450,7 @@ class CatalogManagementV1 extends BaseService {
       'includeHidden',
       'limit',
       'offset',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1396,6 +1489,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1436,6 +1532,7 @@ class CatalogManagementV1 extends BaseService {
       'name',
       'sort',
       'includeHidden',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1479,6 +1576,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1595,6 +1695,7 @@ class CatalogManagementV1 extends BaseService {
       'productKind',
       'badges',
       'plans',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1677,6 +1778,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1758,6 +1862,7 @@ class CatalogManagementV1 extends BaseService {
       'isVsi',
       'repotype',
       'xAuthToken',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1823,6 +1928,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1903,6 +2011,7 @@ class CatalogManagementV1 extends BaseService {
       'isVsi',
       'repotype',
       'xAuthToken',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -1968,6 +2077,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2019,6 +2131,7 @@ class CatalogManagementV1 extends BaseService {
       'installType',
       'zipurl',
       'repoType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2072,6 +2185,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2096,7 +2212,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'type', 'digest', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'type', 'digest', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2131,6 +2247,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2253,6 +2372,7 @@ class CatalogManagementV1 extends BaseService {
       'productKind',
       'badges',
       'plans',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2338,6 +2458,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2362,7 +2485,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'ifMatch'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'ifMatch', 'updates', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'ifMatch',
+      'updates',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2399,6 +2529,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2424,7 +2557,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'xApproverToken', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'xApproverToken', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2457,6 +2590,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2479,7 +2615,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.MetricStats>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2512,6 +2648,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2543,6 +2682,7 @@ class CatalogManagementV1 extends BaseService {
       'start',
       'limit',
       'lookupnames',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2584,6 +2724,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2613,6 +2756,7 @@ class CatalogManagementV1 extends BaseService {
       'offeringId',
       'auditlogIdentifier',
       'lookupnames',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2653,6 +2797,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2701,6 +2848,7 @@ class CatalogManagementV1 extends BaseService {
       'portalUrl',
       'xApproverToken',
       'xAuthToken',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2745,6 +2893,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2778,6 +2929,7 @@ class CatalogManagementV1 extends BaseService {
       'setting',
       'description',
       'daysUntilDeprecate',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2819,6 +2971,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2850,6 +3005,7 @@ class CatalogManagementV1 extends BaseService {
       'ibm',
       '_public',
       'enabled',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -2892,6 +3048,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2916,7 +3075,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Access>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'accessIdentifier'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'accessIdentifier', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'accessIdentifier',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2950,6 +3115,116 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update the access list entry for a specific account.
+   *
+   * Update an access list entry for a specific account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.catalogIdentifier - Catalog identifier.
+   * @param {string} params.offeringId - Offering identification.
+   * @param {string} params.accessIdentifier - Identifier for access. Use 'accountId' or '-acct-accountId' for an
+   * account, '-ent-enterpriseid' for an enterprise, and '-entgrp-enterprisegroupid' for an enterprise group.
+   * @param {string} [params.id] - unique id.
+   * @param {string} [params.rev] - Revision.
+   * @param {string} [params.account] - account id.
+   * @param {number} [params.accountType] - Normal account or enterprise.
+   * @param {string} [params.catalogId] - unique id.
+   * @param {string} [params.targetId] - object ID.
+   * @param {string} [params.targetAccount] - object's owner's account.
+   * @param {string} [params.targetKind] - entity type.
+   * @param {string} [params.created] - date and time create.
+   * @param {string} [params.approvalState] - Approval state for access. If this field is an empty string, then it means
+   * that it's approved.
+   * @param {string[]} [params.visibleStates] - List of additional version states that this account can see. The default
+   * visible states are consumable and prerelease.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.Access>>}
+   */
+  public updateOfferingAccess(
+    params: CatalogManagementV1.UpdateOfferingAccessParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Access>> {
+    const _params = { ...params };
+    const _requiredParams = ['catalogIdentifier', 'offeringId', 'accessIdentifier'];
+    const _validParams = [
+      'catalogIdentifier',
+      'offeringId',
+      'accessIdentifier',
+      'id',
+      'rev',
+      'account',
+      'accountType',
+      'catalogId',
+      'targetId',
+      'targetAccount',
+      'targetKind',
+      'created',
+      'approvalState',
+      'visibleStates',
+      'signal',
+      'headers',
+    ];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'id': _params.id,
+      '_rev': _params.rev,
+      'account': _params.account,
+      'account_type': _params.accountType,
+      'catalog_id': _params.catalogId,
+      'target_id': _params.targetId,
+      'target_account': _params.targetAccount,
+      'target_kind': _params.targetKind,
+      'created': _params.created,
+      'approval_state': _params.approvalState,
+      'visible_states': _params.visibleStates,
+    };
+
+    const path = {
+      'catalog_identifier': _params.catalogIdentifier,
+      'offering_id': _params.offeringId,
+      'access_identifier': _params.accessIdentifier,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateOfferingAccess'
+    );
+
+    const parameters = {
+      options: {
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/access/{access_identifier}',
+        method: 'PUT',
+        body,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2974,7 +3249,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListResult>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'start', 'limit', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2998,7 +3273,7 @@ class CatalogManagementV1 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/access',
+        url: '/catalogs/{catalog_identifier}/offerings/{offering_id}/accessv2',
         method: 'GET',
         qs: query,
         path,
@@ -3013,6 +3288,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3037,7 +3315,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'accesses'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'accesses', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'accesses', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3073,6 +3351,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3089,14 +3370,14 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} params.offeringId - Offering identification.
    * @param {string[]} params.accesses - A list of accesses to add.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListResult>>}
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>>}
    */
   public addOfferingAccessList(
     params: CatalogManagementV1.AddOfferingAccessListParams
-  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListResult>> {
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'offeringId', 'accesses'];
-    const _validParams = ['catalogIdentifier', 'offeringId', 'accesses', 'headers'];
+    const _validParams = ['catalogIdentifier', 'offeringId', 'accesses', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3132,6 +3413,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3188,6 +3472,7 @@ class CatalogManagementV1 extends BaseService {
       'allNamespaces',
       'flavor',
       'installType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3240,6 +3525,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3277,6 +3565,7 @@ class CatalogManagementV1 extends BaseService {
       'version',
       'flavor',
       'versions',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3320,6 +3609,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3363,6 +3655,7 @@ class CatalogManagementV1 extends BaseService {
       'flavor',
       'asIs',
       'installType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3405,6 +3698,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3450,6 +3746,7 @@ class CatalogManagementV1 extends BaseService {
       'flavor',
       'asIs',
       'installType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3492,6 +3789,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3518,7 +3818,15 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<NodeJS.ReadableStream>> {
     const _params = { ...params };
     const _requiredParams = ['keyIdentifier'];
-    const _validParams = ['keyIdentifier', 'accept', 'catalogId', 'name', 'id', 'headers'];
+    const _validParams = [
+      'keyIdentifier',
+      'accept',
+      'catalogId',
+      'name',
+      'id',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3558,6 +3866,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3594,6 +3905,7 @@ class CatalogManagementV1 extends BaseService {
       'catalog',
       'start',
       'limit',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3633,6 +3945,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3657,7 +3972,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<string>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3689,6 +4004,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3710,7 +4028,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CheckedIAMPermission[]>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3742,6 +4060,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3765,7 +4086,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<string>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'licenseId'];
-    const _validParams = ['versionLocId', 'licenseId', 'headers'];
+    const _validParams = ['versionLocId', 'licenseId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3798,6 +4119,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3820,7 +4144,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ImageManifest>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3852,6 +4176,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3873,7 +4200,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3897,6 +4224,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3928,6 +4258,7 @@ class CatalogManagementV1 extends BaseService {
       'setting',
       'description',
       'daysUntilDeprecate',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -3968,6 +4299,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3989,7 +4323,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4013,6 +4347,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4034,7 +4371,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4058,6 +4395,53 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Make version test.
+   *
+   * Set the version as test.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.versionLocId - A dotted value of `catalogID`.`versionID`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>>}
+   */
+  public testVersion(
+    params: CatalogManagementV1.TestVersionParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['versionLocId'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const path = {
+      'version_loc_id': _params.versionLocId,
+    };
+
+    const sdkHeaders = getSdkHeaders(CatalogManagementV1.DEFAULT_SERVICE_NAME, 'v1', 'testVersion');
+
+    const parameters = {
+      options: {
+        url: '/versions/{version_loc_id}/test-publish',
+        method: 'POST',
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4079,7 +4463,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4103,6 +4487,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4124,7 +4511,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4148,6 +4535,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4189,6 +4579,7 @@ class CatalogManagementV1 extends BaseService {
       'flavor',
       'workingDirectory',
       'installType',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4229,6 +4620,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4250,7 +4644,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Version>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4282,6 +4676,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4306,7 +4703,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'type', 'versionLocIdToCopyFrom'];
-    const _validParams = ['versionLocId', 'type', 'versionLocIdToCopyFrom', 'headers'];
+    const _validParams = ['versionLocId', 'type', 'versionLocIdToCopyFrom', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4332,6 +4729,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4355,7 +4755,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionInputValidationResponse>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'input1', 'input2', 'headers'];
+    const _validParams = ['versionLocId', 'input1', 'input2', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4394,6 +4794,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4415,7 +4818,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4443,6 +4846,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4564,6 +4970,7 @@ class CatalogManagementV1 extends BaseService {
       'productKind',
       'badges',
       'plans',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -4648,6 +5055,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4672,7 +5082,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'ifMatch'];
-    const _validParams = ['versionLocId', 'ifMatch', 'updates', 'headers'];
+    const _validParams = ['versionLocId', 'ifMatch', 'updates', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4708,6 +5118,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4730,7 +5143,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4754,6 +5167,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4775,7 +5191,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.VersionDependant>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4807,6 +5223,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4830,7 +5249,7 @@ class CatalogManagementV1 extends BaseService {
     CatalogManagementV1._logger.warn('A deprecated operation has been invoked: deprecateVersion');
     const _params = { ...params };
     const _requiredParams = ['versionLocId'];
-    const _validParams = ['versionLocId', 'headers'];
+    const _validParams = ['versionLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4854,6 +5273,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4880,7 +5302,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ClusterInfo>> {
     const _params = { ...params };
     const _requiredParams = ['clusterId', 'region', 'xAuthRefreshToken'];
-    const _validParams = ['clusterId', 'region', 'xAuthRefreshToken', 'headers'];
+    const _validParams = ['clusterId', 'region', 'xAuthRefreshToken', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4914,6 +5336,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4939,7 +5364,15 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.NamespaceSearchResult>> {
     const _params = { ...params };
     const _requiredParams = ['clusterId', 'region', 'xAuthRefreshToken'];
-    const _validParams = ['clusterId', 'region', 'xAuthRefreshToken', 'limit', 'offset', 'headers'];
+    const _validParams = [
+      'clusterId',
+      'region',
+      'xAuthRefreshToken',
+      'limit',
+      'offset',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4979,6 +5412,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5016,6 +5452,7 @@ class CatalogManagementV1 extends BaseService {
       'versionLocatorId',
       'channel',
       'installPlan',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5057,6 +5494,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5086,6 +5526,7 @@ class CatalogManagementV1 extends BaseService {
       'clusterId',
       'region',
       'versionLocatorId',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5122,6 +5563,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5159,6 +5603,7 @@ class CatalogManagementV1 extends BaseService {
       'versionLocatorId',
       'channel',
       'installPlan',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5200,6 +5645,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5229,6 +5677,7 @@ class CatalogManagementV1 extends BaseService {
       'clusterId',
       'region',
       'versionLocatorId',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5264,6 +5713,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5335,6 +5787,7 @@ class CatalogManagementV1 extends BaseService {
       'planId',
       'channel',
       'installPlan',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5394,6 +5847,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5465,6 +5921,7 @@ class CatalogManagementV1 extends BaseService {
       'planId',
       'channel',
       'installPlan',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5524,6 +5981,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5555,6 +6015,7 @@ class CatalogManagementV1 extends BaseService {
       'clusterId',
       'region',
       'namespace',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5596,6 +6057,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5669,6 +6133,7 @@ class CatalogManagementV1 extends BaseService {
       'channel',
       'installPlan',
       'targetContextName',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -5733,6 +6198,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5756,7 +6224,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Validation>> {
     const _params = { ...params };
     const _requiredParams = ['versionLocId', 'xAuthRefreshToken'];
-    const _validParams = ['versionLocId', 'xAuthRefreshToken', 'targetContextName', 'headers'];
+    const _validParams = [
+      'versionLocId',
+      'xAuthRefreshToken',
+      'targetContextName',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5794,6 +6268,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5825,7 +6302,16 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectSearchResult>> {
     const _params = { ...params };
     const _requiredParams = ['query'];
-    const _validParams = ['query', 'kind', 'limit', 'offset', 'collapse', 'digest', 'headers'];
+    const _validParams = [
+      'query',
+      'kind',
+      'limit',
+      'offset',
+      'collapse',
+      'digest',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5862,6 +6348,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5889,7 +6378,15 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.ObjectListResult>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier'];
-    const _validParams = ['catalogIdentifier', 'limit', 'offset', 'name', 'sort', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'limit',
+      'offset',
+      'name',
+      'sort',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5925,6 +6422,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5982,6 +6482,7 @@ class CatalogManagementV1 extends BaseService {
       'catalogId',
       'catalogName',
       'data',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6037,6 +6538,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6059,7 +6563,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.CatalogObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'headers'];
+    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6088,6 +6592,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6151,6 +6658,7 @@ class CatalogManagementV1 extends BaseService {
       'catalogId',
       'catalogName',
       'data',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6209,6 +6717,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6231,7 +6742,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'headers'];
+    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6256,6 +6767,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6287,6 +6801,7 @@ class CatalogManagementV1 extends BaseService {
       'start',
       'limit',
       'lookupnames',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6328,6 +6843,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6357,6 +6875,7 @@ class CatalogManagementV1 extends BaseService {
       'objectIdentifier',
       'auditlogIdentifier',
       'lookupnames',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6397,6 +6916,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6419,7 +6941,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'headers'];
+    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6444,6 +6966,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6475,6 +7000,7 @@ class CatalogManagementV1 extends BaseService {
       'ibm',
       '_public',
       'enabled',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -6513,6 +7039,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6537,7 +7066,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListResult>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'start', 'limit', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'start',
+      'limit',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6561,7 +7097,7 @@ class CatalogManagementV1 extends BaseService {
 
     const parameters = {
       options: {
-        url: '/catalogs/{catalog_identifier}/objects/{object_identifier}/accessv1',
+        url: '/catalogs/{catalog_identifier}/objects/{object_identifier}/accessv2',
         method: 'GET',
         qs: query,
         path,
@@ -6576,6 +7112,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6600,7 +7139,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Access>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accessIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accessIdentifier', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'accessIdentifier',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6634,6 +7179,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6660,7 +7208,13 @@ class CatalogManagementV1 extends BaseService {
     CatalogManagementV1._logger.warn('A deprecated operation has been invoked: createObjectAccess');
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accessIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accessIdentifier', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'accessIdentifier',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6686,6 +7240,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6712,7 +7269,13 @@ class CatalogManagementV1 extends BaseService {
     CatalogManagementV1._logger.warn('A deprecated operation has been invoked: deleteObjectAccess');
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accessIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accessIdentifier', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'accessIdentifier',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6738,6 +7301,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6747,7 +7313,7 @@ class CatalogManagementV1 extends BaseService {
   /**
    * Get object access list.
    *
-   * Deprecated - use /accessv1 instead.
+   * Deprecated - use /accessv2 instead.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.catalogIdentifier - Catalog identifier.
@@ -6766,7 +7332,14 @@ class CatalogManagementV1 extends BaseService {
     );
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'limit', 'offset', 'headers'];
+    const _validParams = [
+      'catalogIdentifier',
+      'objectIdentifier',
+      'limit',
+      'offset',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6805,6 +7378,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6829,7 +7405,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accesses'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accesses', 'headers'];
+    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accesses', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6865,6 +7441,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6888,7 +7467,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AccessListBulkResponse>> {
     const _params = { ...params };
     const _requiredParams = ['catalogIdentifier', 'objectIdentifier', 'accesses'];
-    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accesses', 'headers'];
+    const _validParams = ['catalogIdentifier', 'objectIdentifier', 'accesses', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6924,6 +7503,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6974,6 +7556,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.sha] - The digest value of the installed software version.
    * @param {string} [params.planId] - The software plan ID used when creating this software instance.
    * @param {string} [params.parentCrn] - The CRN of the resource that is considered a parent of this software instance.
+   * @param {PlanEntitlement} [params.planEntitlement] - Entitlement information returned from the license manager when
+   * a plan contains licenses. This object tracks the license entitlement status and associated licenses for a software
+   * offering instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
@@ -7015,6 +7600,8 @@ class CatalogManagementV1 extends BaseService {
       'sha',
       'planId',
       'parentCrn',
+      'planEntitlement',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -7054,6 +7641,7 @@ class CatalogManagementV1 extends BaseService {
       'sha': _params.sha,
       'plan_id': _params.planId,
       'parent_crn': _params.parentCrn,
+      'plan_entitlement': _params.planEntitlement,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -7080,6 +7668,69 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List offering instances.
+   *
+   * List the available offering instances for the specified account and offering.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.offeringId - Return all offering instances that were created from the specified offering id.
+   * @param {string} [params.start] - Start token for a query.
+   * @param {number} [params.limit] - number or results to return in the query.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstanceListResult>>}
+   */
+  public searchOfferingInstance(
+    params: CatalogManagementV1.SearchOfferingInstanceParams
+  ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstanceListResult>> {
+    const _params = { ...params };
+    const _requiredParams = ['offeringId'];
+    const _validParams = ['offeringId', 'start', 'limit', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'offeringID': _params.offeringId,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      CatalogManagementV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'searchOfferingInstance'
+    );
+
+    const parameters = {
+      options: {
+        url: '/instances/offerings',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7101,7 +7752,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>> {
     const _params = { ...params };
     const _requiredParams = ['instanceIdentifier'];
-    const _validParams = ['instanceIdentifier', 'headers'];
+    const _validParams = ['instanceIdentifier', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7133,6 +7784,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7181,6 +7835,9 @@ class CatalogManagementV1 extends BaseService {
    * @param {string} [params.sha] - The digest value of the installed software version.
    * @param {string} [params.planId] - The software plan ID used when creating this software instance.
    * @param {string} [params.parentCrn] - The CRN of the resource that is considered a parent of this software instance.
+   * @param {PlanEntitlement} [params.planEntitlement] - Entitlement information returned from the license manager when
+   * a plan contains licenses. This object tracks the license entitlement status and associated licenses for a software
+   * offering instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<CatalogManagementV1.Response<CatalogManagementV1.OfferingInstance>>}
    */
@@ -7223,6 +7880,8 @@ class CatalogManagementV1 extends BaseService {
       'sha',
       'planId',
       'parentCrn',
+      'planEntitlement',
+      'signal',
       'headers',
     ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
@@ -7262,6 +7921,7 @@ class CatalogManagementV1 extends BaseService {
       'sha': _params.sha,
       'plan_id': _params.planId,
       'parent_crn': _params.parentCrn,
+      'plan_entitlement': _params.planEntitlement,
     };
 
     const path = {
@@ -7293,6 +7953,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7315,7 +7978,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceIdentifier', 'xAuthRefreshToken'];
-    const _validParams = ['instanceIdentifier', 'xAuthRefreshToken', 'headers'];
+    const _validParams = ['instanceIdentifier', 'xAuthRefreshToken', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7347,6 +8010,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7371,7 +8037,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLogs>> {
     const _params = { ...params };
     const _requiredParams = ['instanceIdentifier'];
-    const _validParams = ['instanceIdentifier', 'start', 'limit', 'lookupnames', 'headers'];
+    const _validParams = [
+      'instanceIdentifier',
+      'start',
+      'limit',
+      'lookupnames',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7410,6 +8083,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7433,7 +8109,13 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.AuditLog>> {
     const _params = { ...params };
     const _requiredParams = ['instanceIdentifier', 'auditlogIdentifier'];
-    const _validParams = ['instanceIdentifier', 'auditlogIdentifier', 'lookupnames', 'headers'];
+    const _validParams = [
+      'instanceIdentifier',
+      'auditlogIdentifier',
+      'lookupnames',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7471,6 +8153,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7495,7 +8180,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.Offering>> {
     const _params = { ...params };
     const _requiredParams = ['planLocId'];
-    const _validParams = ['planLocId', 'headers'];
+    const _validParams = ['planLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7523,6 +8208,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7544,7 +8232,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['planLocId'];
-    const _validParams = ['planLocId', 'headers'];
+    const _validParams = ['planLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7564,6 +8252,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7585,7 +8276,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['planLocId'];
-    const _validParams = ['planLocId', 'headers'];
+    const _validParams = ['planLocId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7609,6 +8300,9 @@ class CatalogManagementV1 extends BaseService {
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, this.baseOptions.headers, {}, _params.headers),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7635,7 +8329,14 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['planLocId', 'setting'];
-    const _validParams = ['planLocId', 'setting', 'description', 'daysUntilDeprecate', 'headers'];
+    const _validParams = [
+      'planLocId',
+      'setting',
+      'description',
+      'daysUntilDeprecate',
+      'signal',
+      'headers',
+    ];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7674,6 +8375,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7701,7 +8405,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['filter', 'getInactive', 'limit', 'offset', 'headers'];
+    const _validParams = ['filter', 'getInactive', 'limit', 'offset', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7736,6 +8440,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7760,7 +8467,7 @@ class CatalogManagementV1 extends BaseService {
   ): Promise<CatalogManagementV1.Response<CatalogManagementV1.RegionsSearchResult>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['filter', 'getInactive', 'limit', 'offset', 'headers'];
+    const _validParams = ['filter', 'getInactive', 'limit', 'offset', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7791,6 +8498,9 @@ class CatalogManagementV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7826,13 +8536,16 @@ namespace CatalogManagementV1 {
    * request interfaces
    ************************/
 
-  /** Parameters for the `getCatalogAccount` operation. */
-  export interface GetCatalogAccountParams {
+  interface DefaultParams {
     headers?: OutgoingHttpHeaders;
+    signal?: AbortSignal;
   }
 
+  /** Parameters for the `getCatalogAccount` operation. */
+  export interface GetCatalogAccountParams extends DefaultParams {}
+
   /** Parameters for the `updateCatalogAccount` operation. */
-  export interface UpdateCatalogAccountParams {
+  export interface UpdateCatalogAccountParams extends DefaultParams {
     /** Account identification. */
     id?: string;
     /** Cloudant revision. */
@@ -7843,45 +8556,42 @@ namespace CatalogManagementV1 {
     accountFilters?: Filters;
     /** Region filter string. */
     regionFilter?: string;
-    headers?: OutgoingHttpHeaders;
+    /** List of terraform engines configured for this account. */
+    terraformEngines?: TerraformEngines[];
   }
 
   /** Parameters for the `listCatalogAccountAudits` operation. */
-  export interface ListCatalogAccountAuditsParams {
+  export interface ListCatalogAccountAuditsParams extends DefaultParams {
     /** Start token for a query. */
     start?: string;
     /** number or results to return in the query. */
     limit?: number;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getCatalogAccountAudit` operation. */
-  export interface GetCatalogAccountAuditParams {
+  export interface GetCatalogAccountAuditParams extends DefaultParams {
     /** Auditlog ID. */
     auditlogIdentifier: string;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getCatalogAccountFilters` operation. */
-  export interface GetCatalogAccountFiltersParams {
+  export interface GetCatalogAccountFiltersParams extends DefaultParams {
     /** catalog id. Narrow down filters to the account and just the one catalog. */
     catalog?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getShareApprovalList` operation. */
-  export interface GetShareApprovalListParams {
+  export interface GetShareApprovalListParams extends DefaultParams {
     /** The type for the object. */
     objectType: GetShareApprovalListConstants.ObjectType | string;
     /** Start token for a query. */
     start?: string;
     /** number or results to return in the query. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getShareApprovalList` operation. */
@@ -7896,12 +8606,11 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `deleteShareApprovalList` operation. */
-  export interface DeleteShareApprovalListParams {
+  export interface DeleteShareApprovalListParams extends DefaultParams {
     /** The type for the object. */
     objectType: DeleteShareApprovalListConstants.ObjectType | string;
     /** A list of accesses to delete.  An entry with star["*"] will remove all accesses. */
     accesses: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `deleteShareApprovalList` operation. */
@@ -7916,12 +8625,11 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `addShareApprovalList` operation. */
-  export interface AddShareApprovalListParams {
+  export interface AddShareApprovalListParams extends DefaultParams {
     /** The type for the object. */
     objectType: AddShareApprovalListConstants.ObjectType | string;
     /** A list of accesses to add. */
     accesses: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `addShareApprovalList` operation. */
@@ -7936,7 +8644,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `getShareApprovalListAsSource` operation. */
-  export interface GetShareApprovalListAsSourceParams {
+  export interface GetShareApprovalListAsSourceParams extends DefaultParams {
     /** The type for the object. */
     objectType: GetShareApprovalListAsSourceConstants.ObjectType | string;
     /** The different possible approval states for share requests or access request. */
@@ -7949,7 +8657,6 @@ namespace CatalogManagementV1 {
      *  for an enterprise and '-entgrp-enterprisegroupid for an enterprise group.
      */
     enterpriseId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getShareApprovalListAsSource` operation. */
@@ -7970,7 +8677,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `updateShareApprovalListAsSource` operation. */
-  export interface UpdateShareApprovalListAsSourceParams {
+  export interface UpdateShareApprovalListAsSourceParams extends DefaultParams {
     /** The type for the object. */
     objectType: UpdateShareApprovalListAsSourceConstants.ObjectType | string;
     /** The different possible approval states for share requests or access request. */
@@ -7983,7 +8690,6 @@ namespace CatalogManagementV1 {
      *  for an enterprise and '-entgrp-enterprisegroupid for an enterprise group.
      */
     enterpriseId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateShareApprovalListAsSource` operation. */
@@ -8004,12 +8710,10 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `listCatalogs` operation. */
-  export interface ListCatalogsParams {
-    headers?: OutgoingHttpHeaders;
-  }
+  export interface ListCatalogsParams extends DefaultParams {}
 
   /** Parameters for the `createCatalog` operation. */
-  export interface CreateCatalogParams {
+  export interface CreateCatalogParams extends DefaultParams {
     /** Display Name in the requested language. */
     label?: string;
     /** A map of translated strings, by language code. */
@@ -8040,18 +8744,16 @@ namespace CatalogManagementV1 {
     metadata?: JsonObject;
     /** List of target accounts contexts on this catalog. */
     targetAccountContexts?: TargetAccountContext[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getCatalog` operation. */
-  export interface GetCatalogParams {
+  export interface GetCatalogParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceCatalog` operation. */
-  export interface ReplaceCatalogParams {
+  export interface ReplaceCatalogParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Unique ID. */
@@ -8088,18 +8790,16 @@ namespace CatalogManagementV1 {
     metadata?: JsonObject;
     /** List of target accounts contexts on this catalog. */
     targetAccountContexts?: TargetAccountContext[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteCatalog` operation. */
-  export interface DeleteCatalogParams {
+  export interface DeleteCatalogParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listCatalogAudits` operation. */
-  export interface ListCatalogAuditsParams {
+  export interface ListCatalogAuditsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Start token for a query. */
@@ -8108,22 +8808,20 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getCatalogAudit` operation. */
-  export interface GetCatalogAuditParams {
+  export interface GetCatalogAuditParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Auditlog ID. */
     auditlogIdentifier: string;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listEnterpriseAudits` operation. */
-  export interface ListEnterpriseAuditsParams {
+  export interface ListEnterpriseAuditsParams extends DefaultParams {
     /** Enterprise ID. */
     enterpriseIdentifier: string;
     /** Start token for a query. */
@@ -8132,22 +8830,20 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getEnterpriseAudit` operation. */
-  export interface GetEnterpriseAuditParams {
+  export interface GetEnterpriseAuditParams extends DefaultParams {
     /** Enterprise ID. */
     enterpriseIdentifier: string;
     /** Auditlog ID. */
     auditlogIdentifier: string;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getConsumptionOfferings` operation. */
-  export interface GetConsumptionOfferingsParams {
+  export interface GetConsumptionOfferingsParams extends DefaultParams {
     /** true - Strip down the content of what is returned. For example don't return the readme. Makes the result
      *  much smaller. Defaults to false.
      */
@@ -8168,7 +8864,6 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** number of results to skip before returning values. */
     offset?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getConsumptionOfferings` operation. */
@@ -8182,7 +8877,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `listOfferings` operation. */
-  export interface ListOfferingsParams {
+  export interface ListOfferingsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** true - Strip down the content of what is returned. For example don't return the readme. Makes the result
@@ -8204,11 +8899,10 @@ namespace CatalogManagementV1 {
      *  offerings false must be explicitly set.
      */
     includeHidden?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createOffering` operation. */
-  export interface CreateOfferingParams {
+  export interface CreateOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** The url for this specific offering. */
@@ -8301,11 +8995,10 @@ namespace CatalogManagementV1 {
     badges?: Badge[];
     /** A list of plans for this offering. */
     plans?: Plan[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `importOfferingVersion` operation. */
-  export interface ImportOfferingVersionParams {
+  export interface ImportOfferingVersionParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8358,11 +9051,10 @@ namespace CatalogManagementV1 {
     repotype?: string;
     /** Authentication token used to access the specified zip file. */
     xAuthToken?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `importOffering` operation. */
-  export interface ImportOfferingParams {
+  export interface ImportOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Tags array. */
@@ -8415,11 +9107,10 @@ namespace CatalogManagementV1 {
     repotype?: string;
     /** Authentication token used to access the specified zip file. */
     xAuthToken?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `reloadOffering` operation. */
-  export interface ReloadOfferingParams {
+  export interface ReloadOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8444,11 +9135,10 @@ namespace CatalogManagementV1 {
     zipurl?: string;
     /** The type of repository containing this version.  Valid values are 'public_git' or 'enterprise_git'. */
     repoType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOffering` operation. */
-  export interface GetOfferingParams {
+  export interface GetOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8457,11 +9147,10 @@ namespace CatalogManagementV1 {
     type?: string;
     /** Return the digest format of the specified offering.  Default is false. */
     digest?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceOffering` operation. */
-  export interface ReplaceOfferingParams {
+  export interface ReplaceOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8560,11 +9249,10 @@ namespace CatalogManagementV1 {
     badges?: Badge[];
     /** A list of plans for this offering. */
     plans?: Plan[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateOffering` operation. */
-  export interface UpdateOfferingParams {
+  export interface UpdateOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8572,11 +9260,10 @@ namespace CatalogManagementV1 {
     /** Offering etag contained in quotes. */
     ifMatch: string;
     updates?: JsonPatchOperation[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteOffering` operation. */
-  export interface DeleteOfferingParams {
+  export interface DeleteOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8585,20 +9272,18 @@ namespace CatalogManagementV1 {
      *  accessing the public offering Partner Center only needs to use their token in the authorization header.
      */
     xApproverToken?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingStats` operation. */
-  export interface GetOfferingStatsParams {
+  export interface GetOfferingStatsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
     offeringId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listOfferingAudits` operation. */
-  export interface ListOfferingAuditsParams {
+  export interface ListOfferingAuditsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8609,11 +9294,10 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingAudit` operation. */
-  export interface GetOfferingAuditParams {
+  export interface GetOfferingAuditParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8622,11 +9306,10 @@ namespace CatalogManagementV1 {
     auditlogIdentifier: string;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `setOfferingPublish` operation. */
-  export interface SetOfferingPublishParams {
+  export interface SetOfferingPublishParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8654,7 +9337,6 @@ namespace CatalogManagementV1 {
      *  the approval type as `ibm_module_repo` or `ibm_community`.
      */
     xAuthToken?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `setOfferingPublish` operation. */
@@ -8675,7 +9357,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `deprecateOffering` operation. */
-  export interface DeprecateOfferingParams {
+  export interface DeprecateOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8686,7 +9368,6 @@ namespace CatalogManagementV1 {
     description?: string;
     /** Specifies the amount of days until product is not available in catalog. */
     daysUntilDeprecate?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `deprecateOffering` operation. */
@@ -8699,7 +9380,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `shareOffering` operation. */
-  export interface ShareOfferingParams {
+  export interface ShareOfferingParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8710,11 +9391,10 @@ namespace CatalogManagementV1 {
     _public?: boolean;
     /** Visible to access list. */
     enabled?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingAccess` operation. */
-  export interface GetOfferingAccessParams {
+  export interface GetOfferingAccessParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8723,11 +9403,46 @@ namespace CatalogManagementV1 {
      *  enterprise, and '-entgrp-enterprisegroupid' for an enterprise group.
      */
     accessIdentifier: string;
-    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateOfferingAccess` operation. */
+  export interface UpdateOfferingAccessParams extends DefaultParams {
+    /** Catalog identifier. */
+    catalogIdentifier: string;
+    /** Offering identification. */
+    offeringId: string;
+    /** Identifier for access. Use 'accountId' or '-acct-accountId' for an account, '-ent-enterpriseid' for an
+     *  enterprise, and '-entgrp-enterprisegroupid' for an enterprise group.
+     */
+    accessIdentifier: string;
+    /** unique id. */
+    id?: string;
+    /** Revision. */
+    rev?: string;
+    /** account id. */
+    account?: string;
+    /** Normal account or enterprise. */
+    accountType?: number;
+    /** unique id. */
+    catalogId?: string;
+    /** object ID. */
+    targetId?: string;
+    /** object's owner's account. */
+    targetAccount?: string;
+    /** entity type. */
+    targetKind?: string;
+    /** date and time create. */
+    created?: string;
+    /** Approval state for access. If this field is an empty string, then it means that it's approved. */
+    approvalState?: string;
+    /** List of additional version states that this account can see. The default visible states are consumable and
+     *  prerelease.
+     */
+    visibleStates?: string[];
   }
 
   /** Parameters for the `getOfferingAccessList` operation. */
-  export interface GetOfferingAccessListParams {
+  export interface GetOfferingAccessListParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8736,33 +9451,30 @@ namespace CatalogManagementV1 {
     start?: string;
     /** number or results to return in the query. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteOfferingAccessList` operation. */
-  export interface DeleteOfferingAccessListParams {
+  export interface DeleteOfferingAccessListParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
     offeringId: string;
     /** A list of accesses to delete.  An entry with star["*"] will remove all accesses. */
     accesses: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addOfferingAccessList` operation. */
-  export interface AddOfferingAccessListParams {
+  export interface AddOfferingAccessListParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
     offeringId: string;
     /** A list of accesses to add. */
     accesses: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingUpdates` operation. */
-  export interface GetOfferingUpdatesParams {
+  export interface GetOfferingUpdatesParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8797,11 +9509,10 @@ namespace CatalogManagementV1 {
     flavor?: string;
     /** The install type of the version that was installed. */
     installType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingChangeNotices` operation. */
-  export interface GetOfferingChangeNoticesParams {
+  export interface GetOfferingChangeNoticesParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8820,7 +9531,6 @@ namespace CatalogManagementV1 {
      *  versions that are newer than the specified version, including the specified version.
      */
     versions?: GetOfferingChangeNoticesConstants.Versions | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getOfferingChangeNotices` operation. */
@@ -8833,7 +9543,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `getOfferingSource` operation. */
-  export interface GetOfferingSourceParams {
+  export interface GetOfferingSourceParams extends DefaultParams {
     /** The version being requested. */
     version: string;
     /** The type of the response: application/yaml, application/json, or application/x-gzip. */
@@ -8856,7 +9566,6 @@ namespace CatalogManagementV1 {
     asIs?: boolean;
     /** The install type of the specified version. */
     installType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getOfferingSource` operation. */
@@ -8870,7 +9579,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `getOfferingSourceArchive` operation. */
-  export interface GetOfferingSourceArchiveParams {
+  export interface GetOfferingSourceArchiveParams extends DefaultParams {
     /** The version being requested. */
     version: string;
     /** The type of the response: application/yaml, application/json, or application/x-gzip. */
@@ -8893,7 +9602,6 @@ namespace CatalogManagementV1 {
     asIs?: boolean;
     /** The install type of the specified version. */
     installType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getOfferingSourceArchive` operation. */
@@ -8907,7 +9615,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `getOfferingSourceUrl` operation. */
-  export interface GetOfferingSourceUrlParams {
+  export interface GetOfferingSourceUrlParams extends DefaultParams {
     /** Unique key identifying an image. */
     keyIdentifier: string;
     /** The type of the response: application/yaml, application/json, or application/x-gzip. */
@@ -8918,7 +9626,6 @@ namespace CatalogManagementV1 {
     name?: string;
     /** Offering id. An offering name or ID must be specified. */
     id?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `getOfferingSourceUrl` operation. */
@@ -8932,7 +9639,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `getVersions` operation. */
-  export interface GetVersionsParams {
+  export interface GetVersionsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Offering identification. */
@@ -8947,48 +9654,42 @@ namespace CatalogManagementV1 {
     start?: string;
     /** number or results to return in the query. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingAbout` operation. */
-  export interface GetOfferingAboutParams {
+  export interface GetOfferingAboutParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getIamPermissions` operation. */
-  export interface GetIamPermissionsParams {
+  export interface GetIamPermissionsParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingLicense` operation. */
-  export interface GetOfferingLicenseParams {
+  export interface GetOfferingLicenseParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** The ID of the license, which maps to the file name in the 'licenses' directory of this verions tgz file. */
     licenseId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingContainerImages` operation. */
-  export interface GetOfferingContainerImagesParams {
+  export interface GetOfferingContainerImagesParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `archiveVersion` operation. */
-  export interface ArchiveVersionParams {
+  export interface ArchiveVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `setDeprecateVersion` operation. */
-  export interface SetDeprecateVersionParams {
+  export interface SetDeprecateVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** Set deprecation (true) or cancel deprecation (false). */
@@ -8997,7 +9698,6 @@ namespace CatalogManagementV1 {
     description?: string;
     /** Specifies the amount of days until product is not available in catalog. */
     daysUntilDeprecate?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `setDeprecateVersion` operation. */
@@ -9010,35 +9710,37 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `consumableVersion` operation. */
-  export interface ConsumableVersionParams {
+  export interface ConsumableVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `prereleaseVersion` operation. */
-  export interface PrereleaseVersionParams {
+  export interface PrereleaseVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `testVersion` operation. */
+  export interface TestVersionParams extends DefaultParams {
+    /** A dotted value of `catalogID`.`versionID`. */
+    versionLocId: string;
   }
 
   /** Parameters for the `suspendVersion` operation. */
-  export interface SuspendVersionParams {
+  export interface SuspendVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `commitVersion` operation. */
-  export interface CommitVersionParams {
+  export interface CommitVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `copyVersion` operation. */
-  export interface CopyVersionParams {
+  export interface CopyVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** Tags array. */
@@ -9055,18 +9757,16 @@ namespace CatalogManagementV1 {
     workingDirectory?: string;
     /** The install type of the current software being onboarded. */
     installType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingWorkingCopy` operation. */
-  export interface GetOfferingWorkingCopyParams {
+  export interface GetOfferingWorkingCopyParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `copyFromPreviousVersion` operation. */
-  export interface CopyFromPreviousVersionParams {
+  export interface CopyFromPreviousVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** The type of data you would like to copy from a previous version. Valid values are 'configuration' or
@@ -9075,29 +9775,26 @@ namespace CatalogManagementV1 {
     type: string;
     /** The version locator id of the version you wish to copy data from. */
     versionLocIdToCopyFrom: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `validateInputs` operation. */
-  export interface ValidateInputsParams {
+  export interface ValidateInputsParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** A deployment variable to validate. */
     input1?: string;
     /** Another deployment variable to validate. */
     input2?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVersion` operation. */
-  export interface GetVersionParams {
+  export interface GetVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVersion` operation. */
-  export interface UpdateVersionParams {
+  export interface UpdateVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** unique id. */
@@ -9194,53 +9891,47 @@ namespace CatalogManagementV1 {
     badges?: Badge[];
     /** A list of plans for this offering. */
     plans?: Plan[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `patchUpdateVersion` operation. */
-  export interface PatchUpdateVersionParams {
+  export interface PatchUpdateVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** Offering etag contained in quotes. */
     ifMatch: string;
     updates?: JsonPatchOperation[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteVersion` operation. */
-  export interface DeleteVersionParams {
+  export interface DeleteVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVersionDependencies` operation. */
-  export interface GetVersionDependenciesParams {
+  export interface GetVersionDependenciesParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deprecateVersion` operation. */
-  export interface DeprecateVersionParams {
+  export interface DeprecateVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getCluster` operation. */
-  export interface GetClusterParams {
+  export interface GetClusterParams extends DefaultParams {
     /** ID of the cluster. */
     clusterId: string;
     /** Region of the cluster. */
     region: string;
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getNamespaces` operation. */
-  export interface GetNamespacesParams {
+  export interface GetNamespacesParams extends DefaultParams {
     /** ID of the cluster. */
     clusterId: string;
     /** Cluster region. */
@@ -9251,11 +9942,10 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** The number of results to skip before returning values. */
     offset?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deployOperators` operation. */
-  export interface DeployOperatorsParams {
+  export interface DeployOperatorsParams extends DefaultParams {
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
     /** Cluster ID. */
@@ -9272,11 +9962,10 @@ namespace CatalogManagementV1 {
     channel?: string;
     /** Plan. */
     installPlan?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listOperators` operation. */
-  export interface ListOperatorsParams {
+  export interface ListOperatorsParams extends DefaultParams {
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
     /** Cluster identification. */
@@ -9285,11 +9974,10 @@ namespace CatalogManagementV1 {
     region: string;
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocatorId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceOperators` operation. */
-  export interface ReplaceOperatorsParams {
+  export interface ReplaceOperatorsParams extends DefaultParams {
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
     /** Cluster ID. */
@@ -9306,11 +9994,10 @@ namespace CatalogManagementV1 {
     channel?: string;
     /** Plan. */
     installPlan?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteOperators` operation. */
-  export interface DeleteOperatorsParams {
+  export interface DeleteOperatorsParams extends DefaultParams {
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
     /** Cluster identification. */
@@ -9319,11 +10006,10 @@ namespace CatalogManagementV1 {
     region: string;
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocatorId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `installVersion` operation. */
-  export interface InstallVersionParams {
+  export interface InstallVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** IAM Refresh token. */
@@ -9374,11 +10060,10 @@ namespace CatalogManagementV1 {
     channel?: string;
     /** Used when installing an operator, to indicate which install plan to use. */
     installPlan?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `preinstallVersion` operation. */
-  export interface PreinstallVersionParams {
+  export interface PreinstallVersionParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** IAM Refresh token. */
@@ -9429,11 +10114,10 @@ namespace CatalogManagementV1 {
     channel?: string;
     /** Used when installing an operator, to indicate which install plan to use. */
     installPlan?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPreinstall` operation. */
-  export interface GetPreinstallParams {
+  export interface GetPreinstallParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** IAM Refresh token. */
@@ -9444,11 +10128,10 @@ namespace CatalogManagementV1 {
     region?: string;
     /** Required if the version's pre-install scope is `namespace`. */
     namespace?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `validateInstall` operation. */
-  export interface ValidateInstallParams {
+  export interface ValidateInstallParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** IAM Refresh token. */
@@ -9501,22 +10184,20 @@ namespace CatalogManagementV1 {
     installPlan?: string;
     /** The name of a target account context on a catalog. */
     targetContextName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getValidationStatus` operation. */
-  export interface GetValidationStatusParams {
+  export interface GetValidationStatusParams extends DefaultParams {
     /** A dotted value of `catalogID`.`versionID`. */
     versionLocId: string;
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
     /** The name of a target account context on a catalog. */
     targetContextName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `searchObjects` operation. */
-  export interface SearchObjectsParams {
+  export interface SearchObjectsParams extends DefaultParams {
     /** Lucene query string. */
     query: string;
     /** The kind of the object. It will default to "vpe". */
@@ -9529,7 +10210,6 @@ namespace CatalogManagementV1 {
     collapse?: boolean;
     /** Display a digests of search results, has default value of true. */
     digest?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `searchObjects` operation. */
@@ -9541,7 +10221,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `listObjects` operation. */
-  export interface ListObjectsParams {
+  export interface ListObjectsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** The number of results to return. */
@@ -9555,11 +10235,10 @@ namespace CatalogManagementV1 {
      *  string, you can specify descending order. Default is ascending order.
      */
     sort?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createObject` operation. */
-  export interface CreateObjectParams {
+  export interface CreateObjectParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** The programmatic name of this object. */
@@ -9596,20 +10275,18 @@ namespace CatalogManagementV1 {
     catalogName?: string;
     /** Map of data values for this object. */
     data?: JsonObject;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getObject` operation. */
-  export interface GetObjectParams {
+  export interface GetObjectParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
     objectIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceObject` operation. */
-  export interface ReplaceObjectParams {
+  export interface ReplaceObjectParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9652,20 +10329,18 @@ namespace CatalogManagementV1 {
     catalogName?: string;
     /** Map of data values for this object. */
     data?: JsonObject;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteObject` operation. */
-  export interface DeleteObjectParams {
+  export interface DeleteObjectParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
     objectIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listObjectAudits` operation. */
-  export interface ListObjectAuditsParams {
+  export interface ListObjectAuditsParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9676,11 +10351,10 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getObjectAudit` operation. */
-  export interface GetObjectAuditParams {
+  export interface GetObjectAuditParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9689,20 +10363,18 @@ namespace CatalogManagementV1 {
     auditlogIdentifier: string;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `consumableShareObject` operation. */
-  export interface ConsumableShareObjectParams {
+  export interface ConsumableShareObjectParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
     objectIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `shareObject` operation. */
-  export interface ShareObjectParams {
+  export interface ShareObjectParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9713,11 +10385,10 @@ namespace CatalogManagementV1 {
     _public?: boolean;
     /** Visible to access list. */
     enabled?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getObjectAccessList` operation. */
-  export interface GetObjectAccessListParams {
+  export interface GetObjectAccessListParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9726,11 +10397,10 @@ namespace CatalogManagementV1 {
     start?: string;
     /** number or results to return in the query. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getObjectAccess` operation. */
-  export interface GetObjectAccessParams {
+  export interface GetObjectAccessParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9739,11 +10409,10 @@ namespace CatalogManagementV1 {
      *  enterprise, and '-entgrp-enterprisegroupid' for an enterprise group.
      */
     accessIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createObjectAccess` operation. */
-  export interface CreateObjectAccessParams {
+  export interface CreateObjectAccessParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9752,11 +10421,10 @@ namespace CatalogManagementV1 {
      *  enterprise, and '-entgrp-enterprisegroupid' for an enterprise group.
      */
     accessIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteObjectAccess` operation. */
-  export interface DeleteObjectAccessParams {
+  export interface DeleteObjectAccessParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9765,11 +10433,10 @@ namespace CatalogManagementV1 {
      *  enterprise, and '-entgrp-enterprisegroupid' for an enterprise group.
      */
     accessIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getObjectAccessListDeprecated` operation. */
-  export interface GetObjectAccessListDeprecatedParams {
+  export interface GetObjectAccessListDeprecatedParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
@@ -9778,33 +10445,30 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** The number of results to skip before returning values. */
     offset?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteObjectAccessList` operation. */
-  export interface DeleteObjectAccessListParams {
+  export interface DeleteObjectAccessListParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
     objectIdentifier: string;
     /** A list of accesses to delete.  An entry with star["*"] will remove all accesses. */
     accesses: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addObjectAccessList` operation. */
-  export interface AddObjectAccessListParams {
+  export interface AddObjectAccessListParams extends DefaultParams {
     /** Catalog identifier. */
     catalogIdentifier: string;
     /** Object identifier. */
     objectIdentifier: string;
     /** A list of accesses to add. */
     accesses: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createOfferingInstance` operation. */
-  export interface CreateOfferingInstanceParams {
+  export interface CreateOfferingInstanceParams extends DefaultParams {
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
     /** provisioned instance ID (part of the CRN). */
@@ -9872,18 +10536,30 @@ namespace CatalogManagementV1 {
     planId?: string;
     /** The CRN of the resource that is considered a parent of this software instance. */
     parentCrn?: string;
-    headers?: OutgoingHttpHeaders;
+    /** Entitlement information returned from the license manager when a plan contains licenses. This object tracks
+     *  the license entitlement status and associated licenses for a software offering instance.
+     */
+    planEntitlement?: PlanEntitlement;
+  }
+
+  /** Parameters for the `searchOfferingInstance` operation. */
+  export interface SearchOfferingInstanceParams extends DefaultParams {
+    /** Return all offering instances that were created from the specified offering id. */
+    offeringId: string;
+    /** Start token for a query. */
+    start?: string;
+    /** number or results to return in the query. */
+    limit?: number;
   }
 
   /** Parameters for the `getOfferingInstance` operation. */
-  export interface GetOfferingInstanceParams {
+  export interface GetOfferingInstanceParams extends DefaultParams {
     /** Version Instance identifier. */
     instanceIdentifier: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `putOfferingInstance` operation. */
-  export interface PutOfferingInstanceParams {
+  export interface PutOfferingInstanceParams extends DefaultParams {
     /** Version Instance identifier. */
     instanceIdentifier: string;
     /** IAM Refresh token. */
@@ -9953,20 +10629,22 @@ namespace CatalogManagementV1 {
     planId?: string;
     /** The CRN of the resource that is considered a parent of this software instance. */
     parentCrn?: string;
-    headers?: OutgoingHttpHeaders;
+    /** Entitlement information returned from the license manager when a plan contains licenses. This object tracks
+     *  the license entitlement status and associated licenses for a software offering instance.
+     */
+    planEntitlement?: PlanEntitlement;
   }
 
   /** Parameters for the `deleteOfferingInstance` operation. */
-  export interface DeleteOfferingInstanceParams {
+  export interface DeleteOfferingInstanceParams extends DefaultParams {
     /** Version Instance identifier. */
     instanceIdentifier: string;
     /** IAM Refresh token. */
     xAuthRefreshToken: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listOfferingInstanceAudits` operation. */
-  export interface ListOfferingInstanceAuditsParams {
+  export interface ListOfferingInstanceAuditsParams extends DefaultParams {
     /** Version Instance identifier. */
     instanceIdentifier: string;
     /** Start token for a query. */
@@ -9975,43 +10653,38 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOfferingInstanceAudit` operation. */
-  export interface GetOfferingInstanceAuditParams {
+  export interface GetOfferingInstanceAuditParams extends DefaultParams {
     /** Version Instance identifier. */
     instanceIdentifier: string;
     /** Auditlog ID. */
     auditlogIdentifier: string;
     /** Auditlog Lookup Names - by default names are not returned in auditlog. */
     lookupnames?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPlan` operation. */
-  export interface GetPlanParams {
+  export interface GetPlanParams extends DefaultParams {
     /** A dotted value of `sw`.`catalogID`.`resourceID`. */
     planLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deletePlan` operation. */
-  export interface DeletePlanParams {
+  export interface DeletePlanParams extends DefaultParams {
     /** A dotted value of `sw`.`catalogID`.`resourceID`. */
     planLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `consumablePlan` operation. */
-  export interface ConsumablePlanParams {
+  export interface ConsumablePlanParams extends DefaultParams {
     /** A dotted value of `sw`.`catalogID`.`resourceID`. */
     planLocId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `setDeprecatePlan` operation. */
-  export interface SetDeprecatePlanParams {
+  export interface SetDeprecatePlanParams extends DefaultParams {
     /** A dotted value of `sw`.`catalogID`.`resourceID`. */
     planLocId: string;
     /** Set deprecation (true) or cancel deprecation (false). */
@@ -10020,7 +10693,6 @@ namespace CatalogManagementV1 {
     description?: string;
     /** Specifies the amount of days until product is not available in catalog. */
     daysUntilDeprecate?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `setDeprecatePlan` operation. */
@@ -10033,7 +10705,7 @@ namespace CatalogManagementV1 {
   }
 
   /** Parameters for the `previewRegions` operation. */
-  export interface PreviewRegionsParams {
+  export interface PreviewRegionsParams extends DefaultParams {
     /** Filter to apply for search. */
     filter?: string;
     /** Returns inactive locations when true. */
@@ -10042,11 +10714,10 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** The number of results to skip before returning values. */
     offset?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listRegions` operation. */
-  export interface ListRegionsParams {
+  export interface ListRegionsParams extends DefaultParams {
     /** Filter to apply for search. */
     filter?: string;
     /** Returns inactive locations when true. */
@@ -10055,7 +10726,6 @@ namespace CatalogManagementV1 {
     limit?: number;
     /** The number of results to skip before returning values. */
     offset?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
@@ -10068,6 +10738,8 @@ namespace CatalogManagementV1 {
   export interface Access {
     /** unique id. */
     id?: string;
+    /** Revision. */
+    _rev?: string;
     /** account id. */
     account?: string;
     /** Normal account or enterprise. */
@@ -10084,6 +10756,10 @@ namespace CatalogManagementV1 {
     created?: string;
     /** Approval state for access. If this field is an empty string, then it means that it's approved. */
     approval_state?: string;
+    /** List of additional version states that this account can see. The default visible states are consumable and
+     *  prerelease.
+     */
+    visible_states?: string[];
   }
 
   /**
@@ -10134,6 +10810,8 @@ namespace CatalogManagementV1 {
     account_filters?: Filters;
     /** Region filter string. */
     region_filter?: string;
+    /** List of terraform engines configured for this account. */
+    terraform_engines?: TerraformEngines[];
   }
 
   /**
@@ -10576,8 +11254,10 @@ namespace CatalogManagementV1 {
     default_value?: any;
     /** Display name for configuration type. */
     display_name?: string;
-    /** Constraint associated with value, e.g., for string type - regx:[a-z]. */
+    /** Deprecated - Constraint associated with value, e.g., for string type - regx:[a-z]. */
     value_constraint?: string;
+    /** Validation rules for this input value. */
+    value_constraints?: ValueConstraint[];
     /** Key description. */
     description?: string;
     /** Is key required to install. */
@@ -10590,6 +11270,24 @@ namespace CatalogManagementV1 {
     custom_config?: RenderType;
     /** The original type, as found in the source being onboarded. */
     type_metadata?: string;
+    /** The specified random string rules are applied to this configuration item's default value if the item is of
+     *  type string.  Random characters include lowercase letters and numbers.
+     */
+    random_string?: ConfigurationRandomString;
+    /** Only added to a configuration item when getting a single version locator ID.  Contains the default value
+     *  and a random string where specified.   If no default value is provided, value is set to a random string,
+     *  otherwise value as appended with a `-` character followed by the random string.
+     */
+    value?: any;
+  }
+
+  /**
+   * The specified random string rules are applied to this configuration item's default value if the item is of type
+   * string.  Random characters include lowercase letters and numbers.
+   */
+  export interface ConfigurationRandomString {
+    /** How many random characters to generate.  Default is 10, max is 25. */
+    length?: number;
   }
 
   /**
@@ -10630,8 +11328,10 @@ namespace CatalogManagementV1 {
     price?: string;
     /** Cost component hourly cost. */
     hourlyCost?: string;
-    /** Cost component monthly cist. */
+    /** Cost component monthly cost. */
     monthlyCost?: string;
+    /** Cost component metric. */
+    metric?: string;
   }
 
   /**
@@ -10696,6 +11396,18 @@ namespace CatalogManagementV1 {
     unsupportedResourceCounts?: JsonObject;
     /** No price resource counts. */
     noPriceResourceCounts?: JsonObject;
+  }
+
+  /**
+   * The settings that determines how deployable architectures are auto-created from workspaces in the terraform engine.
+   */
+  export interface DACreation {
+    /** Determines whether deployable architectures are auto-created from workspaces in the engine. */
+    enabled?: boolean;
+    /** Default private catalog to create the deployable architectures in. */
+    default_private_catalog_id?: string;
+    /** Determines which workspace scope to query to auto-create deployable architectures from. */
+    polling_info?: PollingInfo;
   }
 
   /**
@@ -10766,6 +11478,20 @@ namespace CatalogManagementV1 {
     /** Deprecation state. */
     deprecate_state?: string;
     description?: string;
+  }
+
+  /**
+   * License that is associated with a pricing plan.
+   */
+  export interface EntitlementLicense {
+    /** Configuration ID for the license. */
+    config_id?: string;
+    /** The Stock Keeping Unit (SKU) identifier for the license. */
+    sku?: string;
+    /** Provider ID for the license. */
+    provider_id?: string;
+    /** Vendor ID for the license. */
+    vendor_id?: string;
   }
 
   /**
@@ -11438,6 +12164,10 @@ namespace CatalogManagementV1 {
     plan_id?: string;
     /** The CRN of the resource that is considered a parent of this software instance. */
     parent_crn?: string;
+    /** Entitlement information returned from the license manager when a plan contains licenses. This object tracks
+     *  the license entitlement status and associated licenses for a software offering instance.
+     */
+    plan_entitlement?: PlanEntitlement;
   }
 
   /**
@@ -11459,6 +12189,32 @@ namespace CatalogManagementV1 {
   }
 
   /**
+   * Paginated offering instance search result.
+   */
+  export interface OfferingInstanceListResult {
+    /** The start token used for this response. */
+    start?: string;
+    /** The limit that was applied to this response. It may be smaller than in the request because that was too
+     *  large.
+     */
+    limit: number;
+    /** The total count of resources in the system that matches the request. */
+    total_count?: number;
+    /** The number of resources returned in this response. */
+    resource_count: number;
+    /** Link response on a token paginated query. */
+    first: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    next?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    prev?: PaginationTokenLink;
+    /** Link response on a token paginated query. */
+    last?: PaginationTokenLink;
+    /** A list of offering instance records. */
+    instances: OfferingInstance[];
+  }
+
+  /**
    * Offering reference definition.
    */
   export interface OfferingReference {
@@ -11472,8 +12228,16 @@ namespace CatalogManagementV1 {
     kind?: string;
     /** Required - Semver value or range. */
     version?: string;
+    /** Reason why the user might want to include this dependency. */
+    description?: string;
+    /** The default selected flavor of this dependency. */
+    default_flavor?: string;
     /** Optional - List of dependent flavors in the specified range. */
     flavors?: string[];
+    /** Is this dependency optional. */
+    optional?: boolean;
+    /** Is this dependency on by default. */
+    on_by_default?: boolean;
   }
 
   /**
@@ -11586,6 +12350,41 @@ namespace CatalogManagementV1 {
     metadata?: JsonObject;
     /** Plan has been approved to publish for other users. */
     publish_approved?: boolean;
+    /** List of licenses associated with this plan. */
+    licenses?: EntitlementLicense[];
+  }
+
+  /**
+   * Entitlement information returned from the license manager when a plan contains licenses. This object tracks the
+   * license entitlement status and associated licenses for a software offering instance.
+   */
+  export interface PlanEntitlement {
+    /** ID for the license entitlement. */
+    id?: string;
+    /** The current status of the license entitlement. */
+    status?: string;
+    /** Array of licenses associated with this entitlement. */
+    license_instances?: EntitlementLicense[];
+  }
+
+  /**
+   * Determines which workspace scope to query to auto-create deployable architectures from.
+   */
+  export interface PollingInfo {
+    /** List of scopes to auto-create deployable architectures from workspaces in the engine. */
+    scopes?: TerraformEngineScope[];
+    /** Last polling status of the engine scope. */
+    last_polling_status?: PollingInfoLastPollingStatus;
+  }
+
+  /**
+   * Last polling status of the engine scope.
+   */
+  export interface PollingInfoLastPollingStatus {
+    /** Status code of the last polling attempt. */
+    code?: number;
+    /** Status message from the last polling attempt. */
+    message?: string;
   }
 
   /**
@@ -11684,6 +12483,7 @@ namespace CatalogManagementV1 {
     updated?: string;
     active?: boolean;
     visibility?: JsonObject;
+    services?: string[];
   }
 
   /**
@@ -12144,6 +12944,43 @@ namespace CatalogManagementV1 {
   }
 
   /**
+   * Properties of the engine scope.
+   */
+  export interface TerraformEngineScope {
+    /** Identifier for the specified type in the scope. */
+    name?: string;
+    /** Optional field to provide the organization name of the scope. Needed if you want to query project or
+     *  workspace scope by name instead of ID.
+     */
+    org_name?: string;
+    /** Scope to auto-create deployable architectures from. The supported scopes today are workspace, org, and
+     *  project.
+     */
+    type?: string;
+  }
+
+  /**
+   * The properties of the engine that is used to deploy terraform and auto-create deployable architectures on this
+   * account based on workspaces in the engine instance.
+   */
+  export interface TerraformEngines {
+    /** User provided name for the specified engine. */
+    name?: string;
+    /** The terraform engine type. The only one supported at the moment is terraform-enterprise. */
+    type?: string;
+    /** The public endpoint for the engine instance. */
+    public_endpoint?: string;
+    /** The private endpoint for the engine instance. */
+    private_endpoint?: string;
+    /** The api key used to access the engine instance. */
+    api_token?: string;
+    /** The settings that determines how deployable architectures are auto-created from workspaces in the terraform
+     *  engine.
+     */
+    da_creation?: DACreation;
+  }
+
+  /**
    * Trusted profile info.
    */
   export interface TrustedProfileInfo {
@@ -12183,6 +13020,26 @@ namespace CatalogManagementV1 {
     target?: JsonObject;
     /** Any message needing to be conveyed as part of the validation job. */
     message?: string;
+  }
+
+  /**
+   * Constraint associated with value.
+   */
+  export interface ValueConstraint {
+    /** Type of constraint. */
+    type?: ValueConstraint.Constants.Type | string;
+    /** Contstraint value.  For type regex, this is a regular expression in Javascript notation. */
+    value?: string;
+    /** The value to display if the inptu value does not match the specified constraint. */
+    description?: string;
+  }
+  export namespace ValueConstraint {
+    export namespace Constants {
+      /** Type of constraint. */
+      export enum Type {
+        REGEX = 'regex',
+      }
+    }
   }
 
   /**
@@ -12261,6 +13118,10 @@ namespace CatalogManagementV1 {
     long_description?: string;
     /** A map of translated strings, by language code. */
     long_description_i18n?: JsonObject;
+    /** Short description for version. */
+    short_description?: string;
+    /** A map of translated strings, by language code. */
+    short_description_i18n?: JsonObject;
     /** Whitelisted accounts for version. */
     whitelisted_accounts?: string[];
     /** ID of the image pull key to use from Offering.ImagePullKeys. */
@@ -13731,6 +14592,88 @@ namespace CatalogManagementV1 {
      */
     public async getAll(): Promise<CatalogManagementV1.Access[]> {
       const results: Access[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * SearchOfferingInstancePager can be used to simplify the use of searchOfferingInstance().
+   */
+  export class SearchOfferingInstancePager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: CatalogManagementV1;
+
+    protected params: CatalogManagementV1.SearchOfferingInstanceParams;
+
+    /**
+     * Construct a SearchOfferingInstancePager object.
+     *
+     * @param {CatalogManagementV1}  client - The service client instance used to invoke searchOfferingInstance()
+     * @param {Object} params - The parameters to be passed to searchOfferingInstance()
+     * @constructor
+     * @returns {SearchOfferingInstancePager}
+     */
+    constructor(
+      client: CatalogManagementV1,
+      params: CatalogManagementV1.SearchOfferingInstanceParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking searchOfferingInstance().
+     * @returns {Promise<CatalogManagementV1.OfferingInstance[]>}
+     */
+    public async getNext(): Promise<CatalogManagementV1.OfferingInstance[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.searchOfferingInstance(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        next = result.next.start;
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.instances;
+    }
+
+    /**
+     * Returns all results by invoking searchOfferingInstance() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<CatalogManagementV1.OfferingInstance[]>}
+     */
+    public async getAll(): Promise<CatalogManagementV1.OfferingInstance[]> {
+      const results: OfferingInstance[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
