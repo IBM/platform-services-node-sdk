@@ -1,3 +1,10 @@
+# [0.86.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.85.0...v0.86.0) (2026-08-12)
+
+
+### Features
+
+* **Catalog Management:** re-gen after recent API changes ([#357](https://github.com/IBM/platform-services-node-sdk/issues/357)) ([51aa828](https://github.com/IBM/platform-services-node-sdk/commit/51aa8280391c2b63ccd666177342fcc7eba8a62f))
+
 # [0.85.0](https://github.com/IBM/platform-services-node-sdk/compare/v0.84.0...v0.85.0) (2026-07-22)
 
 
