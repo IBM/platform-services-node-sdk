@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2025.
+ * (C) Copyright IBM Corp. 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,8 +127,7 @@ describe('CatalogManagementV1', () => {
         // Construct the params object for operation getCatalogAccount
         const getCatalogAccountParams = {};
 
-        const getCatalogAccountResult =
-          catalogManagementService.getCatalogAccount(getCatalogAccountParams);
+        const getCatalogAccountResult = catalogManagementService.getCatalogAccount(getCatalogAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAccountResult);
@@ -210,6 +209,42 @@ describe('CatalogManagementV1', () => {
         id_filters: idFilterModel,
       };
 
+      // TerraformEngineScope
+      const terraformEngineScopeModel = {
+        name: 'testString',
+        org_name: 'testString',
+        type: 'testString',
+      };
+
+      // PollingInfoLastPollingStatus
+      const pollingInfoLastPollingStatusModel = {
+        code: 38,
+        message: 'testString',
+      };
+
+      // PollingInfo
+      const pollingInfoModel = {
+        scopes: [terraformEngineScopeModel],
+        last_polling_status: pollingInfoLastPollingStatusModel,
+      };
+
+      // DACreation
+      const daCreationModel = {
+        enabled: true,
+        default_private_catalog_id: 'testString',
+        polling_info: pollingInfoModel,
+      };
+
+      // TerraformEngines
+      const terraformEnginesModel = {
+        name: 'testString',
+        type: 'testString',
+        public_endpoint: 'testString',
+        private_endpoint: 'testString',
+        api_token: 'testString',
+        da_creation: daCreationModel,
+      };
+
       function __updateCatalogAccountTest() {
         // Construct the params object for operation updateCatalogAccount
         const id = 'testString';
@@ -217,17 +252,17 @@ describe('CatalogManagementV1', () => {
         const hideIbmCloudCatalog = true;
         const accountFilters = filtersModel;
         const regionFilter = 'testString';
+        const terraformEngines = [terraformEnginesModel];
         const updateCatalogAccountParams = {
           id,
           rev,
           hideIbmCloudCatalog,
           accountFilters,
           regionFilter,
+          terraformEngines,
         };
 
-        const updateCatalogAccountResult = catalogManagementService.updateCatalogAccount(
-          updateCatalogAccountParams
-        );
+        const updateCatalogAccountResult = catalogManagementService.updateCatalogAccount(updateCatalogAccountParams);
 
         // all methods should return a Promise
         expectToBePromise(updateCatalogAccountResult);
@@ -246,6 +281,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.hide_IBM_cloud_catalog).toEqual(hideIbmCloudCatalog);
         expect(mockRequestOptions.body.account_filters).toEqual(accountFilters);
         expect(mockRequestOptions.body.region_filter).toEqual(regionFilter);
+        expect(mockRequestOptions.body.terraform_engines).toEqual(terraformEngines);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -299,9 +335,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const listCatalogAccountAuditsResult = catalogManagementService.listCatalogAccountAudits(
-          listCatalogAccountAuditsParams
-        );
+        const listCatalogAccountAuditsResult = catalogManagementService.listCatalogAccountAudits(listCatalogAccountAuditsParams);
 
         // all methods should return a Promise
         expectToBePromise(listCatalogAccountAuditsResult);
@@ -385,10 +419,7 @@ describe('CatalogManagementV1', () => {
           lookupnames: true,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.CatalogAccountAuditsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.CatalogAccountAuditsPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -403,10 +434,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
           lookupnames: true,
         };
-        const pager = new CatalogManagementV1.CatalogAccountAuditsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.CatalogAccountAuditsPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -425,9 +453,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const getCatalogAccountAuditResult = catalogManagementService.getCatalogAccountAudit(
-          getCatalogAccountAuditParams
-        );
+        const getCatalogAccountAuditResult = catalogManagementService.getCatalogAccountAudit(getCatalogAccountAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAccountAuditResult);
@@ -437,11 +463,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogaccount/audits/{auditlog_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogaccount/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -516,9 +538,7 @@ describe('CatalogManagementV1', () => {
           catalog,
         };
 
-        const getCatalogAccountFiltersResult = catalogManagementService.getCatalogAccountFilters(
-          getCatalogAccountFiltersParams
-        );
+        const getCatalogAccountFiltersResult = catalogManagementService.getCatalogAccountFilters(getCatalogAccountFiltersParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAccountFiltersResult);
@@ -586,9 +606,7 @@ describe('CatalogManagementV1', () => {
           limit,
         };
 
-        const getShareApprovalListResult = catalogManagementService.getShareApprovalList(
-          getShareApprovalListParams
-        );
+        const getShareApprovalListResult = catalogManagementService.getShareApprovalList(getShareApprovalListParams);
 
         // all methods should return a Promise
         expectToBePromise(getShareApprovalListResult);
@@ -598,7 +616,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/accessv2', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -666,7 +684,7 @@ describe('CatalogManagementV1', () => {
 
     describe('GetShareApprovalListPager tests', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
-      const path = '/shareapproval/offering/access';
+      const path = '/shareapproval/offering/accessv2';
       const mockPagerResponse1 =
         '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
       const mockPagerResponse2 =
@@ -692,10 +710,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.GetShareApprovalListPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -710,10 +725,7 @@ describe('CatalogManagementV1', () => {
           objectType: 'offering',
           limit: 10,
         };
-        const pager = new CatalogManagementV1.GetShareApprovalListPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetShareApprovalListPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -732,9 +744,7 @@ describe('CatalogManagementV1', () => {
           accesses,
         };
 
-        const deleteShareApprovalListResult = catalogManagementService.deleteShareApprovalList(
-          deleteShareApprovalListParams
-        );
+        const deleteShareApprovalListResult = catalogManagementService.deleteShareApprovalList(deleteShareApprovalListParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteShareApprovalListResult);
@@ -823,9 +833,7 @@ describe('CatalogManagementV1', () => {
           accesses,
         };
 
-        const addShareApprovalListResult = catalogManagementService.addShareApprovalList(
-          addShareApprovalListParams
-        );
+        const addShareApprovalListResult = catalogManagementService.addShareApprovalList(addShareApprovalListParams);
 
         // all methods should return a Promise
         expectToBePromise(addShareApprovalListResult);
@@ -920,8 +928,7 @@ describe('CatalogManagementV1', () => {
           enterpriseId,
         };
 
-        const getShareApprovalListAsSourceResult =
-          catalogManagementService.getShareApprovalListAsSource(getShareApprovalListAsSourceParams);
+        const getShareApprovalListAsSourceResult = catalogManagementService.getShareApprovalListAsSource(getShareApprovalListAsSourceParams);
 
         // all methods should return a Promise
         expectToBePromise(getShareApprovalListAsSourceResult);
@@ -931,11 +938,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/shareapproval/{object_type}/access/source/{approval_state_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/accessv2/source/{approval_state_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -1007,7 +1010,7 @@ describe('CatalogManagementV1', () => {
 
     describe('GetShareApprovalListAsSourcePager tests', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
-      const path = '/shareapproval/offering/access/source/approved';
+      const path = '/shareapproval/offering/accessv2/source/approved';
       const mockPagerResponse1 =
         '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
       const mockPagerResponse2 =
@@ -1035,10 +1038,7 @@ describe('CatalogManagementV1', () => {
           enterpriseId: 'testString',
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -1055,10 +1055,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
           enterpriseId: 'testString',
         };
-        const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetShareApprovalListAsSourcePager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -1081,10 +1078,7 @@ describe('CatalogManagementV1', () => {
           enterpriseId,
         };
 
-        const updateShareApprovalListAsSourceResult =
-          catalogManagementService.updateShareApprovalListAsSource(
-            updateShareApprovalListAsSourceParams
-          );
+        const updateShareApprovalListAsSourceResult = catalogManagementService.updateShareApprovalListAsSource(updateShareApprovalListAsSourceParams);
 
         // all methods should return a Promise
         expectToBePromise(updateShareApprovalListAsSourceResult);
@@ -1094,11 +1088,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/shareapproval/{object_type}/access/source/{approval_state_identifier}',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/shareapproval/{object_type}/access/source/{approval_state_identifier}', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -1140,9 +1130,7 @@ describe('CatalogManagementV1', () => {
           },
         };
 
-        catalogManagementService.updateShareApprovalListAsSource(
-          updateShareApprovalListAsSourceParams
-        );
+        catalogManagementService.updateShareApprovalListAsSource(updateShareApprovalListAsSourceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1758,8 +1746,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const listCatalogAuditsResult =
-          catalogManagementService.listCatalogAudits(listCatalogAuditsParams);
+        const listCatalogAuditsResult = catalogManagementService.listCatalogAudits(listCatalogAuditsParams);
 
         // all methods should return a Promise
         expectToBePromise(listCatalogAuditsResult);
@@ -1902,8 +1889,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const getCatalogAuditResult =
-          catalogManagementService.getCatalogAudit(getCatalogAuditParams);
+        const getCatalogAuditResult = catalogManagementService.getCatalogAudit(getCatalogAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getCatalogAuditResult);
@@ -1913,11 +1899,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/audits/{auditlog_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -2001,9 +1983,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const listEnterpriseAuditsResult = catalogManagementService.listEnterpriseAudits(
-          listEnterpriseAuditsParams
-        );
+        const listEnterpriseAuditsResult = catalogManagementService.listEnterpriseAudits(listEnterpriseAuditsParams);
 
         // all methods should return a Promise
         expectToBePromise(listEnterpriseAuditsResult);
@@ -2109,10 +2089,7 @@ describe('CatalogManagementV1', () => {
           lookupnames: true,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.EnterpriseAuditsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.EnterpriseAuditsPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -2128,10 +2105,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
           lookupnames: true,
         };
-        const pager = new CatalogManagementV1.EnterpriseAuditsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.EnterpriseAuditsPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -2152,8 +2126,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const getEnterpriseAuditResult =
-          catalogManagementService.getEnterpriseAudit(getEnterpriseAuditParams);
+        const getEnterpriseAuditResult = catalogManagementService.getEnterpriseAudit(getEnterpriseAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getEnterpriseAuditResult);
@@ -2163,11 +2136,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/enterprises/{enterprise_identifier}/audits/{auditlog_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/enterprises/{enterprise_identifier}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -2255,9 +2224,7 @@ describe('CatalogManagementV1', () => {
           offset,
         };
 
-        const getConsumptionOfferingsResult = catalogManagementService.getConsumptionOfferings(
-          getConsumptionOfferingsParams
-        );
+        const getConsumptionOfferingsResult = catalogManagementService.getConsumptionOfferings(getConsumptionOfferingsParams);
 
         // all methods should return a Promise
         expectToBePromise(getConsumptionOfferingsResult);
@@ -2320,9 +2287,9 @@ describe('CatalogManagementV1', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
       const path = '/offerings';
       const mockPagerResponse1 =
-        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","value_constraints":[{"type":"regex","value":"value","description":"description"}],"description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata","random_string":{"length":6},"value":"anyValue"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","description":"description","default_flavor":"default_flavor","flavors":["flavors"],"optional":true,"on_by_default":false}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true,"licenses":[{"config_id":"config_id","sku":"sku","provider_id":"provider_id","vendor_id":"vendor_id"}]}]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","value_constraints":[{"type":"regex","value":"value","description":"description"}],"description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata","random_string":{"length":6},"value":"anyValue"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","description":"description","default_flavor":"default_flavor","flavors":["flavors"],"optional":true,"on_by_default":false}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true,"licenses":[{"config_id":"config_id","sku":"sku","provider_id":"provider_id","vendor_id":"vendor_id"}]}]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2347,10 +2314,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -2368,10 +2332,7 @@ describe('CatalogManagementV1', () => {
           includeHidden: true,
           limit: 10,
         };
-        const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetConsumptionOfferingsPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -2484,9 +2445,9 @@ describe('CatalogManagementV1', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
       const path = '/catalogs/testString/offerings';
       const mockPagerResponse1 =
-        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","value_constraints":[{"type":"regex","value":"value","description":"description"}],"description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata","random_string":{"length":6},"value":"anyValue"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","description":"description","default_flavor":"default_flavor","flavors":["flavors"],"optional":true,"on_by_default":false}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true,"licenses":[{"config_id":"config_id","sku":"sku","provider_id":"provider_id","vendor_id":"vendor_id"}]}]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true}]}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","offering_icon_url":"offering_icon_url","offering_docs_url":"offering_docs_url","offering_support_url":"offering_support_url","tags":["tags"],"keywords":["keywords"],"rating":{"one_star_count":14,"two_star_count":14,"three_star_count":16,"four_star_count":15},"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"kinds":[{"id":"id","format_kind":"format_kind","format_kind_label":"format_kind_label","install_kind":"install_kind","install_kind_label":"install_kind_label","target_kind":"target_kind","target_kind_label":"target_kind_label","metadata":{"anyKey":"anyValue"},"tags":["tags"],"additional_features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","value_constraints":[{"type":"regex","value":"value","description":"description"}],"description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata","random_string":{"length":6},"value":"anyValue"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","description":"description","default_flavor":"default_flavor","flavors":["flavors"],"optional":true,"on_by_default":false}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"all_versions":{"first":{"href":"href","start":"start"},"next":{"href":"href","start":"start"}}}],"publish":{"pc_managed":true,"approval_type":"approval_type","publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"original_crn":"original_crn","public_crn":"public_crn","approval_record":{"anyKey":"anyValue"},"permit_ibm_public_publish":false,"ibm_approved":true,"public_approved":false},"pc_managed":true,"publish_approved":true,"share_with_all":true,"share_with_ibm":true,"share_enabled":false,"public_original_crn":"public_original_crn","publish_public_crn":"publish_public_crn","portal_approval_record":"portal_approval_record","portal_ui_url":"portal_ui_url","catalog_id":"catalog_id","catalog_name":"catalog_name","metadata":{"anyKey":"anyValue"},"disclaimer":"disclaimer","hidden":true,"provider":"provider","provider_info":{"id":"id","name":"name"},"repo_info":{"token":"token","type":"type"},"image_pull_keys":[{"name":"name","value":"value","description":"description"}],"support":{"url":"url","process":"process","process_i18n":{"mapKey":"inner"},"locations":["locations"],"support_details":[{"type":"type","contact":"contact","response_wait_time":{"value":5,"type":"type"},"availability":{"times":[{"day":3,"start_time":"start_time","end_time":"end_time"}],"timezone":"timezone","always_available":true}}],"support_escalation":{"escalation_wait_time":{"value":5,"type":"type"},"response_wait_time":{"value":5,"type":"type"},"contact":"contact"},"support_type":"support_type"},"media":[{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"}],"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"product_kind":"product_kind","badges":[{"id":"id","label":"label","label_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"},"icon":"icon","authority":"authority","tag":"tag","learn_more_links":{"first_party":"first_party","third_party":"third_party"},"constraints":[{"type":"type","rule":"anyValue"}]}],"plans":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","label":"label","label_i18n":{"mapKey":"inner"},"name":"name","short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"pricing_tags":["pricing_tags"],"version_range":{"kinds":["kinds"],"version":"version","flavors":["flavors"]},"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"metadata":{"anyKey":"anyValue"},"publish_approved":true,"licenses":[{"config_id":"config_id","sku":"sku","provider_id":"provider_id","vendor_id":"vendor_id"}]}]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2567,6 +2528,13 @@ describe('CatalogManagementV1', () => {
         index: 38,
       };
 
+      // ValueConstraint
+      const valueConstraintModel = {
+        type: 'regex',
+        value: 'testString',
+        description: 'testString',
+      };
+
       // RenderTypeAssociationsParametersItem
       const renderTypeAssociationsParametersItemModel = {
         name: 'testString',
@@ -2588,6 +2556,11 @@ describe('CatalogManagementV1', () => {
         associations: renderTypeAssociationsModel,
       };
 
+      // ConfigurationRandomString
+      const configurationRandomStringModel = {
+        length: 38,
+      };
+
       // Configuration
       const configurationModel = {
         key: 'testString',
@@ -2595,12 +2568,15 @@ describe('CatalogManagementV1', () => {
         default_value: 'testString',
         display_name: 'testString',
         value_constraint: 'testString',
+        value_constraints: [valueConstraintModel],
         description: 'testString',
         required: true,
         options: ['testString'],
         hidden: true,
         custom_config: renderTypeModel,
         type_metadata: 'testString',
+        random_string: configurationRandomStringModel,
+        value: 'testString',
       };
 
       // Output
@@ -2642,8 +2618,7 @@ describe('CatalogManagementV1', () => {
       // SchematicsEnvValues
       const schematicsEnvValuesModel = {
         value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
-        sm_ref:
-          'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+        sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
       };
 
       // Script
@@ -2732,6 +2707,7 @@ describe('CatalogManagementV1', () => {
         price: 'testString',
         hourlyCost: 'testString',
         monthlyCost: 'testString',
+        metric: 'testString',
       };
 
       // CostResource
@@ -2793,7 +2769,11 @@ describe('CatalogManagementV1', () => {
         name: 'testString',
         kind: 'testString',
         version: 'testString',
+        description: 'testString',
+        default_flavor: 'testString',
         flavors: ['testString'],
+        optional: true,
+        on_by_default: true,
       };
 
       // SolutionInfo
@@ -2937,6 +2917,8 @@ describe('CatalogManagementV1', () => {
         version_locator: 'testString',
         long_description: 'testString',
         long_description_i18n: { 'key1': 'testString' },
+        short_description: 'testString',
+        short_description_i18n: { 'key1': 'testString' },
         whitelisted_accounts: ['testString'],
         image_pull_key_name: 'testString',
         deprecate_pending: deprecatePendingModel,
@@ -3093,6 +3075,14 @@ describe('CatalogManagementV1', () => {
         flavors: ['testString'],
       };
 
+      // EntitlementLicense
+      const entitlementLicenseModel = {
+        config_id: 'testString',
+        sku: 'testString',
+        provider_id: 'testString',
+        vendor_id: 'testString',
+      };
+
       // Plan
       const planModel = {
         url: 'testString',
@@ -3113,6 +3103,7 @@ describe('CatalogManagementV1', () => {
         deprecate_pending: deprecatePendingModel,
         metadata: { anyKey: 'anyValue' },
         publish_approved: true,
+        licenses: [entitlementLicenseModel],
       };
 
       function __createOfferingTest() {
@@ -3426,9 +3417,7 @@ describe('CatalogManagementV1', () => {
           xAuthToken,
         };
 
-        const importOfferingVersionResult = catalogManagementService.importOfferingVersion(
-          importOfferingVersionParams
-        );
+        const importOfferingVersionResult = catalogManagementService.importOfferingVersion(importOfferingVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(importOfferingVersionResult);
@@ -3438,11 +3427,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/version',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/version', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3639,11 +3624,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/import/offerings',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/import/offerings', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3782,11 +3763,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/reload',
-          'PUT'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/reload', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3891,11 +3868,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -3993,6 +3966,13 @@ describe('CatalogManagementV1', () => {
         index: 38,
       };
 
+      // ValueConstraint
+      const valueConstraintModel = {
+        type: 'regex',
+        value: 'testString',
+        description: 'testString',
+      };
+
       // RenderTypeAssociationsParametersItem
       const renderTypeAssociationsParametersItemModel = {
         name: 'testString',
@@ -4014,6 +3994,11 @@ describe('CatalogManagementV1', () => {
         associations: renderTypeAssociationsModel,
       };
 
+      // ConfigurationRandomString
+      const configurationRandomStringModel = {
+        length: 38,
+      };
+
       // Configuration
       const configurationModel = {
         key: 'testString',
@@ -4021,12 +4006,15 @@ describe('CatalogManagementV1', () => {
         default_value: 'testString',
         display_name: 'testString',
         value_constraint: 'testString',
+        value_constraints: [valueConstraintModel],
         description: 'testString',
         required: true,
         options: ['testString'],
         hidden: true,
         custom_config: renderTypeModel,
         type_metadata: 'testString',
+        random_string: configurationRandomStringModel,
+        value: 'testString',
       };
 
       // Output
@@ -4068,8 +4056,7 @@ describe('CatalogManagementV1', () => {
       // SchematicsEnvValues
       const schematicsEnvValuesModel = {
         value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
-        sm_ref:
-          'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+        sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
       };
 
       // Script
@@ -4158,6 +4145,7 @@ describe('CatalogManagementV1', () => {
         price: 'testString',
         hourlyCost: 'testString',
         monthlyCost: 'testString',
+        metric: 'testString',
       };
 
       // CostResource
@@ -4219,7 +4207,11 @@ describe('CatalogManagementV1', () => {
         name: 'testString',
         kind: 'testString',
         version: 'testString',
+        description: 'testString',
+        default_flavor: 'testString',
         flavors: ['testString'],
+        optional: true,
+        on_by_default: true,
       };
 
       // SolutionInfo
@@ -4363,6 +4355,8 @@ describe('CatalogManagementV1', () => {
         version_locator: 'testString',
         long_description: 'testString',
         long_description_i18n: { 'key1': 'testString' },
+        short_description: 'testString',
+        short_description_i18n: { 'key1': 'testString' },
         whitelisted_accounts: ['testString'],
         image_pull_key_name: 'testString',
         deprecate_pending: deprecatePendingModel,
@@ -4519,6 +4513,14 @@ describe('CatalogManagementV1', () => {
         flavors: ['testString'],
       };
 
+      // EntitlementLicense
+      const entitlementLicenseModel = {
+        config_id: 'testString',
+        sku: 'testString',
+        provider_id: 'testString',
+        vendor_id: 'testString',
+      };
+
       // Plan
       const planModel = {
         url: 'testString',
@@ -4539,6 +4541,7 @@ describe('CatalogManagementV1', () => {
         deprecate_pending: deprecatePendingModel,
         metadata: { anyKey: 'anyValue' },
         publish_approved: true,
+        licenses: [entitlementLicenseModel],
       };
 
       function __replaceOfferingTest() {
@@ -4642,8 +4645,7 @@ describe('CatalogManagementV1', () => {
           plans,
         };
 
-        const replaceOfferingResult =
-          catalogManagementService.replaceOffering(replaceOfferingParams);
+        const replaceOfferingResult = catalogManagementService.replaceOffering(replaceOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceOfferingResult);
@@ -4653,11 +4655,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}',
-          'PUT'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -4806,11 +4804,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}',
-          'PATCH'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -4905,11 +4899,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -4989,8 +4979,7 @@ describe('CatalogManagementV1', () => {
           offeringId,
         };
 
-        const getOfferingStatsResult =
-          catalogManagementService.getOfferingStats(getOfferingStatsParams);
+        const getOfferingStatsResult = catalogManagementService.getOfferingStats(getOfferingStatsParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingStatsResult);
@@ -5000,11 +4989,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/stats',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/stats', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5089,8 +5074,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const listOfferingAuditsResult =
-          catalogManagementService.listOfferingAudits(listOfferingAuditsParams);
+        const listOfferingAuditsResult = catalogManagementService.listOfferingAudits(listOfferingAuditsParams);
 
         // all methods should return a Promise
         expectToBePromise(listOfferingAuditsResult);
@@ -5100,11 +5084,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/audits',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/audits', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5244,8 +5224,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const getOfferingAuditResult =
-          catalogManagementService.getOfferingAudit(getOfferingAuditParams);
+        const getOfferingAuditResult = catalogManagementService.getOfferingAudit(getOfferingAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingAuditResult);
@@ -5255,11 +5234,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/audits/{auditlog_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5354,8 +5329,7 @@ describe('CatalogManagementV1', () => {
           xAuthToken,
         };
 
-        const setOfferingPublishResult =
-          catalogManagementService.setOfferingPublish(setOfferingPublishParams);
+        const setOfferingPublishResult = catalogManagementService.setOfferingPublish(setOfferingPublishParams);
 
         // all methods should return a Promise
         expectToBePromise(setOfferingPublishResult);
@@ -5365,11 +5339,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/publish/{approval_type}/{approved}',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/publish/{approval_type}/{approved}', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5464,8 +5434,7 @@ describe('CatalogManagementV1', () => {
           daysUntilDeprecate,
         };
 
-        const deprecateOfferingResult =
-          catalogManagementService.deprecateOffering(deprecateOfferingParams);
+        const deprecateOfferingResult = catalogManagementService.deprecateOffering(deprecateOfferingParams);
 
         // all methods should return a Promise
         expectToBePromise(deprecateOfferingResult);
@@ -5475,11 +5444,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{setting}',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/deprecate/{setting}', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5579,11 +5544,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/share',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/share', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5667,8 +5628,7 @@ describe('CatalogManagementV1', () => {
           accessIdentifier,
         };
 
-        const getOfferingAccessResult =
-          catalogManagementService.getOfferingAccess(getOfferingAccessParams);
+        const getOfferingAccessResult = catalogManagementService.getOfferingAccess(getOfferingAccessParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingAccessResult);
@@ -5678,11 +5638,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/access/{access_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access/{access_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5753,6 +5709,133 @@ describe('CatalogManagementV1', () => {
     });
   });
 
+  describe('updateOfferingAccess', () => {
+    describe('positive tests', () => {
+      function __updateOfferingAccessTest() {
+        // Construct the params object for operation updateOfferingAccess
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accessIdentifier = 'testString';
+        const id = 'testString';
+        const rev = 'testString';
+        const account = 'testString';
+        const accountType = 38;
+        const catalogId = 'testString';
+        const targetId = 'testString';
+        const targetAccount = 'testString';
+        const targetKind = 'testString';
+        const created = '2019-01-01T12:00:00.000Z';
+        const approvalState = 'testString';
+        const visibleStates = ['testString'];
+        const updateOfferingAccessParams = {
+          catalogIdentifier,
+          offeringId,
+          accessIdentifier,
+          id,
+          rev,
+          account,
+          accountType,
+          catalogId,
+          targetId,
+          targetAccount,
+          targetKind,
+          created,
+          approvalState,
+          visibleStates,
+        };
+
+        const updateOfferingAccessResult = catalogManagementService.updateOfferingAccess(updateOfferingAccessParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateOfferingAccessResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access/{access_identifier}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body._rev).toEqual(rev);
+        expect(mockRequestOptions.body.account).toEqual(account);
+        expect(mockRequestOptions.body.account_type).toEqual(accountType);
+        expect(mockRequestOptions.body.catalog_id).toEqual(catalogId);
+        expect(mockRequestOptions.body.target_id).toEqual(targetId);
+        expect(mockRequestOptions.body.target_account).toEqual(targetAccount);
+        expect(mockRequestOptions.body.target_kind).toEqual(targetKind);
+        expect(mockRequestOptions.body.created).toEqual(created);
+        expect(mockRequestOptions.body.approval_state).toEqual(approvalState);
+        expect(mockRequestOptions.body.visible_states).toEqual(visibleStates);
+        expect(mockRequestOptions.path.catalog_identifier).toEqual(catalogIdentifier);
+        expect(mockRequestOptions.path.offering_id).toEqual(offeringId);
+        expect(mockRequestOptions.path.access_identifier).toEqual(accessIdentifier);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateOfferingAccessTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __updateOfferingAccessTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __updateOfferingAccessTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const catalogIdentifier = 'testString';
+        const offeringId = 'testString';
+        const accessIdentifier = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateOfferingAccessParams = {
+          catalogIdentifier,
+          offeringId,
+          accessIdentifier,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.updateOfferingAccess(updateOfferingAccessParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.updateOfferingAccess({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.updateOfferingAccess();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('getOfferingAccessList', () => {
     describe('positive tests', () => {
       function __getOfferingAccessListTest() {
@@ -5768,9 +5851,7 @@ describe('CatalogManagementV1', () => {
           limit,
         };
 
-        const getOfferingAccessListResult = catalogManagementService.getOfferingAccessList(
-          getOfferingAccessListParams
-        );
+        const getOfferingAccessListResult = catalogManagementService.getOfferingAccessList(getOfferingAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingAccessListResult);
@@ -5780,11 +5861,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/access',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/accessv2', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -5855,11 +5932,11 @@ describe('CatalogManagementV1', () => {
 
     describe('GetOfferingAccessListPager tests', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
-      const path = '/catalogs/testString/offerings/testString/access';
+      const path = '/catalogs/testString/offerings/testString/accessv2';
       const mockPagerResponse1 =
-        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state","visible_states":["visible_states"]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state","visible_states":["visible_states"]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -5882,10 +5959,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.GetOfferingAccessListPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -5901,10 +5975,7 @@ describe('CatalogManagementV1', () => {
           offeringId: 'testString',
           limit: 10,
         };
-        const pager = new CatalogManagementV1.GetOfferingAccessListPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetOfferingAccessListPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -5925,9 +5996,7 @@ describe('CatalogManagementV1', () => {
           accesses,
         };
 
-        const deleteOfferingAccessListResult = catalogManagementService.deleteOfferingAccessList(
-          deleteOfferingAccessListParams
-        );
+        const deleteOfferingAccessListResult = catalogManagementService.deleteOfferingAccessList(deleteOfferingAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteOfferingAccessListResult);
@@ -5937,11 +6006,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/access',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6025,9 +6090,7 @@ describe('CatalogManagementV1', () => {
           accesses,
         };
 
-        const addOfferingAccessListResult = catalogManagementService.addOfferingAccessList(
-          addOfferingAccessListParams
-        );
+        const addOfferingAccessListResult = catalogManagementService.addOfferingAccessList(addOfferingAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(addOfferingAccessListResult);
@@ -6037,11 +6100,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/access',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/access', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6151,8 +6210,7 @@ describe('CatalogManagementV1', () => {
           installType,
         };
 
-        const getOfferingUpdatesResult =
-          catalogManagementService.getOfferingUpdates(getOfferingUpdatesParams);
+        const getOfferingUpdatesResult = catalogManagementService.getOfferingUpdates(getOfferingUpdatesParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingUpdatesResult);
@@ -6162,11 +6220,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/updates',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/updates', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6273,9 +6327,7 @@ describe('CatalogManagementV1', () => {
           versions,
         };
 
-        const getOfferingChangeNoticesResult = catalogManagementService.getOfferingChangeNotices(
-          getOfferingChangeNoticesParams
-        );
+        const getOfferingChangeNoticesResult = catalogManagementService.getOfferingChangeNotices(getOfferingChangeNoticesParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingChangeNoticesResult);
@@ -6285,11 +6337,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/changeNotices',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/changeNotices', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6391,8 +6439,7 @@ describe('CatalogManagementV1', () => {
           installType,
         };
 
-        const getOfferingSourceResult =
-          catalogManagementService.getOfferingSource(getOfferingSourceParams);
+        const getOfferingSourceResult = catalogManagementService.getOfferingSource(getOfferingSourceParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingSourceResult);
@@ -6504,9 +6551,7 @@ describe('CatalogManagementV1', () => {
           installType,
         };
 
-        const getOfferingSourceArchiveResult = catalogManagementService.getOfferingSourceArchive(
-          getOfferingSourceArchiveParams
-        );
+        const getOfferingSourceArchiveResult = catalogManagementService.getOfferingSourceArchive(getOfferingSourceArchiveParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingSourceArchiveResult);
@@ -6608,9 +6653,7 @@ describe('CatalogManagementV1', () => {
           id,
         };
 
-        const getOfferingSourceUrlResult = catalogManagementService.getOfferingSourceUrl(
-          getOfferingSourceUrlParams
-        );
+        const getOfferingSourceUrlResult = catalogManagementService.getOfferingSourceUrl(getOfferingSourceUrlParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingSourceUrlResult);
@@ -6721,11 +6764,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/offerings/{offering_id}/kinds/{kind_id}/versions',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/offerings/{offering_id}/kinds/{kind_id}/versions', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -6803,9 +6842,9 @@ describe('CatalogManagementV1', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
       const path = '/catalogs/testString/offerings/testString/kinds/testString/versions';
       const mockPagerResponse1 =
-        '{"next":{"start":"1"},"versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"total_count":2,"limit":1}';
+        '{"next":{"start":"1"},"versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","value_constraints":[{"type":"regex","value":"value","description":"description"}],"description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata","random_string":{"length":6},"value":"anyValue"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","description":"description","default_flavor":"default_flavor","flavors":["flavors"],"optional":true,"on_by_default":false}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","flavors":["flavors"]}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"total_count":2,"limit":1}';
+        '{"versions":[{"id":"id","_rev":"_rev","crn":"crn","version":"version","flavor":{"name":"name","label":"label","label_i18n":{"mapKey":"inner"},"index":5},"sha":"sha","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","offering_id":"offering_id","catalog_id":"catalog_id","kind_id":"kind_id","tags":["tags"],"repo_url":"repo_url","source_url":"source_url","tgz_url":"tgz_url","configuration":[{"key":"key","type":"type","default_value":"anyValue","display_name":"display_name","value_constraint":"value_constraint","value_constraints":[{"type":"regex","value":"value","description":"description"}],"description":"description","required":true,"options":["anyValue"],"hidden":true,"custom_config":{"type":"type","grouping":"grouping","original_grouping":"original_grouping","grouping_index":14,"config_constraints":{"anyKey":"anyValue"},"associations":{"parameters":[{"name":"name","optionsRefresh":true}]}},"type_metadata":"type_metadata","random_string":{"length":6},"value":"anyValue"}],"outputs":[{"key":"key","description":"description"}],"iam_permissions":[{"service_name":"service_name","role_crns":["role_crns"],"resources":[{"name":"name","description":"description","role_crns":["role_crns"]}]}],"metadata":{"anyKey":"anyValue"},"validation":{"validated":"2019-01-01T12:00:00.000Z","requested":"2019-01-01T12:00:00.000Z","state":"state","last_operation":"last_operation","target":{"anyKey":"anyValue"},"message":"message"},"required_resources":[{"type":"mem","value":"anyValue"}],"single_instance":false,"schematics_env_values":{"value":"[{\\"name\\": \\"TF_LOG\\",\\"value\\": \\"TRACE\\",\\"secure\\": false,\\"hidden\\": false}]","sm_ref":"cmsm_v1:{\\"name\\": \\"envVarSecret\\",\\"id\\":\\"1234567890\\",\\"service_id\\":\\"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::\\",\\"service_name\\":\\"My SM Instance\\",\\"group_id\\":\\"1234567890\\",\\"group_name\\":\\"My SM Group\\",\\"resource_group_id\\":\\"1234567890\\",\\"region\\":\\"eu-gb\\",\\"type\\":\\"arbitrary\\"}"},"install":{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"},"pre_install":[{"instructions":"instructions","instructions_i18n":{"mapKey":"inner"},"script":"script","script_permission":"script_permission","delete_script":"delete_script","scope":"scope"}],"scripts":{"mapKey":{"short_description":"short_description","type":"ansible","path":"scripts/validate-post-ansible-playbook.yaml","stage":"pre","action":"validate"}},"entitlement":{"provider_name":"provider_name","provider_id":"provider_id","product_id":"product_id","part_numbers":["part_numbers"],"image_repo_name":"image_repo_name"},"licenses":[{"id":"id","name":"name","type":"type","url":"url","description":"description"}],"image_manifest_url":"image_manifest_url","deprecated":true,"package_version":"package_version","state":{"current":"current","current_entered":"2019-01-01T12:00:00.000Z","pending":"pending","pending_requested":"2019-01-01T12:00:00.000Z","previous":"previous"},"version_locator":"version_locator","long_description":"long_description","long_description_i18n":{"mapKey":"inner"},"short_description":"short_description","short_description_i18n":{"mapKey":"inner"},"whitelisted_accounts":["whitelisted_accounts"],"image_pull_key_name":"image_pull_key_name","deprecate_pending":{"deprecate_date":"2019-01-01T12:00:00.000Z","deprecate_state":"deprecate_state","description":"description"},"solution_info":{"architecture_diagrams":[{"diagram":{"url":"url","api_url":"api_url","url_proxy":{"url":"url","sha":"sha"},"caption":"caption","caption_i18n":{"mapKey":"inner"},"type":"type","thumbnail_url":"thumbnail_url"},"description":"description","description_i18n":{"mapKey":"inner"}}],"features":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"cost_estimate":{"version":"version","currency":"currency","projects":[{"name":"name","metadata":{"anyKey":"anyValue"},"pastBreakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"breakdown":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"diff":{"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","resources":[{"name":"name","metadata":{"anyKey":"anyValue"},"hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","costComponents":[{"name":"name","unit":"unit","hourlyQuantity":"hourlyQuantity","monthlyQuantity":"monthlyQuantity","price":"price","hourlyCost":"hourlyCost","monthlyCost":"monthlyCost","metric":"metric"}]}]},"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}}}],"summary":{"totalDetectedResources":22,"totalSupportedResources":23,"totalUnsupportedResources":25,"totalUsageBasedResources":24,"totalNoPriceResources":21,"unsupportedResourceCounts":{"mapKey":5},"noPriceResourceCounts":{"mapKey":5}},"totalHourlyCost":"totalHourlyCost","totalMonthlyCost":"totalMonthlyCost","pastTotalHourlyCost":"pastTotalHourlyCost","pastTotalMonthlyCost":"pastTotalMonthlyCost","diffTotalHourlyCost":"diffTotalHourlyCost","diffTotalMonthlyCost":"diffTotalMonthlyCost","timeGenerated":"2019-01-01T12:00:00.000Z"},"dependencies":[{"catalog_id":"catalog_id","id":"id","name":"name","kind":"kind","version":"version","description":"description","default_flavor":"default_flavor","flavors":["flavors"],"optional":true,"on_by_default":false}],"install_type":"install_type"},"is_consumable":false,"compliance_v3":{"authority":"authority","claims":{"profiles":[{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"}],"controls":[{"profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"names":["names"]}]},"evaluations":[{"scan_id":"scan_id","account_id":"account_id","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"result":{"failure_count":13,"scan_time":"2019-01-01T12:00:00.000Z","error_message":"error_message","complete_scan":false,"unscanned_resources":["unscanned_resources"]},"controls":[{"id":"id","name":"name","description":"description","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"failure_count":13,"pass_count":10,"parent":{"id":"id","name":"name","version":"version","description":"description","profile":{"id":"id","name":"name","version":"version","description":"description","type":"type","ui_href":"ui_href"},"parent_name":"parent_name","specifications":[{"id":"id","description":"description","component_name":"component_name","assessments":[{"id":"id","description":"description","version":"version","type":"type","method":"method","ui_href":"ui_href"}],"ui_href":"ui_href"}],"ui_href":"ui_href"},"ui_href":"ui_href"}]}]},"change_notices":{"breaking":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"new":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}],"update":[{"title":"title","title_i18n":{"mapKey":"inner"},"description":"description","description_i18n":{"mapKey":"inner"}}]},"plan_ids":["plan_ids"],"stack":{"anyKey":"anyValue"},"minimum_compatible_version":"minimum_compatible_version"}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -6867,8 +6906,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const getOfferingAboutResult =
-          catalogManagementService.getOfferingAbout(getOfferingAboutParams);
+        const getOfferingAboutResult = catalogManagementService.getOfferingAbout(getOfferingAboutParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingAboutResult);
@@ -6952,8 +6990,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const getIamPermissionsResult =
-          catalogManagementService.getIamPermissions(getIamPermissionsParams);
+        const getIamPermissionsResult = catalogManagementService.getIamPermissions(getIamPermissionsParams);
 
         // all methods should return a Promise
         expectToBePromise(getIamPermissionsResult);
@@ -7039,8 +7076,7 @@ describe('CatalogManagementV1', () => {
           licenseId,
         };
 
-        const getOfferingLicenseResult =
-          catalogManagementService.getOfferingLicense(getOfferingLicenseParams);
+        const getOfferingLicenseResult = catalogManagementService.getOfferingLicense(getOfferingLicenseParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingLicenseResult);
@@ -7050,11 +7086,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/versions/{version_loc_id}/licenses/{license_id}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/licenses/{license_id}', 'GET');
         const expectedAccept = 'text/plain';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -7131,8 +7163,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const getOfferingContainerImagesResult =
-          catalogManagementService.getOfferingContainerImages(getOfferingContainerImagesParams);
+        const getOfferingContainerImagesResult = catalogManagementService.getOfferingContainerImages(getOfferingContainerImagesParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingContainerImagesResult);
@@ -7306,8 +7337,7 @@ describe('CatalogManagementV1', () => {
           daysUntilDeprecate,
         };
 
-        const setDeprecateVersionResult =
-          catalogManagementService.setDeprecateVersion(setDeprecateVersionParams);
+        const setDeprecateVersionResult = catalogManagementService.setDeprecateVersion(setDeprecateVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(setDeprecateVersionResult);
@@ -7317,11 +7347,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/versions/{version_loc_id}/deprecate/{setting}',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/deprecate/{setting}', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -7400,8 +7426,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const consumableVersionResult =
-          catalogManagementService.consumableVersion(consumableVersionParams);
+        const consumableVersionResult = catalogManagementService.consumableVersion(consumableVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(consumableVersionResult);
@@ -7485,8 +7510,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const prereleaseVersionResult =
-          catalogManagementService.prereleaseVersion(prereleaseVersionParams);
+        const prereleaseVersionResult = catalogManagementService.prereleaseVersion(prereleaseVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(prereleaseVersionResult);
@@ -7496,11 +7520,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/versions/{version_loc_id}/prerelease-publish',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/prerelease-publish', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -7556,6 +7576,90 @@ describe('CatalogManagementV1', () => {
         let err;
         try {
           await catalogManagementService.prereleaseVersion();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('testVersion', () => {
+    describe('positive tests', () => {
+      function __testVersionTest() {
+        // Construct the params object for operation testVersion
+        const versionLocId = 'testString';
+        const testVersionParams = {
+          versionLocId,
+        };
+
+        const testVersionResult = catalogManagementService.testVersion(testVersionParams);
+
+        // all methods should return a Promise
+        expectToBePromise(testVersionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/test-publish', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.path.version_loc_id).toEqual(versionLocId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __testVersionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __testVersionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __testVersionTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const versionLocId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const testVersionParams = {
+          versionLocId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.testVersion(testVersionParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.testVersion({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.testVersion();
         } catch (e) {
           err = e;
         }
@@ -7857,9 +7961,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const getOfferingWorkingCopyResult = catalogManagementService.getOfferingWorkingCopy(
-          getOfferingWorkingCopyParams
-        );
+        const getOfferingWorkingCopyResult = catalogManagementService.getOfferingWorkingCopy(getOfferingWorkingCopyParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingWorkingCopyResult);
@@ -7947,9 +8049,7 @@ describe('CatalogManagementV1', () => {
           versionLocIdToCopyFrom,
         };
 
-        const copyFromPreviousVersionResult = catalogManagementService.copyFromPreviousVersion(
-          copyFromPreviousVersionParams
-        );
+        const copyFromPreviousVersionResult = catalogManagementService.copyFromPreviousVersion(copyFromPreviousVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(copyFromPreviousVersionResult);
@@ -7959,11 +8059,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/versions/{version_loc_id}/copy/{type}/{version_loc_id_to_copy_from}',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/copy/{type}/{version_loc_id_to_copy_from}', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -8236,6 +8332,13 @@ describe('CatalogManagementV1', () => {
         index: 38,
       };
 
+      // ValueConstraint
+      const valueConstraintModel = {
+        type: 'regex',
+        value: 'testString',
+        description: 'testString',
+      };
+
       // RenderTypeAssociationsParametersItem
       const renderTypeAssociationsParametersItemModel = {
         name: 'testString',
@@ -8257,6 +8360,11 @@ describe('CatalogManagementV1', () => {
         associations: renderTypeAssociationsModel,
       };
 
+      // ConfigurationRandomString
+      const configurationRandomStringModel = {
+        length: 38,
+      };
+
       // Configuration
       const configurationModel = {
         key: 'testString',
@@ -8264,12 +8372,15 @@ describe('CatalogManagementV1', () => {
         default_value: 'testString',
         display_name: 'testString',
         value_constraint: 'testString',
+        value_constraints: [valueConstraintModel],
         description: 'testString',
         required: true,
         options: ['testString'],
         hidden: true,
         custom_config: renderTypeModel,
         type_metadata: 'testString',
+        random_string: configurationRandomStringModel,
+        value: 'testString',
       };
 
       // Output
@@ -8311,8 +8422,7 @@ describe('CatalogManagementV1', () => {
       // SchematicsEnvValues
       const schematicsEnvValuesModel = {
         value: '[{"name": "TF_LOG","value": "TRACE","secure": false,"hidden": false}]',
-        sm_ref:
-          'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
+        sm_ref: 'cmsm_v1:{"name": "envVarSecret","id":"1234567890","service_id":"crn:v1:bluemix:public:secrets-manager:eu-gb:a/1234567890:1234567890::","service_name":"My SM Instance","group_id":"1234567890","group_name":"My SM Group","resource_group_id":"1234567890","region":"eu-gb","type":"arbitrary"}',
       };
 
       // Script
@@ -8401,6 +8511,7 @@ describe('CatalogManagementV1', () => {
         price: 'testString',
         hourlyCost: 'testString',
         monthlyCost: 'testString',
+        metric: 'testString',
       };
 
       // CostResource
@@ -8462,7 +8573,11 @@ describe('CatalogManagementV1', () => {
         name: 'testString',
         kind: 'testString',
         version: 'testString',
+        description: 'testString',
+        default_flavor: 'testString',
         flavors: ['testString'],
+        optional: true,
+        on_by_default: true,
       };
 
       // SolutionInfo
@@ -8606,6 +8721,8 @@ describe('CatalogManagementV1', () => {
         version_locator: 'testString',
         long_description: 'testString',
         long_description_i18n: { 'key1': 'testString' },
+        short_description: 'testString',
+        short_description_i18n: { 'key1': 'testString' },
         whitelisted_accounts: ['testString'],
         image_pull_key_name: 'testString',
         deprecate_pending: deprecatePendingModel,
@@ -8762,6 +8879,14 @@ describe('CatalogManagementV1', () => {
         flavors: ['testString'],
       };
 
+      // EntitlementLicense
+      const entitlementLicenseModel = {
+        config_id: 'testString',
+        sku: 'testString',
+        provider_id: 'testString',
+        vendor_id: 'testString',
+      };
+
       // Plan
       const planModel = {
         url: 'testString',
@@ -8782,6 +8907,7 @@ describe('CatalogManagementV1', () => {
         deprecate_pending: deprecatePendingModel,
         metadata: { anyKey: 'anyValue' },
         publish_approved: true,
+        licenses: [entitlementLicenseModel],
       };
 
       function __updateVersionTest() {
@@ -9027,8 +9153,7 @@ describe('CatalogManagementV1', () => {
           updates,
         };
 
-        const patchUpdateVersionResult =
-          catalogManagementService.patchUpdateVersion(patchUpdateVersionParams);
+        const patchUpdateVersionResult = catalogManagementService.patchUpdateVersion(patchUpdateVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(patchUpdateVersionResult);
@@ -9200,9 +9325,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const getVersionDependenciesResult = catalogManagementService.getVersionDependencies(
-          getVersionDependenciesParams
-        );
+        const getVersionDependenciesResult = catalogManagementService.getVersionDependencies(getVersionDependenciesParams);
 
         // all methods should return a Promise
         expectToBePromise(getVersionDependenciesResult);
@@ -9286,8 +9409,7 @@ describe('CatalogManagementV1', () => {
           versionLocId,
         };
 
-        const deprecateVersionResult =
-          catalogManagementService.deprecateVersion(deprecateVersionParams);
+        const deprecateVersionResult = catalogManagementService.deprecateVersion(deprecateVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(deprecateVersionResult);
@@ -9483,11 +9605,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/deploy/kubernetes/clusters/{cluster_id}/namespaces',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/deploy/kubernetes/clusters/{cluster_id}/namespaces', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -9564,7 +9682,8 @@ describe('CatalogManagementV1', () => {
       const path = '/deploy/kubernetes/clusters/testString/namespaces';
       const mockPagerResponse1 =
         '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":["resources"]}';
-      const mockPagerResponse2 = '{"total_count":2,"limit":1,"resources":["resources"]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"resources":["resources"]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -9636,8 +9755,7 @@ describe('CatalogManagementV1', () => {
           installPlan,
         };
 
-        const deployOperatorsResult =
-          catalogManagementService.deployOperators(deployOperatorsParams);
+        const deployOperatorsResult = catalogManagementService.deployOperators(deployOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(deployOperatorsResult);
@@ -9841,8 +9959,7 @@ describe('CatalogManagementV1', () => {
           installPlan,
         };
 
-        const replaceOperatorsResult =
-          catalogManagementService.replaceOperators(replaceOperatorsParams);
+        const replaceOperatorsResult = catalogManagementService.replaceOperators(replaceOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(replaceOperatorsResult);
@@ -9939,8 +10056,7 @@ describe('CatalogManagementV1', () => {
           versionLocatorId,
         };
 
-        const deleteOperatorsResult =
-          catalogManagementService.deleteOperators(deleteOperatorsParams);
+        const deleteOperatorsResult = catalogManagementService.deleteOperators(deleteOperatorsParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteOperatorsResult);
@@ -10293,8 +10409,7 @@ describe('CatalogManagementV1', () => {
           installPlan,
         };
 
-        const preinstallVersionResult =
-          catalogManagementService.preinstallVersion(preinstallVersionParams);
+        const preinstallVersionResult = catalogManagementService.preinstallVersion(preinstallVersionParams);
 
         // all methods should return a Promise
         expectToBePromise(preinstallVersionResult);
@@ -10578,8 +10693,7 @@ describe('CatalogManagementV1', () => {
           targetContextName,
         };
 
-        const validateInstallResult =
-          catalogManagementService.validateInstall(validateInstallParams);
+        const validateInstallResult = catalogManagementService.validateInstall(validateInstallParams);
 
         // all methods should return a Promise
         expectToBePromise(validateInstallResult);
@@ -10589,11 +10703,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/versions/{version_loc_id}/validation/install',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/validation/install', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -10696,8 +10806,7 @@ describe('CatalogManagementV1', () => {
           targetContextName,
         };
 
-        const getValidationStatusResult =
-          catalogManagementService.getValidationStatus(getValidationStatusParams);
+        const getValidationStatusResult = catalogManagementService.getValidationStatus(getValidationStatusParams);
 
         // all methods should return a Promise
         expectToBePromise(getValidationStatusResult);
@@ -10707,11 +10816,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/versions/{version_loc_id}/validation/install',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/versions/{version_loc_id}/validation/install', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11268,11 +11373,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11426,11 +11527,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}',
-          'PUT'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11538,11 +11635,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11627,8 +11720,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const listObjectAuditsResult =
-          catalogManagementService.listObjectAudits(listObjectAuditsParams);
+        const listObjectAuditsResult = catalogManagementService.listObjectAudits(listObjectAuditsParams);
 
         // all methods should return a Promise
         expectToBePromise(listObjectAuditsResult);
@@ -11638,11 +11730,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/audits',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/audits', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11792,11 +11880,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/audits/{auditlog_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11879,9 +11963,7 @@ describe('CatalogManagementV1', () => {
           objectIdentifier,
         };
 
-        const consumableShareObjectResult = catalogManagementService.consumableShareObject(
-          consumableShareObjectParams
-        );
+        const consumableShareObjectResult = catalogManagementService.consumableShareObject(consumableShareObjectParams);
 
         // all methods should return a Promise
         expectToBePromise(consumableShareObjectResult);
@@ -11891,11 +11973,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/consume-publish',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/consume-publish', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -11990,11 +12068,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/share',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/share', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12080,8 +12154,7 @@ describe('CatalogManagementV1', () => {
           limit,
         };
 
-        const getObjectAccessListResult =
-          catalogManagementService.getObjectAccessList(getObjectAccessListParams);
+        const getObjectAccessListResult = catalogManagementService.getObjectAccessList(getObjectAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(getObjectAccessListResult);
@@ -12091,11 +12164,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/accessv1',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/accessv2', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12166,11 +12235,11 @@ describe('CatalogManagementV1', () => {
 
     describe('GetObjectAccessListPager tests', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
-      const path = '/catalogs/testString/objects/testString/accessv1';
+      const path = '/catalogs/testString/objects/testString/accessv2';
       const mockPagerResponse1 =
-        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+        '{"next":{"start":"1"},"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state","visible_states":["visible_states"]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state","visible_states":["visible_states"]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -12193,10 +12262,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.GetObjectAccessListPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetObjectAccessListPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -12212,10 +12278,7 @@ describe('CatalogManagementV1', () => {
           objectIdentifier: 'testString',
           limit: 10,
         };
-        const pager = new CatalogManagementV1.GetObjectAccessListPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetObjectAccessListPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -12236,8 +12299,7 @@ describe('CatalogManagementV1', () => {
           accessIdentifier,
         };
 
-        const getObjectAccessResult =
-          catalogManagementService.getObjectAccess(getObjectAccessParams);
+        const getObjectAccessResult = catalogManagementService.getObjectAccess(getObjectAccessParams);
 
         // all methods should return a Promise
         expectToBePromise(getObjectAccessResult);
@@ -12247,11 +12309,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12335,8 +12393,7 @@ describe('CatalogManagementV1', () => {
           accessIdentifier,
         };
 
-        const createObjectAccessResult =
-          catalogManagementService.createObjectAccess(createObjectAccessParams);
+        const createObjectAccessResult = catalogManagementService.createObjectAccess(createObjectAccessParams);
 
         // all methods should return a Promise
         expectToBePromise(createObjectAccessResult);
@@ -12346,11 +12403,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}', 'POST');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12434,8 +12487,7 @@ describe('CatalogManagementV1', () => {
           accessIdentifier,
         };
 
-        const deleteObjectAccessResult =
-          catalogManagementService.deleteObjectAccess(deleteObjectAccessParams);
+        const deleteObjectAccessResult = catalogManagementService.deleteObjectAccess(deleteObjectAccessParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteObjectAccessResult);
@@ -12445,11 +12497,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access/{access_identifier}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12535,10 +12583,7 @@ describe('CatalogManagementV1', () => {
           offset,
         };
 
-        const getObjectAccessListDeprecatedResult =
-          catalogManagementService.getObjectAccessListDeprecated(
-            getObjectAccessListDeprecatedParams
-          );
+        const getObjectAccessListDeprecatedResult = catalogManagementService.getObjectAccessListDeprecated(getObjectAccessListDeprecatedParams);
 
         // all methods should return a Promise
         expectToBePromise(getObjectAccessListDeprecatedResult);
@@ -12548,11 +12593,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/access',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12625,9 +12666,9 @@ describe('CatalogManagementV1', () => {
       const serviceUrl = catalogManagementServiceOptions.url;
       const path = '/catalogs/testString/objects/testString/access';
       const mockPagerResponse1 =
-        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+        '{"next":"https://myhost.com/somePath?offset=1","total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state","visible_states":["visible_states"]}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"resources":[{"id":"id","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state"}]}';
+        '{"total_count":2,"limit":1,"resources":[{"id":"id","_rev":"_rev","account":"account","account_type":12,"catalog_id":"catalog_id","target_id":"target_id","target_account":"target_account","target_kind":"target_kind","created":"2019-01-01T12:00:00.000Z","approval_state":"approval_state","visible_states":["visible_states"]}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -12650,10 +12691,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -12669,10 +12707,7 @@ describe('CatalogManagementV1', () => {
           objectIdentifier: 'testString',
           limit: 10,
         };
-        const pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.GetObjectAccessListDeprecatedPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -12693,9 +12728,7 @@ describe('CatalogManagementV1', () => {
           accesses,
         };
 
-        const deleteObjectAccessListResult = catalogManagementService.deleteObjectAccessList(
-          deleteObjectAccessListParams
-        );
+        const deleteObjectAccessListResult = catalogManagementService.deleteObjectAccessList(deleteObjectAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteObjectAccessListResult);
@@ -12705,11 +12738,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/access',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12793,8 +12822,7 @@ describe('CatalogManagementV1', () => {
           accesses,
         };
 
-        const addObjectAccessListResult =
-          catalogManagementService.addObjectAccessList(addObjectAccessListParams);
+        const addObjectAccessListResult = catalogManagementService.addObjectAccessList(addObjectAccessListParams);
 
         // all methods should return a Promise
         expectToBePromise(addObjectAccessListResult);
@@ -12804,11 +12832,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/catalogs/{catalog_identifier}/objects/{object_identifier}/access',
-          'POST'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/catalogs/{catalog_identifier}/objects/{object_identifier}/access', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -12893,6 +12917,21 @@ describe('CatalogManagementV1', () => {
         code: 'testString',
       };
 
+      // EntitlementLicense
+      const entitlementLicenseModel = {
+        config_id: 'testString',
+        sku: 'testString',
+        provider_id: 'testString',
+        vendor_id: 'testString',
+      };
+
+      // PlanEntitlement
+      const planEntitlementModel = {
+        id: 'testString',
+        status: 'testString',
+        license_instances: [entitlementLicenseModel],
+      };
+
       function __createOfferingInstanceTest() {
         // Construct the params object for operation createOfferingInstance
         const xAuthRefreshToken = 'testString';
@@ -12927,6 +12966,7 @@ describe('CatalogManagementV1', () => {
         const sha = 'testString';
         const planId = 'testString';
         const parentCrn = 'testString';
+        const planEntitlement = planEntitlementModel;
         const createOfferingInstanceParams = {
           xAuthRefreshToken,
           id,
@@ -12960,11 +13000,10 @@ describe('CatalogManagementV1', () => {
           sha,
           planId,
           parentCrn,
+          planEntitlement,
         };
 
-        const createOfferingInstanceResult = catalogManagementService.createOfferingInstance(
-          createOfferingInstanceParams
-        );
+        const createOfferingInstanceResult = catalogManagementService.createOfferingInstance(createOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(createOfferingInstanceResult);
@@ -13010,6 +13049,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.sha).toEqual(sha);
         expect(mockRequestOptions.body.plan_id).toEqual(planId);
         expect(mockRequestOptions.body.parent_crn).toEqual(parentCrn);
+        expect(mockRequestOptions.body.plan_entitlement).toEqual(planEntitlement);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -13070,6 +13110,146 @@ describe('CatalogManagementV1', () => {
     });
   });
 
+  describe('searchOfferingInstance', () => {
+    describe('positive tests', () => {
+      function __searchOfferingInstanceTest() {
+        // Construct the params object for operation searchOfferingInstance
+        const offeringId = 'testString';
+        const start = 'testString';
+        const limit = 150;
+        const searchOfferingInstanceParams = {
+          offeringId,
+          start,
+          limit,
+        };
+
+        const searchOfferingInstanceResult = catalogManagementService.searchOfferingInstance(searchOfferingInstanceParams);
+
+        // all methods should return a Promise
+        expectToBePromise(searchOfferingInstanceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/instances/offerings', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.offeringID).toEqual(offeringId);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __searchOfferingInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.enableRetries();
+        __searchOfferingInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        catalogManagementService.disableRetries();
+        __searchOfferingInstanceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const offeringId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const searchOfferingInstanceParams = {
+          offeringId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        catalogManagementService.searchOfferingInstance(searchOfferingInstanceParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await catalogManagementService.searchOfferingInstance({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await catalogManagementService.searchOfferingInstance();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('SearchOfferingInstancePager tests', () => {
+      const serviceUrl = catalogManagementServiceOptions.url;
+      const path = '/instances/offerings';
+      const mockPagerResponse1 =
+        '{"next":{"start":"1"},"instances":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","catalog_id":"catalog_id","offering_id":"offering_id","kind_format":"kind_format","kind_format_label":"kind_format_label","version":"version","version_id":"version_id","cluster_id":"cluster_id","cluster_region":"cluster_region","cluster_namespaces":["cluster_namespaces"],"cluster_all_namespaces":true,"schematics_workspace_id":"schematics_workspace_id","install_plan":"install_plan","channel":"channel","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","metadata":{"anyKey":"anyValue"},"resource_group_id":"resource_group_id","location":"location","disabled":true,"account":"account","last_operation":{"operation":"operation","state":"state","message":"message","transaction_id":"transaction_id","updated":"2019-01-01T12:00:00.000Z","code":"code"},"kind_target":"kind_target","kind_target_label":"kind_target_label","sha":"sha","plan_id":"plan_id","parent_crn":"parent_crn","plan_entitlement":{"id":"id","status":"status","license_instances":[{"config_id":"config_id","sku":"sku","provider_id":"provider_id","vendor_id":"vendor_id"}]}}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"instances":[{"id":"id","_rev":"_rev","url":"url","crn":"crn","label":"label","catalog_id":"catalog_id","offering_id":"offering_id","kind_format":"kind_format","kind_format_label":"kind_format_label","version":"version","version_id":"version_id","cluster_id":"cluster_id","cluster_region":"cluster_region","cluster_namespaces":["cluster_namespaces"],"cluster_all_namespaces":true,"schematics_workspace_id":"schematics_workspace_id","install_plan":"install_plan","channel":"channel","created":"2019-01-01T12:00:00.000Z","updated":"2019-01-01T12:00:00.000Z","metadata":{"anyKey":"anyValue"},"resource_group_id":"resource_group_id","location":"location","disabled":true,"account":"account","last_operation":{"operation":"operation","state":"state","message":"message","transaction_id":"transaction_id","updated":"2019-01-01T12:00:00.000Z","code":"code"},"kind_target":"kind_target","kind_target_label":"kind_target_label","sha":"sha","plan_id":"plan_id","parent_crn":"parent_crn","plan_entitlement":{"id":"id","status":"status","license_instances":[{"config_id":"config_id","sku":"sku","provider_id":"provider_id","vendor_id":"vendor_id"}]}}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          offeringId: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new CatalogManagementV1.SearchOfferingInstancePager(catalogManagementService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          offeringId: 'testString',
+          limit: 10,
+        };
+        const pager = new CatalogManagementV1.SearchOfferingInstancePager(catalogManagementService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
   describe('getOfferingInstance', () => {
     describe('positive tests', () => {
       function __getOfferingInstanceTest() {
@@ -13079,8 +13259,7 @@ describe('CatalogManagementV1', () => {
           instanceIdentifier,
         };
 
-        const getOfferingInstanceResult =
-          catalogManagementService.getOfferingInstance(getOfferingInstanceParams);
+        const getOfferingInstanceResult = catalogManagementService.getOfferingInstance(getOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingInstanceResult);
@@ -13169,6 +13348,21 @@ describe('CatalogManagementV1', () => {
         code: 'testString',
       };
 
+      // EntitlementLicense
+      const entitlementLicenseModel = {
+        config_id: 'testString',
+        sku: 'testString',
+        provider_id: 'testString',
+        vendor_id: 'testString',
+      };
+
+      // PlanEntitlement
+      const planEntitlementModel = {
+        id: 'testString',
+        status: 'testString',
+        license_instances: [entitlementLicenseModel],
+      };
+
       function __putOfferingInstanceTest() {
         // Construct the params object for operation putOfferingInstance
         const instanceIdentifier = 'testString';
@@ -13204,6 +13398,7 @@ describe('CatalogManagementV1', () => {
         const sha = 'testString';
         const planId = 'testString';
         const parentCrn = 'testString';
+        const planEntitlement = planEntitlementModel;
         const putOfferingInstanceParams = {
           instanceIdentifier,
           xAuthRefreshToken,
@@ -13238,10 +13433,10 @@ describe('CatalogManagementV1', () => {
           sha,
           planId,
           parentCrn,
+          planEntitlement,
         };
 
-        const putOfferingInstanceResult =
-          catalogManagementService.putOfferingInstance(putOfferingInstanceParams);
+        const putOfferingInstanceResult = catalogManagementService.putOfferingInstance(putOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(putOfferingInstanceResult);
@@ -13287,6 +13482,7 @@ describe('CatalogManagementV1', () => {
         expect(mockRequestOptions.body.sha).toEqual(sha);
         expect(mockRequestOptions.body.plan_id).toEqual(planId);
         expect(mockRequestOptions.body.parent_crn).toEqual(parentCrn);
+        expect(mockRequestOptions.body.plan_entitlement).toEqual(planEntitlement);
         expect(mockRequestOptions.path.instance_identifier).toEqual(instanceIdentifier);
       }
 
@@ -13361,9 +13557,7 @@ describe('CatalogManagementV1', () => {
           xAuthRefreshToken,
         };
 
-        const deleteOfferingInstanceResult = catalogManagementService.deleteOfferingInstance(
-          deleteOfferingInstanceParams
-        );
+        const deleteOfferingInstanceResult = catalogManagementService.deleteOfferingInstance(deleteOfferingInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteOfferingInstanceResult);
@@ -13373,11 +13567,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/instances/offerings/{instance_identifier}',
-          'DELETE'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/instances/offerings/{instance_identifier}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -13460,8 +13650,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const listOfferingInstanceAuditsResult =
-          catalogManagementService.listOfferingInstanceAudits(listOfferingInstanceAuditsParams);
+        const listOfferingInstanceAuditsResult = catalogManagementService.listOfferingInstanceAudits(listOfferingInstanceAuditsParams);
 
         // all methods should return a Promise
         expectToBePromise(listOfferingInstanceAuditsResult);
@@ -13471,11 +13660,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/instances/offerings/{instance_identifier}/audits',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/instances/offerings/{instance_identifier}/audits', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -13571,10 +13756,7 @@ describe('CatalogManagementV1', () => {
           lookupnames: true,
         };
         const allResults = [];
-        const pager = new CatalogManagementV1.OfferingInstanceAuditsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
         while (pager.hasNext()) {
           const nextPage = await pager.getNext();
           expect(nextPage).not.toBeNull();
@@ -13590,10 +13772,7 @@ describe('CatalogManagementV1', () => {
           limit: 10,
           lookupnames: true,
         };
-        const pager = new CatalogManagementV1.OfferingInstanceAuditsPager(
-          catalogManagementService,
-          params
-        );
+        const pager = new CatalogManagementV1.OfferingInstanceAuditsPager(catalogManagementService, params);
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
@@ -13614,9 +13793,7 @@ describe('CatalogManagementV1', () => {
           lookupnames,
         };
 
-        const getOfferingInstanceAuditResult = catalogManagementService.getOfferingInstanceAudit(
-          getOfferingInstanceAuditParams
-        );
+        const getOfferingInstanceAuditResult = catalogManagementService.getOfferingInstanceAudit(getOfferingInstanceAuditParams);
 
         // all methods should return a Promise
         expectToBePromise(getOfferingInstanceAuditResult);
@@ -13626,11 +13803,7 @@ describe('CatalogManagementV1', () => {
 
         const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/instances/offerings/{instance_identifier}/audits/{auditlog_identifier}',
-          'GET'
-        );
+        checkUrlAndMethod(mockRequestOptions, '/instances/offerings/{instance_identifier}/audits/{auditlog_identifier}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
@@ -13966,8 +14139,7 @@ describe('CatalogManagementV1', () => {
           daysUntilDeprecate,
         };
 
-        const setDeprecatePlanResult =
-          catalogManagementService.setDeprecatePlan(setDeprecatePlanParams);
+        const setDeprecatePlanResult = catalogManagementService.setDeprecatePlan(setDeprecatePlanParams);
 
         // all methods should return a Promise
         expectToBePromise(setDeprecatePlanResult);
