@@ -71,7 +71,9 @@
   },
   "overrides": {
     "micromatch": "4.0.8",
-    "braces": "3.0.3"
+    "braces": "3.0.3",
+    "browserslist": "4.28.7",
+    "fast-uri": "3.1.6"
   },
   "jest": {
     "collectCoverage": true,
