@@ -1,3 +1,10 @@
+## [0.86.4](https://github.com/IBM/platform-services-node-sdk/compare/v0.86.3...v0.86.4) (2026-11-25)
+
+
+### Bug Fixes
+
+* **deps:** bump vulnerable packages ([#371](https://github.com/IBM/platform-services-node-sdk/issues/371)) ([6ad2d5e](https://github.com/IBM/platform-services-node-sdk/commit/6ad2d5e9c65b69815e15715144c338485dfdb776))
+
 ## [0.86.3](https://github.com/IBM/platform-services-node-sdk/compare/v0.86.2...v0.86.3) (2026-11-04)
 
 
